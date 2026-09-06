@@ -110,13 +110,18 @@ OTHER_WATCHLIST = [
 # no live data, but a re-audit on 2026-09-01 - two rounds 30s apart, the same
 # method that removed them - had all five answering from delta_india. The
 # fetch chain reaches Delta directly now, so that finding no longer holds.
-# Emptied 2026-09-06 to cut scanner load. Tokenised stocks were nine of the
-# sixty-four scanned symbols and were dropped on both timeframes at the same
-# time as the 4h crypto scan, leaving one 30m crypto scan as the only alert
-# job running. The registry in xstock_hybrid_rating.py is deliberately left
-# intact: it still maps tickers to sectors for anything that comes back, and
-# the notes below are the measurements that removed the earlier ones.
 XSTOCK_WATCHLIST = [
+    "TSLAXUSD",
+    "METAXUSD",
+    "SOXLBUSD",
+    "SNDKBUSD",
+    "BZ/USDT:USDT",
+    "SAMSUNG/USDT:USDT",
+    "AXTI/USDT:USDT",
+    "MRVL/USDT:USDT",
+    "SLX/USDT:USDT",
+    "MSFT/USDT:USDT",
+    "NVDAXUSD",
     # Still out, measured on CoinSwitch over 96 30m candles. The watchlist
     # median was about 200,000 in traded value per candle; every symbol here
     # sat under 11,000, and FLNC went a full 30 minutes with no trades at all
@@ -150,7 +155,8 @@ DELTA_LISTED_SYMBOLS = {
     "ZECUSD", "DOGEUSD", "AAVEUSD", "BEAT/USDT", "UNIUSD", "LINKUSD",
     "AVAXUSD", "LTCUSD", "BNBUSD", "TRUMP/USDT", "BCHUSD", "TACUSD",
     "ZORAUSD", "BLESSUSD", "HUSD", "VELVETUSD", "RIVERUSD", "SLVONUSD",
-    "XAUTUSD",
+    "XAUTUSD", "TSLAXUSD", "METAXUSD", "SOXLBUSD", "SNDKBUSD",
+    "MRVL/USDT:USDT", "NVDAXUSD",
 }
 
 COINSWITCH_WATCHLIST = []

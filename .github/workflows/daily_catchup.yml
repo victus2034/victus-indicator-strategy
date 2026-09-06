@@ -1,11 +1,17 @@
 name: Victus Daily Catch-up
 
 on:
-  # Rides the crypto scanner, which cron-job.org dispatches every twenty
-  # minutes and which has not missed a beat. GitHub's own scheduler is not
-  # used here for the same reason the eight alert workflows abandoned it.
+  # Rides the 30m crypto scanner, which cron-job.org dispatches every five
+  # minutes. GitHub's own scheduler is not used here for the same reason the
+  # eight alert workflows abandoned it.
+  #
+  # This deliberately does NOT ride the 4h scanner. That job was switched off
+  # to cut load, and it was the original trigger - leaving it here would have
+  # stopped astrology and the daily backtest dead the moment it was disabled,
+  # with nothing to say why. The 30m scanner is now the only crypto job that
+  # runs, so it is the only safe heartbeat to hang these off.
   workflow_run:
-    workflows: ["Victus Crypto Scanner"]
+    workflows: ["Victus Crypto Scanner 30m"]
     types: [completed]
   workflow_dispatch:
 
