@@ -46,6 +46,7 @@ from config import (
     ZONE_SL_MODE,
     ZONE_SL_HEIGHT_PCT,
     ATR_METHOD,
+    ZONE_MAX_WIDTH_PCT,
     ZONE_RATING_GATE,
     ZONE_SHADOW_GEOMETRY,
     OHLCV_LIMIT,
@@ -274,6 +275,41 @@ def record_zone_touch(zone, candle_high, candle_low, index=None):
         zone["over_touched"] = True
 
 
+def tighten_wide_zone(window, zone_type, far, near):
+    """Re-anchor the near edge when the zone is too wide to trade.
+
+    EX 6: a 2.05% zone is correct geometry and a useless trade. The near edge
+    moves up (supply) or down (demand) to a neighbouring candle's own extreme -
+    the "candle end" - so the box still sits on something real rather than being
+    cut to an arbitrary width.
+
+    Among the other candles in the base, prefer the one that leaves the WIDEST
+    zone still inside the limit. If none is inside it, take the tightest that
+    exists - which is what EX 6 does: 55.130 gives 0.78% against a 0.75% limit,
+    and that was accepted because it is the only candle level there is. Only if
+    the window offers no level at all does it fall back to cutting at the limit.
+    """
+    if ZONE_MAX_WIDTH_PCT <= 0:
+        return near
+    supply = zone_type == "supply"
+    width = lambda n: (far - n) / n * 100.0 if supply else (n - far) / far * 100.0
+    if width(near) <= ZONE_MAX_WIDTH_PCT:
+        return near
+
+    extremes = (window["high"] if supply else window["low"]).astype(float)
+    if supply:
+        inside = [float(c) for c in extremes if near < c < far]
+    else:
+        inside = [float(c) for c in extremes if far < c < near]
+    if not inside:
+        return far / (1 + ZONE_MAX_WIDTH_PCT / 100.0) if supply else far * (1 + ZONE_MAX_WIDTH_PCT / 100.0)
+
+    acceptable = [c for c in inside if width(c) <= ZONE_MAX_WIDTH_PCT]
+    if acceptable:
+        return min(acceptable) if supply else max(acceptable)
+    return max(inside) if supply else min(inside)
+
+
 def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type, geometry=None):
     pivot_atr = atr_series.iloc[pivot_index]
     if pd.isna(pivot_atr):
@@ -321,11 +357,13 @@ def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type
             top = float(window[["open", "close"]].min(axis=1).min())
             if top <= bottom:
                 top = bottom + float(pivot_atr) * 0.01
+            top = tighten_wide_zone(window, "demand", bottom, top)
         else:
             top = float(window["high"].max())
             bottom = float(window[["open", "close"]].max(axis=1).max())
             if bottom >= top:
                 bottom = top - float(pivot_atr) * 0.01
+            bottom = tighten_wide_zone(window, "supply", top, bottom)
     else:
         band = float(pivot_atr) * (BOX_WIDTH / 10.0)
         if zone_type == "demand":

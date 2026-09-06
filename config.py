@@ -110,18 +110,13 @@ OTHER_WATCHLIST = [
 # no live data, but a re-audit on 2026-09-01 - two rounds 30s apart, the same
 # method that removed them - had all five answering from delta_india. The
 # fetch chain reaches Delta directly now, so that finding no longer holds.
+# Emptied 2026-09-06 to cut scanner load. Tokenised stocks were nine of the
+# sixty-four scanned symbols and were dropped on both timeframes at the same
+# time as the 4h crypto scan, leaving one 30m crypto scan as the only alert
+# job running. The registry in xstock_hybrid_rating.py is deliberately left
+# intact: it still maps tickers to sectors for anything that comes back, and
+# the notes below are the measurements that removed the earlier ones.
 XSTOCK_WATCHLIST = [
-    "TSLAXUSD",
-    "METAXUSD",
-    "SOXLBUSD",
-    "SNDKBUSD",
-    "BZ/USDT:USDT",
-    "SAMSUNG/USDT:USDT",
-    "AXTI/USDT:USDT",
-    "MRVL/USDT:USDT",
-    "SLX/USDT:USDT",
-    "MSFT/USDT:USDT",
-    "NVDAXUSD",
     # Still out, measured on CoinSwitch over 96 30m candles. The watchlist
     # median was about 200,000 in traded value per candle; every symbol here
     # sat under 11,000, and FLNC went a full 30 minutes with no trades at all
@@ -155,8 +150,7 @@ DELTA_LISTED_SYMBOLS = {
     "ZECUSD", "DOGEUSD", "AAVEUSD", "BEAT/USDT", "UNIUSD", "LINKUSD",
     "AVAXUSD", "LTCUSD", "BNBUSD", "TRUMP/USDT", "BCHUSD", "TACUSD",
     "ZORAUSD", "BLESSUSD", "HUSD", "VELVETUSD", "RIVERUSD", "SLVONUSD",
-    "XAUTUSD", "TSLAXUSD", "METAXUSD", "SOXLBUSD", "SNDKBUSD",
-    "MRVL/USDT:USDT", "NVDAXUSD",
+    "XAUTUSD",
 }
 
 COINSWITCH_WATCHLIST = []
@@ -319,6 +313,29 @@ ZONE_SL_HEIGHT_PCT = env_float("VICTUS_ZONE_SL_HEIGHT_PCT", 25.0)
 # alert record, so nothing is lost for later analysis; it just stops vetoing.
 # Retrain on wick-geometry outcomes and turn this back on.
 ZONE_RATING_GATE = env_flag("VICTUS_ZONE_RATING_GATE", ZONE_GEOMETRY != "wick")
+
+# EX 6, 2026-09-06. A zone can be right by the geometry and still untradeable:
+# LTC 4h came out 54.446-55.559, which is 2.05% wide. "WE CAN NOT TAKE ANY TRADE
+# WITH SL LIKE 2% SO WE NEED TO REDUCE THE LEVEL OF ZONE."
+#
+# The fix is not to shrink the box to a number. It is to re-anchor the near edge
+# to a real level - "I USE CANDLE END" - the top of the neighbouring candle's
+# wick, the highest point everything else in the base actually reached, leaving
+# the origin candle's wick standing alone above it. On LTC that is 55.130, and
+# the zone becomes 0.78%: "THE ZONE SIZE 0.78% WHICH I WANTED".
+#
+# Only fires when the zone is over the limit. Applied always it would contradict
+# EX1-EX5, which are all under it already - it would give 0.26% on EX3 where
+# 0.63% was drawn. 0 disables the rescue entirely.
+#
+# The limit is 0.80, not the 0.75 asked for, and the reason is EX5. That zone was
+# drawn by hand at 0.777% and a 0.75 trigger re-cuts it to 0.57% - it would break
+# one of the six worked examples. EX6's own accepted answer is 0.78%, so 0.78 is
+# demonstrably a width that passes: it appears twice, once as a zone drawn from
+# scratch and once as the fix for a zone that was too wide. 0.80 clears both and
+# still fires on EX6's 2.05%. Set VICTUS_ZONE_MAX_WIDTH_PCT=0.75 for the strict
+# reading, accepting that EX5 then gets re-cut.
+ZONE_MAX_WIDTH_PCT = env_float("VICTUS_ZONE_MAX_WIDTH_PCT", 0.80)
 
 ZONE_REBUILD_AFTER_BREAK = env_flag("VICTUS_ZONE_REBUILD_AFTER_BREAK", ZONE_GEOMETRY == "wick")
 

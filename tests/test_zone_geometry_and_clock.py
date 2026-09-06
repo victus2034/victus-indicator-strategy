@@ -116,13 +116,16 @@ class GeometrySwitch(unittest.TestCase):
     """wick geometry = [low, body bottom] for demand, mirrored for supply."""
 
     def build(self, geometry):
+        # The rescue is off here: this synthetic zone is 8.9% wide, so it would
+        # fire and move the near edge these assertions are about.
         rows = [(10.0, 10.2, 9.9, 10.1)] * 12
         # pivot low at index 12: a long lower wick under a green body
         rows.append((9.8, 9.9, 9.0, 9.85))
         rows += [(10.0, 10.2, 9.9, 10.1)] * 12
         df = frame(rows)
         atr_series = scanner.atr(df, 5)
-        return scanner.qualify_wick_zone(df, 12, 22, atr_series, "demand", geometry)
+        with patch.object(scanner, "ZONE_MAX_WIDTH_PCT", 0.0):
+            return scanner.qualify_wick_zone(df, 12, 22, atr_series, "demand", geometry)
 
     def test_wick_uses_the_body_edge_not_the_close(self):
         z = self.build("wick")
@@ -246,3 +249,63 @@ class BreakRule(unittest.TestCase):
             any(z["active"] for z in demand),
             "close rule should survive a wick that closed back above",
         )
+
+
+class WideZoneRescue(unittest.TestCase):
+    """EX 6: a zone can be right by the geometry and still untradeable.
+
+    "WE CAN NOT TAKE ANY TRADE WITH SL LIKE 2%". The near edge re-anchors to a
+    neighbouring candle's own extreme - the "candle end" - rather than being cut
+    to an arbitrary width, so the box still sits on something real.
+    """
+
+    def window(self, highs=None, lows=None):
+        n = len(highs or lows)
+        return pd.DataFrame({
+            "high": highs or [0.0] * n, "low": lows or [0.0] * n,
+            "open": [0.0] * n, "close": [0.0] * n,
+        })
+
+    def test_ex6_reproduces_the_hand_drawn_fix(self):
+        # LTC 4h: far 55.559, body-based near 54.446 -> 2.05%. Shiva moved the
+        # near edge to 55.130, the neighbouring candle's high, giving 0.78%.
+        w = self.window(highs=[55.130, 55.559])
+        with patch.object(scanner, "ZONE_MAX_WIDTH_PCT", 0.80):
+            near = scanner.tighten_wide_zone(w, "supply", 55.559, 54.446)
+        self.assertAlmostEqual(near, 55.130, places=3)
+
+    def test_ex5_is_left_alone_at_the_shipped_limit(self):
+        # 0.777% as drawn. The shipped 0.80 limit must not re-cut it; a 0.75
+        # limit would, which is why 0.80 is the default.
+        w = self.window(lows=[78.345, 77.112, 76.747, 77.181, 76.995])
+        with patch.object(scanner, "ZONE_MAX_WIDTH_PCT", 0.80):
+            near = scanner.tighten_wide_zone(w, "demand", 76.747, 77.343)
+        self.assertAlmostEqual(near, 77.343, places=3)
+
+    def test_narrow_zones_are_never_touched(self):
+        w = self.window(highs=[84.316, 84.558, 85.253, 85.032, 83.947])
+        with patch.object(scanner, "ZONE_MAX_WIDTH_PCT", 0.80):
+            near = scanner.tighten_wide_zone(w, "supply", 85.253, 84.716)
+        self.assertAlmostEqual(near, 84.716, places=3)
+
+    def test_prefers_the_widest_level_still_inside_the_limit(self):
+        # Three candidates all inside the limit: take the one leaving the widest
+        # zone, not the tightest.
+        # 100.2 -> 0.798%, 100.4 -> 0.598%, 100.7 -> 0.298%. All three are
+        # inside the limit, so the widest of them wins.
+        w = self.window(highs=[100.7, 100.4, 100.2, 101.0])
+        with patch.object(scanner, "ZONE_MAX_WIDTH_PCT", 0.80):
+            near = scanner.tighten_wide_zone(w, "supply", 101.0, 98.0)
+        self.assertAlmostEqual(near, 100.2, places=3)
+
+    def test_falls_back_to_cutting_when_the_window_offers_no_level(self):
+        w = self.window(highs=[90.0, 101.0])            # nothing between
+        with patch.object(scanner, "ZONE_MAX_WIDTH_PCT", 0.80):
+            near = scanner.tighten_wide_zone(w, "supply", 101.0, 98.0)
+        self.assertAlmostEqual((101.0 - near) / near * 100, 0.80, places=6)
+
+    def test_zero_disables_the_rescue(self):
+        w = self.window(highs=[55.130, 55.559])
+        with patch.object(scanner, "ZONE_MAX_WIDTH_PCT", 0.0):
+            near = scanner.tighten_wide_zone(w, "supply", 55.559, 54.446)
+        self.assertAlmostEqual(near, 54.446, places=3)
