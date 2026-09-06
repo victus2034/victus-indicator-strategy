@@ -32,12 +32,12 @@ STATUS=0
 
 ist_clock() { date -u -d "@$(( $1 + IST_OFFSET ))" '+%H:%M'; }
 
-# dispatch_if_overdue <workflow file> <HH:MM IST> [ISO weekday 1-7]
+# dispatch_if_overdue <workflow file> <HH:MM IST> [ISO weekdays, comma separated, 1=Mon 7=Sun]
 dispatch_if_overdue() {
   local wf="$1" at="$2" dow="${3:-}"
 
-  if [ -n "${dow}" ] && [ "${IST_DOW}" != "${dow}" ]; then
-    printf '  %-32s skipped - not its weekday\n' "${wf}"
+  if [ -n "${dow}" ] && ! printf ',%s,' "${dow}" | grep -q ",${IST_DOW},"; then
+    printf '  %-32s skipped - does not run on this weekday\n' "${wf}"
     return 0
   fi
 
@@ -88,7 +88,13 @@ echo "IST now $(ist_clock "${NOW}") (weekday ${IST_DOW})"
 # The times these workflows' own cron lines named, kept in IST because that is
 # the timezone every alert in this repo is written for.
 dispatch_if_overdue daily_astrology.yml         "07:00"
-dispatch_if_overdue daily_backtest_summary.yml  "16:35"
+# Weekdays only, matching the cron-job.org entry and how the desk actually
+# trades: there is no weekend volume worth taking a position into, so a
+# Saturday report measures trades nobody would have entered. Nothing is lost
+# by skipping them. Each run summarises max(completed days), and the job fires
+# at 16:35 against a 16:30 close boundary, so Friday reports Friday and Monday
+# reports Monday - only Saturday and Sunday go unreported, which is the point.
+dispatch_if_overdue daily_backtest_summary.yml  "16:35" "1,2,3,4,5"
 dispatch_if_overdue weekly_astrology.yml        "19:00" 7   # Sunday
 dispatch_if_overdue weekly_backtest_summary.yml "17:00" 5   # Friday
 
