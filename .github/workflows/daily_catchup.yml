@@ -1,0 +1,42 @@
+name: Victus Daily Catch-up
+
+on:
+  # Rides the crypto scanner, which cron-job.org dispatches every twenty
+  # minutes and which has not missed a beat. GitHub's own scheduler is not
+  # used here for the same reason the eight alert workflows abandoned it.
+  workflow_run:
+    workflows: ["Victus Crypto Scanner"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  actions: write      # to dispatch the workflows it finds overdue
+  contents: read
+
+concurrency:
+  group: victus-daily-catchup
+  cancel-in-progress: false
+
+jobs:
+  catch-up:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Dispatch anything that missed its slot
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash .github/scripts/dispatch_overdue.sh
+
+      - name: Notify on failure
+        if: failure()
+        env:
+          DISCORD_STATUS_WEBHOOK_URL: ${{ secrets.DISCORD_STATUS_WEBHOOK_URL }}
+        run: |
+          if [ -n "$DISCORD_STATUS_WEBHOOK_URL" ]; then
+            curl -sf -X POST -H "Content-Type: application/json" \
+              -d "{\"content\":\"⚠️ **${{ github.workflow }}** failed (run ${{ github.run_id }}). Daily and weekly jobs may not be dispatched: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+              "$DISCORD_STATUS_WEBHOOK_URL" || true
+          fi

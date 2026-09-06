@@ -1,9 +1,12 @@
 name: Victus Weekly Astrology
 
 on:
-  schedule:
-    # GitHub Actions uses UTC. 13:30 UTC = 19:00 IST Sunday.
-    - cron: "30 13 * * 0"
+  # Dispatched by the catch-up workflow, which rides the crypto scanner's
+  # reliable twenty-minute cadence. GitHub's own cron is gone from here: over
+  # nine days it ran the daily briefing 4h42m late at best and 11h35m at
+  # worst, never once at its stated time. Leaving it in place would have
+  # fired a second, duplicate run hours after the catch-up had already sent
+  # one. The due times now live in .github/scripts/dispatch_overdue.sh.
   workflow_dispatch:
 
 permissions:

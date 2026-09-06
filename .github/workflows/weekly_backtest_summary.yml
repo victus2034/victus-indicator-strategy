@@ -1,9 +1,12 @@
 name: Victus Weekly Backtest Summary
 
 on:
-  schedule:
-    # GitHub Actions uses UTC. 11:30 UTC = 17:00 IST, after the Friday daily summary.
-    - cron: "30 11 * * 5"
+  # Dispatched by the catch-up workflow, which rides the crypto scanner's
+  # reliable twenty-minute cadence. GitHub's own cron is gone from here: over
+  # nine days it ran the daily briefing 4h42m late at best and 11h35m at
+  # worst, never once at its stated time. Leaving it in place would have
+  # fired a second, duplicate run hours after the catch-up had already sent
+  # one. The due times now live in .github/scripts/dispatch_overdue.sh.
   workflow_dispatch:
     inputs:
       market:
