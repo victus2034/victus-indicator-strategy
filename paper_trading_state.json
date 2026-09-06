@@ -20103,6 +20103,33 @@
       "target_half": 105.46374999999999,
       "timeframe": "4h",
       "trade_id": "a388261d53d16fc1"
+    },
+    {
+      "alert_time": "2026-09-06T20:01:47.494201+05:30",
+      "cost_r": 4.207991799999044,
+      "date": "2026-09-06",
+      "entry": 197.93,
+      "entry_time": "2026-09-06T20:20:00+05:30",
+      "exit_price": 198.03000000000003,
+      "exit_time": "2026-09-06T20:20:00+05:30",
+      "final_result": "+2R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "xstock",
+      "net_realized_r": -2.2079917999990437,
+      "outcome": "+2R",
+      "rating": 7,
+      "realized_r": 2.0,
+      "risk": 0.05000000000001137,
+      "side": "long",
+      "stop": 197.88,
+      "stream": "live",
+      "symbol": "SAMSUNG/USDT:USDT",
+      "target_1": 197.98000000000002,
+      "target_2": 198.03000000000003,
+      "target_half": 197.955,
+      "timeframe": "30m",
+      "trade_id": "1f49b4aa18f34041"
     }
   ],
   "handled": {
@@ -20219,6 +20246,7 @@
     "1d5f88f8d6973064": "filled",
     "1e39e2cd06c80fb2": "filled",
     "1f0277c3ec7ad9cb": "filled",
+    "1f49b4aa18f34041": "filled",
     "1f82b60608fca63f": "filled",
     "1fba2f21aa84e02c": "filled",
     "1fd552555e7768b9": "filled",
@@ -20720,6 +20748,7 @@
     "ba87ba8cbe5aa2df": "filled",
     "bb1dbbdaf12dc912": "filled",
     "bb4546b1fb2118ac": "filled",
+    "bb77d6c10301f3d2": "filled",
     "bbc8f3ed790d1407": "filled",
     "bc6679c82d58b19e": "filled",
     "bc7137151fba3b02": "filled",
@@ -21064,6 +21093,24 @@
       "target_2": 0.0027015000000000008,
       "target_half": 0.0028571250000000003,
       "timeframe": "4h"
+    },
+    "bb77d6c10301f3d2": {
+      "alert_time": "2026-09-06T20:21:36.963701+05:30",
+      "entry": 0.016099,
+      "entry_time": "2026-09-06T20:25:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 5,
+      "risk": 9.375000000000008e-05,
+      "side": "long",
+      "stop": 0.01600525,
+      "stream": "live",
+      "symbol": "US/USDT",
+      "target_1": 0.01619275,
+      "target_2": 0.0162865,
+      "target_half": 0.016145874999999997,
+      "timeframe": "30m"
     }
   }
 }
