@@ -20157,6 +20157,33 @@
       "target_half": 0.016145874999999997,
       "timeframe": "30m",
       "trade_id": "bb77d6c10301f3d2"
+    },
+    {
+      "alert_time": "2026-09-06T22:23:27.426432+05:30",
+      "cost_r": 0.04903973333333367,
+      "date": "2026-09-06",
+      "entry": 0.002941,
+      "entry_time": "2026-09-06T22:30:00+05:30",
+      "exit_price": 0.0029374708,
+      "exit_time": "2026-09-06T22:30:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.006320266666666914,
+      "outcome": "BE",
+      "rating": 9,
+      "realized_r": 0.05536000000000058,
+      "risk": 6.374999999999957e-05,
+      "side": "short",
+      "stop": 0.0030047499999999996,
+      "stream": "live",
+      "symbol": "ZIL/USDT",
+      "target_1": 0.0028772500000000005,
+      "target_2": 0.002813500000000001,
+      "target_half": 0.0029091250000000003,
+      "timeframe": "4h",
+      "trade_id": "14c01fb09ae287a6"
     }
   ],
   "handled": {
@@ -20980,6 +21007,7 @@
     "f0a2f9ecef99dec9": "filled",
     "f0e6c713612f0613": "filled",
     "f0eebd4090582021": "filled",
+    "f14d850660e7ae24": "filled",
     "f1678084b3c01ffb": "filled",
     "f1bc7c080cf65fe1": "filled",
     "f21f06a877866700": "filled",
@@ -21052,24 +21080,6 @@
       "target_2": 1745.355,
       "target_half": 1763.1862500000002,
       "timeframe": "30m"
-    },
-    "14c01fb09ae287a6": {
-      "alert_time": "2026-09-06T22:23:27.426432+05:30",
-      "entry": 0.002941,
-      "entry_time": "2026-09-06T22:30:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 9,
-      "risk": 6.374999999999957e-05,
-      "side": "short",
-      "stop": 0.0030047499999999996,
-      "stream": "live",
-      "symbol": "ZIL/USDT",
-      "target_1": 0.0028772500000000005,
-      "target_2": 0.002813500000000001,
-      "target_half": 0.0029091250000000003,
-      "timeframe": "4h"
     },
     "1c33fe435bf6ec6d": {
       "alert_time": "2026-09-06T16:21:47.828231+05:30",
@@ -21196,6 +21206,24 @@
       "target_2": 51.675,
       "target_half": 53.75625,
       "timeframe": "4h"
+    },
+    "f14d850660e7ae24": {
+      "alert_time": "2026-09-06T22:46:41.287100+05:30",
+      "entry": 92.08,
+      "entry_time": "2026-09-06T22:50:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 7,
+      "risk": 0.5750000000000028,
+      "side": "short",
+      "stop": 92.655,
+      "stream": "live",
+      "symbol": "CL/USDT",
+      "target_1": 91.505,
+      "target_2": 90.92999999999999,
+      "target_half": 91.79249999999999,
+      "timeframe": "30m"
     }
   }
 }
