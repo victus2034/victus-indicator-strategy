@@ -2368,7 +2368,7 @@
     "shadow:US/USDT|30m|long|0.016024|0.0160696": 1788670312.1588957,
     "shadow:AXTI/USDT:USDT|30m|short|63.8757|64.07": 1788670313.3392987,
     "shadow:ZIL/USDT|30m|short|0.00287653|0.002884": 1788672707.527814,
-    "CL/USDT|30m|short|92.08|92.54": 1788718606.6778717,
+    "CL/USDT|30m|short|92.08|92.54": 1788722800.8004181,
     "METAXUSD|30m|short|617.68|617.7": 1788690718.9030924,
     "SAMSUNG/USDT:USDT|30m|short|199.6|199.87": 1788691907.68054,
     "shadow:SAMSUNG/USDT:USDT|30m|short|199.625|199.87": 1788673906.563993,
@@ -2413,7 +2413,8 @@
     "shadow:CAP/USDT|30m|long|0.04255|0.0429286": 1788721602.1450536,
     "shadow:MRVL/USDT:USDT|30m|short|223.291|223.68": 1788721602.145899,
     "shadow:MSFT/USDT:USDT|30m|short|503.062|503.22": 1788721602.146035,
-    "EUL/USDT|30m|long|1.1572|1.3119": 1788722215.8133304
+    "EUL/USDT|30m|long|1.1572|1.3119": 1788722215.8133304,
+    "MRVL/USDT:USDT|30m|short|223.55|223.68": 1788722800.984197
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -13962,7 +13963,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1788722166.1903112
+    "30m": 1788722750.1012876
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -29770,7 +29771,7 @@
   },
   "CL/USDT|supply|92.08000000|92.54000000": {
     "in_zone": true,
-    "last_alert_at": 1788718606.6778717
+    "last_alert_at": 1788722800.8004181
   },
   "shadow:CL/USDT|supply|92.46528605|92.54000000": {
     "in_zone": false,
@@ -32805,8 +32806,8 @@
     "last_alert_at": 0.0
   },
   "MRVL/USDT:USDT|supply|223.55000000|223.68000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1788722800.984197
   },
   "shadow:MRVL/USDT:USDT|supply|223.31431582|223.68000000": {
     "in_zone": false,
@@ -36337,6 +36338,10 @@
     "last_alert_at": 0.0
   },
   "shadow:ESP/USDT|demand|0.08532000|0.08553491": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BCHUSD|supply|265.01753320|265.50000000": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
