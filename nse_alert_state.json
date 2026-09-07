@@ -2950,10 +2950,12 @@
     "IGL.NS|4h|short|157.914|158.59": 1788508369.1421654,
     "BIOCON.NS|4h|long|395.05|396.824": 1788514392.8772938,
     "BLUEJET.NS|4h|long|563.8|567.509": 1788753148.9318156,
-    "ALKEM.NS|4h|long|5113|5134.96": 1788759168.8483467,
+    "ALKEM.NS|4h|long|5113|5134.96": 1788765163.6944282,
     "ICICIPRULI.NS|4h|long|478.85|481.038": 1788760367.2072842,
     "CUB.NS|4h|short|243.545|244.78": 1788762775.3653128,
-    "3MINDIA.NS|4h|long|32335|32476.6": 1788763949.5843318
+    "3MINDIA.NS|4h|long|32335|32476.6": 1788763949.5843318,
+    "CUB.NS|4h|short|243.546|244.78": 1788765164.0057335,
+    "DEEPAKNTR.NS|4h|long|1634.5|1642.86": 1788765164.3057318
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -9386,9 +9388,9 @@
     "last_attempt_at": 0.0
   },
   "CUB.NS|supply|243.5460|244.7800": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1788765164.0057335,
+    "last_attempt_at": 1788765164.0057335
   },
   "CUB.NS|demand|194.6000|195.6955": {
     "in_zone": false,
@@ -9611,9 +9613,9 @@
     "last_attempt_at": 0.0
   },
   "DEEPAKNTR.NS|demand|1634.5000|1642.8556": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1788765164.3057318,
+    "last_attempt_at": 1788765164.3057318
   },
   "DELHIVERY.NS|supply|489.1690|491.4000": {
     "in_zone": false,
@@ -18006,7 +18008,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1788763882.4792578
+    "4h": 1788765084.8535721
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -54924,9 +54926,9 @@
     "last_attempt_at": 0.0
   },
   "ALKEM.NS|demand|5113.0000|5134.9587": {
-    "in_zone": false,
-    "last_alert_at": 1788759168.8483467,
-    "last_attempt_at": 1788759168.8483467
+    "in_zone": true,
+    "last_alert_at": 1788765163.6944282,
+    "last_attempt_at": 1788765163.6944282
   },
   "ARE&M.NS|supply|1019.5045|1022.6000": {
     "in_zone": false,
@@ -55729,7 +55731,7 @@
     "last_attempt_at": 0.0
   },
   "3MINDIA.NS|demand|32335.0000|32476.5910": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1788763949.5843318,
     "last_attempt_at": 1788763949.5843318
   },
