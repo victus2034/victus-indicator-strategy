@@ -2922,7 +2922,7 @@
     "GRANULES.NS|4h|long|814.75|819.005": 1788325935.3268175,
     "NESTLEIND.NS|4h|long|1408.3|1413.04": 1788427978.5990405,
     "BLUESTARCO.NS|4h|long|1450|1461.23": 1788327161.0175636,
-    "BRITANNIA.NS|4h|long|5035.5|5054.36": 1788327161.283089,
+    "BRITANNIA.NS|4h|long|5035.5|5054.36": 1788759169.4402037,
     "GRANULES.NS|4h|long|814.75|819.006": 1788327161.4622812,
     "IFCI.NS|4h|short|95.1441|95.76": 1788330771.6841984,
     "JWL.NS|4h|long|236.85|239.012": 1788335550.2623627,
@@ -2949,7 +2949,8 @@
     "HDFCAMC.NS|4h|long|2470.5|2480.72": 1788508368.7867205,
     "IGL.NS|4h|short|157.914|158.59": 1788508369.1421654,
     "BIOCON.NS|4h|long|395.05|396.824": 1788514392.8772938,
-    "BLUEJET.NS|4h|long|563.8|567.509": 1788753148.9318156
+    "BLUEJET.NS|4h|long|563.8|567.509": 1788753148.9318156,
+    "ALKEM.NS|4h|long|5113|5134.96": 1788759168.8483467
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -18002,7 +18003,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1788757886.7809532
+    "4h": 1788759099.4082997
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -44795,9 +44796,9 @@
     "last_attempt_at": 0.0
   },
   "BRITANNIA.NS|demand|5035.5000|5054.3568": {
-    "in_zone": false,
-    "last_alert_at": 1788327161.283089,
-    "last_attempt_at": 1788327161.283089
+    "in_zone": true,
+    "last_alert_at": 1788759169.4402037,
+    "last_attempt_at": 1788759169.4402037
   },
   "MAPMYINDIA.NS|demand|795.1000|802.5254": {
     "in_zone": false,
@@ -54920,9 +54921,9 @@
     "last_attempt_at": 0.0
   },
   "ALKEM.NS|demand|5113.0000|5134.9587": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1788759168.8483467,
+    "last_attempt_at": 1788759168.8483467
   },
   "ARE&M.NS|supply|1019.5045|1022.6000": {
     "in_zone": false,
@@ -56710,6 +56711,16 @@
     "last_attempt_at": 0.0
   },
   "BLUEJET.NS|demand|400.5000|403.4737": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "BIOCON.NS|demand|337.8500|339.7957": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "BLUEJET.NS|demand|400.5000|403.4882": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
