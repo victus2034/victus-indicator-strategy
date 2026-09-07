@@ -21129,6 +21129,33 @@
       "target_half": 1.3354125,
       "timeframe": "30m",
       "trade_id": "80f4e47c3da17786"
+    },
+    {
+      "alert_time": "2026-09-07T18:32:04.988738+05:30",
+      "cost_r": 0.11156185000000103,
+      "date": "2026-09-07",
+      "entry": 0.46178,
+      "entry_time": "2026-09-07T18:40:00+05:30",
+      "exit_price": 0.46122586400000004,
+      "exit_time": "2026-09-07T18:40:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.014378149999996245,
+      "outcome": "BE",
+      "rating": 6,
+      "realized_r": 0.12593999999999728,
+      "risk": 0.0043999999999999595,
+      "side": "short",
+      "stop": 0.46618,
+      "stream": "live",
+      "symbol": "RE/USDT",
+      "target_1": 0.45738000000000006,
+      "target_2": 0.4529800000000001,
+      "target_half": 0.45958000000000004,
+      "timeframe": "30m",
+      "trade_id": "47f132ff5967c4fa"
     }
   ],
   "handled": {
@@ -21739,6 +21766,7 @@
     "b31cb34ab923b450": "filled",
     "b364a9320847ed14": "filled",
     "b39a88882190637d": "filled",
+    "b3be4746254b25be": "filled",
     "b422e91cfedca463": "filled",
     "b4327ed775037b33": "filled",
     "b432a780a612ffa4": "filled",
@@ -22074,24 +22102,6 @@
       "target_half": 1763.1862500000002,
       "timeframe": "30m"
     },
-    "47f132ff5967c4fa": {
-      "alert_time": "2026-09-07T18:32:04.988738+05:30",
-      "entry": 0.46178,
-      "entry_time": "2026-09-07T18:40:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 6,
-      "risk": 0.0043999999999999595,
-      "side": "short",
-      "stop": 0.46618,
-      "stream": "live",
-      "symbol": "RE/USDT",
-      "target_1": 0.45738000000000006,
-      "target_2": 0.4529800000000001,
-      "target_half": 0.45958000000000004,
-      "timeframe": "30m"
-    },
     "8030dc72dd4cd0a0": {
       "alert_time": "2026-09-07T15:11:42.595064+05:30",
       "entry": 0.00596,
@@ -22109,6 +22119,24 @@
       "target_2": 0.007277499999999999,
       "target_half": 0.006289375,
       "timeframe": "4h"
+    },
+    "b3be4746254b25be": {
+      "alert_time": "2026-09-07T18:52:03.552626+05:30",
+      "entry": 0.09164,
+      "entry_time": "2026-09-07T18:55:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 3,
+      "risk": 0.0005874999999999908,
+      "side": "short",
+      "stop": 0.09222749999999999,
+      "stream": "live",
+      "symbol": "DOGEUSD",
+      "target_1": 0.09105250000000001,
+      "target_2": 0.09046500000000002,
+      "target_half": 0.09134625,
+      "timeframe": "30m"
     }
   }
 }
