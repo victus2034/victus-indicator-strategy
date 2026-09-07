@@ -69,13 +69,18 @@ to begin with.
 
 ## Gotchas
 
-- **Zones can be too thin to trade, and nothing stops them.** `ZONE_MAX_WIDTH_PCT`
-  caps a zone from above; there is no floor. Measured over 42 symbols, 91 of 886
-  live zones (10.3%) plan a stop under 0.10% — the round-trip cost
-  (`daily_backtest_summary.CRYPTO_ROUND_TRIP_COST_PCT`) — and 32 of those are
-  zero-height wicks floored to 1% of ATR, the smallest at 0.003%. The chart draws
-  them too, so this is the geometry rather than a port bug, and adding a minimum
-  here would put the alerts out of step with the chart. Decide it deliberately.
+- **There is a cap on zone width and deliberately no floor.** `ZONE_MAX_WIDTH_PCT`
+  is the EX 6 rule and handles a zone that comes out too wide. Nothing handles one
+  that comes out too thin: measured over 42 symbols, 91 of 886 live zones (10.3%)
+  plan a stop under 0.10% — the round-trip cost
+  (`daily_backtest_summary.CRYPTO_ROUND_TRIP_COST_PCT`) — the smallest at 0.003%,
+  where fees are 2.7x the risk.
+
+  **Asked and answered, 2026-09-07: leave it.** The zones are to be the ones the
+  indicator draws, and nothing else. A minimum width would mute levels the chart
+  shows, and matching the chart is the requirement that outranks it. Do not add
+  one, on the alert side either — the stop distance is already printed on every
+  alert, and skipping a thin one is a reading decision, not a code one.
 - Alert state is gitignored and machine-local: `alert_state*.json`,
   `nse_alert_state*.json`, `crypto_alert_records*.jsonl`. Deleting these resets cooldowns
   and can cause a burst of duplicate alerts on the next run.
