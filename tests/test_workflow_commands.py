@@ -49,6 +49,39 @@ def scheduled_commands():
             yield workflow.name, script, cleaned
 
 
+class EntryConfirmPriceSourceTests(unittest.TestCase):
+    """entry_confirm must judge entries against a live price, not a stale candle.
+
+    scanner.live_ticker_price falls back to the close of the last COMPLETED
+    candle unless USE_LIVE_TICKER is set, and scanner's own default timeframe
+    is 4h. With neither exported, a 30m zone was measured against a candle up
+    to four hours old: DOGE on 7 Sep alerted at 18:52 sitting 0.01% off its
+    entry, was judged at 18:55 against the 17:30 close, read as 0.71% past
+    entry and outside the approach band, and never pinged at all. Thirty-six
+    percent of watched zones were going silent this way.
+    """
+
+    def setUp(self):
+        self.yaml = (WORKFLOWS / "entry_confirm.yml").read_text(encoding="utf-8")
+
+    def test_the_live_ticker_is_enabled(self):
+        self.assertIn('VICTUS_USE_LIVE_TICKER: "true"', self.yaml)
+
+    def test_the_candle_fallback_is_not_left_at_4h(self):
+        self.assertIn('VICTUS_TIMEFRAME: "30m"', self.yaml)
+
+    def test_the_fallback_would_be_stale_without_the_flag(self):
+        # Guards the mechanism itself: if this default ever flips, the two
+        # assertions above stop being load-bearing and should be revisited.
+        import scanner
+
+        self.assertEqual(
+            scanner.live_ticker_price("binance", "BTCUSD", 123.0),
+            (123.0, "candle_close"),
+            "with USE_LIVE_TICKER off the candle close is returned verbatim",
+        )
+
+
 class WorkflowCommandTests(unittest.TestCase):
     def test_every_referenced_script_exists(self):
         for workflow, script, _ in scheduled_commands():

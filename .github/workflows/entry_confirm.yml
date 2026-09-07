@@ -88,6 +88,20 @@ jobs:
           COINSWITCH_API_KEY: ${{ secrets.COINSWITCH_API_KEY }}
           COINSWITCH_SECRET_KEY: ${{ secrets.COINSWITCH_SECRET_KEY }}
           COINSWITCH_EXCHANGE: ${{ secrets.COINSWITCH_EXCHANGE }}
+          # Without this the price every entry is judged against is
+          # live_ticker_price's fallback: the close of the last COMPLETED
+          # candle. Unset, scanner also defaults to 4h, so a 30m zone was
+          # being measured against a candle up to four hours old. DOGE on
+          # 7 Sep is the shape of it - alerted at 18:52 with price 0.01%
+          # off entry, judged at 18:55 against the 17:30 close of 0.090989,
+          # read as 0.71% past entry and outside the approach band, and so
+          # never pinged at all. Live price then was 0.091690: an entry.
+          VICTUS_USE_LIVE_TICKER: "true"
+          # The fallback when a venue's ticker is unreachable. One process
+          # watches both 30m and 4h records, so no single timeframe is right
+          # for both - 30m is chosen because a stale price is what caused
+          # this, and a 30m candle is the fresher of the two for either.
+          VICTUS_TIMEFRAME: "30m"
           INPUT_TIMEFRAME: ${{ github.event.inputs.timeframe }}
           INPUT_MARKET: ${{ github.event.inputs.market }}
           INPUT_DRY_RUN: ${{ github.event.inputs.dry_run }}
