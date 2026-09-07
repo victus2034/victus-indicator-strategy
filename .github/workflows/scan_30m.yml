@@ -33,7 +33,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Restore runtime state
-        run: bash .github/scripts/restore_runtime_state.sh alert_state_30m_live_price.json crypto_alert_records_30m.jsonl
+        run: bash .github/scripts/restore_runtime_state.sh alert_state_30m_live_price.json crypto_alert_records_30m.jsonl crypto_watch_records_30m.jsonl
 
       - name: Check 30-minute Discord webhook configuration
         env:
@@ -72,7 +72,7 @@ jobs:
         run: python scanner.py --once
 
       - name: Persist runtime state
-        run: bash .github/scripts/persist_runtime_state.sh alert_state_30m_live_price.json crypto_alert_records_30m.jsonl
+        run: bash .github/scripts/persist_runtime_state.sh alert_state_30m_live_price.json crypto_alert_records_30m.jsonl crypto_watch_records_30m.jsonl
 
       - name: Notify on failure
         if: failure()

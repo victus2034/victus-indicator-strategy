@@ -33,6 +33,7 @@ from config import (
     MAX_CONSECUTIVE_ZONE_TOUCHES,
     MIN_ZONE_AGE_CANDLES,
     MAX_DISTANCE_PCT,
+    WATCH_DISTANCE_PCT,
     MIN_CRYPTO_ZONE_SCORE,
     MIN_DISTANCE_PCT,
     MIN_SCAN_INTERVAL_SECONDS,
@@ -101,6 +102,22 @@ ALERT_RECORD_FILE = Path(__file__).with_name(
 SHADOW_ALERT_RECORD_FILE = ALERT_RECORD_FILE.with_name(
     ALERT_RECORD_FILE.name.replace("crypto_alert_records", "crypto_shadow_alerts")
 )
+# Zones near enough for entry_confirm to start watching, but not near enough to
+# alert on. Its own file on purpose: daily_backtest_summary reads the alert
+# records to score what was actually delivered, and folding un-alerted zones in
+# there would inflate the denominator and quietly wreck every win rate in the
+# summary. Nothing here is ever sent to a webhook.
+WATCH_RECORD_FILE = ALERT_RECORD_FILE.with_name(
+    ALERT_RECORD_FILE.name.replace("crypto_alert_records", "crypto_watch_records")
+)
+# A zone sits inside the watch band for far longer than it sits inside the alert
+# band, and the scanner runs every five minutes, so re-writing one on every pass
+# would bloat the file and the state branch with it. One row per zone per window
+# is enough for entry_confirm, which only needs the row to exist.
+WATCH_RECORD_COOLDOWN_SECONDS = int(os.getenv("VICTUS_WATCH_RECORD_COOLDOWN_SECONDS", "1800"))
+# Rows older than this are dropped on write. entry_confirm stops watching after
+# three bars - twelve hours on 4h - so anything older is dead weight.
+WATCH_RECORD_RETENTION_SECONDS = int(os.getenv("VICTUS_WATCH_RECORD_RETENTION_SECONDS", str(24 * 3600)))
 SL_BUFFER_PCT = 0.10
 ZONE_REPEAT_SUPPRESSION_SECONDS = 60 * 60
 EXCHANGE_OPTIONS = {
@@ -1325,6 +1342,66 @@ def record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, 
         print(f"Crypto alert record write failed: {error}")
 
 
+def record_watch_candidate(result, zone_type, zone, distance_pct, now_ts):
+    """Note a zone as worth watching, without alerting on it.
+
+    entry_confirm can only track a zone once a row for it exists, and until
+    now the only rows were delivered alerts - written at 0.20%, by which
+    point the median zone is eight minutes from being touched and 28% are
+    already being touched in the same minute. Writing the row at the watch
+    band instead gives entry_confirm the ~42 minutes it needs to say GET
+    READY before price arrives, while the alert itself stays at 0.20%.
+
+    Deliberately not appended to ALERT_RECORD_FILE: the daily backtest
+    scores that file as things that were actually sent.
+    """
+    rating = result.get(f"{zone_type}_rating") or {}
+    score = rating.get("score")
+    if score is None:
+        score = result.get(f"{zone_type}_score")
+
+    record = {
+        "delivered_at_utc": pd.Timestamp.fromtimestamp(now_ts, tz="UTC").isoformat(),
+        "symbol": result["symbol"],
+        "exchange": result.get("exchange"),
+        "timeframe": TIMEFRAME,
+        "side": "short" if zone_type == "supply" else "long",
+        "zone_type": zone_type,
+        "distance_pct": float(distance_pct),
+        "alert_price": float(result["price"]),
+        "zone_bottom": float(zone["bottom"]),
+        "zone_top": float(zone["top"]),
+        "planned_entry": planned_entry_price(zone_type, zone),
+        "stop_price": planned_stop_price(zone_type, zone),
+        "stop_distance_pct": planned_stop_distance_pct(zone_type, zone),
+        "score": score,
+        "watch": True,
+    }
+
+    kept = []
+    try:
+        if WATCH_RECORD_FILE.exists():
+            floor = now_ts - WATCH_RECORD_RETENTION_SECONDS
+            for line in WATCH_RECORD_FILE.read_text(encoding="utf-8-sig").splitlines():
+                if not line.strip():
+                    continue
+                try:
+                    row = json.loads(line)
+                    when = pd.Timestamp(row["delivered_at_utc"]).timestamp()
+                except Exception:
+                    continue
+                if when >= floor:
+                    kept.append(line)
+    except OSError as error:
+        print(f"Crypto watch record read failed: {error}")
+
+    kept.append(json.dumps(record, separators=(",", ":")))
+    try:
+        WATCH_RECORD_FILE.write_text("\n".join(kept) + "\n", encoding="utf-8")
+    except OSError as error:
+        print(f"Crypto watch record write failed: {error}")
+
+
 def format_alert(result, zone_type, zone, distance_pct):
     symbol = alert_symbol(result["symbol"])
     price = result["price"]
@@ -1538,6 +1615,17 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shad
     # must not re-arm the same zone before the suppression window expires.
     elif distance_pct > MAX_DISTANCE_PCT * REARM_FACTOR:
         entry["in_zone"] = False
+
+    # Near enough to watch, not near enough to alert. Nothing is sent here -
+    # the row exists so entry_confirm can begin tracking the zone well before
+    # price arrives. Shadow candidates are excluded: they are a geometry
+    # experiment scored by paper_trading, not something to be warned about.
+    if not shadow and MIN_DISTANCE_PCT <= distance_pct <= WATCH_DISTANCE_PCT:
+        watch_state = state.setdefault("_watch", {})
+        last_watch = float(watch_state.get(noise_key, 0.0) or 0.0)
+        if not last_watch or now_ts - last_watch >= WATCH_RECORD_COOLDOWN_SECONDS:
+            record_watch_candidate(result, zone_type, zone, distance_pct, now_ts)
+            watch_state[noise_key] = now_ts
 
     return alert_sent
 

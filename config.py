@@ -219,6 +219,19 @@ ZONE_PADDING_ATR = 0.0
 # Alert as soon as a symbol comes within MAX_DISTANCE_PCT of it.
 MIN_DISTANCE_PCT = env_float("VICTUS_MIN_DISTANCE_PCT", 0.0)
 MAX_DISTANCE_PCT = env_float("VICTUS_MAX_DISTANCE_PCT", 0.20)
+# How near a zone must come before entry_confirm starts WATCHING it. This is
+# deliberately far wider than MAX_DISTANCE_PCT, which stays the threshold for
+# actually sending an alert, because the two answer different questions.
+#
+# Measured over 90 zones that price went on to fill: at 0.20% the median
+# warning between price entering the band and touching the entry is 8 minutes,
+# and 28% of zones enter the band and touch inside the SAME MINUTE - no scan
+# interval can catch those. At 0.75% the median warning is 42 minutes and 81%
+# leave room for at least one scan. Widening the alert threshold itself would
+# have bought that warning at the cost of a far noisier channel, including
+# alerts on approaches that never fill - a third of the zones measured never
+# touched at all. So the watch band is wide and the alert band stays narrow.
+WATCH_DISTANCE_PCT = env_float("VICTUS_WATCH_DISTANCE_PCT", 0.75)
 REARM_FACTOR = 1.25
 # 0 disables the over-touch veto. The Pine indicator counts no touches and
 # never retires a zone for being revisited - only a close through it kills the

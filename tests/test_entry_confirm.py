@@ -1,4 +1,5 @@
 import json
+import pathlib
 import unittest
 from unittest.mock import patch
 
@@ -199,6 +200,108 @@ class DroppedSymbolTests(unittest.TestCase):
         symbols = {r["symbol"] for r in watched}
         self.assertNotIn(dropped, symbols)
         self.assertIn(kept, symbols)
+
+
+class WatchBandTests(unittest.TestCase):
+    """The watch band is wide so GET READY has room; the alert band stays narrow.
+
+    Measured over 90 zones price went on to fill: at 0.20% the median gap
+    between entering the band and touching the entry is 8 minutes, and 28% of
+    zones do both inside the same minute. At 0.75% the median is 42 minutes.
+    Widening the alert threshold would have bought that at the cost of a much
+    noisier channel - a third of zones measured never touched at all - so the
+    scanner writes a watch row at 0.75% and still only SENDS at 0.20%.
+    """
+
+    def _records(self, tmp, watch_rows, alert_rows):
+        import json
+        from pathlib import Path
+
+        now = pd.Timestamp.now(tz="UTC") - pd.Timedelta(minutes=10)
+
+        def row(sym, watch):
+            r = {
+                "symbol": sym, "timeframe": "30m", "side": "long", "score": 8,
+                "planned_entry": 100.0, "stop_price": 98.0,
+                "delivered_at_utc": now.isoformat(),
+            }
+            if watch:
+                r["watch"] = True
+            return r
+
+        w = Path(tmp) / "watch.jsonl"
+        a = Path(tmp) / "alert.jsonl"
+        w.write_text(
+            "\n".join(json.dumps(row(s, True)) for s in watch_rows), encoding="utf-8"
+        )
+        a.write_text(
+            "\n".join(json.dumps(row(s, False)) for s in alert_rows), encoding="utf-8"
+        )
+        return w, a
+
+    def test_a_watch_row_is_watched_even_though_it_never_alerted(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            w, a = self._records(tmp, ["SOLUSD"], [])
+            with patch.dict(entry_confirm.WATCH_RECORDS["crypto"], {"30m": w}),                  patch.dict(entry_confirm.ALERT_RECORDS["crypto"], {"30m": a}):
+                got = entry_confirm.load_watched_alerts(
+                    "crypto", "30m", pd.Timestamp.now(tz=entry_confirm.IST)
+                )
+        self.assertEqual([r["symbol"] for r in got], ["SOLUSD"])
+
+    def test_an_alert_row_supersedes_its_own_watch_row(self):
+        # Same zone, both files. The alert row must win: it is the one the
+        # daily backtest scores, and it carries the delivered message.
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            w, a = self._records(tmp, ["BTCUSD"], ["BTCUSD"])
+            with patch.dict(entry_confirm.WATCH_RECORDS["crypto"], {"30m": w}),                  patch.dict(entry_confirm.ALERT_RECORDS["crypto"], {"30m": a}):
+                got = entry_confirm.load_watched_alerts(
+                    "crypto", "30m", pd.Timestamp.now(tz=entry_confirm.IST)
+                )
+        self.assertEqual(len(got), 1, "the zone was counted twice")
+        self.assertNotIn("watch", got[0], "the watch row won instead of the alert row")
+
+    def test_get_ready_reaches_out_to_the_watch_band(self):
+        record = watched(symbol="BTCUSD", _market="crypto", entry=100.0, stop=98.0)
+        with patch.object(entry_confirm, "APPROACH_THRESHOLD_PCT", 0.75):
+            self.assertEqual(entry_confirm.classify(100.6, record, False)[0],
+                             entry_confirm.STAGE_READY)
+            # Still silent beyond the band, so this is a wider net, not no net.
+            self.assertIsNone(entry_confirm.classify(100.9, record, False)[0])
+        # Entry itself is unchanged - the wider band only moves the warning.
+        self.assertEqual(entry_confirm.classify(100.0, record, False)[0],
+                         entry_confirm.STAGE_ENTRY)
+
+
+class WatchRecordsStayOutOfTheBacktestTests(unittest.TestCase):
+    """The backtest scores what was SENT. Watch rows were never sent.
+
+    Folding them into crypto_alert_records would inflate the denominator of
+    every win rate in the daily summary with zones that were only ever looked
+    at, which is why they get their own file rather than a flag on the same
+    one - a flag is one forgotten filter away from silently wrong statistics.
+    """
+
+    def test_the_two_record_files_are_different_files(self):
+        import scanner
+
+        self.assertNotEqual(scanner.WATCH_RECORD_FILE, scanner.ALERT_RECORD_FILE)
+        self.assertIn("watch", scanner.WATCH_RECORD_FILE.name)
+
+    def test_the_backtest_never_reads_the_watch_file(self):
+        source = pathlib.Path("daily_backtest_summary.py").read_text(encoding="utf-8")
+        self.assertNotIn("watch_records", source)
+        self.assertNotIn("WATCH_RECORD_FILE", source)
+
+    def test_the_watch_file_is_not_committed(self):
+        # It is regenerated every scan and grows all day; the alert records are
+        # ignored for the same reason.
+        ignored = pathlib.Path(".gitignore").read_text(encoding="utf-8")
+        self.assertIn("crypto_watch_records.jsonl", ignored)
+        self.assertIn("crypto_watch_records_30m.jsonl", ignored)
 
 
 class BrokerLabelTests(unittest.TestCase):

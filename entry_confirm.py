@@ -55,6 +55,20 @@ ALERT_RECORDS = {
         "4h": Path(__file__).with_name("crypto_alert_records.jsonl"),
     },
 }
+# Zones the scanner noted as worth watching but did not alert on, written at
+# WATCH_DISTANCE_PCT rather than MAX_DISTANCE_PCT. Read alongside the alerts
+# and never instead of them: a zone that later alerts appears in both files,
+# and the alert row wins because it is the one the backtest scores.
+#
+# Without these, the earliest a zone could be watched was the moment it was
+# alerted - 0.20% away, a median eight minutes before the touch and for 28%
+# of zones the very same minute. There was no room left to say GET READY.
+WATCH_RECORDS = {
+    "crypto": {
+        "30m": Path(__file__).with_name("crypto_watch_records_30m.jsonl"),
+        "4h": Path(__file__).with_name("crypto_watch_records.jsonl"),
+    },
+}
 BAR_MINUTES = {"30m": 30, "4h": 240}
 # Discord rejects anything longer; the digest is split rather than dropped.
 MAX_MESSAGE_CHARS = 1900
@@ -137,43 +151,57 @@ def load_watched_alerts(
     records_path points this at a different log - paper_trading uses it to read
     the shadow-geometry alerts, which are written by the scanner but never sent.
     """
-    path = records_path or ALERT_RECORDS[market][timeframe]
-    if not path.exists():
-        return []
+    if records_path is not None:
+        paths = [records_path]
+    else:
+        # Watch rows first, alert rows second. Both key on the same zone, so a
+        # zone that has since alerted overwrites its own watch row - and the
+        # alert row is the one carrying the message the backtest scores.
+        paths = [
+            path
+            for path in (
+                WATCH_RECORDS.get(market, {}).get(timeframe),
+                ALERT_RECORDS[market][timeframe],
+            )
+            if path is not None
+        ]
 
     window = pd.Timedelta(minutes=BAR_MINUTES[timeframe] * WATCH_BARS)
     watched: dict[str, dict] = {}
-    for line in path.read_text(encoding="utf-8-sig").splitlines():
-        if not line.strip():
+    for path in paths:
+        if not path.exists():
             continue
-        try:
-            record = json.loads(line)
-        except json.JSONDecodeError:
-            continue
-        if record.get("timeframe") != timeframe:
-            continue
-        # A symbol dropped from the watchlist keeps pinging for as long as its
-        # last alert stays fillable - twelve hours on 4h - and broker_label
-        # would call it CoinSwitch, because that is what anything outside the
-        # Delta list resolves to. Sending someone to the wrong exchange is
-        # worse than saying nothing, and the symbol was dropped on purpose.
-        if market == "crypto" and str(record.get("symbol", "")).upper() not in CRYPTO_WATCHLIST_SET:
-            continue
-        delivered = pd.to_datetime(record.get("delivered_at_utc"), errors="coerce", utc=True)
-        if pd.isna(delivered):
-            continue
-        delivered = delivered.tz_convert(IST)
-        if now - delivered > window or delivered > now:
-            continue
-        entry = pd.to_numeric(record.get("planned_entry"), errors="coerce")
-        stop = pd.to_numeric(record.get("stop_price"), errors="coerce")
-        if pd.isna(entry) or pd.isna(stop) or entry <= 0:
-            continue
-        record["_entry"] = float(entry)
-        record["_stop"] = float(stop)
-        record["_delivered"] = delivered
-        record["_market"] = market
-        watched[watch_key(record)] = record
+        for line in path.read_text(encoding="utf-8-sig").splitlines():
+            if not line.strip():
+                continue
+            try:
+                record = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if record.get("timeframe") != timeframe:
+                continue
+            # A symbol dropped from the watchlist keeps pinging for as long as its
+            # last alert stays fillable - twelve hours on 4h - and broker_label
+            # would call it CoinSwitch, because that is what anything outside the
+            # Delta list resolves to. Sending someone to the wrong exchange is
+            # worse than saying nothing, and the symbol was dropped on purpose.
+            if market == "crypto" and str(record.get("symbol", "")).upper() not in CRYPTO_WATCHLIST_SET:
+                continue
+            delivered = pd.to_datetime(record.get("delivered_at_utc"), errors="coerce", utc=True)
+            if pd.isna(delivered):
+                continue
+            delivered = delivered.tz_convert(IST)
+            if now - delivered > window or delivered > now:
+                continue
+            entry = pd.to_numeric(record.get("planned_entry"), errors="coerce")
+            stop = pd.to_numeric(record.get("stop_price"), errors="coerce")
+            if pd.isna(entry) or pd.isna(stop) or entry <= 0:
+                continue
+            record["_entry"] = float(entry)
+            record["_stop"] = float(stop)
+            record["_delivered"] = delivered
+            record["_market"] = market
+            watched[watch_key(record)] = record
     return list(watched.values())
 
 

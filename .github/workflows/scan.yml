@@ -33,7 +33,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Restore runtime state
-        run: bash .github/scripts/restore_runtime_state.sh alert_state.json crypto_alert_records.jsonl
+        run: bash .github/scripts/restore_runtime_state.sh alert_state.json crypto_alert_records.jsonl crypto_watch_records.jsonl
 
       - name: Check Discord webhook configuration
         env:
@@ -67,7 +67,7 @@ jobs:
         run: python scanner.py --once
 
       - name: Persist runtime state
-        run: bash .github/scripts/persist_runtime_state.sh alert_state.json crypto_alert_records.jsonl
+        run: bash .github/scripts/persist_runtime_state.sh alert_state.json crypto_alert_records.jsonl crypto_watch_records.jsonl
 
       - name: Notify on failure
         if: failure()
