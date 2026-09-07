@@ -2951,7 +2951,8 @@
     "BIOCON.NS|4h|long|395.05|396.824": 1788514392.8772938,
     "BLUEJET.NS|4h|long|563.8|567.509": 1788753148.9318156,
     "ALKEM.NS|4h|long|5113|5134.96": 1788759168.8483467,
-    "ICICIPRULI.NS|4h|long|478.85|481.038": 1788760367.2072842
+    "ICICIPRULI.NS|4h|long|478.85|481.038": 1788760367.2072842,
+    "CUB.NS|4h|short|243.545|244.78": 1788762775.3653128
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -4454,9 +4455,9 @@
     "last_attempt_at": 0.0
   },
   "CUB.NS|supply|243.5453|244.7800": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1788762775.3653128,
+    "last_attempt_at": 1788762775.3653128
   },
   "CUB.NS|demand|194.6000|195.6975": {
     "in_zone": false,
@@ -18004,7 +18005,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1788761485.6230006
+    "4h": 1788762702.2145386
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -44797,7 +44798,7 @@
     "last_attempt_at": 0.0
   },
   "BRITANNIA.NS|demand|5035.5000|5054.3568": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1788759169.4402037,
     "last_attempt_at": 1788759169.4402037
   },
@@ -50407,7 +50408,7 @@
     "last_attempt_at": 0.0
   },
   "ICICIPRULI.NS|demand|478.8500|481.0377": {
-    "in_zone": false,
+    "in_zone": true,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
   },
@@ -54922,7 +54923,7 @@
     "last_attempt_at": 0.0
   },
   "ALKEM.NS|demand|5113.0000|5134.9587": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1788759168.8483467,
     "last_attempt_at": 1788759168.8483467
   },
