@@ -390,3 +390,46 @@ class FallbackPairTests(unittest.TestCase):
             with self.subTest(raw=raw):
                 self.assertEqual(scanner.fallback_symbol(raw), raw)
 
+
+
+class SubCentPrecision(unittest.TestCase):
+    """A price under a cent must not round its own levels together.
+
+    At a fixed six decimals BOME's entry, zone bottom and stop all landed on
+    the same three significant figures, so the alert could not say where to
+    enter or where the stop went. Nothing at or above a cent changes - the
+    widths above are what these alerts have always read.
+    """
+
+    def test_a_sub_cent_alert_keeps_its_levels_apart(self):
+        result = {"symbol": "BOME/USDT", "price": 0.000915,
+                  "buy_signal": False, "sell_signal": False}
+        zone = {"bottom": 0.00090732, "top": 0.00091456}
+        with patch.object(scanner, "ZONE_SL_MODE", "zone_pct"):
+            message = scanner.format_alert(result, "demand", zone, 0.05)
+
+        levels = [line for line in message.splitlines() if line.startswith(("Zone:", "SL:"))]
+        self.assertIn("0.00090732", levels[0])
+        self.assertIn("0.00091456", levels[0])
+        # The stop must be a different number from the zone bottom it sits under.
+        stop_text = levels[1].split()[1]
+        self.assertNotEqual(stop_text, "0.00090732")
+        self.assertLess(float(stop_text), 0.00090732)
+
+    def test_prices_at_or_above_a_cent_are_unchanged(self):
+        for value in (79080.0, 100.6, 5.9669, 0.0899, 0.01):
+            with self.subTest(value=value):
+                self.assertEqual(scanner.price_decimals(value), 6)
+
+    def test_width_grows_as_the_price_shrinks(self):
+        self.assertEqual(scanner.price_decimals(0.009), 7)
+        self.assertEqual(scanner.price_decimals(0.000915), 8)
+        self.assertEqual(scanner.price_decimals(0.0000012), 10)
+
+    def test_zero_and_negative_do_not_explode(self):
+        self.assertEqual(scanner.price_decimals(0.0), 6)
+        self.assertEqual(scanner.price_decimals(-0.000915), 8)
+
+
+if __name__ == "__main__":
+    unittest.main()
