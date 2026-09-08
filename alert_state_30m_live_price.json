@@ -2588,7 +2588,7 @@
     "AAVEUSD|30m|long|128.16|129.16": 1788871911.7315137,
     "shadow:HUSD|30m|short|0.0803743|0.08064": 1788871911.973066,
     "shadow:LA/USDT|30m|long|0.06205|0.0623616": 1788873113.9621327,
-    "CL/USDT|30m|long|91.95|92.06": 1788873113.9675143,
+    "CL/USDT|30m|long|91.95|92.06": 1788882113.313855,
     "SOON/USDT|30m|long|0.1864|0.187891": 1788873723.7736633,
     "shadow:AAVEUSD|30m|long|128.56|128.816": 1788873724.0651429,
     "MSFT/USDT:USDT|30m|long|494.17|494.47": 1788873724.073227,
@@ -2608,7 +2608,8 @@
     "MSFT/USDT:USDT|30m|long|490.39|490.66": 1788877925.840856,
     "shadow:MSFT/USDT:USDT|30m|long|490.39|490.658": 1788877925.840856,
     "XRPUSD|30m|short|1.4112|1.4128": 1788878515.9446988,
-    "US/USDT|30m|short|0.015495|0.015619": 1788879114.689144
+    "US/USDT|30m|short|0.015495|0.015619": 1788879114.689144,
+    "shadow:CL/USDT|30m|long|91.95|92.0185": 1788882113.313855
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14157,7 +14158,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1788881471.8709586
+    "30m": 1788882060.802863
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -52251,8 +52252,8 @@
     "last_alert_at": 0.0
   },
   "CL/USDT|demand|91.95000000|92.06000000": {
-    "in_zone": false,
-    "last_alert_at": 1788873113.9675143
+    "in_zone": true,
+    "last_alert_at": 1788882113.313855
   },
   "shadow:CL/USDT|demand|91.95000000|92.01844016": {
     "in_zone": false,
@@ -53683,8 +53684,8 @@
     "last_alert_at": 0.0
   },
   "shadow:CL/USDT|demand|91.95000000|92.01852752": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1788882113.313855
   },
   "shadow:KORU/USDT|supply|25.69578615|25.74000000": {
     "in_zone": false,
@@ -53731,6 +53732,26 @@
     "last_alert_at": 0.0
   },
   "shadow:NVDAXUSD|demand|223.20000000|223.36877567": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:SAMSUNG/USDT:USDT|supply|207.82397603|208.04000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:SAMSUNG/USDT:USDT|demand|196.76000000|196.88441212": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:AXTI/USDT:USDT|demand|56.16000000|56.32219184": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:MRVL/USDT:USDT|demand|220.17000000|220.38782167": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:MSFT/USDT:USDT|supply|499.51621661|499.68000000": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
