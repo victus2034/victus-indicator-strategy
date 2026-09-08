@@ -26900,6 +26900,7 @@
     "VELVETUSD|30m|short|0.0805|0.0815": "filled",
     "VELVETUSD|30m|short|0.0812|0.081825": "filled",
     "XRPUSD|30m|short|1.4112|1.4132": "filled",
+    "XRPUSD|30m|short|1.4239|1.43402": "filled",
     "ZIL/USDT|30m|long|0.002876|0.00285225": "filled",
     "ZIL/USDT|30m|short|0.002936|0.00294475": "filled",
     "ZIL/USDT|30m|short|0.002939|0.00296775": "filled",
@@ -27304,7 +27305,7 @@
       "entry": 92.06,
       "entry_time": "2026-09-08T21:15:00+05:30",
       "geometry": "wick",
-      "half_r_hit": false,
+      "half_r_hit": true,
       "market": "crypto",
       "rating": 8,
       "risk": 0.13750000000000284,
@@ -27315,6 +27316,24 @@
       "target_1": 92.1975,
       "target_2": 92.33500000000001,
       "target_half": 92.12875,
+      "timeframe": "30m"
+    },
+    "XRPUSD|30m|short|1.4239|1.43402": {
+      "alert_time": "2026-09-08T21:02:04.221551+05:30",
+      "entry": 1.4239,
+      "entry_time": "2026-09-08T21:15:00+05:30",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 5,
+      "risk": 0.01012499999999994,
+      "side": "short",
+      "stop": 1.4340249999999999,
+      "stream": "live",
+      "symbol": "XRPUSD",
+      "target_1": 1.413775,
+      "target_2": 1.40365,
+      "target_half": 1.4188375,
       "timeframe": "30m"
     }
   }
