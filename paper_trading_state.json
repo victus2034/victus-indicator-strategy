@@ -26070,6 +26070,33 @@
       "target_half": 1.285625,
       "timeframe": "30m",
       "trade_id": "0b4f154913d97688"
+    },
+    {
+      "alert_time": "2026-09-08T19:41:56.143198+05:30",
+      "cost_r": 0.1062999999999998,
+      "date": "2026-09-08",
+      "entry": 0.09916666666666665,
+      "entry_time": "2026-09-08T19:45:00+05:30",
+      "exit_price": 0.10020841249999998,
+      "exit_time": "2026-09-08T20:05:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "net_realized_r": -1.156799999999994,
+      "outcome": "SL",
+      "rating": 6,
+      "realized_r": -1.0504999999999942,
+      "risk": 0.0009916666666666685,
+      "side": "short",
+      "stop": 0.10015833333333332,
+      "stream": "live",
+      "symbol": "ALGO/USDT",
+      "target_1": 0.09817499999999998,
+      "target_2": 0.09718333333333332,
+      "target_half": 0.09867083333333332,
+      "timeframe": "30m",
+      "trade_id": "1c2f6b7bb5fef70a"
     }
   ],
   "handled": {
@@ -26729,6 +26756,7 @@
     "NVDAXUSD|30m|long|229.85|229.475": "filled",
     "O/USDT|30m|short|0.5509|0.55615": "filled",
     "O/USDT|30m|short|0.5512|0.555575": "filled",
+    "O/USDT|30m|short|0.559921|0.56552": "filled",
     "RIVERUSD|30m|short|1.268|1.27675": "filled",
     "RIVERUSD|30m|short|1.29|1.29875": "filled",
     "SAMSUNG/USDT:USDT|4h|short|204.15|207.062": "filled",
@@ -27159,22 +27187,22 @@
     "ffb4661b7d04cd46": "filled"
   },
   "open": {
-    "1c2f6b7bb5fef70a": {
-      "alert_time": "2026-09-08T19:41:56.143198+05:30",
-      "entry": 0.09916666666666665,
-      "entry_time": "2026-09-08T19:45:00+05:30",
-      "geometry": "wick",
+    "O/USDT|30m|short|0.559921|0.56552": {
+      "alert_time": "2026-09-08T19:41:56.137950+05:30",
+      "entry": 0.5599206349206349,
+      "entry_time": "2026-09-08T20:10:00+05:30",
+      "geometry": "live",
       "half_r_hit": false,
       "market": "crypto",
-      "rating": 6,
-      "risk": 0.0009916666666666685,
+      "rating": 9,
+      "risk": 0.005599206349206298,
       "side": "short",
-      "stop": 0.10015833333333332,
+      "stop": 0.5655198412698412,
       "stream": "live",
-      "symbol": "ALGO/USDT",
-      "target_1": 0.09817499999999998,
-      "target_2": 0.09718333333333332,
-      "target_half": 0.09867083333333332,
+      "symbol": "O/USDT",
+      "target_1": 0.5543214285714286,
+      "target_2": 0.5487222222222223,
+      "target_half": 0.5571210317460318,
       "timeframe": "30m"
     }
   }
