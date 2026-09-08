@@ -166,6 +166,56 @@ class FormattingTests(unittest.TestCase):
         self.assertIn("0.00276500", line)
 
 
+class ReadyCooldownTests(unittest.TestCase):
+    """One GET READY per symbol per timeframe within the cooldown window.
+
+    Widening the watch band to 0.75% (see scanner.WATCH_DISTANCE_PCT) put
+    several stacked zones on the same symbol in range at once, and each
+    warned separately - 74 GET READYs from 36 symbols across 70 zones in
+    half a day, TSLA alone six times for four levels. The zone is still
+    marked so its ENTRY NOW still fires per level; only the heads-up is
+    budgeted per symbol.
+    """
+
+    def test_a_fresh_symbol_is_not_on_cooldown(self):
+        state = {}
+        record = watched(symbol="TSLAXUSD", timeframe="30m")
+        self.assertFalse(entry_confirm.ready_recently(state, record, pd.Timestamp.now(tz=entry_confirm.IST)))
+
+    def test_a_second_zone_on_the_same_symbol_is_suppressed(self):
+        now = pd.Timestamp.now(tz=entry_confirm.IST)
+        state = {}
+        first = watched(symbol="TSLAXUSD", timeframe="30m", entry=100.0)
+        state[entry_confirm.ready_key(first)] = now.timestamp()
+
+        second = watched(symbol="TSLAXUSD", timeframe="30m", entry=105.0)
+        self.assertTrue(entry_confirm.ready_recently(state, second, now))
+
+    def test_a_different_symbol_is_unaffected(self):
+        now = pd.Timestamp.now(tz=entry_confirm.IST)
+        state = {entry_confirm.ready_key(watched(symbol="TSLAXUSD", timeframe="30m")): now.timestamp()}
+        other = watched(symbol="METAXUSD", timeframe="30m")
+        self.assertFalse(entry_confirm.ready_recently(state, other, now))
+
+    def test_the_cooldown_expires(self):
+        now = pd.Timestamp.now(tz=entry_confirm.IST)
+        record = watched(symbol="TSLAXUSD", timeframe="30m")
+        stale = now.timestamp() - entry_confirm.READY_COOLDOWN_SECONDS - 1
+        state = {entry_confirm.ready_key(record): stale}
+        self.assertFalse(entry_confirm.ready_recently(state, record, now))
+
+    def test_prune_state_keeps_the_ready_budget(self):
+        # prune_state drops keys for zones no longer being watched. The
+        # ready-cooldown bookkeeping is not a zone key and must survive, or
+        # the cooldown would reset on every run before it could do anything.
+        record = watched(symbol="TSLAXUSD", timeframe="30m")
+        rkey = entry_confirm.ready_key(record)
+        state = {rkey: 123.0, "some|zone|key": {"stage": 1}}
+        pruned = entry_confirm.prune_state(state, active_keys=set())
+        self.assertIn(rkey, pruned)
+        self.assertNotIn("some|zone|key", pruned)
+
+
 class DroppedSymbolTests(unittest.TestCase):
     def test_a_symbol_off_the_watchlist_is_not_watched(self):
         # Its last alert stays fillable for hours after the symbol is cut, and

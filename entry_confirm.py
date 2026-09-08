@@ -86,6 +86,10 @@ MAX_MESSAGE_CHARS = 1900
 APPROACH_THRESHOLD_PCT = float(
     os.getenv("VICTUS_APPROACH_THRESHOLD_PCT", MAX_DISTANCE_PCT)
 )
+# How long one symbol's GET READY budget lasts. entry_confirm runs every 5
+# minutes; a fresh zone on the same symbol inside this window rides the
+# existing warning instead of adding a second message for it.
+READY_COOLDOWN_SECONDS = int(os.getenv("VICTUS_READY_COOLDOWN_SECONDS", str(30 * 60)))
 # Past this share of the planned entry-to-stop distance, the trade is
 # reported as late rather than as a clean entry.
 NEAR_SL_FRACTION = 0.5
@@ -445,8 +449,28 @@ def send_ping(message: str) -> bool:
         return False
 
 
+def ready_key(record: dict) -> str:
+    """One GET READY budget per symbol per timeframe, not per zone."""
+    symbol = str(record.get("symbol", "")).upper()
+    return f"_ready|{symbol}|{record.get('timeframe')}"
+
+
+def ready_recently(state: dict, record: dict, now: pd.Timestamp) -> bool:
+    last = float(state.get(ready_key(record), 0.0) or 0.0)
+    if not last:
+        return False
+    return (now.timestamp() - last) < READY_COOLDOWN_SECONDS
+
+
 def prune_state(state: dict, active_keys: set[str]) -> dict:
-    return {key: value for key, value in state.items() if key in active_keys}
+    # Underscore-prefixed keys are bookkeeping, not zones - the GET READY
+    # budget lives there. Pruning to active zone keys alone dropped it on
+    # every run, which made the cooldown expire the instant it was written.
+    return {
+        key: value
+        for key, value in state.items()
+        if key in active_keys or key.startswith("_")
+    }
 
 
 def crypto_alert_window_open(now: pd.Timestamp) -> bool:
@@ -524,8 +548,22 @@ def main() -> None:
         # run, which is what turned a handful of trades into a wall of
         # near-identical messages.
         if stage is not None and stage > last_stage:
-            pings.append((stage, format_line(stage, price, record)))
-            entry_state["stage"] = stage
+            if stage == STAGE_READY and ready_recently(state, record, now):
+                # One heads-up per symbol, not one per level. Widening the
+                # watch band to 0.75% put several stacked zones on the same
+                # symbol in range at once and each warned separately: 74
+                # GET READYs came from 36 symbols across 70 zones in half a
+                # day, TSLA alone six times for four levels. That the price
+                # is approaching TSLA is one piece of news however many
+                # boxes are drawn near it. The zone is still marked, so its
+                # ENTRY NOW - which names a specific level and is worth
+                # having per zone - still fires when price arrives.
+                entry_state["stage"] = stage
+            else:
+                if stage == STAGE_READY:
+                    state[ready_key(record)] = now.timestamp()
+                pings.append((stage, format_line(stage, price, record)))
+                entry_state["stage"] = stage
         state[key] = entry_state
 
     messages = build_digest(pings, now)
