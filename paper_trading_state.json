@@ -25125,6 +25125,33 @@
       "target_half": 0.09867083333333332,
       "timeframe": "30m",
       "trade_id": "ALGO/USDT|30m|short|0.0991667|0.100158"
+    },
+    {
+      "alert_time": "2026-09-08T08:31:52.971971+05:30",
+      "cost_r": 0.009617426944971544,
+      "date": "2026-09-08",
+      "entry": 0.00596,
+      "entry_time": "2026-09-08T12:30:00+05:30",
+      "exit_price": 0.005975,
+      "exit_time": "2026-09-08T18:25:00+05:30",
+      "final_result": "Neither",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "net_realized_r": 0.013152971537002293,
+      "outcome": "Neither",
+      "rating": 6,
+      "realized_r": 0.022770398481973837,
+      "risk": 0.0006587499999999996,
+      "side": "long",
+      "stop": 0.00530125,
+      "stream": "live",
+      "symbol": "HOME/USDT",
+      "target_1": 0.00661875,
+      "target_2": 0.007277499999999999,
+      "target_half": 0.006289375,
+      "timeframe": "4h",
+      "trade_id": "HOME/USDT|4h|long|0.00596|0.00530125"
     }
   ],
   "handled": {
@@ -25246,6 +25273,7 @@
     "1bae341aedc8b91e": "filled",
     "1bf178363c3e3aa5": "filled",
     "1c33fe435bf6ec6d": "filled",
+    "1c5955d47c6bbf74": "filled",
     "1c5ca86983a95b42": "filled",
     "1c7282b72f97d0c6": "filled",
     "1cb1b52e1599689e": "filled",
@@ -26181,6 +26209,24 @@
     "ffb4661b7d04cd46": "filled"
   },
   "open": {
+    "1c5955d47c6bbf74": {
+      "alert_time": "2026-09-08T16:32:01.285589+05:30",
+      "entry": 495.18,
+      "entry_time": "2026-09-08T18:30:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "rating": 6,
+      "risk": 0.9875000000000114,
+      "side": "long",
+      "stop": 494.1925,
+      "stream": "live",
+      "symbol": "MSFT/USDT:USDT",
+      "target_1": 496.1675,
+      "target_2": 497.15500000000003,
+      "target_half": 495.67375000000004,
+      "timeframe": "4h"
+    },
     "68b2da7d3061ebdc": {
       "alert_time": "2026-09-08T17:51:57.035949+05:30",
       "entry": 129.34,
@@ -26198,24 +26244,6 @@
       "target_2": 131.29,
       "target_half": 129.8275,
       "timeframe": "30m"
-    },
-    "HOME/USDT|4h|long|0.00596|0.00530125": {
-      "alert_time": "2026-09-08T08:31:52.971971+05:30",
-      "entry": 0.00596,
-      "entry_time": "2026-09-08T12:30:00+05:30",
-      "geometry": "live",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 6,
-      "risk": 0.0006587499999999996,
-      "side": "long",
-      "stop": 0.00530125,
-      "stream": "live",
-      "symbol": "HOME/USDT",
-      "target_1": 0.00661875,
-      "target_2": 0.007277499999999999,
-      "target_half": 0.006289375,
-      "timeframe": "4h"
     },
     "ccf6ea74a9cf95b7": {
       "alert_time": "2026-09-08T18:02:03.023455+05:30",
