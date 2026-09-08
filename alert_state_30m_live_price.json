@@ -2601,7 +2601,10 @@
     "ERA/USDT|30m|long|0.06028|0.06036": 1788874913.6131673,
     "shadow:ERA/USDT|30m|long|0.06028|0.0603596": 1788874913.6131673,
     "shadow:TACUSD|30m|long|0.002012|0.00203833": 1788874913.8435607,
-    "RIVERUSD|30m|short|1.29|1.297": 1788876716.4067745
+    "RIVERUSD|30m|short|1.29|1.297": 1788876716.4067745,
+    "shadow:XRPUSD|30m|short|1.41088|1.4128": 1788877318.3857527,
+    "AKE/USDT|30m|short|0.0198413|0.02": 1788877318.386135,
+    "shadow:AKE/USDT|30m|short|0.0197828|0.02": 1788877318.386135
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14150,7 +14153,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1788876660.4731348
+    "30m": 1788877263.3884811
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -40377,7 +40380,7 @@
     "last_alert_at": 1788807113.2846231
   },
   "RIVERUSD|supply|1.29000000|1.29700000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1788876716.4067745
   },
   "SLVONUSD|supply|60.08000000|60.11000000": {
@@ -44142,7 +44145,8 @@
     "RIVERUSD|30m|short|1.29|1.297": 1788876122.785883,
     "MSFT/USDT:USDT|30m|long|490.39|490.66": 1788876122.7907374,
     "O/USDT|30m|short|0.559921|0.5644": 1788876716.1379497,
-    "0G/USDT|30m|short|0.20129|0.2029": 1788876716.401413
+    "0G/USDT|30m|short|0.20129|0.2029": 1788876716.401413,
+    "AKE/USDT|30m|short|0.0198413|0.02": 1788877318.386135
   },
   "shadow:BTCUSD|supply|80474.35070115|80522.70000000": {
     "in_zone": false,
@@ -45781,8 +45785,8 @@
     "last_alert_at": 0.0
   },
   "shadow:XRPUSD|supply|1.41087740|1.41280000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1788877318.3857527
   },
   "shadow:XRPUSD|demand|1.37450000|1.37652898": {
     "in_zone": false,
@@ -48425,12 +48429,12 @@
     "last_alert_at": 0.0
   },
   "AKE/USDT|supply|0.01984127|0.02000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1788877318.386135
   },
   "shadow:AKE/USDT|supply|0.01978279|0.02000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1788877318.386135
   },
   "shadow:ZECUSD|supply|1254.30367666|1259.26000000": {
     "in_zone": false,
