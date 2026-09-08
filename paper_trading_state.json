@@ -22074,6 +22074,33 @@
       "target_half": 0.02470125,
       "timeframe": "30m",
       "trade_id": "db95fe3b1d572b35"
+    },
+    {
+      "alert_time": "2026-09-08T08:11:51.362353+05:30",
+      "cost_r": 0.11040621714285755,
+      "date": "2026-09-08",
+      "entry": 0.0009088,
+      "entry_time": "2026-09-08T08:20:00+05:30",
+      "exit_price": 0.0009098905599999999,
+      "exit_time": "2026-09-08T08:25:00+05:30",
+      "final_result": "BE",
+      "geometry": "live",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.014229211428567201,
+      "outcome": "BE",
+      "rating": 6,
+      "realized_r": 0.12463542857142475,
+      "risk": 8.749999999999969e-06,
+      "side": "long",
+      "stop": 0.00090005,
+      "stream": "live",
+      "symbol": "BOME/USDT",
+      "target_1": 0.0009175499999999999,
+      "target_2": 0.0009262999999999999,
+      "target_half": 0.000913175,
+      "timeframe": "30m",
+      "trade_id": "BOME/USDT|30m|long|0.0009088|0.00090005"
     }
   ],
   "handled": {
@@ -22630,9 +22657,11 @@
     "AVAXUSD|4h|short|8.118|8.368": "filled",
     "AVAXUSD|4h|short|8.132|8.3845": "filled",
     "AXTI/USDT:USDT|30m|short|65.7|66.0125": "filled",
+    "BOME/USDT|30m|long|0.0009088|0.00090005": "filled",
     "COTI/USDT|30m|long|0.016101|0.0159448": "filled",
     "ERA/USDT|30m|short|0.06088|0.060955": "filled",
     "HYPEUSD|30m|long|85.2|84.475": "filled",
+    "KGEN/USDT|30m|long|0.1704|0.16915": "filled",
     "MSFT/USDT:USDT|4h|long|495.04|493.952": "filled",
     "MSFT/USDT:USDT|4h|long|495.18|494.192": "filled",
     "SAMSUNG/USDT:USDT|4h|short|204.15|207.062": "filled",
@@ -23013,5 +23042,24 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {}
+  "open": {
+    "KGEN/USDT|30m|long|0.1704|0.16915": {
+      "alert_time": "2026-09-08T08:11:51.363883+05:30",
+      "entry": 0.1704,
+      "entry_time": "2026-09-08T08:20:00+05:30",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 7,
+      "risk": 0.0012500000000000011,
+      "side": "long",
+      "stop": 0.16915,
+      "stream": "live",
+      "symbol": "KGEN/USDT",
+      "target_1": 0.17165,
+      "target_2": 0.1729,
+      "target_half": 0.17102499999999998,
+      "timeframe": "30m"
+    }
+  }
 }
