@@ -22101,6 +22101,33 @@
       "target_half": 0.000913175,
       "timeframe": "30m",
       "trade_id": "BOME/USDT|30m|long|0.0009088|0.00090005"
+    },
+    {
+      "alert_time": "2026-09-08T08:21:53.911819+05:30",
+      "cost_r": 0.12858756666666657,
+      "date": "2026-09-08",
+      "entry": 0.3629,
+      "entry_time": "2026-09-08T08:25:00+05:30",
+      "exit_price": 0.36333548,
+      "exit_time": "2026-09-08T08:25:00+05:30",
+      "final_result": "BE",
+      "geometry": "live",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.016572433333329334,
+      "outcome": "BE",
+      "rating": 10,
+      "realized_r": 0.1451599999999959,
+      "risk": 0.0030000000000000027,
+      "side": "long",
+      "stop": 0.3599,
+      "stream": "live",
+      "symbol": "CRV/USDT",
+      "target_1": 0.3659,
+      "target_2": 0.3689,
+      "target_half": 0.3644,
+      "timeframe": "30m",
+      "trade_id": "CRV/USDT|30m|long|0.3629|0.3599"
     }
   ],
   "handled": {
@@ -22981,6 +23008,7 @@
     "f039a8a0eadb1c80": "filled",
     "f03f4f64c7c7ea9e": "filled",
     "f05330ca8c706419": "filled",
+    "f07f2756d0928563": "filled",
     "f09d4374d0249cf5": "filled",
     "f0a2f9ecef99dec9": "filled",
     "f0e6c713612f0613": "filled",
@@ -23044,24 +23072,6 @@
     "ffb4661b7d04cd46": "filled"
   },
   "open": {
-    "CRV/USDT|30m|long|0.3629|0.3599": {
-      "alert_time": "2026-09-08T08:21:53.911819+05:30",
-      "entry": 0.3629,
-      "entry_time": "2026-09-08T08:25:00+05:30",
-      "geometry": "live",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 10,
-      "risk": 0.0030000000000000027,
-      "side": "long",
-      "stop": 0.3599,
-      "stream": "live",
-      "symbol": "CRV/USDT",
-      "target_1": 0.3659,
-      "target_2": 0.3689,
-      "target_half": 0.3644,
-      "timeframe": "30m"
-    },
     "KGEN/USDT|30m|long|0.1704|0.16915": {
       "alert_time": "2026-09-08T08:11:51.363883+05:30",
       "entry": 0.1704,
@@ -23079,6 +23089,24 @@
       "target_2": 0.1729,
       "target_half": 0.17102499999999998,
       "timeframe": "30m"
+    },
+    "f07f2756d0928563": {
+      "alert_time": "2026-09-08T08:31:52.975183+05:30",
+      "entry": 1.22,
+      "entry_time": "2026-09-08T08:35:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 7,
+      "risk": 0.1449999999999998,
+      "side": "long",
+      "stop": 1.0750000000000002,
+      "stream": "live",
+      "symbol": "RIVERUSD",
+      "target_1": 1.3649999999999998,
+      "target_2": 1.5099999999999996,
+      "target_half": 1.2925,
+      "timeframe": "4h"
     }
   }
 }
