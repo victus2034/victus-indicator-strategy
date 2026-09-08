@@ -26394,6 +26394,33 @@
       "target_half": 0.002038156,
       "timeframe": "30m",
       "trade_id": "TACUSD|30m|long|0.0020281|0.00200798"
+    },
+    {
+      "alert_time": "2026-09-08T22:21:47.956248+05:30",
+      "cost_r": 0.15780234999999987,
+      "date": "2026-09-08",
+      "entry": 2.969,
+      "entry_time": "2026-09-08T22:25:00+05:30",
+      "exit_price": null,
+      "exit_time": "2026-09-08T22:25:00+05:30",
+      "final_result": "data_quality_ambiguous",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "net_realized_r": null,
+      "outcome": "data_quality_ambiguous",
+      "rating": 6,
+      "realized_r": null,
+      "risk": 0.020000000000000018,
+      "side": "long",
+      "stop": 2.949,
+      "stream": "live",
+      "symbol": "ICP/USDT",
+      "target_1": 2.989,
+      "target_2": 3.009,
+      "target_half": 2.979,
+      "timeframe": "30m",
+      "trade_id": "ICP/USDT|30m|long|2.969|2.949"
     }
   ],
   "handled": {
@@ -26409,6 +26436,7 @@
     "036ee811a412069f": "filled",
     "038e5cd978b341b1": "filled",
     "03e2759194fdf780": "filled",
+    "047653443382ae26": "filled",
     "047b9fa781936cb5": "filled",
     "04a93781573dfff7": "filled",
     "053cdd03b7104d64": "filled",
@@ -27042,6 +27070,7 @@
     "HUSD|30m|short|0.08|0.0808": "filled",
     "HYPEUSD|30m|long|83.81|83.285": "filled",
     "HYPEUSD|30m|long|85.2|84.475": "filled",
+    "ICP/USDT|30m|long|2.969|2.949": "filled",
     "ICP/USDT|30m|short|3.103|3.13175": "filled",
     "KGEN/USDT|30m|long|0.1704|0.16915": "filled",
     "KGEN/USDT|30m|long|0.1705|0.169375": "filled",
@@ -27493,5 +27522,24 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {}
+  "open": {
+    "047653443382ae26": {
+      "alert_time": "2026-09-08T22:21:47.961112+05:30",
+      "entry": 0.002028096,
+      "entry_time": "2026-09-08T22:25:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 8,
+      "risk": 2.0120000000000207e-05,
+      "side": "long",
+      "stop": 0.002007976,
+      "stream": "live",
+      "symbol": "TACUSD",
+      "target_1": 0.0020482160000000003,
+      "target_2": 0.0020683360000000005,
+      "target_half": 0.002038156,
+      "timeframe": "30m"
+    }
+  }
 }
