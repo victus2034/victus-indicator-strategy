@@ -26286,6 +26286,33 @@
       "target_half": 104.22999999999999,
       "timeframe": "30m",
       "trade_id": "SOLUSD|30m|short|104.33|104.53"
+    },
+    {
+      "alert_time": "2026-09-08T15:51:52.102773+05:30",
+      "cost_r": 0.10629999999999938,
+      "date": "2026-09-08",
+      "entry": 0.0029702380952380952,
+      "entry_time": "2026-09-08T21:20:00+05:30",
+      "exit_price": 0.0029666738095238095,
+      "exit_time": "2026-09-08T21:20:00+05:30",
+      "final_result": "BE",
+      "geometry": "live",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.013700000000000614,
+      "outcome": "BE",
+      "rating": 9,
+      "realized_r": 0.12,
+      "risk": 2.9702380952381126e-05,
+      "side": "short",
+      "stop": 0.0029999404761904764,
+      "stream": "live",
+      "symbol": "ZIL/USDT",
+      "target_1": 0.002940535714285714,
+      "target_2": 0.002910833333333333,
+      "target_half": 0.0029553869047619047,
+      "timeframe": "4h",
+      "trade_id": "ZIL/USDT|4h|short|0.00297024|0.00299994"
     }
   ],
   "handled": {
@@ -27382,24 +27409,5 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {
-    "ZIL/USDT|4h|short|0.00297024|0.00299994": {
-      "alert_time": "2026-09-08T15:51:52.102773+05:30",
-      "entry": 0.0029702380952380952,
-      "entry_time": "2026-09-08T21:20:00+05:30",
-      "geometry": "live",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 9,
-      "risk": 2.9702380952381126e-05,
-      "side": "short",
-      "stop": 0.0029999404761904764,
-      "stream": "live",
-      "symbol": "ZIL/USDT",
-      "target_1": 0.002940535714285714,
-      "target_2": 0.002910833333333333,
-      "target_half": 0.0029553869047619047,
-      "timeframe": "4h"
-    }
-  }
+  "open": {}
 }
