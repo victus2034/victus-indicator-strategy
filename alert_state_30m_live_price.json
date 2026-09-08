@@ -2584,7 +2584,9 @@
     "shadow:O/USDT|30m|short|0.553401|0.5547": 1788870723.0185328,
     "HUSD|30m|short|0.08|0.08064": 1788870723.023455,
     "ALGO/USDT|30m|short|0.0991667|0.09996": 1788871301.118212,
-    "MSFT/USDT:USDT|30m|short|498.1|499.68": 1788871301.3316684
+    "MSFT/USDT:USDT|30m|short|498.1|499.68": 1788871301.3316684,
+    "AAVEUSD|30m|long|128.16|129.16": 1788871911.7315137,
+    "shadow:HUSD|30m|short|0.0803743|0.08064": 1788871911.973066
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14133,7 +14135,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1788871253.8938894
+    "30m": 1788871858.1498394
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -29236,8 +29238,8 @@
     "last_alert_at": 0.0
   },
   "shadow:HUSD|supply|0.08037427|0.08064000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1788871911.973066
   },
   "shadow:SAMSUNG/USDT:USDT|supply|199.62901422|199.87000000": {
     "in_zone": false,
@@ -35276,8 +35278,8 @@
     "last_alert_at": 0.0
   },
   "AAVEUSD|demand|128.16000000|129.16000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1788871911.7315137
   },
   "BEAT/USDT|demand|0.11895000|0.11978000": {
     "in_zone": false,
@@ -44084,7 +44086,7 @@
     "ICP/USDT|30m|long|2.953|2.969": 1788870117.380219,
     "O/USDT|30m|short|0.5512|0.5547": 1788865917.423439,
     "TACUSD|30m|long|0.0021|0.0021168": 1788870117.3893769,
-    "HUSD|30m|short|0.08|0.08064": 1788869511.874518,
+    "HUSD|30m|short|0.08|0.08064": 1788871911.973066,
     "AAVEUSD|30m|long|128.56|129.34": 1788870117.0359492,
     "LA/USDT|30m|long|0.06205|0.0623": 1788867131.72737,
     "RIVERUSD|30m|short|1.267|1.275": 1788867131.7406104,
@@ -47207,7 +47209,7 @@
     "last_alert_at": 1788853312.6998158
   },
   "HUSD|supply|0.08000000|0.08064000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1788870723.023455
   },
   "VELVETUSD|demand|0.07440000|0.07490000": {
@@ -51623,7 +51625,7 @@
     "last_alert_at": 0.0
   },
   "ALGO/USDT|supply|0.09916667|0.09996000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1788871301.118212
   },
   "shadow:ALGO/USDT|supply|0.09975020|0.09996000": {
@@ -51887,7 +51889,7 @@
     "last_alert_at": 0.0
   },
   "MSFT/USDT:USDT|supply|498.10000000|499.68000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1788871301.3316684
   },
   "shadow:MSFT/USDT:USDT|supply|499.51779109|499.68000000": {
