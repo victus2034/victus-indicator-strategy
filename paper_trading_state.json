@@ -26502,6 +26502,33 @@
       "target_half": 0.6403875,
       "timeframe": "30m",
       "trade_id": "13634bfab485c77c"
+    },
+    {
+      "alert_time": "2026-09-08T22:51:59.818881+05:30",
+      "cost_r": 0.10629999999999895,
+      "date": "2026-09-08",
+      "entry": 0.016775793650793652,
+      "entry_time": "2026-09-08T22:55:00+05:30",
+      "exit_price": 0.01695202336309524,
+      "exit_time": "2026-09-08T23:05:00+05:30",
+      "final_result": "SL",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "net_realized_r": -1.1567999999999998,
+      "outcome": "SL",
+      "rating": 8,
+      "realized_r": -1.0505000000000009,
+      "risk": 0.0001677579365079382,
+      "side": "short",
+      "stop": 0.01694355158730159,
+      "stream": "live",
+      "symbol": "US/USDT",
+      "target_1": 0.016608035714285714,
+      "target_2": 0.016440277777777776,
+      "target_half": 0.016691914682539683,
+      "timeframe": "30m",
+      "trade_id": "US/USDT|30m|short|0.0167758|0.0169436"
     }
   ],
   "handled": {
@@ -27606,24 +27633,5 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {
-    "US/USDT|30m|short|0.0167758|0.0169436": {
-      "alert_time": "2026-09-08T22:51:59.818881+05:30",
-      "entry": 0.016775793650793652,
-      "entry_time": "2026-09-08T22:55:00+05:30",
-      "geometry": "live",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 8,
-      "risk": 0.0001677579365079382,
-      "side": "short",
-      "stop": 0.01694355158730159,
-      "stream": "live",
-      "symbol": "US/USDT",
-      "target_1": 0.016608035714285714,
-      "target_2": 0.016440277777777776,
-      "target_half": 0.016691914682539683,
-      "timeframe": "30m"
-    }
-  }
+  "open": {}
 }
