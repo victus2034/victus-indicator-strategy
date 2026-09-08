@@ -48,8 +48,39 @@ placeholders in `tests/test_daily_backtest_summary.py`.
   `agent/daily-astrology`
 - last commit Aug 31 12:36, clean tree
 
+## Staying in step with the indicator
+
+The zone logic here is a port of `Shiva_Indicator_v7.pine` (in
+`../indicator improvent by claude/`), and the point of running it live is that an
+alert is one the chart would have fired. **`tests/test_indicator_scanner_parity.py`
+holds that.** It replays `build_zones` against `tests/pine_v7_reference.py` — a
+transcription of the Pine source, written from the Pine and not from this
+scanner — and asserts the surviving zone sets are identical. Change either side
+of the geometry and run it.
+
+Two rules in there are unreachable from a synthetic random walk (over 24,000
+generated bars neither fired once), so the test also carries 800 real 30m candles
+in `tests/fixtures/`. Do not replace that fixture with generated data.
+
+The one place the two legitimately differ: a wick with no height. The chart floors
+the box at `syminfo.mintick`; the scanner has no tick size for a symbol and floors
+at 1% of ATR. It moves only the near edge, and only on a wick that had no height
+to begin with.
+
 ## Gotchas
 
+- **There is a cap on zone width and deliberately no floor.** `ZONE_MAX_WIDTH_PCT`
+  is the EX 6 rule and handles a zone that comes out too wide. Nothing handles one
+  that comes out too thin: measured over 42 symbols, 91 of 886 live zones (10.3%)
+  plan a stop under 0.10% — the round-trip cost
+  (`daily_backtest_summary.CRYPTO_ROUND_TRIP_COST_PCT`) — the smallest at 0.003%,
+  where fees are 2.7x the risk.
+
+  **Asked and answered, 2026-09-07: leave it.** The zones are to be the ones the
+  indicator draws, and nothing else. A minimum width would mute levels the chart
+  shows, and matching the chart is the requirement that outranks it. Do not add
+  one, on the alert side either — the stop distance is already printed on every
+  alert, and skipping a thin one is a reading decision, not a code one.
 - Alert state is gitignored and machine-local: `alert_state*.json`,
   `nse_alert_state*.json`, `crypto_alert_records*.jsonl`. Deleting these resets cooldowns
   and can cause a burst of duplicate alerts on the next run.

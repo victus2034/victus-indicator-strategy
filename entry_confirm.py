@@ -232,6 +232,11 @@ def price_decimals(value: float, market: str = "crypto") -> int:
     NSE stays at two throughout - that is how the exchange quotes and how
     the alerts have always read, and varying it by price would make one
     channel print the same kind of instrument three different ways.
+
+    Deliberately its own rule rather than scanner.price_decimals. A ping is a
+    one-line digest entry and reads narrower than the alert that preceded it;
+    the two only have to agree about the level, which they do, not about how
+    many trailing zeros to carry.
     """
     if market == "nse":
         return 2

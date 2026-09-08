@@ -149,10 +149,6 @@ class GeometrySwitch(unittest.TestCase):
         self.assertIsNotNone(z)
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class ShadowNeverDelivers(unittest.TestCase):
     """The shadow stream must be incapable of sending a real alert."""
 
@@ -309,3 +305,7 @@ class WideZoneRescue(unittest.TestCase):
         with patch.object(scanner, "ZONE_MAX_WIDTH_PCT", 0.0):
             near = scanner.tighten_wide_zone(w, "supply", 55.559, 54.446)
         self.assertAlmostEqual(near, 54.446, places=3)
+
+
+if __name__ == "__main__":
+    unittest.main()

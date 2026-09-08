@@ -2,6 +2,7 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import hashlib
 import json
+import math
 import os
 import time
 from datetime import datetime
@@ -301,10 +302,20 @@ def tighten_wide_zone(window, zone_type, far, near):
     cut to an arbitrary width.
 
     Among the other candles in the base, prefer the one that leaves the WIDEST
-    zone still inside the limit. If none is inside it, take the tightest that
-    exists - which is what EX 6 does: 55.130 gives 0.78% against a 0.75% limit,
-    and that was accepted because it is the only candle level there is. Only if
-    the window offers no level at all does it fall back to cutting at the limit.
+    zone still inside the limit - EX 6's own answer, 55.130 at 0.78% against the
+    shipped 0.80. If no candle level gets the zone inside the limit, cut at the
+    limit instead.
+
+    That last step used to take the tightest candle level that existed, however
+    wide it left the zone, and cut at the limit only when the window offered no
+    level between the two edges at all. On a spike wick there is almost always
+    SOME level in between and it is nowhere near the limit, so the rescue fired,
+    moved the edge a little, and handed back a zone as untradeable as the one it
+    was given: 14% of live zones came out over the limit, the worst at 19.6%,
+    each one alerting with a stop the size of the move it was meant to catch.
+    Cutting is a synthetic edge, which is why it is the last resort - but a
+    synthetic edge inside the limit beats a real one at twenty percent, and the
+    limit exists because "WE CAN NOT TAKE ANY TRADE WITH SL LIKE 2%".
     """
     if ZONE_MAX_WIDTH_PCT <= 0:
         return near
@@ -318,19 +329,27 @@ def tighten_wide_zone(window, zone_type, far, near):
         inside = [float(c) for c in extremes if near < c < far]
     else:
         inside = [float(c) for c in extremes if far < c < near]
-    if not inside:
-        return far / (1 + ZONE_MAX_WIDTH_PCT / 100.0) if supply else far * (1 + ZONE_MAX_WIDTH_PCT / 100.0)
 
     acceptable = [c for c in inside if width(c) <= ZONE_MAX_WIDTH_PCT]
     if acceptable:
         return min(acceptable) if supply else max(acceptable)
-    return max(inside) if supply else min(inside)
+    return far / (1 + ZONE_MAX_WIDTH_PCT / 100.0) if supply else far * (1 + ZONE_MAX_WIDTH_PCT / 100.0)
 
 
 def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type, geometry=None):
+    # Two ATRs, because the indicator uses two. v7's f_layerData reads
+    # `a = ta.atr(atr_len)` on the CONFIRMATION bar and hands that to
+    # f_addZone, so the overlap filter on chart is measured swing_length bars
+    # after the pivot. The zone's own metadata (wick_atr, departure_atr) is
+    # about the pivot candle, so that keeps the pivot-bar reading.
     pivot_atr = atr_series.iloc[pivot_index]
-    if pd.isna(pivot_atr):
+    confirm_atr = atr_series.iloc[confirmation_index]
+    if pd.isna(confirm_atr) or float(confirm_atr) <= 0:
         return None
+    if pd.isna(pivot_atr) or float(pivot_atr) <= 0:
+        # Only reachable in the first atr_len bars of history, where the chart
+        # has an ATR and the pivot bar does not yet.
+        pivot_atr = confirm_atr
 
     candle_open = float(df["open"].iloc[pivot_index])
     candle_close = float(df["close"].iloc[pivot_index])
@@ -362,6 +381,12 @@ def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type
         departure = float(wick_bottom - departure_closes.min())
 
     geometry = geometry or ZONE_GEOMETRY
+    # True when the wick had no height at all - the bar that made the window's
+    # extreme also closed or opened on it. The chart floors such a box at one
+    # tick on the pivot path, and REFUSES it outright on the rebuild path
+    # (v7's `if not na(rfS) and rfS > near`), leaving the rebuild armed for the
+    # next short pivot. build_zones needs to know which happened.
+    degenerate = False
     if geometry == "wick":
         first = max(0, pivot_index - ZONE_BASE_EXTRA)
         last = min(len(df) - 1, pivot_index + ZONE_BASE_EXTRA, confirmation_index)
@@ -373,12 +398,14 @@ def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type
             bottom = float(window["low"].min())
             top = float(window[["open", "close"]].min(axis=1).min())
             if top <= bottom:
+                degenerate = True
                 top = bottom + float(pivot_atr) * 0.01
             top = tighten_wide_zone(window, "demand", bottom, top)
         else:
             top = float(window["high"].max())
             bottom = float(window[["open", "close"]].max(axis=1).max())
             if bottom >= top:
+                degenerate = True
                 bottom = top - float(pivot_atr) * 0.01
             bottom = tighten_wide_zone(window, "supply", top, bottom)
     else:
@@ -400,6 +427,7 @@ def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type
         "clock": confirmation_index,
         "last_gap": None,
         "geometry": geometry,
+        "degenerate": degenerate,
         "top": top,
         "bottom": bottom,
         "body_entry": top if zone_type == "demand" else bottom,
@@ -410,6 +438,10 @@ def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type
         "max_touch_streak": 0,
         "over_touched": False,
         "atr": float(pivot_atr),
+        # The number f_addZone compares midpoints against. Kept apart from
+        # "atr" so the recorded zone metrics do not shift underneath the
+        # rating models that were trained on them.
+        "overlap_atr": float(confirm_atr),
         "wick_to_body": wick_size / body_size if body_size > 0 else wick_size / float(pivot_atr),
         "wick_atr": wick_size / float(pivot_atr),
         "departure_atr": departure / float(pivot_atr),
@@ -473,12 +505,19 @@ def build_zones(df, geometry=None):
         pivot_index = confirmation_index - SWING_LENGTH
         if pivot_index in pivot_high_set:
             zone = qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, "supply", geometry)
-            if zone is not None and add_zone_if_not_overlapping(supply_zones, zone, zone["atr"]):
+            if zone is not None and add_zone_if_not_overlapping(supply_zones, zone, zone["overlap_atr"]):
                 trim_zone_history(supply_zones, confirmation_index)
+                # A full-length pivot has already replaced the side, so the
+                # armed rebuild is spent - v7's f_tryCreate does exactly this
+                # (`if f_addZone(...) : pendS := false`). Without it the
+                # scanner also builds the short-pivot replacement and lands a
+                # zone up to base_extra bars earlier than the chart draws one.
+                pending_rebuild["supply"] = False
         elif pivot_index in pivot_low_set:
             zone = qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, "demand", geometry)
-            if zone is not None and add_zone_if_not_overlapping(demand_zones, zone, zone["atr"]):
+            if zone is not None and add_zone_if_not_overlapping(demand_zones, zone, zone["overlap_atr"]):
                 trim_zone_history(demand_zones, confirmation_index)
+                pending_rebuild["demand"] = False
 
         # A break arms the rebuild; the replacement lands on the next short
         # pivot in the direction the break ran. Supply dies to an up-move, so
@@ -495,10 +534,18 @@ def build_zones(df, geometry=None):
                         rebuilt = qualify_wick_zone(
                             df, short_pivot, confirmation_index, atr_series, side, geometry
                         )
-                        if rebuilt is not None:
-                            rebuilt["rebuilt"] = True
-                            if add_zone_if_not_overlapping(bucket, rebuilt, rebuilt["atr"]):
-                                trim_zone_history(bucket, confirmation_index)
+                        # A wick with no height is not a replacement. v7 tests
+                        # `rfS > near` before it will build one and, when that
+                        # fails, leaves the rebuild armed for the next short
+                        # pivot rather than spending it on a hairline box. The
+                        # scanner used to floor the box and take it, which put a
+                        # zone on the chart's level up to base_extra bars early
+                        # and then made the real pivot zone overlap-rejected.
+                        if rebuilt is None or rebuilt.get("degenerate"):
+                            continue
+                        rebuilt["rebuilt"] = True
+                        if add_zone_if_not_overlapping(bucket, rebuilt, rebuilt["overlap_atr"]):
+                            trim_zone_history(bucket, confirmation_index)
                         pending_rebuild[side] = False
 
         close = float(df["close"].iloc[confirmation_index])
@@ -869,6 +916,55 @@ def bucket_candles(candles, bucket_seconds):
     return [buckets[start] for start in sorted(buckets)]
 
 
+# The last price each symbol's finest CoinSwitch series carried, and when it
+# was read. Written by top_up_recent_candles, which already fetches that series
+# for its own reasons, so nothing here costs an extra request. Symbols are
+# scanned one per thread, and each writes only its own key.
+_FINE_PRICES = {}
+# Older than this and it is not a live price any more. Two minutes covers a 1m
+# top-up plus a slow scan; a 30m top-up (the 4h timeframe) will usually miss it
+# and fall through to the candle close, which is the honest answer there.
+FINE_PRICE_MAX_AGE_SECONDS = int(os.getenv("VICTUS_FINE_PRICE_MAX_AGE_SECONDS", "120"))
+
+
+def _remember_fine_price(symbol, finer):
+    if not finer:
+        return
+    try:
+        price = float(finer[-1][4])
+    except (IndexError, TypeError, ValueError):
+        return
+    if price > 0:
+        _FINE_PRICES[symbol] = (time.time(), price)
+
+
+def fine_price(symbol, max_age_seconds=None):
+    """The freshest CoinSwitch price seen for this symbol, or None."""
+    stamped = _FINE_PRICES.get(symbol)
+    if not stamped:
+        return None
+    seen_at, price = stamped
+    limit = FINE_PRICE_MAX_AGE_SECONDS if max_age_seconds is None else max_age_seconds
+    return price if time.time() - seen_at <= limit else None
+
+
+def fetch_delta_ticker_price(symbol):
+    """Delta's own last traded price. Public endpoint, no signing."""
+    response = requests.get(
+        f"{DELTA_API_BASE_URL}/v2/tickers/{symbol}", timeout=10
+    )
+    response.raise_for_status()
+    payload = response.json()
+    if not payload.get("success"):
+        raise RuntimeError(payload)
+    result = payload.get("result") or {}
+    for field in ("close", "mark_price", "spot_price"):
+        value = result.get(field)
+        if value is not None and float(value) > 0:
+            return float(value)
+    raise RuntimeError(f"Delta ticker for {symbol} carried no price")
+
+
 def top_up_recent_candles(symbol, candles):
     """Rebuild the buckets CoinSwitch has not caught up on yet.
 
@@ -896,6 +992,12 @@ def top_up_recent_candles(symbol, candles):
         # series is still usable, just behind.
         print(f"{symbol} top-up unavailable: {str(error)[:70]}")
         return candles
+
+    # The finest series this venue was asked for is also the freshest price it
+    # has - on 30m that is a 1m candle, current to the minute, from the exact
+    # book being charted. Keep it for live_ticker_price, which otherwise has
+    # nothing to offer on CoinSwitch and silently hands back a candle close.
+    _remember_fine_price(symbol, finer)
 
     # Completed buckets only. The published series carries closed
     # candles, and letting a half-formed one in would let price dip
@@ -948,9 +1050,36 @@ def _fetch_coinswitch_ohlcv_once(symbol, interval):
 
 
 def live_ticker_price(exchange_name, symbol, candle_close):
-    """Use the current last-traded price for alerts without changing candle-based zones."""
+    """Current traded price for alerts, without changing the candle-based zones.
+
+    Every venue in the chain gets a path, because for a long time only one did.
+    EXCHANGES_BY_ID holds ccxt exchanges alone, so on CoinSwitch and Delta - the
+    two venues the production chain actually reaches first - this returned the
+    candle close and said nothing about it. Both the 30-minute workflow and
+    entry_confirm set VICTUS_USE_LIVE_TICKER=true and neither was getting a live
+    price: entry_confirm was deciding ENTRY NOW against a close up to half an
+    hour old, which is the DOGE case its workflow comment describes.
+
+    The price always comes from the venue the candles came from, so it cannot
+    disagree with the levels it is being measured against.
+    """
     if not USE_LIVE_TICKER:
         return candle_close, "candle_close"
+
+    if exchange_name == "coinswitch":
+        # Recorded by the top-up, which has already fetched the finest series
+        # this timeframe uses - so this costs no extra request.
+        price = fine_price(symbol)
+        if price:
+            return price, "coinswitch_fine"
+        return candle_close, "candle_close"
+
+    if exchange_name == "delta_india":
+        try:
+            return fetch_delta_ticker_price(symbol), "delta_ticker"
+        except Exception as error:
+            print(f"{symbol} live ticker unavailable from delta_india: {str(error)[:80]}")
+            return candle_close, "candle_close"
 
     exchange = EXCHANGES_BY_ID.get(exchange_name)
     if exchange is None:
@@ -1402,6 +1531,27 @@ def record_watch_candidate(result, zone_type, zone, distance_pct, now_ts):
         print(f"Crypto watch record write failed: {error}")
 
 
+def price_decimals(value):
+    """Decimals to print a crypto price at. The watchlist spans 79,000 to 0.0009.
+
+    Six is right for almost all of it and is what these alerts have always
+    read. It is not enough below a cent: on BOME at 0.000915 the entry, the
+    zone bottom and the stop all round onto the same three significant figures,
+    so the message cannot say where to enter or where the stop goes. Under 0.01
+    the width grows to keep five significant figures, and nothing above it
+    changes - the fix is only needed where the rounding was losing levels.
+
+    entry_confirm keeps its own narrower rule for the same prices, on purpose:
+    a ping is one line of a digest. The two agree about the level, which is
+    what matters, not about trailing zeros.
+    """
+    value = abs(float(value))
+    if not value > 0 or value >= 0.01:
+        return 6
+    first_significant_place = -math.floor(math.log10(value))
+    return min(12, first_significant_place + 4)
+
+
 def format_alert(result, zone_type, zone, distance_pct):
     symbol = alert_symbol(result["symbol"])
     price = result["price"]
@@ -1420,12 +1570,15 @@ def format_alert(result, zone_type, zone, distance_pct):
             score_text = f" | {rating['rating']}"
     stop = planned_stop_price(zone_type, zone)
     stop_distance = planned_stop_distance_pct(zone_type, zone)
+    # One width for every number in the message, chosen from the entry - so the
+    # levels line up and none of them is rounded into another.
+    places = price_decimals(planned_entry_price(zone_type, zone))
 
     return (
         f"{symbol} | {side}{score_text}\n"
-        f"Price: {price:.6f} | {distance_pct:.2f}%\n"
-        f"Zone: {zone['bottom']:.6f} - {zone['top']:.6f}\n"
-        f"SL: {stop:.6f} | {stop_distance:.2f}%"
+        f"Price: {price:.{places}f} | {distance_pct:.2f}%\n"
+        f"Zone: {zone['bottom']:.{places}f} - {zone['top']:.{places}f}\n"
+        f"SL: {stop:.{places}f} | {stop_distance:.2f}%"
     )
 
 
@@ -1441,7 +1594,7 @@ def format_signal_alert(result, signal_type):
 
     message = (
         f"{symbol} Range Filter {label} signal\n"
-        f"Price: {price:.6f}\n"
+        f"Price: {price:.{price_decimals(price)}f}\n"
         f"Nearest Demand Distance: {display_distance('demand', 'demand_dist')}\n"
         f"Nearest Supply Distance: {display_distance('supply', 'supply_dist')}"
     )
@@ -1705,14 +1858,20 @@ def print_summary(results):
         closest = min(result["supply_dist"], result["demand_dist"])
         bias = "BUY" if result["demand_dist"] < result["supply_dist"] else "SELL"
 
+        # Same widths the alerts use, so a level read off the console is the
+        # level the alert quoted. At a flat six a sub-cent zone printed both
+        # its edges as one number, which made this table useless for exactly
+        # the symbols whose zones are hardest to eyeball.
+        places = price_decimals(result["price"])
+
         print(f"\n{index}. {result['symbol']} | Closest {closest:.2f}% | Bias {bias}")
         print(f"Exchange: {result['exchange']}")
-        print(f"Price: {result['price']:.6f}")
+        print(f"Price: {result['price']:.{places}f}")
 
         if result["supply"]:
             print(
                 "Supply: "
-                f"{result['supply']['bottom']:.6f} - {result['supply']['top']:.6f} "
+                f"{result['supply']['bottom']:.{places}f} - {result['supply']['top']:.{places}f} "
                 f"({result['supply_dist']:.2f}%)"
             )
         else:
@@ -1721,7 +1880,7 @@ def print_summary(results):
         if result["demand"]:
             print(
                 "Demand: "
-                f"{result['demand']['bottom']:.6f} - {result['demand']['top']:.6f} "
+                f"{result['demand']['bottom']:.{places}f} - {result['demand']['top']:.{places}f} "
                 f"({result['demand_dist']:.2f}%)"
             )
         else:
