@@ -27201,6 +27201,7 @@
     "UNIUSD|30m|short|7.149|7.204": "filled",
     "US/USDT|30m|long|0.015359|0.0152978": "filled",
     "US/USDT|30m|long|0.015735|0.0152912": "filled",
+    "US/USDT|30m|short|0.0167758|0.0169436": "filled",
     "US/USDT|4h|long|0.015735|0.0152912": "filled",
     "VELVETUSD|30m|short|0.0805|0.0815": "filled",
     "VELVETUSD|30m|short|0.0812|0.081825": "filled",
@@ -27605,5 +27606,24 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {}
+  "open": {
+    "US/USDT|30m|short|0.0167758|0.0169436": {
+      "alert_time": "2026-09-08T22:51:59.818881+05:30",
+      "entry": 0.016775793650793652,
+      "entry_time": "2026-09-08T22:55:00+05:30",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 8,
+      "risk": 0.0001677579365079382,
+      "side": "short",
+      "stop": 0.01694355158730159,
+      "stream": "live",
+      "symbol": "US/USDT",
+      "target_1": 0.016608035714285714,
+      "target_2": 0.016440277777777776,
+      "target_half": 0.016691914682539683,
+      "timeframe": "30m"
+    }
+  }
 }
