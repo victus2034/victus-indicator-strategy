@@ -29343,6 +29343,7 @@
     "BEAT/USDT|30m|long|0.12508|0.124417": "filled",
     "BEAT/USDT|30m|long|0.1256|0.124475": "filled",
     "BLESSUSD|30m|long|0.00899|0.0089025": "filled",
+    "BNBUSD|30m|long|746.65|740.92": "filled",
     "BNBUSD|30m|short|746.8|747.55": "filled",
     "BNBUSD|30m|short|752.48|757.305": "filled",
     "BOME/USDT|30m|long|0.0009088|0.00090005": "filled",
@@ -29459,6 +29460,7 @@
     "XRPUSD|30m|short|1.4239|1.43402": "filled",
     "XRPUSD|30m|short|1.4396|1.4531": "filled",
     "ZECUSD|30m|short|1202.3|1214.32": "filled",
+    "ZIL/USDT|30m|long|0.002856|0.002831": "filled",
     "ZIL/USDT|30m|long|0.002876|0.00285225": "filled",
     "ZIL/USDT|30m|short|0.002936|0.00294475": "filled",
     "ZIL/USDT|30m|short|0.002939|0.00296775": "filled",
@@ -29873,5 +29875,42 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {}
+  "open": {
+    "BNBUSD|30m|long|746.65|740.92": {
+      "alert_time": "2026-09-09T18:51:57.001449+05:30",
+      "entry": 746.65,
+      "entry_time": "2026-09-09T19:10:00+05:30",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 9,
+      "risk": 5.7299999999999045,
+      "side": "long",
+      "stop": 740.9200000000001,
+      "stream": "live",
+      "symbol": "BNBUSD",
+      "target_1": 752.3799999999999,
+      "target_2": 758.1099999999998,
+      "target_half": 749.5149999999999,
+      "timeframe": "30m"
+    },
+    "ZIL/USDT|30m|long|0.002856|0.002831": {
+      "alert_time": "2026-09-09T18:51:56.997422+05:30",
+      "entry": 0.002856,
+      "entry_time": "2026-09-09T19:10:00+05:30",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 8,
+      "risk": 2.499999999999985e-05,
+      "side": "long",
+      "stop": 0.002831,
+      "stream": "live",
+      "symbol": "ZIL/USDT",
+      "target_1": 0.002881,
+      "target_2": 0.0029059999999999997,
+      "target_half": 0.0028685,
+      "timeframe": "30m"
+    }
+  }
 }
