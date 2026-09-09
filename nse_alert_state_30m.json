@@ -5252,7 +5252,7 @@
     "MRPL.NS|30m|short|179.569|179.93": 1788932520.8114445,
     "NATIONALUM.NS|30m|short|382.36|382.95": 1788932520.9602673,
     "CUMMINSIND.NS|30m|short|5186.58|5193": 1788933754.1930509,
-    "ENDURANCE.NS|30m|short|2806.54|2811": 1788933754.542521,
+    "ENDURANCE.NS|30m|short|2806.54|2811": 1788939741.6255088,
     "FINCABLES.NS|30m|short|1370.06|1373.65": 1788933755.1261938,
     "THELEELA.NS|30m|long|528.3|529.446": 1788933755.3426464,
     "APOLLOHOSP.NS|30m|short|8962.95|8972": 1788934931.2643719,
@@ -5261,12 +5261,13 @@
     "CIPLA.NS|30m|long|1366.2|1368.39": 1788936132.0290165,
     "HCLTECH.NS|30m|long|1228.9|1230.34": 1788936132.4424515,
     "JWL.NS|30m|long|240.61|240.933": 1788936132.8554304,
-    "NIVABUPA.NS|30m|long|79.64|79.7511": 1788936133.1131709,
+    "NIVABUPA.NS|30m|long|79.64|79.7511": 1788939742.6043985,
     "NBCC.NS|30m|long|83.84|83.9383": 1788937349.7144856,
     "CONCOR.NS|30m|short|509.57|510.3": 1788938528.7381046,
     "GLAXO.NS|30m|long|2908.6|2913.23": 1788938529.1664495,
     "HCLTECH.NS|30m|long|1228.9|1230.35": 1788938529.446442,
-    "NMDC.NS|30m|short|85.5095|85.63": 1788938530.521495
+    "NMDC.NS|30m|short|85.5095|85.63": 1788938530.521495,
+    "NATCOPHARM.NS|30m|short|840|841": 1788939742.3659527
   },
   "ANANDRATHI.NS|supply|2187.5000|2221.0000": {
     "in_zone": true,
@@ -31979,7 +31980,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "30m": 1788938466.5454915
+    "30m": 1788939662.181247
   },
   "3MINDIA.NS|supply|35230.9249|35290.0000": {
     "in_zone": false,
@@ -156082,9 +156083,9 @@
     "last_attempt_at": 0.0
   },
   "ENDURANCE.NS|supply|2806.5402|2811.0000": {
-    "in_zone": false,
-    "last_alert_at": 1788933754.542521,
-    "last_attempt_at": 1788933754.542521
+    "in_zone": true,
+    "last_alert_at": 1788939741.6255088,
+    "last_attempt_at": 1788939741.6255088
   },
   "ENDURANCE.NS|demand|2680.0000|2684.6000": {
     "in_zone": false,
@@ -156378,8 +156379,8 @@
   },
   "NIVABUPA.NS|demand|79.6400|79.7511": {
     "in_zone": true,
-    "last_alert_at": 1788936133.1131709,
-    "last_attempt_at": 1788936133.1131709
+    "last_alert_at": 1788939742.6043985,
+    "last_attempt_at": 1788939742.6043985
   },
   "OBEROIRLTY.NS|supply|1929.9764|1932.8000": {
     "in_zone": false,
@@ -163297,9 +163298,9 @@
     "last_attempt_at": 0.0
   },
   "NATCOPHARM.NS|supply|840.0002|841.0000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1788939742.3659527,
+    "last_attempt_at": 1788939742.3659527
   },
   "NAVA.NS|demand|547.3000|548.2109": {
     "in_zone": false,
