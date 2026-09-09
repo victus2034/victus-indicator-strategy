@@ -19,10 +19,17 @@ from unittest.mock import patch
 
 import pandas as pd
 
+import config
 import scanner
 
 
-# name, zone_type, real bars (o, h, l, c) with the pivot marked, drawn box
+# name, zone_type, real bars (o, h, l, c) with the pivot marked, drawn box, timeframe
+#
+# The timeframe matters as of the auto-derived ZONE_BASE_EXTRA fix: EX1-EX5 are
+# 30m (base_extra auto-derives to 5, unchanged) and EX6 is 4h (base_extra now
+# auto-derives to 1, was flatly 5 before the fix). Each example is replayed
+# under the base_extra its OWN timeframe actually produces, not a blanket 5 -
+# so this is the test that would have caught the never-re-derived-for-4h gap.
 EXAMPLES = [
     (
         "EX1/31 supply  BTCUSD 30m",
@@ -36,6 +43,7 @@ EXAMPLES = [
         ],
         1,
         (80999.5, 81253.7),
+        "30m",
     ),
     (
         "EX2/36 demand  BTCUSD 30m",
@@ -51,6 +59,7 @@ EXAMPLES = [
         ],
         3,
         (76676.5, 76902.6),
+        "30m",
     ),
     (
         "EX3/40 supply  HYPEUSDT 30m",
@@ -66,6 +75,7 @@ EXAMPLES = [
         ],
         3,
         (84.716, 85.253),
+        "30m",
     ),
     (
         "EX4/43 demand  HYPEUSDT 30m",
@@ -80,6 +90,7 @@ EXAMPLES = [
         ],
         3,
         (77.003, 77.453),
+        "30m",
     ),
     (
         "EX5/48 demand  HYPEUSDT 30m",
@@ -94,6 +105,7 @@ EXAMPLES = [
         ],
         2,
         (76.747, 77.343),
+        "30m",
     ),
     (
         "EX6/73 supply  LTCUSD 4h",
@@ -104,6 +116,7 @@ EXAMPLES = [
         ],
         1,
         (55.130, 55.559),                            # after the width rescue
+        "4h",
     ),
 ]
 
@@ -134,13 +147,17 @@ class SixWorkedExamples(unittest.TestCase):
     """Each zone the production builder draws must match the one drawn by hand."""
 
     def test_every_example_reproduces(self):
-        for name, zone_type, bars, pivot_offset, (want_lo, want_hi) in EXAMPLES:
+        for name, zone_type, bars, pivot_offset, (want_lo, want_hi), tf in EXAMPLES:
             with self.subTest(example=name):
                 df, pivot = build(zone_type, bars, pivot_offset)
                 confirmation = pivot + scanner.SWING_LENGTH
+                # The REAL per-timeframe value, not a hardcoded 5 - this is what
+                # makes the test exercise the auto-derivation rather than assume
+                # its answer.
+                base_extra = config.auto_base_extra(config.TIMEFRAME_MINUTES[tf])
                 with patch.object(scanner, "ATR_PERIOD", 5), \
                      patch.object(scanner, "ZONE_GEOMETRY", "wick"), \
-                     patch.object(scanner, "ZONE_BASE_EXTRA", 5), \
+                     patch.object(scanner, "ZONE_BASE_EXTRA", base_extra), \
                      patch.object(scanner, "ZONE_MAX_WIDTH_PCT", 0.80):
                     atr_series = scanner.atr(df, 5)
                     zone = scanner.qualify_wick_zone(
@@ -160,12 +177,13 @@ class SixWorkedExamples(unittest.TestCase):
 
     def test_no_example_exceeds_the_width_cap(self):
         """The cap is a cap. EX6 is the case that made this a rule."""
-        for name, zone_type, bars, pivot_offset, _ in EXAMPLES:
+        for name, zone_type, bars, pivot_offset, _, tf in EXAMPLES:
             with self.subTest(example=name):
                 df, pivot = build(zone_type, bars, pivot_offset)
+                base_extra = config.auto_base_extra(config.TIMEFRAME_MINUTES[tf])
                 with patch.object(scanner, "ATR_PERIOD", 5), \
                      patch.object(scanner, "ZONE_GEOMETRY", "wick"), \
-                     patch.object(scanner, "ZONE_BASE_EXTRA", 5), \
+                     patch.object(scanner, "ZONE_BASE_EXTRA", base_extra), \
                      patch.object(scanner, "ZONE_MAX_WIDTH_PCT", 0.80):
                     atr_series = scanner.atr(df, 5)
                     zone = scanner.qualify_wick_zone(
@@ -173,6 +191,13 @@ class SixWorkedExamples(unittest.TestCase):
                     )
                 width = (zone["top"] - zone["bottom"]) / zone["bottom"] * 100
                 self.assertLessEqual(round(width, 6), 0.80, f"{name}: {width:.3f}% wide")
+
+    def test_base_extra_is_not_flatly_five_on_4h(self):
+        """The regression this whole fix is about: 5 bars means 2.5h on 30m and
+        20h on 4h - an 8x difference that was never re-derived. Pin that it no
+        longer is."""
+        self.assertEqual(config.auto_base_extra(config.TIMEFRAME_MINUTES["30m"]), 5)
+        self.assertEqual(config.auto_base_extra(config.TIMEFRAME_MINUTES["4h"]), 1)
 
 
 if __name__ == "__main__":

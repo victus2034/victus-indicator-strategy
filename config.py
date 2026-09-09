@@ -1,3 +1,4 @@
+import math
 import os
 from datetime import time as datetime_time
 
@@ -264,7 +265,52 @@ REARM_FACTOR = 1.25
 # ZONE_BREAK_ON_WICK and the tighter overlap below to reach 0.055. Change these
 # together or not at all.
 ZONE_GEOMETRY = os.getenv("VICTUS_ZONE_GEOMETRY", "wick").strip().lower() or "wick"
-ZONE_BASE_EXTRA = env_int("VICTUS_ZONE_BASE_EXTRA", 5)
+
+# base_extra was tuned by eye on a 30m chart: 5 bars each side of the pivot. It
+# was never re-derived for 4h - 5 bars means 2.5 hours on 30m and 20 hours on
+# 4h, an 8x difference in what the window actually searches, and only the 30m
+# figure has five worked examples behind it (EX1-EX5). EX6, the one 4h example,
+# does not independently pin the count: its own base window holds exactly one
+# real neighbouring candle, so anything from 1 to 10 reproduces it identically
+# and the base=5 default was never actually exercised by that example either.
+#
+# Fix: derive the bar count from a fixed real-world window instead of a flat
+# bar count, so every timeframe gets the same-DURATION search rather than the
+# same bar count. The window is BASE_WINDOW_MINUTES = 150 - exactly what 5 bars
+# on 30m already is (5 * 30 = 150), so the 30m default is unchanged: this is a
+# re-derivation of the untested case, not a retuning of the tested one.
+#
+#   30m (30 min/bar):  round(150/30)  = 5   <- unchanged, still what EX1-EX5 pin
+#   4h  (240 min/bar): round(150/240) = 1   <- was 5 (20h window), now 1 (2.5h)
+#   15m:               round(150/15) = 10  (clamped at the ceiling)
+#   1h:                round(150/60) = 3
+#   1d:                round(150/1440) = 0 -> floored to 1
+#
+# Floored at 1, never 0: 0 is the one value proven wrong on 30m (misses EX5 by
+# 0.18, see Shiva_Indicator_v7.pine) and EX6 needs at least 1 to find its own
+# neighbouring candle. Ceiling at 10 matches the original manual input's range.
+# This is a principled default, not a second independently-tuned constant - 4h
+# has one worked example, not five, so treat it as a starting point rather than
+# a measured value the way 30m's 5 is.
+TIMEFRAME_MINUTES = {
+    "1m": 1, "3m": 3, "5m": 5, "15m": 15, "30m": 30,
+    "1h": 60, "2h": 120, "4h": 240, "6h": 360, "12h": 720,
+    "1d": 1440, "d": 1440, "1w": 10080, "w": 10080,
+}
+BASE_WINDOW_MINUTES = 150  # = 5 bars * 30 min - the 30m default, unchanged
+
+
+def auto_base_extra(timeframe_minutes):
+    if not timeframe_minutes or timeframe_minutes <= 0:
+        return 5
+    bars = math.floor(BASE_WINDOW_MINUTES / timeframe_minutes + 0.5)  # round half up
+    return max(1, min(10, int(bars)))
+
+
+ZONE_BASE_EXTRA = env_int(
+    "VICTUS_ZONE_BASE_EXTRA",
+    auto_base_extra(TIMEFRAME_MINUTES.get(TIMEFRAME.strip().lower())),
+)
 # Built alongside the live geometry and logged, never sent. Set empty to disable.
 ZONE_SHADOW_GEOMETRY = os.getenv("VICTUS_ZONE_SHADOW_GEOMETRY", "atr").strip().lower()
 
