@@ -27952,6 +27952,7 @@
     "SNDKBUSD|30m|long|1768.15|1760.46": "filled",
     "SNDKBUSD|30m|short|1808.78|1825.67": "filled",
     "SOLUSD|30m|short|104.26|104.923": "filled",
+    "SOLUSD|30m|short|104.313|104.976": "filled",
     "SOLUSD|30m|short|104.33|104.53": "filled",
     "SOON/USDT|30m|long|0.1863|0.185175": "filled",
     "SOON/USDT|30m|long|0.1866|0.184975": "filled",
@@ -28389,5 +28390,24 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {}
+  "open": {
+    "SOLUSD|30m|short|104.313|104.976": {
+      "alert_time": "2026-09-09T11:11:55.739448+05:30",
+      "entry": 104.313,
+      "entry_time": "2026-09-09T11:40:00+05:30",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 6,
+      "risk": 0.6625000000000085,
+      "side": "short",
+      "stop": 104.97550000000001,
+      "stream": "live",
+      "symbol": "SOLUSD",
+      "target_1": 103.6505,
+      "target_2": 102.98799999999999,
+      "target_half": 103.98175,
+      "timeframe": "30m"
+    }
+  }
 }
