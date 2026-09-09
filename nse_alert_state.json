@@ -2959,7 +2959,7 @@
     "GODFRYPHLP.NS|4h|long|2013|2023.75": 1788771151.6189055,
     "NCC.NS|4h|short|151.922|152.64": 1788769970.6504622,
     "IGIL.NS|4h|long|312|314.201": 1788925952.0274363,
-    "ACC.NS|4h|long|1252|1257.99": 1788928375.7128663,
+    "ACC.NS|4h|long|1252|1257.99": 1788936758.7163317,
     "AMBUJACEM.NS|4h|long|394.05|396.273": 1788839550.81224,
     "HEXT.NS|4h|long|512.8|516.196": 1788933135.138649,
     "KFINTECH.NS|4h|long|911.7|915.922": 1788934349.090022,
@@ -2983,8 +2983,8 @@
     "KFINTECH.NS|4h|long|911.7|915.92": 1788935583.8210833,
     "MUTHOOTFIN.NS|4h|long|2824.5|2841.94": 1788925952.3463402,
     "JIOFIN.NS|4h|long|231.28|232.164": 1788927151.3106966,
-    "PERSISTENT.NS|4h|long|5390|5416.02": 1788928376.5909734,
-    "COALINDIA.NS|4h|short|434.841|436.5": 1788929563.607102,
+    "PERSISTENT.NS|4h|long|5390|5416.02": 1788936759.4967973,
+    "COALINDIA.NS|4h|short|434.841|436.5": 1788936758.9990745,
     "HONAUT.NS|4h|long|34240|34410.7": 1788929563.8571892,
     "RITES.NS|4h|long|210.24|211.337": 1788935583.9863305,
     "HBLENGINE.NS|4h|short|741.134|744.85": 1788931969.3928196,
@@ -2994,7 +2994,8 @@
     "CAMS.NS|4h|long|716|719.71": 1788934348.148589,
     "FINCABLES.NS|4h|short|1366.6|1373.65": 1788934348.537463,
     "JIOFIN.NS|4h|long|231.28|232.165": 1788934348.8466284,
-    "CAMS.NS|4h|long|716|719.699": 1788935583.6970346
+    "CAMS.NS|4h|long|716|719.699": 1788935583.6970346,
+    "IRCON.NS|4h|long|114.54|115.451": 1788936759.237221
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -4517,9 +4518,9 @@
     "last_attempt_at": 0.0
   },
   "COALINDIA.NS|supply|434.8414|436.5000": {
-    "in_zone": false,
-    "last_alert_at": 1788929563.607102,
-    "last_attempt_at": 1788929563.607102
+    "in_zone": true,
+    "last_alert_at": 1788936758.9990745,
+    "last_attempt_at": 1788936758.9990745
   },
   "COALINDIA.NS|demand|369.6500|370.5707": {
     "in_zone": false,
@@ -15257,9 +15258,9 @@
     "last_attempt_at": 0.0
   },
   "IRCON.NS|demand|114.5400|115.4505": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1788936759.237221,
+    "last_attempt_at": 1788936759.237221
   },
   "INDGN.NS|supply|584.7082|587.0000": {
     "in_zone": false,
@@ -18047,7 +18048,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1788935504.2911923
+    "4h": 1788936687.881524
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -22505,7 +22506,7 @@
     "last_attempt_at": 0.0
   },
   "CAMS.NS|demand|716.0000|719.7095": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1788934348.148589,
     "last_attempt_at": 1788934348.148589
   },
@@ -62535,9 +62536,9 @@
     "last_attempt_at": 0.0
   },
   "ACC.NS|demand|1252.0000|1257.9946": {
-    "in_zone": false,
-    "last_alert_at": 1788928375.7128663,
-    "last_attempt_at": 1788928375.7128663
+    "in_zone": true,
+    "last_alert_at": 1788936758.7163317,
+    "last_attempt_at": 1788936758.7163317
   },
   "APLAPOLLO.NS|supply|2293.7293|2301.3000": {
     "in_zone": false,
@@ -63405,9 +63406,9 @@
     "last_attempt_at": 0.0
   },
   "PERSISTENT.NS|demand|5390.0000|5416.0156": {
-    "in_zone": false,
-    "last_alert_at": 1788928376.5909734,
-    "last_attempt_at": 1788928376.5909734
+    "in_zone": true,
+    "last_alert_at": 1788936759.4967973,
+    "last_attempt_at": 1788936759.4967973
   },
   "POONAWALLA.NS|demand|361.2000|364.0886": {
     "in_zone": false,
@@ -63480,6 +63481,11 @@
     "last_attempt_at": 0.0
   },
   "ASAHIINDIA.NS|supply|1014.9836|1021.0000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "COHANCE.NS|demand|355.2500|358.1623": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
