@@ -67,6 +67,31 @@ the box at `syminfo.mintick`; the scanner has no tick size for a symbol and floo
 at 1% of ATR. It moves only the near edge, and only on a wick that had no height
 to begin with.
 
+**`tests/test_six_worked_examples.py` is the other half — run it alongside the
+parity test, not instead of it.** Six zones Shiva drew by hand on real TradingView
+charts, then measured pixel-by-pixel off each chart's own price axis: both the
+input candles and the expected box edges came from the screenshot, not from code.
+The source images are in `TRADINGVIEW SCRIPT INDICATOR IMG EXAMPLE/EX 1`
+through `EX 6` (untracked — local only, back them up separately), and every
+example in the test names the exact screenshot it was measured from
+(`"EX3/40"` → `EX 3/Screenshot (40).png`). EX6 is the case that caught the
+4h `base_extra` bug the synthetic parity test could not — it never exercises 4h.
+
+**Run this test after every change to `scanner.py`'s zone-building path
+(`qualify_wick_zone`, `tighten_wide_zone`, ATR, `ZONE_BASE_EXTRA`, pivot/swing
+logic) — not just when the geometry itself changes.** The 4h `base_extra` bug
+was a change elsewhere that silently stopped re-deriving a value this test
+depends on; nothing about the zone-building code itself looked different.
+
+**When Shiva adds a new worked example (EX7 and beyond), it must be added
+here too, the same way:** a new `EX N` folder of screenshots, and a new entry
+in `EXAMPLES` in `tests/test_six_worked_examples.py` with the OHLC values and
+drawn box measured off that image, named `"EX<N>/<screenshot number>"`. The
+test file name will then undercount, but the loop iterates `EXAMPLES` itself,
+so nothing else needs to change. Do not consider a scanner change verified
+against these examples until every entry in `EXAMPLES` has been checked, not
+just the ones that existed when the file was named.
+
 ## Gotchas
 
 - **There is a cap on zone width and deliberately no floor.** `ZONE_MAX_WIDTH_PCT`
