@@ -28041,6 +28041,33 @@
       "target_half": 0.4463662500000001,
       "timeframe": "30m",
       "trade_id": "RE/USDT|30m|long|0.44451|0.440797"
+    },
+    {
+      "alert_time": "2026-09-09T15:32:04.346642+05:30",
+      "cost_r": 0.22608167466666665,
+      "date": "2026-09-09",
+      "entry": 199.39,
+      "entry_time": "2026-09-09T15:35:00+05:30",
+      "exit_price": 198.35327375,
+      "exit_time": "2026-09-09T15:45:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "net_realized_r": -1.331923007999986,
+      "outcome": "SL",
+      "rating": 9,
+      "realized_r": -1.1058413333333192,
+      "risk": 0.9375,
+      "side": "long",
+      "stop": 198.4525,
+      "stream": "live",
+      "symbol": "SAMSUNG/USDT:USDT",
+      "target_1": 200.3275,
+      "target_2": 201.265,
+      "target_half": 199.85875,
+      "timeframe": "30m",
+      "trade_id": "a485911b922069e2"
     }
   ],
   "handled": {
@@ -28663,6 +28690,7 @@
     "9e48f19ef533f470": "filled",
     "9e753e5460933e15": "filled",
     "9ea2cbb871fa9d3a": "filled",
+    "9ed18b12b235127d": "filled",
     "9ed935e8cb4daca4": "filled",
     "9eff4526b892ff4d": "filled",
     "9fce92d29d7588e3": "filled",
@@ -29206,6 +29234,24 @@
     "ffb4661b7d04cd46": "filled"
   },
   "open": {
+    "9ed18b12b235127d": {
+      "alert_time": "2026-09-09T15:41:54.941662+05:30",
+      "entry": 0.43678656,
+      "entry_time": "2026-09-09T15:45:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 6,
+      "risk": 0.0043331999999999815,
+      "side": "long",
+      "stop": 0.43245336,
+      "stream": "live",
+      "symbol": "RE/USDT",
+      "target_1": 0.44111975999999997,
+      "target_2": 0.44545295999999995,
+      "target_half": 0.43895315999999995,
+      "timeframe": "30m"
+    },
     "LINKUSD|30m|long|12.157|12.0557": {
       "alert_time": "2026-09-09T15:32:04.319593+05:30",
       "entry": 12.157,
@@ -29258,24 +29304,6 @@
       "target_1": 120.9384,
       "target_2": 122.1264,
       "target_half": 120.34440000000001,
-      "timeframe": "30m"
-    },
-    "a485911b922069e2": {
-      "alert_time": "2026-09-09T15:32:04.346642+05:30",
-      "entry": 199.39,
-      "entry_time": "2026-09-09T15:35:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "xstock",
-      "rating": 9,
-      "risk": 0.9375,
-      "side": "long",
-      "stop": 198.4525,
-      "stream": "live",
-      "symbol": "SAMSUNG/USDT:USDT",
-      "target_1": 200.3275,
-      "target_2": 201.265,
-      "target_half": 199.85875,
       "timeframe": "30m"
     }
   }
