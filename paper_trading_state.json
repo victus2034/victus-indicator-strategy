@@ -28203,6 +28203,33 @@
       "target_half": 0.43488000000000004,
       "timeframe": "4h",
       "trade_id": "RE/USDT|4h|long|0.43428|0.43308"
+    },
+    {
+      "alert_time": "2026-09-09T15:32:04.342161+05:30",
+      "cost_r": 0.1071503999999998,
+      "date": "2026-09-09",
+      "entry": 119.7504,
+      "entry_time": "2026-09-09T15:35:00+05:30",
+      "exit_price": 119.89410048,
+      "exit_time": "2026-09-09T15:35:00+05:30",
+      "final_result": "BE",
+      "geometry": "live",
+      "half_r_hit": true,
+      "market": "xstock",
+      "net_realized_r": 0.013809600000005681,
+      "outcome": "BE",
+      "rating": 5,
+      "realized_r": 0.12096000000000548,
+      "risk": 1.1880000000000024,
+      "side": "long",
+      "stop": 118.5624,
+      "stream": "live",
+      "symbol": "SOXLBUSD",
+      "target_1": 120.9384,
+      "target_2": 122.1264,
+      "target_half": 120.34440000000001,
+      "timeframe": "30m",
+      "trade_id": "SOXLBUSD|30m|long|119.75|118.562"
     }
   ],
   "handled": {
@@ -29091,6 +29118,7 @@
     "be0156ccea7b15b3": "filled",
     "be57674723914eb7": "filled",
     "be62d70e3836795c": "filled",
+    "bea6d13454e46252": "filled",
     "beccd1b438bc4da3": "filled",
     "bf3efca0e509a11e": "filled",
     "bf528ad3be382a0f": "filled",
@@ -29371,14 +29399,14 @@
     "ffb4661b7d04cd46": "filled"
   },
   "open": {
-    "SOXLBUSD|30m|long|119.75|118.562": {
-      "alert_time": "2026-09-09T15:32:04.342161+05:30",
+    "bea6d13454e46252": {
+      "alert_time": "2026-09-09T15:51:54.476157+05:30",
       "entry": 119.7504,
-      "entry_time": "2026-09-09T15:35:00+05:30",
-      "geometry": "live",
-      "half_r_hit": true,
+      "entry_time": "2026-09-09T16:10:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
       "market": "xstock",
-      "rating": 5,
+      "rating": 7,
       "risk": 1.1880000000000024,
       "side": "long",
       "stop": 118.5624,
