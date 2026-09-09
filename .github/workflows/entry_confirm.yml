@@ -104,14 +104,18 @@ jobs:
           # for both - 30m is chosen because a stale price is what caused
           # this, and a 30m candle is the fresher of the two for either.
           VICTUS_TIMEFRAME: "30m"
-          # How far out GET READY fires. Matches config.WATCH_DISTANCE_PCT, not
-          # MAX_DISTANCE_PCT: the scanner now writes a watch row at 0.75%, and
-          # leaving this at 0.20% would mean holding that row in hand and still
-          # saying nothing until price was already on top of the level. Across
-          # 90 filled zones, 0.20% gave a median 8 minutes of warning and none
-          # at all for 28%; 0.75% gives a median of 42. The alert channel is
-          # untouched - the scanner still only SENDS at 0.20%.
-          VICTUS_APPROACH_THRESHOLD_PCT: "0.75"
+          # How far out GET READY fires. Tried 0.75% to match
+          # config.WATCH_DISTANCE_PCT (the scanner's silent watch band) so
+          # GET READY could fire well before the real alert - reverted 9 Sep,
+          # one day later: it meant GET READY pinging on zones 0.53-0.99% away
+          # that the real alert in #crypto-30m-alerts never fired for at all,
+          # which read as noise rather than an early warning. Back at 0.20% to
+          # match MAX_DISTANCE_PCT, so a GET READY only ever precedes a zone
+          # that is genuinely about to alert. The scanner still writes a watch
+          # row at 0.75% - that stays, it only feeds entry_confirm the zone
+          # earlier so its own stage tracking has a head start; it does not by
+          # itself cause a ping until price is actually this close.
+          VICTUS_APPROACH_THRESHOLD_PCT: "0.20"
           INPUT_TIMEFRAME: ${{ github.event.inputs.timeframe }}
           INPUT_MARKET: ${{ github.event.inputs.market }}
           INPUT_DRY_RUN: ${{ github.event.inputs.dry_run }}
