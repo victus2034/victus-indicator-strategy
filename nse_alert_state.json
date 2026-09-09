@@ -2978,11 +2978,11 @@
     "EIDPARRY.NS|4h|long|759|762.547": 1788857559.3808188,
     "SBILIFE.NS|4h|long|1700.4|1706.97": 1788857559.9642713,
     "BPCL.NS|4h|long|299.75|301.154": 1788925951.5841875,
-    "ICICIPRULI.NS|4h|long|459.5|461.86": 1788925951.7319484,
+    "ICICIPRULI.NS|4h|long|459.5|461.86": 1788939209.7733436,
     "IDBI.NS|4h|long|80.18|80.6724": 1788925951.9040518,
     "KFINTECH.NS|4h|long|911.7|915.92": 1788935583.8210833,
     "MUTHOOTFIN.NS|4h|long|2824.5|2841.94": 1788937964.8649728,
-    "JIOFIN.NS|4h|long|231.28|232.164": 1788927151.3106966,
+    "JIOFIN.NS|4h|long|231.28|232.164": 1788939210.296608,
     "PERSISTENT.NS|4h|long|5390|5416.02": 1788936759.4967973,
     "COALINDIA.NS|4h|short|434.841|436.5": 1788936758.9990745,
     "HONAUT.NS|4h|long|34240|34410.7": 1788929563.8571892,
@@ -2992,10 +2992,11 @@
     "COALINDIA.NS|4h|short|434.842|436.5": 1788933134.7619765,
     "HAVELLS.NS|4h|long|1124|1129.32": 1788933134.8782656,
     "CAMS.NS|4h|long|716|719.71": 1788937964.4901936,
-    "FINCABLES.NS|4h|short|1366.6|1373.65": 1788934348.537463,
+    "FINCABLES.NS|4h|short|1366.6|1373.65": 1788939209.4622996,
     "JIOFIN.NS|4h|long|231.28|232.165": 1788934348.8466284,
     "CAMS.NS|4h|long|716|719.699": 1788935583.6970346,
-    "IRCON.NS|4h|long|114.54|115.451": 1788936759.237221
+    "IRCON.NS|4h|long|114.54|115.451": 1788936759.237221,
+    "COHANCE.NS|4h|long|438.3|441.103": 1788939209.130806
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -10778,9 +10779,9 @@
     "last_attempt_at": 0.0
   },
   "JIOFIN.NS|demand|231.2800|232.1643": {
-    "in_zone": false,
-    "last_alert_at": 1788927151.3106966,
-    "last_attempt_at": 1788927151.3106966
+    "in_zone": true,
+    "last_alert_at": 1788939210.296608,
+    "last_attempt_at": 1788939210.296608
   },
   "JUBLFOOD.NS|supply|570.4581|572.4500": {
     "in_zone": false,
@@ -18048,7 +18049,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1788937893.3832636
+    "4h": 1788939107.0970364
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -21596,7 +21597,7 @@
     "last_attempt_at": 1787640759.124467
   },
   "MUTHOOTFIN.NS|demand|2824.5000|2841.9359": {
-    "in_zone": false,
+    "in_zone": true,
     "last_alert_at": 1788925952.3463402,
     "last_attempt_at": 1788925952.3463402
   },
@@ -47021,9 +47022,9 @@
     "last_attempt_at": 0.0
   },
   "FINCABLES.NS|supply|1366.6012|1373.6500": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1788939209.4622996,
+    "last_attempt_at": 1788939209.4622996
   },
   "FORCEMOT.NS|supply|19402.0629|19533.0000": {
     "in_zone": false,
@@ -56091,7 +56092,7 @@
     "last_attempt_at": 0.0
   },
   "CAMS.NS|demand|716.0000|719.6987": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1788935583.6970346,
     "last_attempt_at": 1788935583.6970346
   },
@@ -56301,7 +56302,7 @@
     "last_attempt_at": 0.0
   },
   "HBLENGINE.NS|supply|741.1340|744.8500": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1788931969.3928196,
     "last_attempt_at": 1788931969.3928196
   },
@@ -57081,9 +57082,9 @@
     "last_attempt_at": 0.0
   },
   "COHANCE.NS|demand|438.3000|441.1032": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1788939209.130806,
+    "last_attempt_at": 1788939209.130806
   },
   "COLPAL.NS|supply|2322.3037|2329.0000": {
     "in_zone": false,
@@ -57351,9 +57352,9 @@
     "last_attempt_at": 0.0
   },
   "ICICIPRULI.NS|demand|459.5000|461.8596": {
-    "in_zone": false,
-    "last_alert_at": 1788925951.7319484,
-    "last_attempt_at": 1788925951.7319484
+    "in_zone": true,
+    "last_alert_at": 1788939209.7733436,
+    "last_attempt_at": 1788939209.7733436
   },
   "IDBI.NS|supply|117.8937|118.3800": {
     "in_zone": false,
@@ -61626,7 +61627,7 @@
     "last_attempt_at": 0.0
   },
   "ACC.NS|demand|1252.0000|1257.9502": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1788935583.5631971,
     "last_attempt_at": 1788935583.5631971
   },
@@ -62181,7 +62182,7 @@
     "last_attempt_at": 0.0
   },
   "HONAUT.NS|demand|34240.0000|34410.5358": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1788931969.5565257,
     "last_attempt_at": 1788931969.5565257
   },
