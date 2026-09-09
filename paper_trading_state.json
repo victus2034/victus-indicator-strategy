@@ -29850,6 +29850,33 @@
       "target_half": 0.0470125,
       "timeframe": "30m",
       "trade_id": "30bbefeb11405eab"
+    },
+    {
+      "alert_time": "2026-09-09T20:32:11.074290+05:30",
+      "cost_r": 0.1071503999999999,
+      "date": "2026-09-09",
+      "entry": 1.9039104,
+      "entry_time": "2026-09-09T20:50:00+05:30",
+      "exit_price": 1.90619509248,
+      "exit_time": "2026-09-09T20:50:00+05:30",
+      "final_result": "BE",
+      "geometry": "live",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.013809599999997951,
+      "outcome": "BE",
+      "rating": 6,
+      "realized_r": 0.12095999999999785,
+      "risk": 0.018888000000000016,
+      "side": "long",
+      "stop": 1.8850224,
+      "stream": "live",
+      "symbol": "DEXE/USDT",
+      "target_1": 1.9227984,
+      "target_2": 1.9416864,
+      "target_half": 1.9133544,
+      "timeframe": "4h",
+      "trade_id": "DEXE/USDT|4h|long|1.90391|1.88502"
     }
   ],
   "handled": {
@@ -31078,24 +31105,5 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {
-    "DEXE/USDT|4h|long|1.90391|1.88502": {
-      "alert_time": "2026-09-09T20:32:11.074290+05:30",
-      "entry": 1.9039104,
-      "entry_time": "2026-09-09T20:50:00+05:30",
-      "geometry": "live",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 6,
-      "risk": 0.018888000000000016,
-      "side": "long",
-      "stop": 1.8850224,
-      "stream": "live",
-      "symbol": "DEXE/USDT",
-      "target_1": 1.9227984,
-      "target_2": 1.9416864,
-      "target_half": 1.9133544,
-      "timeframe": "4h"
-    }
-  }
+  "open": {}
 }
