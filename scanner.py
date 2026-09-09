@@ -1769,11 +1769,24 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shad
     elif distance_pct > MAX_DISTANCE_PCT * REARM_FACTOR:
         entry["in_zone"] = False
 
-    # Near enough to watch, not near enough to alert. Nothing is sent here -
-    # the row exists so entry_confirm can begin tracking the zone well before
-    # price arrives. Shadow candidates are excluded: they are a geometry
-    # experiment scored by paper_trading, not something to be warned about.
-    if not shadow and MIN_DISTANCE_PCT <= distance_pct <= WATCH_DISTANCE_PCT:
+    # Near enough to watch, not yet near enough to alert. Nothing is sent
+    # here - the row exists so entry_confirm can begin tracking the zone
+    # well before price arrives. Shadow candidates are excluded: they are a
+    # geometry experiment scored by paper_trading, not something to be
+    # warned about.
+    #
+    # Strictly ABOVE MAX_DISTANCE_PCT, not from MIN_DISTANCE_PCT: this used
+    # to overlap the alert band itself (>= MIN_DISTANCE_PCT), so a zone
+    # already inside 0.20% whose alert was suppressed by ALERT_COOLDOWN or
+    # ZONE_REPEAT_SUPPRESSION on this scan still got a fresh watch row on its
+    # own separate cooldown - and entry_confirm would then ping GET READY or
+    # ENTRY NOW for a symbol that never appeared in #crypto-30m-alerts at
+    # that moment. 14 of 46 watch rows measured inside the alert band had no
+    # matching alert within 5 minutes either side. A zone that is genuinely
+    # about to alert (or already has) is fully covered by the alert record
+    # path above; the watch row's only job is the range the alert path never
+    # sees at all.
+    if not shadow and MAX_DISTANCE_PCT < distance_pct <= WATCH_DISTANCE_PCT:
         watch_state = state.setdefault("_watch", {})
         last_watch = float(watch_state.get(noise_key, 0.0) or 0.0)
         if not last_watch or now_ts - last_watch >= WATCH_RECORD_COOLDOWN_SECONDS:

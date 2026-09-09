@@ -199,6 +199,65 @@ class ShadowNeverDelivers(unittest.TestCase):
         self.assertFalse(live_key.startswith("shadow:"))
 
 
+class WatchBandDoesNotOverlapTheAlertBand(unittest.TestCase):
+    """A watch row must never exist for a zone the alert path already covers.
+
+    The watch band used to start at MIN_DISTANCE_PCT (0), the same floor as
+    the alert band, so a zone already inside 0.20% whose alert was
+    suppressed by cooldown or noise control on this scan still got a watch
+    row on its own separate cooldown clock. entry_confirm would then ping
+    GET READY or ENTRY NOW for a zone #crypto-30m-alerts never mentioned at
+    that moment - 14 of 46 in-band watch rows measured had no alert within
+    5 minutes either side. The watch band now starts strictly above
+    MAX_DISTANCE_PCT, so it only ever covers distance the alert path cannot
+    see at all.
+    """
+
+    def result(self):
+        return {
+            "symbol": "BTCUSD", "exchange": "delta", "price": 100.0,
+            "supply_rating": None, "demand_rating": None,
+            "supply_score": None, "demand_score": None,
+        }
+
+    def zone(self, top=100.5):
+        return {
+            "type": "demand", "top": top, "bottom": 99.0, "body_entry": top,
+            "active": True, "over_touched": False, "created_idx": 0, "clock": 0,
+            "last_gap": None, "atr": 1.0, "geometry": "wick",
+            "wick_to_body": 1.0, "wick_atr": 1.0, "departure_atr": 1.0,
+            "touch_count": 0,
+        }
+
+    def _run(self, distance_pct, state=None):
+        import tempfile
+        from pathlib import Path
+
+        with tempfile.TemporaryDirectory() as tmp:
+            live = Path(tmp) / "live.jsonl"
+            watch = Path(tmp) / "watch.jsonl"
+            with patch.object(scanner, "send_alert", return_value=False),                  patch.object(scanner, "ALERT_RECORD_FILE", live),                  patch.object(scanner, "WATCH_RECORD_FILE", watch),                  patch.object(scanner, "MIN_DISTANCE_PCT", 0.0),                  patch.object(scanner, "MAX_DISTANCE_PCT", 0.20),                  patch.object(scanner, "WATCH_DISTANCE_PCT", 0.75),                  patch.object(scanner, "TIMEFRAME", "30m"):
+                scanner.process_candidate(
+                    state if state is not None else {},
+                    self.result(), "demand", self.zone(), distance_pct, 1.0,
+                )
+            return watch.exists()
+
+    def test_a_zone_inside_the_alert_band_gets_no_watch_row(self):
+        # 0.10% is inside the alert band. send_alert is stubbed to fail, the
+        # same shape as a suppressed alert, so no alert row is written -
+        # this must not fall back to writing a watch row instead.
+        self.assertFalse(self._run(0.10))
+
+    def test_a_zone_between_the_two_bands_gets_a_watch_row(self):
+        # 0.40% is above MAX_DISTANCE_PCT (0.20) and within WATCH_DISTANCE_PCT
+        # (0.75) - the range the alert path never sees at all.
+        self.assertTrue(self._run(0.40))
+
+    def test_a_zone_beyond_the_watch_band_gets_neither(self):
+        self.assertFalse(self._run(1.50))
+
+
 class BreakRule(unittest.TestCase):
     """A wick through the far edge kills the zone when the flag is set.
 

@@ -243,6 +243,16 @@ MAX_DISTANCE_PCT = env_float("VICTUS_MAX_DISTANCE_PCT", 0.20)
 # alerts on approaches that never fill - a third of the zones measured never
 # touched at all. So this stays wide for tracking; what gets pinged stays
 # narrow at 0.20% in entry_confirm.yml.
+#
+# The scanner only writes a watch row strictly ABOVE MAX_DISTANCE_PCT - the
+# range the alert path never covers - not from zero. A zone already inside
+# the alert band is entirely the alert record's job; if that alert fired,
+# entry_confirm already has it, and if it was suppressed by cooldown, no
+# watch row should paper over that silence either. A version of this that
+# started at zero double-covered the alert band and, for a symbol whose
+# alert was suppressed on this exact scan, produced a GET READY in
+# #entry-confirmed for a symbol #crypto-30m-alerts said nothing about at
+# that moment - found 9 Sep, one day after the watch band shipped.
 WATCH_DISTANCE_PCT = env_float("VICTUS_WATCH_DISTANCE_PCT", 0.75)
 REARM_FACTOR = 1.25
 # 0 disables the over-touch veto. The Pine indicator counts no touches and
