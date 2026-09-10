@@ -32199,6 +32199,33 @@
       "target_half": 80.72375,
       "timeframe": "30m",
       "trade_id": "HYPEUSD|30m|long|80.53|80.1425"
+    },
+    {
+      "alert_time": "2026-09-10T17:22:24.534820+05:30",
+      "cost_r": 0.10715039999999784,
+      "date": "2026-09-10",
+      "entry": 1.2166560000000002,
+      "entry_time": "2026-09-10T17:25:00+05:30",
+      "exit_price": 1.2181159872000002,
+      "exit_time": "2026-09-10T17:25:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.01380960000000532,
+      "outcome": "BE",
+      "rating": 7,
+      "realized_r": 0.12096000000000316,
+      "risk": 0.012070000000000247,
+      "side": "long",
+      "stop": 1.204586,
+      "stream": "live",
+      "symbol": "EUL/USDT",
+      "target_1": 1.2287260000000004,
+      "target_2": 1.2407960000000007,
+      "target_half": 1.2226910000000002,
+      "timeframe": "30m",
+      "trade_id": "34a4ccb0cca6746e"
     }
   ],
   "handled": {
@@ -33514,24 +33541,5 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {
-    "34a4ccb0cca6746e": {
-      "alert_time": "2026-09-10T17:22:24.534820+05:30",
-      "entry": 1.2166560000000002,
-      "entry_time": "2026-09-10T17:25:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 7,
-      "risk": 0.012070000000000247,
-      "side": "long",
-      "stop": 1.204586,
-      "stream": "live",
-      "symbol": "EUL/USDT",
-      "target_1": 1.2287260000000004,
-      "target_2": 1.2407960000000007,
-      "target_half": 1.2226910000000002,
-      "timeframe": "30m"
-    }
-  }
+  "open": {}
 }
