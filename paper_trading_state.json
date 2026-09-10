@@ -32442,6 +32442,33 @@
       "target_half": 79.53063,
       "timeframe": "30m",
       "trade_id": "f2f31518c6d7f40d"
+    },
+    {
+      "alert_time": "2026-09-10T23:01:53.041257+05:30",
+      "cost_r": 0.10630000000000005,
+      "date": "2026-09-10",
+      "entry": 0.48124999999999996,
+      "entry_time": "2026-09-10T23:05:00+05:30",
+      "exit_price": null,
+      "exit_time": "2026-09-10T23:05:00+05:30",
+      "final_result": "data_quality_ambiguous",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": null,
+      "outcome": "data_quality_ambiguous",
+      "rating": 5,
+      "realized_r": null,
+      "risk": 0.004812499999999997,
+      "side": "short",
+      "stop": 0.48606249999999995,
+      "stream": "live",
+      "symbol": "BTW/USDT",
+      "target_1": 0.47643749999999996,
+      "target_2": 0.47162499999999996,
+      "target_half": 0.47884374999999996,
+      "timeframe": "30m",
+      "trade_id": "b39f87c4c1f48331"
     }
   ],
   "handled": {
@@ -33766,24 +33793,5 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {
-    "b39f87c4c1f48331": {
-      "alert_time": "2026-09-10T23:01:53.041257+05:30",
-      "entry": 0.48124999999999996,
-      "entry_time": "2026-09-10T23:05:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 5,
-      "risk": 0.004812499999999997,
-      "side": "short",
-      "stop": 0.48606249999999995,
-      "stream": "live",
-      "symbol": "BTW/USDT",
-      "target_1": 0.47643749999999996,
-      "target_2": 0.47162499999999996,
-      "target_half": 0.47884374999999996,
-      "timeframe": "30m"
-    }
-  }
+  "open": {}
 }
