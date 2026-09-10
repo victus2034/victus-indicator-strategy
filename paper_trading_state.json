@@ -30282,6 +30282,33 @@
       "target_half": 0.46818000000000004,
       "timeframe": "30m",
       "trade_id": "RE/USDT|30m|short|0.46998|0.47358"
+    },
+    {
+      "alert_time": "2026-09-10T14:32:00.992560+05:30",
+      "cost_r": 0.1387746500000003,
+      "date": "2026-09-10",
+      "entry": 0.46998,
+      "entry_time": "2026-09-10T14:35:00+05:30",
+      "exit_price": null,
+      "exit_time": "2026-09-10T14:40:00+05:30",
+      "final_result": "data_quality_ambiguous",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": null,
+      "outcome": "data_quality_ambiguous",
+      "rating": 8,
+      "realized_r": null,
+      "risk": 0.003599999999999992,
+      "side": "short",
+      "stop": 0.47358,
+      "stream": "live",
+      "symbol": "RE/USDT",
+      "target_1": 0.46638,
+      "target_2": 0.46278,
+      "target_half": 0.46818000000000004,
+      "timeframe": "30m",
+      "trade_id": "21f9945054a0ad28"
     }
   ],
   "handled": {
@@ -31004,6 +31031,7 @@
     "HOME/USDT|30m|long|0.005963|0.00592425": "filled",
     "HOME/USDT|30m|long|0.005963|0.0059255": "filled",
     "HOME/USDT|4h|long|0.00596|0.00530125": "filled",
+    "HUSD|30m|long|0.0778478|0.0770755": "filled",
     "HUSD|30m|short|0.08254|0.08284": "filled",
     "HUSD|30m|short|0.08|0.0808": "filled",
     "HYPEUSD|30m|long|83.81|83.285": "filled",
@@ -31547,24 +31575,6 @@
       "target_half": 4409.626250000001,
       "timeframe": "30m"
     },
-    "21f9945054a0ad28": {
-      "alert_time": "2026-09-10T14:32:00.992560+05:30",
-      "entry": 0.46998,
-      "entry_time": "2026-09-10T14:35:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 8,
-      "risk": 0.003599999999999992,
-      "side": "short",
-      "stop": 0.47358,
-      "stream": "live",
-      "symbol": "RE/USDT",
-      "target_1": 0.46638,
-      "target_2": 0.46278,
-      "target_half": 0.46818000000000004,
-      "timeframe": "30m"
-    },
     "64713c27c899751a": {
       "alert_time": "2026-09-10T14:21:40.372323+05:30",
       "entry": 95.61,
@@ -31581,6 +31591,24 @@
       "target_1": 94.9225,
       "target_2": 94.235,
       "target_half": 95.26625,
+      "timeframe": "30m"
+    },
+    "HUSD|30m|long|0.0778478|0.0770755": {
+      "alert_time": "2026-09-10T14:32:01.193249+05:30",
+      "entry": 0.07784783999999999,
+      "entry_time": "2026-09-10T14:35:00+05:30",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 8,
+      "risk": 0.0007722999999999897,
+      "side": "long",
+      "stop": 0.07707554,
+      "stream": "live",
+      "symbol": "HUSD",
+      "target_1": 0.07862013999999998,
+      "target_2": 0.07939243999999997,
+      "target_half": 0.07823398999999998,
       "timeframe": "30m"
     }
   }
