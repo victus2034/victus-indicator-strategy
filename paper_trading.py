@@ -626,16 +626,22 @@ def build_report(date_iso: str, timeframe: str, state: dict) -> str:
     if not rows:
         return f"PAPER vs BACKTEST · {date_line}\n\nNothing closed on this date."
 
+    # This table is column-padded with spaces, which only lines up in a monospace
+    # font. Posted as plain Discord content it renders in a proportional font, so
+    # the padding just looks broken - wrap it in a code block to force monospace.
     width = max(len(r[0]) for r in rows)
     paper_width = max(max(len(r[1]) for r in rows), len("paper"))
     backtest_width = max(max(len(r[2]) for r in rows), len("backtest"))
-    lines.append(
+    table_lines = [
         f"{'':<{width}}  {'paper':<{paper_width}}  {'backtest':<{backtest_width}}  gap"
-    )
+    ]
     for name, paper, reference, gap in rows:
-        lines.append(
+        table_lines.append(
             f"{name:<{width}}  {paper:<{paper_width}}  {reference:<{backtest_width}}  {gap}"
         )
+    lines.append("```")
+    lines.extend(table_lines)
+    lines.append("```")
 
     lines.extend([
         "",
