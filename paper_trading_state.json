@@ -30255,6 +30255,33 @@
       "target_half": 0.45954125,
       "timeframe": "30m",
       "trade_id": "09254d0845739139"
+    },
+    {
+      "alert_time": "2026-09-10T13:51:56.068533+05:30",
+      "cost_r": 0.1387746500000003,
+      "date": "2026-09-10",
+      "entry": 0.46998,
+      "entry_time": "2026-09-10T14:10:00+05:30",
+      "exit_price": 0.46638,
+      "exit_time": "2026-09-10T14:15:00+05:30",
+      "final_result": "+1R",
+      "geometry": "live",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.8612253499999997,
+      "outcome": "+1R",
+      "rating": 9,
+      "realized_r": 1.0,
+      "risk": 0.003599999999999992,
+      "side": "short",
+      "stop": 0.47358,
+      "stream": "live",
+      "symbol": "RE/USDT",
+      "target_1": 0.46638,
+      "target_2": 0.46278,
+      "target_half": 0.46818000000000004,
+      "timeframe": "30m",
+      "trade_id": "RE/USDT|30m|short|0.46998|0.47358"
     }
   ],
   "handled": {
@@ -30408,6 +30435,7 @@
     "1fd552555e7768b9": "filled",
     "1fe1a59c5f0ffd60": "filled",
     "1fe1f228da67f6c4": "filled",
+    "201bc64b57ffbc7a": "filled",
     "203bcc14a645646a": "filled",
     "20ca0a196b8b8c4c": "filled",
     "20e446a00f29ed1b": "filled",
@@ -31015,6 +31043,7 @@
     "O/USDT|30m|short|0.559921|0.56552": "filled",
     "RE/USDT|30m|long|0.436787|0.432453": "filled",
     "RE/USDT|30m|long|0.44451|0.440797": "filled",
+    "RE/USDT|30m|short|0.46998|0.47358": "filled",
     "RE/USDT|4h|long|0.43428|0.43308": "filled",
     "RIVERUSD|30m|short|1.261|1.2685": "filled",
     "RIVERUSD|30m|short|1.268|1.27675": "filled",
@@ -31497,5 +31526,24 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {}
+  "open": {
+    "201bc64b57ffbc7a": {
+      "alert_time": "2026-09-10T14:02:03.623293+05:30",
+      "entry": 4397.97,
+      "entry_time": "2026-09-10T14:10:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 6,
+      "risk": 23.31250000000091,
+      "side": "long",
+      "stop": 4374.657499999999,
+      "stream": "live",
+      "symbol": "XAUTUSD",
+      "target_1": 4421.282500000001,
+      "target_2": 4444.595000000002,
+      "target_half": 4409.626250000001,
+      "timeframe": "30m"
+    }
+  }
 }
