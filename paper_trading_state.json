@@ -30147,6 +30147,33 @@
       "target_half": 0.45850625,
       "timeframe": "30m",
       "trade_id": "BTW/USDT|30m|short|0.4607|0.465087"
+    },
+    {
+      "alert_time": "2026-09-10T12:12:22.670713+05:30",
+      "cost_r": 0.15081118048780265,
+      "date": "2026-09-10",
+      "entry": 654.39,
+      "entry_time": "2026-09-10T13:00:00+05:30",
+      "exit_price": 653.604732,
+      "exit_time": "2026-09-10T13:05:00+05:30",
+      "final_result": "BE",
+      "geometry": "live",
+      "half_r_hit": true,
+      "market": "xstock",
+      "net_realized_r": 0.01943662439023791,
+      "outcome": "BE",
+      "rating": 5,
+      "realized_r": 0.17024780487804056,
+      "risk": 4.612500000000068,
+      "side": "short",
+      "stop": 659.0025,
+      "stream": "live",
+      "symbol": "METAXUSD",
+      "target_1": 649.7774999999999,
+      "target_2": 645.1649999999998,
+      "target_half": 652.08375,
+      "timeframe": "30m",
+      "trade_id": "METAXUSD|30m|short|654.39|659.003"
     }
   ],
   "handled": {
@@ -30885,6 +30912,8 @@
     "METAXUSD|30m|short|617.68|617.705": "filled",
     "METAXUSD|30m|short|620.02|626.17": "filled",
     "METAXUSD|30m|short|622|626.25": "filled",
+    "METAXUSD|30m|short|654.39|659.003": "filled",
+    "METAXUSD|30m|short|654.75|658.938": "filled",
     "METAXUSD|4h|short|617.35|620.913": "filled",
     "METAXUSD|4h|short|650.9|656.9": "filled",
     "MNT/USDT|30m|long|0.6288|0.62805": "filled",
@@ -31385,5 +31414,24 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {}
+  "open": {
+    "METAXUSD|30m|short|654.75|658.938": {
+      "alert_time": "2026-09-10T13:02:03.096673+05:30",
+      "entry": 654.75,
+      "entry_time": "2026-09-10T13:05:00+05:30",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "xstock",
+      "rating": 5,
+      "risk": 4.1875,
+      "side": "short",
+      "stop": 658.9375,
+      "stream": "live",
+      "symbol": "METAXUSD",
+      "target_1": 650.5625,
+      "target_2": 646.375,
+      "target_half": 652.65625,
+      "timeframe": "30m"
+    }
+  }
 }
