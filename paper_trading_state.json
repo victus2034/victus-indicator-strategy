@@ -33071,7 +33071,9 @@
     "SOXLBUSD|30m|long|119.75|118.562": "filled",
     "SOXLBUSD|30m|long|122.95|122.45": "filled",
     "SOXLBUSD|30m|short|126.85|127.8": "filled",
+    "STORJ/USDT|30m|long|0.0283248|0.0280438": "filled",
     "STORJ/USDT|30m|short|0.0309|0.0329": "filled",
+    "STORJ/USDT|4h|long|0.0283248|0.0280438": "filled",
     "TACUSD|30m|long|0.0020281|0.00200798": "filled",
     "TACUSD|30m|long|0.0021168|0.0020958": "filled",
     "TACUSD|30m|long|0.002188|0.002178": "filled",
@@ -33541,5 +33543,42 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {}
+  "open": {
+    "STORJ/USDT|30m|long|0.0283248|0.0280438": {
+      "alert_time": "2026-09-10T20:41:53.929055+05:30",
+      "entry": 0.0283248,
+      "entry_time": "2026-09-10T20:45:00+05:30",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 7,
+      "risk": 0.000281,
+      "side": "long",
+      "stop": 0.0280438,
+      "stream": "live",
+      "symbol": "STORJ/USDT",
+      "target_1": 0.0286058,
+      "target_2": 0.0288868,
+      "target_half": 0.0284653,
+      "timeframe": "30m"
+    },
+    "STORJ/USDT|4h|long|0.0283248|0.0280438": {
+      "alert_time": "2026-09-10T20:52:03.328184+05:30",
+      "entry": 0.0283248,
+      "entry_time": "2026-09-10T20:55:00+05:30",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 5,
+      "risk": 0.000281,
+      "side": "long",
+      "stop": 0.0280438,
+      "stream": "live",
+      "symbol": "STORJ/USDT",
+      "target_1": 0.0286058,
+      "target_2": 0.0288868,
+      "target_half": 0.0284653,
+      "timeframe": "4h"
+    }
+  }
 }
