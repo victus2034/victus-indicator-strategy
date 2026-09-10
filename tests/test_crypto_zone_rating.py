@@ -37,7 +37,10 @@ class CryptoZoneRatingTests(unittest.TestCase):
         self.assertFalse(
             crypto_zone_rating.is_rating_eligible("MSTRBUSD", "30m")
         )
-        self.assertFalse(
+        # The retrained model (2026-09) covers the whole live crypto watchlist,
+        # not a fixed 46-pair subset - a real crypto symbol is expected to be
+        # eligible now. MSTRBUSD stays ineligible because it's an xStock.
+        self.assertTrue(
             crypto_zone_rating.is_rating_eligible("HYPEUSD", "30m")
         )
 
@@ -66,9 +69,12 @@ class CryptoZoneRatingTests(unittest.TestCase):
             0.4,
         )
         bundle = crypto_zone_rating.load_rating_bundle()
-        self.assertEqual(
-            set(features),
-            set(bundle["feature_columns"]),
+        # The bundle is free to use any subset of what the builder computes
+        # (the 2026-09 retrain deliberately uses 4 of the 32 features to
+        # avoid overfitting a ~340-example dataset) - the real contract is
+        # that every column the model expects is actually produced.
+        self.assertTrue(
+            set(bundle["feature_columns"]) <= set(features),
         )
         self.assertTrue(crypto_zone_rating.rated_crypto_symbols())
 

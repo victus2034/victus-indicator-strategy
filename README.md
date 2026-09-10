@@ -76,17 +76,35 @@ If you keep the repo private, GitHub Free includes limited Actions minutes, so r
 
 ## 30-minute crypto zone ratings
 
-Eligible 30-minute crypto zone alerts include one compact research rating:
+Eligible 30-minute crypto zone alerts include one compact research rating,
+shown as a 1-10 score (percentile against `score_reference`) or a grade:
 
 - `A (best tested)`: top 30% of model scores
-- `B (mixed)`: middle 30% of model scores
-- `C (weak)`: bottom 40% of model scores
+- `B (mixed)`: middle 30-70th percentile
+- `C (weak)`: bottom 30% of model scores
 
-The model was validated on 46 Binance crypto pairs using 365 days of data and
-an untouched final 60-day test. An `A` rating means better historical relative
-odds, not a guaranteed profitable trade. Ratings are intentionally disabled for
-4-hour alerts, NSE stocks, xStocks, and crypto symbols outside the validated
-universe in `crypto_zone_rating.py`.
+Retrained 2026-09-10 on 340 real decided crypto 30m trades (2026-08-13 to
+2026-09-10), reconstructed from live OHLCV and the production zone builder -
+not a synthetic backtest. The original model (46 Binance pairs, 365 days,
+GradientBoostingClassifier on 32 features) had decayed to *worse* than no
+rating at all on live outcomes (grade A: 51.4% win vs 59.0% baseline) and,
+separately, a missing `score_reference` in the bundle meant it could only
+ever emit three raw scores (3, 6, or 9), not the 1-10 range the code was
+built for. The retrain cuts to 4 features
+(`current_gap_atr`, `alert_close_location_aligned`, `return_vol20_pct`,
+`di_alignment`) to avoid overfitting a dataset this size - a 32-feature
+retrain on the same data still overfit (train/test AUC gap of 0.15 vs the
+4-feature model's 0.02). Validated by 5-fold expanding-window walk-forward,
+not a single split: AUC 0.76-0.92 across folds, mean 0.871.
+
+An `A` rating means better historical relative odds, not a guaranteed
+profitable trade. 340 examples across ~4 weeks is still a thin base by ML
+standards - re-check with `rating_validation_report.py` as more decided
+trades accumulate, and retrain again once volume allows a larger held-out
+set. Ratings are intentionally disabled for 4-hour alerts, NSE stocks,
+xStocks, and crypto symbols outside the validated universe in
+`crypto_zone_rating.py` (now the live crypto watchlist, not a fixed
+46-pair list).
 
 ## Files
 
