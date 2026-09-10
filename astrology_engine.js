@@ -698,63 +698,151 @@ function tone(score) {
   return "Balanced";
 }
 
+// Each (section, tone) used to map to exactly one fixed sentence. That was fine
+// astronomically - the tone genuinely doesn't change every day, since it's driven
+// mostly by Mercury/Jupiter/Saturn house placements that hold for weeks - but it
+// meant the *wording* repeated verbatim for the whole stretch, which read as
+// templated/fake even though the underlying computation was real. Each tone now
+// has a small pool of equivalent phrasings, and the pick rotates with the Moon's
+// nakshatra (the fastest-moving significant factor here, changing roughly every
+// day) so consecutive days read differently even when the tone bucket doesn't
+// change - while staying deterministic for a given date (same date always picks
+// the same variant, so dry runs and tests stay reproducible).
+const SENTENCE_POOL = Object.freeze({
+  overall: {
+    Supportive: [
+      "Aaj ka din thik-thak accha hai - plan simple rakho, kaam ban jayega.",
+      "Aaj sab kuch smooth chalega, bas decisions ko structured rakhna.",
+      "Overall aaj positive vibe hai, bas jaldi mat karna.",
+    ],
+    Caution: [
+      "Aaj thoda reactive din hai - jaldi decision mat lo, cheezein double-check kar lena.",
+      "Aaj friction ho sakta hai, koi bhi assumption pehle verify kar lena.",
+      "Aaj thoda confusing din hai, dheere aur soch-samajh ke chalna.",
+    ],
+    Balanced: [
+      "Aaj normal din hai - routine kaam theek chalega, bas structure mat todna.",
+      "Aaj steady din hai, jo plan hai usi pe tike raho.",
+      "Aaj average din hai, kaam chalega bas jaldbaazi mat karna.",
+    ],
+  },
+  study: {
+    Supportive: [
+      "Padhai ya kaam ke liye accha din hai - koi mushkil topic aaj hi khatam kar do.",
+      "Focus achha rahega aaj, deep work ya revision ke liye best din hai.",
+      "Aaj dimaag sharp rahega, pending mushkil topic pe kaam karo.",
+    ],
+    Caution: [
+      "Aaj lamba focus mushkil hoga - chhote sessions rakho aur purana kaam revise karo.",
+      "Naye topic pe mat jao aaj, jo pehle se padha hai usko dobara dekh lo.",
+      "Aaj concentration kam rahega, calculations dobara check kar lena.",
+    ],
+    Balanced: [
+      "Normal padhai ke liye theek din hai - notes aur backlog clear karo.",
+      "Routine study chalega, ek checklist bana ke follow karo.",
+      "Aaj kuch bada nahi hoga, bas steady pace mein padhai karo.",
+    ],
+  },
+  money: {
+    Supportive: [
+      "Trading discipline aaj strong reh sakta hai - rule pehle likho, phir action lena.",
+      "Aaj discipline achha rahega, bas setup ko carefully filter karna.",
+      "Rules follow karoge toh aaj discipline maintain rahega.",
+    ],
+    Caution: [
+      "Aaj impatience zyada ho sakta hai - jaldi mein koi paisa wala decision mat lo.",
+      "Aaj discipline weak reh sakta hai, activity kam rakho.",
+      "Risk hai ki aaj jaldi mein galat decision ho jaye - size aur frequency dono kam rakho.",
+    ],
+    Balanced: [
+      "Aaj neutral din hai - checklist complete ho tabhi action lena.",
+      "Discipline ke liye normal din hai, market clear ho tab hi move karna.",
+      "Kuch force nahi hai aaj, checklist ka wait karo phir action lena.",
+    ],
+  },
+  health: {
+    Supportive: [
+      "Energy aaj achhi rahegi - mushkil kaam din ke strong part mein karo, breaks lete raho.",
+      "Aaj energy level theek rahega, thoda movement aur breaks zaroor lena.",
+      "Body ka energy aaj support karega, bas regular breaks lete raho.",
+    ],
+    Caution: [
+      "Aaj energy up-down ho sakti hai - neend, paani aur khana time pe lena.",
+      "Aaj stamina kam mehsoos ho sakti hai, screen breaks zaroor lena.",
+      "Body thoda tired reh sakta hai aaj, routine strict rakhna.",
+    ],
+    Balanced: [
+      "Energy moderate hai aaj - steady routine aur chhote movement breaks kaafi hain.",
+      "Aaj energy normal rahegi, bas routine steady rakhna.",
+      "Kuch demanding nahi hai aaj, routine follow karo aur beech mein break lete raho.",
+    ],
+  },
+  communication: {
+    Supportive: [
+      "Baatcheet ke liye accha din hai - follow-ups aur group coordination smooth rahega.",
+      "Aaj communication strong rahega, practical baatein karo.",
+      "Log se baat karna aaj easy rahega, follow-ups clear kar do.",
+    ],
+    Caution: [
+      "Aaj baat galat samjhi ja sakti hai - reply short aur factual rakho.",
+      "Emotional ho toh reply thoda delay kar dena, warna baat bigad sakti hai.",
+      "Aaj tone misunderstand ho sakta hai, lambi baatein avoid karo.",
+    ],
+    Balanced: [
+      "Normal din hai baatcheet ke liye - practical follow-ups theek rahenge.",
+      "Aaj communication average rahega, zyada explain karne ki zarurat nahi.",
+      "Kaam ki baatein theek chalengi, bas lamba discussion avoid karna.",
+    ],
+  },
+});
+
 function sentenceFor(section, score, context) {
   const state = tone(score.value);
-  if (section === "overall") {
-    if (state === "Supportive") return "Supportive day for steady progress when decisions stay planned and simple.";
-    if (state === "Caution") return "Reactive day; slow decisions, verify assumptions, and avoid forcing outcomes.";
-    return "Balanced day; useful for routine progress if you keep structure and avoid rushing.";
-  }
-  if (section === "study") {
-    if (state === "Supportive") return "Good for focused study, technical revision, and completing one difficult pending topic.";
-    if (state === "Caution") return "Use shorter blocks, revise older material, and double-check calculations before moving ahead.";
-    return "Suitable for normal study, notes, and backlog clearing with a written checklist.";
-  }
-  if (section === "money") {
-    if (state === "Supportive") return "Discipline can stay strong if rules are written before action and setups are filtered carefully.";
-    if (state === "Caution") return "High chance of impatience; avoid rushed money decisions and keep activity reduced.";
-    return "Neutral discipline day; act only when the checklist is complete and the market context is clear.";
-  }
-  if (section === "health") {
-    if (state === "Supportive") return "Energy is workable; use the stronger part of the day for demanding tasks and take regular breaks.";
-    if (state === "Caution") return "Energy may fluctuate; protect sleep, hydration, meals, and screen breaks.";
-    return "Moderate energy; steady routine and short movement breaks should keep focus stable.";
-  }
-  if (section === "communication") {
-    if (state === "Supportive") return "Good for follow-ups, group coordination, and clear practical conversations.";
-    if (state === "Caution") return "Tone can be misunderstood; keep replies short, factual, and delayed when emotions rise.";
-    return "Normal interaction day; useful for practical follow-ups, but avoid overexplaining.";
-  }
-  return context;
+  const pool = SENTENCE_POOL[section] && SENTENCE_POOL[section][state];
+  if (!pool) return context;
+  const nakIndex = (context && context.moonNak && Number.isInteger(context.moonNak.index))
+    ? context.moonNak.index
+    : 0;
+  const sectionSeed = SECTION_VARIANT_SEED[section] || 0;
+  return pool[(nakIndex + sectionSeed) % pool.length];
 }
 
-function reasonsSuffix(score) {
-  if (!score.reasons || !score.reasons.length) return "";
-  return ` (${score.reasons.join(", ")})`;
-}
+const SECTION_VARIANT_SEED = Object.freeze({
+  overall: 0,
+  study: 1,
+  money: 2,
+  health: 3,
+  communication: 4,
+});
 
 function sectionSentence(section, score, evaluation) {
-  return `${sentenceFor(section, score, evaluation)}${reasonsSuffix(score)}`;
+  // score.reasons (e.g. "Mercury supports learning, Jupiter supports guidance")
+  // used to be appended in brackets. That's the actual planetary reasoning behind
+  // the score and stays on evaluation.scores for diagnostics/tests, but reading
+  // "(Mercury supports learning, Jupiter supports guidance, Moon supports focus)"
+  // in a Discord message is jargon nobody asked for - the sentence itself already
+  // says what it means. Kept out of the displayed text on purpose.
+  return sentenceFor(section, score, evaluation);
 }
 
 function doToday(evaluation) {
   if (evaluation.scores.money.value <= -2) {
-    return "Write rules before any money decision; finish one priority study task.";
+    return "Koi bhi paisa wala decision lene se pehle rule likh lo; ek zaroori padhai ya career ka kaam aaj khatam karo.";
   }
   if (evaluation.scores.study.value >= 3) {
-    return "Use the best focus window for the hardest study or career task.";
+    return "Aaj ka best focus window sabse mushkil padhai ya career task ke liye use karo.";
   }
-  return "Complete one important pending task and keep decisions inside normal rules.";
+  return "Ek zaroori pending kaam complete karo aur normal rules ke andar hi decisions lo.";
 }
 
 function avoidToday(evaluation) {
   if (evaluation.scores.money.value <= -2) {
-    return "Impulsive decisions, revenge behaviour, and changing rules under pressure.";
+    return "Jaldi wale decisions, revenge wali harkat, aur pressure mein rules badalna avoid karo.";
   }
   if (evaluation.scores.communication.value <= -2) {
-    return "Long emotional replies, assumptions about people, and unnecessary arguments.";
+    return "Lambi emotional baatein, logo ke baare mein assumption, aur bekaar ki bahas avoid karo.";
   }
-  return "Overconfidence after early progress and switching plans without a clear reason.";
+  return "Early success ke baad overconfidence aur bina wajah plan badalna avoid karo.";
 }
 
 function sectorThemes(transit, dasha) {
@@ -847,30 +935,30 @@ function buildDailyText(evaluation) {
   const lines = [
     `DAILY ASTROLOGY | ${displayDate(evaluation.date)}`,
     "",
-    `Overall: ${sectionSentence("overall", evaluation.scores.overall, evaluation)}`,
+    `Aaj Ka Din: ${sectionSentence("overall", evaluation.scores.overall, evaluation)}`,
     "",
-    `Study & Career: ${sectionSentence("study", evaluation.scores.study, evaluation)}`,
+    `Padhai & Career: ${sectionSentence("study", evaluation.scores.study, evaluation)}`,
     "",
-    `Money & Trading Discipline: ${sectionSentence("money", evaluation.scores.money, evaluation)}`,
+    `Paisa & Trading: ${sectionSentence("money", evaluation.scores.money, evaluation)}`,
     "",
     `Health & Energy: ${sectionSentence("health", evaluation.scores.health, evaluation)}`,
     "",
-    `Communication & People: ${sectionSentence("communication", evaluation.scores.communication, evaluation)}`,
+    `Baatcheet & Log: ${sectionSentence("communication", evaluation.scores.communication, evaluation)}`,
     "",
-    `Favourable Period: ${formatWindow(evaluation.favourable)}`,
-    `Caution Period: ${formatWindow(evaluation.timings.rahuKalam)}`,
+    `Accha Time: ${formatWindow(evaluation.favourable)}`,
+    `Savdhaan Time: ${formatWindow(evaluation.timings.rahuKalam)}`,
     "",
-    `Do Today: ${doToday(evaluation)}`,
-    `Avoid Today: ${avoidToday(evaluation)}`,
+    `Aaj Karo: ${doToday(evaluation)}`,
+    `Aaj Na Karo: ${avoidToday(evaluation)}`,
   ];
 
   if (evaluation.sectors) {
-    lines.push("", "Sector Themes:");
+    lines.push("", "Sector Trend:");
     if (evaluation.sectors.supportive.length) {
-      lines.push(`Supportive: ${evaluation.sectors.supportive.join(", ")}`);
+      lines.push(`Accha: ${evaluation.sectors.supportive.join(", ")}`);
     }
     if (evaluation.sectors.caution.length) {
-      lines.push(`Caution: ${evaluation.sectors.caution.join(", ")}`);
+      lines.push(`Savdhaan: ${evaluation.sectors.caution.join(", ")}`);
     }
   }
 
@@ -880,15 +968,15 @@ function buildDailyText(evaluation) {
 function buildDailyEmbed(evaluation) {
   const fields = [
     {
-      name: "Overall",
+      name: "Aaj Ka Din",
       value: sectionSentence("overall", evaluation.scores.overall, evaluation),
     },
     {
-      name: "Study & Career",
+      name: "Padhai & Career",
       value: sectionSentence("study", evaluation.scores.study, evaluation),
     },
     {
-      name: "Money & Trading Discipline",
+      name: "Paisa & Trading",
       value: sectionSentence("money", evaluation.scores.money, evaluation),
     },
     {
@@ -896,25 +984,25 @@ function buildDailyEmbed(evaluation) {
       value: sectionSentence("health", evaluation.scores.health, evaluation),
     },
     {
-      name: "Communication & People",
+      name: "Baatcheet & Log",
       value: sectionSentence("communication", evaluation.scores.communication, evaluation),
     },
     {
-      name: "Favourable Period",
+      name: "Accha Time",
       value: formatWindow(evaluation.favourable),
       inline: true,
     },
     {
-      name: "Caution Period",
+      name: "Savdhaan Time",
       value: formatWindow(evaluation.timings.rahuKalam),
       inline: true,
     },
     {
-      name: "Do Today",
+      name: "Aaj Karo",
       value: doToday(evaluation),
     },
     {
-      name: "Avoid Today",
+      name: "Aaj Na Karo",
       value: avoidToday(evaluation),
     },
   ];
@@ -922,13 +1010,13 @@ function buildDailyEmbed(evaluation) {
   if (evaluation.sectors) {
     const sectorLines = [];
     if (evaluation.sectors.supportive.length) {
-      sectorLines.push(`Supportive: ${evaluation.sectors.supportive.join(", ")}`);
+      sectorLines.push(`Accha: ${evaluation.sectors.supportive.join(", ")}`);
     }
     if (evaluation.sectors.caution.length) {
-      sectorLines.push(`Caution: ${evaluation.sectors.caution.join(", ")}`);
+      sectorLines.push(`Savdhaan: ${evaluation.sectors.caution.join(", ")}`);
     }
     if (sectorLines.length) {
-      fields.push({ name: "Sector Themes", value: sectorLines.join("\n") });
+      fields.push({ name: "Sector Trend", value: sectorLines.join("\n") });
     }
   }
 
@@ -937,7 +1025,7 @@ function buildDailyEmbed(evaluation) {
     color: 0x5865f2,
     fields,
     footer: {
-      text: "Reflection only. Use your setup, stop-loss, and position-size rules.",
+      text: "Sirf reflection ke liye. Apna trading setup, stop-loss aur position-size rules khud follow karna.",
     },
   };
 }
