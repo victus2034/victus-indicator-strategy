@@ -2704,7 +2704,8 @@
     "shadow:BCHUSD|30m|long|248.58|248.967": 1789024305.048212,
     "RE/USDT|30m|short|0.45971|0.45998": 1789024915.638821,
     "shadow:RE/USDT|30m|short|0.458805|0.45998": 1789024915.638821,
-    "METAXUSD|30m|short|654.75|658.1": 1789026122.3920512
+    "METAXUSD|30m|short|654.75|658.1": 1789026122.3920512,
+    "shadow:METAXUSD|30m|short|657.372|658.1": 1789026716.5548105
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14253,7 +14254,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1789026065.7169075
+    "30m": 1789026663.6669133
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -44373,7 +44374,7 @@
     "DEXE/USDT|30m|long|1.884|1.892": 1788981712.637881,
     "CAP/USDT|30m|short|0.0472|0.0475": 1788972116.7519538,
     "RIVERUSD|30m|long|1.203|1.205": 1788971524.0373242,
-    "MSFT/USDT:USDT|30m|short|495.34|495.41": 1789024916.0697608,
+    "MSFT/USDT:USDT|30m|short|495.34|495.41": 1789026716.555084,
     "MNT/USDT|30m|long|0.6147|0.6169": 1788972713.2172537,
     "XAUTUSD|30m|short|4432.83|4437.59": 1788972713.2283733,
     "ZAMA/USDT|30m|short|0.05253|0.0528": 1788973324.5335486,
@@ -44391,7 +44392,8 @@
     "MSFT/USDT:USDT|30m|long|490.07|491.81": 1789022542.6743314,
     "METAXUSD|30m|short|654.39|658.08": 1789022542.6707134,
     "HYPEUSD|30m|long|81.59|82.2427": 1789026122.3583539,
-    "BNBUSD|30m|long|708.76|711.01": 1789026122.3632
+    "BNBUSD|30m|long|708.76|711.01": 1789026122.3632,
+    "ATOM/USDT|30m|long|1.796|1.8": 1789026716.5481238
   },
   "shadow:BTCUSD|supply|80474.35070115|80522.70000000": {
     "in_zone": false,
@@ -66242,8 +66244,8 @@
     "last_alert_at": 0.0
   },
   "shadow:METAXUSD|supply|657.37238427|658.10000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789026716.5548105
   },
   "SOXLBUSD|demand|118.60000000|119.05000000": {
     "in_zone": false,
@@ -66662,7 +66664,7 @@
     "last_alert_at": 0.0
   },
   "METAXUSD|supply|654.75000000|658.10000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789026122.3920512
   },
   "shadow:SAMSUNG/USDT:USDT|supply|203.06267168|203.37000000": {
@@ -68994,6 +68996,10 @@
     "last_alert_at": 0.0
   },
   "shadow:MSFT/USDT:USDT|demand|490.07000000|490.29194928": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:AAVEUSD|demand|122.13000000|122.37403093": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
