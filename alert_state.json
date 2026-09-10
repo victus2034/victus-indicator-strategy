@@ -1752,7 +1752,9 @@
     "shadow:ZIL/USDT|4h|short|0.002979|0.002994": 1788883323.5850391,
     "ZIL/USDT|4h|short|0.00296825|0.002992": 1788884505.1864376,
     "SLVONUSD|4h|short|61.6468|62.14": 1788973328.9987118,
-    "SLVONUSD|4h|long|58.73|59.1998": 1789042911.7857912
+    "SLVONUSD|4h|long|58.73|59.1998": 1789042911.7857912,
+    "AAVEUSD|4h|long|120|120.9": 1789057324.215126,
+    "shadow:AAVEUSD|4h|long|120|120.901": 1789057324.215126
   },
   "ARBUSD|supply|0.08030000|0.08180000": {
     "in_zone": false,
@@ -5331,7 +5333,7 @@
     "last_alert_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1789056073.6581995
+    "4h": 1789057262.5614238
   },
   "HOOD/USDT:USDT|demand|83.83000000|84.37120000": {
     "in_zone": false,
@@ -9378,8 +9380,8 @@
     "last_alert_at": 0.0
   },
   "shadow:AAVEUSD|demand|120.00000000|120.90059308": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789057324.215126
   },
   "BEAT/USDT|supply|0.13510000|0.13900000": {
     "in_zone": false,
@@ -16482,8 +16484,8 @@
     "last_alert_at": 0.0
   },
   "AAVEUSD|demand|120.00000000|120.90000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789057324.215126
   },
   "EUL/USDT|demand|1.22000000|1.22976000": {
     "in_zone": false,
@@ -18434,6 +18436,30 @@
     "last_alert_at": 0.0
   },
   "shadow:MSFT/USDT:USDT|demand|477.51000000|478.41013232": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BTCUSD|supply|82597.36108482|82811.50000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:COTI/USDT|supply|0.02386089|0.02404000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:SOON/USDT|supply|0.21654339|0.21830000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BEAT/USDT|supply|0.17100834|0.20850000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:ZIL/USDT|demand|0.00247100|0.00248750": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:MSFT/USDT:USDT|supply|516.51008980|517.45000000": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
