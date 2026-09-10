@@ -32496,6 +32496,33 @@
       "target_half": 0.08754346,
       "timeframe": "30m",
       "trade_id": "b4e516e8dbd46aeb"
+    },
+    {
+      "alert_time": "2026-09-10T23:41:54.031799+05:30",
+      "cost_r": 0.18372505454545163,
+      "date": "2026-09-10",
+      "entry": 0.09506,
+      "entry_time": "2026-09-10T23:45:00+05:30",
+      "exit_price": 0.09517407200000001,
+      "exit_time": "2026-09-10T23:45:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.023678581818193628,
+      "outcome": "BE",
+      "rating": 5,
+      "realized_r": 0.20740363636364526,
+      "risk": 0.0005500000000000088,
+      "side": "long",
+      "stop": 0.09451,
+      "stream": "live",
+      "symbol": "ALGO/USDT",
+      "target_1": 0.09561000000000001,
+      "target_2": 0.09616000000000002,
+      "target_half": 0.095335,
+      "timeframe": "30m",
+      "trade_id": "8e84ebec982bacf6"
     }
   ],
   "handled": {
@@ -33822,24 +33849,5 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {
-    "8e84ebec982bacf6": {
-      "alert_time": "2026-09-10T23:41:54.031799+05:30",
-      "entry": 0.09506,
-      "entry_time": "2026-09-10T23:45:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 5,
-      "risk": 0.0005500000000000088,
-      "side": "long",
-      "stop": 0.09451,
-      "stream": "live",
-      "symbol": "ALGO/USDT",
-      "target_1": 0.09561000000000001,
-      "target_2": 0.09616000000000002,
-      "target_half": 0.095335,
-      "timeframe": "30m"
-    }
-  }
+  "open": {}
 }
