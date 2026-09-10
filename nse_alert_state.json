@@ -3007,7 +3007,9 @@
     "JBMA.NS|4h|long|606.65|610.842": 1789018368.8335,
     "FSL.NS|4h|long|251.39|252.958": 1789025572.0488734,
     "JBMA.NS|4h|long|606.65|610.849": 1789023161.2205002,
-    "ICICIBANK.NS|4h|long|1376|1380.13": 1789025572.2631147
+    "ICICIBANK.NS|4h|long|1376|1380.13": 1789031568.3706012,
+    "AFCONS.NS|4h|long|259.3|260.876": 1789031567.888834,
+    "CANFINHOME.NS|4h|long|780.05|782.858": 1789031568.0989547
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -3665,9 +3667,9 @@
     "last_attempt_at": 0.0
   },
   "AFCONS.NS|demand|259.3000|260.8756": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789031567.888834,
+    "last_attempt_at": 1789031567.888834
   },
   "AFFLE.NS|supply|1711.5860|1720.1000": {
     "in_zone": true,
@@ -5451,8 +5453,8 @@
   },
   "ICICIBANK.NS|demand|1376.0000|1380.1323": {
     "in_zone": true,
-    "last_alert_at": 1787124776.9627419,
-    "last_attempt_at": 1787124776.9627419
+    "last_alert_at": 1789031568.3706012,
+    "last_attempt_at": 1789031568.3706012
   },
   "ICICIGI.NS|supply|1698.5541|1706.4000": {
     "in_zone": false,
@@ -18060,7 +18062,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1789030290.9422777
+    "4h": 1789031491.4173238
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -67583,9 +67585,9 @@
     "last_attempt_at": 0.0
   },
   "CANFINHOME.NS|demand|780.0500|782.8580": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789031568.0989547,
+    "last_attempt_at": 1789031568.0989547
   },
   "CARTRADE.NS|supply|3268.3253|3290.5000": {
     "in_zone": false,
@@ -69243,6 +69245,16 @@
     "last_attempt_at": 0.0
   },
   "ANURAS.NS|demand|1163.2000|1169.9568": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "GRSE.NS|demand|1967.3000|1983.3529": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "JBMA.NS|demand|512.7500|517.1442": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
