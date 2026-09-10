@@ -32,6 +32,7 @@ from nse_config import (
     MIN_DISTANCE_PCT,
     MIN_SCAN_INTERVAL_SECONDS,
     NSE_INDEX_CSV_URL,
+    NSE_MARKET_CAP_RANK,
     NSE_MAX_SYMBOLS,
     OHLCV_LIMIT,
     OVERLAP_ATR,
@@ -246,6 +247,12 @@ def load_watchlist():
         if len(symbols) < 50:
             raise RuntimeError(f"NSE index CSV returned only {len(symbols)} symbols")
         NSE_SECTOR_MAP = build_sector_map_from_constituents(csv)
+        # The CSV lists constituents alphabetically by company name, not by size,
+        # so sort against the market-cap ranking before cutting to NSE_MAX_SYMBOLS -
+        # otherwise the cut is "first N alphabetically", not "top N by market cap".
+        # A symbol not in the ranking (listed since it was captured) sorts last.
+        rank_index = {symbol: i for i, symbol in enumerate(NSE_MARKET_CAP_RANK)}
+        symbols.sort(key=lambda symbol: rank_index.get(symbol, len(NSE_MARKET_CAP_RANK)))
         return symbols[:NSE_MAX_SYMBOLS]
     except Exception as error:
         print(f"Using fallback NSE watchlist because index CSV failed: {error}")
