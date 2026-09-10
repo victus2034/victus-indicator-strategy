@@ -2734,7 +2734,7 @@
     "shadow:TSLAXUSD|30m|long|364.2|364.435": 1789041145.9014745,
     "AXTI/USDT:USDT|30m|long|66.63|66.73": 1789041724.6114624,
     "shadow:AXTI/USDT:USDT|30m|long|66.63|66.8267": 1789041724.6114624,
-    "shadow:BTCUSD|30m|long|77579.4|77639": 1789042312.0243359,
+    "shadow:BTCUSD|30m|long|77579.4|77639": 1789046519.0915127,
     "EUL/USDT|30m|long|1.2081|1.21776": 1789042312.2655027,
     "shadow:MSFT/USDT:USDT|30m|long|490.07|490.292": 1789042312.6381514,
     "shadow:SLVONUSD|30m|long|58.73|58.8316": 1789043526.471074,
@@ -2742,7 +2742,8 @@
     "shadow:MSFT/USDT:USDT|30m|long|490.28|490.506": 1789043527.3015792,
     "BTCUSD|30m|long|76923|76983.6": 1789044116.248773,
     "shadow:BTCUSD|30m|long|76923|77003.4": 1789044116.248773,
-    "BNBUSD|30m|long|708.76|711.01": 1789044116.91811
+    "BNBUSD|30m|long|708.76|711.01": 1789044116.91811,
+    "AVAXUSD|30m|long|7.534|7.57": 1789046519.0922022
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14291,7 +14292,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1789045860.2054453
+    "30m": 1789046463.686595
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -36802,8 +36803,8 @@
     "last_alert_at": 0.0
   },
   "AVAXUSD|demand|7.53400000|7.57000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789046519.0922022
   },
   "shadow:AVAXUSD|demand|7.53400000|7.54335394": {
     "in_zone": false,
@@ -46072,7 +46073,7 @@
     "last_alert_at": 1788942107.8755777
   },
   "BTCUSD|demand|76923.00000000|76983.60000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789044116.248773
   },
   "shadow:BTCUSD|supply|79562.43167197|79612.80000000": {
@@ -72206,5 +72207,9 @@
   "shadow:MSFT/USDT:USDT|supply|495.20658304|495.41000000": {
     "in_zone": false,
     "last_alert_at": 0.0
+  },
+  "shadow:BTCUSD|demand|77579.40000000|77638.97082495": {
+    "in_zone": true,
+    "last_alert_at": 1789046519.0915127
   }
 }
