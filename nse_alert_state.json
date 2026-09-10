@@ -2930,7 +2930,7 @@
     "BAJAJHFL.NS|4h|long|81.85|82.1984": 1788329559.280476,
     "INDIGO.NS|4h|long|4886.5|4907.7": 1789013559.1880271,
     "CLEAN.NS|4h|short|848.854|853.5": 1788333152.279929,
-    "GRSE.NS|4h|long|2474|2486.05": 1789013558.7013724,
+    "GRSE.NS|4h|long|2474|2486.05": 1789023161.0131097,
     "BEML.NS|4h|short|2021.59|2032.5": 1788335549.768456,
     "CLEAN.NS|4h|short|848.853|853.5": 1788335550.0108907,
     "PGEL.NS|4h|long|561.9|565.284": 1788340348.322058,
@@ -3005,7 +3005,8 @@
     "GLAND.NS|4h|short|3024.17|3039": 1788946387.675818,
     "ARE&M.NS|4h|long|829.1|832.996": 1789017163.6845715,
     "JBMA.NS|4h|long|606.65|610.842": 1789018368.8335,
-    "FSL.NS|4h|long|251.39|252.958": 1789020760.1800702
+    "FSL.NS|4h|long|251.39|252.958": 1789020760.1800702,
+    "JBMA.NS|4h|long|606.65|610.849": 1789023161.2205002
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -4963,7 +4964,7 @@
     "last_attempt_at": 0.0
   },
   "FSL.NS|demand|251.3900|252.9578": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789020760.1800702,
     "last_attempt_at": 1789020760.1800702
   },
@@ -18058,7 +18059,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1789021903.4709015
+    "4h": 1789023088.8564336
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -45091,9 +45092,9 @@
     "last_attempt_at": 0.0
   },
   "GRSE.NS|demand|2474.0000|2486.0476": {
-    "in_zone": false,
-    "last_alert_at": 1789013558.7013724,
-    "last_attempt_at": 1789013558.7013724
+    "in_zone": true,
+    "last_alert_at": 1789023161.0131097,
+    "last_attempt_at": 1789023161.0131097
   },
   "GILLETTE.NS|demand|7240.0000|7275.6656": {
     "in_zone": false,
@@ -49926,7 +49927,7 @@
     "last_attempt_at": 0.0
   },
   "INDIGO.NS|demand|4886.5000|4907.6964": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789013559.1880271,
     "last_attempt_at": 1789013559.1880271
   },
@@ -66036,9 +66037,9 @@
     "last_attempt_at": 0.0
   },
   "JBMA.NS|demand|606.6500|610.8493": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789023161.2205002,
+    "last_attempt_at": 1789023161.2205002
   },
   "JSWCEMENT.NS|demand|119.3200|119.8727": {
     "in_zone": false,
