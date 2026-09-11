@@ -32577,6 +32577,33 @@
       "target_half": 0.47884374999999996,
       "timeframe": "30m",
       "trade_id": "BTW/USDT|30m|short|0.48125|0.486062"
+    },
+    {
+      "alert_time": "2026-09-11T08:01:56.523100+05:30",
+      "cost_r": 0.3237189333333334,
+      "date": "2026-09-11",
+      "entry": 114.2,
+      "entry_time": "2026-09-11T08:05:00+05:30",
+      "exit_price": null,
+      "exit_time": "2026-09-11T08:05:00+05:30",
+      "final_result": "data_quality_ambiguous",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "xstock",
+      "net_realized_r": null,
+      "outcome": "data_quality_ambiguous",
+      "rating": 9,
+      "realized_r": null,
+      "risk": 0.375,
+      "side": "long",
+      "stop": 113.825,
+      "stream": "live",
+      "symbol": "SOXLBUSD",
+      "target_1": 114.575,
+      "target_2": 114.95,
+      "target_half": 114.3875,
+      "timeframe": "30m",
+      "trade_id": "5996863a1e7dd82f"
     }
   ],
   "handled": {
@@ -33771,6 +33798,7 @@
     "e09445db7102d067": "filled",
     "e0a3d1f6db2d049f": "filled",
     "e1814b15b0493952": "filled",
+    "e1d3c8caa5ef9ca0": "filled",
     "e2dd9c6197a6ed55": "filled",
     "e358c532aa3fc8fc": "filled",
     "e38865d71893301d": "filled",
@@ -33907,23 +33935,23 @@
     "ffb4661b7d04cd46": "filled"
   },
   "open": {
-    "5996863a1e7dd82f": {
-      "alert_time": "2026-09-11T08:01:56.523100+05:30",
-      "entry": 114.2,
-      "entry_time": "2026-09-11T08:05:00+05:30",
+    "e1d3c8caa5ef9ca0": {
+      "alert_time": "2026-09-11T08:11:49.396623+05:30",
+      "entry": 0.09020592,
+      "entry_time": "2026-09-11T08:15:00+05:30",
       "geometry": "wick",
-      "half_r_hit": true,
-      "market": "xstock",
-      "rating": 9,
-      "risk": 0.375,
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 8,
+      "risk": 0.0008948999999999901,
       "side": "long",
-      "stop": 113.825,
+      "stop": 0.08931102,
       "stream": "live",
-      "symbol": "SOXLBUSD",
-      "target_1": 114.575,
-      "target_2": 114.95,
-      "target_half": 114.3875,
-      "timeframe": "30m"
+      "symbol": "ALGO/USDT",
+      "target_1": 0.09110081999999999,
+      "target_2": 0.09199571999999998,
+      "target_half": 0.09065336999999998,
+      "timeframe": "4h"
     }
   }
 }
