@@ -33616,6 +33616,7 @@
     "AAVEUSD|30m|short|131|131.075": "filled",
     "ALGO/USDT|30m|short|0.0990575|0.100048": "filled",
     "ALGO/USDT|30m|short|0.0991667|0.100158": "filled",
+    "ATOM/USDT|30m|long|1.754|1.74275": "filled",
     "ATOM/USDT|30m|long|1.8|1.795": "filled",
     "ATOM/USDT|30m|short|1.68353|1.70037": "filled",
     "ATOM/USDT|4h|short|1.648|1.738": "filled",
@@ -34269,5 +34270,24 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {}
+  "open": {
+    "ATOM/USDT|30m|long|1.754|1.74275": {
+      "alert_time": "2026-09-11T12:41:55.067837+05:30",
+      "entry": 1.754,
+      "entry_time": "2026-09-11T13:10:00+05:30",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 5,
+      "risk": 0.011249999999999982,
+      "side": "long",
+      "stop": 1.74275,
+      "stream": "live",
+      "symbol": "ATOM/USDT",
+      "target_1": 1.76525,
+      "target_2": 1.7765,
+      "target_half": 1.759625,
+      "timeframe": "30m"
+    }
+  }
 }
