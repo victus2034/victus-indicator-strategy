@@ -5346,7 +5346,11 @@
     "CANBK.NS|30m|long|123|123.183": 1789100515.4361818,
     "3MINDIA.NS|30m|long|32500|32537.2": 1789100516.7511618,
     "KIRLOSENG.NS|30m|long|2156.8|2162.19": 1789100530.201774,
-    "CHOLAHLDNG.NS|30m|long|1496.1|1498.7": 1789100530.5399163
+    "CHOLAHLDNG.NS|30m|long|1496.1|1498.7": 1789100530.5399163,
+    "BHARTIARTL.NS|30m|short|1852.23|1854": 1789101720.150931,
+    "DLF.NS|30m|long|630.65|631.728": 1789101721.0419269,
+    "BAJAJHFL.NS|30m|short|84.7822|84.86": 1789101721.5028243,
+    "BLUESTARCO.NS|30m|short|1533.48|1537.1": 1789101721.8343341
   },
   "ANANDRATHI.NS|supply|2187.5000|2221.0000": {
     "in_zone": true,
@@ -32059,7 +32063,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "30m": 1789100461.5146995
+    "30m": 1789101665.3634138
   },
   "3MINDIA.NS|supply|35230.9249|35290.0000": {
     "in_zone": false,
@@ -164542,7 +164546,7 @@
     "last_attempt_at": 0.0
   },
   "KIRLOSENG.NS|demand|2156.8000|2162.1864": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789100530.201774,
     "last_attempt_at": 1789100530.201774
   },
@@ -164877,9 +164881,9 @@
     "last_attempt_at": 0.0
   },
   "BAJAJHFL.NS|supply|84.7822|84.8600": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789101721.5028243,
+    "last_attempt_at": 1789101721.5028243
   },
   "BALKRISIND.NS|demand|1985.4000|1988.4631": {
     "in_zone": false,
@@ -167562,7 +167566,7 @@
     "last_attempt_at": 0.0
   },
   "GICRE.NS|demand|341.8000|342.2257": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789099353.057926,
     "last_attempt_at": 1789099353.057926
   },
@@ -168777,9 +168781,9 @@
     "last_attempt_at": 0.0
   },
   "BHARTIARTL.NS|supply|1852.2330|1854.0000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789101720.150931,
+    "last_attempt_at": 1789101720.150931
   },
   "BLUEDART.NS|demand|4720.0000|4725.1747": {
     "in_zone": false,
@@ -175022,9 +175026,9 @@
     "last_attempt_at": 0.0
   },
   "DLF.NS|demand|630.6500|631.7278": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789101721.0419269,
+    "last_attempt_at": 1789101721.0419269
   },
   "PIDILITIND.NS|demand|1537.9000|1539.9217": {
     "in_zone": false,
@@ -175477,6 +175481,66 @@
     "last_attempt_at": 0.0
   },
   "ONESOURCE.NS|supply|1642.2902|1646.1000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "ONGC.NS|supply|241.9062|242.1300": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "GRASIM.NS|demand|3183.0000|3186.9319": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "RADICO.NS|demand|4080.1001|4086.8464": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "CPPLUS.NS|supply|4075.0531|4085.2000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "NAVINFLUOR.NS|demand|8510.5000|8522.7061": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "PAGEIND.NS|supply|38185.1336|38260.0000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "KPRMILL.NS|demand|1101.0000|1102.9836": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "3MINDIA.NS|demand|32500.0000|32537.1589": {
+    "in_zone": true,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "PTCIL.NS|demand|20480.0000|20523.2733": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "BLUESTARCO.NS|supply|1533.4842|1537.1000": {
+    "in_zone": true,
+    "last_alert_at": 1789101721.8343341,
+    "last_attempt_at": 1789101721.8343341
+  },
+  "IFCI.NS|demand|80.4300|80.6108": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "KAJARIACER.NS|supply|1273.0814|1275.0000": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
