@@ -34656,6 +34656,33 @@
       "target_half": 0.022762599206349206,
       "timeframe": "30m",
       "trade_id": "GWEI/USDT|30m|short|0.022877|0.0231058"
+    },
+    {
+      "alert_time": "2026-09-11T19:32:05.349870+05:30",
+      "cost_r": 0.3092414423357603,
+      "date": "2026-09-11",
+      "entry": 498.19,
+      "entry_time": "2026-09-11T19:35:00+05:30",
+      "exit_price": 496.47749999999996,
+      "exit_time": "2026-09-11T19:40:00+05:30",
+      "final_result": "+1R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "xstock",
+      "net_realized_r": 0.6907585576642397,
+      "outcome": "+1R",
+      "rating": 8,
+      "realized_r": 1.0,
+      "risk": 1.712500000000034,
+      "side": "short",
+      "stop": 499.90250000000003,
+      "stream": "live",
+      "symbol": "MSFT/USDT:USDT",
+      "target_1": 496.47749999999996,
+      "target_2": 494.76499999999993,
+      "target_half": 497.33375,
+      "timeframe": "30m",
+      "trade_id": "166f8ad58faded57"
     }
   ],
   "handled": {
@@ -36069,7 +36096,7 @@
       "entry": 368.0,
       "entry_time": "2026-09-11T19:35:00+05:30",
       "geometry": "wick",
-      "half_r_hit": false,
+      "half_r_hit": true,
       "market": "xstock",
       "rating": 6,
       "risk": 2.1875,
@@ -36080,24 +36107,6 @@
       "target_1": 365.8125,
       "target_2": 363.625,
       "target_half": 366.90625,
-      "timeframe": "30m"
-    },
-    "166f8ad58faded57": {
-      "alert_time": "2026-09-11T19:32:05.349870+05:30",
-      "entry": 498.19,
-      "entry_time": "2026-09-11T19:35:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "xstock",
-      "rating": 8,
-      "risk": 1.712500000000034,
-      "side": "short",
-      "stop": 499.90250000000003,
-      "stream": "live",
-      "symbol": "MSFT/USDT:USDT",
-      "target_1": 496.47749999999996,
-      "target_2": 494.76499999999993,
-      "target_half": 497.33375,
       "timeframe": "30m"
     }
   }
