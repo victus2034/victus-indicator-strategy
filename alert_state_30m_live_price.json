@@ -2793,7 +2793,8 @@
     "O/USDT|30m|long|0.5274|0.5309": 1789128718.637184,
     "BTCUSD|30m|long|76199.1|76469.6": 1789129931.925211,
     "shadow:BTCUSD|30m|long|76199.1|76279.9": 1789129931.925211,
-    "shadow:SOLUSD|30m|long|98.3|98.46": 1789129932.1831381
+    "shadow:SOLUSD|30m|long|98.3|98.46": 1789129932.1831381,
+    "ICP/USDT|30m|short|2.818|2.837": 1789131113.0800924
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14342,7 +14343,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1789130463.7584605
+    "30m": 1789131060.485385
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -44595,7 +44596,11 @@
     "TRUMP/USDT|30m|short|2.006|2.018": 1789130515.5855727,
     "ESP/USDT|30m|short|0.08856|0.08875": 1789130515.5876124,
     "AERO/USDT|30m|short|0.5651|0.5677": 1789130515.5897536,
-    "ICP/USDT|30m|short|2.818|2.837": 1789130515.591835
+    "ICP/USDT|30m|short|2.818|2.837": 1789130515.591835,
+    "BTCUSD|30m|short|78500.4|78536.7": 1789131113.066111,
+    "ETHUSD|30m|short|2520.02|2522.73": 1789131113.0715594,
+    "SOLUSD|30m|short|102.06|102.15": 1789131113.0743105,
+    "AAVEUSD|30m|short|125.47|125.89": 1789131113.0771456
   },
   "shadow:BTCUSD|supply|80474.35070115|80522.70000000": {
     "in_zone": false,
@@ -80542,8 +80547,8 @@
     "last_alert_at": 0.0
   },
   "ICP/USDT|supply|2.81800000|2.83700000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789131113.0800924
   },
   "shadow:ICP/USDT|supply|2.82906732|2.83700000": {
     "in_zone": false,
@@ -80990,6 +80995,26 @@
     "last_alert_at": 0.0
   },
   "shadow:XAUTUSD|demand|4292.60000000|4295.49813785": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:ETHUSD|supply|2520.03767316|2522.73000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:AAVEUSD|demand|119.60000000|119.92976539": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:TRUMP/USDT|supply|2.29150254|2.29700000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:ESP/USDT|supply|0.09462819|0.09488000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:AERO/USDT|supply|0.62291057|0.62520000": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
