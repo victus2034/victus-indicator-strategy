@@ -5360,7 +5360,9 @@
     "DLF.NS|30m|long|630.65|631.704": 1789105315.285068,
     "PWL.NS|30m|short|133.081|133.35": 1789106528.896857,
     "JSWENERGY.NS|30m|long|522.3|523.014": 1789107709.5025628,
-    "NLCINDIA.NS|30m|long|265|265.425": 1789107709.7211213
+    "NLCINDIA.NS|30m|long|265|265.425": 1789107709.7211213,
+    "PETRONET.NS|30m|long|284.2|284.545": 1789108942.8319972,
+    "PAGEIND.NS|30m|long|35110|35156": 1789108943.1247635
   },
   "ANANDRATHI.NS|supply|2187.5000|2221.0000": {
     "in_zone": true,
@@ -32073,7 +32075,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "30m": 1789107665.2202396
+    "30m": 1789108899.0355287
   },
   "3MINDIA.NS|supply|35230.9249|35290.0000": {
     "in_zone": false,
@@ -133081,9 +133083,9 @@
     "last_attempt_at": 0.0
   },
   "PAGEIND.NS|demand|35110.0000|35155.9969": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789108943.1247635,
+    "last_attempt_at": 1789108943.1247635
   },
   "PATANJALI.NS|demand|330.8500|331.5901": {
     "in_zone": false,
@@ -177666,9 +177668,9 @@
     "last_attempt_at": 0.0
   },
   "PETRONET.NS|demand|284.2000|284.5446": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789108942.8319972,
+    "last_attempt_at": 1789108942.8319972
   },
   "COCHINSHIP.NS|demand|1377.4000|1379.1165": {
     "in_zone": false,
@@ -177946,6 +177948,11 @@
     "last_attempt_at": 0.0
   },
   "ONESOURCE.NS|supply|1642.2825|1646.1000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "RADICO.NS|demand|4080.1001|4086.8063": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
