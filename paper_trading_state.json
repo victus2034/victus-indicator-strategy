@@ -32766,6 +32766,33 @@
       "target_half": 0.014582135,
       "timeframe": "30m",
       "trade_id": "4d54591529d54598"
+    },
+    {
+      "alert_time": "2026-09-11T08:51:48.618811+05:30",
+      "cost_r": 0.17737008278530356,
+      "date": "2026-09-11",
+      "entry": 4313.28,
+      "entry_time": "2026-09-11T09:15:00+05:30",
+      "exit_price": 4318.455935999999,
+      "exit_time": "2026-09-11T09:15:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.022859549709851074,
+      "outcome": "BE",
+      "rating": 6,
+      "realized_r": 0.20022963249515463,
+      "risk": 25.849999999999454,
+      "side": "long",
+      "stop": 4287.43,
+      "stream": "live",
+      "symbol": "XAUTUSD",
+      "target_1": 4339.129999999999,
+      "target_2": 4364.979999999999,
+      "target_half": 4326.205,
+      "timeframe": "4h",
+      "trade_id": "bb8c5b6d8eb79023"
     }
   ],
   "handled": {
@@ -34102,24 +34129,5 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {
-    "bb8c5b6d8eb79023": {
-      "alert_time": "2026-09-11T08:51:48.618811+05:30",
-      "entry": 4313.28,
-      "entry_time": "2026-09-11T09:15:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 6,
-      "risk": 25.849999999999454,
-      "side": "long",
-      "stop": 4287.43,
-      "stream": "live",
-      "symbol": "XAUTUSD",
-      "target_1": 4339.129999999999,
-      "target_2": 4364.979999999999,
-      "target_half": 4326.205,
-      "timeframe": "4h"
-    }
-  }
+  "open": {}
 }
