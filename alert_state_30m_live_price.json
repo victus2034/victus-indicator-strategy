@@ -2789,7 +2789,8 @@
     "shadow:LA/USDT|30m|short|0.0640579|0.06428": 1789126352.7380896,
     "MSFT/USDT:USDT|30m|short|495.34|495.41": 1789126352.7474785,
     "shadow:MSFT/USDT:USDT|30m|short|495.207|495.41": 1789126352.7474785,
-    "TSLAXUSD|30m|long|358.65|360.95": 1789127514.7277405
+    "TSLAXUSD|30m|long|358.65|360.95": 1789127514.7277405,
+    "O/USDT|30m|long|0.5274|0.5309": 1789128718.637184
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14338,7 +14339,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1789128069.4357483
+    "30m": 1789128663.8907905
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -44515,10 +44516,10 @@
     "LINKUSD|30m|long|11.568|11.6605": 1789044116.9147224,
     "BCHUSD|30m|long|239.8|241.718": 1789044117.155107,
     "MNT/USDT|30m|long|0.5844|0.5849": 1789044117.1587317,
-    "XAUTUSD|30m|long|4309.54|4315.85": 1789126352.7445338,
+    "XAUTUSD|30m|long|4309.54|4315.85": 1789128718.8436925,
     "DOGEUSD|30m|long|0.08369|0.08413": 1789044710.6745536,
     "AAVEUSD|30m|long|120.75|121.716": 1789044710.6793761,
-    "BTCUSD|30m|long|76199.1|76469.6": 1789126352.726467,
+    "BTCUSD|30m|long|76199.1|76469.6": 1789128718.6277628,
     "AAVEUSD|30m|long|120|120.96": 1789125714.7943232,
     "AVAXUSD|30m|long|7.534|7.57": 1789051321.1208253,
     "HYPEUSD|30m|long|80.22|80.53": 1789047126.6273699,
@@ -44542,7 +44543,7 @@
     "SLVONUSD|30m|long|56.82|57.05": 1789098701.85428,
     "MSFT/USDT:USDT|30m|long|486.9|488.5": 1789114310.4170716,
     "NVDAXUSD|30m|long|217.35|217.45": 1789105916.4473352,
-    "TSLAXUSD|30m|long|358.65|360.95": 1789126914.9374907,
+    "TSLAXUSD|30m|long|358.65|360.95": 1789128718.8466349,
     "SOXLBUSD|30m|long|113.9|114.2": 1789094500.6386983,
     "UB/USDT|30m|short|0.12591|0.12613": 1789099323.1306822,
     "BLESSUSD|30m|long|0.007675|0.00772": 1789099323.139444,
@@ -44583,7 +44584,8 @@
     "ZAMA/USDT|30m|long|0.04546|0.04577": 1789126352.7383,
     "BCHUSD|30m|long|222.3|223.6": 1789126352.741214,
     "DOGEUSD|30m|long|0.082617|0.0832779": 1789126914.9280348,
-    "BNBUSD|30m|long|708.44|708.47": 1789128123.804116
+    "BNBUSD|30m|long|708.44|708.47": 1789128123.804116,
+    "ETHUSD|30m|long|2433.07|2437.05": 1789128718.6335528
   },
   "shadow:BTCUSD|supply|80474.35070115|80522.70000000": {
     "in_zone": false,
@@ -79478,8 +79480,8 @@
     "last_alert_at": 0.0
   },
   "O/USDT|demand|0.52740000|0.53090000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789128718.637184
   },
   "shadow:O/USDT|supply|0.54985247|0.55130000": {
     "in_zone": false,
@@ -80626,6 +80628,50 @@
     "last_alert_at": 0.0
   },
   "shadow:NVDAXUSD|demand|217.36000000|217.50963271": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BTCUSD|supply|78467.30234819|78536.70000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BTCUSD|demand|76199.10000000|76279.91625265": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:XRPUSD|demand|1.30880000|1.31122902": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:AKE/USDT|demand|0.00748100|0.00753798": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:AAVEUSD|demand|119.60000000|119.92936151": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:AXTI/USDT:USDT|supply|68.94928099|69.15000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:AXTI/USDT:USDT|demand|60.10000000|60.21666596": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:MRVL/USDT:USDT|supply|235.18245118|235.57000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:MRVL/USDT:USDT|demand|220.24000000|220.52419231": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:MSFT/USDT:USDT|supply|499.52971589|499.68000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:MSFT/USDT:USDT|demand|489.19000000|489.46196458": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
