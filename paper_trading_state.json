@@ -32901,6 +32901,33 @@
       "target_half": 0.05075,
       "timeframe": "30m",
       "trade_id": "VELVETUSD|30m|long|0.0505|0.05"
+    },
+    {
+      "alert_time": "2026-09-11T11:41:58.440649+05:30",
+      "cost_r": 0.16573351111111137,
+      "date": "2026-09-11",
+      "entry": 1.754,
+      "entry_time": "2026-09-11T12:10:00+05:30",
+      "exit_price": 1.7561048,
+      "exit_time": "2026-09-11T12:10:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.02135982222221397,
+      "outcome": "BE",
+      "rating": 5,
+      "realized_r": 0.18709333333332534,
+      "risk": 0.011249999999999982,
+      "side": "long",
+      "stop": 1.74275,
+      "stream": "live",
+      "symbol": "ATOM/USDT",
+      "target_1": 1.76525,
+      "target_2": 1.7765,
+      "target_half": 1.759625,
+      "timeframe": "30m",
+      "trade_id": "a1de3c021e8da38a"
     }
   ],
   "handled": {
@@ -34242,24 +34269,5 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {
-    "a1de3c021e8da38a": {
-      "alert_time": "2026-09-11T11:41:58.440649+05:30",
-      "entry": 1.754,
-      "entry_time": "2026-09-11T12:10:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 5,
-      "risk": 0.011249999999999982,
-      "side": "long",
-      "stop": 1.74275,
-      "stream": "live",
-      "symbol": "ATOM/USDT",
-      "target_1": 1.76525,
-      "target_2": 1.7765,
-      "target_half": 1.759625,
-      "timeframe": "30m"
-    }
-  }
+  "open": {}
 }
