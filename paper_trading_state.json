@@ -32928,6 +32928,33 @@
       "target_half": 1.759625,
       "timeframe": "30m",
       "trade_id": "a1de3c021e8da38a"
+    },
+    {
+      "alert_time": "2026-09-11T12:41:55.065003+05:30",
+      "cost_r": 0.1075234921568629,
+      "date": "2026-09-11",
+      "entry": 0.51587,
+      "entry_time": "2026-09-11T13:20:00+05:30",
+      "exit_price": 0.5056700000000001,
+      "exit_time": "2026-09-11T13:25:00+05:30",
+      "final_result": "+2R",
+      "geometry": "live",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 1.8924765078431371,
+      "outcome": "+2R",
+      "rating": 7,
+      "realized_r": 2.0,
+      "risk": 0.005099999999999993,
+      "side": "short",
+      "stop": 0.52097,
+      "stream": "live",
+      "symbol": "BTW/USDT",
+      "target_1": 0.5107700000000001,
+      "target_2": 0.5056700000000001,
+      "target_half": 0.51332,
+      "timeframe": "30m",
+      "trade_id": "BTW/USDT|30m|short|0.51587|0.52097"
     }
   ],
   "handled": {
@@ -33000,6 +33027,7 @@
     "0e2a3d2142c79531": "filled",
     "0e378aac19e80ff2": "filled",
     "0e3c1e869f7eb044": "filled",
+    "0e7134dc4af1597c": "filled",
     "0ee19b13f3dbe1d8": "filled",
     "0f83b52aaffcc023": "filled",
     "0f91a9b3e1b14b66": "filled",
@@ -34272,6 +34300,24 @@
     "ffb4661b7d04cd46": "filled"
   },
   "open": {
+    "0e7134dc4af1597c": {
+      "alert_time": "2026-09-11T13:21:48.197171+05:30",
+      "entry": 1.754,
+      "entry_time": "2026-09-11T13:25:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 3,
+      "risk": 0.011249999999999982,
+      "side": "long",
+      "stop": 1.74275,
+      "stream": "live",
+      "symbol": "ATOM/USDT",
+      "target_1": 1.76525,
+      "target_2": 1.7765,
+      "target_half": 1.759625,
+      "timeframe": "30m"
+    },
     "ATOM/USDT|30m|long|1.754|1.74275": {
       "alert_time": "2026-09-11T12:41:55.067837+05:30",
       "entry": 1.754,
@@ -34288,24 +34334,6 @@
       "target_1": 1.76525,
       "target_2": 1.7765,
       "target_half": 1.759625,
-      "timeframe": "30m"
-    },
-    "BTW/USDT|30m|short|0.51587|0.52097": {
-      "alert_time": "2026-09-11T12:41:55.065003+05:30",
-      "entry": 0.51587,
-      "entry_time": "2026-09-11T13:20:00+05:30",
-      "geometry": "live",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 7,
-      "risk": 0.005099999999999993,
-      "side": "short",
-      "stop": 0.52097,
-      "stream": "live",
-      "symbol": "BTW/USDT",
-      "target_1": 0.5107700000000001,
-      "target_2": 0.5056700000000001,
-      "target_half": 0.51332,
       "timeframe": "30m"
     }
   }
