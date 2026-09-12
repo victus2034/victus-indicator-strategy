@@ -692,157 +692,220 @@ function labelForSection(name) {
   }[name] || "Overall";
 }
 
-function tone(score) {
-  if (score >= 3) return "Supportive";
-  if (score <= -2) return "Caution";
-  return "Balanced";
+function scoreLevel(value) {
+  if (value >= 4) return "strong_positive";
+  if (value >= 2) return "positive";
+  if (value >= 0) return "neutral";
+  if (value >= -2) return "caution";
+  return "strong_caution";
 }
 
-// Each (section, tone) used to map to exactly one fixed sentence. That was fine
-// astronomically - the tone genuinely doesn't change every day, since it's driven
-// mostly by Mercury/Jupiter/Saturn house placements that hold for weeks - but it
-// meant the *wording* repeated verbatim for the whole stretch, which read as
-// templated/fake even though the underlying computation was real. Each tone now
-// has a small pool of equivalent phrasings, and the pick rotates with the Moon's
-// nakshatra (the fastest-moving significant factor here, changing roughly every
-// day) so consecutive days read differently even when the tone bucket doesn't
-// change - while staying deterministic for a given date (same date always picks
-// the same variant, so dry runs and tests stay reproducible).
-const SENTENCE_POOL = Object.freeze({
-  overall: {
-    Supportive: [
-      "Aaj ka din thik-thak accha hai - plan simple rakho, kaam ban jayega.",
-      "Aaj sab kuch smooth chalega, bas decisions ko structured rakhna.",
-      "Overall aaj positive vibe hai, bas jaldi mat karna.",
-    ],
-    Caution: [
-      "Aaj thoda reactive din hai - jaldi decision mat lo, cheezein double-check kar lena.",
-      "Aaj friction ho sakta hai, koi bhi assumption pehle verify kar lena.",
-      "Aaj thoda confusing din hai, dheere aur soch-samajh ke chalna.",
-    ],
-    Balanced: [
-      "Aaj normal din hai - routine kaam theek chalega, bas structure mat todna.",
-      "Aaj steady din hai, jo plan hai usi pe tike raho.",
-      "Aaj average din hai, kaam chalega bas jaldbaazi mat karna.",
-    ],
-  },
-  study: {
-    Supportive: [
-      "Padhai ya kaam ke liye accha din hai - koi mushkil topic aaj hi khatam kar do.",
-      "Focus achha rahega aaj, deep work ya revision ke liye best din hai.",
-      "Aaj dimaag sharp rahega, pending mushkil topic pe kaam karo.",
-    ],
-    Caution: [
-      "Aaj lamba focus mushkil hoga - chhote sessions rakho aur purana kaam revise karo.",
-      "Naye topic pe mat jao aaj, jo pehle se padha hai usko dobara dekh lo.",
-      "Aaj concentration kam rahega, calculations dobara check kar lena.",
-    ],
-    Balanced: [
-      "Normal padhai ke liye theek din hai - notes aur backlog clear karo.",
-      "Routine study chalega, ek checklist bana ke follow karo.",
-      "Aaj kuch bada nahi hoga, bas steady pace mein padhai karo.",
-    ],
-  },
-  money: {
-    Supportive: [
-      "Trading discipline aaj strong reh sakta hai - rule pehle likho, phir action lena.",
-      "Aaj discipline achha rahega, bas setup ko carefully filter karna.",
-      "Rules follow karoge toh aaj discipline maintain rahega.",
-    ],
-    Caution: [
-      "Aaj impatience zyada ho sakta hai - jaldi mein koi paisa wala decision mat lo.",
-      "Aaj discipline weak reh sakta hai, activity kam rakho.",
-      "Risk hai ki aaj jaldi mein galat decision ho jaye - size aur frequency dono kam rakho.",
-    ],
-    Balanced: [
-      "Aaj neutral din hai - checklist complete ho tabhi action lena.",
-      "Discipline ke liye normal din hai, market clear ho tab hi move karna.",
-      "Kuch force nahi hai aaj, checklist ka wait karo phir action lena.",
-    ],
-  },
-  health: {
-    Supportive: [
-      "Energy aaj achhi rahegi - mushkil kaam din ke strong part mein karo, breaks lete raho.",
-      "Aaj energy level theek rahega, thoda movement aur breaks zaroor lena.",
-      "Body ka energy aaj support karega, bas regular breaks lete raho.",
-    ],
-    Caution: [
-      "Aaj energy up-down ho sakti hai - neend, paani aur khana time pe lena.",
-      "Aaj stamina kam mehsoos ho sakti hai, screen breaks zaroor lena.",
-      "Body thoda tired reh sakta hai aaj, routine strict rakhna.",
-    ],
-    Balanced: [
-      "Energy moderate hai aaj - steady routine aur chhote movement breaks kaafi hain.",
-      "Aaj energy normal rahegi, bas routine steady rakhna.",
-      "Kuch demanding nahi hai aaj, routine follow karo aur beech mein break lete raho.",
-    ],
-  },
-  communication: {
-    Supportive: [
-      "Baatcheet ke liye accha din hai - follow-ups aur group coordination smooth rahega.",
-      "Aaj communication strong rahega, practical baatein karo.",
-      "Log se baat karna aaj easy rahega, follow-ups clear kar do.",
-    ],
-    Caution: [
-      "Aaj baat galat samjhi ja sakti hai - reply short aur factual rakho.",
-      "Emotional ho toh reply thoda delay kar dena, warna baat bigad sakti hai.",
-      "Aaj tone misunderstand ho sakta hai, lambi baatein avoid karo.",
-    ],
-    Balanced: [
-      "Normal din hai baatcheet ke liye - practical follow-ups theek rahenge.",
-      "Aaj communication average rahega, zyada explain karne ki zarurat nahi.",
-      "Kaam ki baatein theek chalengi, bas lamba discussion avoid karna.",
-    ],
-  },
-});
+// Interpretation layer: money, health, and trust each split into an
+// opportunity/positive dimension and a separate risk dimension (built from
+// the same transit/dasha placements that already feed the underlying score),
+// so a day can be "financial improvement + high expenses" or "health caution"
+// rather than collapsing everything into one Supportive/Balanced/Caution
+// bucket. This does not touch the astronomical calculations above - it only
+// reads their outputs (scores, dasha, tara, chandra, transit houses) to pick
+// a richer sentence.
+function generateDailyInterpretation(evaluation) {
+  const { scores, dasha, chandra, tara, transit } = evaluation;
+  const money = scores.money.value;
+  const health = scores.health.value;
+  const study = scores.study.value;
+  const communication = scores.communication.value;
+  const overall = scores.overall.value;
 
-function sentenceFor(section, score, context) {
-  const state = tone(score.value);
-  const pool = SENTENCE_POOL[section] && SENTENCE_POOL[section][state];
-  if (!pool) return context;
-  const nakIndex = (context && context.moonNak && Number.isInteger(context.moonNak.index))
-    ? context.moonNak.index
-    : 0;
-  const sectionSeed = SECTION_VARIANT_SEED[section] || 0;
-  return pool[(nakIndex + sectionSeed) % pool.length];
+  const moneyOpportunity =
+    (chandra ? 1 : 0) +
+    ([3, 6, 10, 11].includes(transit.jupiter.houseFromMoon) ? 2 : 0) +
+    ([2, 5, 9, 11].includes(transit.jupiter.houseFromLagna) ? 1 : 0) +
+    (dasha.mahadasha === "Jupiter" ? 1 : 0) +
+    (dasha.mahadasha === "Venus" ? 1 : 0);
+  const moneyRisk =
+    (money <= -1 ? 1 : 0) +
+    ([8, 12].includes(transit.mars.houseFromLagna) ? 2 : 0) +
+    ([4, 8, 12].includes(transit.rahu.houseFromMoon) ? 2 : 0) +
+    (dasha.mahadasha === "Rahu" ? 1 : 0) +
+    (dasha.antardasha?.lord === "Rahu" ? 1 : 0);
+  // Rahu/Ketu transiting the 1st, 6th or 8th from lagna, and Mars in the 6th
+  // or 8th, are the standard dusthana-based health-caution triggers (6th =
+  // disease, 8th = chronic/hidden ailment or accident-prone, 12th =
+  // hospitalisation); Saturn on the natal Moon's 1st/8th/12th already covered
+  // low-vitality Sade-Sati-style pressure.
+  const healthRisk =
+    (health <= -1 ? 1 : 0) +
+    ([6, 8, 12].includes(transit.moon.houseFromLagna) ? 1 : 0) +
+    ([1, 8, 12].includes(transit.saturn.houseFromMoon) ? 2 : 0) +
+    ([1, 6, 8].includes(transit.rahu.houseFromLagna) ? 1 : 0) +
+    ([1, 6, 8].includes(transit.ketu.houseFromLagna) ? 1 : 0) +
+    ([6, 8].includes(transit.mars.houseFromLagna) ? 2 : 0);
+  // A same-sign Mercury-Rahu conjunction is the classic Vedic indicator for
+  // distorted or manipulative communication (Rahu overtakes Mercury's
+  // clarity), so it carries as much weight as an already-negative
+  // communication score.
+  const trustRisk =
+    (communication <= -1 ? 1 : 0) +
+    ([2, 8, 12].includes(transit.rahu.houseFromLagna) ? 2 : 0) +
+    (!tara.favourable ? 1 : 0) +
+    (transit.mercury.sign === transit.rahu.sign ? 2 : 0);
+  const studyPositive =
+    (study >= 2 ? 2 : 0) +
+    ([2, 5, 7, 9, 11].includes(transit.jupiter.houseFromMoon) ? 2 : 0) +
+    ([1, 2, 5, 9, 10, 11].includes(transit.mercury.houseFromLagna) ? 1 : 0);
+
+  let overallText;
+  if (overall <= -2) {
+    overallText =
+      "Aaj ka din thoda sensitive reh sakta hai. Jaldi decisions lene ke bajay dheere aur soch-samajh kar chalna better rahega.";
+  } else if (overall >= 4) {
+    overallText =
+      "Aaj overall conditions supportive reh sakti hain. Important kaam complete karne aur practical decisions lene ke liye din useful hai.";
+  } else {
+    overallText =
+      "Aaj ka din mixed but manageable reh sakta hai. Routine maintain karo aur important decisions mein unnecessary hurry avoid karo.";
+  }
+
+  let moneyText;
+  if (moneyOpportunity >= 3 && moneyRisk >= 3) {
+    moneyText =
+      "Financial position improve hone ke chances hain, lekin money outflow aur impulsive decisions rukawat create kar sakte hain. Trading mein opportunity dikhe tab bhi risk rules compromise mat karo.";
+  } else if (moneyOpportunity >= 3 && moneyRisk < 3) {
+    moneyText =
+      "Financial matters comparatively supportive reh sakte hain. Paisa-related planning aur practical decisions ke liye din theek hai, lekin unnecessary risk avoid karo.";
+  } else if (moneyOpportunity >= 1 && moneyRisk >= 3) {
+    moneyText =
+      "Thoda financial improvement possible hai, lekin abhi outflow aur impulsiveness ka risk zyada dominant hai. Koi bhi bada paisa wala decision lene se pehle expenses aur trading activity dono control mein rakho.";
+  } else if (moneyRisk >= 3) {
+    moneyText =
+      "Money matters mein caution rakho. Unnecessary expenses, impulsive decisions ya pressure mein liya gaya financial decision problem create kar sakta hai. Trading activity controlled rakho.";
+  } else if (money <= -1) {
+    moneyText =
+      "Aaj financial discipline important rahega. Har paisa wala decision lene se pehle apne rules check karo aur unnecessary activity avoid karo.";
+  } else {
+    moneyText =
+      "Financial matters relatively balanced reh sakte hain. Normal planning theek hai, lekin bina proper setup ke financial risk lena avoid karo.";
+  }
+
+  let healthText;
+  if (healthRisk >= 3) {
+    healthText =
+      "Health ko lightly mat lena. Food, hydration, sleep aur daily routine mein care rakho. Overexertion aur unnecessary stress avoid karo.";
+  } else if (healthRisk >= 2 || health <= -1) {
+    healthText =
+      "Health aur energy mein thodi care ki zarurat reh sakti hai. Khane-peene, hydration aur rest mein carelessness avoid karo.";
+  } else if (health >= 2) {
+    healthText =
+      "Energy comparatively supportive reh sakti hai. Routine maintain karo aur kaam ke beech proper breaks lete raho.";
+  } else {
+    healthText =
+      "Health ke liye normal routine follow karna sufficient rahega. Food, hydration aur rest ko ignore mat karo.";
+  }
+
+  let careerText;
+  if (studyPositive >= 4) {
+    careerText =
+      "Padhai aur career-related work ke liye achha time hai. Pending ya difficult task ko complete karne par focus karo.";
+  } else if (study >= 1) {
+    careerText =
+      "Padhai aur career ke liye din workable hai. Ek important task ko priority dekar complete karna better rahega.";
+  } else if (study <= -2) {
+    careerText =
+      "Focus maintain karne mein thodi difficulty ho sakti hai. Naye complicated work ko force karne ke bajay revision aur pending tasks complete karo.";
+  } else {
+    careerText =
+      "Career aur studies mein steady progress ke liye routine follow karo. Consistency aaj speed se zyada important rahegi.";
+  }
+
+  let socialText;
+  if (trustRisk >= 3) {
+    socialText =
+      "Aaj doosron ki baaton par blindly trust mat karo. Important information ya suggestions ko verify karke hi decision lena.";
+  } else if (trustRisk >= 1) {
+    socialText =
+      "Communication normal rahegi, lekin koi bhi important suggestion ya information verify karke hi follow karo.";
+  } else if (communication >= 2) {
+    socialText =
+      "Communication aur follow-ups ke liye din supportive reh sakta hai. Practical discussions smoothly handle ho sakti hain.";
+  } else {
+    socialText =
+      "Communication normal rahegi, lekin unnecessary arguments aur assumptions avoid karna better hai.";
+  }
+
+  let todayAction;
+  if (moneyRisk >= 3) {
+    todayAction =
+      "Koi bhi paisa wala decision lene se pehle apna rule/checklist dekho. Ek important study ya career task complete karo.";
+  } else if (studyPositive >= 4) {
+    todayAction =
+      "Aaj apne most important study ya career task ko priority do aur use complete karne ki koshish karo.";
+  } else {
+    todayAction =
+      "Ek important pending task complete karo aur financial decisions mein predefined rules follow karo.";
+  }
+
+  let avoidToday;
+  if (moneyRisk >= 3) {
+    avoidToday =
+      "Jaldi wale financial decisions, revenge trading, unnecessary spending aur pressure mein rules change karna avoid karo.";
+  } else if (trustRisk >= 3) {
+    avoidToday =
+      "Doosron ki advice ko bina verify kiye follow karna, assumptions aur unnecessary arguments avoid karo.";
+  } else if (healthRisk >= 3) {
+    avoidToday =
+      "Health ko ignore karna, irregular food/sleep aur unnecessary overwork avoid karo.";
+  } else {
+    avoidToday =
+      "Overconfidence, unnecessary risk aur bina reason apna plan change karna avoid karo.";
+  }
+
+  return {
+    overallText,
+    moneyText,
+    healthText,
+    careerText,
+    socialText,
+    todayAction,
+    avoidToday,
+    diagnostics: {
+      moneyOpportunity,
+      moneyRisk,
+      healthRisk,
+      trustRisk,
+      studyPositive,
+      levels: {
+        overall: scoreLevel(overall),
+        money: scoreLevel(money),
+        health: scoreLevel(health),
+        study: scoreLevel(study),
+        communication: scoreLevel(communication),
+      },
+    },
+  };
 }
 
-const SECTION_VARIANT_SEED = Object.freeze({
-  overall: 0,
-  study: 1,
-  money: 2,
-  health: 3,
-  communication: 4,
-});
-
-function sectionSentence(section, score, evaluation) {
-  // score.reasons (e.g. "Mercury supports learning, Jupiter supports guidance")
-  // used to be appended in brackets. That's the actual planetary reasoning behind
-  // the score and stays on evaluation.scores for diagnostics/tests, but reading
-  // "(Mercury supports learning, Jupiter supports guidance, Moon supports focus)"
-  // in a Discord message is jargon nobody asked for - the sentence itself already
-  // says what it means. Kept out of the displayed text on purpose.
-  return sentenceFor(section, score, evaluation);
-}
-
-function doToday(evaluation) {
-  if (evaluation.scores.money.value <= -2) {
-    return "Koi bhi paisa wala decision lene se pehle rule likh lo; ek zaroori padhai ya career ka kaam aaj khatam karo.";
+function getAstrologicalFocus(evaluation) {
+  const { scores, dasha } = evaluation;
+  const focusParts = [];
+  if (scores.money.value <= -1) {
+    focusParts.push("financial discipline");
   }
-  if (evaluation.scores.study.value >= 3) {
-    return "Aaj ka best focus window sabse mushkil padhai ya career task ke liye use karo.";
+  if (scores.health.value <= -1) {
+    focusParts.push("health and routine");
   }
-  return "Ek zaroori pending kaam complete karo aur normal rules ke andar hi decisions lo.";
-}
-
-function avoidToday(evaluation) {
-  if (evaluation.scores.money.value <= -2) {
-    return "Jaldi wale decisions, revenge wali harkat, aur pressure mein rules badalna avoid karo.";
+  if (scores.study.value >= 2) {
+    focusParts.push("study and career progress");
   }
-  if (evaluation.scores.communication.value <= -2) {
-    return "Lambi emotional baatein, logo ke baare mein assumption, aur bekaar ki bahas avoid karo.";
+  if (scores.communication.value <= -1) {
+    focusParts.push("communication and verification");
   }
-  return "Early success ke baad overconfidence aur bina wajah plan badalna avoid karo.";
+  if (dasha?.mahadasha) {
+    focusParts.push(`${dasha.mahadasha} Mahadasha`);
+  }
+  if (!focusParts.length) {
+    focusParts.push("steady routine and practical decisions");
+  }
+  return focusParts.slice(0, 3).join(" • ");
 }
 
 function sectorThemes(transit, dasha) {
@@ -932,60 +995,54 @@ function displayDate(date) {
 }
 
 function buildDailyText(evaluation) {
+  const interpretation = generateDailyInterpretation(evaluation);
   const lines = [
     `DAILY ASTROLOGY | ${displayDate(evaluation.date)}`,
     "",
-    `Aaj Ka Din: ${sectionSentence("overall", evaluation.scores.overall, evaluation)}`,
+    `Aaj Ka Din: ${interpretation.overallText}`,
     "",
-    `Padhai & Career: ${sectionSentence("study", evaluation.scores.study, evaluation)}`,
+    `Padhai & Career: ${interpretation.careerText}`,
     "",
-    `Paisa & Trading: ${sectionSentence("money", evaluation.scores.money, evaluation)}`,
+    `Paisa & Trading: ${interpretation.moneyText}`,
     "",
-    `Health & Energy: ${sectionSentence("health", evaluation.scores.health, evaluation)}`,
+    `Health & Energy: ${interpretation.healthText}`,
     "",
-    `Baatcheet & Log: ${sectionSentence("communication", evaluation.scores.communication, evaluation)}`,
+    `Baatcheet & Log: ${interpretation.socialText}`,
     "",
     `Accha Time: ${formatWindow(evaluation.favourable)}`,
     `Savdhaan Time: ${formatWindow(evaluation.timings.rahuKalam)}`,
     "",
-    `Aaj Karo: ${doToday(evaluation)}`,
-    `Aaj Na Karo: ${avoidToday(evaluation)}`,
+    `Aaj Karo: ${interpretation.todayAction}`,
+    `Aaj Na Karo: ${interpretation.avoidToday}`,
+    "",
+    `Astrological Focus: ${getAstrologicalFocus(evaluation)}`,
   ];
-
-  if (evaluation.sectors) {
-    lines.push("", "Sector Trend:");
-    if (evaluation.sectors.supportive.length) {
-      lines.push(`Accha: ${evaluation.sectors.supportive.join(", ")}`);
-    }
-    if (evaluation.sectors.caution.length) {
-      lines.push(`Savdhaan: ${evaluation.sectors.caution.join(", ")}`);
-    }
-  }
 
   return lines.join("\n");
 }
 
 function buildDailyEmbed(evaluation) {
+  const interpretation = generateDailyInterpretation(evaluation);
   const fields = [
     {
       name: "Aaj Ka Din",
-      value: sectionSentence("overall", evaluation.scores.overall, evaluation),
+      value: interpretation.overallText,
     },
     {
       name: "Padhai & Career",
-      value: sectionSentence("study", evaluation.scores.study, evaluation),
+      value: interpretation.careerText,
     },
     {
       name: "Paisa & Trading",
-      value: sectionSentence("money", evaluation.scores.money, evaluation),
+      value: interpretation.moneyText,
     },
     {
       name: "Health & Energy",
-      value: sectionSentence("health", evaluation.scores.health, evaluation),
+      value: interpretation.healthText,
     },
     {
       name: "Baatcheet & Log",
-      value: sectionSentence("communication", evaluation.scores.communication, evaluation),
+      value: interpretation.socialText,
     },
     {
       name: "Accha Time",
@@ -999,26 +1056,17 @@ function buildDailyEmbed(evaluation) {
     },
     {
       name: "Aaj Karo",
-      value: doToday(evaluation),
+      value: interpretation.todayAction,
     },
     {
       name: "Aaj Na Karo",
-      value: avoidToday(evaluation),
+      value: interpretation.avoidToday,
+    },
+    {
+      name: "Astrological Focus",
+      value: getAstrologicalFocus(evaluation),
     },
   ];
-
-  if (evaluation.sectors) {
-    const sectorLines = [];
-    if (evaluation.sectors.supportive.length) {
-      sectorLines.push(`Accha: ${evaluation.sectors.supportive.join(", ")}`);
-    }
-    if (evaluation.sectors.caution.length) {
-      sectorLines.push(`Savdhaan: ${evaluation.sectors.caution.join(", ")}`);
-    }
-    if (sectorLines.length) {
-      fields.push({ name: "Sector Trend", value: sectorLines.join("\n") });
-    }
-  }
 
   return {
     title: `Victus Daily Astrology - ${displayDate(evaluation.date)}`,
