@@ -35277,6 +35277,33 @@
       "target_half": 54.12625,
       "timeframe": "30m",
       "trade_id": "LTCUSD|30m|short|54.17|54.2575"
+    },
+    {
+      "alert_time": "2026-09-12T13:41:43.093907+05:30",
+      "cost_r": 0.6580881142857251,
+      "date": "2026-09-12",
+      "entry": 54.17,
+      "entry_time": "2026-09-12T13:45:00+05:30",
+      "exit_price": 54.0825,
+      "exit_time": "2026-09-12T14:00:00+05:30",
+      "final_result": "+1R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.3419118857142749,
+      "outcome": "+1R",
+      "rating": 8,
+      "realized_r": 1.0,
+      "risk": 0.08749999999999858,
+      "side": "short",
+      "stop": 54.2575,
+      "stream": "live",
+      "symbol": "LTCUSD",
+      "target_1": 54.0825,
+      "target_2": 53.995000000000005,
+      "target_half": 54.12625,
+      "timeframe": "30m",
+      "trade_id": "d09785f1a18fdccc"
     }
   ],
   "handled": {
@@ -36706,24 +36733,5 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {
-    "d09785f1a18fdccc": {
-      "alert_time": "2026-09-12T13:41:43.093907+05:30",
-      "entry": 54.17,
-      "entry_time": "2026-09-12T13:45:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": true,
-      "market": "crypto",
-      "rating": 8,
-      "risk": 0.08749999999999858,
-      "side": "short",
-      "stop": 54.2575,
-      "stream": "live",
-      "symbol": "LTCUSD",
-      "target_1": 54.0825,
-      "target_2": 53.995000000000005,
-      "target_half": 54.12625,
-      "timeframe": "30m"
-    }
-  }
+  "open": {}
 }
