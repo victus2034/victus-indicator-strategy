@@ -35707,6 +35707,7 @@
     "BOME/USDT|30m|long|0.00084551|0.000837122": "filled",
     "BOME/USDT|30m|long|0.0008911|0.000883225": "filled",
     "BOME/USDT|30m|long|0.0009088|0.00090005": "filled",
+    "BOME/USDT|30m|short|0.0008658|0.000873675": "filled",
     "BOME/USDT|30m|short|0.0009344|0.0009434": "filled",
     "BOME/USDT|30m|short|0.0009351|0.00094435": "filled",
     "BTCUSD|30m|long|76469.6|76131.5": "filled",
@@ -36369,5 +36370,24 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {}
+  "open": {
+    "BOME/USDT|30m|short|0.0008658|0.000873675": {
+      "alert_time": "2026-09-12T08:01:58.403599+05:30",
+      "entry": 0.0008658,
+      "entry_time": "2026-09-12T08:05:00+05:30",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 6,
+      "risk": 7.874999999999961e-06,
+      "side": "short",
+      "stop": 0.000873675,
+      "stream": "live",
+      "symbol": "BOME/USDT",
+      "target_1": 0.000857925,
+      "target_2": 0.0008500500000000001,
+      "target_half": 0.0008618625000000001,
+      "timeframe": "30m"
+    }
+  }
 }
