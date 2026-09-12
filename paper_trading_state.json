@@ -34980,6 +34980,33 @@
       "target_half": 0.0008618625000000001,
       "timeframe": "30m",
       "trade_id": "BOME/USDT|30m|short|0.0008658|0.000873675"
+    },
+    {
+      "alert_time": "2026-09-12T09:11:49.632365+05:30",
+      "cost_r": 0.11140240000000058,
+      "date": "2026-09-12",
+      "entry": 1.441,
+      "entry_time": "2026-09-12T09:15:00+05:30",
+      "exit_price": 1.4272500000000001,
+      "exit_time": "2026-09-12T09:15:00+05:30",
+      "final_result": "+1R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.8885975999999994,
+      "outcome": "+1R",
+      "rating": 3,
+      "realized_r": 1.0,
+      "risk": 0.013749999999999929,
+      "side": "short",
+      "stop": 1.45475,
+      "stream": "live",
+      "symbol": "RIVERUSD",
+      "target_1": 1.4272500000000001,
+      "target_2": 1.4135000000000002,
+      "target_half": 1.434125,
+      "timeframe": "30m",
+      "trade_id": "c45fbda366b71d6f"
     }
   ],
   "handled": {
@@ -36121,6 +36148,7 @@
     "c32bcbf75d9df88c": "filled",
     "c349013161831255": "filled",
     "c3e2b03ce7560c11": "filled",
+    "c45fbda366b71d6f": "filled",
     "c4761d10457edcb9": "filled",
     "c4bd12fd3cf6a3a4": "filled",
     "c4e035e31f2db5b0": "filled",
@@ -36250,6 +36278,7 @@
     "de33b2d35b85ba45": "filled",
     "defedca65023be68": "filled",
     "df1c81c534188509": "filled",
+    "df27bb956eb01beb": "filled",
     "df465098fed0d6fb": "filled",
     "df748d926071592b": "filled",
     "df9d6f73d859f3b8": "filled",
@@ -36264,6 +36293,7 @@
     "e1d3c8caa5ef9ca0": "filled",
     "e2dd9c6197a6ed55": "filled",
     "e358c532aa3fc8fc": "filled",
+    "e3865c6b6c0f69a5": "filled",
     "e38865d71893301d": "filled",
     "e3b830780d43f9ff": "filled",
     "e4821c3bd09fadc3": "filled",
@@ -36397,5 +36427,42 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {}
+  "open": {
+    "df27bb956eb01beb": {
+      "alert_time": "2026-09-12T08:11:50.905533+05:30",
+      "entry": 0.06270768,
+      "entry_time": "2026-09-12T09:10:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 5,
+      "risk": 0.0006221000000000004,
+      "side": "long",
+      "stop": 0.06208558,
+      "stream": "live",
+      "symbol": "LA/USDT",
+      "target_1": 0.06332978,
+      "target_2": 0.06395188,
+      "target_half": 0.06301873,
+      "timeframe": "30m"
+    },
+    "e3865c6b6c0f69a5": {
+      "alert_time": "2026-09-12T08:52:00.698243+05:30",
+      "entry": 1.927,
+      "entry_time": "2026-09-12T09:10:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 7,
+      "risk": 0.016249999999999876,
+      "side": "short",
+      "stop": 1.94325,
+      "stream": "live",
+      "symbol": "DEXE/USDT",
+      "target_1": 1.9107500000000002,
+      "target_2": 1.8945000000000003,
+      "target_half": 1.918875,
+      "timeframe": "30m"
+    }
+  }
 }
