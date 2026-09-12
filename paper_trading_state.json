@@ -35304,6 +35304,33 @@
       "target_half": 54.12625,
       "timeframe": "30m",
       "trade_id": "d09785f1a18fdccc"
+    },
+    {
+      "alert_time": "2026-09-12T14:51:42.343291+05:30",
+      "cost_r": 0.6580881142857251,
+      "date": "2026-09-12",
+      "entry": 54.17,
+      "entry_time": "2026-09-12T14:55:00+05:30",
+      "exit_price": 54.0825,
+      "exit_time": "2026-09-12T15:20:00+05:30",
+      "final_result": "+1R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.3419118857142749,
+      "outcome": "+1R",
+      "rating": 5,
+      "realized_r": 1.0,
+      "risk": 0.08749999999999858,
+      "side": "short",
+      "stop": 54.2575,
+      "stream": "live",
+      "symbol": "LTCUSD",
+      "target_1": 54.0825,
+      "target_2": 53.995000000000005,
+      "target_half": 54.12625,
+      "timeframe": "30m",
+      "trade_id": "1b5d135da3e0a11c"
     }
   ],
   "handled": {
@@ -36257,6 +36284,7 @@
     "TSLAXUSD|30m|short|367.72|369.632": "filled",
     "TSLAXUSD|30m|short|368.59|370.478": "filled",
     "TSLAXUSD|30m|short|371.09|372.027": "filled",
+    "UB/USDT|30m|long|0.1227|0.121787": "filled",
     "UB/USDT|30m|long|0.126685|0.125429": "filled",
     "UB/USDT|30m|long|0.12717|0.125307": "filled",
     "UB/USDT|30m|short|0.12591|0.126185": "filled",
@@ -36737,24 +36765,6 @@
     "ffb4661b7d04cd46": "filled"
   },
   "open": {
-    "1b5d135da3e0a11c": {
-      "alert_time": "2026-09-12T14:51:42.343291+05:30",
-      "entry": 54.17,
-      "entry_time": "2026-09-12T14:55:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": true,
-      "market": "crypto",
-      "rating": 5,
-      "risk": 0.08749999999999858,
-      "side": "short",
-      "stop": 54.2575,
-      "stream": "live",
-      "symbol": "LTCUSD",
-      "target_1": 54.0825,
-      "target_2": 53.995000000000005,
-      "target_half": 54.12625,
-      "timeframe": "30m"
-    },
     "BNBUSD|30m|short|736.3|742.425": {
       "alert_time": "2026-09-12T14:41:41.907396+05:30",
       "entry": 736.3,
@@ -36789,6 +36799,24 @@
       "target_1": 730.5,
       "target_2": 724.55,
       "target_half": 733.475,
+      "timeframe": "30m"
+    },
+    "UB/USDT|30m|long|0.1227|0.121787": {
+      "alert_time": "2026-09-12T14:51:42.524804+05:30",
+      "entry": 0.1227,
+      "entry_time": "2026-09-12T15:15:00+05:30",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 7,
+      "risk": 0.0009125000000000105,
+      "side": "long",
+      "stop": 0.12178749999999999,
+      "stream": "live",
+      "symbol": "UB/USDT",
+      "target_1": 0.12361250000000001,
+      "target_2": 0.12452500000000002,
+      "target_half": 0.12315625000000001,
       "timeframe": "30m"
     }
   }
