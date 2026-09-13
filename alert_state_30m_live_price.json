@@ -2903,7 +2903,8 @@
     "shadow:SOLUSD|30m|short|102.221|102.37": 1789267914.9451425,
     "shadow:SNDKBUSD|30m|long|1618.94|1622.14": 1789267914.9545393,
     "NVDAXUSD|30m|long|217.36|217.57": 1789268523.5990946,
-    "shadow:NVDAXUSD|30m|long|217.36|217.51": 1789268523.5990946
+    "shadow:NVDAXUSD|30m|long|217.36|217.51": 1789268523.5990946,
+    "AAVEUSD|30m|short|127.45|127.91": 1789269698.7996526
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14452,7 +14453,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1789269054.7457469
+    "30m": 1789269655.5978944
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -44681,7 +44682,7 @@
     "SOLUSD|30m|long|98.3|98.86": 1789129316.3256948,
     "MSFT/USDT:USDT|30m|long|489.19|490.28": 1789138304.862075,
     "BCHUSD|30m|long|223|223.57": 1789128123.8071399,
-    "ICP/USDT|30m|long|2.69|2.71152": 1789239724.333573,
+    "ICP/USDT|30m|long|2.69|2.71152": 1789269699.0637772,
     "XRPUSD|30m|long|1.3282|1.3337": 1789123314.4233205,
     "ERA/USDT|30m|long|0.05541|0.05557": 1789123314.4359772,
     "MSFT/USDT:USDT|30m|long|488.88|489.99": 1789120923.9848228,
@@ -44813,7 +44814,8 @@
     "AKE/USDT|30m|short|0.0165853|0.016718": 1789268523.544666,
     "SOON/USDT|30m|short|0.1836|0.1844": 1789268523.550055,
     "MSFT/USDT:USDT|30m|long|494.46|494.49": 1789268523.588237,
-    "LA/USDT|30m|long|0.0621|0.06231": 1789269100.9196155
+    "LA/USDT|30m|long|0.0621|0.06231": 1789269100.9196155,
+    "ACE/USDT|30m|long|0.15413|0.15444": 1789269699.0692718
   },
   "shadow:BTCUSD|supply|80474.35070115|80522.70000000": {
     "in_zone": false,
@@ -94144,8 +94146,8 @@
     "last_alert_at": 0.0
   },
   "AAVEUSD|supply|127.45000000|127.91000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789269698.7996526
   },
   "shadow:AAVEUSD|supply|127.67782446|127.91000000": {
     "in_zone": false,
@@ -94833,6 +94835,18 @@
   },
   "shadow:MSFT/USDT:USDT|demand|494.72000000|494.91544329": {
     "in_zone": true,
+    "last_alert_at": 0.0
+  },
+  "shadow:BCHUSD|supply|231.51182998|232.00000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BCHUSD|demand|219.20000000|219.71721293": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:O/USDT|demand|0.52620000|0.52751336": {
+    "in_zone": false,
     "last_alert_at": 0.0
   }
 }
