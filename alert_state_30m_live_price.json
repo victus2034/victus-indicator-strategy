@@ -2953,7 +2953,10 @@
     "shadow:DOGEUSD|30m|long|0.08351|0.083687": 1789288323.417816,
     "shadow:LA/USDT|30m|long|0.06209|0.0622793": 1789288323.706807,
     "MSFT/USDT:USDT|30m|long|493.21|493.33": 1789288323.7311296,
-    "shadow:MSFT/USDT:USDT|30m|long|493.21|493.481": 1789288323.7311296
+    "shadow:MSFT/USDT:USDT|30m|long|493.21|493.481": 1789288323.7311296,
+    "shadow:ZECUSD|30m|long|1111.12|1114.8": 1789288911.5761554,
+    "LINKUSD|30m|long|11.24|11.3": 1789288911.590814,
+    "AVAXUSD|30m|long|7.264|7.3": 1789288911.7489128
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14502,7 +14505,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1789288268.6155453
+    "30m": 1789288860.7695317
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -44903,7 +44906,13 @@
     "TRUMP/USDT|30m|long|1.943|1.951": 1789288323.7070112,
     "CRV/USDT|30m|long|0.3297|0.332338": 1789288323.7131445,
     "GWEI/USDT|30m|long|0.02132|0.02149": 1789288323.7191052,
-    "KORU/USDT|30m|long|22.28|22.4582": 1789288323.7249894
+    "KORU/USDT|30m|long|22.28|22.4582": 1789288323.7249894,
+    "SOON/USDT|30m|long|0.177|0.1779": 1789288911.5765784,
+    "AAVEUSD|30m|long|123.27|123.62": 1789288911.5849876,
+    "BCHUSD|30m|long|219|220.752": 1789288911.9502962,
+    "BOME/USDT|30m|long|0.0008332|0.0008367": 1789288911.9562683,
+    "SNDKBUSD|30m|long|1561|1572.91": 1789288911.9622993,
+    "NVDAXUSD|30m|long|215.05|216.5": 1789288911.968035
   },
   "shadow:BTCUSD|supply|80474.35070115|80522.70000000": {
     "in_zone": false,
@@ -73522,8 +73531,8 @@
     "last_alert_at": 0.0
   },
   "AVAXUSD|demand|7.26400000|7.30000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789288911.7489128
   },
   "shadow:SAMSUNG/USDT:USDT|supply|203.06256765|203.37000000": {
     "in_zone": false,
@@ -82150,7 +82159,7 @@
     "last_alert_at": 0.0
   },
   "HYPEUSD|demand|78.04000000|78.53000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789285305.726419
   },
   "shadow:AKE/USDT|demand|0.00748100|0.00753720": {
@@ -85342,8 +85351,8 @@
     "last_alert_at": 0.0
   },
   "LINKUSD|demand|11.24000000|11.30000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789288911.590814
   },
   "shadow:LINKUSD|supply|12.17767839|12.20000000": {
     "in_zone": false,
@@ -87930,7 +87939,7 @@
     "last_alert_at": 0.0
   },
   "XRPUSD|demand|1.34550000|1.35160000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789288322.8544662
   },
   "shadow:XRPUSD|demand|1.34550000|1.34850505": {
@@ -89542,7 +89551,7 @@
     "last_alert_at": 0.0
   },
   "DOGEUSD|demand|0.08351000|0.08374000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789288323.417816
   },
   "shadow:DOGEUSD|demand|0.08351000|0.08368697": {
@@ -97118,7 +97127,7 @@
     "last_alert_at": 0.0
   },
   "shadow:SOLUSD|demand|100.25000000|100.45296859": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789287113.043537
   },
   "shadow:HYPEUSD|demand|78.04000000|78.21530349": {
@@ -97362,7 +97371,7 @@
     "last_alert_at": 0.0
   },
   "NVDAXUSD|demand|215.05000000|216.50000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789285911.1724596
   },
   "shadow:BTCUSD|supply|77423.24931581|77482.50000000": {
@@ -97694,8 +97703,8 @@
     "last_alert_at": 0.0
   },
   "shadow:ZECUSD|demand|1111.12000000|1114.80221876": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789288911.5761554
   },
   "shadow:AAVEUSD|supply|129.77197421|130.03000000": {
     "in_zone": false,
@@ -97866,6 +97875,10 @@
     "last_alert_at": 1789288323.7311296
   },
   "shadow:NVDAXUSD|demand|215.30000000|215.44249972": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:LA/USDT|demand|0.05966000|0.05987722": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
