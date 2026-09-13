@@ -2883,8 +2883,8 @@
     "SOLUSD|30m|long|101.36|101.39": 1789239723.86617,
     "shadow:AERO/USDT|30m|long|0.5626|0.564609": 1789239724.3332834,
     "shadow:BTCUSD|30m|long|76840.1|76940.2": 1789240313.271204,
-    "MSFT/USDT:USDT|30m|long|494.72|494.8": 1789240313.8326504,
-    "shadow:MSFT/USDT:USDT|30m|long|494.72|494.915": 1789266716.1200638,
+    "MSFT/USDT:USDT|30m|long|494.72|494.8": 1789272716.7577114,
+    "shadow:MSFT/USDT:USDT|30m|long|494.72|494.915": 1789272716.7577114,
     "LINKUSD|30m|long|11.446|11.48": 1789240937.125275,
     "shadow:LINKUSD|30m|long|11.446|11.4701": 1789240937.125275,
     "RIVERUSD|30m|short|1.44345|1.455": 1789240938.0434897,
@@ -14458,7 +14458,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1789272078.487635
+    "30m": 1789272662.5961015
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -44825,7 +44825,9 @@
     "SOON/USDT|30m|short|0.1855|0.1859": 1789270312.1564631,
     "GWEI/USDT|30m|long|0.02168|0.02177": 1789270918.7261114,
     "AAVEUSD|30m|short|127.64|128.07": 1789272125.4787118,
-    "TSLAXUSD|30m|long|365.01|365.09": 1789272125.9035828
+    "TSLAXUSD|30m|long|365.01|365.09": 1789272125.9035828,
+    "DOGEUSD|30m|short|0.08513|0.0853": 1789272716.7437074,
+    "ERA/USDT|30m|short|0.05993|0.06032": 1789272716.7520525
   },
   "shadow:BTCUSD|supply|80474.35070115|80522.70000000": {
     "in_zone": false,
@@ -93481,7 +93483,7 @@
   },
   "MSFT/USDT:USDT|demand|494.72000000|494.80000000": {
     "in_zone": true,
-    "last_alert_at": 1789240313.8326504
+    "last_alert_at": 1789272716.7577114
   },
   "shadow:MSFT/USDT:USDT|supply|499.53356442|499.68000000": {
     "in_zone": false,
@@ -95100,7 +95102,7 @@
     "last_alert_at": 0.0
   },
   "AAVEUSD|supply|127.64000000|128.07000000": {
-    "in_zone": false,
+    "in_zone": true,
     "last_alert_at": 1789271518.9031916
   },
   "shadow:AAVEUSD|supply|127.85042474|128.07000000": {
@@ -95406,5 +95408,57 @@
   "shadow:NVDAXUSD|demand|217.36000000|217.50963239": {
     "in_zone": true,
     "last_alert_at": 1789272126.2512176
+  },
+  "shadow:BTCUSD|supply|77423.24930961|77482.50000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BTCUSD|demand|76840.10000000|76940.15380837": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "DOGEUSD|supply|0.08513000|0.08530000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:DOGEUSD|supply|0.08517990|0.08530000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:SOON/USDT|supply|0.18613661|0.18660000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:SOON/USDT|demand|0.17930000|0.17961890": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:SAMSUNG/USDT:USDT|supply|197.06825637|197.40000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:SAMSUNG/USDT:USDT|demand|189.02000000|189.33999480": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:AXTI/USDT:USDT|supply|68.94995616|69.15000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:AXTI/USDT:USDT|demand|60.10000000|60.21080164": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:MRVL/USDT:USDT|demand|226.89000000|227.27770637": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:MSFT/USDT:USDT|supply|499.53185207|499.68000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:MSFT/USDT:USDT|demand|494.72000000|494.91536538": {
+    "in_zone": true,
+    "last_alert_at": 1789272716.7577114
   }
 }
