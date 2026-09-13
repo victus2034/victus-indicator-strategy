@@ -36762,6 +36762,33 @@
       "target_half": 0.12089749999999999,
       "timeframe": "30m",
       "trade_id": "UB/USDT|30m|long|0.12036|0.119285"
+    },
+    {
+      "alert_time": "2026-09-13T08:01:55.528198+05:30",
+      "cost_r": 0.3774075199999997,
+      "date": "2026-09-13",
+      "entry": 0.02219,
+      "entry_time": "2026-09-13T08:05:00+05:30",
+      "exit_price": null,
+      "exit_time": "2026-09-13T08:05:00+05:30",
+      "final_result": "data_quality_ambiguous",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": null,
+      "outcome": "data_quality_ambiguous",
+      "rating": 7,
+      "realized_r": null,
+      "risk": 6.250000000000006e-05,
+      "side": "long",
+      "stop": 0.0221275,
+      "stream": "live",
+      "symbol": "GWEI/USDT",
+      "target_1": 0.0222525,
+      "target_2": 0.022315,
+      "target_half": 0.02222125,
+      "timeframe": "30m",
+      "trade_id": "6ba3d395a5080712"
     }
   ],
   "handled": {
@@ -37242,6 +37269,7 @@
     "67c9bac24db0171b": "filled",
     "67d7bbd9655ca698": "filled",
     "6857c787236621f7": "filled",
+    "68820ee81884e87b": "filled",
     "68b2da7d3061ebdc": "filled",
     "68d620f4bcb8f2c1": "filled",
     "69390fab24efb07c": "filled",
@@ -37259,6 +37287,7 @@
     "6b55c055a99849d9": "filled",
     "6b706c0f5577747e": "filled",
     "6b81fbf67041dd8e": "filled",
+    "6ba3d395a5080712": "filled",
     "6bbb737854d6066b": "filled",
     "6bbc88f089134a90": "filled",
     "6bd289a6b60fc9c3": "filled",
@@ -38245,5 +38274,24 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {}
+  "open": {
+    "68820ee81884e87b": {
+      "alert_time": "2026-09-13T08:01:55.255542+05:30",
+      "entry": 0.1592,
+      "entry_time": "2026-09-13T08:05:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 6,
+      "risk": 0.0005000000000000004,
+      "side": "long",
+      "stop": 0.1587,
+      "stream": "live",
+      "symbol": "KGEN/USDT",
+      "target_1": 0.1597,
+      "target_2": 0.1602,
+      "target_half": 0.15945,
+      "timeframe": "30m"
+    }
+  }
 }
