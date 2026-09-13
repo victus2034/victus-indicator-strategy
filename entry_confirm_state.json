@@ -1,10 +1,11 @@
 {
   "0G/USDT|30m|short|0.1986|0.199475": {
-    "reached_entry": false
+    "reached_entry": false,
+    "stage": 1
   },
   "AAVEUSD|30m|short|127.45|128.025": {
     "reached_entry": true,
-    "stage": 2
+    "stage": 3
   },
   "ACE/USDT|30m|long|0.15444|0.154052": {
     "reached_entry": false,
@@ -46,10 +47,6 @@
     "reached_entry": true,
     "stage": 3
   },
-  "HUSD|30m|long|0.07839|0.0778025": {
-    "reached_entry": true,
-    "stage": 2
-  },
   "HYPEUSD|30m|long|78.53|77.9175": {
     "reached_entry": false
   },
@@ -61,11 +58,14 @@
     "reached_entry": true,
     "stage": 2
   },
+  "LINKUSD|30m|short|11.602|11.6195": {
+    "reached_entry": false
+  },
   "LINKUSD|30m|short|11.615|11.6188": {
     "reached_entry": false
   },
   "LTCUSD|30m|short|54.24|54.2775": {
-    "reached_entry": false,
+    "reached_entry": true,
     "stage": 1
   },
   "METAXUSD|30m|long|647.427|647.393": {
@@ -123,7 +123,11 @@
   "ZECUSD|30m|short|1159.21|1170.17": {
     "reached_entry": false
   },
-  "_ready|0G/USDT|30m": 1789232471.925581,
+  "ZORAUSD|30m|short|0.00863|0.00868": {
+    "reached_entry": true,
+    "stage": 3
+  },
+  "_ready|0G/USDT|30m": 1789278959.951125,
   "_ready|AAVEUSD|30m": 1789273548.161158,
   "_ready|AAVEUSD|4h": 1789057560.102114,
   "_ready|ACE/USDT|30m": 1789278662.30266,
