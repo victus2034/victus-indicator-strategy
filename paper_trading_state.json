@@ -43620,6 +43620,33 @@
       "target_half": 226.9500570847647,
       "timeframe": "30m",
       "trade_id": "BCHUSD|30m|short|226.958|226.973"
+    },
+    {
+      "alert_time": "2026-09-14T23:41:56.514069+05:30",
+      "cost_r": 0.42585030588234424,
+      "date": "2026-09-14",
+      "entry": 0.08513,
+      "entry_time": "2026-09-14T23:50:00+05:30",
+      "exit_price": 0.08502784399999999,
+      "exit_time": "2026-09-14T23:50:00+05:30",
+      "final_result": "BE",
+      "geometry": "live",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.05488381176473306,
+      "outcome": "BE",
+      "rating": 7,
+      "realized_r": 0.4807341176470773,
+      "risk": 0.00021250000000000435,
+      "side": "short",
+      "stop": 0.0853425,
+      "stream": "live",
+      "symbol": "DOGEUSD",
+      "target_1": 0.08491749999999999,
+      "target_2": 0.08470499999999999,
+      "target_half": 0.08502375,
+      "timeframe": "30m",
+      "trade_id": "DOGEUSD|30m|short|0.08513|0.0853425"
     }
   ],
   "handled": {
@@ -44552,6 +44579,7 @@
     "DOGEUSD|30m|short|0.0844|0.0844375": "filled",
     "DOGEUSD|30m|short|0.08457|0.0846075": "filled",
     "DOGEUSD|30m|short|0.08471|0.08476": "filled",
+    "DOGEUSD|30m|short|0.08513|0.0853425": "filled",
     "DOGEUSD|30m|short|0.09144|0.09204": "filled",
     "DOGEUSD|30m|short|0.09164|0.0922275": "filled",
     "ERA/USDT|30m|long|0.05557|0.05537": "filled",
@@ -44936,6 +44964,7 @@
     "af8d7711b044e810": "filled",
     "afa83312ecf9a511": "filled",
     "afab13c323649be4": "filled",
+    "b0455d82cfd78daf": "filled",
     "b09f21fa32198077": "filled",
     "b0bb5f61d52b0880": "filled",
     "b0d7c46b592758c6": "filled",
@@ -45357,5 +45386,24 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {}
+  "open": {
+    "b0455d82cfd78daf": {
+      "alert_time": "2026-09-14T23:52:00.702056+05:30",
+      "entry": 1.4396,
+      "entry_time": "2026-09-14T23:55:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 8,
+      "risk": 0.013499999999999845,
+      "side": "short",
+      "stop": 1.4530999999999998,
+      "stream": "live",
+      "symbol": "XRPUSD",
+      "target_1": 1.4261000000000001,
+      "target_2": 1.4126000000000003,
+      "target_half": 1.4328500000000002,
+      "timeframe": "30m"
+    }
+  }
 }
