@@ -42027,6 +42027,33 @@
       "target_half": 662.5375000000001,
       "timeframe": "30m",
       "trade_id": "215e670939637ed4"
+    },
+    {
+      "alert_time": "2026-09-14T17:11:57.748579+05:30",
+      "cost_r": 0.634058239999991,
+      "date": "2026-09-14",
+      "entry": 7.456,
+      "entry_time": "2026-09-14T17:20:00+05:30",
+      "exit_price": 7.4435,
+      "exit_time": "2026-09-14T17:20:00+05:30",
+      "final_result": "+1R",
+      "geometry": "live",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.365941760000009,
+      "outcome": "+1R",
+      "rating": 8,
+      "realized_r": 1.0,
+      "risk": 0.012500000000000178,
+      "side": "short",
+      "stop": 7.468500000000001,
+      "stream": "live",
+      "symbol": "AVAXUSD",
+      "target_1": 7.4435,
+      "target_2": 7.431,
+      "target_half": 7.44975,
+      "timeframe": "30m",
+      "trade_id": "AVAXUSD|30m|short|7.456|7.4685"
     }
   ],
   "handled": {
@@ -42849,6 +42876,7 @@
     "AVAXUSD|30m|long|7.88256|7.80436": "filled",
     "AVAXUSD|30m|long|7.89264|7.81434": "filled",
     "AVAXUSD|30m|short|7.447|7.4595": "filled",
+    "AVAXUSD|30m|short|7.456|7.4685": "filled",
     "AVAXUSD|30m|short|8.144|8.219": "filled",
     "AVAXUSD|4h|short|8.118|8.368": "filled",
     "AVAXUSD|4h|short|8.132|8.3845": "filled",
@@ -43663,6 +43691,7 @@
     "f69e85db324bcc23": "filled",
     "f6ad1aaa60aa75fe": "filled",
     "f702aa95dfcb12b6": "filled",
+    "f71cdc5f2bff6d80": "filled",
     "f7233df4ae24ef58": "filled",
     "f72b321b8871e754": "filled",
     "f756c5f793939471": "filled",
@@ -43781,6 +43810,24 @@
       "target_2": 4364.979999999999,
       "target_half": 4326.205,
       "timeframe": "4h"
+    },
+    "f71cdc5f2bff6d80": {
+      "alert_time": "2026-09-14T17:21:53.748574+05:30",
+      "entry": 0.04782,
+      "entry_time": "2026-09-14T17:25:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 6,
+      "risk": 0.0003000000000000086,
+      "side": "long",
+      "stop": 0.04751999999999999,
+      "stream": "live",
+      "symbol": "ZAMA/USDT",
+      "target_1": 0.04812000000000001,
+      "target_2": 0.04842000000000002,
+      "target_half": 0.047970000000000006,
+      "timeframe": "30m"
     }
   }
 }
