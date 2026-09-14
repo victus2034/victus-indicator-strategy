@@ -40542,6 +40542,33 @@
       "target_half": 1.9998750000000003,
       "timeframe": "30m",
       "trade_id": "TRUMP/USDT|30m|short|2.003|2.00925"
+    },
+    {
+      "alert_time": "2026-09-14T10:11:58.661957+05:30",
+      "cost_r": 0.12359146666666782,
+      "date": "2026-09-14",
+      "entry": 0.04796,
+      "entry_time": "2026-09-14T10:15:00+05:30",
+      "exit_price": 0.04839668625,
+      "exit_time": "2026-09-14T10:35:00+05:30",
+      "final_result": "SL",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "net_realized_r": -1.1822248000000073,
+      "outcome": "SL",
+      "rating": 6,
+      "realized_r": -1.0586333333333395,
+      "risk": 0.0004124999999999962,
+      "side": "short",
+      "stop": 0.0483725,
+      "stream": "live",
+      "symbol": "CAP/USDT",
+      "target_1": 0.047547500000000006,
+      "target_2": 0.04713500000000001,
+      "target_half": 0.047753750000000005,
+      "timeframe": "30m",
+      "trade_id": "CAP/USDT|30m|short|0.04796|0.0483725"
     }
   ],
   "handled": {
@@ -42166,24 +42193,5 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {
-    "CAP/USDT|30m|short|0.04796|0.0483725": {
-      "alert_time": "2026-09-14T10:11:58.661957+05:30",
-      "entry": 0.04796,
-      "entry_time": "2026-09-14T10:15:00+05:30",
-      "geometry": "live",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 6,
-      "risk": 0.0004124999999999962,
-      "side": "short",
-      "stop": 0.0483725,
-      "stream": "live",
-      "symbol": "CAP/USDT",
-      "target_1": 0.047547500000000006,
-      "target_2": 0.04713500000000001,
-      "target_half": 0.047753750000000005,
-      "timeframe": "30m"
-    }
-  }
+  "open": {}
 }
