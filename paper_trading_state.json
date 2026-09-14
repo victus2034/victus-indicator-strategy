@@ -42594,6 +42594,33 @@
       "target_half": 0.180525,
       "timeframe": "30m",
       "trade_id": "SOON/USDT|30m|long|0.1804|0.18015"
+    },
+    {
+      "alert_time": "2026-09-14T19:02:03.544435+05:30",
+      "cost_r": 0.5875894260870071,
+      "date": "2026-09-14",
+      "entry": 0.015892,
+      "entry_time": "2026-09-14T19:05:00+05:30",
+      "exit_price": null,
+      "exit_time": "2026-09-14T19:05:00+05:30",
+      "final_result": "data_quality_ambiguous",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "crypto",
+      "net_realized_r": null,
+      "outcome": "data_quality_ambiguous",
+      "rating": 8,
+      "realized_r": null,
+      "risk": 2.8749999999997528e-05,
+      "side": "short",
+      "stop": 0.015920749999999997,
+      "stream": "live",
+      "symbol": "US/USDT",
+      "target_1": 0.015863250000000002,
+      "target_2": 0.015834500000000005,
+      "target_half": 0.015877625,
+      "timeframe": "30m",
+      "trade_id": "US/USDT|30m|short|0.015892|0.0159207"
     }
   ],
   "handled": {
@@ -43663,9 +43690,11 @@
     "RIVERUSD|30m|short|1.268|1.27675": "filled",
     "RIVERUSD|30m|short|1.29|1.29875": "filled",
     "RIVERUSD|30m|short|1.44246|1.45688": "filled",
+    "SAMSUNG/USDT:USDT|30m|long|180.14|178.353": "filled",
     "SAMSUNG/USDT:USDT|30m|long|196.78|196.355": "filled",
     "SAMSUNG/USDT:USDT|30m|long|196.86|196.435": "filled",
     "SAMSUNG/USDT:USDT|30m|long|199.3|198.375": "filled",
+    "SAMSUNG/USDT:USDT|4h|long|180.109|178.323": "filled",
     "SAMSUNG/USDT:USDT|4h|short|204.15|207.062": "filled",
     "SLVONUSD|30m|long|57.05|56.7625": "filled",
     "SLVONUSD|30m|long|57.7181|57.1455": "filled",
@@ -43756,6 +43785,7 @@
     "US/USDT|30m|long|0.0150152|0.0148662": "filled",
     "US/USDT|30m|long|0.015359|0.0152978": "filled",
     "US/USDT|30m|long|0.015735|0.0152912": "filled",
+    "US/USDT|30m|short|0.015892|0.0159207": "filled",
     "US/USDT|30m|short|0.0167758|0.0169436": "filled",
     "US/USDT|4h|long|0.015735|0.0152912": "filled",
     "VELVETUSD|30m|long|0.0505|0.05": "filled",
@@ -44293,5 +44323,42 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {}
+  "open": {
+    "SAMSUNG/USDT:USDT|30m|long|180.14|178.353": {
+      "alert_time": "2026-09-14T19:02:03.549150+05:30",
+      "entry": 180.13968,
+      "entry_time": "2026-09-14T19:10:00+05:30",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "xstock",
+      "rating": 8,
+      "risk": 1.787099999999981,
+      "side": "long",
+      "stop": 178.35258000000002,
+      "stream": "live",
+      "symbol": "SAMSUNG/USDT:USDT",
+      "target_1": 181.92677999999998,
+      "target_2": 183.71387999999996,
+      "target_half": 181.03323,
+      "timeframe": "30m"
+    },
+    "SAMSUNG/USDT:USDT|4h|long|180.109|178.323": {
+      "alert_time": "2026-09-14T18:31:50.359237+05:30",
+      "entry": 180.10944,
+      "entry_time": "2026-09-14T19:10:00+05:30",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "xstock",
+      "rating": 8,
+      "risk": 1.7867999999999995,
+      "side": "long",
+      "stop": 178.32264,
+      "stream": "live",
+      "symbol": "SAMSUNG/USDT:USDT",
+      "target_1": 181.89624,
+      "target_2": 183.68304,
+      "target_half": 181.00284,
+      "timeframe": "4h"
+    }
+  }
 }
