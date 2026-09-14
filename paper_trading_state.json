@@ -42540,6 +42540,33 @@
       "target_half": 1.2678374999999997,
       "timeframe": "30m",
       "trade_id": "308705deb7ef4090"
+    },
+    {
+      "alert_time": "2026-09-14T18:02:05.356269+05:30",
+      "cost_r": 0.3092414423357603,
+      "date": "2026-09-14",
+      "entry": 498.19,
+      "entry_time": "2026-09-14T18:05:00+05:30",
+      "exit_price": null,
+      "exit_time": "2026-09-14T19:00:00+05:30",
+      "final_result": "data_quality_ambiguous",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "net_realized_r": null,
+      "outcome": "data_quality_ambiguous",
+      "rating": 6,
+      "realized_r": null,
+      "risk": 1.712500000000034,
+      "side": "short",
+      "stop": 499.90250000000003,
+      "stream": "live",
+      "symbol": "MSFT/USDT:USDT",
+      "target_1": 496.47749999999996,
+      "target_2": 494.76499999999993,
+      "target_half": 497.33375,
+      "timeframe": "30m",
+      "trade_id": "d85a21b6adf05ab3"
     }
   ],
   "handled": {
@@ -44238,24 +44265,5 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {
-    "d85a21b6adf05ab3": {
-      "alert_time": "2026-09-14T18:02:05.356269+05:30",
-      "entry": 498.19,
-      "entry_time": "2026-09-14T18:05:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "xstock",
-      "rating": 6,
-      "risk": 1.712500000000034,
-      "side": "short",
-      "stop": 499.90250000000003,
-      "stream": "live",
-      "symbol": "MSFT/USDT:USDT",
-      "target_1": 496.47749999999996,
-      "target_2": 494.76499999999993,
-      "target_half": 497.33375,
-      "timeframe": "30m"
-    }
-  }
+  "open": {}
 }
