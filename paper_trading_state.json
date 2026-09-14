@@ -41028,6 +41028,33 @@
       "target_half": 110.03125,
       "timeframe": "30m",
       "trade_id": "03ca0f77d336a4b1"
+    },
+    {
+      "alert_time": "2026-09-14T12:32:06.404813+05:30",
+      "cost_r": 0.11814101265822649,
+      "date": "2026-09-14",
+      "entry": 109.75,
+      "entry_time": "2026-09-14T12:55:00+05:30",
+      "exit_price": 108.70811874999998,
+      "exit_time": "2026-09-14T13:15:00+05:30",
+      "final_result": "SL",
+      "geometry": "live",
+      "half_r_hit": false,
+      "market": "xstock",
+      "net_realized_r": -1.1732106329113963,
+      "outcome": "SL",
+      "rating": 9,
+      "realized_r": -1.0550696202531697,
+      "risk": 0.9875000000000114,
+      "side": "long",
+      "stop": 108.76249999999999,
+      "stream": "live",
+      "symbol": "SOXLBUSD",
+      "target_1": 110.73750000000001,
+      "target_2": 111.72500000000002,
+      "target_half": 110.24375,
+      "timeframe": "30m",
+      "trade_id": "SOXLBUSD|30m|long|109.75|108.762"
     }
   ],
   "handled": {
@@ -42688,24 +42715,6 @@
       "target_1": 58.29068,
       "target_2": 58.86328,
       "target_half": 58.00438,
-      "timeframe": "30m"
-    },
-    "SOXLBUSD|30m|long|109.75|108.762": {
-      "alert_time": "2026-09-14T12:32:06.404813+05:30",
-      "entry": 109.75,
-      "entry_time": "2026-09-14T12:55:00+05:30",
-      "geometry": "live",
-      "half_r_hit": false,
-      "market": "xstock",
-      "rating": 9,
-      "risk": 0.9875000000000114,
-      "side": "long",
-      "stop": 108.76249999999999,
-      "stream": "live",
-      "symbol": "SOXLBUSD",
-      "target_1": 110.73750000000001,
-      "target_2": 111.72500000000002,
-      "target_half": 110.24375,
       "timeframe": "30m"
     }
   }
