@@ -40569,6 +40569,33 @@
       "target_half": 0.047753750000000005,
       "timeframe": "30m",
       "trade_id": "CAP/USDT|30m|short|0.04796|0.0483725"
+    },
+    {
+      "alert_time": "2026-09-14T10:11:58.667057+05:30",
+      "cost_r": 0.10630000000000063,
+      "date": "2026-09-14",
+      "entry": 0.008397817460317461,
+      "entry_time": "2026-09-14T11:00:00+05:30",
+      "exit_price": 0.008486036532738096,
+      "exit_time": "2026-09-14T11:10:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "net_realized_r": -1.1567999999999985,
+      "outcome": "SL",
+      "rating": 3,
+      "realized_r": -1.0504999999999978,
+      "risk": 8.397817460317411e-05,
+      "side": "short",
+      "stop": 0.008481795634920635,
+      "stream": "live",
+      "symbol": "BLESSUSD",
+      "target_1": 0.008313839285714287,
+      "target_2": 0.008229861111111113,
+      "target_half": 0.008355828373015874,
+      "timeframe": "30m",
+      "trade_id": "5dfd32b38d8a74f2"
     }
   ],
   "handled": {
@@ -42194,24 +42221,5 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {
-    "5dfd32b38d8a74f2": {
-      "alert_time": "2026-09-14T10:11:58.667057+05:30",
-      "entry": 0.008397817460317461,
-      "entry_time": "2026-09-14T11:00:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 3,
-      "risk": 8.397817460317411e-05,
-      "side": "short",
-      "stop": 0.008481795634920635,
-      "stream": "live",
-      "symbol": "BLESSUSD",
-      "target_1": 0.008313839285714287,
-      "target_2": 0.008229861111111113,
-      "target_half": 0.008355828373015874,
-      "timeframe": "30m"
-    }
-  }
+  "open": {}
 }
