@@ -47643,6 +47643,33 @@
       "target_half": 99.9,
       "timeframe": "30m",
       "trade_id": "a70144aa92d0da77"
+    },
+    {
+      "alert_time": "2026-09-15T21:32:04.754737+05:30",
+      "cost_r": 0.10715039999999912,
+      "date": "2026-09-15",
+      "entry": 2422.3147200000003,
+      "entry_time": "2026-09-15T21:35:00+05:30",
+      "exit_price": 2446.3456200000005,
+      "exit_time": "2026-09-15T23:05:00+05:30",
+      "final_result": "+1R",
+      "geometry": "live",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.8928496000000009,
+      "outcome": "+1R",
+      "rating": 7,
+      "realized_r": 1.0,
+      "risk": 24.0309000000002,
+      "side": "long",
+      "stop": 2398.28382,
+      "stream": "live",
+      "symbol": "ETHUSD",
+      "target_1": 2446.3456200000005,
+      "target_2": 2470.3765200000007,
+      "target_half": 2434.33017,
+      "timeframe": "4h",
+      "trade_id": "ETHUSD|4h|long|2422.31|2398.28"
     }
   ],
   "handled": {
@@ -49530,24 +49557,5 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {
-    "ETHUSD|4h|long|2422.31|2398.28": {
-      "alert_time": "2026-09-15T21:32:04.754737+05:30",
-      "entry": 2422.3147200000003,
-      "entry_time": "2026-09-15T21:35:00+05:30",
-      "geometry": "live",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 7,
-      "risk": 24.0309000000002,
-      "side": "long",
-      "stop": 2398.28382,
-      "stream": "live",
-      "symbol": "ETHUSD",
-      "target_1": 2446.3456200000005,
-      "target_2": 2470.3765200000007,
-      "target_half": 2434.33017,
-      "timeframe": "4h"
-    }
-  }
+  "open": {}
 }
