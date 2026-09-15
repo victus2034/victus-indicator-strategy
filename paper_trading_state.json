@@ -43809,6 +43809,33 @@
       "target_half": 2541.8,
       "timeframe": "30m",
       "trade_id": "72c470d7d2307016"
+    },
+    {
+      "alert_time": "2026-09-15T00:32:07.482744+05:30",
+      "cost_r": 0.291396273684214,
+      "date": "2026-09-15",
+      "entry": 130.21,
+      "entry_time": "2026-09-15T00:55:00+05:30",
+      "exit_price": null,
+      "exit_time": "2026-09-15T01:05:00+05:30",
+      "final_result": "data_quality_ambiguous",
+      "geometry": "live",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": null,
+      "outcome": "data_quality_ambiguous",
+      "rating": 9,
+      "realized_r": null,
+      "risk": 0.4749999999999943,
+      "side": "short",
+      "stop": 130.685,
+      "stream": "live",
+      "symbol": "AAVEUSD",
+      "target_1": 129.735,
+      "target_2": 129.26000000000002,
+      "target_half": 129.97250000000003,
+      "timeframe": "30m",
+      "trade_id": "AAVEUSD|30m|short|130.21|130.685"
     }
   ],
   "handled": {
@@ -45554,24 +45581,5 @@
     "fef89a26f883ad6d": "filled",
     "ffb4661b7d04cd46": "filled"
   },
-  "open": {
-    "AAVEUSD|30m|short|130.21|130.685": {
-      "alert_time": "2026-09-15T00:32:07.482744+05:30",
-      "entry": 130.21,
-      "entry_time": "2026-09-15T00:55:00+05:30",
-      "geometry": "live",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 9,
-      "risk": 0.4749999999999943,
-      "side": "short",
-      "stop": 130.685,
-      "stream": "live",
-      "symbol": "AAVEUSD",
-      "target_1": 129.735,
-      "target_2": 129.26000000000002,
-      "target_half": 129.97250000000003,
-      "timeframe": "30m"
-    }
-  }
+  "open": {}
 }
