@@ -17,7 +17,7 @@ class CryptoConfigTests(unittest.TestCase):
         with patch.dict(os.environ, {}, clear=True):
             import config
 
-            self.assertEqual(len(config.CRYPTO_WATCHLIST), 53)
+            self.assertEqual(len(config.CRYPTO_WATCHLIST), 23)
             self.assertLessEqual(len(config.CRYPTO_WATCHLIST), 100)
             self.assertEqual(
                 config.WATCHLIST,
@@ -43,18 +43,28 @@ class CryptoConfigTests(unittest.TestCase):
             ):
                 self.assertIn(symbol, config.XSTOCK_WATCHLIST)
 
-    def test_symbols_added_from_the_volume_sweep_are_present(self):
-        # ETC was culled once for thin volume and came back at 115M over
-        # thirty days, so the removal list is not a permanent verdict - it
-        # is only ever as good as the last measurement.
+    def test_coinswitch_only_symbols_from_the_volume_sweep_are_gone(self):
+        # These three passed the 2026-09-01 liquidity sweep on CoinSwitch
+        # volume, since Delta had no figure to judge them on. They came out
+        # anyway in the 2026-09-15 cut: Shiva stopped trading on CoinSwitch
+        # (buggy app and website), so a CoinSwitch-only level is not a trade
+        # he can take, regardless of its volume.
         with patch.dict(os.environ, {}, clear=True):
             import config
 
-            # ETC went out again in the 2026-09-01 cut at $49.9K a day on
-            # Delta. The CoinSwitch three stay: no volume figure exists for
-            # that venue yet, so nothing has been measured to cut them on.
             for symbol in ("CL/USDT", "KORU/USDT", "ACE/USDT"):
-                self.assertIn(symbol, config.CRYPTO_WATCHLIST)
+                self.assertNotIn(symbol, config.CRYPTO_WATCHLIST)
+
+    def test_every_crypto_symbol_is_delta_listed(self):
+        # The 2026-09-15 cut's whole point: no crypto symbol should scan,
+        # and therefore alert, for a venue Shiva does not trade on any more.
+        # entry_confirm.broker_label reads DELTA_LISTED_SYMBOLS to tag each
+        # alert's venue, so this is also what keeps that tag from ever
+        # reading "CoinSwitch" for crypto again.
+        with patch.dict(os.environ, {}, clear=True):
+            import config
+
+            self.assertTrue(set(config.CRYPTO_WATCHLIST) <= config.DELTA_LISTED_SYMBOLS)
 
     def test_thin_volume_symbols_are_removed(self):
         # Measured on CoinSwitch over 96 30m candles: all ten traded under

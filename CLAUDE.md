@@ -26,10 +26,14 @@ Nothing broke, but suspect it first for any dataframe-shaped bug.
 
 All in `config.py`, which **is tracked in git**:
 
-- `WATCHLIST` — the symbols scanned (the README still says "10 coins"; it is 64 as of
-  2026-09-01, cut from 119 on seven-day Delta volume)
-- `DELTA_LISTED_SYMBOLS` — the 31 symbols Delta India lists. Everything else scanned
-  is reached through CoinSwitch, and `entry_confirm.py` tags each alert with the venue.
+- `WATCHLIST` — the symbols scanned (the README still says "10 coins"; it is 36 as of
+  2026-09-15: 64 as of 2026-09-01 cut from 119 on seven-day Delta volume, then
+  `CRYPTO_WATCHLIST` cut again to drop every CoinSwitch-only crypto symbol once
+  Shiva stopped trading there - see `config.py`'s note on that list)
+- `DELTA_LISTED_SYMBOLS` — the 31 symbols Delta India lists. `entry_confirm.py` tags
+  each alert with the venue this way; since 2026-09-15 every crypto symbol left in
+  `CRYPTO_WATCHLIST` is Delta-listed by construction, so that tag only ever reads
+  "Delta" for crypto now (the xStock/other symbols can still read CoinSwitch).
   Static on purpose; re-audit against Delta's `/v2/products` when the watchlist changes
 - `EXCHANGE_IDS` — exchange fallback order
 - `MAX_DISTANCE_PCT` — how close price must get before alerting

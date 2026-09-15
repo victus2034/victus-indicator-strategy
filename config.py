@@ -31,9 +31,21 @@ def env_flag(name, default=False):
 # Delta - a zone drawn on a book that thin is a level nobody can be filled
 # in. Ranked every Delta perpetual by seven-day traded value (a single
 # session misranks badly: TAC printed 6% of its weekly average that day)
-# and kept the 31 that earn the scan. The CoinSwitch symbols below are
-# untouched - CoinSwitch's futures endpoints need an API key, so there is
-# no volume figure to judge them on yet.
+# and kept the 31 that earn the scan.
+#
+# CoinSwitch-only symbols dropped entirely, 2026-09-15: Shiva stopped
+# trading on CoinSwitch - its app and website had gotten too buggy to use -
+# so a level only reachable there is not a trade he can take. Every crypto
+# symbol not in DELTA_LISTED_SYMBOLS came out, across all three surfaces
+# that read this list (4h scan, 30m scan, entry_confirm):
+#   COTI, DEXE, SOON, EUL, ZIL, BTW, LA, ZAMA, ESP, UB, ATOM, AERO, CAP,
+#   RE, US, ICP, BOME, O, MNT, ERA, CRV, STORJ, ALGO, 0G, HOME, KGEN,
+#   GWEI, CL, KORU, ACE (all /USDT)
+# What is left is exactly DELTA_LISTED_SYMBOLS's crypto half - every symbol
+# below is Delta-listed by construction, so entry_confirm's venue tag will
+# only ever read "Delta" for crypto from here on. If CoinSwitch trading
+# resumes, the removed list above is where to look, not a fresh liquidity
+# sweep - nothing here says those symbols were thin, only unreachable.
 CRYPTO_WATCHLIST = [
     "BTCUSD",
     "ETHUSD",
@@ -41,52 +53,17 @@ CRYPTO_WATCHLIST = [
     "XRPUSD",
     "HYPEUSD",
     "AKE/USDT",
-    "COTI/USDT",
     "ZECUSD",
     "DOGEUSD",
-    "DEXE/USDT",
-    "SOON/USDT",
     "AAVEUSD",
     "BEAT/USDT",
-    "EUL/USDT",
-    "ZIL/USDT",
     "UNIUSD",
     "LINKUSD",
     "AVAXUSD",
     "LTCUSD",
-    "BTW/USDT",
-    "LA/USDT",
     "BNBUSD",
-    "ZAMA/USDT",
     "TRUMP/USDT",
-    "ESP/USDT",
     "BCHUSD",
-    "UB/USDT",
-    "ATOM/USDT",
-    "AERO/USDT",
-    "CAP/USDT",
-    "RE/USDT",
-    "US/USDT",
-    "ICP/USDT",
-    "BOME/USDT",
-    "O/USDT",
-    "MNT/USDT",
-    "ERA/USDT",
-    "CRV/USDT",
-    "STORJ/USDT",
-    "ALGO/USDT",
-    "0G/USDT",
-    "HOME/USDT",
-    "KGEN/USDT",
-    "GWEI/USDT",
-    # From a CoinSwitch volume sweep, checked over a month rather than a day
-    # so a spike could not pass for a book. Per 30m candle, against a
-    # watchlist median near 203,000: CL about 1,090,000, KORU 978,000,
-    # ACE 739,000. ETC came in with them at 80,000 and went out again in the
-    # 2026-09-01 cut, at $49,900 a day on Delta.
-    "CL/USDT",
-    "KORU/USDT",
-    "ACE/USDT",
     # Added in the 2026-09-01 cut on seven-day Delta volume: TAC $87.8M,
     # ZORA $28.0M, BLESS $21.1M, H $12.5M, VELVET $12.0M, RIVER $6.8M.
     # RIVER had been removed once for thin volume - a removal is only ever
@@ -160,6 +137,8 @@ DELTA_LISTED_SYMBOLS = {
     "MRVL/USDT:USDT", "NVDAXUSD",
 }
 
+# Was always empty in practice; now also correct in intent - no CoinSwitch-only
+# crypto symbols are scanned any more (see the 2026-09-15 note on CRYPTO_WATCHLIST).
 COINSWITCH_WATCHLIST = []
 
 DELTA_API_BASE_URL = "https://api.india.delta.exchange"
