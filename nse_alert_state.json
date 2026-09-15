@@ -3013,14 +3013,14 @@
     "BATAINDIA.NS|4h|long|651.15|654.33": 1789032817.016653,
     "MANKIND.NS|4h|long|2217.1|2226.57": 1789098747.4695036,
     "PHOENIXLTD.NS|4h|long|1840.2|1849.42": 1789098747.673009,
-    "FACT.NS|4h|long|771|774.618": 1789098747.9188838,
+    "FACT.NS|4h|long|771|774.618": 1789446755.257444,
     "COLPAL.NS|4h|long|1782|1790.14": 1789098748.2930362,
     "CARBORUNIV.NS|4h|long|1059.1|1065.44": 1789103570.5616992,
     "RELIANCE.NS|4h|long|1253.6|1258.26": 1789115558.7179127,
     "HDFCAMC.NS|4h|long|2380.8|2393.55": 1789108369.968261,
     "CIPLA.NS|4h|long|1341.1|1345.69": 1789101156.9243474,
     "RELIANCE.NS|4h|long|1253.6|1258.27": 1789102345.3284194,
-    "PIDILITIND.NS|4h|long|1548|1553.4": 1789109546.725591,
+    "PIDILITIND.NS|4h|long|1548|1553.4": 1789446752.8177888,
     "COLPAL.NS|4h|long|1782|1790.16": 1789116744.0036798,
     "ATGL.NS|4h|long|589.25|593.399": 1789114374.7347832,
     "DLF.NS|4h|long|636.3|639.215": 1789445550.2923062,
@@ -3031,7 +3031,10 @@
     "3MINDIA.NS|4h|long|32335|32476.7": 1789114375.0065038,
     "GRANULES.NS|4h|short|906.007|909.9": 1789115558.9841385,
     "BERGEPAINT.NS|4h|long|456|458.158": 1789445550.771797,
-    "JSWSTEEL.NS|4h|long|1251|1254.96": 1789445549.642099
+    "JSWSTEEL.NS|4h|long|1251|1254.96": 1789445549.642099,
+    "BAJAJ-AUTO.NS|4h|long|11534|11569.9": 1789446752.5309591,
+    "ABB.NS|4h|long|7085.5|7120.01": 1789446753.0802732,
+    "GILLETTE.NS|4h|long|7240|7276.02": 1789446755.5114143
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -18084,7 +18087,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1789445488.5032852
+    "4h": 1789446704.5167317
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -21867,9 +21870,9 @@
     "last_attempt_at": 0.0
   },
   "PIDILITIND.NS|demand|1548.0000|1553.3982": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789446752.8177888,
+    "last_attempt_at": 1789446752.8177888
   },
   "PINELABS.NS|supply|209.6552|211.2200": {
     "in_zone": false,
@@ -32302,9 +32305,9 @@
     "last_attempt_at": 0.0
   },
   "ABB.NS|demand|7085.5000|7120.0094": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789446753.0802732,
+    "last_attempt_at": 1789446753.0802732
   },
   "APLAPOLLO.NS|supply|2293.7230|2301.3000": {
     "in_zone": false,
@@ -57457,7 +57460,7 @@
     "last_attempt_at": 0.0
   },
   "JSWSTEEL.NS|demand|1251.0000|1254.9598": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789445549.642099,
     "last_attempt_at": 1789445549.642099
   },
@@ -63702,9 +63705,9 @@
     "last_attempt_at": 0.0
   },
   "BAJAJ-AUTO.NS|demand|11534.0000|11569.8548": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789446752.5309591,
+    "last_attempt_at": 1789446752.5309591
   },
   "BAJAJFINSV.NS|supply|2120.7029|2126.8000": {
     "in_zone": false,
@@ -69672,9 +69675,9 @@
     "last_attempt_at": 0.0
   },
   "FACT.NS|demand|771.0000|774.6185": {
-    "in_zone": false,
-    "last_alert_at": 1789098747.9188838,
-    "last_attempt_at": 1789098747.9188838
+    "in_zone": true,
+    "last_alert_at": 1789446755.257444,
+    "last_attempt_at": 1789446755.257444
   },
   "HINDCOPPER.NS|supply|623.5648|628.6000": {
     "in_zone": false,
@@ -73127,9 +73130,9 @@
     "last_attempt_at": 0.0
   },
   "GILLETTE.NS|demand|7240.0000|7276.0178": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789446755.5114143,
+    "last_attempt_at": 1789446755.5114143
   },
   "FORCEMOT.NS|supply|19402.0690|19533.0000": {
     "in_zone": false,
@@ -73217,6 +73220,26 @@
     "last_attempt_at": 0.0
   },
   "THELEELA.NS|demand|494.4000|497.2795": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "NMDC.NS|demand|72.2600|72.5174": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "BERGEPAINT.NS|demand|391.4500|393.5177": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "3MINDIA.NS|demand|30280.0000|30432.3566": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "CARBORUNIV.NS|demand|923.0000|927.6712": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
