@@ -14,10 +14,11 @@
   },
   "BTCUSD|30m|long|76510.2|75751.2": {
     "reached_entry": true,
-    "stage": 2
+    "stage": 3
   },
   "BTCUSD|4h|long|76028|75487.4": {
-    "reached_entry": false
+    "reached_entry": false,
+    "stage": 1
   },
   "CL/USDT|30m|long|97.05|96.45": {
     "reached_entry": false
@@ -32,7 +33,8 @@
     "reached_entry": false
   },
   "DOGEUSD|30m|long|0.08207|0.08177": {
-    "reached_entry": false
+    "reached_entry": false,
+    "stage": 1
   },
   "ETHUSD|30m|long|2449.47|2425.61": {
     "reached_entry": true,
@@ -46,20 +48,12 @@
     "reached_entry": true,
     "stage": 3
   },
-  "METAXUSD|30m|short|667.79|669.115": {
-    "reached_entry": true,
-    "stage": 1
-  },
   "METAXUSD|30m|short|668.7|669.137": {
     "reached_entry": true
   },
   "MNT/USDT|30m|long|0.5509|0.55015": {
     "reached_entry": true,
     "stage": 3
-  },
-  "MNT/USDT|30m|long|0.555625|0.555594": {
-    "reached_entry": true,
-    "stage": 1
   },
   "MRVL/USDT:USDT|30m|short|223.67|224.245": {
     "reached_entry": true,
@@ -76,13 +70,7 @@
     "reached_entry": false,
     "stage": 1
   },
-  "RE/USDT|30m|short|0.4437|0.44575": {
-    "reached_entry": false
-  },
   "SAMSUNG/USDT:USDT|30m|short|185.8|187.1": {
-    "reached_entry": false
-  },
-  "SNDKBUSD|30m|short|1579.12|1582.71": {
     "reached_entry": false
   },
   "TSLAXUSD|30m|short|360.9|361.212": {
@@ -108,6 +96,9 @@
   "ZAMA/USDT|4h|long|0.045239|0.0447902": {
     "reached_entry": false,
     "stage": 1
+  },
+  "ZECUSD|30m|long|1118.67|1110.06": {
+    "reached_entry": false
   },
   "ZIL/USDT|30m|long|0.002871|0.00284475": {
     "reached_entry": true,
@@ -138,6 +129,7 @@
   "_ready|BNBUSD|30m": 1789458964.864873,
   "_ready|BOME/USDT|30m": 1789466760.110004,
   "_ready|BTCUSD|30m": 1789459868.270592,
+  "_ready|BTCUSD|4h": 1789482963.449333,
   "_ready|BTW/USDT|30m": 1789194664.716904,
   "_ready|CAP/USDT|30m": 1789361459.428611,
   "_ready|CL/USDT|30m": 1789327257.256434,
@@ -146,7 +138,7 @@
   "_ready|CRV/USDT|30m": 1789461071.110789,
   "_ready|DEXE/USDT|30m": 1789389359.59074,
   "_ready|DEXE/USDT|4h": 1788962475.195541,
-  "_ready|DOGEUSD|30m": 1789410667.126836,
+  "_ready|DOGEUSD|30m": 1789482963.449333,
   "_ready|ERA/USDT|30m": 1789467666.170572,
   "_ready|ESP/USDT|30m": 1789458664.421898,
   "_ready|ESP/USDT|4h": 1788956755.098613,
