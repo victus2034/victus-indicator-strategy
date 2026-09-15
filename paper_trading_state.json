@@ -46671,6 +46671,33 @@
       "target_half": 0.5400499999999999,
       "timeframe": "30m",
       "trade_id": "O/USDT|30m|long|0.5398|0.5393"
+    },
+    {
+      "alert_time": "2026-09-15T19:11:59.868730+05:30",
+      "cost_r": 0.10736299999999842,
+      "date": "2026-09-15",
+      "entry": 0.0505,
+      "entry_time": "2026-09-15T19:50:00+05:30",
+      "exit_price": 0.050560600000000004,
+      "exit_time": "2026-09-15T19:50:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.013837000000001654,
+      "outcome": "BE",
+      "rating": 4,
+      "realized_r": 0.12120000000000007,
+      "risk": 0.0005000000000000074,
+      "side": "long",
+      "stop": 0.049999999999999996,
+      "stream": "live",
+      "symbol": "VELVETUSD",
+      "target_1": 0.05100000000000001,
+      "target_2": 0.05150000000000002,
+      "target_half": 0.05075,
+      "timeframe": "30m",
+      "trade_id": "8a482585134d1cc9"
     }
   ],
   "handled": {
@@ -48458,6 +48485,7 @@
     "f3de4cbbd1d2e746": "filled",
     "f3fcc18739d6a5be": "filled",
     "f439cdebb9241872": "filled",
+    "f44efe1acdc89be7": "filled",
     "f46904ce713775e5": "filled",
     "f495f2ac73fd636c": "filled",
     "f4a65138daba8b23": "filled",
@@ -48545,24 +48573,6 @@
       "target_half": 76889.739,
       "timeframe": "30m"
     },
-    "8a482585134d1cc9": {
-      "alert_time": "2026-09-15T19:11:59.868730+05:30",
-      "entry": 0.0505,
-      "entry_time": "2026-09-15T19:50:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 4,
-      "risk": 0.0005000000000000074,
-      "side": "long",
-      "stop": 0.049999999999999996,
-      "stream": "live",
-      "symbol": "VELVETUSD",
-      "target_1": 0.05100000000000001,
-      "target_2": 0.05150000000000002,
-      "target_half": 0.05075,
-      "timeframe": "30m"
-    },
     "BTCUSD|30m|long|76510.2|75751.2": {
       "alert_time": "2026-09-15T18:51:58.834227+05:30",
       "entry": 76510.224,
@@ -48615,6 +48625,24 @@
       "target_1": 2473.3324999999995,
       "target_2": 2497.1949999999993,
       "target_half": 2461.40125,
+      "timeframe": "30m"
+    },
+    "f44efe1acdc89be7": {
+      "alert_time": "2026-09-15T19:41:54.973559+05:30",
+      "entry": 0.5509,
+      "entry_time": "2026-09-15T19:50:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 6,
+      "risk": 0.0007499999999999174,
+      "side": "long",
+      "stop": 0.55015,
+      "stream": "live",
+      "symbol": "MNT/USDT",
+      "target_1": 0.5516499999999999,
+      "target_2": 0.5523999999999998,
+      "target_half": 0.551275,
       "timeframe": "30m"
     }
   }
