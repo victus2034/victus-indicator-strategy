@@ -44484,6 +44484,33 @@
       "target_half": 0.008077500000000001,
       "timeframe": "30m",
       "trade_id": "ZORAUSD|30m|short|0.00809|0.008115"
+    },
+    {
+      "alert_time": "2026-09-15T10:11:57.768628+05:30",
+      "cost_r": 0.15639629090908772,
+      "date": "2026-09-15",
+      "entry": 101.15,
+      "entry_time": "2026-09-15T10:35:00+05:30",
+      "exit_price": 101.27138000000001,
+      "exit_time": "2026-09-15T10:35:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.02015643636363887,
+      "outcome": "BE",
+      "rating": 6,
+      "realized_r": 0.17655272727272658,
+      "risk": 0.6875000000000142,
+      "side": "long",
+      "stop": 100.46249999999999,
+      "stream": "live",
+      "symbol": "SOLUSD",
+      "target_1": 101.83750000000002,
+      "target_2": 102.52500000000003,
+      "target_half": 101.49375,
+      "timeframe": "30m",
+      "trade_id": "de22510cfb997f79"
     }
   ],
   "handled": {
@@ -46330,24 +46357,6 @@
       "target_2": 0.005357936,
       "target_half": 0.005279756,
       "timeframe": "4h"
-    },
-    "de22510cfb997f79": {
-      "alert_time": "2026-09-15T10:11:57.768628+05:30",
-      "entry": 101.15,
-      "entry_time": "2026-09-15T10:35:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 6,
-      "risk": 0.6875000000000142,
-      "side": "long",
-      "stop": 100.46249999999999,
-      "stream": "live",
-      "symbol": "SOLUSD",
-      "target_1": 101.83750000000002,
-      "target_2": 102.52500000000003,
-      "target_half": 101.49375,
-      "timeframe": "30m"
     }
   }
 }
