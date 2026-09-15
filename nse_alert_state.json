@@ -3012,12 +3012,12 @@
     "CANFINHOME.NS|4h|long|780.05|782.858": 1789031568.0989547,
     "BATAINDIA.NS|4h|long|651.15|654.33": 1789032817.016653,
     "MANKIND.NS|4h|long|2217.1|2226.57": 1789098747.4695036,
-    "PHOENIXLTD.NS|4h|long|1840.2|1849.42": 1789098747.673009,
+    "PHOENIXLTD.NS|4h|long|1840.2|1849.42": 1789462348.1695375,
     "FACT.NS|4h|long|771|774.618": 1789446755.257444,
     "COLPAL.NS|4h|long|1782|1790.14": 1789098748.2930362,
     "CARBORUNIV.NS|4h|long|1059.1|1065.44": 1789103570.5616992,
     "RELIANCE.NS|4h|long|1253.6|1258.26": 1789115558.7179127,
-    "HDFCAMC.NS|4h|long|2380.8|2393.55": 1789450336.0867565,
+    "HDFCAMC.NS|4h|long|2380.8|2393.55": 1789462347.6432629,
     "CIPLA.NS|4h|long|1341.1|1345.69": 1789101156.9243474,
     "RELIANCE.NS|4h|long|1253.6|1258.27": 1789102345.3284194,
     "PIDILITIND.NS|4h|long|1548|1553.4": 1789446752.8177888,
@@ -3046,11 +3046,13 @@
     "GILLETTE.NS|4h|long|7240|7275.64": 1789458731.090302,
     "MSUMI.NS|4h|long|35.71|35.9354": 1789451536.3718467,
     "NESTLEIND.NS|4h|long|1368.7|1373.7": 1789455148.5034235,
-    "LTF.NS|4h|long|297.15|298.67": 1789457560.3322535,
+    "LTF.NS|4h|long|297.15|298.67": 1789462347.9057515,
     "FORTIS.NS|4h|long|879.35|883.34": 1789459935.5594642,
     "PAGEIND.NS|4h|long|34785|34932.9": 1789459935.968078,
     "PAGEIND.NS|4h|long|34785|34932.8": 1789461162.4218237,
-    "IREDA.NS|4h|long|108.66|109.332": 1789461162.6656919
+    "IREDA.NS|4h|long|108.66|109.332": 1789461162.6656919,
+    "MFSL.NS|4h|long|1433.6|1441.55": 1789462348.457044,
+    "IREDA.NS|4h|long|108.66|109.336": 1789462348.7016554
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -6154,8 +6156,8 @@
   },
   "LTF.NS|demand|297.1500|298.6702": {
     "in_zone": true,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "last_alert_at": 1789462347.9057515,
+    "last_attempt_at": 1789462347.9057515
   },
   "LTTS.NS|supply|3645.1221|3665.1001": {
     "in_zone": false,
@@ -18103,7 +18105,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1789461111.804366
+    "4h": 1789462292.446901
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -54496,9 +54498,9 @@
     "last_attempt_at": 0.0
   },
   "HDFCAMC.NS|demand|2380.8000|2393.5515": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789462347.6432629,
+    "last_attempt_at": 1789462347.6432629
   },
   "HAVELLS.NS|supply|1436.1941|1441.2000": {
     "in_zone": false,
@@ -72426,9 +72428,9 @@
     "last_attempt_at": 0.0
   },
   "IREDA.NS|demand|108.6600|109.3358": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789462348.7016554,
+    "last_attempt_at": 1789462348.7016554
   },
   "ABSLAMC.NS|demand|845.0000|849.4338": {
     "in_zone": false,
@@ -73641,9 +73643,9 @@
     "last_attempt_at": 0.0
   },
   "PHOENIXLTD.NS|demand|1840.2000|1849.4199": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789462348.1695375,
+    "last_attempt_at": 1789462348.1695375
   },
   "PRESTIGE.NS|supply|1798.0490|1805.2000": {
     "in_zone": false,
@@ -73711,9 +73713,9 @@
     "last_attempt_at": 0.0
   },
   "MFSL.NS|demand|1433.6000|1441.5530": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789462348.457044,
+    "last_attempt_at": 1789462348.457044
   },
   "COLPAL.NS|supply|2322.9708|2329.0000": {
     "in_zone": false,
@@ -73946,7 +73948,7 @@
     "last_attempt_at": 0.0
   },
   "GILLETTE.NS|demand|7240.0000|7275.6410": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789458731.090302,
     "last_attempt_at": 1789458731.090302
   },
@@ -74671,6 +74673,11 @@
     "last_attempt_at": 0.0
   },
   "ONESOURCE.NS|demand|1231.4000|1245.5126": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "ABB.NS|demand|6653.0000|6687.3260": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
