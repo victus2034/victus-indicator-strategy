@@ -33,7 +33,7 @@ import pandas as pd
 import requests
 import yfinance as yf
 
-from config import DELTA_LISTED_SYMBOLS, MAX_DISTANCE_PCT, WATCHLIST
+from config import DELTA_LISTED_SYMBOLS, MAX_DISTANCE_PCT, MIN_CRYPTO_ZONE_SCORE, WATCHLIST
 
 # Only crypto is checked against its watchlist. The NSE side has no
 # authoritative one here - nse_config carries a FALLBACK_WATCHLIST used when
@@ -55,14 +55,10 @@ ALERT_RECORDS = {
         "4h": Path(__file__).with_name("crypto_alert_records.jsonl"),
     },
 }
-# Zones the scanner noted as worth watching but did not alert on, written at
-# WATCH_DISTANCE_PCT rather than MAX_DISTANCE_PCT. Read alongside the alerts
-# and never instead of them: a zone that later alerts appears in both files,
-# and the alert row wins because it is the one the backtest scores.
-#
-# Without these, the earliest a zone could be watched was the moment it was
-# alerted - 0.20% away, a median eight minutes before the touch and for 28%
-# of zones the very same minute. There was no room left to say GET READY.
+# Zones the scanner noted as worth watching but did not alert on. Kept here
+# only so older tests/tools can still locate the files; entry_confirm does not
+# read them for live pings because that can announce a trade before the real
+# crypto alert channel has delivered it.
 WATCH_RECORDS = {
     "crypto": {
         "30m": Path(__file__).with_name("crypto_watch_records_30m.jsonl"),
@@ -90,6 +86,11 @@ APPROACH_THRESHOLD_PCT = float(
 # minutes; a fresh zone on the same symbol inside this window rides the
 # existing warning instead of adding a second message for it.
 READY_COOLDOWN_SECONDS = int(os.getenv("VICTUS_READY_COOLDOWN_SECONDS", str(30 * 60)))
+# Same exact level should not keep repeating a "getting close" message. ENTRY
+# NOW is still allowed when price actually touches the level.
+LEVEL_READY_COOLDOWN_SECONDS = int(
+    os.getenv("VICTUS_LEVEL_READY_COOLDOWN_SECONDS", str(6 * 60 * 60))
+)
 # Past this share of the planned entry-to-stop distance, the trade is
 # reported as late rather than as a clean entry.
 NEAR_SL_FRACTION = 0.5
@@ -158,17 +159,7 @@ def load_watched_alerts(
     if records_path is not None:
         paths = [records_path]
     else:
-        # Watch rows first, alert rows second. Both key on the same zone, so a
-        # zone that has since alerted overwrites its own watch row - and the
-        # alert row is the one carrying the message the backtest scores.
-        paths = [
-            path
-            for path in (
-                WATCH_RECORDS.get(market, {}).get(timeframe),
-                ALERT_RECORDS[market][timeframe],
-            )
-            if path is not None
-        ]
+        paths = [ALERT_RECORDS[market][timeframe]]
 
     window = pd.Timedelta(minutes=BAR_MINUTES[timeframe] * WATCH_BARS)
     watched: dict[str, dict] = {}
@@ -191,6 +182,8 @@ def load_watched_alerts(
             # worse than saying nothing, and the symbol was dropped on purpose.
             if market == "crypto" and str(record.get("symbol", "")).upper() not in CRYPTO_WATCHLIST_SET:
                 continue
+            if market == "crypto" and not rating_allowed(record):
+                continue
             delivered = pd.to_datetime(record.get("delivered_at_utc"), errors="coerce", utc=True)
             if pd.isna(delivered):
                 continue
@@ -207,6 +200,14 @@ def load_watched_alerts(
             record["_market"] = market
             watched[watch_key(record)] = record
     return list(watched.values())
+
+
+def rating_allowed(record: dict) -> bool:
+    """Only confirmed crypto entries at or above the configured score floor."""
+    score = pd.to_numeric(record.get("score"), errors="coerce")
+    if pd.isna(score):
+        return False
+    return float(score) >= MIN_CRYPTO_ZONE_SCORE
 
 
 def watch_key(record: dict) -> str:
@@ -460,11 +461,23 @@ def ready_key(record: dict) -> str:
     return f"_ready|{symbol}|{record.get('timeframe')}"
 
 
+def level_ready_key(record: dict) -> str:
+    """One GET READY budget per exact level."""
+    return "_level_ready|" + watch_key(record)
+
+
 def ready_recently(state: dict, record: dict, now: pd.Timestamp) -> bool:
     last = float(state.get(ready_key(record), 0.0) or 0.0)
     if not last:
         return False
     return (now.timestamp() - last) < READY_COOLDOWN_SECONDS
+
+
+def level_ready_recently(state: dict, record: dict, now: pd.Timestamp) -> bool:
+    last = float(state.get(level_ready_key(record), 0.0) or 0.0)
+    if not last:
+        return False
+    return (now.timestamp() - last) < LEVEL_READY_COOLDOWN_SECONDS
 
 
 def prune_state(state: dict, active_keys: set[str]) -> dict:
@@ -553,20 +566,26 @@ def main() -> None:
         # run, which is what turned a handful of trades into a wall of
         # near-identical messages.
         if stage is not None and stage > last_stage:
-            if stage == STAGE_READY and ready_recently(state, record, now):
+            if stage == STAGE_READY and (
+                ready_recently(state, record, now)
+                or level_ready_recently(state, record, now)
+            ):
                 # One heads-up per symbol, not one per level. Widening the
                 # watch band to 0.75% put several stacked zones on the same
                 # symbol in range at once and each warned separately: 74
                 # GET READYs came from 36 symbols across 70 zones in half a
                 # day, TSLA alone six times for four levels. That the price
                 # is approaching TSLA is one piece of news however many
-                # boxes are drawn near it. The zone is still marked, so its
+                # boxes are drawn near it. The same exact level also gets a
+                # six-hour budget, so repeat scanner deliveries cannot keep
+                # saying GET READY. The zone is still marked, so its
                 # ENTRY NOW - which names a specific level and is worth
                 # having per zone - still fires when price arrives.
                 entry_state["stage"] = stage
             else:
                 if stage == STAGE_READY:
                     state[ready_key(record)] = now.timestamp()
+                    state[level_ready_key(record)] = now.timestamp()
                 pings.append((stage, format_line(stage, price, record)))
                 entry_state["stage"] = stage
         state[key] = entry_state

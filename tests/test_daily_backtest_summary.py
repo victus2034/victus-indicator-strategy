@@ -1183,10 +1183,10 @@ class RepeatDeliveryTests(unittest.TestCase):
         )
         return path
 
-    def _record(self, when, top):
+    def _record(self, when, top, symbol="TCS.NS"):
         return {
             "delivered_at_utc": when,
-            "symbol": "TCS.NS",
+            "symbol": symbol,
             "timeframe": "30m",
             "side": "long",
             "alert_price": 100.0,
@@ -1216,6 +1216,26 @@ class RepeatDeliveryTests(unittest.TestCase):
         rows = [
             self._record("2026-08-26T04:00:00+00:00", 100.172),
             self._record("2026-08-27T04:00:00+00:00", 100.172),
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            frame = summary.load_records(self._write(tmp, rows), "30m")
+
+        self.assertEqual(len(frame), 2)
+
+    def test_crypto_same_level_within_six_hours_is_one_trade(self):
+        rows = [
+            self._record("2026-08-26T17:45:00+00:00", 100.172, symbol="HYPEUSD"),
+            self._record("2026-08-26T19:15:00+00:00", 100.1720001, symbol="HYPEUSD"),
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            frame = summary.load_records(self._write(tmp, rows), "30m")
+
+        self.assertEqual(len(frame), 1)
+
+    def test_crypto_same_level_after_six_hours_is_new_trade(self):
+        rows = [
+            self._record("2026-08-26T04:00:00+00:00", 100.172, symbol="HYPEUSD"),
+            self._record("2026-08-26T10:30:00+00:00", 100.1720001, symbol="HYPEUSD"),
         ]
         with tempfile.TemporaryDirectory() as tmp:
             frame = summary.load_records(self._write(tmp, rows), "30m")

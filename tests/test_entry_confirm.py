@@ -141,6 +141,58 @@ class WatchWindowTests(unittest.TestCase):
         self.assertEqual([record["symbol"] for record in result], ["TCS.NS"])
 
 
+class RatingFloorTests(unittest.TestCase):
+    def _write(self, tmp_path, rows):
+        path = tmp_path / "records.jsonl"
+        path.write_text("\n".join(json.dumps(row) for row in rows), encoding="utf-8")
+        return path
+
+    def _row(self, symbol, score):
+        now = pd.Timestamp.now(tz=entry_confirm.IST)
+        row = {
+            "delivered_at_utc": (now - pd.Timedelta(minutes=10)).tz_convert("UTC").isoformat(),
+            "symbol": symbol,
+            "timeframe": "30m",
+            "side": "long",
+            "score": score,
+            "planned_entry": 100.0,
+            "stop_price": 98.0,
+        }
+        if score is None:
+            row.pop("score")
+        return row
+
+    def test_crypto_alerts_below_six_are_not_watched(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self._write(
+                pd.io.common.Path(tmp),
+                [
+                    self._row("HYPEUSD", 5),
+                    self._row("BTCUSD", entry_confirm.MIN_CRYPTO_ZONE_SCORE),
+                ],
+            )
+            with patch.dict(entry_confirm.ALERT_RECORDS["crypto"], {"30m": path}):
+                result = entry_confirm.load_watched_alerts(
+                    "crypto", "30m", pd.Timestamp.now(tz=entry_confirm.IST)
+                )
+
+        self.assertEqual([record["symbol"] for record in result], ["BTCUSD"])
+
+    def test_crypto_alerts_without_a_score_are_not_watched(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self._write(pd.io.common.Path(tmp), [self._row("HYPEUSD", None)])
+            with patch.dict(entry_confirm.ALERT_RECORDS["crypto"], {"30m": path}):
+                result = entry_confirm.load_watched_alerts(
+                    "crypto", "30m", pd.Timestamp.now(tz=entry_confirm.IST)
+                )
+
+        self.assertEqual(result, [])
+
+
 class FormattingTests(unittest.TestCase):
     def test_ping_reports_the_recorded_entry_and_stop_verbatim(self):
         record = watched(entry=4117.10, stop=4131.63, side="short", symbol="BAYERCROP.NS", score=9)
@@ -204,6 +256,30 @@ class ReadyCooldownTests(unittest.TestCase):
         state = {entry_confirm.ready_key(record): stale}
         self.assertFalse(entry_confirm.ready_recently(state, record, now))
 
+    def test_the_same_level_gets_a_six_hour_ready_cooldown(self):
+        now = pd.Timestamp.now(tz=entry_confirm.IST)
+        record = watched(symbol="HYPEUSD", timeframe="30m", entry=80.490, stop=80.868, side="short")
+        state = {entry_confirm.level_ready_key(record): now.timestamp()}
+
+        self.assertTrue(entry_confirm.level_ready_recently(state, record, now))
+
+        different_level = watched(
+            symbol="HYPEUSD", timeframe="30m", entry=80.250, stop=80.868, side="short"
+        )
+        self.assertFalse(entry_confirm.level_ready_recently(state, different_level, now))
+
+    def test_entry_now_is_still_allowed_after_ready_cooldown(self):
+        now = pd.Timestamp.now(tz=entry_confirm.IST)
+        record = watched(symbol="HYPEUSD", timeframe="30m", entry=80.490, stop=80.868, side="short")
+        stale = now - pd.Timedelta(hours=7)
+        state = {entry_confirm.level_ready_key(record): stale.timestamp()}
+
+        stage, reached = entry_confirm.classify(80.500, record, reached_entry=False)
+
+        self.assertEqual(stage, entry_confirm.STAGE_ENTRY)
+        self.assertTrue(reached)
+        self.assertFalse(entry_confirm.level_ready_recently(state, record, now))
+
     def test_prune_state_keeps_the_ready_budget(self):
         # prune_state drops keys for zones no longer being watched. The
         # ready-cooldown bookkeeping is not a zone key and must survive, or
@@ -253,14 +329,12 @@ class DroppedSymbolTests(unittest.TestCase):
 
 
 class WatchBandTests(unittest.TestCase):
-    """The watch band is wide so GET READY has room; the alert band stays narrow.
+    """Silent watch rows must not create live entry-confirm pings.
 
-    Measured over 90 zones price went on to fill: at 0.20% the median gap
-    between entering the band and touching the entry is 8 minutes, and 28% of
-    zones do both inside the same minute. At 0.75% the median is 42 minutes.
-    Widening the alert threshold would have bought that at the cost of a much
-    noisier channel - a third of zones measured never touched at all - so the
-    scanner writes a watch row at 0.75% and still only SENDS at 0.20%.
+    A watch row is not a delivered crypto alert. If entry_confirm reads it, a
+    GET READY can appear for a symbol that never appeared in the crypto 30m
+    alert channel, which makes the entry-confirm channel look tradable before
+    the real alert path has agreed.
     """
 
     def _records(self, tmp, watch_rows, alert_rows):
@@ -289,7 +363,7 @@ class WatchBandTests(unittest.TestCase):
         )
         return w, a
 
-    def test_a_watch_row_is_watched_even_though_it_never_alerted(self):
+    def test_a_watch_row_is_ignored_when_it_never_alerted(self):
         import tempfile
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -298,11 +372,11 @@ class WatchBandTests(unittest.TestCase):
                 got = entry_confirm.load_watched_alerts(
                     "crypto", "30m", pd.Timestamp.now(tz=entry_confirm.IST)
                 )
-        self.assertEqual([r["symbol"] for r in got], ["SOLUSD"])
+        self.assertEqual(got, [])
 
     def test_an_alert_row_supersedes_its_own_watch_row(self):
-        # Same zone, both files. The alert row must win: it is the one the
-        # daily backtest scores, and it carries the delivered message.
+        # Same zone, both files. The alert row must be the only live source:
+        # it is the one the daily backtest scores and the one the user saw.
         import tempfile
 
         with tempfile.TemporaryDirectory() as tmp:

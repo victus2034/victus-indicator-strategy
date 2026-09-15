@@ -22,6 +22,7 @@ from xstock_hybrid_rating import XSTOCK_UNDERLYINGS, is_xstock
 
 IST = ZoneInfo("Asia/Kolkata")
 WEBHOOK_ENV = "DISCORD_DAILY_BACKTEST_WEBHOOK_URL"
+CRYPTO_LEVEL_REPEAT_COOLDOWN = pd.Timedelta(hours=6)
 TIMEFRAME_SETTINGS = {
     "30m": {
         "nse_records": Path(__file__).with_name("nse_alert_records_30m.jsonl"),
@@ -266,10 +267,10 @@ def load_records(path: Path, timeframe_filter: str) -> pd.DataFrame:
     # was evaluated as a separate trade. Across eight days of NSE records,
     # 44% of deliveries were the same zone alerted again.
     #
-    # Six significant figures is far finer than any zone is wide, and the
-    # day is part of the key, so the same level on a later session is still
-    # its own trade. The first delivery wins, which is the one the user
-    # would have acted on.
+    # Six significant figures is far finer than any zone is wide. NSE keeps
+    # the session/day boundary; crypto-style markets use a rolling six-hour
+    # repeat budget so a level repeated across midnight is still one trade.
+    # The first delivery wins, which is the one the user would have acted on.
     day = pd.to_datetime(frame["event_time"], utc=True, errors="coerce").dt.tz_convert(IST).dt.date
     identity = pd.DataFrame({
         "day": day,
@@ -278,8 +279,29 @@ def load_records(path: Path, timeframe_filter: str) -> pd.DataFrame:
         "bottom": frame["zone_bottom"].map(lambda v: f"{float(v):.6g}"),
         "top": frame["zone_top"].map(lambda v: f"{float(v):.6g}"),
     })
-    keep = ~identity.duplicated(keep="first")
-    return frame[keep].reset_index(drop=True)
+    keep = []
+    last_crypto_delivery: dict[tuple[str, str, str, str], pd.Timestamp] = {}
+    seen_nse: set[tuple[object, str, str, str, str]] = set()
+    for index, row in frame.iterrows():
+        key = (
+            str(identity.at[index, "symbol"]),
+            str(identity.at[index, "side"]),
+            str(identity.at[index, "bottom"]),
+            str(identity.at[index, "top"]),
+        )
+        if row.get("market_class") in {MARKET_CRYPTO, MARKET_XSTOCK, MARKET_OTHER}:
+            event_time = pd.Timestamp(row["event_time"]).tz_convert(IST)
+            last_time = last_crypto_delivery.get(key)
+            if last_time is not None and event_time - last_time < CRYPTO_LEVEL_REPEAT_COOLDOWN:
+                keep.append(False)
+                continue
+            last_crypto_delivery[key] = event_time
+            keep.append(True)
+            continue
+        nse_key = (identity.at[index, "day"], *key)
+        keep.append(nse_key not in seen_nse)
+        seen_nse.add(nse_key)
+    return frame[pd.Series(keep, index=frame.index)].reset_index(drop=True)
 
 
 def parse_rating(value) -> float:
