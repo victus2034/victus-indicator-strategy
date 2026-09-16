@@ -3063,14 +3063,15 @@
     "MARUTI.NS|4h|long|12201|12259.7": 1789540367.5315049,
     "LICI.NS|4h|long|386|387.58": 1789531961.7788646,
     "ASIANPAINT.NS|4h|long|2385.5|2395.74": 1789531962.075392,
-    "LUPIN.NS|4h|long|2036.8|2042.98": 1789531962.3088505,
+    "LUPIN.NS|4h|long|2036.8|2042.98": 1789548737.1698306,
     "SBICARD.NS|4h|long|611.1|613.828": 1789540367.7624538,
     "APARINDS.NS|4h|long|16208|16320.5": 1789533156.1474555,
     "FACT.NS|4h|long|739.85|746.209": 1789533156.5729373,
     "LUPIN.NS|4h|long|2036.8|2042.96": 1789536756.4432411,
     "GMRAIRPORT.NS|4h|long|92.3|92.8013": 1789542739.751104,
     "LUPIN.NS|4h|long|2036.8|2042.97": 1789546340.1618161,
-    "PATANJALI.NS|4h|short|363.656|365.5": 1789547573.8896444
+    "PATANJALI.NS|4h|short|363.656|365.5": 1789547573.8896444,
+    "PATANJALI.NS|4h|short|363.655|365.5": 1789548737.492311
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -5088,7 +5089,7 @@
     "last_attempt_at": 0.0
   },
   "GMRAIRPORT.NS|demand|92.3000|92.8018": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789541550.3808289,
     "last_attempt_at": 1789541550.3808289
   },
@@ -6873,9 +6874,9 @@
     "last_attempt_at": 0.0
   },
   "PATANJALI.NS|supply|363.6552|365.5000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789548737.492311,
+    "last_attempt_at": 1789548737.492311
   },
   "PATANJALI.NS|demand|328.3500|330.2777": {
     "in_zone": false,
@@ -18123,7 +18124,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1789547517.315258
+    "4h": 1789548691.4880512
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -76396,9 +76397,9 @@
     "last_attempt_at": 0.0
   },
   "LUPIN.NS|demand|2036.8000|2042.9813": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789548737.1698306,
+    "last_attempt_at": 1789548737.1698306
   },
   "BHARATFORG.NS|demand|1818.4000|1828.2084": {
     "in_zone": false,
@@ -77486,6 +77487,11 @@
     "last_attempt_at": 0.0
   },
   "ONESOURCE.NS|demand|1231.4000|1245.5133": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "CDSL.NS|demand|1183.6000|1188.8531": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
