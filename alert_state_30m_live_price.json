@@ -3241,13 +3241,15 @@
     "shadow:MSFT/USDT:USDT|30m|long|495.47|495.78": 1789549342.8257492,
     "XAUTUSD|30m|short|4359.58|4361.65": 1789563707.3666396,
     "shadow:RIVERUSD|30m|short|1.21595|1.221": 1789556498.6080155,
-    "shadow:XAUTUSD|30m|short|4360.28|4361.65": 1789556498.6102095,
+    "shadow:XAUTUSD|30m|short|4360.28|4361.65": 1789564289.5633247,
     "shadow:SAMSUNG/USDT:USDT|30m|short|186.788|187.04": 1789558895.6333098,
     "HYPEUSD|30m|short|79.49|79.77": 1789559498.8491795,
     "shadow:HYPEUSD|30m|short|79.632|79.77": 1789559498.8491795,
     "shadow:SAMSUNG/USDT:USDT|30m|short|186.792|187.04": 1789560115.643077,
     "shadow:SAMSUNG/USDT:USDT|30m|short|186.793|187.04": 1789561886.5438418,
-    "shadow:METAXUSD|30m|short|679.055|679.6": 1789563095.4505787
+    "shadow:METAXUSD|30m|short|679.055|679.6": 1789563095.4505787,
+    "DOGEUSD|30m|long|0.07831|0.0789365": 1789564288.7954397,
+    "UNIUSD|30m|long|6.161|6.21029": 1789564289.1446443
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14796,7 +14798,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1789563675.3932695
+    "30m": 1789564259.6960628
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -110256,8 +110258,8 @@
     "last_alert_at": 1789563707.3666396
   },
   "shadow:XAUTUSD|supply|4360.27767925|4361.65000000": {
-    "in_zone": false,
-    "last_alert_at": 1789556498.6102095
+    "in_zone": true,
+    "last_alert_at": 1789564289.5633247
   },
   "shadow:METAXUSD|demand|616.57000000|616.95003891": {
     "in_zone": false,
@@ -124584,8 +124586,8 @@
     "last_alert_at": 0.0
   },
   "DOGEUSD|demand|0.07831000|0.07893648": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789564288.7954397
   },
   "shadow:DOGEUSD|demand|0.07831000|0.07845111": {
     "in_zone": false,
@@ -124804,8 +124806,8 @@
     "last_alert_at": 0.0
   },
   "UNIUSD|demand|6.16100000|6.21028800": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789564289.1446443
   },
   "shadow:LINKUSD|demand|10.35900000|10.38104638": {
     "in_zone": false,
@@ -126356,6 +126358,14 @@
     "last_alert_at": 0.0
   },
   "shadow:MSFT/USDT:USDT|demand|491.16000000|491.28941384": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BCHUSD|supply|224.55283527|224.90000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BCHUSD|demand|212.60000000|213.03040968": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
