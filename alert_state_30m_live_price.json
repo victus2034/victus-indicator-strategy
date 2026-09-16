@@ -3242,7 +3242,9 @@
     "XAUTUSD|30m|short|4359.58|4361.65": 1789555307.633564,
     "shadow:RIVERUSD|30m|short|1.21595|1.221": 1789556498.6080155,
     "shadow:XAUTUSD|30m|short|4360.28|4361.65": 1789556498.6102095,
-    "shadow:SAMSUNG/USDT:USDT|30m|short|186.788|187.04": 1789558895.6333098
+    "shadow:SAMSUNG/USDT:USDT|30m|short|186.788|187.04": 1789558895.6333098,
+    "HYPEUSD|30m|short|79.49|79.77": 1789559498.8491795,
+    "shadow:HYPEUSD|30m|short|79.632|79.77": 1789559498.8491795
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14791,7 +14793,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1789558862.8126464
+    "30m": 1789559465.7683675
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -45459,7 +45461,7 @@
     "SAMSUNG/USDT:USDT|30m|short|185.91|187.04": 1789537300.9845676,
     "XAUTUSD|30m|short|4349.8|4354.4": 1789549931.1183307,
     "LINKUSD|30m|long|10.66|10.7453": 1789556498.6035683,
-    "TSLAXUSD|30m|long|355|356.35": 1789557095.798715,
+    "TSLAXUSD|30m|long|355|356.35": 1789559499.117135,
     "MSFT/USDT:USDT|30m|long|496|497.07": 1789540894.0314808,
     "AXTI/USDT:USDT|30m|short|59.33|59.8": 1789550498.7271013,
     "MRVL/USDT:USDT|30m|short|226.74|227.7": 1789557705.3126721,
@@ -110245,11 +110247,11 @@
     "last_alert_at": 0.0
   },
   "XAUTUSD|supply|4359.58000000|4361.65000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789555307.633564
   },
   "shadow:XAUTUSD|supply|4360.27767925|4361.65000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789556498.6102095
   },
   "shadow:METAXUSD|demand|616.57000000|616.95003891": {
@@ -123469,8 +123471,8 @@
     "last_alert_at": 0.0
   },
   "HYPEUSD|supply|79.49000000|79.77000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789559498.8491795
   },
   "shadow:HYPEUSD|supply|79.63197700|79.77000000": {
     "in_zone": false,
@@ -125677,8 +125679,8 @@
     "last_alert_at": 0.0
   },
   "shadow:HYPEUSD|supply|79.63197699|79.77000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789559498.8491795
   },
   "shadow:ZECUSD|supply|1232.94017105|1237.20000000": {
     "in_zone": false,
