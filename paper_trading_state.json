@@ -47913,6 +47913,33 @@
       "target_half": 213.26875,
       "timeframe": "30m",
       "trade_id": "9b55ff3795e59341"
+    },
+    {
+      "alert_time": "2026-09-16T12:51:48.938401+05:30",
+      "cost_r": 0.10630000000000069,
+      "date": "2026-09-16",
+      "entry": 0.08982142857142857,
+      "entry_time": "2026-09-16T12:55:00+05:30",
+      "exit_price": 0.08971364285714285,
+      "exit_time": "2026-09-16T12:55:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.0136999999999987,
+      "outcome": "BE",
+      "rating": 6,
+      "realized_r": 0.11999999999999938,
+      "risk": 0.00089821428571428,
+      "side": "short",
+      "stop": 0.09071964285714285,
+      "stream": "live",
+      "symbol": "HUSD",
+      "target_1": 0.08892321428571429,
+      "target_2": 0.088025,
+      "target_half": 0.08937232142857143,
+      "timeframe": "4h",
+      "trade_id": "f8db28a5ae28133d"
     }
   ],
   "handled": {
@@ -49905,24 +49932,6 @@
       "target_2": 661.0499999999997,
       "target_half": 670.9875,
       "timeframe": "30m"
-    },
-    "f8db28a5ae28133d": {
-      "alert_time": "2026-09-16T12:51:48.938401+05:30",
-      "entry": 0.08982142857142857,
-      "entry_time": "2026-09-16T12:55:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 6,
-      "risk": 0.00089821428571428,
-      "side": "short",
-      "stop": 0.09071964285714285,
-      "stream": "live",
-      "symbol": "HUSD",
-      "target_1": 0.08892321428571429,
-      "target_2": 0.088025,
-      "target_half": 0.08937232142857143,
-      "timeframe": "4h"
     }
   }
 }
