@@ -3222,7 +3222,8 @@
     "shadow:SAMSUNG/USDT:USDT|30m|short|184.586|184.83": 1789527098.8026025,
     "SAMSUNG/USDT:USDT|30m|short|184.68|184.83": 1789527704.830708,
     "NVDAXUSD|30m|short|213.55|214": 1789532501.8964376,
-    "SAMSUNG/USDT:USDT|30m|short|185.91|187.04": 1789531294.1158886
+    "SAMSUNG/USDT:USDT|30m|short|185.91|187.04": 1789531294.1158886,
+    "shadow:NVDAXUSD|30m|short|213.896|214": 1789536097.7992108
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14771,7 +14772,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1789535462.9003937
+    "30m": 1789536066.7803168
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -45429,13 +45430,13 @@
     "AVAXUSD|30m|long|7.248|7.271": 1789498297.7267632,
     "SNDKBUSD|30m|long|1507.1|1517.85": 1789499526.6164129,
     "SLVONUSD|30m|short|58.54|58.7": 1789525899.948326,
-    "METAXUSD|30m|short|674.3|679.6": 1789534293.8516543,
+    "METAXUSD|30m|short|674.3|679.6": 1789536097.79211,
     "SAMSUNG/USDT:USDT|30m|short|184.68|184.83": 1789525899.9707527,
     "NVDAXUSD|30m|short|213.55|214": 1789530095.019421,
     "NVDAXUSD|30m|long|211.3|211.45": 1789527705.0783038,
     "HUSD|30m|short|0.08864|0.08876": 1789527098.7978647,
-    "XAUTUSD|30m|short|4359.58|4361.65": 1789531912.0570796,
-    "MSFT/USDT:USDT|30m|short|502.36|506.11": 1789531912.0672486,
+    "XAUTUSD|30m|short|4359.58|4361.65": 1789536097.7863705,
+    "MSFT/USDT:USDT|30m|short|502.36|506.11": 1789536097.7957351,
     "SAMSUNG/USDT:USDT|30m|short|185.91|187.04": 1789534914.5948334,
     "XAUTUSD|30m|short|4349.8|4354.4": 1789530676.1304476,
     "LINKUSD|30m|long|10.66|10.7453": 1789531294.1111982
@@ -123665,8 +123666,8 @@
     "last_alert_at": 0.0
   },
   "shadow:NVDAXUSD|supply|213.89551570|214.00000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789536097.7992108
   },
   "shadow:NVDAXUSD|demand|211.30000000|211.40093330": {
     "in_zone": false,
@@ -124497,6 +124498,10 @@
     "last_alert_at": 0.0
   },
   "shadow:BNBUSD|demand|702.50000000|703.37964167": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:HYPEUSD|demand|58.03400000|58.11104312": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
