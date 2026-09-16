@@ -1776,7 +1776,9 @@
     "ZORAUSD|4h|long|0.00768|0.00771": 1789466528.934726,
     "shadow:LTCUSD|4h|long|51.67|51.9144": 1789483313.2139893,
     "shadow:VELVETUSD|4h|long|0.0455|0.0496331": 1789489294.2333546,
-    "HUSD|4h|short|0.0898214|0.09054": 1789543308.938401
+    "HUSD|4h|short|0.0898214|0.09054": 1789543308.938401,
+    "shadow:BNBUSD|4h|long|702.96|705.322": 1789546894.8405712,
+    "shadow:HUSD|4h|short|0.0896492|0.09054": 1789546894.8409793
   },
   "ARBUSD|supply|0.08030000|0.08180000": {
     "in_zone": false,
@@ -5355,7 +5357,7 @@
     "last_alert_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1789545670.9329674
+    "4h": 1789546863.8473701
   },
   "HOOD/USDT:USDT|demand|83.83000000|84.37120000": {
     "in_zone": false,
@@ -12946,7 +12948,7 @@
     "ETHUSD|4h|long|2403.09|2422.31": 1789488124.7547371,
     "BNBUSD|4h|long|702.96|707.82": 1789545699.1669934,
     "BNBUSD|4h|long|702.5|707.4": 1789534886.9112344,
-    "HUSD|4h|short|0.0898214|0.09054": 1789544496.147722,
+    "HUSD|4h|short|0.0898214|0.09054": 1789546894.8409793,
     "AAVEUSD|4h|long|119.6|120.52": 1789545699.1638913
   },
   "shadow:LA/USDT|demand|0.05565000|0.05625977": {
@@ -20834,8 +20836,8 @@
     "last_alert_at": 0.0
   },
   "shadow:BNBUSD|demand|702.96000000|705.32187238": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789546894.8405712
   },
   "ZAMA/USDT|supply|0.05314484|0.05357000": {
     "in_zone": false,
@@ -25302,12 +25304,12 @@
     "last_alert_at": 0.0
   },
   "HUSD|supply|0.08982143|0.09054000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789543308.938401
   },
   "shadow:HUSD|supply|0.08964915|0.09054000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789546894.8409793
   },
   "VELVETUSD|supply|0.06279762|0.06330000": {
     "in_zone": false,
@@ -25546,6 +25548,22 @@
     "last_alert_at": 0.0
   },
   "shadow:MSFT/USDT:USDT|demand|486.90000000|487.60631516": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "AAVEUSD|demand|85.18500000|85.78000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:AAVEUSD|demand|85.18500000|85.54895241": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BEAT/USDT|supply|0.10231844|0.10700000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BEAT/USDT|demand|0.07290000|0.07774021": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
