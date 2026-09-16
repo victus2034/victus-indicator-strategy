@@ -120,7 +120,24 @@ WATCH_RECORD_COOLDOWN_SECONDS = int(os.getenv("VICTUS_WATCH_RECORD_COOLDOWN_SECO
 # three bars - twelve hours on 4h - so anything older is dead weight.
 WATCH_RECORD_RETENTION_SECONDS = int(os.getenv("VICTUS_WATCH_RECORD_RETENTION_SECONDS", str(24 * 3600)))
 SL_BUFFER_PCT = 0.10
-ZONE_REPEAT_SUPPRESSION_SECONDS = 60 * 60
+# Guards the exact same zone/price re-alerting after price briefly steps
+# outside the alert band (past MAX_DISTANCE_PCT * REARM_FACTOR) and back in -
+# process_candidate's should_alert only blocks that on ALERT_COOLDOWN once
+# in_zone is reset, so this is the second lock that has to also expire before
+# a rearm can fire.
+#
+# Was a hardcoded 3600 regardless of timeframe, which is fine for 30m (the
+# same order as its own 1800s ALERT_COOLDOWN_SECONDS) but far short of 4h's
+# 14400s default - on the 4h chart, a zone the price merely bounced off the
+# rearm threshold for a couple of hours could clear this lock while
+# ALERT_COOLDOWN was still most of the way from expiring, producing a second,
+# effectively identical alert 2-3 hours after the first (AAVE, 2026-09-16:
+# same zone, same price, same SL, 09:51 and again at 12:31). Tied to
+# ALERT_COOLDOWN_SECONDS so the two locks agree per timeframe instead of one
+# quietly undercutting the other.
+ZONE_REPEAT_SUPPRESSION_SECONDS = int(
+    os.getenv("VICTUS_ZONE_REPEAT_SUPPRESSION_SECONDS", "").strip() or ALERT_COOLDOWN_SECONDS
+)
 EXCHANGE_OPTIONS = {
     "enableRateLimit": True,
     "options": {"defaultType": "future"},

@@ -88,17 +88,21 @@ OTHER_WATCHLIST = [
 # no live data, but a re-audit on 2026-09-01 - two rounds 30s apart, the same
 # method that removed them - had all five answering from delta_india. The
 # fetch chain reaches Delta directly now, so that finding no longer holds.
+#
+# BZ/USDT:USDT, SAMSUNG/USDT:USDT, AXTI/USDT:USDT, SLX/USDT:USDT and
+# MSFT/USDT:USDT dropped 2026-09-16, same reason as the 2026-09-15
+# CRYPTO_WATCHLIST cut above: none of the five is in DELTA_LISTED_SYMBOLS,
+# so every alert on them was only ever reachable on CoinSwitch, which Shiva
+# stopped trading on. BZ/USDT:USDT and SLX/USDT:USDT were additionally
+# already flagged in xstock_hybrid_rating.BLOCKED_XSTOCK_SYMBOLS as
+# resolving to unrelated instruments - they were never valid xStock scans
+# to begin with, CoinSwitch-only or not.
 XSTOCK_WATCHLIST = [
     "TSLAXUSD",
     "METAXUSD",
     "SOXLBUSD",
     "SNDKBUSD",
-    "BZ/USDT:USDT",
-    "SAMSUNG/USDT:USDT",
-    "AXTI/USDT:USDT",
     "MRVL/USDT:USDT",
-    "SLX/USDT:USDT",
-    "MSFT/USDT:USDT",
     "NVDAXUSD",
     # Still out, measured on CoinSwitch over 96 30m candles. The watchlist
     # median was about 200,000 in traded value per candle; every symbol here

@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import time as datetime_time
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -256,6 +257,16 @@ def fetch_crypto_prices(symbols: list[str]) -> dict[str, float]:
 
     Imported lazily: the NSE-only path must not pay for ccxt's exchange
     loading, and a crypto venue being unreachable must not stop NSE pings.
+
+    Run across a thread pool, not sequentially - each symbol here is a
+    fetch_symbol_ohlcv() chain that can try CoinSwitch, Binance, Delta and
+    every fallback exchange in turn before it gives up. One process running
+    "both" timeframes can watch two dozen symbols at once, and at roughly a
+    second or more per symbol that is a run comfortably past this job's
+    5-minute dispatch interval - which does not free the runner, it queues
+    the next dispatch behind it (workflow concurrency is cancel-in-progress:
+    false), and the backlog compounds through the day. scanner.py's own scan
+    already parallelizes this exact chain with SCAN_WORKERS; this mirrors it.
     """
     if not symbols:
         return {}
@@ -265,15 +276,21 @@ def fetch_crypto_prices(symbols: list[str]) -> dict[str, float]:
         print(f"crypto price fetch unavailable: {error}")
         return {}
 
+    def fetch_one(symbol):
+        ohlcv, exchange_name = scanner.fetch_symbol_ohlcv(symbol)
+        candle_close = float(ohlcv[-1][4])
+        price, _ = scanner.live_ticker_price(exchange_name, symbol, candle_close)
+        return float(price)
+
     prices: dict[str, float] = {}
-    for symbol in symbols:
-        try:
-            ohlcv, exchange_name = scanner.fetch_symbol_ohlcv(symbol)
-            candle_close = float(ohlcv[-1][4])
-            price, _ = scanner.live_ticker_price(exchange_name, symbol, candle_close)
-            prices[symbol] = float(price)
-        except Exception as error:
-            print(f"{symbol} price unavailable: {str(error)[:80]}")
+    with ThreadPoolExecutor(max_workers=min(scanner.SCAN_WORKERS, len(symbols))) as executor:
+        futures = {executor.submit(fetch_one, symbol): symbol for symbol in symbols}
+        for future in as_completed(futures):
+            symbol = futures[future]
+            try:
+                prices[symbol] = future.result()
+            except Exception as error:
+                print(f"{symbol} price unavailable: {str(error)[:80]}")
     return prices
 
 

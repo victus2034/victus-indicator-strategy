@@ -32,8 +32,6 @@ class CryptoConfigTests(unittest.TestCase):
             import config
 
             for symbol in (
-                "SLX/USDT:USDT",
-                "MSFT/USDT:USDT",
                 "MRVL/USDT:USDT",
                 # Re-admitted 2026-09-01. It had been dropped for having no
                 # live data, but a re-audit - two rounds 30s apart, the same
@@ -42,6 +40,25 @@ class CryptoConfigTests(unittest.TestCase):
                 "NVDAXUSD",
             ):
                 self.assertIn(symbol, config.XSTOCK_WATCHLIST)
+
+    def test_coinswitch_only_xstock_symbols_are_gone(self):
+        # 2026-09-16: none of these five is in DELTA_LISTED_SYMBOLS, so every
+        # alert on them was only ever reachable on CoinSwitch - same reason
+        # the 2026-09-15 cut removed every CoinSwitch-only crypto symbol.
+        # SLX/USDT:USDT and MSFT/USDT:USDT used to be preserved here
+        # deliberately; that stood only while xStock symbols were allowed to
+        # stay CoinSwitch-only, which is no longer the case.
+        with patch.dict(os.environ, {}, clear=True):
+            import config
+
+            for symbol in (
+                "BZ/USDT:USDT",
+                "SAMSUNG/USDT:USDT",
+                "AXTI/USDT:USDT",
+                "SLX/USDT:USDT",
+                "MSFT/USDT:USDT",
+            ):
+                self.assertNotIn(symbol, config.WATCHLIST)
 
     def test_coinswitch_only_symbols_from_the_volume_sweep_are_gone(self):
         # These three passed the 2026-09-01 liquidity sweep on CoinSwitch
@@ -65,6 +82,16 @@ class CryptoConfigTests(unittest.TestCase):
             import config
 
             self.assertTrue(set(config.CRYPTO_WATCHLIST) <= config.DELTA_LISTED_SYMBOLS)
+
+    def test_every_watchlist_symbol_is_delta_listed(self):
+        # 2026-09-16: the xStock cut extended the same rule to the whole
+        # watchlist, not just crypto - WATCHLIST is now exactly
+        # DELTA_LISTED_SYMBOLS, so the venue tag never reads "CoinSwitch"
+        # for anything scanned, xStock included.
+        with patch.dict(os.environ, {}, clear=True):
+            import config
+
+            self.assertEqual(set(config.WATCHLIST), config.DELTA_LISTED_SYMBOLS)
 
     def test_thin_volume_symbols_are_removed(self):
         # Measured on CoinSwitch over 96 30m candles: all ten traded under
@@ -132,11 +159,16 @@ class CryptoConfigTests(unittest.TestCase):
             self.assertTrue(removed_symbols.isdisjoint(config.WATCHLIST))
 
     def test_crypto_slx_is_excluded_to_avoid_xstock_symbol_collision(self):
+        # SLX/USDT:USDT itself came out of XSTOCK_WATCHLIST entirely on
+        # 2026-09-16 (CoinSwitch-only), but the collision it was named for
+        # still matters: CRYPTO_WATCHLIST must never carry the bare
+        # SLX/USDT contract, since scanner.active_watchlist() cannot tell
+        # it apart from the xStock symbol by suffix alone.
         with patch.dict(os.environ, {}, clear=True):
             import config
 
             self.assertNotIn("SLX/USDT", config.CRYPTO_WATCHLIST)
-            self.assertIn("SLX/USDT:USDT", config.XSTOCK_WATCHLIST)
+            self.assertNotIn("SLX/USDT:USDT", config.XSTOCK_WATCHLIST)
 
     def test_active_watchlist_blocks_misidentified_xstock_contracts(self):
         import scanner
