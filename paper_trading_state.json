@@ -48588,6 +48588,33 @@
       "target_half": 1524.56875,
       "timeframe": "30m",
       "trade_id": "6fd5571bba2bc37f"
+    },
+    {
+      "alert_time": "2026-09-17T00:41:43.732578+05:30",
+      "cost_r": 0.17254008571428503,
+      "date": "2026-09-17",
+      "entry": 56.81,
+      "entry_time": "2026-09-17T00:45:00+05:30",
+      "exit_price": null,
+      "exit_time": "2026-09-17T00:45:00+05:30",
+      "final_result": "data_quality_ambiguous",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "other",
+      "net_realized_r": null,
+      "outcome": "data_quality_ambiguous",
+      "rating": 6,
+      "realized_r": null,
+      "risk": 0.3500000000000014,
+      "side": "long",
+      "stop": 56.46,
+      "stream": "live",
+      "symbol": "SLVONUSD",
+      "target_1": 57.160000000000004,
+      "target_2": 57.510000000000005,
+      "target_half": 56.985,
+      "timeframe": "30m",
+      "trade_id": "0a06e802971df705"
     }
   ],
   "handled": {
@@ -49408,6 +49435,7 @@
     "93103e4d7de8ad87": "filled",
     "9344e194b434482b": "filled",
     "93452f87274f7e01": "filled",
+    "93502bae3d5efe21": "filled",
     "938d846a73055d6a": "filled",
     "93a04b4379a883db": "filled",
     "93a13e3202e9cf94": "filled",
@@ -50516,24 +50544,6 @@
     "ffb4661b7d04cd46": "filled"
   },
   "open": {
-    "0a06e802971df705": {
-      "alert_time": "2026-09-17T00:41:43.732578+05:30",
-      "entry": 56.81,
-      "entry_time": "2026-09-17T00:45:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": true,
-      "market": "other",
-      "rating": 6,
-      "risk": 0.3500000000000014,
-      "side": "long",
-      "stop": 56.46,
-      "stream": "live",
-      "symbol": "SLVONUSD",
-      "target_1": 57.160000000000004,
-      "target_2": 57.510000000000005,
-      "target_half": 56.985,
-      "timeframe": "30m"
-    },
     "27e4d32d014fe354": {
       "alert_time": "2026-09-16T13:51:33.319458+05:30",
       "entry": 497.07,
@@ -50604,6 +50614,24 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
+      "timeframe": "30m"
+    },
+    "93502bae3d5efe21": {
+      "alert_time": "2026-09-17T00:41:44.197826+05:30",
+      "entry": 1517.11,
+      "entry_time": "2026-09-17T00:50:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "rating": 6,
+      "risk": 13.324999999999818,
+      "side": "long",
+      "stop": 1503.785,
+      "stream": "live",
+      "symbol": "SNDKBUSD",
+      "target_1": 1530.4349999999997,
+      "target_2": 1543.7599999999995,
+      "target_half": 1523.7724999999998,
       "timeframe": "30m"
     },
     "b41bf082f9b3aa78": {
