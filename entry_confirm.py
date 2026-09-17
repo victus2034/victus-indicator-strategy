@@ -676,6 +676,28 @@ def resolve_pings(
         swept_only = False
     entry_state["reached_entry"] = reached_entry
 
+    # classify() collapses "stop already hit" and "bounced back into
+    # profit" to the same (None, True) - both go quiet, which is correct
+    # for the run that observes it. But neither classify() nor
+    # reached_entry remembers WHICH one happened, and reached_entry is
+    # only consulted on the profit-bounce branch (progress < 0) - the
+    # STAGE_ENTRY/STAGE_LATE branches don't look at it at all. So a stop
+    # that was genuinely hit, followed by price drifting back into the
+    # 0-100% risk band, used to report ENTRY NOW or LATE again for a trade
+    # that had already failed - found auditing this rather than reported.
+    # Once the stop is hit (by the live price or anything the sweep
+    # touched), this zone is retired for good: no further stage, ever.
+    side = record.get("side", "long")
+    entry = record["_entry"]
+    stop = record["_stop"]
+    stopped_out = bool(entry_state.get("stopped_out", False)) or (
+        risk_progress(price, entry, stop, side) >= 1.0
+        or risk_progress(extreme, entry, stop, side) >= 1.0
+    )
+    entry_state["stopped_out"] = stopped_out
+    if stopped_out:
+        stage = None
+
     pings: list[tuple[int, str]] = []
     if stage is not None and stage > last_stage:
         ready_seen = ready_recently(state, record, now) or level_ready_recently(

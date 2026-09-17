@@ -741,6 +741,41 @@ class ResolvePingsTests(unittest.TestCase):
 
         self.assertEqual(entry_state["reached_entry"], True)
 
+    def test_a_zone_whose_stop_was_hit_is_retired_for_good(self):
+        # A short's stop was swept (recent_high past stop=102) in one run,
+        # then price drifted back into what looks like a fresh ENTRY NOW
+        # band on a later run. Before the stopped_out fix this re-fired
+        # ENTRY NOW for a trade that had already failed.
+        record = watched(entry=100.0, stop=102.0, side="short")
+        now = pd.Timestamp("2026-09-17 16:26", tz=entry_confirm.IST)
+
+        first_pings, entry_state = entry_confirm.resolve_pings(
+            record, price_info(99.8, recent_high=102.5), {}, now
+        )
+        state = {entry_confirm.watch_key(record): entry_state}
+        later = now + pd.Timedelta(minutes=5)
+
+        second_pings, entry_state = entry_confirm.resolve_pings(
+            record, price_info(100.1), state, later
+        )
+
+        self.assertTrue(entry_state["stopped_out"])
+        self.assertEqual(second_pings, [])
+
+    def test_a_zone_never_swept_past_stop_keeps_pinging_normally(self):
+        record = watched(entry=100.0, stop=102.0, side="short")
+        now = pd.Timestamp("2026-09-17 16:26", tz=entry_confirm.IST)
+        # Already past GET READY, so this isolates the READY -> ENTRY step
+        # from the separate (and already-tested) backfill behaviour.
+        state = {entry_confirm.watch_key(record): {"stage": entry_confirm.STAGE_READY}}
+
+        pings, entry_state = entry_confirm.resolve_pings(
+            record, price_info(100.1), state, now
+        )
+
+        self.assertFalse(entry_state["stopped_out"])
+        self.assertEqual([stage for stage, _ in pings], [entry_confirm.STAGE_ENTRY])
+
 
 class ScopeTests(unittest.TestCase):
     def test_it_watches_crypto_over_both_timeframes_by_default(self):
