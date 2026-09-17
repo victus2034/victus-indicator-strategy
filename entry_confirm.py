@@ -22,6 +22,13 @@ happens the GET READY the user would otherwise never get is backfilled into
 the same digest, marked as having moved fast rather than printed as a live
 distance.
 
+The dispatch interval is meant to be 5 minutes but is not reliably that -
+real gaps of 20-40+ minutes happen. Stage detection therefore looks at the
+last couple of candles' range (sweep_extreme()), not only the live ticker's
+single point-in-time price, so a stage price touched and moved past before
+this run got to look is still caught. Messages still show the live price -
+only whether a stage has been reached looks at the swept range.
+
 Every ping from one run goes out as a single digest. Posted one message
 per symbol, a busy run buried the channel under dozens of separate blocks
 and the few that mattered were impossible to pick out.
@@ -258,8 +265,24 @@ def price_decimals(value: float, market: str = "crypto") -> int:
     return 8
 
 
-def fetch_crypto_prices(symbols: list[str]) -> dict[str, float]:
-    """Latest crypto price per symbol, from the same venue chain as the scan.
+# How many of the most recent candles to sweep for a missed stage. The
+# dispatch interval is meant to be 5 minutes but is not reliably that in
+# practice - real gaps up to 40+ minutes happen (queued runs behind a slow
+# one, or the external cron dispatch itself skipping a slot). Two candles
+# covers a 40-minute gap on the 30m feed with room to spare; on 4h it is
+# generously wide, which is fine - a wider sweep only helps the same problem
+# there too.
+SWEEP_CANDLES = 2
+
+
+def fetch_crypto_prices(symbols: list[str]) -> dict[str, dict[str, float]]:
+    """Latest crypto price per symbol, plus the recent candle range swept.
+
+    Each entry is {"price": ..., "recent_low": ..., "recent_high": ...} -
+    the low/high cover the last SWEEP_CANDLES candles (closed and forming),
+    so a stage the live ticker's single point-in-time price would have
+    missed between two polls - price touched the level and moved on before
+    this run happened - can still be caught from the candles.
 
     Imported lazily: the NSE-only path must not pay for ccxt's exchange
     loading, and a crypto venue being unreachable must not stop NSE pings.
@@ -286,9 +309,20 @@ def fetch_crypto_prices(symbols: list[str]) -> dict[str, float]:
         ohlcv, exchange_name = scanner.fetch_symbol_ohlcv(symbol)
         candle_close = float(ohlcv[-1][4])
         price, _ = scanner.live_ticker_price(exchange_name, symbol, candle_close)
-        return float(price)
+        recent = ohlcv[-SWEEP_CANDLES:]
+        recent_low = min(float(candle[3]) for candle in recent)
+        recent_high = max(float(candle[2]) for candle in recent)
+        # The live ticker can itself be beyond either candle boundary -
+        # CoinSwitch's fine price in particular runs ahead of its own last
+        # closed candle - so fold it in rather than trusting the candles
+        # alone to bound where price has actually been.
+        return {
+            "price": float(price),
+            "recent_low": min(recent_low, float(price)),
+            "recent_high": max(recent_high, float(price)),
+        }
 
-    prices: dict[str, float] = {}
+    prices: dict[str, dict[str, float]] = {}
     with ThreadPoolExecutor(max_workers=min(scanner.SCAN_WORKERS, len(symbols))) as executor:
         futures = {executor.submit(fetch_one, symbol): symbol for symbol in symbols}
         for future in as_completed(futures):
@@ -518,21 +552,38 @@ def prune_state(state: dict, active_keys: set[str]) -> dict:
     }
 
 
+def sweep_extreme(price_info: dict, side: str) -> float:
+    """The most favourable price reached recently, for stage detection.
+
+    A long's entry is approached from above, so its favourable extreme is
+    the recent low; a short's is the recent high. Classifying against this
+    instead of only the live point-in-time price catches a stage the
+    ticker's single snapshot would have missed between two polls - price
+    touched the level and moved on before this run happened to look.
+    Falls back to the live price when no sweep range was fetched (NSE).
+    """
+    key = "recent_low" if side == "long" else "recent_high"
+    return float(price_info.get(key, price_info["price"]))
+
+
 def resolve_pings(
-    record: dict, price: float, state: dict, now: pd.Timestamp
+    record: dict, price_info: dict, state: dict, now: pd.Timestamp
 ) -> tuple[list[tuple[int, str]], dict]:
     """Decide this record's pings for one run and its updated entry_state.
 
     Forward-only: a symbol reports each stage once, never on every run,
     which is what turned a handful of trades into a wall of near-identical
-    messages.
+    messages. Messages always show the live price - only the stage
+    decision itself looks at the swept range.
     """
     key = watch_key(record)
     entry_state = state.get(key, {})
     reached_entry = bool(entry_state.get("reached_entry", False))
     last_stage = int(entry_state.get("stage", 0))
 
-    stage, reached_entry = classify(price, record, reached_entry)
+    price = float(price_info["price"])
+    extreme = sweep_extreme(price_info, record.get("side", "long"))
+    stage, reached_entry = classify(extreme, record, reached_entry)
     entry_state["reached_entry"] = reached_entry
 
     pings: list[tuple[int, str]] = []
@@ -614,9 +665,15 @@ def main() -> None:
         return
 
     state = load_state()
-    prices = fetch_prices(
+    # NSE has no sweep range (fetch_prices only ever returns a close), so it
+    # is wrapped to the same {"price": ...} shape crypto's sweep-aware fetch
+    # returns - sweep_extreme() falls back to "price" when the range is absent.
+    nse_prices = fetch_prices(
         sorted({r["symbol"] for r in watched if r["_market"] == "nse"})
     )
+    prices: dict[str, dict[str, float]] = {
+        symbol: {"price": price} for symbol, price in nse_prices.items()
+    }
     prices.update(
         fetch_crypto_prices(
             sorted({r["symbol"] for r in watched if r["_market"] == "crypto"})
@@ -634,10 +691,10 @@ def main() -> None:
     # worth having per zone - still fires when price arrives.
     pings: list[tuple[int, str]] = []
     for record in watched:
-        price = prices.get(record["symbol"])
-        if price is None:
+        price_info = prices.get(record["symbol"])
+        if price_info is None:
             continue
-        record_pings, _ = resolve_pings(record, price, state, now)
+        record_pings, _ = resolve_pings(record, price_info, state, now)
         pings.extend(record_pings)
 
     messages = build_digest(pings, now)

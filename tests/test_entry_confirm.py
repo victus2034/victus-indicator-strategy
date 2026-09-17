@@ -543,6 +543,15 @@ class ApproachBandTests(unittest.TestCase):
         self.assertEqual(stage, entry_confirm.STAGE_READY)
         self.assertFalse(reached)
 
+def price_info(price, recent_low=None, recent_high=None):
+    info = {"price": price}
+    if recent_low is not None:
+        info["recent_low"] = recent_low
+    if recent_high is not None:
+        info["recent_high"] = recent_high
+    return info
+
+
 class ResolvePingsTests(unittest.TestCase):
     def test_jumping_straight_to_entry_backfills_a_get_ready_ping(self):
         # ZORA-shaped case: entry_confirm's first look at this zone finds
@@ -551,7 +560,7 @@ class ResolvePingsTests(unittest.TestCase):
         record = watched(entry=100.0, stop=98.0, side="long")
         now = pd.Timestamp("2026-09-17 13:46", tz=entry_confirm.IST)
 
-        pings, entry_state = entry_confirm.resolve_pings(record, 100.0, {}, now)
+        pings, entry_state = entry_confirm.resolve_pings(record, price_info(100.0), {}, now)
 
         stages = [stage for stage, _ in pings]
         self.assertEqual(stages, [entry_confirm.STAGE_READY, entry_confirm.STAGE_ENTRY])
@@ -562,7 +571,7 @@ class ResolvePingsTests(unittest.TestCase):
         record = watched(entry=100.0, stop=98.0, side="long")
         now = pd.Timestamp("2026-09-17 13:46", tz=entry_confirm.IST)
 
-        pings, _ = entry_confirm.resolve_pings(record, 100.09, {}, now)
+        pings, _ = entry_confirm.resolve_pings(record, price_info(100.09), {}, now)
 
         self.assertEqual([stage for stage, _ in pings], [entry_confirm.STAGE_READY])
         self.assertNotIn("moved fast", pings[0][1])
@@ -572,7 +581,7 @@ class ResolvePingsTests(unittest.TestCase):
         now = pd.Timestamp("2026-09-17 13:46", tz=entry_confirm.IST)
         state = {entry_confirm.ready_key(record): now.timestamp()}
 
-        pings, _ = entry_confirm.resolve_pings(record, 100.0, state, now)
+        pings, _ = entry_confirm.resolve_pings(record, price_info(100.0), state, now)
 
         self.assertEqual([stage for stage, _ in pings], [entry_confirm.STAGE_ENTRY])
 
@@ -581,12 +590,40 @@ class ResolvePingsTests(unittest.TestCase):
         now = pd.Timestamp("2026-09-17 13:46", tz=entry_confirm.IST)
 
         # Past NEAR_SL_FRACTION of the entry-to-stop distance: LATE.
-        pings, _ = entry_confirm.resolve_pings(record, 99.0, {}, now)
+        pings, _ = entry_confirm.resolve_pings(record, price_info(99.0), {}, now)
 
         self.assertEqual(
             [stage for stage, _ in pings],
             [entry_confirm.STAGE_READY, entry_confirm.STAGE_LATE],
         )
+
+    def test_a_stage_reached_between_polls_is_still_caught(self):
+        # The BEAT case: entry_confirm's poll landed after price had already
+        # swept up through the supply entry and back - the live ticker alone
+        # would show it still approaching and never register ENTRY NOW.
+        record = watched(entry=100.0, stop=102.0, side="short")
+        now = pd.Timestamp("2026-09-17 16:26", tz=entry_confirm.IST)
+
+        pings, entry_state = entry_confirm.resolve_pings(
+            record, price_info(99.8, recent_high=100.3), {}, now
+        )
+
+        self.assertEqual(entry_state["stage"], entry_confirm.STAGE_ENTRY)
+        # The message still shows the live price, not the swept extreme.
+        self.assertIn("99.80", pings[-1][1])
+
+    def test_a_swept_touch_that_fully_recovered_is_not_reported_as_ready_only(self):
+        record = watched(entry=100.0, stop=98.0, side="long")
+        now = pd.Timestamp("2026-09-17 16:26", tz=entry_confirm.IST)
+
+        # Live price is back at 101 (past entry, into profit) but the recent
+        # low actually touched 100 - entry was reached and should register,
+        # even though nothing looks like an approach right now.
+        pings, entry_state = entry_confirm.resolve_pings(
+            record, price_info(101.0, recent_low=100.0), {}, now
+        )
+
+        self.assertEqual(entry_state["reached_entry"], True)
 
 
 class ScopeTests(unittest.TestCase):
