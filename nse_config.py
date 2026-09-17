@@ -1,5 +1,9 @@
 NSE_INDEX_CSV_URL = "https://www.niftyindices.com/IndexConstituent/ind_nifty500list.csv"
-NSE_MAX_SYMBOLS = 300
+# Watchlist is a 200-symbol window by market-cap rank, not the top 300. Shiva
+# wants the biggest 100 names (rank 1-100) excluded - already well covered
+# elsewhere - and the next 200 down (rank 101-300) scanned instead.
+NSE_RANK_START = 100
+NSE_RANK_END = 300
 
 # The niftyindices constituent CSV load_watchlist() fetches is alphabetical by
 # company name, not ranked by size, so slicing it at NSE_MAX_SYMBOLS used to mean
