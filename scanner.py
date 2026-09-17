@@ -1576,15 +1576,21 @@ def format_alert(result, zone_type, zone, distance_pct):
     score = result.get(f"{zone_type}_score")
     rating = result.get(f"{zone_type}_rating")
     score_text = ""
-    if rating and rating.get("kind") == "xstock_hybrid":
+    # Same priority record_delivered_zone_alert() uses to pick the "score"
+    # field it persists: prefer the validated rating (ML crypto model or
+    # xstock hybrid), fall back to the transparent rule-based score. These
+    # used to disagree - a BNB alert once showed "9/10" here (the rule-based
+    # score) while the record it wrote down scored it 4 (the ML rating) -
+    # so entry_confirm's MIN_CRYPTO_ZONE_SCORE gate silently dropped a zone
+    # the Discord message had just called a 9. What the user reads here and
+    # what decides whether entry_confirm ever sees the zone must be the same
+    # number.
+    if rating and rating.get("score") is not None:
         score_text = f" | {rating['score']}/10"
     elif score is not None:
         score_text = f" | {score}/10"
-    elif rating:
-        if rating.get("score") is not None:
-            score_text = f" | {rating['score']}/10"
-        elif rating.get("rating"):
-            score_text = f" | {rating['rating']}"
+    elif rating and rating.get("rating"):
+        score_text = f" | {rating['rating']}"
     stop = planned_stop_price(zone_type, zone)
     stop_distance = planned_stop_distance_pct(zone_type, zone)
     # One width for every number in the message, chosen from the entry - so the

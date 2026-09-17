@@ -161,6 +161,27 @@ class AlertFormatTests(unittest.TestCase):
         self.assertTrue(message.startswith("BTC | BUY | 9/10"))
         self.assertNotIn("\n\n", message)
 
+    def test_a_plain_crypto_rating_also_overrides_the_rule_based_score(self):
+        # The BNB case: the message showed "9/10" (demand_score, rule-based)
+        # while record_delivered_zone_alert() persisted 4 (the ML rating's
+        # own score) - entry_confirm.MIN_CRYPTO_ZONE_SCORE then silently
+        # dropped a zone the alert had just called a 9. The two must agree:
+        # whichever score the record keeps is the one the message shows.
+        result = {
+            "symbol": "BNBUSD",
+            "price": 732.04,
+            "supply_score": 9,
+            "supply_rating": {
+                "score": 4,
+            },
+        }
+        zone = {"bottom": 731.75, "top": 733.5}
+
+        message = scanner.format_alert(result, "supply", zone, 0.04)
+
+        self.assertTrue(message.startswith("BNB | SELL | 4/10"))
+        self.assertNotIn("9/10", message)
+
     def test_xstock_hybrid_score_overrides_base_display_score(self):
         result = {
             "symbol": "NVDAXUSD",
