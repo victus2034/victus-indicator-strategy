@@ -135,7 +135,12 @@ jobs:
           }
 
           if [ "$MARKET" = "both" ]; then
-            MARKETS="nse crypto xstock"
+            # "other" (PAXG, SLVONUSD) is a real, fully-supported market -
+            # daily_backtest_summary.py itself lists it as a --market choice
+            # - but was missing here, so it never ran on the daily cadence.
+            # SLVONUSD alerts regularly on the live watchlist and had zero
+            # finalized records to show for it.
+            MARKETS="nse crypto xstock other"
           else
             MARKETS="$MARKET"
           fi
