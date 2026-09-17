@@ -45,7 +45,7 @@ class FillTests(unittest.TestCase):
         frames = {"TCS.NS": bars([[101.5, 100.8, 101.0], [101.0, 99.5, 99.8]])}
         opened = paper_trading.open_new_positions(state, [alert()], frames, NOW)
         self.assertEqual(len(opened), 1)
-        self.assertAlmostEqual(state["open"]["t1"]["entry"], 100.0)
+        self.assertAlmostEqual(state["open"][opened[0]]["entry"], 100.0)
 
     def test_bars_before_the_alert_cannot_fill_it(self):
         state = fresh_state()
@@ -62,6 +62,25 @@ class FillTests(unittest.TestCase):
         paper_trading.open_new_positions(state, [alert()], frames, NOW)
         state["open"].clear()  # simulate it having closed
         self.assertEqual(paper_trading.open_new_positions(state, [alert()], frames, NOW), [])
+
+    def test_the_same_zone_re_alerted_with_a_different_scanner_trade_id_opens_once(self):
+        # The scanner's own "trade_id" embeds delivered_at_utc, so it is
+        # unique on every single delivery even when it is the same real
+        # zone re-alerted (which daily_backtest_summary.load_records()
+        # measured as 44% of NSE deliveries). Preferring that field here
+        # used to open a fresh paper position for each re-alert of the same
+        # zone, overcounting against the backtest.
+        state = fresh_state()
+        frames = {"TCS.NS": bars([[101.0, 99.5, 99.8]])}
+        first = alert(trade_id="scan-run-1")
+        second = alert(trade_id="scan-run-2", delivered="2026-08-17 09:56")
+
+        opened_first = paper_trading.open_new_positions(state, [first], frames, NOW)
+        opened_second = paper_trading.open_new_positions(state, [second], frames, NOW)
+
+        self.assertEqual(len(opened_first), 1)
+        self.assertEqual(opened_second, [])
+        self.assertEqual(len(state["open"]), 1)
 
 
 class OutcomeTests(unittest.TestCase):
@@ -166,7 +185,8 @@ class OutcomeTests(unittest.TestCase):
                 columns=["high", "low", "close"],
             )
         }
-        state["open"]["t1"]["entry_time"] = "2026-08-17 15:05:00+05:30"
+        only_trade_id = next(iter(state["open"]))
+        state["open"][only_trade_id]["entry_time"] = "2026-08-17 15:05:00+05:30"
         closed = paper_trading.evaluate_open_positions(
             state, frames, pd.Timestamp("2026-08-17 15:30", tz=IST)
         )

@@ -212,9 +212,22 @@ def open_new_positions(
     geometry: str = "live",
 ) -> list[str]:
     """Fill a virtual limit order only if price genuinely reached entry."""
+    # One zone, one trade - entry_confirm.watch_key(), not the scanner's own
+    # "trade_id" field. The scanner re-alerts a live zone on every scan
+    # (daily_backtest_summary.load_records() measured 44% of NSE deliveries
+    # as repeats of the same zone, and collapses them the same way this
+    # does), but its trade_id embeds delivered_at_utc and so is unique on
+    # every single delivery - preferring it here meant paper trading opened
+    # a fresh virtual position for the same real zone every time it was
+    # re-alerted, overcounting against the backtest it is meant to be
+    # compared with. watch_key has no delivered_at in it, so a re-alert of
+    # the same zone (drifted for a venue flip or not - coalesce_venue_drift()
+    # already normalizes that in load_watched_alerts) maps to the same key,
+    # and the state["handled"]/state["open"] check below is what turns that
+    # into "already handled, skip".
     opened = []
     for record in watched:
-        trade_id = record.get("trade_id") or entry_confirm.watch_key(record)
+        trade_id = entry_confirm.watch_key(record)
         if geometry != "live":
             # Its own id space. A shadow alert on the same zone as a live one
             # would otherwise collide and one of the two would be dropped.
