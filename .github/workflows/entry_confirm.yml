@@ -115,18 +115,27 @@ jobs:
           # for both - 30m is chosen because a stale price is what caused
           # this, and a 30m candle is the fresher of the two for either.
           VICTUS_TIMEFRAME: "30m"
-          # How far out GET READY fires. Tried 0.75% to match
+          # How far out GET READY fires. Tried 0.75% on 8 Sep to match
           # config.WATCH_DISTANCE_PCT (the scanner's silent watch band) so
-          # GET READY could fire well before the real alert - reverted 9 Sep,
-          # one day later: it meant GET READY pinging on zones 0.53-0.99% away
-          # that the real alert in #crypto-30m-alerts never fired for at all,
-          # which read as noise rather than an early warning. Back at 0.20% to
-          # match MAX_DISTANCE_PCT, so a GET READY only ever precedes a zone
-          # that is genuinely about to alert. The scanner still writes a watch
-          # row at 0.75% - that stays, it only feeds entry_confirm the zone
-          # earlier so its own stage tracking has a head start; it does not by
-          # itself cause a ping until price is actually this close.
-          VICTUS_APPROACH_THRESHOLD_PCT: "0.20"
+          # GET READY could fire well before the real alert - reverted the
+          # next day: at that point entry_confirm WAS reading the scanner's
+          # pre-alert watch rows for a head start, and 0.75% pinged GET READY
+          # on zones 0.53-0.99% away that never got a real alert at all,
+          # which read as noise rather than an early warning. Went back to
+          # 0.20% (= MAX_DISTANCE_PCT) alongside dropping the watch-row read
+          # entirely - entry_confirm.WATCH_RECORDS is unused now, it only
+          # watches zones a real alert already delivered.
+          #
+          # That changes the tradeoff: with watch rows out of the picture,
+          # widening this can no longer ping a zone that never got a real
+          # alert - every zone entry_confirm ever looks at already has one.
+          # Raised to 0.50% on 17 Sep so GET READY has real separation from
+          # ENTRY NOW instead of firing in the same run: at 0.20% (equal to
+          # the alert's own MAX_DISTANCE_PCT), a zone is already as close as
+          # GET READY's own trigger the moment entry_confirm first sees it,
+          # so the two stages routinely landed in the same digest - Shiva's
+          # Issue 14.
+          VICTUS_APPROACH_THRESHOLD_PCT: "0.50"
           INPUT_TIMEFRAME: ${{ github.event.inputs.timeframe }}
           INPUT_MARKET: ${{ github.event.inputs.market }}
           INPUT_DRY_RUN: ${{ github.event.inputs.dry_run }}
