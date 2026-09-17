@@ -21,7 +21,6 @@ from nse_config import (
     DISCORD_NSE_WEBHOOK_URL,
     DISCORD_STATUS_WEBHOOK_URL,
     DISCORD_WEBHOOK_URL,
-    FALLBACK_WATCHLIST,
     HISTORY_OF_ZONES_TO_KEEP,
     MARKET_CLOSE,
     MARKET_OPEN,
@@ -257,8 +256,17 @@ def load_watchlist():
         return symbols[NSE_RANK_START:NSE_RANK_END]
     except Exception as error:
         print(f"Using fallback NSE watchlist because index CSV failed: {error}")
-        NSE_SECTOR_MAP = {symbol: "Unclassified" for symbol in FALLBACK_WATCHLIST}
-        return FALLBACK_WATCHLIST
+        # FALLBACK_WATCHLIST only covers rank ~1-100 - returning it directly
+        # here used to be fine when the live path also took the top of the
+        # list, but now the live path deliberately SKIPS rank 1-100 for
+        # rank 101-300. Returning FALLBACK_WATCHLIST unsliced on a CSV outage
+        # would silently scan exactly the top-100 names the live path exists
+        # to exclude. NSE_MARKET_CAP_RANK already runs to rank 399, so slice
+        # it the same way the live path does instead of falling back to a
+        # differently-scoped list.
+        symbols = NSE_MARKET_CAP_RANK[NSE_RANK_START:NSE_RANK_END]
+        NSE_SECTOR_MAP = {symbol: "Unclassified" for symbol in symbols}
+        return symbols
 
 
 def atr(df, period=50):
