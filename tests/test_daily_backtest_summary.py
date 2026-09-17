@@ -51,6 +51,15 @@ def xstock_alert(**overrides):
     return alert
 
 
+def other_alert(**overrides):
+    alert = crypto_alert(
+        symbol="SLVONUSD",
+        zone_id="SLVONUSD|long|99.00000000|100.00000000",
+    )
+    alert.update(overrides)
+    return alert
+
+
 def crypto_frame(start="2026-08-04 10:00", rows=None):
     rows = rows or [
         (101.0, 101.2, 100.8, 101.0),
@@ -947,6 +956,45 @@ class DailyBacktestSummaryTests(unittest.TestCase):
         # The rally arrives twelve hours after entry, well past the six-hour
         # horizon, so it must not be credited.
         self.assertNotIn(result["final_result"], {"+1R", "+2R"})
+
+    def test_other_market_uses_the_same_six_hour_window_as_crypto(self):
+        # SLVONUSD (market "other") was missing from uses_six_hour_evaluation():
+        # run_backtest() already gives it the same provisional window as
+        # crypto via crypto_tracking_end(), but simulate_alert() skipped the
+        # real six-hour maturity gate and re-scope entirely, so a filled
+        # trade could be graded within minutes of the alert instead of
+        # after six real hours actually passed.
+        future_start = (pd.Timestamp.now(tz=summary.IST) + pd.Timedelta(hours=1)).floor("30min")
+        frame = crypto_frame(
+            start=future_start,
+            rows=[
+                (101.0, 101.2, 100.8, 101.0),
+                (100.0, 100.3, 100.0, 100.1),
+            ],
+        )
+        alert = other_alert(event_time=frame.index[0], event_time_ist=frame.index[0])
+
+        result = summary.simulate_alert(frame, alert, 0, 1)
+
+        self.assertEqual(result["final_result"], "Pending")
+
+    def test_other_market_no_entry_waits_until_entry_window_closes(self):
+        # Without the fix this graded "zone_not_touched" - a finished,
+        # negative outcome - even though real time hadn't reached the end
+        # of the provisional window yet.
+        future_start = (pd.Timestamp.now(tz=summary.IST) + pd.Timedelta(hours=1)).floor("30min")
+        frame = crypto_frame(
+            start=future_start,
+            rows=[
+                (101.0, 101.2, 100.8, 101.0),
+                (101.0, 101.2, 100.8, 101.0),
+            ],
+        )
+        alert = other_alert(event_time=frame.index[0], event_time_ist=frame.index[0])
+
+        result = summary.simulate_alert(frame, alert, 0, 1)
+
+        self.assertEqual(result["outcome"], "immature")
 
     def test_finalized_records_include_stable_id_and_timing_fields(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -1225,8 +1225,20 @@ def uses_six_hour_evaluation(symbol: str) -> bool:
     Waiting and the market totalled 0.00R no matter what it did. They
     trade on the same venues as crypto, around the clock, and are
     alerted on the same cadence, so they are judged the same way.
+
+    "other" (PAXG, SLVON) is included for the same reason and was missing
+    it: run_backtest() already routes "other" through crypto_tracking_end()
+    for its outer, provisional window, but simulate_alert() only applies
+    the real six-hour maturity gate and re-scoping when this function says
+    yes. Without it here, an "other" trade with no entry yet inside its
+    provisional window was graded "zone_not_touched" - a finished, negative
+    outcome - even if the real six-hour window hadn't elapsed; one that did
+    find an entry skipped the maturity check and re-scope entirely, so it
+    could be graded SL/Neither/etc. within minutes of the alert instead of
+    after six real hours. SLVONUSD alerts regularly on the live watchlist,
+    so this wasn't a hypothetical - it was quietly mis-grading real trades.
     """
-    return market_class(symbol) in {MARKET_CRYPTO, MARKET_XSTOCK}
+    return market_class(symbol) in {MARKET_CRYPTO, MARKET_XSTOCK, MARKET_OTHER}
 
 
 def pending_trade(
