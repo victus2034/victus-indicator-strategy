@@ -687,8 +687,34 @@ class ResolvePingsTests(unittest.TestCase):
         )
 
         self.assertEqual(entry_state["stage"], entry_confirm.STAGE_ENTRY)
-        # The message still shows the live price, not the swept extreme.
-        self.assertIn("99.80", pings[-1][1])
+        # The message shows the price that actually earned ENTRY NOW (the
+        # swept high), not the live price - showing 99.80 next to "ENTRY
+        # NOW" while price had since run back into profit is the exact
+        # self-contradiction ("LATE ... -108% risk used") this was fixed
+        # to stop printing.
+        self.assertIn("100.30", pings[-1][1])
+        self.assertIn("peaked here", pings[-1][1])
+
+    def test_late_decided_from_a_swept_high_never_shows_negative_risk_used(self):
+        # Reproduces the exact BEAT report: price swept close enough to the
+        # stop to count as LATE, then ran back deep into profit before this
+        # poll looked. The live price alone would make "risk used" negative
+        # under a LATE header - nonsensical - so the message must show the
+        # swept price instead.
+        record = watched(entry=0.08437, stop=0.08479, side="short")
+        now = pd.Timestamp("2026-09-17 17:11", tz=entry_confirm.IST)
+        state = {
+            entry_confirm.watch_key(record): {"stage": entry_confirm.STAGE_ENTRY, "reached_entry": True}
+        }
+
+        pings, entry_state = entry_confirm.resolve_pings(
+            record, price_info(0.08391, recent_high=0.08462), state, now
+        )
+
+        self.assertEqual(entry_state["stage"], entry_confirm.STAGE_LATE)
+        self.assertEqual(len(pings), 1)
+        self.assertNotIn("-", pings[0][1].split("risk used")[0].split("·")[-1])
+        self.assertIn("peaked here", pings[0][1])
 
     def test_a_swept_touch_that_fully_recovered_is_not_reported_as_ready_only(self):
         record = watched(entry=100.0, stop=98.0, side="long")

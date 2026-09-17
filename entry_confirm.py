@@ -481,8 +481,17 @@ def broker_label(record: dict) -> str | None:
     return "Delta" if symbol in DELTA_LISTED_SYMBOLS else "CoinSwitch"
 
 
-def format_line(stage: int, price: float, record: dict, backfilled: bool = False) -> str:
-    """One line per alert. Three lines each turned a busy run into a wall."""
+def format_line(stage: int, price: float, record: dict, note: str = "") -> str:
+    """One line per alert. Three lines each turned a busy run into a wall.
+
+    `price` and `note` must describe the same moment: the number printed
+    always has to justify the stage next to it. A LATE ping built from a
+    swept high but displayed with the live price once produced "LATE ·
+    NEAR SL ... -108% risk used" - a self-contradiction, since price had
+    since run back into profit. Whichever price actually earned the stage
+    (see resolve_pings) is the one that belongs here; note says so when
+    that price is not simply "right now".
+    """
     entry = record["_entry"]
     stop = record["_stop"]
     side = "BUY" if record.get("side") == "long" else "SELL"
@@ -499,15 +508,12 @@ def format_line(stage: int, price: float, record: dict, backfilled: bool = False
 
     broker = broker_label(record)
     venue = f" · {broker}" if broker else ""
+    note_text = f" · {note}" if note else ""
 
     if stage == STAGE_READY:
         away = abs(price - entry) / entry * 100.0
-        # backfilled: price already reached entry by the time this poll saw
-        # it, so "away" would misleadingly read ~0.00% - say so instead of
-        # printing a distance that no longer means "not there yet".
-        note = " · moved fast, already at entry" if backfilled else ""
-        return f"{head} · {levels} · {away:.2f}% away · {stop_text}{venue}{note}"
-    return f"{head} · {levels} · {stop_text} · {progress * 100:.0f}% risk used{venue}"
+        return f"{head} · {levels} · {away:.2f}% away · {stop_text}{venue}{note_text}"
+    return f"{head} · {levels} · {stop_text} · {progress * 100:.0f}% risk used{venue}{note_text}"
 
 
 def build_digest(pings: list[tuple[int, str]], now: pd.Timestamp) -> list[str]:
@@ -622,6 +628,10 @@ def sweep_extreme(price_info: dict, side: str) -> float:
     return float(price_info.get(key, price_info["price"]))
 
 
+def _rank(stage: int | None) -> int:
+    return -1 if stage is None else stage
+
+
 def resolve_pings(
     record: dict, price_info: dict, state: dict, now: pd.Timestamp
 ) -> tuple[list[tuple[int, str]], dict]:
@@ -629,8 +639,17 @@ def resolve_pings(
 
     Forward-only: a symbol reports each stage once, never on every run,
     which is what turned a handful of trades into a wall of near-identical
-    messages. Messages always show the live price - only the stage
-    decision itself looks at the swept range.
+    messages.
+
+    Classified twice - once against the live price, once against the
+    swept range (sweep_extreme()) - and whichever is more advanced wins,
+    so a stage reached and left behind between two polls still registers.
+    Critically, the PRICE THAT WON is also the price the message shows: a
+    LATE ping decided from a swept high but displayed with a live price
+    that had since run back into profit once printed "LATE · NEAR SL ...
+    -108% risk used" - a stage and a number that flatly contradicted each
+    other. When the swept price is what earned the stage, the message
+    says so instead of silently presenting a stale peak as "now".
     """
     key = watch_key(record)
     entry_state = state.get(key, {})
@@ -639,7 +658,18 @@ def resolve_pings(
 
     price = float(price_info["price"])
     extreme = sweep_extreme(price_info, record.get("side", "long"))
-    stage, reached_entry = classify(extreme, record, reached_entry)
+    stage_now, reached_now = classify(price, record, reached_entry)
+    stage_swept, reached_swept = classify(extreme, record, reached_entry)
+    reached_entry = reached_now or reached_swept
+
+    if _rank(stage_swept) > _rank(stage_now):
+        stage = stage_swept
+        display_price = extreme
+        swept_only = True
+    else:
+        stage = stage_now
+        display_price = price
+        swept_only = False
     entry_state["reached_entry"] = reached_entry
 
     pings: list[tuple[int, str]] = []
@@ -658,7 +688,12 @@ def resolve_pings(
             # to ENTRY NOW still comes with its heads-up.
             state[ready_key(record)] = now.timestamp()
             state[level_ready_key(record)] = now.timestamp()
-            pings.append((STAGE_READY, format_line(STAGE_READY, price, record, backfilled=True)))
+            pings.append(
+                (
+                    STAGE_READY,
+                    format_line(STAGE_READY, price, record, note="moved fast, already at entry"),
+                )
+            )
 
         if stage == STAGE_READY and ready_seen:
             entry_state["stage"] = stage
@@ -666,7 +701,8 @@ def resolve_pings(
             if stage == STAGE_READY:
                 state[ready_key(record)] = now.timestamp()
                 state[level_ready_key(record)] = now.timestamp()
-            pings.append((stage, format_line(stage, price, record)))
+            note = "peaked here since the last check, price has since moved" if swept_only else ""
+            pings.append((stage, format_line(stage, display_price, record, note=note)))
             entry_state["stage"] = stage
 
     state[key] = entry_state
