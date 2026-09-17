@@ -1266,6 +1266,45 @@ class RepeatDeliveryTests(unittest.TestCase):
         self.assertEqual(kept.hour, 4)
         self.assertEqual(kept.minute, 0)
 
+    def test_a_venue_flipped_repeat_is_still_caught_as_one_trade(self):
+        # A CoinSwitch->Delta (or any) venue flip shifts a real zone's edges
+        # by up to ~0.7%, measured on the real alert log - far past an
+        # exact/6-sig-fig match but still the same trade. bottom AND top
+        # both drift here, not just top like the exact-match tests above.
+        rows = [
+            self._record("2026-08-26T17:45:00+00:00", 100.0, symbol="HYPEUSD"),
+            {**self._record("2026-08-26T18:15:00+00:00", 100.3, symbol="HYPEUSD"), "zone_bottom": 99.3},
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            frame = summary.load_records(self._write(tmp, rows), "30m")
+
+        self.assertEqual(len(frame), 1)
+
+    def test_a_genuinely_different_zone_survives_even_with_drift_tolerance(self):
+        # 5% apart is well past the 1% tolerance - two real, distinct zones.
+        rows = [
+            self._record("2026-08-26T17:45:00+00:00", 100.0, symbol="HYPEUSD"),
+            {**self._record("2026-08-26T18:15:00+00:00", 105.0, symbol="HYPEUSD"), "zone_bottom": 104.0},
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            frame = summary.load_records(self._write(tmp, rows), "30m")
+
+        self.assertEqual(len(frame), 2)
+
+    def test_nse_edge_drift_within_a_session_is_still_one_trade(self):
+        # NSE has no venue flip, but the comment on load_records() says the
+        # scanner's ATR-driven edges drift scan to scan too - same-day NSE
+        # dedup needs the same tolerance, not just crypto's.
+        rows = [
+            self._record("2026-08-26T04:00:00+00:00", 100.0),
+            {**self._record("2026-08-26T04:20:00+00:00", 100.4), "zone_bottom": 99.4},
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            frame = summary.load_records(self._write(tmp, rows), "30m")
+
+        self.assertEqual(len(frame), 1)
+
+
 class OutcomeLabelTests(unittest.TestCase):
     def test_the_internal_ambiguous_name_never_reaches_a_report(self):
         # A dry run caught this leaking as data_quality_ambiguous into

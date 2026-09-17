@@ -267,41 +267,76 @@ def load_records(path: Path, timeframe_filter: str) -> pd.DataFrame:
     # was evaluated as a separate trade. Across eight days of NSE records,
     # 44% of deliveries were the same zone alerted again.
     #
-    # Six significant figures is far finer than any zone is wide. NSE keeps
-    # the session/day boundary; crypto-style markets use a rolling six-hour
-    # repeat budget so a level repeated across midnight is still one trade.
-    # The first delivery wins, which is the one the user would have acted on.
+    # An EXACT match (originally six significant figures) still missed a
+    # real class of repeat: crypto's fetch_symbol_ohlcv() tries CoinSwitch
+    # first each scan and falls back to Binance/Delta/others when it's slow
+    # or fails, so the same real zone can come back priced from a different
+    # venue scan to scan - measured on the real 30m alert log, 290 same
+    # symbol/side pairs inside the crypto cooldown window were within 1% of
+    # each other (plausibly the same zone) but NOT an exact match, so each
+    # one was still counted as its own trade. _same_zone() below is
+    # tolerance-based instead - generous against that 0.02-0.72% drift,
+    # tight against test_a_genuinely_different_zone_survives's 1.3% gap.
+    #
+    # NSE keeps the session/day boundary; crypto-style markets use a rolling
+    # six-hour repeat budget so a level repeated across midnight is still one
+    # trade. The first delivery wins, which is the one the user would have
+    # acted on, and its own edges are what later repeats are compared against
+    # - not a running average - so drift can't creep past tolerance one
+    # small hop at a time.
     day = pd.to_datetime(frame["event_time"], utc=True, errors="coerce").dt.tz_convert(IST).dt.date
-    identity = pd.DataFrame({
-        "day": day,
-        "symbol": frame["symbol"],
-        "side": frame["side"],
-        "bottom": frame["zone_bottom"].map(lambda v: f"{float(v):.6g}"),
-        "top": frame["zone_top"].map(lambda v: f"{float(v):.6g}"),
-    })
     keep = []
-    last_crypto_delivery: dict[tuple[str, str, str, str], pd.Timestamp] = {}
-    seen_nse: set[tuple[object, str, str, str, str]] = set()
+    crypto_anchors: dict[tuple[str, str], list[dict]] = {}
+    nse_anchors: dict[tuple[object, str, str], list[dict]] = {}
     for index, row in frame.iterrows():
-        key = (
-            str(identity.at[index, "symbol"]),
-            str(identity.at[index, "side"]),
-            str(identity.at[index, "bottom"]),
-            str(identity.at[index, "top"]),
-        )
+        symbol = str(row["symbol"])
+        side = str(row["side"])
+        bottom = float(row["zone_bottom"])
+        top = float(row["zone_top"])
         if row.get("market_class") in {MARKET_CRYPTO, MARKET_XSTOCK, MARKET_OTHER}:
             event_time = pd.Timestamp(row["event_time"]).tz_convert(IST)
-            last_time = last_crypto_delivery.get(key)
-            if last_time is not None and event_time - last_time < CRYPTO_LEVEL_REPEAT_COOLDOWN:
+            key = (symbol, side)
+            anchors = crypto_anchors.setdefault(key, [])
+            anchors[:] = [
+                anchor
+                for anchor in anchors
+                if event_time - anchor["last_time"] < CRYPTO_LEVEL_REPEAT_COOLDOWN
+            ]
+            match = next(
+                (a for a in anchors if _same_zone(a["bottom"], a["top"], bottom, top)),
+                None,
+            )
+            if match is not None:
+                match["last_time"] = event_time
                 keep.append(False)
                 continue
-            last_crypto_delivery[key] = event_time
+            anchors.append({"bottom": bottom, "top": top, "last_time": event_time})
             keep.append(True)
             continue
-        nse_key = (identity.at[index, "day"], *key)
-        keep.append(nse_key not in seen_nse)
-        seen_nse.add(nse_key)
+
+        nse_key = (day.iat[index], symbol, side)
+        anchors = nse_anchors.setdefault(nse_key, [])
+        match = next(
+            (a for a in anchors if _same_zone(a["bottom"], a["top"], bottom, top)),
+            None,
+        )
+        keep.append(match is None)
+        if match is None:
+            anchors.append({"bottom": bottom, "top": top})
     return frame[pd.Series(keep, index=frame.index)].reset_index(drop=True)
+
+
+# See load_records()'s dedup comment for why this replaced an exact
+# zone_bottom/zone_top match.
+ZONE_DEDUP_TOLERANCE_PCT = 1.0
+
+
+def _same_zone(a_bottom: float, a_top: float, b_bottom: float, b_top: float) -> bool:
+    if a_bottom <= 0 or a_top <= 0:
+        return False
+    bottom_diff = abs(a_bottom - b_bottom) / a_bottom * 100.0
+    top_diff = abs(a_top - b_top) / a_top * 100.0
+    return bottom_diff <= ZONE_DEDUP_TOLERANCE_PCT and top_diff <= ZONE_DEDUP_TOLERANCE_PCT
 
 
 def parse_rating(value) -> float:
