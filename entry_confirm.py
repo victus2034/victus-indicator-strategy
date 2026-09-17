@@ -162,6 +162,57 @@ def save_state(state: dict) -> None:
     STATE_PATH.write_text(json.dumps(state, indent=2, sort_keys=True), encoding="utf-8")
 
 
+# How different a re-alert's entry can be from an earlier one on the same
+# symbol/side/timeframe and still count as a venue flip on the same real
+# zone rather than a genuinely new one. fetch_symbol_ohlcv() tries CoinSwitch
+# first each scan and falls back to Binance/Delta/others when it is slow or
+# fails, so the same real level can come back priced from a different venue
+# scan to scan - measured across 205 same-symbol/side/timeframe pairs inside
+# a 3-hour window, the shift was 0.02-0.72%. 1% is generous against that and
+# tight against anything that was ever a genuinely different zone in the
+# same sample.
+WATCH_KEY_MERGE_TOLERANCE_PCT = 1.0
+
+
+def coalesce_venue_drift(records: list[dict], window: pd.Timedelta) -> None:
+    """Snap a record's entry/stop to an earlier one's own, in place, when
+    they are plausibly the same real zone re-alerted from a different venue.
+
+    Left alone, a venue flip shifts the price just enough to clear
+    watch_key's 6-significant-figure tolerance and look like a brand-new
+    zone, restarting the GET READY -> ENTRY NOW cycle for a trade the user
+    already confirmed - the "coinswitch alert still gets on the entry
+    confirm" report. The first record in a matching run is kept as the
+    group's anchor and every later record within tolerance of it (not of
+    its immediate predecessor, so drift cannot creep past the tolerance one
+    small hop at a time) is rewritten to the anchor's own levels, which is
+    what gives them the same watch_key downstream.
+    """
+    groups: dict[tuple, list[dict]] = {}
+    for record in records:
+        key = (
+            str(record.get("symbol", "")).upper(),
+            record.get("side"),
+            record.get("timeframe"),
+        )
+        groups.setdefault(key, []).append(record)
+
+    for group in groups.values():
+        group.sort(key=lambda r: r["_delivered"])
+        anchor = None
+        for record in group:
+            if anchor is not None:
+                gap = record["_delivered"] - anchor["_delivered"]
+                pct_diff = (
+                    abs(record["_entry"] - anchor["_entry"]) / anchor["_entry"] * 100.0
+                )
+                if gap <= window and pct_diff <= WATCH_KEY_MERGE_TOLERANCE_PCT:
+                    record["_entry"] = anchor["_entry"]
+                    record["_stop"] = anchor["_stop"]
+                    continue
+            anchor = record
+
+
 def load_watched_alerts(
     market: str, timeframe: str, now: pd.Timestamp, records_path=None
 ) -> list[dict]:
@@ -176,7 +227,7 @@ def load_watched_alerts(
         paths = [ALERT_RECORDS[market][timeframe]]
 
     window = pd.Timedelta(minutes=BAR_MINUTES[timeframe] * WATCH_BARS)
-    watched: dict[str, dict] = {}
+    parsed: list[dict] = []
     for path in paths:
         if not path.exists():
             continue
@@ -212,7 +263,12 @@ def load_watched_alerts(
             record["_stop"] = float(stop)
             record["_delivered"] = delivered
             record["_market"] = market
-            watched[watch_key(record)] = record
+            parsed.append(record)
+
+    coalesce_venue_drift(parsed, window)
+    watched: dict[str, dict] = {}
+    for record in parsed:
+        watched[watch_key(record)] = record
     return list(watched.values())
 
 

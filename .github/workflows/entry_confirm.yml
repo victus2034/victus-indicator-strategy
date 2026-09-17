@@ -45,9 +45,20 @@ on:
 permissions:
   contents: write
 
+# cancel-in-progress: true, changed from false 17 Sep 2026. cron-job.org
+# dispatches this reliably every 5 minutes (checked its own run history -
+# on time, ~10-20s round trip), but with cancel-in-progress false a run
+# that took longer than 5 minutes queued the next one behind it instead of
+# running alongside or replacing it, and the backlog compounds through the
+# day: a real gap of 40 minutes between two runs was found in
+# entry_confirm_state.json's commit history right before a reported stale
+# alert. This job is safe to cancel mid-run - it re-derives everything from
+# the alert records and its own state file each time, so a cancelled run
+# only means the next one repeats a little of its work, not that anything
+# is lost or corrupted.
 concurrency:
   group: victus-entry-confirm
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   entry-confirm:

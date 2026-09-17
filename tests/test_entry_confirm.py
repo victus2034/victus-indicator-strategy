@@ -141,6 +141,84 @@ class WatchWindowTests(unittest.TestCase):
         self.assertEqual([record["symbol"] for record in result], ["TCS.NS"])
 
 
+class VenueDriftTests(unittest.TestCase):
+    def _write(self, tmp_path, rows):
+        path = tmp_path / "records.jsonl"
+        path.write_text("\n".join(json.dumps(row) for row in rows), encoding="utf-8")
+        return path
+
+    def _row(self, entry, stop, minutes_ago, exchange="delta_india"):
+        now = pd.Timestamp("2026-09-17 12:00", tz=entry_confirm.IST)
+        return {
+            "delivered_at_utc": (now - pd.Timedelta(minutes=minutes_ago)).tz_convert("UTC").isoformat(),
+            "symbol": "BTCUSD",
+            "timeframe": "30m",
+            "side": "short",
+            "score": 8,
+            "exchange": exchange,
+            "planned_entry": entry,
+            "stop_price": stop,
+        }
+
+    def test_a_venue_flip_within_tolerance_collapses_to_one_watched_zone(self):
+        import tempfile
+
+        now = pd.Timestamp("2026-09-17 12:00", tz=entry_confirm.IST)
+        # Same real zone, ~0.2% apart - inside WATCH_KEY_MERGE_TOLERANCE_PCT -
+        # priced from delta_india then coinswitch, TSLAXUSD-shaped.
+        rows = [
+            self._row(0.08437, 0.08479, minutes_ago=40, exchange="delta_india"),
+            self._row(0.08454, 0.08496, minutes_ago=10, exchange="coinswitch"),
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self._write(pd.io.common.Path(tmp), rows)
+            with patch.dict(entry_confirm.ALERT_RECORDS, {"crypto": {"30m": path}}):
+                result = entry_confirm.load_watched_alerts("crypto", "30m", now)
+
+        self.assertEqual(len(result), 1)
+        # Snapped to the first (anchor) record's own levels.
+        self.assertEqual(result[0]["_entry"], 0.08437)
+
+    def test_a_genuinely_different_zone_is_not_merged(self):
+        import tempfile
+
+        now = pd.Timestamp("2026-09-17 12:00", tz=entry_confirm.IST)
+        # 5% apart - far outside tolerance, a real second zone on the symbol.
+        rows = [
+            self._row(0.08437, 0.08479, minutes_ago=40),
+            self._row(0.0887, 0.0892, minutes_ago=10),
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self._write(pd.io.common.Path(tmp), rows)
+            with patch.dict(entry_confirm.ALERT_RECORDS, {"crypto": {"30m": path}}):
+                result = entry_confirm.load_watched_alerts("crypto", "30m", now)
+
+        self.assertEqual(len(result), 2)
+
+    def test_drift_does_not_creep_past_tolerance_one_hop_at_a_time(self):
+        import tempfile
+
+        now = pd.Timestamp("2026-09-17 12:00", tz=entry_confirm.IST)
+        # Each hop is under 1% of its predecessor, but three hops later the
+        # price is 3% from where the zone started - anchored comparisons
+        # catch that; comparing only to the previous record would not.
+        rows = [
+            self._row(100.0, 98.0, minutes_ago=80),
+            self._row(100.9, 98.9, minutes_ago=60),
+            self._row(101.8, 99.8, minutes_ago=40),
+            self._row(102.7, 100.7, minutes_ago=20),
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            path = self._write(pd.io.common.Path(tmp), rows)
+            with patch.dict(entry_confirm.ALERT_RECORDS, {"crypto": {"30m": path}}):
+                result = entry_confirm.load_watched_alerts("crypto", "30m", now)
+
+        # Two zones, anchored at 100.0 and 101.8 - not one that drifted all
+        # the way out to 102.7, and not four separate ones either.
+        entries = sorted(r["_entry"] for r in result)
+        self.assertEqual(entries, [100.0, 101.8])
+
+
 class RatingFloorTests(unittest.TestCase):
     def _write(self, tmp_path, rows):
         path = tmp_path / "records.jsonl"
