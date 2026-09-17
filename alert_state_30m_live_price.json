@@ -3267,7 +3267,8 @@
     "METAXUSD|30m|short|682.15|685.55": 1789628505.6007926,
     "METAXUSD|30m|short|681.64|685.41": 1789623667.860441,
     "RIVERUSD|30m|short|1.23214|1.242": 1789628505.3351467,
-    "shadow:RIVERUSD|30m|short|1.23762|1.242": 1789627891.0972908
+    "shadow:RIVERUSD|30m|short|1.23762|1.242": 1789627891.0972908,
+    "LTCUSD|30m|short|52.7|52.87": 1789629098.3279161
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14816,7 +14817,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1789628475.712285
+    "30m": 1789629068.201482
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -45526,7 +45527,7 @@
     "NVDAXUSD|30m|long|212.1|212.104": 1789585904.4878192,
     "METAXUSD|30m|short|682.15|685.55": 1789626097.0685627,
     "NVDAXUSD|30m|short|216.25|216.9": 1789626097.0740232,
-    "BTCUSD|30m|short|76933|77320": 1789627293.9683042,
+    "BTCUSD|30m|short|76933|77320": 1789629098.31932,
     "AVAXUSD|30m|short|7.588|7.614": 1789620690.238871,
     "METAXUSD|30m|short|681.64|685.41": 1789613466.555112,
     "BNBUSD|30m|short|731.2|733.4": 1789615886.2886457,
@@ -45536,7 +45537,10 @@
     "RIVERUSD|30m|short|1.23214|1.242": 1789627293.9752011,
     "XAUTUSD|30m|long|4249.17|4265.58": 1789622489.943712,
     "NVDAXUSD|30m|short|216.35|216.99": 1789623668.4711401,
-    "LTCUSD|30m|short|52.7|52.87": 1789627293.972933
+    "LTCUSD|30m|short|52.7|52.87": 1789627293.972933,
+    "SOLUSD|30m|short|100.99|101.34": 1789629098.3236816,
+    "BEAT/USDT|30m|short|0.08237|0.08297": 1789629098.325842,
+    "BNBUSD|30m|short|731.75|733.5": 1789629098.6088686
   },
   "shadow:BTCUSD|supply|80474.35070115|80522.70000000": {
     "in_zone": false,
@@ -123891,8 +123895,8 @@
     "last_alert_at": 0.0
   },
   "LTCUSD|supply|52.70000000|52.87000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789629098.3279161
   },
   "shadow:LTCUSD|supply|52.80843390|52.87000000": {
     "in_zone": false,
@@ -128883,6 +128887,14 @@
     "last_alert_at": 0.0
   },
   "shadow:MRVL/USDT:USDT|demand|224.80000000|225.11842253": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:UNIUSD|supply|7.16902553|7.19200000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:AVAXUSD|demand|7.12500000|7.13666667": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
