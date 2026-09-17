@@ -220,6 +220,16 @@ class VenueDriftTests(unittest.TestCase):
 
 
 class RatingFloorTests(unittest.TestCase):
+    """MIN_CRYPTO_ZONE_SCORE gate dropped 17 Sep 2026: rating_validation_report.py
+    run against real decided trades showed the ML rating flat ~50-53% win
+    rate from 3/10 through 9/10 (not monotonic), while unrated zones won
+    74.2% - the gate wasn't demonstrably separating good zones from bad
+    ones, only hiding real alerts (a BNB 9/10 alert never reached
+    entry_confirm because its stored score, from the same rating, was 4).
+    These tests now guard the opposite: every crypto alert is watched,
+    score notwithstanding.
+    """
+
     def _write(self, tmp_path, rows):
         path = tmp_path / "records.jsonl"
         path.write_text("\n".join(json.dumps(row) for row in rows), encoding="utf-8")
@@ -240,15 +250,15 @@ class RatingFloorTests(unittest.TestCase):
             row.pop("score")
         return row
 
-    def test_crypto_alerts_below_six_are_not_watched(self):
+    def test_a_low_scoring_crypto_alert_is_still_watched(self):
         import tempfile
 
         with tempfile.TemporaryDirectory() as tmp:
             path = self._write(
                 pd.io.common.Path(tmp),
                 [
-                    self._row("HYPEUSD", 5),
-                    self._row("BTCUSD", entry_confirm.MIN_CRYPTO_ZONE_SCORE),
+                    self._row("HYPEUSD", 2),
+                    self._row("BTCUSD", 9),
                 ],
             )
             with patch.dict(entry_confirm.ALERT_RECORDS["crypto"], {"30m": path}):
@@ -256,9 +266,11 @@ class RatingFloorTests(unittest.TestCase):
                     "crypto", "30m", pd.Timestamp.now(tz=entry_confirm.IST)
                 )
 
-        self.assertEqual([record["symbol"] for record in result], ["BTCUSD"])
+        self.assertEqual(
+            sorted(record["symbol"] for record in result), ["BTCUSD", "HYPEUSD"]
+        )
 
-    def test_crypto_alerts_without_a_score_are_not_watched(self):
+    def test_a_crypto_alert_without_a_score_is_still_watched(self):
         import tempfile
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -268,7 +280,7 @@ class RatingFloorTests(unittest.TestCase):
                     "crypto", "30m", pd.Timestamp.now(tz=entry_confirm.IST)
                 )
 
-        self.assertEqual(result, [])
+        self.assertEqual([record["symbol"] for record in result], ["HYPEUSD"])
 
 
 class FormattingTests(unittest.TestCase):

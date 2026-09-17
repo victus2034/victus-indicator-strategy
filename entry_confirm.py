@@ -47,7 +47,7 @@ import pandas as pd
 import requests
 import yfinance as yf
 
-from config import DELTA_LISTED_SYMBOLS, MAX_DISTANCE_PCT, MIN_CRYPTO_ZONE_SCORE, WATCHLIST
+from config import DELTA_LISTED_SYMBOLS, MAX_DISTANCE_PCT, WATCHLIST
 
 # Only crypto is checked against its watchlist. The NSE side has no
 # authoritative one here - nse_config carries a FALLBACK_WATCHLIST used when
@@ -247,8 +247,6 @@ def load_watched_alerts(
             # worse than saying nothing, and the symbol was dropped on purpose.
             if market == "crypto" and str(record.get("symbol", "")).upper() not in CRYPTO_WATCHLIST_SET:
                 continue
-            if market == "crypto" and not rating_allowed(record):
-                continue
             delivered = pd.to_datetime(record.get("delivered_at_utc"), errors="coerce", utc=True)
             if pd.isna(delivered):
                 continue
@@ -272,12 +270,18 @@ def load_watched_alerts(
     return list(watched.values())
 
 
-def rating_allowed(record: dict) -> bool:
-    """Only confirmed crypto entries at or above the configured score floor."""
-    score = pd.to_numeric(record.get("score"), errors="coerce")
-    if pd.isna(score):
-        return False
-    return float(score) >= MIN_CRYPTO_ZONE_SCORE
+# rating_allowed() (dropped 17 Sep 2026) used to gate this on
+# MIN_CRYPTO_ZONE_SCORE - but the score it was checking could itself be
+# wrong (a BNB alert once showed 9/10 while the record it wrote down scored
+# it 4, see scanner.format_alert()'s fix), and rating_validation_report.py
+# run against real decided trades that same day showed the ML rating is not
+# currently discriminating outcomes at all: win rate flat ~50-53% from
+# 3/10 through 9/10, not monotonic, while UNRATED zones (no ML score) won
+# 74.2% - far better than any rated bucket. A gate that isn't demonstrably
+# separating good zones from bad ones was just hiding real alerts from
+# entry_confirm. Every zone the scanner alerts on is watched here now,
+# unfiltered by score - re-add a gate if rating_validation_report.py ever
+# shows the model earning its keep on live outcomes.
 
 
 def watch_key(record: dict) -> str:
