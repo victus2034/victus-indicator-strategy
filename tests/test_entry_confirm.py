@@ -543,6 +543,52 @@ class ApproachBandTests(unittest.TestCase):
         self.assertEqual(stage, entry_confirm.STAGE_READY)
         self.assertFalse(reached)
 
+class ResolvePingsTests(unittest.TestCase):
+    def test_jumping_straight_to_entry_backfills_a_get_ready_ping(self):
+        # ZORA-shaped case: entry_confirm's first look at this zone finds
+        # price already at entry - it moved through the approach band
+        # between two polls and was never seen mid-approach.
+        record = watched(entry=100.0, stop=98.0, side="long")
+        now = pd.Timestamp("2026-09-17 13:46", tz=entry_confirm.IST)
+
+        pings, entry_state = entry_confirm.resolve_pings(record, 100.0, {}, now)
+
+        stages = [stage for stage, _ in pings]
+        self.assertEqual(stages, [entry_confirm.STAGE_READY, entry_confirm.STAGE_ENTRY])
+        self.assertIn("moved fast", pings[0][1])
+        self.assertEqual(entry_state["stage"], entry_confirm.STAGE_ENTRY)
+
+    def test_a_real_get_ready_is_not_marked_as_backfilled(self):
+        record = watched(entry=100.0, stop=98.0, side="long")
+        now = pd.Timestamp("2026-09-17 13:46", tz=entry_confirm.IST)
+
+        pings, _ = entry_confirm.resolve_pings(record, 100.09, {}, now)
+
+        self.assertEqual([stage for stage, _ in pings], [entry_confirm.STAGE_READY])
+        self.assertNotIn("moved fast", pings[0][1])
+
+    def test_backfill_is_skipped_if_the_symbol_already_has_a_recent_ready(self):
+        record = watched(entry=100.0, stop=98.0, side="long")
+        now = pd.Timestamp("2026-09-17 13:46", tz=entry_confirm.IST)
+        state = {entry_confirm.ready_key(record): now.timestamp()}
+
+        pings, _ = entry_confirm.resolve_pings(record, 100.0, state, now)
+
+        self.assertEqual([stage for stage, _ in pings], [entry_confirm.STAGE_ENTRY])
+
+    def test_reaching_late_from_unseen_also_backfills_get_ready(self):
+        record = watched(entry=100.0, stop=98.0, side="long")
+        now = pd.Timestamp("2026-09-17 13:46", tz=entry_confirm.IST)
+
+        # Past NEAR_SL_FRACTION of the entry-to-stop distance: LATE.
+        pings, _ = entry_confirm.resolve_pings(record, 99.0, {}, now)
+
+        self.assertEqual(
+            [stage for stage, _ in pings],
+            [entry_confirm.STAGE_READY, entry_confirm.STAGE_LATE],
+        )
+
+
 class ScopeTests(unittest.TestCase):
     def test_it_watches_crypto_over_both_timeframes_by_default(self):
         # NSE was dropped from this job, and covering one timeframe

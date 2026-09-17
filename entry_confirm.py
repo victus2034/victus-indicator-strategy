@@ -16,6 +16,12 @@ Deliberately silent when the trade is no longer worth taking: price has
 bounced back past entry into profit (entering now would sit far from the
 locked stop), or the stop is already hit.
 
+A fast mover can cross the whole GET READY -> ENTRY gap between two polls
+and be seen for the first time already at ENTRY NOW or LATE. When that
+happens the GET READY the user would otherwise never get is backfilled into
+the same digest, marked as having moved fast rather than printed as a live
+distance.
+
 Every ping from one run goes out as a single digest. Posted one message
 per symbol, a busy run buried the channel under dozens of separate blocks
 and the few that mattered were impossible to pick out.
@@ -385,7 +391,7 @@ def broker_label(record: dict) -> str | None:
     return "Delta" if symbol in DELTA_LISTED_SYMBOLS else "CoinSwitch"
 
 
-def format_line(stage: int, price: float, record: dict) -> str:
+def format_line(stage: int, price: float, record: dict, backfilled: bool = False) -> str:
     """One line per alert. Three lines each turned a busy run into a wall."""
     entry = record["_entry"]
     stop = record["_stop"]
@@ -406,7 +412,11 @@ def format_line(stage: int, price: float, record: dict) -> str:
 
     if stage == STAGE_READY:
         away = abs(price - entry) / entry * 100.0
-        return f"{head} · {levels} · {away:.2f}% away · {stop_text}{venue}"
+        # backfilled: price already reached entry by the time this poll saw
+        # it, so "away" would misleadingly read ~0.00% - say so instead of
+        # printing a distance that no longer means "not there yet".
+        note = " · moved fast, already at entry" if backfilled else ""
+        return f"{head} · {levels} · {away:.2f}% away · {stop_text}{venue}{note}"
     return f"{head} · {levels} · {stop_text} · {progress * 100:.0f}% risk used{venue}"
 
 
@@ -508,6 +518,54 @@ def prune_state(state: dict, active_keys: set[str]) -> dict:
     }
 
 
+def resolve_pings(
+    record: dict, price: float, state: dict, now: pd.Timestamp
+) -> tuple[list[tuple[int, str]], dict]:
+    """Decide this record's pings for one run and its updated entry_state.
+
+    Forward-only: a symbol reports each stage once, never on every run,
+    which is what turned a handful of trades into a wall of near-identical
+    messages.
+    """
+    key = watch_key(record)
+    entry_state = state.get(key, {})
+    reached_entry = bool(entry_state.get("reached_entry", False))
+    last_stage = int(entry_state.get("stage", 0))
+
+    stage, reached_entry = classify(price, record, reached_entry)
+    entry_state["reached_entry"] = reached_entry
+
+    pings: list[tuple[int, str]] = []
+    if stage is not None and stage > last_stage:
+        ready_seen = ready_recently(state, record, now) or level_ready_recently(
+            state, record, now
+        )
+        if last_stage == 0 and stage in (STAGE_ENTRY, STAGE_LATE) and not ready_seen:
+            # entry_confirm polls every few minutes; a fast mover (crypto
+            # especially) can cross the whole GET READY -> ENTRY gap
+            # between two polls and never get caught mid-approach - the
+            # scanner alert itself only fires once price is already inside
+            # APPROACH_THRESHOLD_PCT, so there is barely a window to catch
+            # in the first place. Back-fill the GET READY the user would
+            # otherwise never see, in the same digest, so a jump straight
+            # to ENTRY NOW still comes with its heads-up.
+            state[ready_key(record)] = now.timestamp()
+            state[level_ready_key(record)] = now.timestamp()
+            pings.append((STAGE_READY, format_line(STAGE_READY, price, record, backfilled=True)))
+
+        if stage == STAGE_READY and ready_seen:
+            entry_state["stage"] = stage
+        else:
+            if stage == STAGE_READY:
+                state[ready_key(record)] = now.timestamp()
+                state[level_ready_key(record)] = now.timestamp()
+            pings.append((stage, format_line(stage, price, record)))
+            entry_state["stage"] = stage
+
+    state[key] = entry_state
+    return pings, entry_state
+
+
 def crypto_alert_window_open(now: pd.Timestamp) -> bool:
     """Same 08:00-01:00 IST window the crypto scanner alerts in.
 
@@ -565,47 +623,22 @@ def main() -> None:
         )
     )
 
+    # One heads-up per symbol, not one per level. Widening the watch band to
+    # 0.75% put several stacked zones on the same symbol in range at once and
+    # each warned separately: 74 GET READYs came from 36 symbols across 70
+    # zones in half a day, TSLA alone six times for four levels. That the
+    # price is approaching TSLA is one piece of news however many boxes are
+    # drawn near it. The same exact level also gets a six-hour budget, so
+    # repeat scanner deliveries cannot keep saying GET READY. The zone is
+    # still marked, so its ENTRY NOW - which names a specific level and is
+    # worth having per zone - still fires when price arrives.
     pings: list[tuple[int, str]] = []
     for record in watched:
-        key = watch_key(record)
         price = prices.get(record["symbol"])
         if price is None:
             continue
-
-        entry_state = state.get(key, {})
-        reached_entry = bool(entry_state.get("reached_entry", False))
-        last_stage = int(entry_state.get("stage", 0))
-
-        stage, reached_entry = classify(price, record, reached_entry)
-        entry_state["reached_entry"] = reached_entry
-
-        # Forward-only: a symbol reports each stage once, never on every
-        # run, which is what turned a handful of trades into a wall of
-        # near-identical messages.
-        if stage is not None and stage > last_stage:
-            if stage == STAGE_READY and (
-                ready_recently(state, record, now)
-                or level_ready_recently(state, record, now)
-            ):
-                # One heads-up per symbol, not one per level. Widening the
-                # watch band to 0.75% put several stacked zones on the same
-                # symbol in range at once and each warned separately: 74
-                # GET READYs came from 36 symbols across 70 zones in half a
-                # day, TSLA alone six times for four levels. That the price
-                # is approaching TSLA is one piece of news however many
-                # boxes are drawn near it. The same exact level also gets a
-                # six-hour budget, so repeat scanner deliveries cannot keep
-                # saying GET READY. The zone is still marked, so its
-                # ENTRY NOW - which names a specific level and is worth
-                # having per zone - still fires when price arrives.
-                entry_state["stage"] = stage
-            else:
-                if stage == STAGE_READY:
-                    state[ready_key(record)] = now.timestamp()
-                    state[level_ready_key(record)] = now.timestamp()
-                pings.append((stage, format_line(stage, price, record)))
-                entry_state["stage"] = stage
-        state[key] = entry_state
+        record_pings, _ = resolve_pings(record, price, state, now)
+        pings.extend(record_pings)
 
     messages = build_digest(pings, now)
     if not messages:
