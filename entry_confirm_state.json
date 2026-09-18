@@ -4,6 +4,11 @@
     "stage": 3,
     "stopped_out": true
   },
+  "AAVEUSD|30m|short|136.8|137.05": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "BNBUSD|4h|short|756.21|762.023": {
     "reached_entry": true,
     "stage": 3,
@@ -13,6 +18,10 @@
     "reached_entry": true,
     "stage": 3,
     "stopped_out": false
+  },
+  "HYPEUSD|30m|short|89.52|89.6325": {
+    "reached_entry": true,
+    "stopped_out": true
   },
   "LINKUSD|30m|short|11.911|11.9735": {
     "reached_entry": false,
@@ -41,6 +50,7 @@
   },
   "_level_ready|AAVEUSD|30m|short|128.48|129.368": 1789665141.396728,
   "_level_ready|AAVEUSD|30m|short|135.31|135.498": 1789720556.703096,
+  "_level_ready|AAVEUSD|30m|short|136.8|137.05": 1789727200.289498,
   "_level_ready|AVAXUSD|30m|short|7.614|7.619": 1789647674.823928,
   "_level_ready|AXTI/USDT:USDT|30m|short|59.33|59.9175": 1789540275.035677,
   "_level_ready|BEAT/USDT|30m|short|0.08437|0.084795": 1789642566.116701,
@@ -93,7 +103,7 @@
   "_level_ready|XAUTUSD|30m|short|4379.21|4380.52": 1789707357.385724,
   "_level_ready|XAUTUSD|30m|short|4403.45|4403.81": 1789715768.437191,
   "_ready|0G/USDT|30m": 1789441569.595457,
-  "_ready|AAVEUSD|30m": 1789720556.703096,
+  "_ready|AAVEUSD|30m": 1789727200.289498,
   "_ready|AAVEUSD|4h": 1789057560.102114,
   "_ready|ACE/USDT|30m": 1789278662.30266,
   "_ready|AERO/USDT|30m": 1789444875.534929,
@@ -177,5 +187,29 @@
   "_ready|ZIL/USDT|30m": 1789230352.789374,
   "_ready|ZIL/USDT|4h": 1788885653.347347,
   "_ready|ZORAUSD|30m": 1789467666.170572,
-  "_ready|ZORAUSD|4h": 1789464571.087274
+  "_ready|ZORAUSD|4h": 1789464571.087274,
+  "_silent_ready|BCHUSD|30m|short|252.3|252.55": {
+    "price": 248.8,
+    "time": "2026-09-18T15:56:40.289498+05:30"
+  },
+  "_silent_ready|BNBUSD|30m|short|758.58|761.43": {
+    "price": 750.3,
+    "time": "2026-09-18T15:56:40.289498+05:30"
+  },
+  "_silent_ready|BNBUSD|4h|short|756|762.125": {
+    "price": 750.3,
+    "time": "2026-09-18T15:56:40.289498+05:30"
+  },
+  "_silent_ready|METAXUSD|4h|short|689.8|691.8": {
+    "price": 685.05,
+    "time": "2026-09-18T15:56:40.289498+05:30"
+  },
+  "_silent_ready|SOLUSD|30m|short|107.04|107.39": {
+    "price": 106.51,
+    "time": "2026-09-18T15:56:40.289498+05:30"
+  },
+  "_silent_ready|SOLUSD|4h|short|107.144|107.53": {
+    "price": 106.51,
+    "time": "2026-09-18T15:56:40.289498+05:30"
+  }
 }
