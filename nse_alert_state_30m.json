@@ -5510,7 +5510,8 @@
     "MPHASIS.NS|30m|long|2275.1|2278.67": 1789711318.004734,
     "POONAWALLA.NS|30m|short|454.182|454.85": 1789712503.9526892,
     "KIMS.NS|30m|short|806.922|808": 1789712504.0935905,
-    "ACMESOLAR.NS|30m|short|429.189|430.1": 1789712504.804169
+    "ACMESOLAR.NS|30m|short|429.189|430.1": 1789712504.804169,
+    "IRCTC.NS|30m|short|466.194|466.55": 1789713704.1521978
   },
   "ANANDRATHI.NS|supply|2187.5000|2221.0000": {
     "in_zone": true,
@@ -32223,7 +32224,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "30m": 1789712469.0309293
+    "30m": 1789713670.1586134
   },
   "3MINDIA.NS|supply|35230.9249|35290.0000": {
     "in_zone": false,
@@ -184581,7 +184582,7 @@
     "last_attempt_at": 0.0
   },
   "POONAWALLA.NS|supply|454.1822|454.8500": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789712503.9526892,
     "last_attempt_at": 1789712503.9526892
   },
@@ -195651,7 +195652,7 @@
     "last_attempt_at": 0.0
   },
   "ACMESOLAR.NS|supply|429.1889|430.1000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789712504.804169,
     "last_attempt_at": 1789712504.804169
   },
@@ -198606,9 +198607,9 @@
     "last_attempt_at": 0.0
   },
   "IRCTC.NS|supply|466.1943|466.5500": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789713704.1521978,
+    "last_attempt_at": 1789713704.1521978
   },
   "3MINDIA.NS|supply|34764.3251|34810.0000": {
     "in_zone": false,
@@ -203706,7 +203707,7 @@
     "last_attempt_at": 0.0
   },
   "KIMS.NS|supply|806.9218|808.0000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789712504.0935905,
     "last_attempt_at": 1789712504.0935905
   },
@@ -204301,6 +204302,11 @@
     "last_attempt_at": 0.0
   },
   "POLYMED.NS|demand|1691.2000|1694.0556": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "ATGL.NS|supply|686.7591|687.8000": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
