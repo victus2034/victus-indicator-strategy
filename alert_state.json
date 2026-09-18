@@ -1787,7 +1787,10 @@
     "shadow:LTCUSD|4h|short|55.0666|55.3": 1789713697.0508318,
     "shadow:BNBUSD|4h|short|758.58|760.86": 1789716098.6914399,
     "BNBUSD|4h|short|756.21|760.86": 1789717295.3824666,
-    "shadow:HYPEUSD|4h|short|89.1761|89.617": 1789725713.157256
+    "shadow:HYPEUSD|4h|short|89.1761|89.617": 1789725713.157256,
+    "BTCUSD|4h|short|80309|80537": 1789740115.560195,
+    "shadow:BTCUSD|4h|short|80325.5|80537": 1789740115.560195,
+    "DOGEUSD|4h|short|0.0876091|0.08831": 1789740115.849092
   },
   "ARBUSD|supply|0.08030000|0.08180000": {
     "in_zone": false,
@@ -5366,7 +5369,7 @@
     "last_alert_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1789738866.410519
+    "4h": 1789740081.5364063
   },
   "HOOD/USDT:USDT|demand|83.83000000|84.37120000": {
     "in_zone": false,
@@ -12974,7 +12977,8 @@
     "METAXUSD|4h|short|684.246|689.72": 1789711334.0408757,
     "HYPEUSD|4h|short|88.9058|89.617": 1789725713.157256,
     "HYPEUSD|4h|short|88.8988|89.61": 1789723285.6269495,
-    "SOLUSD|4h|short|107.144|107.453": 1789725713.154258
+    "SOLUSD|4h|short|107.144|107.453": 1789725713.154258,
+    "LINKUSD|4h|short|12.1032|12.2": 1789740116.1201158
   },
   "shadow:LA/USDT|demand|0.05565000|0.05625977": {
     "in_zone": false,
@@ -19453,12 +19457,12 @@
     "last_alert_at": 0.0
   },
   "BTCUSD|supply|80309.00000000|80537.00000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789740115.560195
   },
   "shadow:BTCUSD|supply|80325.45303583|80537.00000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789740115.560195
   },
   "shadow:ETHUSD|supply|2555.95052208|2566.16000000": {
     "in_zone": false,
@@ -25069,8 +25073,8 @@
     "last_alert_at": 0.0
   },
   "DOGEUSD|supply|0.08760913|0.08831000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789740115.849092
   },
   "DOGEUSD|demand|0.06892000|0.06947136": {
     "in_zone": false,
@@ -26857,6 +26861,14 @@
     "last_alert_at": 0.0
   },
   "AAVEUSD|supply|144.22619048|145.38000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "SOLUSD|supply|109.91100000|110.63500000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BNBUSD|supply|780.50990075|784.08000000": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
