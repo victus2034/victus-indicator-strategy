@@ -14,6 +14,26 @@
     "stage": 3,
     "stopped_out": true
   },
+  "BTCUSD|30m|short|80299.6|80578.5": {
+    "reached_entry": true,
+    "stage": 3,
+    "stopped_out": false
+  },
+  "BTCUSD|4h|short|80309|80594": {
+    "reached_entry": true,
+    "stage": 3,
+    "stopped_out": false
+  },
+  "DOGEUSD|30m|short|0.0875|0.088375": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
+  "DOGEUSD|4h|short|0.0876091|0.0884852": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
   "LTCUSD|4h|short|54.9|55.4": {
     "reached_entry": true,
     "stage": 3,
@@ -38,8 +58,12 @@
   "_level_ready|BNBUSD|4h|short|756.21|762.023": 1789717563.77555,
   "_level_ready|BTCUSD|30m|short|76933|77416.8": 1789698960.185339,
   "_level_ready|BTCUSD|30m|short|76939|77419": 1789647962.053265,
+  "_level_ready|BTCUSD|30m|short|80299.6|80578.5": 1789740370.930292,
+  "_level_ready|BTCUSD|4h|short|80309|80594": 1789740370.930292,
   "_level_ready|DOGEUSD|30m|long|0.0789365|0.0781534": 1789564569.716163,
   "_level_ready|DOGEUSD|30m|short|0.08575|0.0862": 1789725354.705543,
+  "_level_ready|DOGEUSD|30m|short|0.0875|0.088375": 1789740370.930292,
+  "_level_ready|DOGEUSD|4h|short|0.0876091|0.0884852": 1789740370.930292,
   "_level_ready|ETHUSD|30m|short|2475.89|2484.44": 1789701967.437765,
   "_level_ready|HUSD|30m|long|0.0868594|0.0859977": 1789704356.64535,
   "_level_ready|HUSD|4h|short|0.0898214|0.0907196": 1789543879.185888,
@@ -98,8 +122,8 @@
   "_ready|BNBUSD|30m": 1789716360.478621,
   "_ready|BNBUSD|4h": 1789717563.77555,
   "_ready|BOME/USDT|30m": 1789466760.110004,
-  "_ready|BTCUSD|30m": 1789698960.185339,
-  "_ready|BTCUSD|4h": 1789482963.449333,
+  "_ready|BTCUSD|30m": 1789740370.930292,
+  "_ready|BTCUSD|4h": 1789740370.930292,
   "_ready|BTW/USDT|30m": 1789194664.716904,
   "_ready|CAP/USDT|30m": 1789361459.428611,
   "_ready|CL/USDT|30m": 1789488077.641078,
@@ -108,7 +132,8 @@
   "_ready|CRV/USDT|30m": 1789461071.110789,
   "_ready|DEXE/USDT|30m": 1789389359.59074,
   "_ready|DEXE/USDT|4h": 1788962475.195541,
-  "_ready|DOGEUSD|30m": 1789725354.705543,
+  "_ready|DOGEUSD|30m": 1789740370.930292,
+  "_ready|DOGEUSD|4h": 1789740370.930292,
   "_ready|ERA/USDT|30m": 1789467666.170572,
   "_ready|ESP/USDT|30m": 1789458664.421898,
   "_ready|ESP/USDT|4h": 1788956755.098613,
@@ -203,13 +228,17 @@
     "price": 750.3,
     "time": "2026-09-18T15:56:40.289498+05:30"
   },
-  "_silent_ready|BTCUSD|30m|short|80299.6|80578.5": {
-    "price": 79969.4,
-    "time": "2026-09-18T19:26:01.487342+05:30"
-  },
   "_silent_ready|LINKUSD|30m|short|11.911|11.9735": {
     "price": 11.855,
     "time": "2026-09-18T18:06:04.591417+05:30"
+  },
+  "_silent_ready|LINKUSD|30m|short|12.1032|12.2242": {
+    "price": 12.04,
+    "time": "2026-09-18T19:36:10.930292+05:30"
+  },
+  "_silent_ready|LINKUSD|4h|short|12.1032|12.2242": {
+    "price": 12.04,
+    "time": "2026-09-18T19:36:10.930292+05:30"
   },
   "_silent_ready|LTCUSD|30m|short|55.84|56.3025": {
     "price": 55.51,
