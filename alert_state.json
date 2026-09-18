@@ -1790,7 +1790,10 @@
     "shadow:HYPEUSD|4h|short|89.1761|89.617": 1789725713.157256,
     "BTCUSD|4h|short|80309|80537": 1789740115.560195,
     "shadow:BTCUSD|4h|short|80325.5|80537": 1789740115.560195,
-    "DOGEUSD|4h|short|0.0876091|0.08831": 1789740115.849092
+    "DOGEUSD|4h|short|0.0876091|0.08831": 1789740115.849092,
+    "SOLUSD|4h|short|109.911|110.635": 1789742500.054763,
+    "shadow:SOLUSD|4h|short|110.105|110.635": 1789742500.054763,
+    "shadow:DOGEUSD|4h|short|0.0878382|0.08831": 1789742500.5133955
   },
   "ARBUSD|supply|0.08030000|0.08180000": {
     "in_zone": false,
@@ -5369,7 +5372,7 @@
     "last_alert_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1789741254.7478828
+    "4h": 1789742467.0468705
   },
   "HOOD/USDT:USDT|demand|83.83000000|84.37120000": {
     "in_zone": false,
@@ -12380,8 +12383,8 @@
     "last_alert_at": 0.0
   },
   "shadow:SOLUSD|supply|110.10461626|110.63500000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789742500.054763
   },
   "shadow:SOLUSD|demand|97.40800000|97.91689604": {
     "in_zone": false,
@@ -12978,7 +12981,8 @@
     "HYPEUSD|4h|short|88.9058|89.617": 1789725713.157256,
     "HYPEUSD|4h|short|88.8988|89.61": 1789723285.6269495,
     "SOLUSD|4h|short|107.144|107.453": 1789725713.154258,
-    "LINKUSD|4h|short|12.1032|12.2": 1789740116.1201158
+    "LINKUSD|4h|short|12.1032|12.2": 1789742500.5166452,
+    "DOGEUSD|4h|short|0.0876091|0.08831": 1789742500.5133955
   },
   "shadow:LA/USDT|demand|0.05565000|0.05625977": {
     "in_zone": false,
@@ -25073,7 +25077,7 @@
     "last_alert_at": 0.0
   },
   "DOGEUSD|supply|0.08760913|0.08831000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789740115.849092
   },
   "DOGEUSD|demand|0.06892000|0.06947136": {
@@ -25081,8 +25085,8 @@
     "last_alert_at": 0.0
   },
   "shadow:DOGEUSD|supply|0.08783825|0.08831000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789742500.5133955
   },
   "shadow:DOGEUSD|demand|0.06892000|0.06913851": {
     "in_zone": false,
@@ -26865,10 +26869,14 @@
     "last_alert_at": 0.0
   },
   "SOLUSD|supply|109.91100000|110.63500000": {
+    "in_zone": true,
+    "last_alert_at": 1789742500.054763
+  },
+  "shadow:BNBUSD|supply|780.50990075|784.08000000": {
     "in_zone": false,
     "last_alert_at": 0.0
   },
-  "shadow:BNBUSD|supply|780.50990075|784.08000000": {
+  "shadow:BTCUSD|supply|82597.36112830|82811.50000000": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
