@@ -3326,7 +3326,8 @@
     "HYPEUSD|30m|short|86.95|87.04": 1789703501.8028188,
     "SOXLBUSD|30m|short|115.5|115.75": 1789703502.0762982,
     "shadow:SOXLBUSD|30m|short|115.508|115.75": 1789703502.0762982,
-    "HUSD|30m|long|0.08617|0.0868594": 1789704108.8407946
+    "HUSD|30m|long|0.08617|0.0868594": 1789704108.8407946,
+    "shadow:HUSD|30m|long|0.08617|0.0864776": 1789704698.721612
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14875,7 +14876,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1789704076.5374117
+    "30m": 1789704669.9361343
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -45246,7 +45247,7 @@
     "DOGEUSD|30m|short|0.08513|0.0853": 1789409516.514069,
     "ERA/USDT|30m|short|0.05993|0.06032": 1789275723.5789802,
     "TSLAXUSD|30m|short|370.4|370.55": 1789651902.957218,
-    "SNDKBUSD|30m|short|1634.7|1634.76": 1789702873.0479965,
+    "SNDKBUSD|30m|short|1634.7|1634.76": 1789704698.7219846,
     "LTCUSD|30m|short|54.24|54.27": 1789275723.5673523,
     "CRV/USDT|30m|short|0.3413|0.3425": 1789278706.672105,
     "0G/USDT|30m|short|0.1986|0.1993": 1789278111.8223772,
@@ -127927,7 +127928,7 @@
     "last_alert_at": 0.0
   },
   "HUSD|demand|0.08617000|0.08685936": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789704108.8407946
   },
   "shadow:HUSD|supply|0.09206528|0.09286000": {
@@ -127935,8 +127936,8 @@
     "last_alert_at": 0.0
   },
   "shadow:HUSD|demand|0.08617000|0.08647762": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789704698.721612
   },
   "RIVERUSD|supply|1.23214286|1.24200000": {
     "in_zone": false,
@@ -131055,7 +131056,7 @@
     "last_alert_at": 0.0
   },
   "shadow:BLESSUSD|supply|0.00873799|0.00876500": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789704108.8404505
   },
   "HUSD|supply|0.09021000|0.09075000": {
@@ -131475,6 +131476,18 @@
     "last_alert_at": 0.0
   },
   "shadow:MRVL/USDT:USDT|demand|232.02000000|232.38523958": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:ETHUSD|supply|2611.65294902|2615.00000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:ETHUSD|demand|2426.46000000|2429.95648852": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:HYPEUSD|supply|88.17234834|88.32000000": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
