@@ -1,9 +1,9 @@
 """Stage pings for zone alerts that were already delivered.
 
-Watches only zones that a real scanner alert already announced, and
-reports how price is behaving relative to that alert's own recorded
-entry and stop. It never re-derives levels, never scans for new
-candidates, and never writes to the alert records the backtest reads.
+Watches zones a real scanner alert already announced, and reports how
+price is behaving relative to that alert's own recorded entry and stop.
+It never re-derives levels, never trades on a candidate the scanner has
+not alerted on, and never writes to the alert records the backtest reads.
 
 Stages (one ping each, forward-only):
   1 GET READY     price within APPROACH_THRESHOLD_PCT of entry, entry
@@ -16,11 +16,23 @@ Deliberately silent when the trade is no longer worth taking: price has
 bounced back past entry into profit (entering now would sit far from the
 locked stop), or the stop is already hit.
 
-A fast mover can cross the whole GET READY -> ENTRY gap between two polls
-and be seen for the first time already at ENTRY NOW or LATE. When that
-happens the GET READY the user would otherwise never get is backfilled into
-the same digest, marked as having moved fast rather than printed as a live
-distance.
+A real alert only exists once price is already within MAX_DISTANCE_PCT of
+entry, which used to mean a zone's very first look here was routinely
+already at ENTRY NOW or LATE - GET READY never had a real chance to fire
+first. note_watch_candidates() reads the scanner's own pre-alert watch rows
+(crypto only, WATCH_RECORDS) to notice a zone's approach earlier, but never
+turns that into a ping by itself - only a real, delivered alert still
+triggers a notification. It only changes what price that notification
+uses: the moment the zone genuinely first approached (silent_ready_key(),
+consumed once by resolve_pings), instead of a live snapshot dressed up as
+"moved fast". A zone that never gets a real alert never pings, matching
+the same restraint the module always had.
+
+A fast mover can still cross the whole GET READY -> ENTRY gap between two
+polls with no earlier watch sighting at all - genuinely no warning existed
+to give. When that happens the GET READY the user would otherwise never
+get is backfilled into the same digest, marked as having moved fast rather
+than printed as a live distance.
 
 The dispatch interval is meant to be 5 minutes but is not reliably that -
 real gaps of 20-40+ minutes happen. Stage detection therefore looks at the
@@ -69,10 +81,11 @@ ALERT_RECORDS = {
         "4h": Path(__file__).with_name("crypto_alert_records.jsonl"),
     },
 }
-# Zones the scanner noted as worth watching but did not alert on. Kept here
-# only so older tests/tools can still locate the files; entry_confirm does not
-# read them for live pings because that can announce a trade before the real
-# crypto alert channel has delivered it.
+# Zones the scanner noted as worth watching but has not (or not yet)
+# alerted on. Read by load_watch_candidates()/note_watch_candidates() to
+# notice a zone's approach earlier than a real alert could - but never
+# itself a source of a ping. Announcing a trade before the real crypto
+# alert channel has delivered it stays off the table.
 WATCH_RECORDS = {
     "crypto": {
         "30m": Path(__file__).with_name("crypto_watch_records_30m.jsonl"),
@@ -213,20 +226,12 @@ def coalesce_venue_drift(records: list[dict], window: pd.Timedelta) -> None:
             anchor = record
 
 
-def load_watched_alerts(
-    market: str, timeframe: str, now: pd.Timestamp, records_path=None
+def _parse_zone_records(
+    paths: list[Path], timeframe: str, market: str, now: pd.Timestamp, window: pd.Timedelta
 ) -> list[dict]:
-    """Alerts still inside their fillable window, newest occurrence wins.
-
-    records_path points this at a different log - paper_trading uses it to read
-    the shadow-geometry alerts, which are written by the scanner but never sent.
+    """Shared parse/filter/coalesce/dedup for any zone-record log - real
+    delivered alerts or the scanner's own pre-alert watch rows alike.
     """
-    if records_path is not None:
-        paths = [records_path]
-    else:
-        paths = [ALERT_RECORDS[market][timeframe]]
-
-    window = pd.Timedelta(minutes=BAR_MINUTES[timeframe] * WATCH_BARS)
     parsed: list[dict] = []
     for path in paths:
         if not path.exists():
@@ -270,6 +275,35 @@ def load_watched_alerts(
     return list(watched.values())
 
 
+def load_watched_alerts(
+    market: str, timeframe: str, now: pd.Timestamp, records_path=None
+) -> list[dict]:
+    """Alerts still inside their fillable window, newest occurrence wins.
+
+    records_path points this at a different log - paper_trading uses it to read
+    the shadow-geometry alerts, which are written by the scanner but never sent.
+    """
+    paths = [records_path] if records_path is not None else [ALERT_RECORDS[market][timeframe]]
+    window = pd.Timedelta(minutes=BAR_MINUTES[timeframe] * WATCH_BARS)
+    return _parse_zone_records(paths, timeframe, market, now, window)
+
+
+def load_watch_candidates(timeframe: str, now: pd.Timestamp) -> list[dict]:
+    """Zones the scanner is watching but has not alerted on yet - crypto only.
+
+    Never a source of pings by itself - see note_watch_candidates(). Only
+    lets entry_confirm notice a zone's approach earlier than a real alert
+    (fired at MAX_DISTANCE_PCT) could tell it, so a later GET READY can use
+    a genuine early price instead of guessing "moved fast" from whatever
+    was live once the real alert showed up already close to entry.
+    """
+    path = WATCH_RECORDS.get("crypto", {}).get(timeframe)
+    if path is None:
+        return []
+    window = pd.Timedelta(minutes=BAR_MINUTES[timeframe] * WATCH_BARS)
+    return _parse_zone_records([path], timeframe, "crypto", now, window)
+
+
 # rating_allowed() (dropped 17 Sep 2026) used to gate this on
 # MIN_CRYPTO_ZONE_SCORE - but the score it was checking could itself be
 # wrong (a BNB alert once showed 9/10 while the record it wrote down scored
@@ -299,6 +333,77 @@ def watch_key(record: dict) -> str:
     entry = f"{float(record['_entry']):.6g}"
     stop = f"{float(record['_stop']):.6g}"
     return f"{symbol}|{record.get('timeframe')}|{record.get('side')}|{entry}|{stop}"
+
+
+def silent_ready_key(record: dict) -> str:
+    """Bookkeeping for a watch candidate's first sighting in the approach
+    band, before any real alert has confirmed it. Underscore-prefixed like
+    the other bookkeeping keys, so prune_state() does not drop it just
+    because the zone has not (yet, or ever) produced a real alert - see
+    prune_silent_ready() for its own, time-based expiry instead.
+    """
+    return "_silent_ready|" + watch_key(record)
+
+
+# How long an unconfirmed sighting is worth remembering. Long enough that a
+# genuinely slow-building approach (crypto can sit near a level for hours)
+# still gets credited; short enough that a zone which never turns into a
+# real alert does not leave permanent clutter in the state file.
+SILENT_READY_TTL_SECONDS = 24 * 60 * 60
+
+
+def note_watch_candidates(
+    candidates: list[dict],
+    confirmed_keys: set[str],
+    prices: dict[str, dict],
+    state: dict,
+    now: pd.Timestamp,
+) -> None:
+    """Remember the first time an unconfirmed zone enters the approach band.
+
+    Nothing here is ever pinged - only a real, delivered alert can trigger a
+    notification (see resolve_pings' use of silent_ready_key()). This only
+    changes what price that later notification uses: the genuine moment the
+    zone first came within range, instead of whichever price happened to be
+    live once the real alert showed up already close to (or past) entry -
+    the "moved fast, already at entry" case that used to be nearly every
+    ping once alerts only ever surfaced a zone at MAX_DISTANCE_PCT.
+    """
+    for record in candidates:
+        key = watch_key(record)
+        if key in confirmed_keys:
+            # A real alert already exists for this zone this run - the
+            # ordinary confirmed-alert flow handles it, backfilling from
+            # the live price if needed. Nothing extra to remember here.
+            continue
+        skey = silent_ready_key(record)
+        if skey in state:
+            continue
+        price_info = prices.get(record["symbol"])
+        if price_info is None:
+            continue
+        extreme = sweep_extreme(price_info, record.get("side", "long"))
+        stage, _ = classify(extreme, record, False)
+        if stage != STAGE_READY:
+            continue
+        state[skey] = {"price": float(price_info["price"]), "time": now.isoformat()}
+
+
+def prune_silent_ready(state: dict, now: pd.Timestamp) -> None:
+    """Drop unconfirmed sightings older than SILENT_READY_TTL_SECONDS, in place."""
+    stale = []
+    for key, value in state.items():
+        if not key.startswith("_silent_ready|") or not isinstance(value, dict):
+            continue
+        try:
+            seen_at = pd.Timestamp(value["time"])
+        except (KeyError, TypeError, ValueError):
+            stale.append(key)
+            continue
+        if (now - seen_at).total_seconds() > SILENT_READY_TTL_SECONDS:
+            stale.append(key)
+    for key in stale:
+        del state[key]
 
 
 def price_decimals(value: float, market: str = "crypto") -> int:
@@ -712,12 +817,25 @@ def resolve_pings(
             # in the first place. Back-fill the GET READY the user would
             # otherwise never see, in the same digest, so a jump straight
             # to ENTRY NOW still comes with its heads-up.
+            #
+            # note_watch_candidates() may already have seen this zone
+            # approaching, before the real alert existed at all - if so,
+            # use that genuine early price/time instead of guessing "moved
+            # fast" from whatever the live price happens to be right now.
             state[ready_key(record)] = now.timestamp()
             state[level_ready_key(record)] = now.timestamp()
+            silent = state.pop(silent_ready_key(record), None)
+            if silent:
+                backfill_price = float(silent["price"])
+                seen_at = pd.Timestamp(silent["time"]).tz_convert(IST)
+                note = f"approaching since {seen_at:%H:%M} IST"
+            else:
+                backfill_price = price
+                note = "moved fast, already at entry"
             pings.append(
                 (
                     STAGE_READY,
-                    format_line(STAGE_READY, price, record, note="moved fast, already at entry"),
+                    format_line(STAGE_READY, backfill_price, record, note=note),
                 )
             )
 
@@ -762,6 +880,7 @@ def main() -> None:
     now = pd.Timestamp.now(tz=IST)
 
     watched: list[dict] = []
+    watch_candidates: list[dict] = []
     for market in markets_for(args.market):
         # Crypto never closes, so the 09:15-15:10 guard is an NSE rule and
         # applying it everywhere would silence crypto for most of the day.
@@ -777,8 +896,10 @@ def main() -> None:
             continue
         for timeframe in timeframes_for(args.timeframe):
             watched.extend(load_watched_alerts(market, timeframe, now))
+            if market == "crypto":
+                watch_candidates.extend(load_watch_candidates(timeframe, now))
 
-    if not watched:
+    if not watched and not watch_candidates:
         print("No alerts inside their entry window.")
         return
 
@@ -792,11 +913,18 @@ def main() -> None:
     prices: dict[str, dict[str, float]] = {
         symbol: {"price": price} for symbol, price in nse_prices.items()
     }
-    prices.update(
-        fetch_crypto_prices(
-            sorted({r["symbol"] for r in watched if r["_market"] == "crypto"})
-        )
+    crypto_symbols = {r["symbol"] for r in watched if r["_market"] == "crypto"}
+    crypto_symbols.update(r["symbol"] for r in watch_candidates)
+    prices.update(fetch_crypto_prices(sorted(crypto_symbols)))
+
+    # Watch candidates are never pinged directly - see note_watch_candidates().
+    # This only lets a later GET READY (once a real alert confirms the zone)
+    # use the price from when it genuinely first approached, instead of
+    # guessing "moved fast" from whatever was live once the alert showed up.
+    note_watch_candidates(
+        watch_candidates, {watch_key(record) for record in watched}, prices, state, now
     )
+    prune_silent_ready(state, now)
 
     # One heads-up per symbol, not one per level. Widening the watch band to
     # 0.75% put several stacked zones on the same symbol in range at once and

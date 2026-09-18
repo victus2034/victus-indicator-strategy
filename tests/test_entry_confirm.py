@@ -777,6 +777,101 @@ class ResolvePingsTests(unittest.TestCase):
         self.assertEqual([stage for stage, _ in pings], [entry_confirm.STAGE_ENTRY])
 
 
+class WatchCandidateTests(unittest.TestCase):
+    def test_an_unconfirmed_candidate_in_range_is_noted_but_not_pinged(self):
+        record = watched(entry=100.0, stop=98.0, side="long")
+        now = pd.Timestamp("2026-09-17 12:00", tz=entry_confirm.IST)
+        state = {}
+
+        entry_confirm.note_watch_candidates(
+            [record], set(), {"TCS.NS": price_info(100.1)}, state, now
+        )
+
+        skey = entry_confirm.silent_ready_key(record)
+        self.assertIn(skey, state)
+        self.assertAlmostEqual(state[skey]["price"], 100.1)
+        # Nothing was sent - only a real alert can ever trigger a ping.
+        self.assertEqual(
+            [k for k in state if not k.startswith("_")], []
+        )
+
+    def test_a_candidate_already_confirmed_this_run_is_left_to_the_normal_flow(self):
+        record = watched(entry=100.0, stop=98.0, side="long")
+        now = pd.Timestamp("2026-09-17 12:00", tz=entry_confirm.IST)
+        state = {}
+        confirmed = {entry_confirm.watch_key(record)}
+
+        entry_confirm.note_watch_candidates(
+            [record], confirmed, {"TCS.NS": price_info(100.1)}, state, now
+        )
+
+        self.assertNotIn(entry_confirm.silent_ready_key(record), state)
+
+    def test_a_candidate_outside_the_approach_band_is_not_noted(self):
+        record = watched(entry=100.0, stop=98.0, side="long")
+        now = pd.Timestamp("2026-09-17 12:00", tz=entry_confirm.IST)
+        state = {}
+
+        entry_confirm.note_watch_candidates(
+            [record], set(), {"TCS.NS": price_info(105.0)}, state, now
+        )
+
+        self.assertNotIn(entry_confirm.silent_ready_key(record), state)
+
+    def test_a_real_alert_confirming_a_noted_zone_uses_the_early_price_not_moved_fast(self):
+        # The whole point: entry_confirm saw this zone approaching via a
+        # watch candidate before any real alert existed. Once the alert
+        # confirms it, already at ENTRY NOW, the backfilled GET READY
+        # should use the genuine early price, not "moved fast".
+        record = watched(entry=100.0, stop=98.0, side="long")
+        seen_at = pd.Timestamp("2026-09-17 11:45", tz=entry_confirm.IST)
+        state = {
+            entry_confirm.silent_ready_key(record): {
+                "price": 100.4,
+                "time": seen_at.isoformat(),
+            }
+        }
+        now = pd.Timestamp("2026-09-17 12:00", tz=entry_confirm.IST)
+
+        pings, entry_state = entry_confirm.resolve_pings(
+            record, price_info(99.9), state, now
+        )
+
+        stages = [stage for stage, _ in pings]
+        self.assertEqual(stages, [entry_confirm.STAGE_READY, entry_confirm.STAGE_ENTRY])
+        self.assertIn("100.40", pings[0][1])
+        self.assertIn("approaching since 11:45 IST", pings[0][1])
+        self.assertNotIn("moved fast", pings[0][1])
+        # Consumed - a second confirmation would not need it again anyway,
+        # since last_stage would no longer be 0, but it should not linger.
+        self.assertNotIn(entry_confirm.silent_ready_key(record), state)
+
+    def test_a_genuinely_unwarned_jump_still_says_moved_fast(self):
+        record = watched(entry=100.0, stop=98.0, side="long")
+        now = pd.Timestamp("2026-09-17 12:00", tz=entry_confirm.IST)
+
+        pings, _ = entry_confirm.resolve_pings(record, price_info(99.9), {}, now)
+
+        self.assertIn("moved fast, already at entry", pings[0][1])
+
+    def test_stale_silent_ready_entries_are_pruned(self):
+        record = watched(entry=100.0, stop=98.0, side="long")
+        now = pd.Timestamp("2026-09-17 12:00", tz=entry_confirm.IST)
+        fresh_key = entry_confirm.silent_ready_key(record)
+        stale_time = now - pd.Timedelta(hours=25)
+        state = {
+            fresh_key: {"price": 100.0, "time": (now - pd.Timedelta(hours=1)).isoformat()},
+            "_silent_ready|OLD.NS|30m|long|1|2": {
+                "price": 1.0, "time": stale_time.isoformat(),
+            },
+        }
+
+        entry_confirm.prune_silent_ready(state, now)
+
+        self.assertIn(fresh_key, state)
+        self.assertNotIn("_silent_ready|OLD.NS|30m|long|1|2", state)
+
+
 class ScopeTests(unittest.TestCase):
     def test_it_watches_crypto_over_both_timeframes_by_default(self):
         # NSE was dropped from this job, and covering one timeframe
