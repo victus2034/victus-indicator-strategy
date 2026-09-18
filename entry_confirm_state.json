@@ -5,13 +5,14 @@
     "stopped_out": true
   },
   "AVAXUSD|30m|short|8.144|8.219": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "BNBUSD|4h|short|756.21|762.023": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "LTCUSD|4h|short|54.9|55.4": {
     "reached_entry": true,
@@ -28,6 +29,7 @@
   "_level_ready|AAVEUSD|30m|short|136.8|137.05": 1789727200.289498,
   "_level_ready|AVAXUSD|30m|short|7.614|7.619": 1789647674.823928,
   "_level_ready|AVAXUSD|30m|short|8.04|8.06": 1789735573.135937,
+  "_level_ready|AVAXUSD|30m|short|8.144|8.219": 1789740079.484637,
   "_level_ready|AXTI/USDT:USDT|30m|short|59.33|59.9175": 1789540275.035677,
   "_level_ready|BEAT/USDT|30m|short|0.08437|0.084795": 1789642566.116701,
   "_level_ready|BEAT/USDT|30m|short|0.08613|0.0867175": 1789670159.6338,
@@ -88,7 +90,7 @@
   "_ready|ALGO/USDT|30m": 1789460760.736088,
   "_ready|ATOM/USDT|30m": 1789369559.225687,
   "_ready|ATOM/USDT|4h": 1788869156.905559,
-  "_ready|AVAXUSD|30m": 1789735573.135937,
+  "_ready|AVAXUSD|30m": 1789740079.484637,
   "_ready|AXTI/USDT:USDT|30m": 1789540275.035677,
   "_ready|BCHUSD|30m": 1789410066.584142,
   "_ready|BEAT/USDT|30m": 1789670159.6338,
@@ -228,6 +230,10 @@
   "_silent_ready|RIVERUSD|30m|long|1.20053|1.18862": {
     "price": 1.215,
     "time": "2026-09-18T18:31:57.818700+05:30"
+  },
+  "_silent_ready|RIVERUSD|30m|short|1.257|1.26825": {
+    "price": 1.246,
+    "time": "2026-09-18T19:31:19.484637+05:30"
   },
   "_silent_ready|SOLUSD|30m|short|106.554|107.216": {
     "price": 105.79,
