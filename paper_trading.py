@@ -269,6 +269,13 @@ def open_new_positions(
                 state["handled"][trade_id] = "zone_not_touched"
             continue
 
+        direction = 1.0 if side == "long" else -1.0
+        if backtest.stop_too_tight(entry, stop, direction, market_of(record["symbol"], market)):
+            # Same rule as the backtest: charges alone would cost more than
+            # MAX_COST_R, so this is not a trade the two sides should take.
+            state["handled"][trade_id] = "stop_too_tight"
+            continue
+
         fill_time = after_alert.index[list(touched).index(True)]
         levels = targets_for(entry, stop, side)
         # Fill at the recorded entry, matching the backtest's assumption, so
@@ -399,7 +406,7 @@ def evaluate_open_positions(
 
         # Same charge model as the backtest, so the two totals stay
         # comparable rather than one being gross and the other net.
-        cost_r = backtest.round_trip_cost_r(entry, risk, "nse")
+        cost_r = backtest.round_trip_cost_r(entry, risk, position.get("market"))
         net_r = realized_r - cost_r if pd.notna(realized_r) else realized_r
 
         record = dict(position)

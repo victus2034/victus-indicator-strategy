@@ -1475,5 +1475,36 @@ class OutcomeLabelTests(unittest.TestCase):
 
 
 
+class StopTooTightTests(unittest.TestCase):
+    def test_charges_over_half_a_risk_unit_is_too_tight(self):
+        # crypto fee 0.10% of 100 = 0.10; a 0.15 risk makes that 0.67R
+        self.assertTrue(summary.stop_too_tight(100.0, 99.85, 1.0, "crypto"))
+        self.assertTrue(summary.stop_too_tight(100.0, 100.15, -1.0, "crypto"))
+
+    def test_a_normal_stop_is_left_alone(self):
+        self.assertFalse(summary.stop_too_tight(100.0, 99.5, 1.0, "crypto"))
+        self.assertFalse(summary.stop_too_tight(100.0, 100.5, -1.0, "crypto"))
+
+    def test_a_micro_stop_is_not_taken_instead_of_losing_multiple_r(self):
+        alert = crypto_alert(
+            zone_bottom=99.98, zone_top=100.0, body_entry=100.0,
+            planned_entry=100.0, stop_price=99.98,
+        )
+        index = pd.date_range("2026-08-04 10:00", periods=4, freq="5min", tz=summary.IST)
+        frame = pd.DataFrame(
+            {
+                "open": [101.0, 100.0, 99.0, 99.0],
+                "high": [101.2, 100.1, 99.5, 99.5],
+                "low": [100.8, 99.0, 98.5, 98.5],
+                "close": [101.0, 99.5, 99.0, 99.0],
+                "volume": [1, 1, 1, 1],
+            },
+            index=index,
+        )
+        result = summary.simulate_alert(frame, alert, 0, 3, market="crypto")
+        self.assertFalse(result["filled"])
+        self.assertEqual(result["outcome"], "stop_too_tight")
+
+
 if __name__ == "__main__":
     unittest.main()

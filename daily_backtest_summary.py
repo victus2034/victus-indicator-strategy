@@ -115,6 +115,13 @@ MIN_SAFE_STOP_PCT = BREAK_EVEN_OFFSET_PCT * 2
 # labeled assumption (not derived from real fills) rather than a measured
 # figure - revisit if real execution data becomes available.
 SL_FILL_SLIPPAGE_PCT = 0.05
+# A trade whose round-trip charges alone would eat more than this much of R
+# is not a trade worth taking: the stop is so thin that fees and slippage,
+# which are a fixed share of price, turn a full stop into -2R or -3R. Fees,
+# buffer and slippage stay exactly as they were; these alerts are simply
+# scored "stop_too_tight" (not taken) instead of being left to distort
+# every total. 0.5R is a stop of about 0.20% at the crypto fee rate.
+MAX_COST_R = 0.5
 TARGET_1_R = 1.0
 TARGET_2_R = 2.0
 HALF_R = 0.5
@@ -951,6 +958,9 @@ def simulate_alert(
             return unfilled(alert, "immature")
         return unfilled(alert, "zone_not_touched")
 
+    if stop_too_tight(entry_price, original_stop_price(alert), direction, market):
+        return unfilled(alert, "stop_too_tight")
+
     if uses_six_hour_evaluation(alert.get("symbol", "")):
         six_hour_end_index, six_hour_window_mature = six_hour_entry_tracking_end(frame, entry_index)
         if six_hour_end_index is None or six_hour_end_index < entry_index:
@@ -1429,6 +1439,14 @@ def round_trip_cost_r(entry_price: float, risk: float, market: str | None) -> fl
     return (entry_price * rate / 100.0) / risk
 
 
+def stop_too_tight(entry_price: float, stop: float, direction: float, market: str | None) -> bool:
+    """True when charges alone would cost more than MAX_COST_R of the risk."""
+    risk = direction * (entry_price - stop)
+    if risk <= 0:
+        risk = entry_price * FIXED_STOP_PCT / 100.0
+    return round_trip_cost_r(entry_price, risk, market) > MAX_COST_R
+
+
 def original_stop_price(alert: dict) -> float:
     """Buffered far-side zone stop used by alerts and backtest."""
     recorded_stop = pd.to_numeric(alert.get("stop_price"), errors="coerce")
@@ -1674,6 +1692,7 @@ def build_summary(
     duplicates = int(outcome_counts.get("zone_cooldown", 0))
     entries = len(filled)
     no_touch = int(outcome_counts.get("zone_not_touched", 0))
+    too_tight = int(outcome_counts.get("stop_too_tight", 0))
     waiting = int(outcome_counts.get("immature", 0))
     data_issues = int(outcome_counts.get("data_missing", 0)) + int(outcome_counts.get("alert_before_data", 0))
     finalized = filled[filled["final_result"] != "Pending"] if not filled.empty else filled
@@ -1699,6 +1718,8 @@ def build_summary(
     tally = [f"Alerts {len(records)}", f"Entries {entries}", f"No Touch {no_touch}"]
     if duplicates:
         tally.append(f"Duplicates {duplicates}")
+    if too_tight:
+        tally.append(f"Too Tight {too_tight}")
     if waiting:
         tally.append(f"Waiting {waiting}")
     if data_issues:
