@@ -3426,7 +3426,9 @@
     "BEAT/USDT|30m|long|0.0831|0.0835": 1789900905.7343743,
     "shadow:BLESSUSD|30m|long|0.008903|0.00893165": 1789900905.9427984,
     "XAUTUSD|30m|short|4373.38|4375.18": 1789902111.5804398,
-    "shadow:XAUTUSD|30m|short|4373.84|4375.18": 1789902111.5804398
+    "shadow:XAUTUSD|30m|short|4373.84|4375.18": 1789902111.5804398,
+    "METAXUSD|30m|short|672.238|672.25": 1789906290.7007887,
+    "shadow:METAXUSD|30m|short|671.956|672.25": 1789906290.7007887
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14975,7 +14977,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1789905673.2398121
+    "30m": 1789906264.0370376
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -138476,8 +138478,8 @@
     "last_alert_at": 0.0
   },
   "shadow:METAXUSD|supply|671.95602215|672.25000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789906290.7007887
   },
   "SNDKBUSD|supply|1783.68000000|1785.00000000": {
     "in_zone": false,
@@ -138800,8 +138802,8 @@
     "last_alert_at": 0.0
   },
   "METAXUSD|supply|672.23824089|672.25000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789906290.7007887
   },
   "shadow:SNDKBUSD|supply|1783.49898798|1785.00000000": {
     "in_zone": false,
@@ -139808,6 +139810,34 @@
     "last_alert_at": 0.0
   },
   "shadow:MRVL/USDT:USDT|demand|236.26000000|236.63971460": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BTCUSD|supply|81885.76309867|81954.60000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BTCUSD|demand|75981.00000000|76063.89146408": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:ETHUSD|supply|2666.79769026|2670.98000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:ETHUSD|demand|2426.46000000|2429.95649172": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:XRPUSD|supply|1.45664448|1.45930000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:DOGEUSD|supply|0.09169884|0.09192000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:AAVEUSD|demand|121.70000000|121.98306906": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
