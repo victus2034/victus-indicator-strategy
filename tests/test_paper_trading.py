@@ -382,5 +382,16 @@ class MarketScopeTests(unittest.TestCase):
 
 
 
+class EntryWaitTests(unittest.TestCase):
+    def test_wait_is_three_bars_of_the_alerts_own_timeframe(self):
+        t = pd.Timestamp("2026-09-10 10:00", tz="UTC")
+        self.assertEqual(paper_trading.entry_wait_end(t, "30m"), t + pd.Timedelta(minutes=90))
+        self.assertEqual(paper_trading.entry_wait_end(t, "4h"), t + pd.Timedelta(hours=12))
+
+    def test_unknown_timeframe_falls_back_to_30m(self):
+        t = pd.Timestamp("2026-09-10 10:00", tz="UTC")
+        self.assertEqual(paper_trading.entry_wait_end(t, "??"), t + pd.Timedelta(minutes=90))
+
+
 if __name__ == "__main__":
     unittest.main()

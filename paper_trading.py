@@ -248,13 +248,25 @@ def open_new_positions(
         if market == "nse":
             square_off = horizon_end(market, record["_delivered"], now)
             after_alert = after_alert[after_alert.index < square_off]
+        # Same cap the backtest applies in find_entry(): a zone that never
+        # touches within ENTRY_WAIT_BARS of its own timeframe is scored
+        # "zone_not_touched" and dropped from its stats, not carried
+        # forever. Without this, paper kept filling stale zones the
+        # backtest had already stopped counting, comparing two different
+        # populations of trades rather than the same trades twice.
+        wait_end = entry_wait_end(record["_delivered"], timeframe)
+        after_alert = after_alert[after_alert.index <= wait_end]
         if after_alert.empty:
+            if now >= wait_end:
+                state["handled"][trade_id] = "zone_not_touched"
             continue
 
         touched = (
             (after_alert["low"] <= entry) if side == "long" else (after_alert["high"] >= entry)
         )
         if not bool(touched.any()):
+            if now >= wait_end:
+                state["handled"][trade_id] = "zone_not_touched"
             continue
 
         fill_time = after_alert.index[list(touched).index(True)]
@@ -429,6 +441,21 @@ def paper_window_open(market: str, now: pd.Timestamp) -> bool:
     if market == "nse":
         return in_paper_window(now)
     return entry_confirm.crypto_alert_window_open(now)
+
+
+def entry_wait_end(delivered: pd.Timestamp, timeframe: str) -> pd.Timestamp:
+    """When an alert stops being eligible to fill, per backtest.ENTRY_WAIT_BARS.
+
+    daily_backtest_summary.find_entry() only looks ENTRY_WAIT_BARS bars of the
+    alert's own timeframe past the alert before giving up and scoring the
+    trade "zone_not_touched" (excluded from its stats). Paper must give up on
+    the same clock, or it fills alerts the backtest has already discarded and
+    the two sides stop being the same set of trades.
+    """
+    duration = backtest.ALERT_BAR_DURATION.get(
+        str(timeframe), backtest.ALERT_BAR_DURATION["30m"]
+    )
+    return pd.Timestamp(delivered) + duration * backtest.ENTRY_WAIT_BARS
 
 
 def horizon_end(market: str, entry_time: pd.Timestamp, now: pd.Timestamp) -> pd.Timestamp:
