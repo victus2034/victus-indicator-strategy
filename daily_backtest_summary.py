@@ -1616,7 +1616,14 @@ def apply_same_day_zone_cooldown(
             replacement = unfilled(current, "zone_cooldown")
             replacement["cooldown_blocked"] = True
             for key, value in replacement.items():
-                frame.at[index, key] = value
+                try:
+                    frame.at[index, key] = value
+                except (TypeError, ValueError):
+                    # pandas 3 refuses to put e.g. "" into a float64 column
+                    # (a group whose fills all had numeric net_realized_r).
+                    # Widen just that column; the row still round-trips.
+                    frame[key] = frame[key].astype(object)
+                    frame.at[index, key] = value
             blocked += 1
         else:
             accepted.setdefault(symbol, []).append(current)

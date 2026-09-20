@@ -1506,5 +1506,31 @@ class StopTooTightTests(unittest.TestCase):
         self.assertEqual(result["outcome"], "stop_too_tight")
 
 
+class CooldownDtypeTests(unittest.TestCase):
+    def test_cooldown_writes_text_into_all_nan_float_columns(self):
+        # A day whose fills carry NaN in final_result / timing_status makes
+        # those columns float64; pandas 3 then rejects the "" that the
+        # zone_cooldown replacement writes, which crashed a whole report group.
+        rows = []
+        for minute in (0, 5):
+            rows.append(
+                {
+                    "symbol": "AAPLXUSD",
+                    "side": "long",
+                    "filled": True,
+                    "trade_id": f"t{minute}",
+                    "entry_time": pd.Timestamp(f"2026-09-01 10:{minute:02d}", tz=summary.IST),
+                    "zone_bottom": 99.0,
+                    "zone_top": 100.0,
+                    "final_result": float("nan"),
+                    "timing_status": float("nan"),
+                    "net_realized_r": 1.0,
+                }
+            )
+        results, blocked = summary.apply_same_day_zone_cooldown(pd.DataFrame(rows), "xstock")
+        self.assertEqual(blocked, 1)
+        self.assertEqual(list(results["outcome"].fillna("")).count("zone_cooldown"), 1)
+
+
 if __name__ == "__main__":
     unittest.main()
