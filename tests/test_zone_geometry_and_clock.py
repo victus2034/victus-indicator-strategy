@@ -161,7 +161,7 @@ class ShadowNeverDelivers(unittest.TestCase):
 
     def zone(self):
         return {
-            "type": "demand", "top": 100.5, "bottom": 99.0, "body_entry": 100.5,
+            "type": "demand", "top": 100.5, "bottom": 100.0, "body_entry": 100.5,
             "active": True, "over_touched": False, "created_idx": 0, "clock": 0,
             "last_gap": None, "atr": 1.0, "geometry": "wick",
             "wick_to_body": 1.0, "wick_atr": 1.0, "departure_atr": 1.0,
@@ -222,7 +222,7 @@ class WatchBandDoesNotOverlapTheAlertBand(unittest.TestCase):
 
     def zone(self, top=100.5):
         return {
-            "type": "demand", "top": top, "bottom": 99.0, "body_entry": top,
+            "type": "demand", "top": top, "bottom": 100.0, "body_entry": top,
             "active": True, "over_touched": False, "created_idx": 0, "clock": 0,
             "last_gap": None, "atr": 1.0, "geometry": "wick",
             "wick_to_body": 1.0, "wick_atr": 1.0, "departure_atr": 1.0,

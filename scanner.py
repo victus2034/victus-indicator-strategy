@@ -49,6 +49,7 @@ from config import (
     ZONE_SL_HEIGHT_PCT,
     ATR_METHOD,
     ZONE_MAX_WIDTH_PCT,
+    MAX_ALERT_STOP_PCT,
     ZONE_RATING_GATE,
     ZONE_SHADOW_GEOMETRY,
     OHLCV_LIMIT,
@@ -1458,6 +1459,13 @@ def planned_stop_distance_pct(zone_type, zone, buffer_pct=SL_BUFFER_PCT):
     return abs(entry - stop) / abs(entry) * 100.0
 
 
+def stop_too_wide(zone_type, zone):
+    """True when the planned stop is further than MAX_ALERT_STOP_PCT from entry."""
+    if MAX_ALERT_STOP_PCT <= 0:
+        return False
+    return planned_stop_distance_pct(zone_type, zone) > MAX_ALERT_STOP_PCT
+
+
 def delivered_alert_id(record):
     """Stable ID carried from alert log into daily/weekly backtest summaries."""
     parts = [
@@ -1769,6 +1777,9 @@ def send_status_message(message):
 
 def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shadow=False):
     if zone is None:
+        return False
+
+    if stop_too_wide(zone_type, zone):
         return False
 
     rating = result.get(f"{zone_type}_rating")

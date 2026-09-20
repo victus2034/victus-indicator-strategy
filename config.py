@@ -406,6 +406,13 @@ ZONE_RATING_GATE = env_flag("VICTUS_ZONE_RATING_GATE", ZONE_GEOMETRY != "wick")
 # reading, accepting that EX5 then gets re-cut.
 ZONE_MAX_WIDTH_PCT = env_float("VICTUS_ZONE_MAX_WIDTH_PCT", 0.80)
 
+# No alert - and no pre-alert watch row, so no GET READY / ENTRY NOW either - for
+# a zone whose planned stop sits further than this from its entry. Asked for on
+# 2026-09-20: a stop that wide makes the trade too big a risk per R to be worth
+# an alert. Zone geometry is untouched (the chart still draws the zone); only the
+# alert is withheld. Set VICTUS_MAX_ALERT_STOP_PCT=0 to switch it off.
+MAX_ALERT_STOP_PCT = env_float("VICTUS_MAX_ALERT_STOP_PCT", 1.5)
+
 ZONE_REBUILD_AFTER_BREAK = env_flag("VICTUS_ZONE_REBUILD_AFTER_BREAK", ZONE_GEOMETRY == "wick")
 
 MAX_CONSECUTIVE_ZONE_TOUCHES = 2
