@@ -3427,13 +3427,14 @@
     "shadow:BLESSUSD|30m|long|0.008903|0.00893165": 1789900905.9427984,
     "XAUTUSD|30m|short|4373.38|4375.18": 1789902111.5804398,
     "shadow:XAUTUSD|30m|short|4373.84|4375.18": 1789902111.5804398,
-    "METAXUSD|30m|short|672.238|672.25": 1789909904.5932229,
-    "shadow:METAXUSD|30m|short|671.956|672.25": 1789909904.5932229,
+    "METAXUSD|30m|short|672.238|672.25": 1789912283.9916027,
+    "shadow:METAXUSD|30m|short|671.956|672.25": 1789912283.9916027,
     "XAUTUSD|30m|long|4371.59|4373.06": 1789911701.97471,
     "shadow:XAUTUSD|30m|long|4371.59|4372.61": 1789911701.97471,
     "MRVL/USDT:USDT|30m|long|240|240.6": 1789910490.4764202,
     "AAVEUSD|30m|long|133.38|134.06": 1789911101.5570114,
-    "SNDKBUSD|30m|long|1750.51|1757.5": 1789911703.283641
+    "SNDKBUSD|30m|long|1750.51|1757.5": 1789911703.283641,
+    "shadow:MRVL/USDT:USDT|30m|long|240|240.2": 1789912284.4700367
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -14982,7 +14983,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1789911670.912867
+    "30m": 1789912258.054365
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -45804,7 +45805,7 @@
     "ETHUSD|30m|short|2649.78|2670.98": 1789831904.0753393,
     "BTCUSD|30m|short|81739.6|82276.6": 1789825305.7118764,
     "TACUSD|30m|long|0.001589|0.001598": 1789795891.3269837,
-    "TSLAXUSD|30m|long|361.8|363.1": 1789894919.0101023,
+    "TSLAXUSD|30m|long|361.8|363.1": 1789912283.989447,
     "LTCUSD|30m|short|59.31|59.44": 1789790515.1108654,
     "ZORAUSD|30m|short|0.00825397|0.00832": 1789813906.0818398,
     "LTCUSD|30m|short|59.06|59.39": 1789788692.3527474,
@@ -45861,8 +45862,8 @@
     "ZORAUSD|30m|long|0.007816|0.007824": 1789900905.939622,
     "BLESSUSD|30m|long|0.008903|0.008915": 1789900905.9427984,
     "XAUTUSD|30m|long|4334.23|4341.23": 1789902111.5804398,
-    "NVDAXUSD|30m|long|218.25|218.54": 1789909904.846243,
-    "XRPUSD|30m|long|1.3671|1.3703": 1789909313.0993032,
+    "NVDAXUSD|30m|long|218.25|218.54": 1789912284.4701362,
+    "XRPUSD|30m|long|1.3671|1.3703": 1789912283.9848492,
     "SOXLBUSD|30m|long|119.5|119.55": 1789911703.280819,
     "SNDKBUSD|30m|long|1750.51|1757.5": 1789909314.0837057,
     "MRVL/USDT:USDT|30m|long|240|240.6": 1789909314.0865586,
@@ -134613,7 +134614,7 @@
     "last_alert_at": 0.0
   },
   "TSLAXUSD|demand|361.80000000|363.10000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789911702.7501347
   },
   "MRVL/USDT:USDT|demand|236.26000000|236.53000000": {
@@ -138494,7 +138495,7 @@
   },
   "shadow:METAXUSD|supply|671.95602215|672.25000000": {
     "in_zone": true,
-    "last_alert_at": 1789909904.5932229
+    "last_alert_at": 1789912283.9916027
   },
   "SNDKBUSD|supply|1783.68000000|1785.00000000": {
     "in_zone": false,
@@ -138818,7 +138819,7 @@
   },
   "METAXUSD|supply|672.23824089|672.25000000": {
     "in_zone": true,
-    "last_alert_at": 1789909904.5932229
+    "last_alert_at": 1789912283.9916027
   },
   "shadow:SNDKBUSD|supply|1783.49898798|1785.00000000": {
     "in_zone": false,
@@ -140137,8 +140138,8 @@
     "last_alert_at": 0.0
   },
   "shadow:MRVL/USDT:USDT|demand|240.00000000|240.20012094": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789912284.4700367
   },
   "ETHUSD|supply|2649.20000000|2666.15000000": {
     "in_zone": false,
@@ -140157,6 +140158,26 @@
     "last_alert_at": 0.0
   },
   "shadow:XRPUSD|demand|1.36870000|1.37147520": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:AAVEUSD|supply|143.81767270|144.18000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:AAVEUSD|demand|121.70000000|121.98306927": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:LTCUSD|demand|54.84000000|54.91668542": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BNBUSD|supply|772.95352038|773.80000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0
+  },
+  "shadow:BNBUSD|demand|744.10000000|744.92563467": {
     "in_zone": false,
     "last_alert_at": 0.0
   }
