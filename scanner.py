@@ -713,6 +713,29 @@ def is_delta_symbol(symbol):
     return "/" not in symbol and symbol.endswith("USD")
 
 
+# Watchlist names that are ccxt-style pairs, not Delta's own contract
+# strings, but which Delta India does list (checked against /v2/products:
+# all four are live perpetuals). is_delta_symbol() reads a name's shape, so
+# it called these "not Delta" and the scanner never asked Delta for them -
+# their zones came from CoinSwitch/OKX/etc. while every ping still said
+# "Delta". It is left as it is because fallback_symbol() relies on that shape
+# rule for naming ccxt pairs; this is what the Delta fetches use instead.
+DELTA_CONTRACT_ALIASES = {
+    "AKE/USDT": "AKEUSD",
+    "BEAT/USDT": "BEATUSD",
+    "TRUMP/USDT": "TRUMPUSD",
+    "MRVL/USDT:USDT": "MRVLBUSD",
+}
+
+
+def delta_contract(symbol):
+    """Delta India's own contract string for a watchlist symbol, or None."""
+    alias = DELTA_CONTRACT_ALIASES.get(symbol)
+    if alias:
+        return alias
+    return symbol if is_delta_symbol(symbol) else None
+
+
 def fallback_symbol(symbol):
     """The ccxt pair to ask a fallback exchange for.
 
@@ -813,7 +836,8 @@ def require_fresh_ohlcv(ohlcv, source_name):
 
 
 def fetch_delta_ohlcv(symbol, attempts=3, retry_delay=1.5):
-    if not is_delta_symbol(symbol):
+    contract = delta_contract(symbol)
+    if contract is None:
         return None
 
     timeframe_seconds = TIMEFRAME_SECONDS.get(TIMEFRAME)
@@ -823,7 +847,7 @@ def fetch_delta_ohlcv(symbol, attempts=3, retry_delay=1.5):
     last_error = None
     for attempt in range(attempts):
         try:
-            return _fetch_delta_ohlcv_once(symbol, timeframe_seconds)
+            return _fetch_delta_ohlcv_once(contract, timeframe_seconds)
         except Exception as error:
             last_error = error
             if attempt < attempts - 1:
@@ -968,7 +992,7 @@ def fine_price(symbol, max_age_seconds=None):
 def fetch_delta_ticker_price(symbol):
     """Delta's own last traded price. Public endpoint, no signing."""
     response = requests.get(
-        f"{DELTA_API_BASE_URL}/v2/tickers/{symbol}", timeout=10
+        f"{DELTA_API_BASE_URL}/v2/tickers/{delta_contract(symbol) or symbol}", timeout=10
     )
     response.raise_for_status()
     payload = response.json()
@@ -1152,18 +1176,32 @@ def splice_deep_history(symbol, ohlcv):
 def fetch_symbol_ohlcv(symbol):
     """Candles for one symbol and the venue they came from.
 
-    CoinSwitch first because that is the book being charted; the rest of
-    the chain is a fallback whose levels can drift from the chart. Split
-    out of scan_symbol so anything else needing a price - the entry-confirm
-    pings, for one - goes through the same venue order instead of picking
-    its own exchange.
+    Delta India first, because that is the book Shiva trades and charts:
+    every entry-confirm ping says "Delta", and TradingView's chart of these
+    symbols is Delta's feed. CoinSwitch used to be first ("the book being
+    charted") until he stopped trading there, but the order was never
+    changed, so about a quarter of recent zones were still built off it and
+    the same zone flipped between venues from scan to scan, restarting
+    entry-confirm cycles. The rest of the chain is a fallback whose levels
+    can drift from the chart. Split out of scan_symbol so anything else
+    needing a price - the entry-confirm pings, for one - goes through the
+    same venue order instead of picking its own exchange.
     """
     last_error = None
     ohlcv = None
     exchange_name = None
     symbol_for_fallback = fallback_symbol(symbol)
 
-    if PREFER_COINSWITCH:
+    try:
+        delta_candles = fetch_delta_ohlcv(symbol)  # None = not a Delta contract
+        if delta_candles is not None:
+            ohlcv = require_fresh_ohlcv(delta_candles, "delta_india")
+            exchange_name = "delta_india"
+    except Exception as error:
+        last_error = error
+        ohlcv = None
+
+    if PREFER_COINSWITCH and ohlcv is None:
         try:
             ohlcv = require_fresh_ohlcv(fetch_coinswitch_ohlcv(symbol), "CoinSwitch")
             exchange_name = "coinswitch" if ohlcv is not None else exchange_name
@@ -1186,14 +1224,8 @@ def fetch_symbol_ohlcv(symbol):
     # Beyond this point the venue is no longer the one being charted, so
     # levels can drift from the chart. That is still better than no scan at
     # all: Binance is geo-blocked from GitHub Actions runners, so on CI the
-    # chain really is CoinSwitch then these.
-    if ohlcv is None:
-        try:
-            ohlcv = require_fresh_ohlcv(fetch_delta_ohlcv(symbol), "delta_india")
-            exchange_name = "delta_india" if ohlcv is not None else exchange_name
-        except Exception as error:
-            last_error = error
-
+    # chain really is these. (Delta was already tried first, above - asking
+    # again here would only re-run its three retries on an outage.)
     if ohlcv is None:
         for exchange in EXCHANGES:
             if exchange.id == PRIMARY_EXCHANGE_ID:

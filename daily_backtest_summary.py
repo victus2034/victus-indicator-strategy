@@ -536,13 +536,14 @@ def delta_fetch_window(symbol: str, resolution: str, start, end):
     Delta is where the trades are actually taken and, since CoinSwitch was
     dropped, where most zones are built - see crypto_fetch_ohlcv().
     """
-    if not crypto_scanner.is_delta_symbol(symbol):
+    contract = crypto_scanner.delta_contract(symbol)
+    if contract is None:
         return None
     start_s = int(_as_ist_timestamp(start).tz_convert("UTC").timestamp())
     end_s = int(_as_ist_timestamp(end).tz_convert("UTC").timestamp())
     response = requests.get(
         f"{crypto_scanner.DELTA_API_BASE_URL}/v2/history/candles",
-        params={"symbol": symbol, "resolution": resolution, "start": start_s, "end": end_s},
+        params={"symbol": contract, "resolution": resolution, "start": start_s, "end": end_s},
         timeout=20,
     )
     response.raise_for_status()
