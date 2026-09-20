@@ -529,8 +529,55 @@ def _as_ist_timestamp(value) -> pd.Timestamp:
     return timestamp.tz_localize(IST) if timestamp.tzinfo is None else timestamp.tz_convert(IST)
 
 
+def delta_fetch_window(symbol: str, resolution: str, start, end):
+    """Candles for [start, end) straight from Delta India, or None if the
+    symbol is not a Delta contract.
+
+    Delta is where the trades are actually taken and, since CoinSwitch was
+    dropped, where most zones are built - see crypto_fetch_ohlcv().
+    """
+    if not crypto_scanner.is_delta_symbol(symbol):
+        return None
+    start_s = int(_as_ist_timestamp(start).tz_convert("UTC").timestamp())
+    end_s = int(_as_ist_timestamp(end).tz_convert("UTC").timestamp())
+    response = requests.get(
+        f"{crypto_scanner.DELTA_API_BASE_URL}/v2/history/candles",
+        params={"symbol": symbol, "resolution": resolution, "start": start_s, "end": end_s},
+        timeout=20,
+    )
+    response.raise_for_status()
+    payload = response.json()
+    if not payload.get("success"):
+        raise RuntimeError(payload)
+    candles = sorted(payload.get("result", []), key=lambda candle: candle["time"])
+    return [
+        [
+            int(candle["time"]) * 1000,
+            float(candle["open"]),
+            float(candle["high"]),
+            float(candle["low"]),
+            float(candle["close"]),
+            float(candle.get("volume") or 0),
+        ]
+        for candle in candles
+        if start_s <= int(candle["time"]) < end_s
+    ]
+
+
 def crypto_fetch_resolution_ohlcv(symbol: str, start=None, end=None):
     """Fetch only the 1-minute window needed to resolve an ambiguous candle."""
+    # Same venue as the candle being resolved (see crypto_fetch_ohlcv). A
+    # tie-break read off OKX or MEXC prices against a different book from the
+    # stop and target it is deciding between.
+    try:
+        window_end = end if end is not None else pd.Timestamp.now(tz=IST)
+        window_start = start if start is not None else window_end - pd.Timedelta(minutes=1000)
+        delta_rows = delta_fetch_window(symbol, "1m", window_start, window_end)
+        if delta_rows:
+            return delta_rows
+    except Exception as error:
+        if CRYPTO_FETCH_DEBUG:
+            print(f"[backtest-exchange-debug] {symbol} delta 1m failed: {error}", file=sys.stderr)
     fallback = crypto_scanner.fallback_symbol(symbol)
     last_error = None
     exchanges = []
@@ -602,13 +649,18 @@ def fetch_resolution_frames(
                     **download_kwargs,
                 )
                 frames[symbol] = normalize_yfinance_frame(raw)
-            elif market == "crypto":
+            elif market in {"crypto", "xstock", "other"}:
+                # xStocks used to be skipped here ("timing is TBD") because no
+                # exchange the 1m fetch tried carries them - so every
+                # same-candle stop/target conflict on an xStock stayed
+                # Ambiguous for good. Delta carries them, and the 1m fetch now
+                # asks Delta first, so they can be resolved like any coin.
                 start, end = (windows or {}).get(symbol, (None, None))
                 frames[symbol] = normalize_crypto_frame(
                     crypto_fetch_resolution_ohlcv(symbol, start=start, end=end)
                 )
             else:
-                failures[symbol] = "fine-resolution timing is TBD for xStocks"
+                failures[symbol] = f"no fine-resolution source for market {market}"
         except Exception as error:
             failures[symbol] = str(error)
     return frames, failures
@@ -637,6 +689,29 @@ def _log_crypto_fetch_source(symbol: str, source: str, ohlcv) -> None:
 def crypto_fetch_ohlcv(symbol: str):
     last_error = None
     symbol_for_fallback = crypto_scanner.fallback_symbol(symbol)
+
+    # Delta first. Trades are taken on Delta India (entry_confirm tags every
+    # ping "Delta"), and its book is the one the zones are built from and the
+    # one on the chart being watched. The old order - Binance (geo-blocked on
+    # GitHub runners), then OKX/MEXC/etc., then CoinSwitch - graded every
+    # trade against a different venue's candles: real CI logs showed OKX,
+    # MEXC and CoinSwitch and never Delta, and measured against Delta those
+    # venues' closes differ by a median 0.04-0.25% on the alts (95th
+    # percentile up to 0.9%) - the same size as the 0.20% alert distance and
+    # a large share of a 0.1-0.6% stop. A fill or stop that only exists on
+    # another exchange is a wrong grade. 8 of the 31 watchlist symbols (the
+    # xStocks) exist on no other venue at all, so they only ever got graded
+    # off CoinSwitch's separate feed, or not at all.
+    try:
+        delta_rows = crypto_scanner.fetch_delta_ohlcv(symbol)
+        if delta_rows is not None:  # None = not a Delta contract, go on to the rest
+            ohlcv = crypto_scanner.require_fresh_ohlcv(delta_rows, "delta_india")
+            _log_crypto_fetch_source(symbol, "delta_india", ohlcv)
+            return ohlcv
+    except Exception as error:
+        last_error = error
+        if CRYPTO_FETCH_DEBUG:
+            print(f"[backtest-exchange-debug] {symbol} delta_india failed: {error}", file=sys.stderr)
 
     primary_exchange = crypto_scanner.EXCHANGES_BY_ID.get(crypto_scanner.PRIMARY_EXCHANGE_ID)
     if primary_exchange is not None:

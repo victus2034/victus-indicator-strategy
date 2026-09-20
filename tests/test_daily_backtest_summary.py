@@ -1353,6 +1353,105 @@ class RepeatDeliveryTests(unittest.TestCase):
         self.assertEqual(len(frame), 1)
 
 
+class DeltaVenueTests(unittest.TestCase):
+    """The backtest grades trades on Delta - where they are taken - first."""
+
+    DELTA_ROWS = [[1_780_000_000_000, 100.0, 101.0, 99.0, 100.5, 10.0]]
+    OTHER_ROWS = [[1_780_000_000_000, 90.0, 91.0, 89.0, 90.5, 10.0]]
+
+    def test_delta_candles_are_used_before_any_other_exchange(self):
+        with patch.object(
+            summary.crypto_scanner, "fetch_delta_ohlcv", return_value=self.DELTA_ROWS
+        ), patch.object(
+            summary.crypto_scanner, "require_fresh_ohlcv", side_effect=lambda rows, name: rows
+        ), patch.object(
+            summary.crypto_scanner,
+            "fetch_exchange_ohlcv",
+            side_effect=AssertionError("another exchange was asked while Delta had the data"),
+        ):
+            rows = summary.crypto_fetch_ohlcv("NVDAXUSD")
+
+        self.assertEqual(rows, self.DELTA_ROWS)
+
+    def test_a_non_delta_symbol_falls_through_to_the_old_chain(self):
+        with patch.object(
+            summary.crypto_scanner, "fetch_delta_ohlcv", return_value=None
+        ), patch.object(
+            summary.crypto_scanner, "require_fresh_ohlcv", side_effect=lambda rows, name: rows
+        ), patch.object(
+            summary.crypto_scanner, "fetch_exchange_ohlcv", return_value=self.OTHER_ROWS
+        ):
+            rows = summary.crypto_fetch_ohlcv("SOMECOIN/USDT")
+
+        self.assertEqual(rows, self.OTHER_ROWS)
+
+    def test_a_delta_outage_falls_back_instead_of_failing_the_report(self):
+        with patch.object(
+            summary.crypto_scanner, "fetch_delta_ohlcv", side_effect=RuntimeError("delta down")
+        ), patch.object(
+            summary.crypto_scanner, "require_fresh_ohlcv", side_effect=lambda rows, name: rows
+        ), patch.object(
+            summary.crypto_scanner, "fetch_exchange_ohlcv", return_value=self.OTHER_ROWS
+        ):
+            rows = summary.crypto_fetch_ohlcv("BTCUSD")
+
+        self.assertEqual(rows, self.OTHER_ROWS)
+
+    def test_delta_window_fetch_returns_only_candles_inside_the_window(self):
+        class Resp:
+            def raise_for_status(self):
+                pass
+
+            def json(self):
+                return {"success": True, "result": [
+                    {"time": 1000, "open": 1, "high": 2, "low": 0.5, "close": 1.5, "volume": 3},
+                    {"time": 1060, "open": 1.5, "high": 2.5, "low": 1, "close": 2, "volume": 4},
+                    {"time": 1120, "open": 2, "high": 3, "low": 1.5, "close": 2.5, "volume": 5},
+                ]}
+
+        start = pd.Timestamp(1000, unit="s", tz="UTC")
+        end = pd.Timestamp(1120, unit="s", tz="UTC")  # end is exclusive
+        with patch.object(summary.crypto_scanner, "is_delta_symbol", return_value=True), \
+                patch.object(summary.requests, "get", return_value=Resp()) as get:
+            rows = summary.delta_fetch_window("NVDAXUSD", "1m", start, end)
+
+        self.assertEqual([row[0] for row in rows], [1_000_000, 1_060_000])
+        self.assertEqual(get.call_args.kwargs["params"]["resolution"], "1m")
+        self.assertEqual(get.call_args.kwargs["params"]["start"], 1000)
+
+    def test_delta_window_fetch_skips_a_symbol_delta_does_not_list(self):
+        with patch.object(summary.crypto_scanner, "is_delta_symbol", return_value=False):
+            self.assertIsNone(
+                summary.delta_fetch_window(
+                    "X/USDT", "1m",
+                    pd.Timestamp("2026-09-01", tz=summary.IST),
+                    pd.Timestamp("2026-09-02", tz=summary.IST),
+                )
+            )
+
+    def test_tie_break_candles_come_from_delta_too(self):
+        rows = [[1_780_000_000_000, 1, 2, 0.5, 1.5, 1]]
+        with patch.object(summary, "delta_fetch_window", return_value=rows):
+            got = summary.crypto_fetch_resolution_ohlcv(
+                "BTCUSD",
+                start=pd.Timestamp("2026-09-01 10:00", tz=summary.IST),
+                end=pd.Timestamp("2026-09-01 10:30", tz=summary.IST),
+            )
+
+        self.assertEqual(got, rows)
+
+    def test_xstocks_can_now_be_tie_broken_instead_of_staying_ambiguous(self):
+        rows = [
+            [1_780_000_000_000, 1, 2, 0.5, 1.5, 1],
+            [1_780_000_060_000, 1.5, 2, 1, 1.8, 1],
+        ]
+        with patch.object(summary, "crypto_fetch_resolution_ohlcv", return_value=rows):
+            frames, failures = summary.fetch_resolution_frames(["NVDAXUSD"], "xstock")
+
+        self.assertIn("NVDAXUSD", frames)
+        self.assertEqual(failures, {})
+
+
 class OutcomeLabelTests(unittest.TestCase):
     def test_the_internal_ambiguous_name_never_reaches_a_report(self):
         # A dry run caught this leaking as data_quality_ambiguous into
