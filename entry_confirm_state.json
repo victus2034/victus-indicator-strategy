@@ -3,6 +3,11 @@
     "reached_entry": true,
     "stopped_out": true
   },
+  "BLESSUSD|30m|short|0.00952183|0.00961704": {
+    "reached_entry": true,
+    "stage": 3,
+    "stopped_out": false
+  },
   "DOGEUSD|4h|short|0.0943651|0.0953087": {
     "reached_entry": true,
     "stage": 3,
@@ -28,11 +33,6 @@
     "stage": 1,
     "stopped_out": false
   },
-  "XRPUSD|30m|short|1.4888|1.49293": {
-    "reached_entry": false,
-    "stage": 1,
-    "stopped_out": false
-  },
   "XRPUSD|4h|short|1.4808|1.49493": {
     "reached_entry": true,
     "stage": 3,
@@ -50,6 +50,7 @@
   "_level_ready|BEAT/USDT|30m|long|0.0835|0.083": 1789901763.445102,
   "_level_ready|BEAT/USDT|30m|short|0.08437|0.084795": 1789642566.116701,
   "_level_ready|BEAT/USDT|30m|short|0.08613|0.0867175": 1789670159.6338,
+  "_level_ready|BLESSUSD|30m|short|0.00952183|0.00961704": 1789986361.691538,
   "_level_ready|BNBUSD|30m|short|731.75|733.938": 1789651563.778331,
   "_level_ready|BNBUSD|30m|short|758.58|761.43": 1789716360.478621,
   "_level_ready|BNBUSD|30m|short|772.88|773.905": 1789929358.559169,
@@ -169,7 +170,7 @@
   "_ready|AXTI/USDT:USDT|30m": 1789540275.035677,
   "_ready|BCHUSD|30m": 1789410066.584142,
   "_ready|BEAT/USDT|30m": 1789901763.445102,
-  "_ready|BLESSUSD|30m": 1789134354.019085,
+  "_ready|BLESSUSD|30m": 1789986361.691538,
   "_ready|BNBUSD|30m": 1789929358.559169,
   "_ready|BNBUSD|4h": 1789717563.77555,
   "_ready|BOME/USDT|30m": 1789466760.110004,
@@ -255,10 +256,6 @@
   "_silent_ready|BEAT/USDT|30m|long|0.08366|0.083235": {
     "price": 0.08433,
     "time": "2026-09-20T20:06:02.499557+05:30"
-  },
-  "_silent_ready|BLESSUSD|30m|short|0.00952183|0.00961704": {
-    "price": 0.009496,
-    "time": "2026-09-21T15:46:12.832146+05:30"
   },
   "_silent_ready|BNBUSD|30m|short|763.24|764.352": {
     "price": 759.51,
@@ -387,6 +384,10 @@
   "_silent_ready|XRPUSD|30m|long|1.3714|1.36803": {
     "price": 1.3774,
     "time": "2026-09-20T20:06:02.499557+05:30"
+  },
+  "_silent_ready|XRPUSD|30m|short|1.4888|1.49293": {
+    "price": 1.4863,
+    "time": "2026-09-21T15:56:01.691538+05:30"
   },
   "_silent_ready|ZORAUSD|30m|long|0.007824|0.007814": {
     "price": 0.007857,
