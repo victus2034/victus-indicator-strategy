@@ -52697,6 +52697,7 @@
     "MRVL/USDT:USDT|30m|short|223.76|224.235": "filled",
     "MRVL/USDT:USDT|30m|short|234.96|235.722": "filled",
     "MRVL/USDT:USDT|30m|short|243.45|243.475": "stop_too_tight",
+    "MRVL/USDT:USDT|30m|short|247.599|250.075": "filled",
     "MRVL/USDT:USDT|4h|long|220.39|220.203": "filled",
     "MSFT/USDT:USDT|30m|long|490.66|490.322": "filled",
     "MSFT/USDT:USDT|30m|long|491.53|491.068": "filled",
@@ -53538,6 +53539,24 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
+      "timeframe": "30m"
+    },
+    "MRVL/USDT:USDT|30m|short|247.599|250.075": {
+      "alert_time": "2026-09-21T08:01:33.678754+05:30",
+      "entry": 247.59920634920636,
+      "entry_time": "2026-09-21T08:05:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "rating": 8,
+      "risk": 2.475992063492072,
+      "side": "short",
+      "stop": 250.07519841269843,
+      "stream": "live",
+      "symbol": "MRVL/USDT:USDT",
+      "target_1": 245.12321428571428,
+      "target_2": 242.6472222222222,
+      "target_half": 246.36121031746032,
       "timeframe": "30m"
     }
   }
