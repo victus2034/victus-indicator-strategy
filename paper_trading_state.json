@@ -51666,6 +51666,33 @@
       "target_half": 145.08442460317457,
       "timeframe": "30m",
       "trade_id": "AAVEUSD|30m|short|145.813|147.272"
+    },
+    {
+      "alert_time": "2026-09-21T15:11:29.921588+05:30",
+      "cost_r": 0.10483539823008726,
+      "date": "2026-09-21",
+      "entry": 1.4808,
+      "entry_time": "2026-09-21T15:15:00+05:30",
+      "exit_price": 1.47902304,
+      "exit_time": "2026-09-21T15:15:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.020967079646013118,
+      "outcome": "BE",
+      "rating": 8,
+      "realized_r": 0.12580247787610038,
+      "risk": 0.014125000000000165,
+      "side": "short",
+      "stop": 1.494925,
+      "stream": "live",
+      "symbol": "XRPUSD",
+      "target_1": 1.4666749999999997,
+      "target_2": 1.4525499999999996,
+      "target_half": 1.4737375,
+      "timeframe": "4h",
+      "trade_id": "XRPUSD|4h|short|1.4808|1.49493"
     }
   ],
   "handled": {
@@ -53803,24 +53830,6 @@
       "target_2": 367.75,
       "target_half": 369.8125,
       "timeframe": "30m"
-    },
-    "XRPUSD|4h|short|1.4808|1.49493": {
-      "alert_time": "2026-09-21T15:11:29.921588+05:30",
-      "entry": 1.4808,
-      "entry_time": "2026-09-21T15:15:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 8,
-      "risk": 0.014125000000000165,
-      "side": "short",
-      "stop": 1.494925,
-      "stream": "live",
-      "symbol": "XRPUSD",
-      "target_1": 1.4666749999999997,
-      "target_2": 1.4525499999999996,
-      "target_half": 1.4737375,
-      "timeframe": "4h"
     }
   }
 }
