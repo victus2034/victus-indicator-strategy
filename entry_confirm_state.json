@@ -1,4 +1,9 @@
 {
+  "BCHUSD|30m|short|268.2|269.612": {
+    "reached_entry": true,
+    "stage": 3,
+    "stopped_out": false
+  },
   "BLESSUSD|30m|short|0.009762|0.009772": {
     "reached_entry": true,
     "stage": 1,
@@ -9,18 +14,14 @@
     "stage": 3,
     "stopped_out": false
   },
-  "HUSD|30m|long|0.0685642|0.067884": {
-    "reached_entry": true,
-    "stopped_out": true
-  },
   "HUSD|4h|long|0.0709834|0.0702792": {
     "reached_entry": true,
     "stage": 3,
     "stopped_out": true
   },
   "LTCUSD|4h|short|60.754|61.3615": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "RIVERUSD|30m|short|1.27|1.2825": {
@@ -42,11 +43,6 @@
     "reached_entry": true,
     "stage": 2,
     "stopped_out": false
-  },
-  "VELVETUSD|30m|short|0.0624|0.06265": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
   },
   "XAUTUSD|30m|long|4347.95|4338.86": {
     "reached_entry": false,
@@ -72,6 +68,7 @@
   "_level_ready|AVAXUSD|30m|short|8.144|8.219": 1789740079.484637,
   "_level_ready|AVAXUSD|30m|short|8.154|8.21025": 1789748757.121565,
   "_level_ready|AXTI/USDT:USDT|30m|short|59.33|59.9175": 1789540275.035677,
+  "_level_ready|BCHUSD|30m|short|268.2|269.612": 1789992972.396004,
   "_level_ready|BEAT/USDT|30m|long|0.0835|0.083": 1789901763.445102,
   "_level_ready|BEAT/USDT|30m|short|0.08437|0.084795": 1789642566.116701,
   "_level_ready|BEAT/USDT|30m|short|0.08613|0.0867175": 1789670159.6338,
@@ -201,7 +198,7 @@
   "_ready|ATOM/USDT|4h": 1788869156.905559,
   "_ready|AVAXUSD|30m": 1789748757.121565,
   "_ready|AXTI/USDT:USDT|30m": 1789540275.035677,
-  "_ready|BCHUSD|30m": 1789410066.584142,
+  "_ready|BCHUSD|30m": 1789992972.396004,
   "_ready|BEAT/USDT|30m": 1789901763.445102,
   "_ready|BLESSUSD|30m": 1789988499.705946,
   "_ready|BNBUSD|30m": 1789929358.559169,
@@ -285,10 +282,6 @@
   "_silent_ready|BCHUSD|30m|short|263.869|266.508": {
     "price": 263.2,
     "time": "2026-09-21T15:06:08.311002+05:30"
-  },
-  "_silent_ready|BCHUSD|30m|short|268.2|269.612": {
-    "price": 266.5,
-    "time": "2026-09-21T16:21:11.383931+05:30"
   },
   "_silent_ready|BEAT/USDT|30m|long|0.08366|0.083235": {
     "price": 0.08433,
