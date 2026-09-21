@@ -51801,6 +51801,33 @@
       "target_half": 0.06227499999999999,
       "timeframe": "30m",
       "trade_id": "VELVETUSD|30m|short|0.0624|0.06265"
+    },
+    {
+      "alert_time": "2026-09-21T14:21:30.741688+05:30",
+      "cost_r": 0.2694545454545455,
+      "date": "2026-09-21",
+      "entry": 370.5,
+      "entry_time": "2026-09-21T14:35:00+05:30",
+      "exit_price": 370.0554,
+      "exit_time": "2026-09-21T14:35:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "xstock",
+      "net_realized_r": 0.053890909090894445,
+      "outcome": "BE",
+      "rating": 10,
+      "realized_r": 0.32334545454543995,
+      "risk": 1.375,
+      "side": "short",
+      "stop": 371.875,
+      "stream": "live",
+      "symbol": "TSLAXUSD",
+      "target_1": 369.125,
+      "target_2": 367.75,
+      "target_half": 369.8125,
+      "timeframe": "30m",
+      "trade_id": "TSLAXUSD|30m|short|370.5|371.875"
     }
   ],
   "handled": {
@@ -52785,6 +52812,7 @@
     "BLESSUSD|30m|short|0.00839782|0.0084818": "filled",
     "BLESSUSD|30m|short|0.00850198|0.008587": "filled",
     "BLESSUSD|30m|short|0.00952183|0.00961704": "filled",
+    "BLESSUSD|30m|short|0.009762|0.009772": "stop_too_tight",
     "BNBUSD|30m|long|708.47|708.432": "filled",
     "BNBUSD|30m|long|711.01|708.197": "filled",
     "BNBUSD|30m|long|713.37|713.183": "filled",
@@ -53923,24 +53951,6 @@
       "target_1": 245.12321428571428,
       "target_2": 242.6472222222222,
       "target_half": 246.36121031746032,
-      "timeframe": "30m"
-    },
-    "TSLAXUSD|30m|short|370.5|371.875": {
-      "alert_time": "2026-09-21T14:21:30.741688+05:30",
-      "entry": 370.5,
-      "entry_time": "2026-09-21T14:35:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": true,
-      "market": "xstock",
-      "rating": 10,
-      "risk": 1.375,
-      "side": "short",
-      "stop": 371.875,
-      "stream": "live",
-      "symbol": "TSLAXUSD",
-      "target_1": 369.125,
-      "target_2": 367.75,
-      "target_half": 369.8125,
       "timeframe": "30m"
     }
   }
