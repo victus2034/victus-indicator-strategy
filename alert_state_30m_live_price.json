@@ -3483,7 +3483,9 @@
     "BLESSUSD|30m|short|0.009762|0.00977": 1789988415.5382314,
     "shadow:XAUTUSD|30m|long|4340.68|4343.63": 1789988415.7659748,
     "shadow:BEAT/USDT|30m|short|0.0885558|0.0888": 1789988752.017746,
-    "TRUMP/USDT|30m|short|2.18452|2.202": 1789988752.0180604
+    "TRUMP/USDT|30m|short|2.18452|2.202": 1789988752.0180604,
+    "shadow:TRUMP/USDT|30m|short|2.19705|2.202": 1789989370.478688,
+    "RIVERUSD|30m|short|1.27|1.28": 1789989370.479102
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15032,7 +15034,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1789988916.885152
+    "30m": 1789989349.504419
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -45829,7 +45831,7 @@
     "AVAXUSD|30m|short|8.04|8.056": 1789734706.1118507,
     "RIVERUSD|30m|long|1.191|1.20053": 1789734101.7866607,
     "BEAT/USDT|30m|long|0.0831|0.0835": 1789901506.5903492,
-    "XAUTUSD|30m|long|4340.68|4347.95": 1789987364.0619452,
+    "XAUTUSD|30m|long|4340.68|4347.95": 1789989370.7012131,
     "SOLUSD|30m|short|106.554|107.084": 1789737706.0060856,
     "AAVEUSD|30m|short|139.65|140": 1789737706.0108314,
     "BLESSUSD|30m|short|0.008876|0.008926": 1789740704.0285497,
@@ -136973,8 +136975,8 @@
     "last_alert_at": 0.0
   },
   "RIVERUSD|supply|1.27000000|1.28000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789989370.479102
   },
   "shadow:RIVERUSD|supply|1.27682628|1.28000000": {
     "in_zone": false,
@@ -140593,7 +140595,7 @@
     "last_alert_at": 0.0
   },
   "shadow:BEAT/USDT|supply|0.08855581|0.08880000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789988752.017746
   },
   "shadow:BEAT/USDT|demand|0.08340000|0.08362562": {
@@ -140601,7 +140603,7 @@
     "last_alert_at": 0.0
   },
   "TRUMP/USDT|supply|2.18452381|2.20200000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1789988752.0180604
   },
   "TRUMP/USDT|demand|1.99400000|2.00100000": {
@@ -140609,8 +140611,8 @@
     "last_alert_at": 0.0
   },
   "shadow:TRUMP/USDT|supply|2.19705202|2.20200000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1789989370.478688
   },
   "shadow:TRUMP/USDT|demand|1.99400000|1.99981273": {
     "in_zone": false,
