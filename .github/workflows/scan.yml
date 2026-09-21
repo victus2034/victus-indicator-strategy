@@ -17,7 +17,7 @@ concurrency:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -59,12 +59,17 @@ jobs:
           COINSWITCH_API_KEY: ${{ secrets.COINSWITCH_API_KEY }}
           COINSWITCH_SECRET_KEY: ${{ secrets.COINSWITCH_SECRET_KEY }}
           COINSWITCH_EXCHANGE: ${{ secrets.COINSWITCH_EXCHANGE }}
+          VICTUS_MIN_SCAN_INTERVAL_SECONDS: "60"
           VICTUS_ENABLE_XSTOCK_HYBRID_RATINGS: "true"
           VICTUS_XSTOCK_REGULAR_MIN_SCORE: "5"
           VICTUS_XSTOCK_EXTENDED_MIN_SCORE: "5"
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python scanner.py --once
+        run: |
+          # One dispatch scans repeatedly (every ~90s) instead of once, so a
+          # zone price reaches between two dispatches is not seen only after
+          # the touch. See .github/scripts/scan_loop.sh.
+          bash .github/scripts/scan_loop.sh 1020 90 alert_state.json crypto_alert_records.jsonl crypto_watch_records.jsonl -- python scanner.py --once
 
       - name: Persist runtime state
         run: bash .github/scripts/persist_runtime_state.sh alert_state.json crypto_alert_records.jsonl crypto_watch_records.jsonl

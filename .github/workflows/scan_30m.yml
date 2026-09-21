@@ -66,10 +66,15 @@ jobs:
           COINSWITCH_API_KEY: ${{ secrets.COINSWITCH_API_KEY }}
           COINSWITCH_SECRET_KEY: ${{ secrets.COINSWITCH_SECRET_KEY }}
           COINSWITCH_EXCHANGE: ${{ secrets.COINSWITCH_EXCHANGE }}
+          VICTUS_MIN_SCAN_INTERVAL_SECONDS: "60"
           VICTUS_ENABLE_XSTOCK_HYBRID_RATINGS: "true"
           VICTUS_XSTOCK_REGULAR_MIN_SCORE: "5"
           VICTUS_XSTOCK_EXTENDED_MIN_SCORE: "5"
-        run: python scanner.py --once
+        run: |
+          # One dispatch scans repeatedly (every ~90s) instead of once, so a
+          # zone price reaches between two dispatches is not seen only after
+          # the touch. See .github/scripts/scan_loop.sh.
+          bash .github/scripts/scan_loop.sh 480 90 alert_state_30m_live_price.json crypto_alert_records_30m.jsonl crypto_watch_records_30m.jsonl -- python scanner.py --once
 
       - name: Persist runtime state
         run: bash .github/scripts/persist_runtime_state.sh alert_state_30m_live_price.json crypto_alert_records_30m.jsonl crypto_watch_records_30m.jsonl
