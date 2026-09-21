@@ -52723,6 +52723,7 @@
     "HYPEUSD|30m|short|86.95|87.0625": "filled",
     "HYPEUSD|30m|short|89.52|89.6325": "filled",
     "HYPEUSD|30m|short|93.273|93.488": "filled",
+    "HYPEUSD|30m|short|94.519|94.6352": "stop_too_tight",
     "ICP/USDT|30m|long|2.71152|2.68462": "filled",
     "ICP/USDT|30m|long|2.734|2.7115": "filled",
     "ICP/USDT|30m|long|2.969|2.949": "filled",
@@ -53022,6 +53023,7 @@
     "XRPUSD|30m|short|1.4396|1.4531": "filled",
     "XRPUSD|30m|short|1.4404|1.45365": "filled",
     "XRPUSD|30m|short|1.44772|1.4622": "filled",
+    "XRPUSD|30m|short|1.44861|1.4631": "filled",
     "ZAMA/USDT|30m|long|0.04573|0.0453675": "filled",
     "ZAMA/USDT|30m|long|0.04782|0.04752": "filled",
     "ZAMA/USDT|30m|short|0.0488194|0.0493076": "filled",
@@ -53688,6 +53690,24 @@
       "target_1": 245.12321428571428,
       "target_2": 242.6472222222222,
       "target_half": 246.36121031746032,
+      "timeframe": "30m"
+    },
+    "XRPUSD|30m|short|1.44861|1.4631": {
+      "alert_time": "2026-09-21T13:41:41.881866+05:30",
+      "entry": 1.448611111111111,
+      "entry_time": "2026-09-21T13:50:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 6,
+      "risk": 0.0144861111111112,
+      "side": "short",
+      "stop": 1.4630972222222223,
+      "stream": "live",
+      "symbol": "XRPUSD",
+      "target_1": 1.4341249999999999,
+      "target_2": 1.4196388888888887,
+      "target_half": 1.4413680555555555,
       "timeframe": "30m"
     }
   }
