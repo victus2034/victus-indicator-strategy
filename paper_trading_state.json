@@ -51774,6 +51774,33 @@
       "target_half": 0.06890426,
       "timeframe": "30m",
       "trade_id": "HUSD|30m|long|0.0685642|0.067884"
+    },
+    {
+      "alert_time": "2026-09-21T16:14:13.893851+05:30",
+      "cost_r": 0.24959999999998592,
+      "date": "2026-09-21",
+      "entry": 0.0624,
+      "entry_time": "2026-09-21T16:15:00+05:30",
+      "exit_price": 0.06214999999999998,
+      "exit_time": "2026-09-21T16:20:00+05:30",
+      "final_result": "+1R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.7504000000000141,
+      "outcome": "+1R",
+      "rating": 3,
+      "realized_r": 1.0,
+      "risk": 0.0002500000000000141,
+      "side": "short",
+      "stop": 0.06265000000000001,
+      "stream": "live",
+      "symbol": "VELVETUSD",
+      "target_1": 0.06214999999999998,
+      "target_2": 0.06189999999999997,
+      "target_half": 0.06227499999999999,
+      "timeframe": "30m",
+      "trade_id": "VELVETUSD|30m|short|0.0624|0.06265"
     }
   ],
   "handled": {
@@ -53914,24 +53941,6 @@
       "target_1": 369.125,
       "target_2": 367.75,
       "target_half": 369.8125,
-      "timeframe": "30m"
-    },
-    "VELVETUSD|30m|short|0.0624|0.06265": {
-      "alert_time": "2026-09-21T16:14:13.893851+05:30",
-      "entry": 0.0624,
-      "entry_time": "2026-09-21T16:15:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 3,
-      "risk": 0.0002500000000000141,
-      "side": "short",
-      "stop": 0.06265000000000001,
-      "stream": "live",
-      "symbol": "VELVETUSD",
-      "target_1": 0.06214999999999998,
-      "target_2": 0.06189999999999997,
-      "target_half": 0.06227499999999999,
       "timeframe": "30m"
     }
   }
