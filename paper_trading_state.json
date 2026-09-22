@@ -52395,6 +52395,33 @@
       "target_half": 0.06690864999999999,
       "timeframe": "30m",
       "trade_id": "HUSD|30m|long|0.0665784|0.0659179"
+    },
+    {
+      "alert_time": "2026-09-22T17:53:01.191592+05:30",
+      "cost_r": 0.43603181818184866,
+      "date": "2026-09-22",
+      "entry": 95.927,
+      "entry_time": "2026-09-22T18:00:00+05:30",
+      "exit_price": 95.70700000000002,
+      "exit_time": "2026-09-22T18:05:00+05:30",
+      "final_result": "+1R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.5639681818181513,
+      "outcome": "+1R",
+      "rating": 5,
+      "realized_r": 1.0,
+      "risk": 0.21999999999998465,
+      "side": "short",
+      "stop": 96.14699999999999,
+      "stream": "live",
+      "symbol": "HYPEUSD",
+      "target_1": 95.70700000000002,
+      "target_2": 95.48700000000004,
+      "target_half": 95.81700000000001,
+      "timeframe": "30m",
+      "trade_id": "HYPEUSD|30m|short|95.927|96.147"
     }
   ],
   "handled": {
@@ -54521,24 +54548,6 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
-      "timeframe": "30m"
-    },
-    "HYPEUSD|30m|short|95.927|96.147": {
-      "alert_time": "2026-09-22T17:53:01.191592+05:30",
-      "entry": 95.927,
-      "entry_time": "2026-09-22T18:00:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 5,
-      "risk": 0.21999999999998465,
-      "side": "short",
-      "stop": 96.14699999999999,
-      "stream": "live",
-      "symbol": "HYPEUSD",
-      "target_1": 95.70700000000002,
-      "target_2": 95.48700000000004,
-      "target_half": 95.81700000000001,
       "timeframe": "30m"
     }
   }
