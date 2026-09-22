@@ -52287,6 +52287,33 @@
       "target_half": 59.83375,
       "timeframe": "30m",
       "trade_id": "SLVONUSD|30m|long|59.74|59.5525"
+    },
+    {
+      "alert_time": "2026-09-22T15:57:46.151572+05:30",
+      "cost_r": 0.12259649122807163,
+      "date": "2026-09-22",
+      "entry": 8.735,
+      "entry_time": "2026-09-22T16:00:00+05:30",
+      "exit_price": 8.806249999999999,
+      "exit_time": "2026-09-22T16:10:00+05:30",
+      "final_result": "+1R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.8774035087719284,
+      "outcome": "+1R",
+      "rating": 4,
+      "realized_r": 1.0,
+      "risk": 0.07124999999999915,
+      "side": "long",
+      "stop": 8.66375,
+      "stream": "live",
+      "symbol": "UNIUSD",
+      "target_1": 8.806249999999999,
+      "target_2": 8.877499999999998,
+      "target_half": 8.770624999999999,
+      "timeframe": "30m",
+      "trade_id": "UNIUSD|30m|long|8.735|8.66375"
     }
   ],
   "handled": {
@@ -53260,6 +53287,7 @@
     "BCHUSD|30m|short|268.2|269.612": "filled",
     "BCHUSD|30m|short|271.82|272.695": "filled",
     "BCHUSD|4h|long|241.66|239.335": "filled",
+    "BCHUSD|4h|short|272.43|274.668": "filled",
     "BEAT/USDT|30m|long|0.0785837|0.0778041": "filled",
     "BEAT/USDT|30m|long|0.1227|0.121575": "filled",
     "BEAT/USDT|30m|long|0.12508|0.124417": "filled",
@@ -54411,23 +54439,23 @@
       "target_half": 497.73875,
       "timeframe": "30m"
     },
-    "UNIUSD|30m|long|8.735|8.66375": {
-      "alert_time": "2026-09-22T15:57:46.151572+05:30",
-      "entry": 8.735,
-      "entry_time": "2026-09-22T16:00:00+05:30",
+    "BCHUSD|4h|short|272.43|274.668": {
+      "alert_time": "2026-09-22T16:03:25.155868+05:30",
+      "entry": 272.43,
+      "entry_time": "2026-09-22T16:05:00+05:30",
       "geometry": "wick",
       "half_r_hit": false,
       "market": "crypto",
-      "rating": 4,
-      "risk": 0.07124999999999915,
-      "side": "long",
-      "stop": 8.66375,
+      "rating": 9,
+      "risk": 2.2375000000000114,
+      "side": "short",
+      "stop": 274.6675,
       "stream": "live",
-      "symbol": "UNIUSD",
-      "target_1": 8.806249999999999,
-      "target_2": 8.877499999999998,
-      "target_half": 8.770624999999999,
-      "timeframe": "30m"
+      "symbol": "BCHUSD",
+      "target_1": 270.1925,
+      "target_2": 267.955,
+      "target_half": 271.31125,
+      "timeframe": "4h"
     }
   }
 }
