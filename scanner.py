@@ -4,6 +4,8 @@ import hashlib
 import json
 import math
 import os
+import tempfile
+import threading
 import time
 from datetime import datetime
 from pathlib import Path
@@ -151,6 +153,14 @@ EXCHANGES = [
     for exchange_id in EXCHANGE_IDS
 ]
 EXCHANGES_BY_ID = {exchange.id: exchange for exchange in EXCHANGES}
+# Sync ccxt exchange instances are not thread-safe: the internal throttle
+# (lastRestRequestTimestamp) and request session mutate on the shared object
+# with no lock, so scan_symbol's ThreadPoolExecutor calling the same exchange
+# from multiple threads can clobber the throttle state (over-throttling, or
+# in rare cases a ConnectionResetError from concurrent socket reuse). One
+# lock per exchange id serializes calls to that exchange without blocking
+# calls to a different one - the same isolation enableRateLimit assumes.
+_EXCHANGE_LOCKS = {exchange.id: threading.Lock() for exchange in EXCHANGES}
 XSTOCK_CONTEXTS = {}
 TIMEFRAME_SECONDS = {
     "1m": 60,
@@ -793,10 +803,16 @@ def exchange_symbol_candidates(symbol):
 
 
 def fetch_exchange_ohlcv(exchange, symbol):
+    lock = _EXCHANGE_LOCKS.get(getattr(exchange, "id", None))
     candidates = exchange_symbol_candidates(symbol)
     last_error = None
     for candidate in candidates:
         try:
+            if lock:
+                with lock:
+                    return exchange.fetch_ohlcv(
+                        candidate, timeframe=TIMEFRAME, limit=OHLCV_LIMIT
+                    )
             return exchange.fetch_ohlcv(
                 candidate, timeframe=TIMEFRAME, limit=OHLCV_LIMIT
             )
@@ -806,10 +822,14 @@ def fetch_exchange_ohlcv(exchange, symbol):
 
 
 def fetch_exchange_ticker(exchange, symbol):
+    lock = _EXCHANGE_LOCKS.get(getattr(exchange, "id", None))
     candidates = exchange_symbol_candidates(symbol)
     last_error = None
     for candidate in candidates:
         try:
+            if lock:
+                with lock:
+                    return exchange.fetch_ticker(candidate)
             return exchange.fetch_ticker(candidate)
         except Exception as error:
             last_error = error
@@ -1582,10 +1602,26 @@ def record_watch_candidate(result, zone_type, zone, distance_pct, now_ts):
         print(f"Crypto watch record read failed: {error}")
 
     kept.append(json.dumps(record, separators=(",", ":")))
+    content = "\n".join(kept) + "\n"
+
+    # Atomic write: a plain write_text() truncates the file to 0 bytes before
+    # writing, so a run killed mid-write (runner timeout, cancel) leaves
+    # crypto_watch_records.jsonl empty and entry_confirm loses every candidate
+    # it was tracking. Writing to a temp file in the same directory and
+    # renaming over the target is atomic on the same filesystem, so the file
+    # is always either the old content or the new content, never neither.
+    temp_path = None
     try:
-        WATCH_RECORD_FILE.write_text("\n".join(kept) + "\n", encoding="utf-8")
+        with tempfile.NamedTemporaryFile(
+            "w", dir=WATCH_RECORD_FILE.parent, delete=False, encoding="utf-8"
+        ) as handle:
+            handle.write(content)
+            temp_path = Path(handle.name)
+        temp_path.replace(WATCH_RECORD_FILE)
     except OSError as error:
         print(f"Crypto watch record write failed: {error}")
+        if temp_path is not None and temp_path.exists():
+            temp_path.unlink()
 
 
 def price_decimals(value):
