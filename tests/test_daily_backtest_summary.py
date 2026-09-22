@@ -632,6 +632,81 @@ class DailyBacktestSummaryTests(unittest.TestCase):
         self.assertIn("Entries 1", message)
         self.assertIn("+1R 1", message)
 
+    def test_report_excludes_a_repeat_delivery_that_really_belongs_to_yesterday(self):
+        # stable_trade_id is keyed on the zone, not the delivery time, so a
+        # still-open zone re-alerting today shares its trade_id with
+        # yesterday's still-pending row for the same zone. Graded, that row
+        # is persisted under the day it actually belongs to (yesterday) -
+        # paper_trading's own comparison reads exactly that date - so this
+        # report must not count the re-delivery as one of today's own
+        # fresh entries, or Alerts/Entries/win rate silently double up a
+        # trade that already existed.
+        today = pd.Timestamp("2026-08-05").date()
+        yesterday = pd.Timestamp("2026-08-04").date()
+        records = pd.DataFrame(
+            [
+                # A genuinely new alert, first seen today.
+                {**base_alert(symbol="A.NS", rating=5), "trade_id": "repeat-zone", "report_date": today},
+                {**base_alert(symbol="B.NS", rating=6, side="short"), "trade_id": "fresh-today", "report_date": today},
+            ]
+        )
+        results = pd.DataFrame(
+            [
+                {
+                    # Same trade_id as the alert above, but this is the
+                    # reconciled PENDING row - it belongs to yesterday.
+                    **records.iloc[0].to_dict(),
+                    "trade_id": "repeat-zone",
+                    "filled": True,
+                    "outcome": "+2R",
+                    "final_result": "+2R",
+                    "net_realized_r": 2.0,
+                    "report_date": yesterday,
+                },
+                {
+                    **records.iloc[1].to_dict(),
+                    "trade_id": "fresh-today",
+                    "filled": True,
+                    "outcome": "+1R",
+                    "final_result": "+1R",
+                    "net_realized_r": 1.0,
+                    "report_date": today,
+                },
+            ]
+        )
+
+        filtered = summary.report_results_for_current_day(results, records, today)
+
+        self.assertEqual(list(filtered["trade_id"]), ["fresh-today"])
+
+    def test_report_falls_back_to_report_date_when_every_id_match_is_a_repeat(self):
+        # Same shape as above, but ALL of today's alerts turn out to be
+        # repeats of older trades - nothing id-matched is genuinely today's.
+        # Must fall through to the report_date fallback rather than quietly
+        # returning the stale (yesterday-dated) id-matched rows.
+        today = pd.Timestamp("2026-08-05").date()
+        yesterday = pd.Timestamp("2026-08-04").date()
+        records = pd.DataFrame(
+            [{**base_alert(symbol="A.NS", rating=5), "trade_id": "repeat-zone", "report_date": today}]
+        )
+        results = pd.DataFrame(
+            [
+                {
+                    **records.iloc[0].to_dict(),
+                    "trade_id": "repeat-zone",
+                    "filled": True,
+                    "outcome": "+2R",
+                    "final_result": "+2R",
+                    "net_realized_r": 2.0,
+                    "report_date": yesterday,
+                }
+            ]
+        )
+
+        filtered = summary.report_results_for_current_day(results, records, today)
+
+        self.assertTrue(filtered.empty)
+
     def test_discord_payload_uses_embeds_without_truncating_long_reports(self):
         message = "\n".join([f"Line {index}" for index in range(900)])
 

@@ -432,20 +432,38 @@ def report_results_for_current_day(
     if current_day_records.empty:
         return results.iloc[0:0].copy()
 
+    target = pd.Timestamp(target_date).date()
+
     if "trade_id" in results:
         current_ids = set(
             current_day_records.get("trade_id", pd.Series(dtype=str)).dropna().astype(str)
         )
         if current_ids:
-            matched = results[results["trade_id"].astype(str).isin(current_ids)].copy()
-            if not matched.empty:
-                return matched
+            id_matched = results[results["trade_id"].astype(str).isin(current_ids)].copy()
+            if not id_matched.empty:
+                # A trade_id can land in today's alert list even when the trade
+                # itself first appeared on an earlier day: stable_trade_id is
+                # keyed on the zone, not the delivery time, so a still-open
+                # zone that alerts again is "the same trade" re-delivered, not
+                # a new one. Graded, it is persisted under the day it actually
+                # belongs to (load_pending_records carries that report_date
+                # through), and paper_trading's own comparison reads exactly
+                # that date - so this report must agree, or a re-delivered,
+                # still-running trade from yesterday silently double-counts
+                # as a brand new entry in today's Alerts/Entries/win rate.
+                if "report_date" in id_matched:
+                    same_day = id_matched[
+                        id_matched["report_date"].apply(normalized_report_date) == target
+                    ]
+                    if not same_day.empty:
+                        return same_day
+                else:
+                    return id_matched
 
     # Trade IDs are derived from evolving alert fields. If old runtime rows were
     # produced before an ID-shape change, fall back to the already-assigned
     # report_date so the summary does not show fake zero execution.
     if "report_date" in results:
-        target = pd.Timestamp(target_date).date()
         result_dates = results["report_date"].apply(normalized_report_date)
         matched = results[result_dates == target].copy()
         if not matched.empty:
