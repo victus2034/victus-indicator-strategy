@@ -52314,6 +52314,33 @@
       "target_half": 8.770624999999999,
       "timeframe": "30m",
       "trade_id": "UNIUSD|30m|long|8.735|8.66375"
+    },
+    {
+      "alert_time": "2026-09-22T16:03:25.155868+05:30",
+      "cost_r": 0.12175642458100497,
+      "date": "2026-09-22",
+      "entry": 272.43,
+      "entry_time": "2026-09-22T16:05:00+05:30",
+      "exit_price": 270.1925,
+      "exit_time": "2026-09-22T16:15:00+05:30",
+      "final_result": "+1R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.878243575418995,
+      "outcome": "+1R",
+      "rating": 9,
+      "realized_r": 1.0,
+      "risk": 2.2375000000000114,
+      "side": "short",
+      "stop": 274.6675,
+      "stream": "live",
+      "symbol": "BCHUSD",
+      "target_1": 270.1925,
+      "target_2": 267.955,
+      "target_half": 271.31125,
+      "timeframe": "4h",
+      "trade_id": "BCHUSD|4h|short|272.43|274.668"
     }
   ],
   "handled": {
@@ -54438,24 +54465,6 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
-    },
-    "BCHUSD|4h|short|272.43|274.668": {
-      "alert_time": "2026-09-22T16:03:25.155868+05:30",
-      "entry": 272.43,
-      "entry_time": "2026-09-22T16:05:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 9,
-      "risk": 2.2375000000000114,
-      "side": "short",
-      "stop": 274.6675,
-      "stream": "live",
-      "symbol": "BCHUSD",
-      "target_1": 270.1925,
-      "target_2": 267.955,
-      "target_half": 271.31125,
-      "timeframe": "4h"
     }
   }
 }
