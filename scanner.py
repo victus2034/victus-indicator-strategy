@@ -1836,7 +1836,9 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shad
         # Its own cooldown namespace, so a shadow alert can never suppress or
         # re-arm a real one.
         state_key = "shadow:" + state_key
-    entry = state.setdefault(state_key, {"in_zone": False, "last_alert_at": 0.0})
+    entry = state.setdefault(
+        state_key, {"in_zone": False, "last_alert_at": 0.0, "last_attempt_at": 0.0}
+    )
     noise_state = state.setdefault("_noise_control", {})
     noise_key = exact_zone_identity(result["symbol"], zone_type, zone)
     if shadow:
@@ -1844,7 +1846,15 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shad
     alert_sent = False
 
     if MIN_DISTANCE_PCT <= distance_pct <= MAX_DISTANCE_PCT:
-        should_alert = (not entry["in_zone"]) or (now_ts - entry["last_alert_at"] >= ALERT_COOLDOWN_SECONDS)
+        # Cooldown is measured from the last ATTEMPT, not the last success.
+        # send_alert only returns True on an actual delivery, so a Discord
+        # outage that exhausts every retry (429s all the way down) used to
+        # leave last_alert_at untouched - should_alert stayed true and the
+        # next scan retried immediately, every scan, for as long as Discord
+        # stayed down, with no backoff at all. nse_scanner.py already carries
+        # this fix; this mirrors it for crypto.
+        last_attempt_at = max(entry.get("last_alert_at", 0.0), entry.get("last_attempt_at", 0.0))
+        should_alert = (not entry["in_zone"]) or (now_ts - last_attempt_at >= ALERT_COOLDOWN_SECONDS)
         last_success = float(noise_state.get(noise_key, 0.0) or 0.0)
         noise_open = not last_success or now_ts - last_success >= ZONE_REPEAT_SUPPRESSION_SECONDS
         if should_alert and noise_open:
@@ -1852,16 +1862,25 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shad
             if shadow:
                 # Logged only. No webhook is touched on this path.
                 entry["last_alert_at"] = now_ts
+                entry["last_attempt_at"] = now_ts
                 noise_state[noise_key] = now_ts
                 record_delivered_zone_alert(
                     result, zone_type, zone, distance_pct, message, now_ts, shadow=True
                 )
                 alert_sent = True
-            elif send_alert(message):
-                entry["last_alert_at"] = now_ts
-                noise_state[noise_key] = now_ts
-                record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, now_ts)
-                alert_sent = True
+            else:
+                # in_alert_window() is checked here too (send_alert checks it
+                # again internally) so a hold outside the 08:00-01:00 IST
+                # window - not a delivery failure - never counts as an
+                # attempt and never backs off. Genuine alerts must still fire
+                # the instant the window reopens, exactly as before this fix.
+                if in_alert_window():
+                    entry["last_attempt_at"] = now_ts
+                if send_alert(message):
+                    entry["last_alert_at"] = now_ts
+                    noise_state[noise_key] = now_ts
+                    record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, now_ts)
+                    alert_sent = True
         elif should_alert and last_success:
             remaining = max(0, int(ZONE_REPEAT_SUPPRESSION_SECONDS - (now_ts - last_success)))
             print(f"Suppressed repeat alert: {noise_key} | {remaining // 60}m remaining")
