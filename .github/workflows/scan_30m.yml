@@ -74,7 +74,18 @@ jobs:
           # One dispatch scans repeatedly (every ~90s) instead of once, so a
           # zone price reaches between two dispatches is not seen only after
           # the touch. See .github/scripts/scan_loop.sh.
-          bash .github/scripts/scan_loop.sh 480 90 alert_state_30m_live_price.json crypto_alert_records_30m.jsonl crypto_watch_records_30m.jsonl -- python scanner.py --once
+          #
+          # 180s, not the 4h scanner's 1020s: this job is actually dispatched
+          # every 5 minutes (checked cron-job.org's own run history directly,
+          # not assumed - the original 480s figure guessed 10 minutes and was
+          # wrong). Checkout+install+restore run ~50s on top of this, so 480s
+          # made the whole job take ~7 minutes against a 5-minute redispatch
+          # cycle: with cancel-in-progress:false a still-running job just
+          # queues the next dispatch, but a THIRD dispatch arriving before
+          # that queued one starts cancels it outright - verified 8 of 24
+          # dispatches cancelled before ever scanning once. 180s keeps the
+          # whole job under ~4 minutes, comfortably inside the real cycle.
+          bash .github/scripts/scan_loop.sh 180 90 alert_state_30m_live_price.json crypto_alert_records_30m.jsonl crypto_watch_records_30m.jsonl -- python scanner.py --once
 
       - name: Persist runtime state
         run: bash .github/scripts/persist_runtime_state.sh alert_state_30m_live_price.json crypto_alert_records_30m.jsonl crypto_watch_records_30m.jsonl
