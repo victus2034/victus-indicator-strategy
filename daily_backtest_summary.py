@@ -62,7 +62,20 @@ MAX_HOLD_BARS = 24
 NSE_BACKTEST_CLOSE_CUTOFF = datetime_time(15, 10)
 NSE_TRADE_START = datetime_time(9, 15)
 CRYPTO_EVALUATION_HOURS = 6
-CRYPTO_REPORT_BOUNDARY = datetime_time(16, 30)
+# Where one crypto "report day" ends and the next begins. Was 16:30, chosen
+# for no reason tied to the scanner's own clock - it sat in the middle of
+# the 08:00-01:00 IST alert window, so every report day was two stitched-
+# together halves of two different sessions rather than one clean session,
+# and reconciliation (pending trades left over from "yesterday") had to
+# paper over a seam that didn't need to exist.
+#
+# 04:00 sits in the middle of the scanner's own 01:00-08:00 IST dark gap
+# (config.CRYPTO_ALERT_START/END), where no alert can ever fire - so this
+# boundary now marks a genuine gap, not an arbitrary clock time, and a
+# report day maps onto exactly one full alert session. Any time in that
+# gap produces identical bucketing; centered so scan-loop timing jitter
+# near 01:00 or 08:00 can never land on the wrong side of it.
+CRYPTO_REPORT_BOUNDARY = datetime_time(4, 0)
 FIXED_STOP_PCT = 0.5
 SL_BUFFER_PCT = 0.10
 # Dhan NSE equity intraday, both legs, derived from a real contract note and

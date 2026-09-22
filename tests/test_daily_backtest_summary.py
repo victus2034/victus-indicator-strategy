@@ -666,10 +666,14 @@ class DailyBacktestSummaryTests(unittest.TestCase):
         )
 
     def test_crypto_report_date_uses_ist_boundary_day(self):
-        afternoon = pd.Timestamp("2026-08-04 16:30", tz=summary.IST)
+        # Boundary is 04:00 IST, inside the scanner's own 01:00-08:00 dark
+        # gap - no alert can fire there, so 02:00 (still the tail of the
+        # prior session's dark hours) stays on the same calendar date and
+        # anything from 04:00 onward rolls to the next one.
+        small_hours = pd.Timestamp("2026-08-04 02:00", tz=summary.IST)
         evening = pd.Timestamp("2026-08-04 23:59", tz=summary.IST)
 
-        self.assertEqual(summary.crypto_report_date(afternoon), pd.Timestamp("2026-08-04").date())
+        self.assertEqual(summary.crypto_report_date(small_hours), pd.Timestamp("2026-08-04").date())
         self.assertEqual(summary.crypto_report_date(evening), pd.Timestamp("2026-08-05").date())
 
     def test_crypto_default_report_date_uses_completed_bucket(self):
@@ -692,9 +696,9 @@ class DailyBacktestSummaryTests(unittest.TestCase):
         )
 
     def test_crypto_default_report_date_skips_when_no_bucket_is_complete(self):
-        # Before the boundary the day is still running, so there is
-        # nothing complete to report and the answer is None.
-        now = pd.Timestamp("2026-08-23 09:00", tz=summary.IST)
+        # Before the boundary (04:00 IST) the day is still running, so
+        # there is nothing complete to report and the answer is None.
+        now = pd.Timestamp("2026-08-23 02:00", tz=summary.IST)
         records = pd.DataFrame([{"report_date": now.date()}])
 
         self.assertIsNone(
