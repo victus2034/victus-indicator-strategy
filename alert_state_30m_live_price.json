@@ -3521,7 +3521,8 @@
     "UNIUSD|30m|long|8.678|8.735": 1790078504.5737643,
     "shadow:UNIUSD|30m|long|8.678|8.71368": 1790077064.5619283,
     "BCHUSD|30m|short|273.8|274.22": 1790073474.8936772,
-    "shadow:BCHUSD|30m|short|273.669|274.22": 1790073474.8936772
+    "shadow:BCHUSD|30m|short|273.669|274.22": 1790073474.8936772,
+    "shadow:HUSD|30m|long|0.06605|0.0663899": 1790078881.302973
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15070,7 +15071,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790078773.9064486
+    "30m": 1790078862.7880476
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -141162,7 +141163,7 @@
     "last_alert_at": 0.0
   },
   "HUSD|demand|0.06605000|0.06657840": {
-    "in_zone": false,
+    "in_zone": true,
     "last_alert_at": 1790077980.0005558,
     "last_attempt_at": 1790077980.0005558
   },
@@ -142237,8 +142238,8 @@
     "last_attempt_at": 0.0
   },
   "shadow:HUSD|demand|0.06605000|0.06638988": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790078881.302973,
+    "last_attempt_at": 1790078881.302973
   }
 }
