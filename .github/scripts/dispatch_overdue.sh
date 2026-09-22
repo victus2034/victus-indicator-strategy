@@ -88,13 +88,17 @@ echo "IST now $(ist_clock "${NOW}") (weekday ${IST_DOW})"
 # The times these workflows' own cron lines named, kept in IST because that is
 # the timezone every alert in this repo is written for.
 dispatch_if_overdue daily_astrology.yml         "07:00"
-# Weekdays only, matching the cron-job.org entry and how the desk actually
-# trades: there is no weekend volume worth taking a position into, so a
-# Saturday report measures trades nobody would have entered. Nothing is lost
-# by skipping them. Each run summarises max(completed days), and the job fires
-# at 16:35 against a 16:30 close boundary, so Friday reports Friday and Monday
-# reports Monday - only Saturday and Sunday go unreported, which is the point.
-dispatch_if_overdue daily_backtest_summary.yml  "16:35" "1,2,3,4,5"
+# Every day now, matching the cron-job.org entry. Used to be weekdays only
+# ("no weekend volume worth taking a position into"), which was true of NSE
+# but wrong for this job - it also reports crypto and xStock, which trade and
+# alert every day including weekends, and a weekday-only schedule meant
+# Saturday's entire crypto cycle was never reported at all: each run
+# summarises max(completed days), so by Monday Sunday was already the newest
+# closed bucket and Saturday was skipped forever, not delayed. Time moved
+# from 16:35 to 07:30 alongside CRYPTO_REPORT_BOUNDARY moving from 16:30 to
+# 04:00 IST - the middle of the scanner's 01:00-08:00 dark gap - so a report
+# day is one full alert session and the job runs right after it closes.
+dispatch_if_overdue daily_backtest_summary.yml  "07:30"
 dispatch_if_overdue weekly_astrology.yml        "19:00" 7   # Sunday
 dispatch_if_overdue weekly_backtest_summary.yml "17:00" 5   # Friday
 
