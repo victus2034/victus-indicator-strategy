@@ -52503,6 +52503,33 @@
       "target_half": 1.278375,
       "timeframe": "30m",
       "trade_id": "RIVERUSD|30m|short|1.284|1.29525"
+    },
+    {
+      "alert_time": "2026-09-23T09:11:34.005762+05:30",
+      "cost_r": 0.1642048109965654,
+      "date": "2026-09-23",
+      "entry": 119.459,
+      "entry_time": "2026-09-23T09:15:00+05:30",
+      "exit_price": 119.31564920000001,
+      "exit_time": "2026-09-23T09:15:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.03284096219930374,
+      "outcome": "BE",
+      "rating": 5,
+      "realized_r": 0.19704577319586913,
+      "risk": 0.727499999999992,
+      "side": "short",
+      "stop": 120.1865,
+      "stream": "live",
+      "symbol": "SOLUSD",
+      "target_1": 118.73150000000001,
+      "target_2": 118.00400000000002,
+      "target_half": 119.09525000000001,
+      "timeframe": "30m",
+      "trade_id": "SOLUSD|30m|short|119.459|120.186"
     }
   ],
   "handled": {
@@ -54634,24 +54661,6 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
-      "timeframe": "30m"
-    },
-    "SOLUSD|30m|short|119.459|120.186": {
-      "alert_time": "2026-09-23T09:11:34.005762+05:30",
-      "entry": 119.459,
-      "entry_time": "2026-09-23T09:15:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 5,
-      "risk": 0.727499999999992,
-      "side": "short",
-      "stop": 120.1865,
-      "stream": "live",
-      "symbol": "SOLUSD",
-      "target_1": 118.73150000000001,
-      "target_2": 118.00400000000002,
-      "target_half": 119.09525000000001,
       "timeframe": "30m"
     }
   }
