@@ -90,6 +90,42 @@ def expected_nse_sessions(week_start, week_end, now=None) -> set[date]:
     return sessions
 
 
+def nse_alert_dates(timeframe: str, path: Path | None = None) -> set[date] | None:
+    """The IST days this timeframe's NSE scanner actually delivered alerts on.
+
+    None when the alert file is not there at all - the caller must then fall
+    back to a weekday calendar rather than read "no file" as "no sessions",
+    which would let an incomplete week publish.
+
+    This is what tells a trading day from a holiday. The readiness check used
+    to assume every Monday-Friday was a session unless NSE_HOLIDAYS listed it,
+    and nothing ever set that, so any week containing a market holiday was
+    withheld for a "missing" session that never existed - the same holiday
+    reading the daily report already takes from the data ("a weekday with none
+    is a closed market, not a quiet one"). It also separates a normal day that
+    simply had no alerts on THIS timeframe: 4h fires a handful a week, and a
+    day with none is not a day whose grading went missing.
+    """
+    path = path or daily.TIMEFRAME_SETTINGS[timeframe]["nse_records"]
+    if not path.exists():
+        return None
+    days: set[date] = set()
+    for line in path.read_text(encoding="utf-8-sig").splitlines():
+        if not line.strip():
+            continue
+        try:
+            raw = json.loads(line)
+            if raw.get("timeframe", timeframe) != timeframe:
+                continue
+            stamp = pd.Timestamp(raw["delivered_at_utc"])
+            if stamp.tzinfo is None:
+                stamp = stamp.tz_localize("UTC")
+            days.add(stamp.tz_convert(daily.IST).date())
+        except (KeyError, ValueError, TypeError):
+            continue
+    return days
+
+
 def load_finalized_records(path: Path = daily.FINALIZED_RECORDS_PATH) -> pd.DataFrame:
     if not path.exists():
         return pd.DataFrame()
@@ -250,8 +286,13 @@ def weekly_readiness(
     week_end,
     market: str = "nse",
     timeframe: str = "30m",
+    alert_dates: set[date] | None = None,
 ) -> tuple[bool, str]:
-    """Prevent a final weekly report while lifecycle rows remain unresolved."""
+    """Prevent a final weekly report while lifecycle rows remain unresolved.
+
+    `alert_dates`, when known, narrows the NSE sessions that must be present to
+    the days that actually had alerts to grade (see nse_alert_dates). Left as
+    None it keeps the plain weekday calendar."""
     unresolved = []
     if not finalized.empty and "final_result" in finalized:
         ambiguous = finalized[finalized["final_result"] == daily.DATA_QUALITY_AMBIGUOUS]
@@ -264,6 +305,8 @@ def weekly_readiness(
         if not pending.empty:
             unresolved.append(f"pending={len(pending)}")
         expected = expected_nse_sessions(week_start, week_end)
+        if alert_dates is not None:
+            expected &= alert_dates
         represented = set()
         if not finalized.empty and "date" in finalized:
             represented = {
@@ -386,7 +429,8 @@ def main() -> None:
         ].copy()
 
     ready, diagnostic = weekly_readiness(
-        frame, pending, week_start, week_end, market=args.market, timeframe=args.timeframe
+        frame, pending, week_start, week_end, market=args.market, timeframe=args.timeframe,
+        alert_dates=nse_alert_dates(args.timeframe) if args.market == "nse" else None,
     )
     if not ready:
         print(diagnostic)

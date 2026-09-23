@@ -76,6 +76,8 @@ jobs:
       - name: Restore runtime state
         run: |
           bash .github/scripts/restore_runtime_state.sh \
+            nse_alert_records.jsonl \
+            nse_alert_records_30m.jsonl \
             daily_backtest_finalized_records.jsonl \
             daily_backtest_pending_records.jsonl \
             weekly_backtest_reports_sent.json
