@@ -3558,7 +3558,8 @@
     "ETHUSD|30m|long|2714.7|2731.2": 1790155297.3971944,
     "BTCUSD|30m|long|85432|85700": 1790155297.0560875,
     "NVDAXUSD|30m|short|229.7|229.9": 1790155298.0901527,
-    "shadow:NVDAXUSD|30m|short|229.762|229.9": 1790155898.2057626
+    "shadow:NVDAXUSD|30m|short|229.762|229.9": 1790155898.2057626,
+    "shadow:BNBUSD|30m|long|781.29|782.281": 1790156787.5205266
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15107,7 +15108,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790156564.4059458
+    "30m": 1790156858.6800723
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -46064,7 +46065,7 @@
     "SOLUSD|30m|short|119.459|120.041": 1790147580.6672838,
     "XAUTUSD|30m|long|4303.41|4312.49": 1790156496.6773396,
     "BLESSUSD|30m|short|0.009458|0.009469": 1790130784.6722088,
-    "NVDAXUSD|30m|short|229.7|229.9": 1790153231.3708189,
+    "NVDAXUSD|30m|short|229.7|229.9": 1790156871.9233468,
     "DOGEUSD|30m|short|0.105129|0.10597": 1790136780.272654,
     "SNDKBUSD|30m|short|1895.24|1906.31": 1790150489.3453453,
     "ETHUSD|30m|short|2803.65|2806.6": 1790137581.7597797,
@@ -142639,9 +142640,9 @@
     "last_attempt_at": 0.0
   },
   "shadow:BNBUSD|demand|781.29000000|782.28124932": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790156787.5205266,
+    "last_attempt_at": 1790156787.5205266
   },
   "shadow:TRUMP/USDT|supply|2.29203649|2.29700000": {
     "in_zone": false,
@@ -142784,12 +142785,12 @@
     "last_attempt_at": 0.0
   },
   "NVDAXUSD|supply|229.70000000|229.90000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790155298.0901527,
     "last_attempt_at": 1790155298.0901527
   },
   "shadow:NVDAXUSD|supply|229.76184976|229.90000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790155898.2057626,
     "last_attempt_at": 1790155898.2057626
   },
