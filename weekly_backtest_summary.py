@@ -278,8 +278,8 @@ def weekly_readiness(
     else:
         # Crypto/xstock trade continuously - there's no trading-day session
         # calendar to check against. Readiness just needs the week's final
-        # day's report bucket to have closed, mirroring the same 16:30 IST
-        # cutoff the daily crypto report already uses.
+        # day's report bucket to have closed, mirroring the same
+        # daily.CRYPTO_REPORT_BOUNDARY (04:00 IST) the daily crypto report uses.
         if not daily.crypto_report_bucket_ready(week_end, timeframe):
             unresolved.append(f"report_bucket_not_closed={week_end}")
 

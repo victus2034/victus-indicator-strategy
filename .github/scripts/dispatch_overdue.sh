@@ -100,6 +100,15 @@ dispatch_if_overdue daily_astrology.yml         "07:00"
 # day is one full alert session and the job runs right after it closes.
 dispatch_if_overdue daily_backtest_summary.yml  "07:30"
 dispatch_if_overdue weekly_astrology.yml        "19:00" 7   # Sunday
-dispatch_if_overdue weekly_backtest_summary.yml "17:00" 5   # Friday
+# Saturday morning, after the daily run - not Friday 17:00. The weekly refuses
+# to publish unless every completed NSE session in the week is already in the
+# finalized records ("INCOMPLETE WEEK - final report withheld"), and Friday's
+# session is now finalized by the daily job's 07:30 run on Saturday, not the
+# afternoon of the day itself. Friday 17:00 would have withheld the NSE weekly
+# every single week, and a withheld run is never retried because the catch-up
+# counts it as having run. 09:00 leaves ninety minutes of slack after the
+# daily's 07:30 dispatch (which takes about three minutes), so a late or slow
+# daily still finalizes Friday before this reads it.
+dispatch_if_overdue weekly_backtest_summary.yml "09:00" 6   # Saturday
 
 exit "${STATUS}"
