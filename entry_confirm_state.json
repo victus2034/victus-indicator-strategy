@@ -5,8 +5,13 @@
     "stopped_out": false
   },
   "BNBUSD|30m|long|785.45|780.25": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
+  "ETHUSD|30m|long|2731.2|2710.57": {
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "RIVERUSD|30m|short|1.294|1.29525": {
@@ -67,6 +72,7 @@
   "_level_ready|DOGEUSD|4h|short|0.0876091|0.0884852": 1789740370.930292,
   "_level_ready|DOGEUSD|4h|short|0.0943651|0.0953087": 1789983964.89935,
   "_level_ready|ETHUSD|30m|long|2611.02|2598.51": 1789871757.521092,
+  "_level_ready|ETHUSD|30m|long|2731.2|2710.57": 1790153477.609122,
   "_level_ready|ETHUSD|30m|short|2475.89|2484.44": 1789701967.437765,
   "_level_ready|ETHUSD|30m|short|2598.5|2618.69": 1789748757.121565,
   "_level_ready|ETHUSD|30m|short|2598.79|2619.05": 1789754164.974278,
@@ -211,7 +217,7 @@
   "_ready|ERA/USDT|30m": 1789467666.170572,
   "_ready|ESP/USDT|30m": 1789458664.421898,
   "_ready|ESP/USDT|4h": 1788956755.098613,
-  "_ready|ETHUSD|30m": 1789871757.521092,
+  "_ready|ETHUSD|30m": 1790153477.609122,
   "_ready|ETHUSD|4h": 1789488358.32405,
   "_ready|EUL/USDT|30m": 1789439750.580446,
   "_ready|GWEI/USDT|30m": 1789391158.458368,
@@ -286,10 +292,6 @@
   "_silent_ready|BTCUSD|30m|short|87247.5|87420.6": {
     "price": 86870.5,
     "time": "2026-09-23T09:11:19.297918+05:30"
-  },
-  "_silent_ready|ETHUSD|30m|long|2731.2|2710.57": {
-    "price": 2741.2,
-    "time": "2026-09-23T13:06:01.812415+05:30"
   },
   "_silent_ready|HYPEUSD|30m|short|95.927|96.147": {
     "price": 95.275,
