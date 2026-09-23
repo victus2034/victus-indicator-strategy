@@ -3566,7 +3566,10 @@
     "XAUTUSD|30m|long|4303.41|4312.49": 1790164590.2623556,
     "shadow:XAUTUSD|30m|long|4303.41|4305.76": 1790163100.3256042,
     "XRPUSD|30m|long|1.556|1.5683": 1790165314.54136,
-    "SLVONUSD|30m|long|58.58|58.75": 1790163696.169457
+    "SLVONUSD|30m|long|58.58|58.75": 1790163696.169457,
+    "BTCUSD|30m|long|85088.5|85189": 1790165881.9233809,
+    "shadow:BTCUSD|30m|long|85088.5|85185.9": 1790165881.9233809,
+    "shadow:XRPUSD|30m|long|1.556|1.56015": 1790165882.3744478
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15115,7 +15118,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790165569.336572
+    "30m": 1790165861.043691
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -46093,7 +46096,7 @@
     "BTCUSD|30m|long|85088.5|85189": 1790164999.63499,
     "XRPUSD|30m|long|1.556|1.5683": 1790164678.3867884,
     "NVDAXUSD|30m|long|225.6|226.15": 1790164678.3898246,
-    "SOLUSD|30m|long|115.599|115.847": 1790163189.3131213,
+    "SOLUSD|30m|long|115.599|115.847": 1790165882.37,
     "TSLAXUSD|30m|long|373.85|376.2": 1790165226.2692,
     "HYPEUSD|30m|long|93.788|94.371": 1790163696.164649,
     "METAXUSD|30m|long|731.15|731.25": 1790165226.2735693
@@ -142505,14 +142508,14 @@
     "last_attempt_at": 0.0
   },
   "BTCUSD|demand|85088.50000000|85189.00000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790165881.9233809,
+    "last_attempt_at": 1790165881.9233809
   },
   "shadow:BTCUSD|demand|85088.50000000|85185.94122387": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790165881.9233809,
+    "last_attempt_at": 1790165881.9233809
   },
   "SOLUSD|demand|115.59900000|115.84700000": {
     "in_zone": false,
@@ -142950,14 +142953,14 @@
     "last_attempt_at": 0.0
   },
   "XRPUSD|demand|1.55600000|1.56830000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790165314.54136,
     "last_attempt_at": 1790165314.54136
   },
   "shadow:XRPUSD|demand|1.55600000|1.56015223": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790165882.3744478,
+    "last_attempt_at": 1790165882.3744478
   },
   "BLESSUSD|demand|0.00901000|0.00904500": {
     "in_zone": false,
