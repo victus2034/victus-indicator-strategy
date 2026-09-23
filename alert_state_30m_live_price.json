@@ -3544,7 +3544,8 @@
     "BTCUSD|30m|short|87247.5|87386": 1790139389.3408937,
     "shadow:BTCUSD|30m|short|87286.4|87386": 1790139389.3408937,
     "shadow:SOLUSD|30m|short|119.818|120.041": 1790139389.6858547,
-    "ZORAUSD|30m|short|0.0094246|0.0095": 1790145365.4347055
+    "ZORAUSD|30m|short|0.0094246|0.0095": 1790145365.4347055,
+    "shadow:ZORAUSD|30m|short|0.00944587|0.0095": 1790145454.392494
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15093,7 +15094,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790145354.1998038
+    "30m": 1790145443.2959838
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -29352,8 +29353,9 @@
     "last_alert_at": 0.0
   },
   "shadow:ZORAUSD|supply|0.00944587|0.00950000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790145454.392494,
+    "last_attempt_at": 1790145454.392494
   },
   "shadow:ZORAUSD|demand|0.00839000|0.00844334": {
     "in_zone": false,
