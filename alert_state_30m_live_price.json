@@ -3557,7 +3557,8 @@
     "BLESSUSD|30m|short|0.00977381|0.009852": 1790155297.8881366,
     "ETHUSD|30m|long|2714.7|2731.2": 1790155297.3971944,
     "BTCUSD|30m|long|85432|85700": 1790155297.0560875,
-    "NVDAXUSD|30m|short|229.7|229.9": 1790155298.0901527
+    "NVDAXUSD|30m|short|229.7|229.9": 1790155298.0901527,
+    "shadow:NVDAXUSD|30m|short|229.762|229.9": 1790155898.2057626
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15106,7 +15107,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790155654.0802705
+    "30m": 1790155966.6007907
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -142568,7 +142569,7 @@
     "last_attempt_at": 0.0
   },
   "ETHUSD|demand|2714.70000000|2731.20000000": {
-    "in_zone": false,
+    "in_zone": true,
     "last_alert_at": 1790155297.3971944,
     "last_attempt_at": 1790155297.3971944
   },
@@ -142758,7 +142759,7 @@
     "last_attempt_at": 0.0
   },
   "BTCUSD|demand|85432.00000000|85700.00000000": {
-    "in_zone": false,
+    "in_zone": true,
     "last_alert_at": 1790155297.0560875,
     "last_attempt_at": 1790155297.0560875
   },
@@ -142788,9 +142789,9 @@
     "last_attempt_at": 1790155298.0901527
   },
   "shadow:NVDAXUSD|supply|229.76184976|229.90000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790155898.2057626,
+    "last_attempt_at": 1790155898.2057626
   },
   "shadow:TSLAXUSD|supply|384.10225916|384.55000000": {
     "in_zone": false,
@@ -142808,7 +142809,7 @@
     "last_attempt_at": 0.0
   },
   "BNBUSD|demand|781.29000000|785.45000000": {
-    "in_zone": false,
+    "in_zone": true,
     "last_alert_at": 1790155297.620202,
     "last_attempt_at": 1790155297.620202
   },
@@ -142903,6 +142904,26 @@
     "last_attempt_at": 0.0
   },
   "shadow:ZORAUSD|supply|0.00975909|0.00981000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "ZECUSD|supply|1648.09000000|1652.00000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "shadow:ZECUSD|supply|1647.12683319|1652.00000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "shadow:TSLAXUSD|supply|384.10225799|384.55000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "shadow:SOXLBUSD|supply|152.43123166|152.80000000": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
