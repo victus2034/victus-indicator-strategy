@@ -3574,7 +3574,8 @@
     "shadow:SOLUSD|30m|long|115.599|115.823": 1790169083.541385,
     "HYPEUSD|30m|long|93.788|94.371": 1790169083.8185916,
     "AVAXUSD|30m|long|10.526|10.594": 1790170295.1325362,
-    "shadow:AVAXUSD|30m|long|10.526|10.5692": 1790170587.7303748
+    "shadow:AVAXUSD|30m|long|10.526|10.5692": 1790170587.7303748,
+    "shadow:DOGEUSD|30m|long|0.09726|0.0975941": 1790172700.0258088
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15123,7 +15124,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790172456.1010718
+    "30m": 1790172678.700684
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -46103,11 +46104,14 @@
     "NVDAXUSD|30m|long|225.6|226.15": 1790172189.2496798,
     "SOLUSD|30m|long|115.599|115.847": 1790172468.4026966,
     "TSLAXUSD|30m|long|373.85|376.2": 1790169170.8984668,
-    "HYPEUSD|30m|long|93.788|94.371": 1790169781.398916,
+    "HYPEUSD|30m|long|93.788|94.371": 1790172700.0234919,
     "METAXUSD|30m|long|731.15|731.25": 1790165226.2735693,
     "AVAXUSD|30m|long|10.526|10.594": 1790170676.6983466,
     "METAXUSD|30m|short|754.5|757.8": 1790170676.7016277,
-    "TACUSD|30m|long|0.001573|0.001578": 1790171191.713817
+    "TACUSD|30m|long|0.001573|0.001578": 1790171191.713817,
+    "ETHUSD|30m|long|2645.25|2657.6": 1790172700.018558,
+    "DOGEUSD|30m|long|0.09726|0.09785": 1790172700.0258088,
+    "BNBUSD|30m|long|765.89|767.3": 1790172700.0284083
   },
   "shadow:BTCUSD|supply|80474.35070115|80522.70000000": {
     "in_zone": false,
@@ -142611,9 +142615,9 @@
     "last_attempt_at": 0.0
   },
   "shadow:DOGEUSD|demand|0.09726000|0.09759409": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790172700.0258088,
+    "last_attempt_at": 1790172700.0258088
   },
   "AAVEUSD|demand|140.00000000|140.82000000": {
     "in_zone": false,
@@ -143086,6 +143090,16 @@
     "last_attempt_at": 0.0
   },
   "shadow:BNBUSD|supply|797.99178513|798.89000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "TRUMP/USDT|demand|1.93000000|1.93800000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "shadow:TRUMP/USDT|demand|1.93000000|1.93406035": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
