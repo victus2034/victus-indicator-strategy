@@ -2,7 +2,7 @@
   "BLESSUSD|30m|short|0.00977381|0.00987155": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BNBUSD|30m|long|785.45|780.25": {
     "reached_entry": true,
@@ -17,6 +17,11 @@
   "ETHUSD|30m|long|2731.2|2710.57": {
     "reached_entry": true,
     "stage": 2,
+    "stopped_out": false
+  },
+  "NVDAXUSD|30m|short|229.7|229.95": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ZORAUSD|30m|short|0.0094246|0.00951885": {
@@ -115,6 +120,7 @@
   "_level_ready|NVDAXUSD|30m|short|221.85|222.1": 1789715768.437191,
   "_level_ready|NVDAXUSD|30m|short|222.45|222.7": 1789806362.208166,
   "_level_ready|NVDAXUSD|30m|short|227.6|228.537": 1790071565.863518,
+  "_level_ready|NVDAXUSD|30m|short|229.7|229.95": 1790155569.9266,
   "_level_ready|RIVERUSD|30m|long|1.173|1.163": 1789580468.013141,
   "_level_ready|RIVERUSD|30m|long|1.20053|1.18862": 1789731363.245333,
   "_level_ready|RIVERUSD|30m|short|1.27|1.2825": 1789989667.643424,
@@ -235,7 +241,7 @@
   "_ready|MRVL/USDT:USDT|4h": 1790014567.180453,
   "_ready|MSFT/USDT:USDT|30m": 1789542964.512681,
   "_ready|MSFT/USDT:USDT|4h": 1789376756.136711,
-  "_ready|NVDAXUSD|30m": 1790071565.863518,
+  "_ready|NVDAXUSD|30m": 1790155569.9266,
   "_ready|O/USDT|30m": 1789481164.028485,
   "_ready|RE/USDT|30m": 1789390557.764438,
   "_ready|RE/USDT|4h": 1788948356.002419,
@@ -280,6 +286,10 @@
   "_silent_ready|BEAT/USDT|30m|long|0.0862|0.085575": {
     "price": 0.0867,
     "time": "2026-09-22T15:36:05.863518+05:30"
+  },
+  "_silent_ready|BLESSUSD|4h|short|0.009955|0.0099925": {
+    "price": 0.009915,
+    "time": "2026-09-23T14:56:09.926600+05:30"
   },
   "_silent_ready|BNBUSD|30m|long|785.45|780.25": {
     "price": 788.25,
