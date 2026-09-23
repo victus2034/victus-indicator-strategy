@@ -584,12 +584,66 @@ def backtest_day_stats(date_iso: str, timeframe: str, market: str = "nse") -> di
 
 
 
+def paper_report_date(row: dict) -> str | None:
+    """The day a closed paper trade is reported under - the backtest's own day.
+
+    A closed trade stores `date`, the calendar day it was entered. The backtest
+    does not report crypto, xStock or "other" by calendar day: it buckets by
+    the alert's time against CRYPTO_REPORT_BOUNDARY, so one report day is one
+    whole alert session (04:00 to 04:00 IST, spanning midnight). Matching the
+    two on calendar date was harmless while the report ran mid-afternoon, but
+    once it ran at 07:30 it asked for "today" - a day that has not started
+    trading yet - and every paper column came back empty while last night's
+    session, filed under yesterday, sat unreported.
+
+    The bucket is worked out from the alert time, exactly as the backtest does
+    it for the same alert, so a trade and its backtest twin always land on the
+    same day. NSE is a calendar day on both sides. Rows without a usable
+    timestamp keep their stored date.
+    """
+    if str(row.get("market", "nse")).lower() != "nse":
+        stamp = row.get("alert_time") or row.get("entry_time")
+        if stamp:
+            try:
+                return backtest.crypto_report_date(pd.Timestamp(stamp)).isoformat()
+            except (TypeError, ValueError):
+                pass
+    return row.get("date")
+
+
+def previous_weekday(day):
+    day = day - timedelta(days=1)
+    while day.weekday() >= 5:
+        day -= timedelta(days=1)
+    return day
+
+
+def default_report_dates(now: pd.Timestamp) -> dict[str, str]:
+    """Which day each market's comparison covers when none was asked for.
+
+    Not one shared "today": the report now runs at 07:30, when yesterday's
+    crypto session has just closed (its bucket ended at 04:00) but the NSE has
+    not opened, so its latest finished session is the previous trading day.
+    Each market gets the latest day it has actually finished, matching the day
+    the backtest reports for that market.
+    """
+    today = now.date()
+    crypto_day = today if now.time() >= backtest.CRYPTO_REPORT_BOUNDARY else today - timedelta(days=1)
+    if today.weekday() < 5 and now.time() > SQUARE_OFF_GRACE_END:
+        nse_day = today
+    else:
+        nse_day = previous_weekday(today)
+    dates = {market: crypto_day.isoformat() for market, _ in MARKETS}
+    dates["nse"] = nse_day.isoformat()
+    return dates
+
+
 def paper_day_stats(
     state: dict, date_iso: str, market: str, timeframe: str, stream: str | None = None
 ) -> dict | None:
     rows = [
         row for row in state["closed"]
-        if row.get("date") == date_iso
+        if paper_report_date(row) == date_iso
         and row.get("market", "nse").lower() == market
         and row.get("timeframe", timeframe) == timeframe
         and (stream is None or row.get("stream", "live") == stream)
@@ -647,20 +701,33 @@ def side_text(stats: dict | None) -> str:
     return f"{stats['entries']} · {rate} · {stats['total_r']:+.2f}R"
 
 
-def build_report(date_iso: str, timeframe: str, state: dict) -> str:
+def build_report(
+    date_iso: str, timeframe: str, state: dict, dates: dict[str, str] | None = None
+) -> str:
     """One table for every market, rather than a block each.
 
     The old report ran twenty-six lines for NSE alone. Nothing here is lost:
     entries, win rate and total for both sides, and the gap between them.
+
+    `date_iso` is the day in the heading. `dates`, when given, names the day
+    each market covers - they differ when the report runs while the NSE's
+    latest finished session is an earlier day than the crypto one. A row whose
+    day is not the heading's says so, so no row can be misread as another day.
     """
     date_line = pd.Timestamp(date_iso).strftime("%d %b %Y").upper()
     lines = [f"PAPER vs BACKTEST · {date_line}", ""]
 
     rows = []
     for market, label in MARKETS:
+        market_date = (dates or {}).get(market, date_iso)
+        suffix = (
+            ""
+            if market_date == date_iso
+            else f" ({pd.Timestamp(market_date).strftime('%d %b')})"
+        )
         for frame in TIMEFRAMES:
-            paper = paper_day_stats(state, date_iso, market, frame)
-            reference = backtest_day_stats(date_iso, frame, market)
+            paper = paper_day_stats(state, market_date, market, frame)
+            reference = backtest_day_stats(market_date, frame, market)
             if paper is None and reference is None:
                 continue
             gap = (
@@ -668,7 +735,7 @@ def build_report(date_iso: str, timeframe: str, state: dict) -> str:
                 if paper and reference
                 else "-"
             )
-            rows.append((f"{label} {frame}", side_text(paper), side_text(reference), gap))
+            rows.append((f"{label} {frame}{suffix}", side_text(paper), side_text(reference), gap))
 
     if not rows:
         return f"PAPER vs BACKTEST · {date_line}\n\nNothing closed on this date."
@@ -710,8 +777,12 @@ def post_report(message: str) -> None:
 
 
 def run_report(args: argparse.Namespace) -> None:
-    date_iso = args.date or pd.Timestamp.now(tz=IST).date().isoformat()
-    message = build_report(date_iso, args.timeframe, load_state())
+    if args.date:
+        date_iso, dates = args.date, None
+    else:
+        dates = default_report_dates(pd.Timestamp.now(tz=IST))
+        date_iso = dates["crypto"]
+    message = build_report(date_iso, args.timeframe, load_state(), dates)
     print(message)
     if not args.dry_run:
         post_report(message)

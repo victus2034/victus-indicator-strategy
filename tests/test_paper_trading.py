@@ -393,5 +393,93 @@ class EntryWaitTests(unittest.TestCase):
         self.assertEqual(paper_trading.entry_wait_end(t, "??"), t + pd.Timedelta(minutes=90))
 
 
+class ReportDayTests(unittest.TestCase):
+    """The comparison must ask for the same day the backtest reports.
+
+    The backtest files crypto, xStock and "other" under a session day
+    (CRYPTO_REPORT_BOUNDARY, 04:00 IST) while a closed paper trade stores the
+    calendar day it was entered. When the daily report moved to 07:30 it asked
+    for "today" - a day with no trading yet - so every paper column came back
+    empty and last night's session, filed under yesterday, went unreported.
+    """
+
+    # Shaped like a real closed trade from the live state file.
+    EVENING_TRADE = {
+        "alert_time": "2026-09-22T19:51:27.159747+05:30",
+        "entry_time": "2026-09-22T19:55:00+05:30",
+        "date": "2026-09-22",
+        "market": "crypto",
+        "timeframe": "30m",
+        "outcome": "+1R",
+        "net_realized_r": 0.9,
+        "symbol": "ETHUSD",
+    }
+
+    def test_an_evening_trade_is_reported_under_the_next_session_day(self):
+        self.assertEqual(paper_trading.paper_report_date(self.EVENING_TRADE), "2026-09-23")
+
+    def test_a_trade_after_midnight_stays_in_the_same_session_day(self):
+        # 00:30 is still the tail of the session that began the evening
+        # before, and sits before the 04:00 boundary.
+        row = {**self.EVENING_TRADE, "alert_time": "2026-09-23T00:30:00+05:30"}
+        self.assertEqual(paper_trading.paper_report_date(row), "2026-09-23")
+
+    def test_it_lands_on_the_same_day_as_its_backtest_twin(self):
+        alert_time = pd.Timestamp(self.EVENING_TRADE["alert_time"])
+        self.assertEqual(
+            paper_trading.paper_report_date(self.EVENING_TRADE),
+            backtest.crypto_report_date(alert_time).isoformat(),
+        )
+
+    def test_nse_stays_a_calendar_day(self):
+        row = {**self.EVENING_TRADE, "market": "nse"}
+        self.assertEqual(paper_trading.paper_report_date(row), "2026-09-22")
+
+    def test_a_row_without_a_timestamp_keeps_its_stored_date(self):
+        row = {"market": "crypto", "date": "2026-09-22"}
+        self.assertEqual(paper_trading.paper_report_date(row), "2026-09-22")
+
+    def test_last_nights_paper_trade_shows_in_the_0730_report(self):
+        state = fresh_state()
+        state["closed"] = [dict(self.EVENING_TRADE)]
+        with patch.object(paper_trading, "backtest_day_stats", lambda *a, **k: None):
+            message = paper_trading.build_report("2026-09-23", "30m", state)
+        self.assertIn("CRYPTO 30m", message)
+        self.assertNotIn("Nothing closed", message)
+
+    def test_default_days_at_0730_are_last_nights_session_and_the_prior_nse_day(self):
+        # Wednesday 07:32: the crypto bucket closed at 04:00, NSE has not opened.
+        dates = paper_trading.default_report_dates(pd.Timestamp("2026-09-23 07:32", tz=IST))
+        self.assertEqual(dates["crypto"], "2026-09-23")
+        self.assertEqual(dates["xstock"], "2026-09-23")
+        self.assertEqual(dates["nse"], "2026-09-22")
+
+    def test_before_the_boundary_the_crypto_day_is_still_yesterdays(self):
+        dates = paper_trading.default_report_dates(pd.Timestamp("2026-09-23 03:00", tz=IST))
+        self.assertEqual(dates["crypto"], "2026-09-22")
+
+    def test_monday_morning_reports_fridays_nse_session(self):
+        dates = paper_trading.default_report_dates(pd.Timestamp("2026-09-21 07:32", tz=IST))
+        self.assertEqual(dates["nse"], "2026-09-18")
+        self.assertEqual(dates["crypto"], "2026-09-21")
+
+    def test_after_the_nse_session_the_nse_day_is_today(self):
+        dates = paper_trading.default_report_dates(pd.Timestamp("2026-09-23 16:30", tz=IST))
+        self.assertEqual(dates["nse"], "2026-09-23")
+
+    def test_a_row_for_a_different_day_is_labelled(self):
+        state = fresh_state()
+        state["closed"] = [{
+            "date": "2026-09-22", "market": "nse", "timeframe": "30m",
+            "outcome": "+1R", "net_realized_r": 1.0, "symbol": "TCS.NS",
+        }]
+        with patch.object(paper_trading, "backtest_day_stats", lambda *a, **k: None):
+            message = paper_trading.build_report(
+                "2026-09-23", "30m", state, {"nse": "2026-09-22", "crypto": "2026-09-23"}
+            )
+        self.assertIn("NSE 30m (22 Sep)", message)
+
+
+
 if __name__ == "__main__":
     unittest.main()
