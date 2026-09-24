@@ -3596,7 +3596,10 @@
     "BLESSUSD|30m|short|0.01052|0.0106": 1790233076.6809607,
     "shadow:BLESSUSD|30m|short|0.010521|0.0106": 1790233076.6809607,
     "SOXLBUSD|30m|long|140|140.8": 1790233590.3889604,
-    "shadow:SOXLBUSD|30m|long|140|140.421": 1790237278.3406904
+    "shadow:SOXLBUSD|30m|long|140|140.421": 1790237278.3406904,
+    "XAUTUSD|30m|long|4249.17|4265.58": 1790238398.2737088,
+    "METAXUSD|30m|long|731.15|731.25": 1790238398.519338,
+    "shadow:METAXUSD|30m|long|731.15|731.811": 1790238398.519338
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15145,7 +15148,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790238164.3199444
+    "30m": 1790238375.8485062
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -46150,7 +46153,8 @@
     "SOXLBUSD|30m|long|140|140.8": 1790236589.1421745,
     "VELVETUSD|30m|short|0.0612103|0.0617": 1790233893.8001785,
     "AKE/USDT|30m|long|0.039766|0.0400841": 1790233893.7951589,
-    "UNIUSD|30m|long|9.042|9.109": 1790233983.4486465
+    "UNIUSD|30m|long|9.042|9.109": 1790238398.2689526,
+    "MRVL/USDT:USDT|30m|long|252|252.01": 1790238398.7488894
   },
   "shadow:BTCUSD|supply|80474.35070115|80522.70000000": {
     "in_zone": false,
@@ -129090,8 +129094,9 @@
     "last_alert_at": 0.0
   },
   "XAUTUSD|demand|4249.17000000|4265.58000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790238398.2737088,
+    "last_attempt_at": 1790238398.2737088
   },
   "shadow:XAUTUSD|demand|4249.17000000|4252.40586902": {
     "in_zone": false,
@@ -142781,9 +142786,9 @@
     "last_attempt_at": 0.0
   },
   "METAXUSD|demand|731.15000000|731.25000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790238398.519338,
+    "last_attempt_at": 1790238398.519338
   },
   "shadow:METAXUSD|supply|757.01964624|757.80000000": {
     "in_zone": false,
@@ -142791,9 +142796,9 @@
     "last_attempt_at": 0.0
   },
   "shadow:METAXUSD|demand|731.15000000|731.81082016": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790238398.519338,
+    "last_attempt_at": 1790238398.519338
   },
   "SOXLBUSD|demand|135.65000000|135.70000000": {
     "in_zone": false,
