@@ -54700,6 +54700,7 @@
     "HYPEUSD|30m|short|86.95|87.0625": "filled",
     "HYPEUSD|30m|short|89.52|89.6325": "filled",
     "HYPEUSD|30m|short|93.273|93.488": "filled",
+    "HYPEUSD|30m|short|94.1954|95.1374": "filled",
     "HYPEUSD|30m|short|94.519|94.6352": "stop_too_tight",
     "HYPEUSD|30m|short|95.927|96.147": "filled",
     "ICP/USDT|30m|long|2.71152|2.68462": "filled",
@@ -55678,6 +55679,24 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
+      "timeframe": "30m"
+    },
+    "HYPEUSD|30m|short|94.1954|95.1374": {
+      "alert_time": "2026-09-25T00:27:58.550677+05:30",
+      "entry": 94.1954365079365,
+      "entry_time": "2026-09-25T00:30:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 3,
+      "risk": 0.9419543650793685,
+      "side": "short",
+      "stop": 95.13739087301587,
+      "stream": "live",
+      "symbol": "HYPEUSD",
+      "target_1": 93.25348214285714,
+      "target_2": 92.31152777777777,
+      "target_half": 93.72445932539682,
       "timeframe": "30m"
     }
   }
