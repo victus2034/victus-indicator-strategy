@@ -3614,7 +3614,9 @@
     "BCHUSD|30m|long|324.83|327.429": 1790241773.9176853,
     "shadow:BCHUSD|30m|long|324.83|326.636": 1790242300.1295767,
     "shadow:ETHUSD|30m|long|2634|2638.17": 1790242388.9125445,
-    "DOGEUSD|30m|long|0.09127|0.09187": 1790242388.9175081
+    "DOGEUSD|30m|long|0.09127|0.09187": 1790242388.9175081,
+    "SOXLBUSD|30m|long|135.65|135.7": 1790243185.5929735,
+    "shadow:NVDAXUSD|30m|long|221.85|221.941": 1790243185.8188372
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15163,7 +15165,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790242960.924281
+    "30m": 1790243170.9085827
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -142070,8 +142072,9 @@
     "last_attempt_at": 1790242300.1301222
   },
   "shadow:NVDAXUSD|demand|221.85000000|221.94082688": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790243185.8188372,
+    "last_attempt_at": 1790243185.8188372
   },
   "shadow:BCHUSD|supply|273.72145982|274.22000000": {
     "in_zone": false,
@@ -142824,9 +142827,9 @@
     "last_attempt_at": 1790238398.519338
   },
   "SOXLBUSD|demand|135.65000000|135.70000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790243185.5929735,
+    "last_attempt_at": 1790243185.5929735
   },
   "shadow:SOXLBUSD|demand|135.65000000|135.97284331": {
     "in_zone": true,
@@ -143344,7 +143347,7 @@
     "last_attempt_at": 0.0
   },
   "shadow:BCHUSD|demand|324.83000000|326.63619887": {
-    "in_zone": false,
+    "in_zone": true,
     "last_alert_at": 1790242300.1295767,
     "last_attempt_at": 1790242300.1295767
   },
@@ -143514,7 +143517,7 @@
     "last_attempt_at": 1790221593.0880473
   },
   "DOGEUSD|demand|0.09127000|0.09187000": {
-    "in_zone": false,
+    "in_zone": true,
     "last_alert_at": 1790242388.9175081,
     "last_attempt_at": 1790242388.9175081
   },
