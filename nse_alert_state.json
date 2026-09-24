@@ -3095,7 +3095,8 @@
     "POLICYBZR.NS|4h|long|1502.1|1510.23": 1790224353.9455476,
     "CARBORUNIV.NS|4h|short|1297.43|1304.6": 1790232736.667685,
     "MCX.NS|4h|short|3463.69|3479.9": 1790233971.0682342,
-    "MCX.NS|4h|short|3463.79|3479.9": 1790236304.7154531
+    "MCX.NS|4h|short|3463.79|3479.9": 1790236304.7154531,
+    "HDBFS.NS|4h|long|657.05|659.841": 1790239935.5588005
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -10278,9 +10279,9 @@
     "last_attempt_at": 0.0
   },
   "HDBFS.NS|demand|657.0500|659.8406": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790239935.5588005,
+    "last_attempt_at": 1790239935.5588005
   },
   "HDFCAMC.NS|supply|2633.1364|2644.8000": {
     "in_zone": true,
@@ -18148,7 +18149,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1790238718.4677339
+    "4h": 1790239901.5515544
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -83981,7 +83982,7 @@
     "last_attempt_at": 0.0
   },
   "MCX.NS|supply|3463.7872|3479.8999": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790236304.7154531,
     "last_attempt_at": 1790236304.7154531
   },
