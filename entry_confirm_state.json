@@ -1,7 +1,12 @@
 {
-  "TSLAXUSD|30m|long|378.8|378.238": {
+  "NVDAXUSD|30m|long|224.25|223.938": {
     "reached_entry": true,
     "stage": 2,
+    "stopped_out": false
+  },
+  "TSLAXUSD|30m|long|378.8|378.238": {
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "XAUTUSD|4h|long|4281.79|4241.02": {
@@ -102,6 +107,7 @@
   "_level_ready|MRVL/USDT:USDT|30m|short|260.484|260.504": 1790017859.606707,
   "_level_ready|MRVL/USDT:USDT|4h|short|258.433|261.017": 1790014567.180453,
   "_level_ready|MSFT/USDT:USDT|30m|long|497.07|495.733": 1789542964.512681,
+  "_level_ready|NVDAXUSD|30m|long|224.25|223.938": 1790229680.062048,
   "_level_ready|NVDAXUSD|30m|short|213.55|214.113": 1789529155.735761,
   "_level_ready|NVDAXUSD|30m|short|216.25|217.062": 1789613166.898256,
   "_level_ready|NVDAXUSD|30m|short|221.85|222.1": 1789715768.437191,
@@ -235,7 +241,7 @@
   "_ready|MRVL/USDT:USDT|4h": 1790014567.180453,
   "_ready|MSFT/USDT:USDT|30m": 1789542964.512681,
   "_ready|MSFT/USDT:USDT|4h": 1789376756.136711,
-  "_ready|NVDAXUSD|30m": 1790155569.9266,
+  "_ready|NVDAXUSD|30m": 1790229680.062048,
   "_ready|O/USDT|30m": 1789481164.028485,
   "_ready|RE/USDT|30m": 1789390557.764438,
   "_ready|RE/USDT|4h": 1788948356.002419,
@@ -316,10 +322,6 @@
   "_silent_ready|MRVL/USDT:USDT|30m|short|264.86|266.098": {
     "price": 264.21,
     "time": "2026-09-23T12:11:03.440149+05:30"
-  },
-  "_silent_ready|NVDAXUSD|30m|long|224.25|223.938": {
-    "price": 225.2,
-    "time": "2026-09-24T08:06:07.525098+05:30"
   },
   "_silent_ready|NVDAXUSD|30m|long|226.15|225.462": {
     "price": 227.3,
