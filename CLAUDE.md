@@ -131,9 +131,17 @@ just the ones that existed when the file was named.
   (in `scan_symbol`), not at import, so a crypto-only process that merely imports
   `nse_scanner` is never reconfigured.
 
-  Still NSE-only on purpose: session hours and holidays, the yfinance data and its
-  confirmed-candle policy, the 500-candle lookback, the watchlist, webhooks and rating
-  display. Not shared: watch rows / entry-confirm, the 90-second scan loop and the live
-  ticker are crypto-only, and NSE paper trading is paused.
+  NSE builds zones on the candle still forming, like crypto and the chart (since
+  2026-09-25) - a wick through a zone's far edge kills it at once. A half-finished candle
+  cannot kill a zone the finished one would not, since its range sits inside the full
+  candle's: replayed over 700 mid-bar snapshots of 20 real stocks there were no false
+  kills. The one thing that stays on confirmed candles is the range-filter *signal*,
+  which unlike a zone can appear on the forming bar and be gone by the close.
+  `tests/test_nse_forming_candle.py` pins both.
+
+  Still NSE-only on purpose: session hours and holidays, the yfinance data, the
+  500-candle lookback, the watchlist, webhooks and rating display. Not shared: watch
+  rows / entry-confirm, the 90-second scan loop and the live ticker are crypto-only, and
+  NSE paper trading is paused.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

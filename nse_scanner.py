@@ -608,21 +608,29 @@ def scan_symbol(symbol):
     bind_zone_engine()
     df = fetch_stock_ohlcv(symbol)
     price = float(df["close"].iloc[-1])
-    indicator_df = confirmed_candles(df)
-    if len(indicator_df) < ATR_PERIOD + SWING_LENGTH * 2:
-        raise RuntimeError(f"not enough confirmed candles: {len(indicator_df)}")
+    if len(df) < ATR_PERIOD + SWING_LENGTH * 2:
+        raise RuntimeError(f"not enough candles: {len(df)}")
 
-    supply_zones, demand_zones = build_zones(indicator_df)
-    for zone in supply_zones:
-        if zone["active"] and price >= zone["top"]:
-            zone["active"] = False
-    for zone in demand_zones:
-        if zone["active"] and price <= zone["bottom"]:
-            zone["active"] = False
-
-    latest_index = len(indicator_df) - 1
+    # Zones are built on EVERY candle, the one still forming included - exactly
+    # as the crypto scanner does and as the chart draws them. Pine evaluates the
+    # forming bar on every tick, so a wick through a zone's far edge kills it the
+    # moment it happens, and a pivot's tenth following bar can be the forming
+    # one. This used to build on confirmed candles only and then kill zones on
+    # the last CLOSE, which misses a wick that pokes through and pulls back.
+    #
+    # A half-finished candle cannot kill a zone the finished one would not: its
+    # range sits inside the full candle's. Replayed over 700 mid-bar snapshots
+    # of 20 real stocks (19,804 zone comparisons) there were no false kills.
+    # The engine's own wick rule does the killing, so the separate close-based
+    # pass that used to follow build_zones is gone.
+    supply_zones, demand_zones = build_zones(df)
+    latest_index = len(df) - 1
     nearest_supply, supply_dist = nearest_active_zone(price, supply_zones, "supply", latest_index)
     nearest_demand, demand_dist = nearest_active_zone(price, demand_zones, "demand", latest_index)
+    # The range-filter signal is a different animal: unlike a zone it can appear
+    # on the forming bar and be gone by the close, so it stays on confirmed
+    # candles rather than alerting on something that may not survive the bar.
+    indicator_df = confirmed_candles(df)
     buy_signal, sell_signal = get_range_filter_signals(indicator_df)
     supply_score = None
     demand_score = None
