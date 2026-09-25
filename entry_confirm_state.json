@@ -6,13 +6,18 @@
   },
   "TACUSD|30m|short|0.001612|0.0016245": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "TSLAXUSD|30m|short|383.3|384.05": {
     "reached_entry": true,
     "stage": 3,
     "stopped_out": true
+  },
+  "XAUTUSD|30m|long|4265.58|4245.07": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
   },
   "XAUTUSD|4h|long|4281.79|4241.02": {
     "reached_entry": true,
@@ -199,7 +204,7 @@
   "_level_ready|UNIUSD|30m|short|8.936|9.016": 1789982174.003005,
   "_level_ready|VELVETUSD|30m|short|0.0612103|0.0618224": 1790232967.803001,
   "_level_ready|VELVETUSD|30m|short|0.0624|0.06265": 1789987570.285335,
-  "_level_ready|XAUTUSD|30m|long|4265.58|4245.07": 1790310081.859819,
+  "_level_ready|XAUTUSD|30m|long|4265.58|4245.07": 1790345179.752382,
   "_level_ready|XAUTUSD|30m|long|4312.49|4301.14": 1790162774.274513,
   "_level_ready|XAUTUSD|30m|long|4347.95|4338.86": 1789998969.117953,
   "_level_ready|XAUTUSD|30m|long|4366.2|4364.09": 1789921564.237907,
@@ -299,7 +304,7 @@
   "_ready|UNIUSD|30m": 1790239881.93561,
   "_ready|US/USDT|30m": 1789306268.896163,
   "_ready|VELVETUSD|30m": 1790232967.803001,
-  "_ready|XAUTUSD|30m": 1790331374.010618,
+  "_ready|XAUTUSD|30m": 1790345179.752382,
   "_ready|XAUTUSD|4h": 1790221564.238422,
   "_ready|XRPUSD|30m": 1790163672.095984,
   "_ready|XRPUSD|4h": 1789983964.89935,
@@ -329,6 +334,10 @@
   "_silent_ready|BEAT/USDT|30m|short|0.0962|0.096575": {
     "price": 0.0957,
     "time": "2026-09-24T23:06:19.044120+05:30"
+  },
+  "_silent_ready|BNBUSD|30m|long|766.18|761.993": {
+    "price": 768.78,
+    "time": "2026-09-25T19:36:19.752382+05:30"
   },
   "_silent_ready|BNBUSD|30m|short|785.18|785.868": {
     "price": 781.17,
@@ -397,10 +406,6 @@
   "_silent_ready|UNIUSD|30m|short|9.391|9.47725": {
     "price": 9.279,
     "time": "2026-09-25T14:41:20.522816+05:30"
-  },
-  "_silent_ready|XAUTUSD|30m|long|4265.58|4245.07": {
-    "price": 4286.73,
-    "time": "2026-09-25T08:11:15.810261+05:30"
   },
   "_silent_ready|ZECUSD|30m|short|1573.76|1576.65": {
     "price": 1569.03,
