@@ -96,17 +96,22 @@ STRATEGY_CUTOFF = "15:10"
 REPORT_TIME = "16:30"
 
 OHLCV_LIMIT = 500
-SWING_LENGTH = 10
-ATR_PERIOD = 50
-BOX_WIDTH = 2.5
-# NSE keeps its 500-bar lookback: the exchange trades 6.25 hours a day,
-# so 500 30m candles is already forty sessions, not ten days. Only the
-# cap moves, so a level from two months ago is not dropped in favour of a
-# newer one.
-HISTORY_OF_ZONES_TO_KEEP = 60
-# Matches the Pine indicator's f_check_overlapping, which rejects a new zone
-# whose midpoint sits within atr * 2 of an existing one.
-OVERLAP_ATR = 2.0
+# The zone engine is the crypto scanner's, and so are the numbers that drive it.
+# Imported rather than copied - NSE used to carry its own SWING_LENGTH,
+# ATR_PERIOD, BOX_WIDTH, OVERLAP_ATR, HISTORY_OF_ZONES_TO_KEEP,
+# MAX_CONSECUTIVE_ZONE_TOUCHES and MIN_ZONE_AGE_CANDLES, and when crypto moved
+# to the v7 wick rules those copies stayed on the older values. The two
+# scanners then disagreed about what a zone is, silently. With one source there
+# is nothing to keep in step: change config.py and both markets follow.
+from config import (  # noqa: E402  (grouped with the values it replaces)
+    ATR_PERIOD,
+    BOX_WIDTH,
+    HISTORY_OF_ZONES_TO_KEEP,
+    MAX_CONSECUTIVE_ZONE_TOUCHES,
+    MIN_ZONE_AGE_CANDLES,
+    OVERLAP_ATR,
+    SWING_LENGTH,
+)
 # The Pine indicator applies no wick, body-ratio or departure test - every
 # confirmed pivot becomes a zone. These are kept only as metadata on the zone
 # for the rating and for later analysis, never as filters, so the zone set
@@ -124,26 +129,7 @@ ZONE_PADDING_ATR = 0.0
 MIN_DISTANCE_PCT = 0.0
 MAX_DISTANCE_PCT = 0.20
 REARM_FACTOR = 1.25
-# 0 disables the over-touch veto. The Pine indicator counts no touches and
-# never retires a zone for being revisited - only a close through it kills the
-# zone - so any positive value here drops levels the chart still shows.
-# Back-to-back candles sitting on a zone mean price is grinding through it
-# rather than reacting to it - thin volume, no rejection. Two consecutive
-# touching candles retire the zone. This is deliberately stricter than the
-# Pine indicator, which has no touch veto at all: the indicator draws every
-# level, this decides which are worth an alert.
-MAX_CONSECUTIVE_ZONE_TOUCHES = 2
 
-# A zone has to stand before it means anything. A level confirmed a candle
-# or two ago that price is already sitting on was never defended - it is
-# just the recent high or low, and alerting on it produces the small, risky
-# levels that are not worth a trade. Age is counted from confirmation, so a
-# 30m zone must survive twenty candles - about ten hours - before it can
-# raise an alert, and a 4h zone a little over three days.
-# Twenty rather than fifteen because both markets said so: replayed on 5m
-# candles, the alerts this blocks earned 0.054R on NSE and 0.389R on
-# crypto, against 0.122R and 0.564R for the ones that survive it.
-MIN_ZONE_AGE_CANDLES = 20
 # Shortest gap between two scans of the same timeframe. Every workflow is
 # also dispatched by an external scheduler, so cron in this repo means each
 # scan would otherwise run twice, minutes apart.

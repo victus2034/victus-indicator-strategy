@@ -10,24 +10,23 @@ import scanner
 def build(module, frame, pivot, confirmation, atr_values, zone_type):
     """Ask for the atr band by name.
 
-    Until 2026-09-06 it was the only construction and the default. Crypto now
-    defaults to the wick geometry (ZONE_GEOMETRY in config.py), so these tests
-    have to name the band rather than assume it. nse_scanner has no switch and
-    still only builds the band.
+    Until 2026-09-06 it was the only construction and the default. The wick
+    geometry is the default now (ZONE_GEOMETRY in config.py), so these tests
+    name the band rather than assume it. nse_scanner shares the crypto engine,
+    so its qualify_wick_zone takes the same argument - both entry points are
+    exercised, which is what catches the alias being broken.
     """
-    if module is scanner:
-        return module.qualify_wick_zone(
-            frame, pivot, confirmation, atr_values, zone_type, "atr"
-        )
-    return module.qualify_wick_zone(frame, pivot, confirmation, atr_values, zone_type)
+    return module.qualify_wick_zone(
+        frame, pivot, confirmation, atr_values, zone_type, "atr"
+    )
 
 
 class IndicatorBoundaryTests(unittest.TestCase):
     """The atr band: a fixed atr * (BOX_WIDTH / 10) hung off the pivot extreme.
 
-    Still what NSE runs and still selectable on crypto, so still pinned. The
-    wick construction that crypto now defaults to has its own coverage in
-    test_zone_geometry_and_clock.py.
+    Still selectable (it is the shadow geometry), so still pinned, through both
+    entry points. The wick construction both markets now default to has its own
+    coverage in test_zone_geometry_and_clock.py.
     """
 
     def frame(self):
@@ -100,10 +99,11 @@ class NoQualificationFilterTests(unittest.TestCase):
         # Deliberately stricter than the indicator, which has no touch veto.
         # The veto is off by default under the wick geometry, because v7 has
         # none and the restarted age clock already covers the case. It is still
-        # supported and still what NSE runs, so pin the value rather than read
-        # whatever the live geometry has chosen.
+        # supported, so pin the value rather than read whatever the live
+        # geometry has chosen. The engine is shared, so it is scanner's global
+        # that matters whichever entry point is called.
         for module in (scanner, nse_scanner):
-            with patch.object(module, "MAX_CONSECUTIVE_ZONE_TOUCHES", 2):
+            with patch.object(scanner, "MAX_CONSECUTIVE_ZONE_TOUCHES", 2):
                 self._assert_back_to_back_retires(module)
 
     def _assert_back_to_back_retires(self, module):

@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import nse_scanner as scanner
@@ -14,6 +15,11 @@ scanner.MIN_DISTANCE_PCT = 0.0
 scanner.MAX_DISTANCE_PCT = 0.20
 scanner.ALERT_COOLDOWN_SECONDS = 30 * 60
 scanner.SIGNAL_ALERT_COOLDOWN_SECONDS = 30 * 60
+# Follows the cooldown, as the crypto 30m scanner's does. nse_scanner computed it
+# at import from the 4h cooldown, which is the wrong value for this process.
+scanner.ZONE_REPEAT_SUPPRESSION_SECONDS = int(
+    os.getenv("VICTUS_ZONE_REPEAT_SUPPRESSION_SECONDS", "").strip() or 30 * 60
+)
 scanner.SHOW_ZONE_RATINGS = True
 
 

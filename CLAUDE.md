@@ -114,6 +114,26 @@ just the ones that existed when the file was named.
   `nse_alert_state*.json`, `crypto_alert_records*.jsonl`. Deleting these resets cooldowns
   and can cause a burst of duplicate alerts on the next run.
 - The 30-minute workflow is deliberately isolated. Changing shared zone logic affects both
-  it and the 4h flow — check both before assuming a fix is local.
+  it and the 4h flow — check both before assuming a fix is local. **Since 2026-09-25 it
+  also affects NSE** (next bullet).
+- **NSE runs crypto's zone engine — there is no second copy, and there must not be one.**
+  `nse_scanner.py` used to keep a private copy of `atr / find_pivots / build_zones /
+  qualify_wick_zone / record_zone_touch / too_young_to_alert / nearest_active_zone` and its
+  own numbers in `nse_config.py`. When crypto moved to the v7 wick rules the copy stayed on
+  the old ATR band, a plain drop-the-oldest buffer and a close-through break, so the two
+  markets silently ran different strategies for weeks. Now `nse_scanner` aliases the
+  `scanner` functions (`nse_scanner.build_zones is scanner.build_zones`) and `nse_config`
+  imports its zone numbers from `config.py`, so a change to either is a change to both.
+  `tests/test_nse_shares_crypto_engine.py` fails if a copy comes back.
+
+  The engine reads one timeframe-dependent number, `ZONE_BASE_EXTRA` (30m → 5, 4h → 1).
+  `nse_scanner.bind_zone_engine()` sets it from NSE's own timeframe when NSE actually scans
+  (in `scan_symbol`), not at import, so a crypto-only process that merely imports
+  `nse_scanner` is never reconfigured.
+
+  Still NSE-only on purpose: session hours and holidays, the yfinance data and its
+  confirmed-candle policy, the 500-candle lookback, the watchlist, webhooks and rating
+  display. Not shared: watch rows / entry-confirm, the 90-second scan loop and the live
+  ticker are crypto-only, and NSE paper trading is paused.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

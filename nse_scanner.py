@@ -50,6 +50,7 @@ from nse_config import (
     SHOW_ZONE_RATINGS,
     ZONE_RATING_BASE,
 )
+import scanner as zone_engine
 from zone_scoring import score_wick_zone
 
 
@@ -63,7 +64,12 @@ SL_BUFFER_PCT = 0.10
 ROUND_TRIP_COST_PCT = 0.1063
 MIN_SAFE_STOP_PCT = 0.240
 MARKET_DATA = {}
-ZONE_REPEAT_SUPPRESSION_SECONDS = 60 * 60
+# Follows the alert cooldown, exactly as the crypto scanner's does (its own
+# comment: a zone repeats no faster than it may alert). Was a flat hour, which
+# is a quarter of the 4h cooldown and twice the 30m one.
+ZONE_REPEAT_SUPPRESSION_SECONDS = int(
+    os.getenv("VICTUS_ZONE_REPEAT_SUPPRESSION_SECONDS", "").strip() or ALERT_COOLDOWN_SECONDS
+)
 NSE_SECTOR_MAP = {}
 NSE_SECTOR_BIAS_THRESHOLD_PCT = float(os.getenv("NSE_SECTOR_BIAS_THRESHOLD_PCT", "1.5"))
 NSE_SECTOR_BUCKETS = (
@@ -269,219 +275,46 @@ def load_watchlist():
         return symbols
 
 
-def atr(df, period=50):
-    high = df["high"]
-    low = df["low"]
-    close = df["close"]
-
-    tr = pd.concat(
-        [
-            high - low,
-            (high - close.shift()).abs(),
-            (low - close.shift()).abs(),
-        ],
-        axis=1,
-    ).max(axis=1)
-
-    result = pd.Series(float("nan"), index=df.index, dtype="float64")
-    if len(tr) < period:
-        return result
-
-    # Pine's ta.atr() uses Wilder's RMA, seeded with the first period's SMA.
-    result.iloc[period - 1] = tr.iloc[:period].mean()
-    for index in range(period, len(tr)):
-        result.iloc[index] = (result.iloc[index - 1] * (period - 1) + tr.iloc[index]) / period
-
-    return result
+# --- Zone engine -------------------------------------------------------------
+# NSE does not build zones itself. It uses the crypto scanner's engine - the one
+# tests/test_indicator_scanner_parity.py holds to Shiva_Indicator_v7.pine and
+# tests/test_six_worked_examples.py holds to six hand-measured charts. NSE used
+# to keep a private copy of these nine functions: a fixed ATR band, a plain
+# "drop the oldest" buffer, an age counted from creation, a close-through break.
+# When crypto moved to the v7 wick rules the copy stayed behind, and the two
+# markets quietly ran different strategies. These are aliases, not wrappers:
+# `nse_scanner.build_zones is scanner.build_zones`, and a test says so.
+atr = zone_engine.atr
+find_pivots = zone_engine.find_pivots
+zone_center = zone_engine.zone_center
+add_zone_if_not_overlapping = zone_engine.add_zone_if_not_overlapping
+record_zone_touch = zone_engine.record_zone_touch
+qualify_wick_zone = zone_engine.qualify_wick_zone
+build_zones = zone_engine.build_zones
+too_young_to_alert = zone_engine.too_young_to_alert
+nearest_active_zone = zone_engine.nearest_active_zone
 
 
-def find_pivots(df, swing_length=10):
-    highs = []
-    lows = []
-    high_values = df["high"].values
-    low_values = df["low"].values
+def bind_zone_engine(timeframe=None):
+    """Point the shared engine at this scanner's timeframe; returns the base.
 
-    for index in range(swing_length, len(df) - swing_length):
-        left_highs = high_values[index - swing_length:index]
-        right_highs = high_values[index + 1:index + swing_length + 1]
-        if high_values[index] > left_highs.max() and high_values[index] > right_highs.max():
-            highs.append(index)
-
-        left_lows = low_values[index - swing_length:index]
-        right_lows = low_values[index + 1:index + swing_length + 1]
-        if low_values[index] < left_lows.min() and low_values[index] < right_lows.min():
-            lows.append(index)
-
-    return highs, lows
-
-
-def zone_center(zone):
-    return (zone["top"] + zone["bottom"]) / 2.0
-
-
-def add_zone_if_not_overlapping(zones, new_zone, atr_value):
-    atr_threshold = atr_value * OVERLAP_ATR
-    new_center = zone_center(new_zone)
-
-    for zone in zones:
-        if not zone["active"]:
-            continue
-
-        existing_center = zone_center(zone)
-        if existing_center - atr_threshold <= new_center <= existing_center + atr_threshold:
-            return False
-
-    zones.append(new_zone)
-    return True
-
-
-def record_zone_touch(zone, candle_high, candle_low):
-    touches_zone = candle_high >= zone["bottom"] and candle_low <= zone["top"]
-    zone["touch_streak"] = zone.get("touch_streak", 0) + 1 if touches_zone else 0
-    if touches_zone:
-        zone["touch_count"] = zone.get("touch_count", 0) + 1
-    zone["max_touch_streak"] = max(zone.get("max_touch_streak", 0), zone["touch_streak"])
-    # 0 disables the veto entirely, matching the indicator. Without the guard
-    # a threshold of 0 would flag every zone the moment it is created.
-    if MAX_CONSECUTIVE_ZONE_TOUCHES > 0 and zone["max_touch_streak"] >= MAX_CONSECUTIVE_ZONE_TOUCHES:
-        zone["over_touched"] = True
-
-
-def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type):
-    pivot_atr = atr_series.iloc[pivot_index]
-    if pd.isna(pivot_atr):
-        return None
-
-    candle_open = float(df["open"].iloc[pivot_index])
-    candle_close = float(df["close"].iloc[pivot_index])
-    candle_high = float(df["high"].iloc[pivot_index])
-    candle_low = float(df["low"].iloc[pivot_index])
-    body_size = abs(candle_close - candle_open)
-    departure_closes = df["close"].iloc[pivot_index + 1:confirmation_index + 1]
-    if departure_closes.empty:
-        return None
-
-    # Geometry follows the Pine indicator exactly: a fixed atr * (BOX_WIDTH/10)
-    # band anchored on the pivot extreme, not the pivot candle's own wick. The
-    # wick version produced the same far edge but a near edge far away from the
-    # level - and the near edge is the entry, so entries and stops came out
-    # several times wider than the chart implies.
-    band = float(pivot_atr) * (BOX_WIDTH / 10.0)
-    if zone_type == "demand":
-        bottom = candle_low
-        top = bottom + band
-        wick_top = min(candle_open, candle_close)
-        wick_bottom = candle_low
-        departure = float(departure_closes.max() - wick_top)
-    else:
-        top = candle_high
-        bottom = top - band
-        wick_bottom = max(candle_open, candle_close)
-        wick_top = candle_high
-        departure = float(wick_bottom - departure_closes.min())
-
-    # Recorded as metadata for the rating and later analysis. The indicator
-    # applies no such tests, so they must not gate zone creation.
-    wick_size = wick_top - wick_bottom
-    return {
-        "type": zone_type,
-        "created_idx": confirmation_index,
-        "pivot_idx": pivot_index,
-        "top": top,
-        "bottom": bottom,
-        "body_entry": top if zone_type == "demand" else bottom,
-        "active": True,
-        "touch_streak": 0,
-        "touch_count": 0,
-        "max_touch_streak": 0,
-        "over_touched": False,
-        "atr": float(pivot_atr),
-        "wick_to_body": wick_size / body_size if body_size > 0 else wick_size / float(pivot_atr),
-        "wick_atr": wick_size / float(pivot_atr),
-        "departure_atr": departure / float(pivot_atr),
-    }
-
-
-def build_zones(df):
-    atr_series = atr(df, ATR_PERIOD)
-    if atr_series.isna().all():
-        return [], []
-
-    pivot_highs, pivot_lows = find_pivots(df, SWING_LENGTH)
-    pivot_high_set = set(pivot_highs)
-    pivot_low_set = set(pivot_lows)
-    supply_zones = []
-    demand_zones = []
-
-    # Qualify only confirmed pivot wicks with enough rejection and departure.
-    for confirmation_index in range(SWING_LENGTH, len(df)):
-        pivot_index = confirmation_index - SWING_LENGTH
-        if pivot_index in pivot_high_set:
-            zone = qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, "supply")
-            if zone is not None and add_zone_if_not_overlapping(supply_zones, zone, zone["atr"]):
-                supply_zones = supply_zones[-HISTORY_OF_ZONES_TO_KEEP:]
-        elif pivot_index in pivot_low_set:
-            zone = qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, "demand")
-            if zone is not None and add_zone_if_not_overlapping(demand_zones, zone, zone["atr"]):
-                demand_zones = demand_zones[-HISTORY_OF_ZONES_TO_KEEP:]
-
-        close = float(df["close"].iloc[confirmation_index])
-        high = float(df["high"].iloc[confirmation_index])
-        low = float(df["low"].iloc[confirmation_index])
-        for zone in supply_zones:
-            if zone["active"] and confirmation_index > zone["created_idx"]:
-                record_zone_touch(zone, high, low)
-            if zone["active"] and confirmation_index > zone["created_idx"] and close >= zone["top"]:
-                zone["active"] = False
-        for zone in demand_zones:
-            if zone["active"] and confirmation_index > zone["created_idx"]:
-                record_zone_touch(zone, high, low)
-            if zone["active"] and confirmation_index > zone["created_idx"] and close <= zone["bottom"]:
-                zone["active"] = False
-
-    return supply_zones, demand_zones
-
-
-def too_young_to_alert(zone, current_index):
-    """A level price reaches within a candle or two of confirmation.
-
-    Nothing has been defended yet - it is simply the recent high or low, and
-    the zone is drawn tight around it, so the alert carries a small stop and
-    no evidence that anyone is selling there. Waiting a set number of candles
-    is what separates a level that held from a level that just happened.
+    The engine reads exactly one timeframe-dependent number, ZONE_BASE_EXTRA -
+    how many bars either side of a pivot form its base (5 on 30m, 1 on 4h). The
+    crypto scanner fixes it at import from VICTUS_TIMEFRAME, but NSE chooses its
+    timeframe afterwards (nse_scanner_30m patches it in), so it is set here,
+    when NSE actually scans, rather than at import - which would reach into the
+    crypto engine of every process that merely imports this module. An explicit
+    VICTUS_ZONE_BASE_EXTRA still wins, as it does for crypto.
     """
-    if current_index is None or MIN_ZONE_AGE_CANDLES <= 0:
-        return False
-    return (current_index - zone["created_idx"]) < MIN_ZONE_AGE_CANDLES
+    from config import TIMEFRAME_MINUTES, auto_base_extra
 
-
-def nearest_active_zone(price, zones, zone_type, current_index=None):
-    nearest = None
-    nearest_dist = 999.0
-
-    for zone in zones:
-        if not zone["active"] or zone.get("over_touched", False):
-            continue
-        if too_young_to_alert(zone, current_index):
-            continue
-
-        # Measure to the edge price actually reaches first, which is the
-        # edge the trade is entered at. Measuring to the far edge put a
-        # whole zone height between the trigger and the fill, so alerts
-        # could arrive with price already through the entry.
-        reference = planned_entry_price(zone_type, zone)
-        distance = abs(reference - price) / price * 100.0
-        if distance < nearest_dist:
-            nearest = zone
-            nearest_dist = distance
-
-    # Stamp the age on the way out, matching scanner.py. This is the only
-    # place the bar index and the chosen zone are both in scope, and the
-    # record needs the age to make MIN_ZONE_AGE_CANDLES tunable.
-    if nearest is not None and current_index is not None:
-        nearest["zone_age_candles"] = int(current_index - nearest["created_idx"])
-
-    return nearest, nearest_dist
+    override = os.getenv("VICTUS_ZONE_BASE_EXTRA", "").strip()
+    if override:
+        zone_engine.ZONE_BASE_EXTRA = int(override)
+    else:
+        minutes = TIMEFRAME_MINUTES.get(str(timeframe or TIMEFRAME).strip().lower())
+        zone_engine.ZONE_BASE_EXTRA = auto_base_extra(minutes)
+    return zone_engine.ZONE_BASE_EXTRA
 
 
 def get_range_filter_signals(df):
@@ -772,6 +605,7 @@ def sector_coverage_summary(watchlist):
 
 
 def scan_symbol(symbol):
+    bind_zone_engine()
     df = fetch_stock_ohlcv(symbol)
     price = float(df["close"].iloc[-1])
     indicator_df = confirmed_candles(df)
@@ -993,8 +827,24 @@ def send_status_message(message):
         print(f"Discord status message failed: {error}")
 
 
+def stop_too_wide(zone_type, zone):
+    """True when the planned stop is further than MAX_ALERT_STOP_PCT from entry.
+
+    The crypto scanner's rule, applied here too so both markets send the same
+    alerts from the same zones. It reads the crypto scanner's limit rather than
+    a second copy of the number.
+    """
+    limit = zone_engine.MAX_ALERT_STOP_PCT
+    if limit <= 0:
+        return False
+    return planned_stop_distance_pct(zone_type, zone) > limit
+
+
 def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
     if zone is None:
+        return None
+
+    if stop_too_wide(zone_type, zone):
         return None
 
     state_key = build_state_key(result["symbol"], zone_type, zone)

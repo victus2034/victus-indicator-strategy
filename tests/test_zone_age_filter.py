@@ -16,6 +16,10 @@ def zone(created_idx, bottom, top):
 
 
 class ZoneAgeFilterTests(unittest.TestCase):
+    # nse_scanner.nearest_active_zone IS scanner.nearest_active_zone (one shared
+    # engine), so the rule reads scanner's MIN_ZONE_AGE_CANDLES whichever entry
+    # point is called. Patching nse_scanner's own attribute would do nothing.
+
     def test_zone_confirmed_moments_ago_raises_no_alert(self):
         # The COAI supply zone that prompted this rule: confirmed on the
         # candle before the alert, with price already sitting on it. Nothing
@@ -24,7 +28,7 @@ class ZoneAgeFilterTests(unittest.TestCase):
 
         for module in (scanner, nse_scanner):
             with self.subTest(module=module.__name__):
-                with patch.object(module, "MIN_ZONE_AGE_CANDLES", 15):
+                with patch.object(scanner, "MIN_ZONE_AGE_CANDLES", 15):
                     found, _ = module.nearest_active_zone(
                         0.2863, [fresh], "supply", 201
                     )
@@ -36,7 +40,7 @@ class ZoneAgeFilterTests(unittest.TestCase):
 
         for module in (scanner, nse_scanner):
             with self.subTest(module=module.__name__):
-                with patch.object(module, "MIN_ZONE_AGE_CANDLES", 15):
+                with patch.object(scanner, "MIN_ZONE_AGE_CANDLES", 15):
                     found, _ = module.nearest_active_zone(
                         0.2863, [held], "supply", 215
                     )
@@ -51,7 +55,7 @@ class ZoneAgeFilterTests(unittest.TestCase):
 
         for module in (scanner, nse_scanner):
             with self.subTest(module=module.__name__):
-                with patch.object(module, "MIN_ZONE_AGE_CANDLES", 15):
+                with patch.object(scanner, "MIN_ZONE_AGE_CANDLES", 15):
                     found, _ = module.nearest_active_zone(
                         101.0, zones, "demand", 215
                     )
@@ -63,7 +67,7 @@ class ZoneAgeFilterTests(unittest.TestCase):
 
         for module in (scanner, nse_scanner):
             with self.subTest(module=module.__name__):
-                with patch.object(module, "MIN_ZONE_AGE_CANDLES", 0):
+                with patch.object(scanner, "MIN_ZONE_AGE_CANDLES", 0):
                     found, _ = module.nearest_active_zone(
                         101.0, [fresh], "demand", 201
                     )
@@ -77,7 +81,7 @@ class ZoneAgeFilterTests(unittest.TestCase):
 
         for module in (scanner, nse_scanner):
             with self.subTest(module=module.__name__):
-                with patch.object(module, "MIN_ZONE_AGE_CANDLES", 15):
+                with patch.object(scanner, "MIN_ZONE_AGE_CANDLES", 15):
                     found, _ = module.nearest_active_zone(101.0, [fresh], "demand")
 
                 self.assertIs(found, fresh)

@@ -7,63 +7,13 @@ import nse_scanner
 
 
 class NseIndicatorParityTests(unittest.TestCase):
-    def test_atr_uses_wilder_rma(self):
-        data = pd.DataFrame(
-            {
-                "high": [11.0, 13.0, 14.0, 18.0],
-                "low": [9.0, 10.0, 11.0, 14.0],
-                "close": [10.0, 12.0, 13.0, 17.0],
-            }
-        )
-
-        result = nse_scanner.atr(data, period=3)
-
-        self.assertTrue(pd.isna(result.iloc[0]))
-        self.assertTrue(pd.isna(result.iloc[1]))
-        self.assertAlmostEqual(result.iloc[2], 8.0 / 3.0)
-        self.assertAlmostEqual(result.iloc[3], 31.0 / 9.0)
-
-    def test_demand_zone_is_an_atr_band_on_the_pivot_low(self):
-        # Parity with the Pine indicator: box_bottom = the swing low, and
-        # box_top = bottom + atr * (box_width / 10). The pivot candle's own
-        # wick does not set the height.
-        data = pd.DataFrame(
-            {
-                "open": [10.0, 10.0, 10.0, 11.0, 11.0],
-                "close": [9.8, 9.8, 9.8, 12.0, 12.0],
-                "high": [10.1, 10.1, 10.1, 12.1, 12.1],
-                "low": [9.0, 9.0, 9.0, 10.5, 10.5],
-            }
-        )
-        atr_values = pd.Series([2.0] * len(data))
-
-        zone = nse_scanner.qualify_wick_zone(data, 2, 3, atr_values, "demand")
-
-        self.assertEqual(zone["bottom"], 9.0)
-        self.assertAlmostEqual(zone["top"], 9.0 + 2.0 * (nse_scanner.BOX_WIDTH / 10.0))
-
-    def test_broken_zone_does_not_block_later_replacement(self):
-        data = pd.DataFrame(
-            {
-                "open": [90.0, 90.0, 95.0, 90.0, 90.0, 101.0, 96.0, 90.0, 90.0, 90.0],
-                "high": [90.0, 95.0, 100.0, 96.0, 95.0, 102.0, 101.0, 98.0, 97.0, 96.0],
-                "low": [80.0] * 10,
-                "close": [90.0, 90.0, 95.0, 90.0, 90.0, 101.0, 96.0, 90.0, 90.0, 90.0],
-            }
-        )
-        atr_values = pd.Series([2.0] * len(data), index=data.index)
-
-        with (
-            patch.object(nse_scanner, "SWING_LENGTH", 2),
-            patch.object(nse_scanner, "atr", return_value=atr_values),
-            patch.object(nse_scanner, "find_pivots", return_value=([2, 6], [])),
-        ):
-            supply, _ = nse_scanner.build_zones(data)
-
-        active_supply = [zone for zone in supply if zone["active"]]
-        self.assertEqual(len(active_supply), 1)
-        self.assertEqual(active_supply[0]["top"], 101.0)
-        self.assertEqual(active_supply[0]["pivot_idx"], 6)
+    # The ATR, pivot, zone-geometry, touch-veto and zone-break tests that used to
+    # live here pinned NSE's private copy of the zone engine (a fixed ATR band, a
+    # plain "drop the oldest" buffer, a close-through break). NSE no longer has
+    # one: it uses the crypto scanner's, which tests/test_indicator_scanner_parity.py
+    # holds to the Pine indicator and tests/test_six_worked_examples.py holds to
+    # six hand-measured charts. tests/test_nse_shares_crypto_engine.py pins that
+    # the two really are the same functions with the same numbers.
 
     def test_30m_resample_is_anchored_to_nse_open(self):
         index = pd.date_range("2026-07-22 09:15", periods=4, freq="15min", tz="Asia/Kolkata")

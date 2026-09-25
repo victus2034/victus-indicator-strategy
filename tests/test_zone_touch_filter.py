@@ -6,11 +6,14 @@ import scanner
 
 
 class ZoneTouchFilterTests(unittest.TestCase):
+    # Both entry points share one engine, so the veto reads scanner's
+    # MAX_CONSECUTIVE_ZONE_TOUCHES. Patching nse_scanner's attribute does nothing.
+
     def test_two_consecutive_touches_mark_zone_as_over_tested(self):
         for module in (scanner, nse_scanner):
             with self.subTest(module=module.__name__):
                 zone = {"bottom": 100.0, "top": 101.0, "active": True}
-                with patch.object(module, "MAX_CONSECUTIVE_ZONE_TOUCHES", 2):
+                with patch.object(scanner, "MAX_CONSECUTIVE_ZONE_TOUCHES", 2):
                     module.record_zone_touch(zone, 101.5, 100.5)
                     self.assertFalse(zone.get("over_touched", False))
                     module.record_zone_touch(zone, 100.8, 99.8)
@@ -22,7 +25,7 @@ class ZoneTouchFilterTests(unittest.TestCase):
         for module in (scanner, nse_scanner):
             with self.subTest(module=module.__name__):
                 zone = {"bottom": 100.0, "top": 101.0, "active": True}
-                with patch.object(module, "MAX_CONSECUTIVE_ZONE_TOUCHES", 2):
+                with patch.object(scanner, "MAX_CONSECUTIVE_ZONE_TOUCHES", 2):
                     module.record_zone_touch(zone, 101.5, 100.5)
                     module.record_zone_touch(zone, 103.0, 102.0)
                     module.record_zone_touch(zone, 100.8, 99.8)

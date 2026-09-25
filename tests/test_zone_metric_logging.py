@@ -90,10 +90,16 @@ class ScannerRecordTests(unittest.TestCase):
                 )
 
     def test_the_zone_age_is_stamped_where_the_bar_index_is_known(self):
-        for module in ("scanner.py", "nse_scanner.py"):
-            source = Path(__file__).resolve().parent.parent.joinpath(module).read_text(encoding="utf-8")
-            body = source.split("def nearest_active_zone", 1)[1].split("\ndef ", 1)[0]
-            self.assertIn('nearest["zone_age_candles"]', body, f"{module} never stamps the age")
+        source = Path(__file__).resolve().parent.parent.joinpath("scanner.py").read_text(encoding="utf-8")
+        body = source.split("def nearest_active_zone", 1)[1].split("\ndef ", 1)[0]
+        self.assertIn('nearest["zone_age_candles"]', body, "scanner.py never stamps the age")
+
+    def test_nse_stamps_the_age_through_the_same_function(self):
+        # NSE no longer has a nearest_active_zone of its own to read.
+        import nse_scanner
+        import scanner
+
+        self.assertIs(nse_scanner.nearest_active_zone, scanner.nearest_active_zone)
 
 
 if __name__ == "__main__":
