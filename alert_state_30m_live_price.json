@@ -3597,7 +3597,7 @@
     "shadow:BLESSUSD|30m|short|0.010521|0.0106": 1790233076.6809607,
     "SOXLBUSD|30m|long|140|140.8": 1790233590.3889604,
     "shadow:SOXLBUSD|30m|long|140|140.421": 1790237278.3406904,
-    "XAUTUSD|30m|long|4249.17|4265.58": 1790315885.1781757,
+    "XAUTUSD|30m|long|4249.17|4265.58": 1790344911.8486078,
     "METAXUSD|30m|long|731.15|731.25": 1790238398.519338,
     "shadow:METAXUSD|30m|long|731.15|731.811": 1790238398.519338,
     "NVDAXUSD|30m|long|221.85|222.4": 1790255497.0836496,
@@ -3659,7 +3659,8 @@
     "shadow:AVAXUSD|30m|short|10.6616|10.692": 1790336194.733187,
     "shadow:TSLAXUSD|30m|short|383.608|383.9": 1790341670.7100449,
     "shadow:SNDKBUSD|30m|short|1802.68|1805.65": 1790341581.1414464,
-    "TACUSD|30m|short|0.001612|0.001622": 1790343701.108016
+    "TACUSD|30m|short|0.001612|0.001622": 1790343701.108016,
+    "shadow:TACUSD|30m|short|0.00161766|0.001622": 1790344911.8482344
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15208,7 +15209,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790344663.8625956
+    "30m": 1790344890.3705418
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -129194,9 +129195,9 @@
     "last_alert_at": 0.0
   },
   "XAUTUSD|demand|4249.17000000|4265.58000000": {
-    "in_zone": false,
-    "last_alert_at": 1790315885.1781757,
-    "last_attempt_at": 1790315885.1781757
+    "in_zone": true,
+    "last_alert_at": 1790344911.8486078,
+    "last_attempt_at": 1790344911.8486078
   },
   "shadow:XAUTUSD|demand|4249.17000000|4252.40586902": {
     "in_zone": false,
@@ -143889,14 +143890,14 @@
     "last_attempt_at": 0.0
   },
   "TACUSD|supply|0.00161200|0.00162200": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790343701.108016,
     "last_attempt_at": 1790343701.108016
   },
   "shadow:TACUSD|supply|0.00161766|0.00162200": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790344911.8482344,
+    "last_attempt_at": 1790344911.8482344
   },
   "ZORAUSD|demand|0.00836200|0.00836292": {
     "in_zone": false,
