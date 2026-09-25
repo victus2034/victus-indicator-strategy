@@ -54940,6 +54940,7 @@
     "SNDKBUSD|30m|short|1722.85|1736.11": "filled",
     "SNDKBUSD|30m|short|1724.4|1738.45": "filled",
     "SNDKBUSD|30m|short|1790.25|1791.16": "stop_too_tight",
+    "SNDKBUSD|30m|short|1791.32|1809.23": "filled",
     "SNDKBUSD|30m|short|1797.93|1805.62": "filled",
     "SNDKBUSD|30m|short|1808.78|1825.67": "filled",
     "SOLUSD|30m|long|100.74|99.8275": "filled",
@@ -55736,6 +55737,24 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
+      "timeframe": "30m"
+    },
+    "SNDKBUSD|30m|short|1791.32|1809.23": {
+      "alert_time": "2026-09-25T13:33:01.479007+05:30",
+      "entry": 1791.32,
+      "entry_time": "2026-09-25T13:40:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "rating": 6,
+      "risk": 17.912500000000136,
+      "side": "short",
+      "stop": 1809.2325,
+      "stream": "live",
+      "symbol": "SNDKBUSD",
+      "target_1": 1773.4074999999998,
+      "target_2": 1755.4949999999997,
+      "target_half": 1782.36375,
       "timeframe": "30m"
     }
   }
