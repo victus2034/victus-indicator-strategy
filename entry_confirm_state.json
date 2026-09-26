@@ -2,7 +2,7 @@
   "BEAT/USDT|30m|short|0.10625|0.107313": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BLESSUSD|30m|long|0.009296|0.00924225": {
     "reached_entry": true,
@@ -10,6 +10,11 @@
     "stopped_out": false
   },
   "SLVONUSD|30m|long|58.15|58.1125": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
+  "TSLAXUSD|30m|long|371.762|371.747": {
     "reached_entry": false,
     "stage": 1,
     "stopped_out": false
@@ -192,6 +197,7 @@
   "_level_ready|TSLAXUSD|30m|long|363.1|361.475": 1789880765.949457,
   "_level_ready|TSLAXUSD|30m|long|363.24|360.978": 1789878363.188966,
   "_level_ready|TSLAXUSD|30m|long|371.25|367.812": 1790390173.787584,
+  "_level_ready|TSLAXUSD|30m|long|371.762|371.747": 1790431571.793892,
   "_level_ready|TSLAXUSD|30m|long|376.2|373.263": 1790239282.105593,
   "_level_ready|TSLAXUSD|30m|long|378.8|378.238": 1790221875.347665,
   "_level_ready|TSLAXUSD|30m|short|365.079|368.73": 1789646770.464048,
@@ -307,7 +313,7 @@
   "_ready|TACUSD|30m": 1790421375.956707,
   "_ready|TACUSD|4h": 1788866757.185792,
   "_ready|TRUMP/USDT|30m": 1790334977.01829,
-  "_ready|TSLAXUSD|30m": 1790390173.787584,
+  "_ready|TSLAXUSD|30m": 1790431571.793892,
   "_ready|TSLAXUSD|4h": 1790171469.965766,
   "_ready|UB/USDT|30m": 1789320957.820623,
   "_ready|UNIUSD|30m": 1790239881.93561,
@@ -383,6 +389,10 @@
   "_silent_ready|RIVERUSD|30m|short|1.287|1.29825": {
     "price": 1.277,
     "time": "2026-09-26T15:36:13.072931+05:30"
+  },
+  "_silent_ready|SNDKBUSD|30m|long|1763.65|1759.52": {
+    "price": 1769.61,
+    "time": "2026-09-26T19:36:11.793892+05:30"
   },
   "_silent_ready|TACUSD|30m|short|0.00167487|0.00167503": {
     "price": 0.001661,
