@@ -7,11 +7,16 @@
   "BLESSUSD|30m|long|0.009296|0.00924225": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BTCUSD|30m|short|84167.5|84329.4": {
     "reached_entry": false,
     "stage": 1,
+    "stopped_out": false
+  },
+  "LTCUSD|30m|long|71.75|71.6375": {
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "SLVONUSD|30m|long|58.15|58.1125": {
@@ -125,6 +130,7 @@
   "_level_ready|LINKUSD|30m|short|12.588|12.6405": 1789814163.053415,
   "_level_ready|LINKUSD|30m|short|13.16|13.225": 1790274080.977571,
   "_level_ready|LTCUSD|30m|long|56.83|56.6675": 1789872965.628717,
+  "_level_ready|LTCUSD|30m|long|71.75|71.6375": 1790448379.68994,
   "_level_ready|LTCUSD|30m|short|52.7|52.9125": 1789630280.122914,
   "_level_ready|LTCUSD|30m|short|54.99|55.2775": 1789718755.792765,
   "_level_ready|LTCUSD|30m|short|55.08|55.355": 1789710365.457944,
@@ -297,7 +303,7 @@
   "_ready|KGEN/USDT|30m": 1789463159.791482,
   "_ready|LA/USDT|30m": 1789440963.456523,
   "_ready|LINKUSD|30m": 1790274080.977571,
-  "_ready|LTCUSD|30m": 1790417173.072931,
+  "_ready|LTCUSD|30m": 1790448379.68994,
   "_ready|LTCUSD|4h": 1789990565.578549,
   "_ready|METAXUSD|30m": 1789906569.980362,
   "_ready|METAXUSD|4h": 1788957356.779043,
@@ -371,10 +377,6 @@
   "_silent_ready|LINKUSD|30m|short|14.123|14.2405": {
     "price": 14.05,
     "time": "2026-09-26T09:11:19.596312+05:30"
-  },
-  "_silent_ready|LTCUSD|30m|long|71.75|71.6375": {
-    "price": 72.18,
-    "time": "2026-09-26T23:11:23.863487+05:30"
   },
   "_silent_ready|METAXUSD|30m|long|744.95|744.45": {
     "price": 748.05,
