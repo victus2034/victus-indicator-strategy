@@ -3692,7 +3692,8 @@
     "TSLAXUSD|30m|long|371.75|371.762": 1790435886.5105371,
     "shadow:TSLAXUSD|30m|long|371.75|372.06": 1790434999.380524,
     "shadow:HYPEUSD|30m|short|92.7405|92.901": 1790434297.2386522,
-    "RIVERUSD|30m|short|1.287|1.296": 1790435797.9776244
+    "RIVERUSD|30m|short|1.287|1.296": 1790435797.9776244,
+    "shadow:RIVERUSD|30m|short|1.29158|1.296": 1790436706.9750512
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15241,7 +15242,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790436461.5278442
+    "30m": 1790436685.3641262
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -46314,7 +46315,7 @@
     "BEAT/USDT|30m|short|0.10625|0.1071": 1790431348.1218867,
     "METAXUSD|30m|long|744.55|744.95": 1790435489.2783394,
     "HYPEUSD|30m|short|92.8946|92.901": 1790435797.9718466,
-    "SOLUSD|30m|short|122.314|122.952": 1790423469.0845613,
+    "SOLUSD|30m|short|122.314|122.952": 1790436706.9691825,
     "TACUSD|30m|short|0.00167487|0.001675": 1790424400.2789428,
     "BNBUSD|30m|short|777.16|777.8": 1790435284.169753,
     "SNDKBUSD|30m|long|1760.35|1763.65": 1790435284.7902033,
@@ -144597,9 +144598,9 @@
     "last_attempt_at": 1790435797.9776244
   },
   "shadow:RIVERUSD|supply|1.29158178|1.29600000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790436706.9750512,
+    "last_attempt_at": 1790436706.9750512
   },
   "AKE/USDT|supply|0.03875990|0.03894070": {
     "in_zone": false,
@@ -144817,6 +144818,11 @@
     "last_attempt_at": 0.0
   },
   "shadow:SOXLBUSD|supply|155.70408069|156.05000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "shadow:TRUMP/USDT|supply|2.29203646|2.29700000": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
