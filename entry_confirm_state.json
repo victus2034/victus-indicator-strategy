@@ -4,6 +4,11 @@
     "stage": 2,
     "stopped_out": false
   },
+  "BLESSUSD|30m|long|0.009296|0.00924225": {
+    "reached_entry": true,
+    "stage": 3,
+    "stopped_out": false
+  },
   "BTCUSD|30m|short|84167.5|84329.4": {
     "reached_entry": false,
     "stage": 1,
@@ -15,6 +20,11 @@
     "stopped_out": false
   },
   "XAUTUSD|30m|long|4287.05|4285.89": {
+    "reached_entry": true,
+    "stage": 3,
+    "stopped_out": false
+  },
+  "XRPUSD|30m|long|1.5287|1.51832": {
     "reached_entry": true,
     "stage": 3,
     "stopped_out": false
@@ -231,6 +241,7 @@
   "_level_ready|XAUTUSD|30m|short|4384.51|4391.64": 1789991772.459682,
   "_level_ready|XAUTUSD|30m|short|4403.45|4403.81": 1789753564.600689,
   "_level_ready|XAUTUSD|4h|long|4281.79|4241.02": 1790221564.238422,
+  "_level_ready|XRPUSD|30m|long|1.5287|1.51832": 1790448082.093375,
   "_level_ready|XRPUSD|30m|long|1.5683|1.55293": 1790163672.095984,
   "_level_ready|XRPUSD|30m|short|1.44772|1.4622": 1789824365.25911,
   "_level_ready|XRPUSD|30m|short|1.44861|1.4631": 1789978569.844119,
@@ -320,7 +331,7 @@
   "_ready|VELVETUSD|30m": 1790232967.803001,
   "_ready|XAUTUSD|30m": 1790427974.10198,
   "_ready|XAUTUSD|4h": 1790221564.238422,
-  "_ready|XRPUSD|30m": 1790163672.095984,
+  "_ready|XRPUSD|30m": 1790448082.093375,
   "_ready|XRPUSD|4h": 1789983964.89935,
   "_ready|ZAMA/USDT|30m": 1789225271.699613,
   "_ready|ZAMA/USDT|4h": 1789458964.864873,
@@ -412,10 +423,6 @@
   "_silent_ready|XAUTUSD|4h|long|4281.79|4241.02": {
     "price": 4288.92,
     "time": "2026-09-26T11:06:14.260758+05:30"
-  },
-  "_silent_ready|XRPUSD|30m|long|1.5287|1.51832": {
-    "price": 1.5353,
-    "time": "2026-09-26T23:06:17.454450+05:30"
   },
   "_silent_ready|ZECUSD|30m|long|1527.64|1514.07": {
     "price": 1536.77,
