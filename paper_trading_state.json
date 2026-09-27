@@ -55604,6 +55604,7 @@
     "SOLUSD|30m|short|104.33|104.53": "filled",
     "SOLUSD|30m|short|104.52|104.845": "filled",
     "SOLUSD|30m|short|119.459|120.186": "filled",
+    "SOLUSD|30m|short|122.314|123.112": "filled",
     "SOLUSD|4h|long|98.06|97.0975": "filled",
     "SOLUSD|4h|short|104.973|106.023": "filled",
     "SOLUSD|4h|short|109.911|110.816": "filled",
@@ -56392,6 +56393,24 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
+      "timeframe": "30m"
+    },
+    "SOLUSD|30m|short|122.314|123.112": {
+      "alert_time": "2026-09-27T13:11:43.044289+05:30",
+      "entry": 122.3135,
+      "entry_time": "2026-09-27T13:15:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 5,
+      "risk": 0.7981249999999989,
+      "side": "short",
+      "stop": 123.111625,
+      "stream": "live",
+      "symbol": "SOLUSD",
+      "target_1": 121.515375,
+      "target_2": 120.71725,
+      "target_half": 121.9144375,
       "timeframe": "30m"
     }
   }
