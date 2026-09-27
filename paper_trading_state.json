@@ -55253,6 +55253,7 @@
     "BNBUSD|30m|short|763.24|764.352": "stop_too_tight",
     "BNBUSD|30m|short|775.06|775.997": "stop_too_tight",
     "BNBUSD|30m|short|777.16|777.96": "stop_too_tight",
+    "BNBUSD|30m|short|780.03|785.367": "filled",
     "BNBUSD|4h|short|756.21|762.023": "filled",
     "BOME/USDT|30m|long|0.0008367|0.000832325": "filled",
     "BOME/USDT|30m|long|0.00084551|0.000837122": "filled",
@@ -56451,6 +56452,24 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
+      "timeframe": "30m"
+    },
+    "BNBUSD|30m|short|780.03|785.367": {
+      "alert_time": "2026-09-27T15:11:35.904824+05:30",
+      "entry": 780.03,
+      "entry_time": "2026-09-27T15:15:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 8,
+      "risk": 5.337499999999977,
+      "side": "short",
+      "stop": 785.3675,
+      "stream": "live",
+      "symbol": "BNBUSD",
+      "target_1": 774.6925,
+      "target_2": 769.355,
+      "target_half": 777.3612499999999,
       "timeframe": "30m"
     },
     "BTCUSD|30m|short|84893.5|85306.6": {
