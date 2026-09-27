@@ -55277,6 +55277,7 @@
     "BTCUSD|30m|short|81650.6|81756.1": "filled",
     "BTCUSD|30m|short|81750|82406.2": "filled",
     "BTCUSD|30m|short|84841.5|84914.6": "stop_too_tight",
+    "BTCUSD|30m|short|84893.5|85306.6": "filled",
     "BTCUSD|30m|short|87247.5|87420.6": "stop_too_tight",
     "BTCUSD|4h|long|76028|75487.4": "filled",
     "BTCUSD|4h|short|80309|80594": "filled",
@@ -56450,6 +56451,24 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
+      "timeframe": "30m"
+    },
+    "BTCUSD|30m|short|84893.5|85306.6": {
+      "alert_time": "2026-09-27T15:11:35.662221+05:30",
+      "entry": 84893.5,
+      "entry_time": "2026-09-27T15:15:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 8,
+      "risk": 413.125,
+      "side": "short",
+      "stop": 85306.625,
+      "stream": "live",
+      "symbol": "BTCUSD",
+      "target_1": 84480.375,
+      "target_2": 84067.25,
+      "target_half": 84686.9375,
       "timeframe": "30m"
     }
   }
