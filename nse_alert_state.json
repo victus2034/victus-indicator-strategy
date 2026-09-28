@@ -3109,7 +3109,10 @@
     "GODREJCP.NS|4h|long|855.45|860.7": 1790568749.2551165,
     "KALYANKJIL.NS|4h|long|556.7|561.154": 1790568749.6580958,
     "ACC.NS|4h|long|1219.3|1223.3": 1790568749.851964,
-    "POLYMED.NS|4h|long|1668.4|1681.75": 1790569978.6166902
+    "POLYMED.NS|4h|long|1668.4|1681.75": 1790569978.6166902,
+    "RECLTD.NS|4h|long|304.1|305.25": 1790571121.2884185,
+    "NH.NS|4h|long|1812|1826.5": 1790571121.477391,
+    "GODREJIND.NS|4h|long|1078|1086.62": 1790571121.708901
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -18162,7 +18165,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1790569931.5363507
+    "4h": 1790571087.074461
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -89545,9 +89548,9 @@
     "last_attempt_at": 0.0
   },
   "RECLTD.NS|demand|304.1000|305.2500": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790571121.2884185,
+    "last_attempt_at": 1790571121.2884185
   },
   "DIXON.NS|supply|14853.0000|14920.0000": {
     "in_zone": false,
@@ -91325,7 +91328,7 @@
     "last_attempt_at": 0.0
   },
   "GODREJCP.NS|demand|855.4500|860.7000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790568749.2551165,
     "last_attempt_at": 1790568749.2551165
   },
@@ -91475,14 +91478,14 @@
     "last_attempt_at": 0.0
   },
   "NH.NS|demand|1812.0000|1826.4960": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790571121.477391,
+    "last_attempt_at": 1790571121.477391
   },
   "GODREJIND.NS|demand|1078.0000|1086.6240": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790571121.708901,
+    "last_attempt_at": 1790571121.708901
   },
   "IRCTC.NS|demand|446.7500|450.3240": {
     "in_zone": false,
@@ -91585,6 +91588,11 @@
     "last_attempt_at": 0.0
   },
   "GESHIP.NS|supply|1592.8462|1593.2000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "BANKINDIA.NS|demand|122.2100|122.9000": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
