@@ -54771,6 +54771,33 @@
       "target_half": 372.96875,
       "timeframe": "30m",
       "trade_id": "TSLAXUSD|30m|long|371.25|367.812"
+    },
+    {
+      "alert_time": "2026-09-28T14:37:49.406479+05:30",
+      "cost_r": 0.18576470588235672,
+      "date": "2026-09-28",
+      "entry": 0.007895,
+      "entry_time": "2026-09-28T14:40:00+05:30",
+      "exit_price": 0.007937499999999998,
+      "exit_time": "2026-09-28T14:45:00+05:30",
+      "final_result": "+1R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.8142352941176433,
+      "outcome": "+1R",
+      "rating": 7,
+      "realized_r": 1.0,
+      "risk": 4.2499999999999136e-05,
+      "side": "long",
+      "stop": 0.0078525,
+      "stream": "live",
+      "symbol": "ZORAUSD",
+      "target_1": 0.007937499999999998,
+      "target_2": 0.007979999999999998,
+      "target_half": 0.00791625,
+      "timeframe": "4h",
+      "trade_id": "ZORAUSD|4h|long|0.007895|0.0078525"
     }
   ],
   "handled": {
@@ -57017,24 +57044,6 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
-    },
-    "ZORAUSD|4h|long|0.007895|0.0078525": {
-      "alert_time": "2026-09-28T14:37:49.406479+05:30",
-      "entry": 0.007895,
-      "entry_time": "2026-09-28T14:40:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 7,
-      "risk": 4.2499999999999136e-05,
-      "side": "long",
-      "stop": 0.0078525,
-      "stream": "live",
-      "symbol": "ZORAUSD",
-      "target_1": 0.007937499999999998,
-      "target_2": 0.007979999999999998,
-      "target_half": 0.00791625,
-      "timeframe": "4h"
     }
   }
 }
