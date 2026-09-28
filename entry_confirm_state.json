@@ -2,11 +2,11 @@
   "BNBUSD|30m|long|769.16|766.135": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BTCUSD|30m|long|83228.5|82749.8": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "LINKUSD|30m|long|13.76|13.64": {
@@ -371,6 +371,10 @@
   "_ready|ZIL/USDT|4h": 1788885653.347347,
   "_ready|ZORAUSD|30m": 1790481688.586142,
   "_ready|ZORAUSD|4h": 1789464571.087274,
+  "_silent_ready|AVAXUSD|30m|long|10.54|10.515": {
+    "price": 10.6,
+    "time": "2026-09-28T10:56:52.204894+05:30"
+  },
   "_silent_ready|AVAXUSD|30m|long|10.688|10.6655": {
     "price": 10.722,
     "time": "2026-09-28T09:01:25.458923+05:30"
@@ -478,10 +482,6 @@
   "_silent_ready|SOXLBUSD|30m|short|155.55|156.175": {
     "price": 154.55,
     "time": "2026-09-27T13:56:11.680668+05:30"
-  },
-  "_silent_ready|TACUSD|30m|short|0.00165377|0.00167031": {
-    "price": 0.001646,
-    "time": "2026-09-27T10:56:22.400686+05:30"
   },
   "_silent_ready|XRPUSD|30m|long|1.5123|1.5008": {
     "price": 1.5237,
