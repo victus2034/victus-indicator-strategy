@@ -54852,6 +54852,33 @@
       "target_half": 228.275,
       "timeframe": "4h",
       "trade_id": "NVDAXUSD|4h|short|228.9|230.15"
+    },
+    {
+      "alert_time": "2026-09-28T19:13:18.921977+05:30",
+      "cost_r": 0.22344615384615388,
+      "date": "2026-09-28",
+      "entry": 363.1,
+      "entry_time": "2026-09-28T19:15:00+05:30",
+      "exit_price": null,
+      "exit_time": "2026-09-28T19:25:00+05:30",
+      "final_result": "data_quality_ambiguous",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "xstock",
+      "net_realized_r": null,
+      "outcome": "data_quality_ambiguous",
+      "rating": 5,
+      "realized_r": null,
+      "risk": 1.625,
+      "side": "long",
+      "stop": 361.475,
+      "stream": "live",
+      "symbol": "TSLAXUSD",
+      "target_1": 364.725,
+      "target_2": 366.35,
+      "target_half": 363.9125,
+      "timeframe": "30m",
+      "trade_id": "TSLAXUSD|30m|long|363.1|361.475"
     }
   ],
   "handled": {
@@ -57101,24 +57128,6 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
-      "timeframe": "30m"
-    },
-    "TSLAXUSD|30m|long|363.1|361.475": {
-      "alert_time": "2026-09-28T19:13:18.921977+05:30",
-      "entry": 363.1,
-      "entry_time": "2026-09-28T19:15:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "xstock",
-      "rating": 5,
-      "risk": 1.625,
-      "side": "long",
-      "stop": 361.475,
-      "stream": "live",
-      "symbol": "TSLAXUSD",
-      "target_1": 364.725,
-      "target_2": 366.35,
-      "target_half": 363.9125,
       "timeframe": "30m"
     }
   }
