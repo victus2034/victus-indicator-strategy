@@ -54906,6 +54906,33 @@
       "target_half": 1.144625,
       "timeframe": "30m",
       "trade_id": "RIVERUSD|30m|long|1.139|1.12775"
+    },
+    {
+      "alert_time": "2026-09-28T19:57:59.074816+05:30",
+      "cost_r": 0.10079999999999849,
+      "date": "2026-09-28",
+      "entry": 0.008223264000000001,
+      "entry_time": "2026-09-28T20:00:00+05:30",
+      "exit_price": null,
+      "exit_time": "2026-09-28T20:00:00+05:30",
+      "final_result": "data_quality_ambiguous",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": null,
+      "outcome": "data_quality_ambiguous",
+      "rating": 3,
+      "realized_r": null,
+      "risk": 8.158000000000123e-05,
+      "side": "long",
+      "stop": 0.008141684,
+      "stream": "live",
+      "symbol": "BLESSUSD",
+      "target_1": 0.008304844000000002,
+      "target_2": 0.008386424000000003,
+      "target_half": 0.008264054000000002,
+      "timeframe": "30m",
+      "trade_id": "BLESSUSD|30m|long|0.00822326|0.00814168"
     }
   ],
   "handled": {
@@ -57157,24 +57184,6 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
-      "timeframe": "30m"
-    },
-    "BLESSUSD|30m|long|0.00822326|0.00814168": {
-      "alert_time": "2026-09-28T19:57:59.074816+05:30",
-      "entry": 0.008223264000000001,
-      "entry_time": "2026-09-28T20:00:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 3,
-      "risk": 8.158000000000123e-05,
-      "side": "long",
-      "stop": 0.008141684,
-      "stream": "live",
-      "symbol": "BLESSUSD",
-      "target_1": 0.008304844000000002,
-      "target_2": 0.008386424000000003,
-      "target_half": 0.008264054000000002,
       "timeframe": "30m"
     }
   }
