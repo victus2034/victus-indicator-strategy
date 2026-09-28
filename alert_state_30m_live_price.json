@@ -3779,7 +3779,9 @@
     "HUSD|30m|long|0.0681|0.06853": 1790588570.5160124,
     "shadow:HUSD|30m|long|0.0681|0.0684865": 1790588570.5160124,
     "shadow:LTCUSD|30m|short|71.5214|71.65": 1790591891.6654317,
-    "shadow:LTCUSD|30m|short|72.5874|72.76": 1790597876.088008
+    "shadow:LTCUSD|30m|short|72.5874|72.76": 1790597876.088008,
+    "METAXUSD|30m|short|751.35|751.65": 1790599306.421457,
+    "shadow:METAXUSD|30m|short|751.4|751.65": 1790599306.421457
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15328,7 +15330,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790599077.7685807
+    "30m": 1790599285.0763419
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -46286,7 +46288,7 @@
     "SOLUSD|30m|short|119.459|120.041": 1790332053.6697936,
     "XAUTUSD|30m|long|4303.41|4312.49": 1790166183.4382226,
     "BLESSUSD|30m|short|0.009458|0.009469": 1790130784.6722088,
-    "NVDAXUSD|30m|short|229.7|229.9": 1790597492.7950776,
+    "NVDAXUSD|30m|short|229.7|229.9": 1790599306.6585085,
     "DOGEUSD|30m|short|0.105129|0.10597": 1790136780.272654,
     "SNDKBUSD|30m|short|1895.24|1906.31": 1790169988.6838531,
     "ETHUSD|30m|short|2803.65|2806.6": 1790137581.7597797,
@@ -143189,7 +143191,7 @@
     "last_attempt_at": 1790598781.913916
   },
   "shadow:NVDAXUSD|supply|229.76184976|229.90000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790598781.913916,
     "last_attempt_at": 1790598781.913916
   },
@@ -145664,14 +145666,14 @@
     "last_attempt_at": 0.0
   },
   "METAXUSD|supply|751.35000000|751.65000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790599306.421457,
+    "last_attempt_at": 1790599306.421457
   },
   "shadow:METAXUSD|supply|751.40005691|751.65000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790599306.421457,
+    "last_attempt_at": 1790599306.421457
   },
   "SLVONUSD|supply|58.24000000|58.29000000": {
     "in_zone": false,
