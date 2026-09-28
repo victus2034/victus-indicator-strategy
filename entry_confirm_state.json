@@ -6,12 +6,17 @@
   },
   "BNBUSD|4h|long|760.9|755.5": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ETHUSD|30m|long|2637.5|2623.88": {
     "reached_entry": true,
     "stage": 2,
+    "stopped_out": false
+  },
+  "HUSD|30m|long|0.06853|0.0679925": {
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "SNDKBUSD|4h|long|1739.48|1722.22": {
@@ -113,6 +118,7 @@
   "_level_ready|ETHUSD|30m|short|2635.79|2648.46": 1789802761.038971,
   "_level_ready|ETHUSD|30m|short|2649.78|2676.28": 1789833365.529983,
   "_level_ready|HUSD|30m|long|0.0665784|0.0659179": 1790078166.602372,
+  "_level_ready|HUSD|30m|long|0.06853|0.0679925": 1790588782.015784,
   "_level_ready|HUSD|30m|long|0.0709834|0.0702792": 1789970161.86527,
   "_level_ready|HUSD|30m|long|0.07623|0.076205": 1789886761.676269,
   "_level_ready|HUSD|30m|long|0.07977|0.07927": 1789794367.459781,
@@ -327,7 +333,7 @@
   "_ready|GWEI/USDT|30m": 1789391158.458368,
   "_ready|HOME/USDT|30m": 1789449947.639194,
   "_ready|HOME/USDT|4h": 1789449947.639194,
-  "_ready|HUSD|30m": 1790360480.071318,
+  "_ready|HUSD|30m": 1790588782.015784,
   "_ready|HUSD|4h": 1789977969.836148,
   "_ready|HYPEUSD|30m": 1790520677.779451,
   "_ready|ICP/USDT|30m": 1789439750.580446,
@@ -442,10 +448,6 @@
     "price": 2690.05,
     "time": "2026-09-27T20:01:09.316733+05:30"
   },
-  "_silent_ready|HUSD|30m|long|0.06853|0.0679925": {
-    "price": 0.07007,
-    "time": "2026-09-28T13:31:37.084137+05:30"
-  },
   "_silent_ready|HYPEUSD|30m|long|90.917|90.3832": {
     "price": 91.681,
     "time": "2026-09-27T23:16:29.490066+05:30"
@@ -477,10 +479,6 @@
   "_silent_ready|NVDAXUSD|30m|long|223.155|223.149": {
     "price": 224.0,
     "time": "2026-09-28T08:11:23.369935+05:30"
-  },
-  "_silent_ready|NVDAXUSD|30m|short|226.15|227.025": {
-    "price": 225.15,
-    "time": "2026-09-27T15:16:21.967245+05:30"
   },
   "_silent_ready|RIVERUSD|30m|long|1.139|1.12775": {
     "price": 1.146,
