@@ -3112,7 +3112,9 @@
     "POLYMED.NS|4h|long|1668.4|1681.75": 1790569978.6166902,
     "RECLTD.NS|4h|long|304.1|305.25": 1790571121.2884185,
     "NH.NS|4h|long|1812|1826.5": 1790571121.477391,
-    "GODREJIND.NS|4h|long|1078|1086.62": 1790571121.708901
+    "GODREJIND.NS|4h|long|1078|1086.62": 1790571121.708901,
+    "MPHASIS.NS|4h|long|2192.1|2209.64": 1790572348.9226975,
+    "ASTRAL.NS|4h|long|1358.9|1369.77": 1790572349.3569474
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -18165,7 +18167,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1790571087.074461
+    "4h": 1790572305.0888858
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -89548,7 +89550,7 @@
     "last_attempt_at": 0.0
   },
   "RECLTD.NS|demand|304.1000|305.2500": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790571121.2884185,
     "last_attempt_at": 1790571121.2884185
   },
@@ -90173,9 +90175,9 @@
     "last_attempt_at": 0.0
   },
   "MPHASIS.NS|demand|2192.1001|2209.6369": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790572348.9226975,
+    "last_attempt_at": 1790572348.9226975
   },
   "PREMIERENE.NS|supply|1063.5912|1072.1000": {
     "in_zone": false,
@@ -91268,7 +91270,7 @@
     "last_attempt_at": 0.0
   },
   "POLYMED.NS|demand|1668.4000|1681.7472": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790569978.6166902,
     "last_attempt_at": 1790569978.6166902
   },
@@ -91328,7 +91330,7 @@
     "last_attempt_at": 0.0
   },
   "GODREJCP.NS|demand|855.4500|860.7000": {
-    "in_zone": false,
+    "in_zone": true,
     "last_alert_at": 1790568749.2551165,
     "last_attempt_at": 1790568749.2551165
   },
@@ -91473,9 +91475,9 @@
     "last_attempt_at": 0.0
   },
   "ASTRAL.NS|demand|1358.9000|1369.7712": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790572349.3569474,
+    "last_attempt_at": 1790572349.3569474
   },
   "NH.NS|demand|1812.0000|1826.4960": {
     "in_zone": true,
