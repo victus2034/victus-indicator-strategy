@@ -56184,6 +56184,7 @@
     "NVDAXUSD|30m|short|224.7|224.762": "stop_too_tight",
     "NVDAXUSD|30m|short|225.395|225.401": "stop_too_tight",
     "NVDAXUSD|30m|short|227.6|228.537": "filled",
+    "NVDAXUSD|4h|short|228.9|230.15": "filled",
     "O/USDT|30m|long|0.5279|0.525775": "filled",
     "O/USDT|30m|long|0.5309|0.526525": "filled",
     "O/USDT|30m|long|0.5393|0.537175": "filled",
@@ -57072,6 +57073,24 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
+    },
+    "NVDAXUSD|4h|short|228.9|230.15": {
+      "alert_time": "2026-09-28T18:00:38.083997+05:30",
+      "entry": 228.9,
+      "entry_time": "2026-09-28T18:05:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "rating": 5,
+      "risk": 1.25,
+      "side": "short",
+      "stop": 230.15,
+      "stream": "live",
+      "symbol": "NVDAXUSD",
+      "target_1": 227.65,
+      "target_2": 226.4,
+      "target_half": 228.275,
+      "timeframe": "4h"
     }
   }
 }
