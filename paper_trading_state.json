@@ -55690,6 +55690,7 @@
     "BNBUSD|30m|short|775.06|775.997": "stop_too_tight",
     "BNBUSD|30m|short|777.16|777.96": "stop_too_tight",
     "BNBUSD|30m|short|780.03|785.367": "filled",
+    "BNBUSD|4h|long|760.9|755.5": "filled",
     "BNBUSD|4h|short|756.21|762.023": "filled",
     "BOME/USDT|30m|long|0.0008367|0.000832325": "filled",
     "BOME/USDT|30m|long|0.00084551|0.000837122": "filled",
@@ -56906,6 +56907,24 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
+    },
+    "BNBUSD|4h|long|760.9|755.5": {
+      "alert_time": "2026-09-28T11:59:06.094888+05:30",
+      "entry": 760.9,
+      "entry_time": "2026-09-28T12:50:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 7,
+      "risk": 5.399999999999977,
+      "side": "long",
+      "stop": 755.5,
+      "stream": "live",
+      "symbol": "BNBUSD",
+      "target_1": 766.3,
+      "target_2": 771.6999999999999,
+      "target_half": 763.5999999999999,
+      "timeframe": "4h"
     },
     "TSLAXUSD|30m|long|371.25|367.812": {
       "alert_time": "2026-09-28T08:01:51.300555+05:30",
