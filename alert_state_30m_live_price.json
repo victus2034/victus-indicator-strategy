@@ -3751,7 +3751,8 @@
     "SOLUSD|30m|long|120.05|120.301": 1790562800.1701977,
     "shadow:SOLUSD|30m|long|120.05|120.232": 1790562800.1701977,
     "DOGEUSD|30m|long|0.09463|0.09504": 1790562800.563193,
-    "shadow:UNIUSD|30m|long|9.398|9.4325": 1790562800.836394
+    "shadow:UNIUSD|30m|long|9.398|9.4325": 1790562800.836394,
+    "shadow:BNBUSD|30m|long|770.43|770.861": 1790562980.7721958
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15300,7 +15301,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790562782.1463223
+    "30m": 1790562966.627977
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -46360,7 +46361,7 @@
     "NVDAXUSD|30m|short|226.15|226.85": 1790536298.920881,
     "ETHUSD|30m|long|2666.35|2671.15": 1790450503.4286563,
     "TSLAXUSD|30m|long|368.5|371.25": 1790429595.8727655,
-    "NVDAXUSD|30m|long|223.15|223.155": 1790449897.800156,
+    "NVDAXUSD|30m|long|223.15|223.155": 1790562980.7726595,
     "RIVERUSD|30m|long|1.225|1.2348": 1790450591.2819803,
     "ZECUSD|30m|long|1516.78|1527.64": 1790433698.2472622,
     "BNBUSD|30m|long|768.78|772.31": 1790398910.369354,
@@ -144393,7 +144394,7 @@
     "last_attempt_at": 1790364137.3297708
   },
   "DOGEUSD|demand|0.09463000|0.09504000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790562800.563193,
     "last_attempt_at": 1790562800.563193
   },
@@ -144778,7 +144779,7 @@
     "last_attempt_at": 0.0
   },
   "shadow:UNIUSD|demand|9.39800000|9.43249646": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790562800.836394,
     "last_attempt_at": 1790562800.836394
   },
@@ -145418,9 +145419,9 @@
     "last_attempt_at": 0.0
   },
   "shadow:BNBUSD|demand|770.43000000|770.86101496": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790562980.7721958,
+    "last_attempt_at": 1790562980.7721958
   },
   "SOLUSD|supply|124.46300000|124.99000000": {
     "in_zone": false,
