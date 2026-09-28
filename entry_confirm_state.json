@@ -2,7 +2,7 @@
   "AVAXUSD|30m|long|10.252|10.192": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BLESSUSD|30m|long|0.00822326|0.00814168": {
     "reached_entry": true,
@@ -12,6 +12,16 @@
   "BNBUSD|4h|long|760.9|755.5": {
     "reached_entry": true,
     "stage": 3,
+    "stopped_out": false
+  },
+  "DOGEUSD|30m|long|0.09187|0.09112": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
+  "DOGEUSD|4h|long|0.09174|0.0911525": {
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "MRVL/USDT:USDT|30m|long|248.321|245.857": {
@@ -51,6 +61,11 @@
     "stage": 3,
     "stopped_out": true
   },
+  "TRUMP/USDT|4h|long|1.948|1.9355": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "TSLAXUSD|30m|long|363.1|361.475": {
     "reached_entry": true,
     "stage": 3,
@@ -59,7 +74,7 @@
   "UNIUSD|30m|long|8.735|8.66375": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "ZORAUSD|4h|long|0.007895|0.0078525": {
     "reached_entry": true,
@@ -131,7 +146,7 @@
   "_level_ready|BTCUSD|30m|short|87247.5|87420.6": 1790137882.330441,
   "_level_ready|BTCUSD|4h|short|80309|80594": 1789740370.930292,
   "_level_ready|DOGEUSD|30m|long|0.0789365|0.0781534": 1789564569.716163,
-  "_level_ready|DOGEUSD|30m|long|0.09187|0.09112": 1790242572.889559,
+  "_level_ready|DOGEUSD|30m|long|0.09187|0.09112": 1790607384.010239,
   "_level_ready|DOGEUSD|30m|long|0.09504|0.0945275": 1790562975.920281,
   "_level_ready|DOGEUSD|30m|short|0.08575|0.0862": 1789725354.705543,
   "_level_ready|DOGEUSD|30m|short|0.0875|0.088375": 1789740370.930292,
@@ -139,6 +154,7 @@
   "_level_ready|DOGEUSD|30m|short|0.09068|0.09153": 1789978569.844119,
   "_level_ready|DOGEUSD|30m|short|0.0951|0.0954875": 1790002567.651283,
   "_level_ready|DOGEUSD|30m|short|0.09681|0.0976725": 1790327480.522816,
+  "_level_ready|DOGEUSD|4h|long|0.09174|0.0911525": 1790607384.010239,
   "_level_ready|DOGEUSD|4h|short|0.0876091|0.0884852": 1789740370.930292,
   "_level_ready|DOGEUSD|4h|short|0.0943651|0.0953087": 1789983964.89935,
   "_level_ready|ETHUSD|30m|long|2611.02|2598.51": 1789871757.521092,
@@ -276,6 +292,7 @@
   "_level_ready|TRUMP/USDT|30m|short|2.118|2.12425": 1790334977.01829,
   "_level_ready|TRUMP/USDT|30m|short|2.18452|2.20637": 1789989072.59254,
   "_level_ready|TRUMP/USDT|30m|short|2.283|2.3005": 1790146266.066408,
+  "_level_ready|TRUMP/USDT|4h|long|1.948|1.9355": 1790607384.010239,
   "_level_ready|TSLAXUSD|30m|long|363.1|361.475": 1790603182.044021,
   "_level_ready|TSLAXUSD|30m|long|363.24|360.978": 1789878363.188966,
   "_level_ready|TSLAXUSD|30m|long|371.25|367.812": 1790592982.896404,
@@ -359,8 +376,8 @@
   "_ready|CRV/USDT|30m": 1789461071.110789,
   "_ready|DEXE/USDT|30m": 1789389359.59074,
   "_ready|DEXE/USDT|4h": 1788962475.195541,
-  "_ready|DOGEUSD|30m": 1790562975.920281,
-  "_ready|DOGEUSD|4h": 1789983964.89935,
+  "_ready|DOGEUSD|30m": 1790607384.010239,
+  "_ready|DOGEUSD|4h": 1790607384.010239,
   "_ready|ERA/USDT|30m": 1789467666.170572,
   "_ready|ESP/USDT|30m": 1789458664.421898,
   "_ready|ESP/USDT|4h": 1788956755.098613,
@@ -405,6 +422,7 @@
   "_ready|TACUSD|30m": 1790566580.565131,
   "_ready|TACUSD|4h": 1790566885.398299,
   "_ready|TRUMP/USDT|30m": 1790334977.01829,
+  "_ready|TRUMP/USDT|4h": 1790607384.010239,
   "_ready|TSLAXUSD|30m": 1790603182.044021,
   "_ready|TSLAXUSD|4h": 1790171469.965766,
   "_ready|UB/USDT|30m": 1789320957.820623,
@@ -458,17 +476,9 @@
     "price": 84388.0,
     "time": "2026-09-27T20:36:16.280651+05:30"
   },
-  "_silent_ready|DOGEUSD|30m|long|0.09187|0.09112": {
-    "price": 0.09246,
-    "time": "2026-09-28T14:41:20.897774+05:30"
-  },
   "_silent_ready|DOGEUSD|30m|long|0.09592|0.0952575": {
     "price": 0.09648,
     "time": "2026-09-27T20:36:16.280651+05:30"
-  },
-  "_silent_ready|DOGEUSD|4h|long|0.09174|0.0911525": {
-    "price": 0.09253,
-    "time": "2026-09-28T20:01:17.000717+05:30"
   },
   "_silent_ready|ETHUSD|30m|long|2637.5|2623.88": {
     "price": 2652.25,
