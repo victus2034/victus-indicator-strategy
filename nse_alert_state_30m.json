@@ -5646,16 +5646,18 @@
     "ACC.NS|30m|long|1225.4|1227.5": 1790568174.3146374,
     "PFIZER.NS|30m|long|3955.5|3965.9": 1790568174.477028,
     "ABSLAMC.NS|30m|long|990.9|993.9": 1790571751.4617088,
-    "CRAFTSMAN.NS|30m|long|10509|10580": 1790571751.7554176,
-    "COROMANDEL.NS|30m|long|1922|1924.9": 1790570517.0491035,
+    "CRAFTSMAN.NS|30m|long|10509|10580": 1790574131.4547834,
+    "COROMANDEL.NS|30m|long|1922|1924.9": 1790574130.2729325,
     "POLYMED.NS|30m|long|1668.4|1681.75": 1790570517.2318435,
-    "ATHERENERG.NS|30m|long|1472.5|1480.5": 1790571749.9827764,
+    "ATHERENERG.NS|30m|long|1472.5|1480.5": 1790574129.7699332,
     "MAHABANK.NS|30m|long|81.65|81.8": 1790571750.811697,
-    "ESCORTS.NS|30m|long|2774.8|2789": 1790571751.0317879,
+    "ESCORTS.NS|30m|long|2774.8|2789": 1790574131.260368,
     "AARTIIND.NS|30m|long|481.05|482.2": 1790571752.1650558,
     "NHPC.NS|30m|long|74.91|74.99": 1790572894.552123,
     "NAM-INDIA.NS|30m|long|1106.1|1112.7": 1790572894.9284866,
-    "ITCHOTELS.NS|30m|long|159.31|159.6": 1790572895.161259
+    "ITCHOTELS.NS|30m|long|159.31|159.6": 1790572895.161259,
+    "PETRONET.NS|30m|short|292.1|293.75": 1790574130.4915373,
+    "ACC.NS|30m|long|1219.3|1219.8": 1790574131.6985188
   },
   "ANANDRATHI.NS|supply|2187.5000|2221.0000": {
     "in_zone": true,
@@ -32368,7 +32370,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "30m": 1790572871.3985631
+    "30m": 1790574089.4746666
   },
   "3MINDIA.NS|supply|35230.9249|35290.0000": {
     "in_zone": false,
@@ -229451,7 +229453,7 @@
     "last_attempt_at": 0.0
   },
   "NHPC.NS|demand|74.9100|74.9900": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790572894.552123,
     "last_attempt_at": 1790572894.552123
   },
@@ -229616,9 +229618,9 @@
     "last_attempt_at": 0.0
   },
   "ATHERENERG.NS|demand|1472.5000|1480.5000": {
-    "in_zone": false,
-    "last_alert_at": 1790571749.9827764,
-    "last_attempt_at": 1790571749.9827764
+    "in_zone": true,
+    "last_alert_at": 1790574129.7699332,
+    "last_attempt_at": 1790574129.7699332
   },
   "OBEROIRLTY.NS|supply|1924.1000|1932.8000": {
     "in_zone": false,
@@ -229751,9 +229753,9 @@
     "last_attempt_at": 0.0
   },
   "COROMANDEL.NS|demand|1922.0000|1924.9000": {
-    "in_zone": false,
-    "last_alert_at": 1790570517.0491035,
-    "last_attempt_at": 1790570517.0491035
+    "in_zone": true,
+    "last_alert_at": 1790574130.2729325,
+    "last_attempt_at": 1790574130.2729325
   },
   "GODREJPROP.NS|supply|1717.8000|1729.6000": {
     "in_zone": false,
@@ -229986,9 +229988,9 @@
     "last_attempt_at": 0.0
   },
   "PETRONET.NS|supply|292.1000|293.7500": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790574130.4915373,
+    "last_attempt_at": 1790574130.4915373
   },
   "PETRONET.NS|demand|280.3000|281.1500": {
     "in_zone": false,
@@ -230292,8 +230294,8 @@
   },
   "ESCORTS.NS|demand|2774.8000|2789.0000": {
     "in_zone": true,
-    "last_alert_at": 1790571751.0317879,
-    "last_attempt_at": 1790571751.0317879
+    "last_alert_at": 1790574131.260368,
+    "last_attempt_at": 1790574131.260368
   },
   "NUVAMA.NS|supply|1723.4126|1737.2000": {
     "in_zone": false,
@@ -230421,9 +230423,9 @@
     "last_attempt_at": 0.0
   },
   "CRAFTSMAN.NS|demand|10509.0000|10580.0000": {
-    "in_zone": false,
-    "last_alert_at": 1790571751.7554176,
-    "last_attempt_at": 1790571751.7554176
+    "in_zone": true,
+    "last_alert_at": 1790574131.4547834,
+    "last_attempt_at": 1790574131.4547834
   },
   "KIMS.NS|supply|816.6667|823.2000": {
     "in_zone": false,
@@ -231546,9 +231548,9 @@
     "last_attempt_at": 0.0
   },
   "ACC.NS|demand|1219.3000|1219.8000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790574131.6985188,
+    "last_attempt_at": 1790574131.6985188
   },
   "PINELABS.NS|demand|167.7100|168.9000": {
     "in_zone": false,
@@ -231641,6 +231643,11 @@
     "last_attempt_at": 0.0
   },
   "GESHIP.NS|demand|1466.0000|1469.8000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "AARTIIND.NS|demand|475.0000|476.4000": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
