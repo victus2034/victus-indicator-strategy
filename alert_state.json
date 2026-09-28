@@ -1821,7 +1821,8 @@
     "TACUSD|4h|long|0.001469|0.00148075": 1790566594.334503,
     "BNBUSD|4h|long|756.58|760.9": 1790576946.0948877,
     "shadow:BNBUSD|4h|long|756.58|759.116": 1790580815.18217,
-    "shadow:ZORAUSD|4h|long|0.007861|0.00793099": 1790584873.3035066
+    "shadow:ZORAUSD|4h|long|0.007861|0.00793099": 1790584873.3035066,
+    "ZORAUSD|4h|long|0.007861|0.007895": 1790586469.4064791
   },
   "ARBUSD|supply|0.08030000|0.08180000": {
     "in_zone": false,
@@ -5400,7 +5401,7 @@
     "last_alert_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1790586271.452839
+    "4h": 1790586450.8884206
   },
   "HOOD/USDT:USDT|demand|83.83000000|84.37120000": {
     "in_zone": false,
@@ -28067,9 +28068,9 @@
     "last_attempt_at": 1790257917.2501473
   },
   "ZORAUSD|demand|0.00786100|0.00789500": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790586469.4064791,
+    "last_attempt_at": 1790586469.4064791
   },
   "shadow:ZORAUSD|demand|0.00786100|0.00793099": {
     "in_zone": false,
@@ -28317,7 +28318,7 @@
     "last_attempt_at": 0.0
   },
   "BNBUSD|demand|756.58000000|760.90000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790576946.0948877,
     "last_attempt_at": 1790576946.0948877
   },
