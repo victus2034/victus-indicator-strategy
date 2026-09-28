@@ -1825,7 +1825,8 @@
     "ZORAUSD|4h|long|0.007861|0.007895": 1790605840.8275802,
     "NVDAXUSD|4h|short|228.9|229.9": 1790598638.0839968,
     "shadow:DOGEUSD|4h|long|0.09127|0.0918508": 1790606677.6806433,
-    "SOXLBUSD|4h|long|135.75|136.45": 1790606857.4759145
+    "SOXLBUSD|4h|long|135.75|136.45": 1790606857.4759145,
+    "DOGEUSD|4h|long|0.09127|0.09174": 1790607127.8291895
   },
   "ARBUSD|supply|0.08030000|0.08180000": {
     "in_zone": false,
@@ -5404,7 +5405,7 @@
     "last_alert_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1790606847.2526495
+    "4h": 1790607117.4259079
   },
   "HOOD/USDT:USDT|demand|83.83000000|84.37120000": {
     "in_zone": false,
@@ -28295,12 +28296,12 @@
     "last_attempt_at": 0.0
   },
   "DOGEUSD|demand|0.09127000|0.09174000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790607127.8291895,
+    "last_attempt_at": 1790607127.8291895
   },
   "shadow:DOGEUSD|demand|0.09127000|0.09185075": {
-    "in_zone": false,
+    "in_zone": true,
     "last_alert_at": 1790606677.6806433,
     "last_attempt_at": 1790606677.6806433
   },
@@ -28325,12 +28326,12 @@
     "last_attempt_at": 0.0
   },
   "BNBUSD|demand|756.58000000|760.90000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790605840.5216293,
     "last_attempt_at": 1790605840.5216293
   },
   "shadow:BNBUSD|demand|756.58000000|759.11613851": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790605930.503333,
     "last_attempt_at": 1790605930.503333
   },
