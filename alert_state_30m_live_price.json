@@ -3811,11 +3811,15 @@
     "AVAXUSD|30m|short|11.21|11.286": 1790665691.866614,
     "AKE/USDT|30m|short|0.0336092|0.0337685": 1790666878.362072,
     "shadow:AKE/USDT|30m|short|0.033571|0.0337685": 1790666878.362072,
-    "shadow:DOGEUSD|30m|short|0.0953434|0.09556": 1790667477.9655645,
+    "shadow:DOGEUSD|30m|short|0.0953434|0.09556": 1790670150.3736687,
     "BNBUSD|30m|short|770.28|773.08": 1790667697.156982,
     "AVAXUSD|30m|short|11.3274|11.418": 1790668012.6574624,
     "AVAXUSD|30m|short|11.486|11.554": 1790668587.6918564,
-    "shadow:AVAXUSD|30m|short|11.5027|11.554": 1790668587.6918564
+    "shadow:AVAXUSD|30m|short|11.5027|11.554": 1790668587.6918564,
+    "shadow:BTCUSD|30m|short|84271.2|84350": 1790670149.868758,
+    "ETHUSD|30m|short|2725.55|2742.3": 1790670149.8732486,
+    "SOLUSD|30m|short|120|120.771": 1790670150.108785,
+    "NVDAXUSD|30m|short|231.95|233.25": 1790670150.3763053
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15364,7 +15368,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790669875.838042
+    "30m": 1790670127.9131107
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -46517,7 +46521,7 @@
     "MRVL/USDT:USDT|30m|long|248.74|250.5": 1790659308.413667,
     "BTCUSD|30m|long|82500|82991": 1790653008.030215,
     "AAVEUSD|30m|short|150.94|151.39": 1790659692.2028773,
-    "BTCUSD|30m|short|84000|84350": 1790663257.6773977,
+    "BTCUSD|30m|short|84000|84350": 1790670149.868758,
     "AAVEUSD|30m|short|155.85|156.51": 1790663601.4425662,
     "DOGEUSD|30m|short|0.09507|0.09556": 1790669295.952273,
     "SOLUSD|30m|short|120|120.771": 1790669295.948174,
@@ -46527,7 +46531,9 @@
     "AVAXUSD|30m|short|11.21|11.286": 1790665602.852389,
     "SNDKBUSD|30m|short|1745.8|1759.77": 1790668910.3714547,
     "NVDAXUSD|30m|short|231.95|233.25": 1790668910.372851,
-    "AVAXUSD|30m|short|11.486|11.554": 1790668391.2135532
+    "AVAXUSD|30m|short|11.486|11.554": 1790668391.2135532,
+    "XRPUSD|30m|short|1.5247|1.5333": 1790670150.3714623,
+    "BCHUSD|30m|short|314.48|315.58": 1790670150.373996
   },
   "shadow:BTCUSD|supply|80474.35070115|80522.70000000": {
     "in_zone": false,
@@ -144527,9 +144533,9 @@
     "last_attempt_at": 1790518610.4694214
   },
   "ETHUSD|supply|2725.55000000|2742.30000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790670149.8732486,
+    "last_attempt_at": 1790670149.8732486
   },
   "ETHUSD|demand|2666.35000000|2671.15000000": {
     "in_zone": false,
@@ -146175,9 +146181,9 @@
     "last_attempt_at": 1790660294.0236237
   },
   "NVDAXUSD|supply|231.95000000|233.25000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790670150.3763053,
+    "last_attempt_at": 1790670150.3763053
   },
   "shadow:NVDAXUSD|supply|233.12423961|233.25000000": {
     "in_zone": false,
@@ -146190,19 +146196,19 @@
     "last_attempt_at": 0.0
   },
   "BTCUSD|supply|84000.00000000|84350.00000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790668909.7862735,
     "last_attempt_at": 1790668909.7862735
   },
   "shadow:BTCUSD|supply|84271.24131936|84350.00000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790670149.868758,
+    "last_attempt_at": 1790670149.868758
   },
   "SOLUSD|supply|120.00000000|120.77100000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790670150.108785,
+    "last_attempt_at": 1790670150.108785
   },
   "shadow:SOLUSD|supply|120.54879941|120.77100000": {
     "in_zone": false,
@@ -146210,14 +146216,14 @@
     "last_attempt_at": 0.0
   },
   "DOGEUSD|supply|0.09507000|0.09556000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790668910.0818884,
     "last_attempt_at": 1790668910.0818884
   },
   "shadow:DOGEUSD|supply|0.09534341|0.09556000": {
-    "in_zone": false,
-    "last_alert_at": 1790667477.9655645,
-    "last_attempt_at": 1790667477.9655645
+    "in_zone": true,
+    "last_alert_at": 1790670150.3736687,
+    "last_attempt_at": 1790670150.3736687
   },
   "BNBUSD|supply|770.28000000|773.08000000": {
     "in_zone": false,
