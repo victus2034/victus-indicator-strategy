@@ -543,12 +543,16 @@ FIB_TL_TIMEFRAMES = [
 FIB_SWING_LENGTH = 10
 TRENDLINE_SWING_LENGTH = 10
 TRENDLINES_KEEP = 6
-# Shiva, 2026-09-29: alert from 1.5% away down to touching, the same band on
-# every timeframe and for both. Fib distance is to the near edge of a zone (0
-# once price is inside it); trendline distance is to the line (0 once price is
-# on or through it before a candle has closed through).
+# Alert from 0.75% away down to touching, the same band on every timeframe and
+# for both. Fib distance is to the near edge of a zone (0 once price is inside
+# it); trendline distance is to the line, approach side only.
+#
+# Shiva set 1.5% first, then 0.75% (both 2026-09-29). The backtest at each:
+# 79 -> 68 alerts a day on 4H-1M, filled 61-74% -> 76-84% of the time on
+# 4H/1D, win rates 1-2 points lower - the band decides when he is told, not
+# where the entry is. It is a preference, not an edge.
 FIB_TL_MIN_DISTANCE_PCT = env_float("VICTUS_FIB_TL_MIN_DISTANCE_PCT", 0.0)
-FIB_TL_MAX_DISTANCE_PCT = env_float("VICTUS_FIB_TL_MAX_DISTANCE_PCT", 1.5)
+FIB_TL_MAX_DISTANCE_PCT = env_float("VICTUS_FIB_TL_MAX_DISTANCE_PCT", 0.75)
 # Trade rules the alerts print and the backtests score (Shiva's choice,
 # 2026-09-29). Fib: entry at the zone's near edge, SL on the inner fib's 0.55
 # line (his EX 2 ETH trades). Trendline: entry at the line, SL this % on the far side of it.

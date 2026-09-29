@@ -6,11 +6,11 @@ borrows their watchlists, symbol names, price formatting, alert window and
 Discord sender.
 
 - Fib alerts (DISCORD_FIB_WEBHOOK_URL): price is within FIB_TL_MAX_DISTANCE_PCT
-  (1.5%) of Zone 1 or Zone 2 of the live fib, down to inside it, as indicator
+  (0.75%) of Zone 1 or Zone 2 of the live fib, down to inside it, as indicator
   v12.3 draws it (fib_engine.py). Once per zone per fib - a new top or base is a
   new fib and can alert again.
 - Trendline alerts (DISCORD_TRENDLINE_WEBHOOK_URL): price is within the same
-  1.5% of a live trendline (indicator v11.0, trendlines.py), or a candle closes
+  0.75% of a live trendline (indicator v11.0, trendlines.py), or a candle closes
   through one. A touch re-arms once price has left the band and a full candle
   has passed.
 
@@ -114,7 +114,7 @@ def line_distance(kind, level, price):
 
 
 def in_band(distance):
-    """1.5% away down to 0.00% (Shiva). Never beyond 0: a fib zone price has gone
+    """FIB_TL_MAX_DISTANCE_PCT (0.75%) away down to 0.00% (Shiva). Never beyond 0: a fib zone price has gone
     through is None already, and price through a trendline before the candle
     closes is a break in progress - alerting it as a BUY at support (as the
     first version did, calling it "0.00%") pointed the wrong way. A close

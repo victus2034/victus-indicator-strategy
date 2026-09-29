@@ -1,4 +1,4 @@
-"""Fib + trendline alerts: the engines, the 0-1.5% band, trade scoring, replay and the once-only rules."""
+"""Fib + trendline alerts: the engines, the 0-0.75% band, trade scoring, replay and the once-only rules."""
 import os
 import pathlib
 import tempfile
@@ -60,7 +60,7 @@ class FibZoneNumberingTests(unittest.TestCase):
 
 
 class DistanceBandTests(unittest.TestCase):
-    """Shiva: alerts from 1.5% away down to 0.00%."""
+    """Shiva: alerts from 0.75% away down to 0.00% (1.5% at first)."""
 
     zone = {"low": 100.0, "high": 110.0}
 
@@ -73,11 +73,13 @@ class DistanceBandTests(unittest.TestCase):
         self.assertAlmostEqual(fts.fib_distance(-1, self.zone, 99.0), 1.0)
         self.assertIsNone(fts.fib_distance(-1, self.zone, 111.0))
 
-    def test_band_is_zero_to_one_and_a_half(self):
-        self.assertTrue(fts.in_band(1.5))
+    def test_band_is_zero_to_three_quarters(self):
+        self.assertTrue(fts.in_band(0.75))
+        self.assertEqual(fts.FIB_TL_MAX_DISTANCE_PCT, 0.75)
         self.assertTrue(fts.in_band(0.0))
         self.assertFalse(fts.in_band(-0.4))         # through the line before the close: a break, not a BUY
-        self.assertFalse(fts.in_band(1.51))
+        self.assertFalse(fts.in_band(0.76))
+        self.assertFalse(fts.in_band(1.2))
         self.assertFalse(fts.in_band(None))
 
     def test_line_distance_is_on_the_approach_side(self):

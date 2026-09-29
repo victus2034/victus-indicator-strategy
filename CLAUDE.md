@@ -116,7 +116,8 @@ server). NSE posts to the same two channels (Shiva's choice); every alert says
 | `fib_trendline_backtest.py` | history replay → `reports/FIB_TRENDLINE_BACKTEST.md` |
 | `fib_trendline_daily_report.py` | scores live alerts once a day after 08:00 IST → daily-backtest channel |
 
-- **Band (Shiva, 2026-09-29): alert from 1.5% away down to 0.00%** (`FIB_TL_MAX_DISTANCE_PCT`),
+- **Band (Shiva, 2026-09-29): alert from 0.75% away down to 0.00%** (`FIB_TL_MAX_DISTANCE_PCT`;
+  it was 1.5% first - the backtest at both is in `config.py`),
   same for every timeframe. Fib distance is to the zone's near edge; trendline distance to the
   line, and price through the line before a close shows as 0.00%. Changing what counts as an
   alert means bumping `SEED_VERSION`, or the first pass posts everything the new rule catches.
