@@ -225,8 +225,10 @@ def format_fib_alert(market, symbol, tf, price, z):
         f"{display(market, symbol)} | FIB {name} ZONE | {side}\n"
         f"{_header(market, tf)}\n"
         f"Price: {_fmt(price, places)} | {where}\n"
-        f"{name.capitalize()} zone: {_fmt(z['low'], places)} - {_fmt(z['high'], places)}{deeper}\n"
-        f"Entry: {_fmt(z['entry'], places)} | SL: {_fmt(z['sl'], places)} | {trades.risk_pct(z['plan']):.2f}%\n"
+        # Upper/lower names the zone, top/bottom its edges (Shiva, 2026-09-29).
+        f"{name.capitalize()} zone: bottom {_fmt(z['low'], places)} - top {_fmt(z['high'], places)}{deeper}\n"
+        f"Entry: {_fmt(z['entry'], places)} (zone {'top' if z['d'] == 1 else 'bottom'}) | "
+        f"SL: {_fmt(z['sl'], places)} | {trades.risk_pct(z['plan']):.2f}%\n"
         f"Fib: {_fmt(z['base'], places)} -> {_fmt(z['top'], places)}"
     )
 

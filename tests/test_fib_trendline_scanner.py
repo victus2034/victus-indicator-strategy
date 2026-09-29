@@ -100,7 +100,12 @@ class AlertTextTests(unittest.TestCase):
         text = fts.format_fib_alert(ftd.NSE, "RELIANCE.NS", "4h", 100.0, z)
         self.assertIn("Timeframe: 4H | NSE", text)
         self.assertIn("RELIANCE | FIB LOWER ZONE | LONG", text)      # zone 2 of an up move
-        self.assertIn("Lower zone: ", text)
+        self.assertIn(f"Lower zone: bottom {z['low']:.6f} - top {z['high']:.6f} (deeper)", text)
+        self.assertIn(f"Entry: {z['high']:.6f} (zone top)", text)                # a long buys the top
+        short = {**zones_by_number(-1, 110, 90)[1], "d": -1, "base": 110, "top": 90, "distance": 0.5}
+        short["plan"] = ftt.fib_plan(-1, short)
+        self.assertIn(f"Entry: {short['low']:.6f} (zone bottom)",
+                      fts.format_fib_alert(ftd.CRYPTO, "BTCUSD", "1d", 95.0, short))   # a short sells the bottom
         self.assertIn("0.80% away", text)
         t = {"kind": SUPPORT, "level": 100.0, "distance": 1.2, "from": (90, "a"), "to": (95, "b"),
              "plan": ftt.trendline_plan(True, 100.0, "1d")}
