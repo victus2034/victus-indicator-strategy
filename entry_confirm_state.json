@@ -4,6 +4,16 @@
     "stage": 3,
     "stopped_out": true
   },
+  "AAVEUSD|30m|short|155.85|156.675": {
+    "reached_entry": true,
+    "stage": 3,
+    "stopped_out": false
+  },
+  "BTCUSD|30m|short|84000|84437.5": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "TSLAXUSD|30m|long|356.35|354.663": {
     "reached_entry": true,
     "stage": 2,
@@ -21,6 +31,7 @@
   "_level_ready|AAVEUSD|30m|short|150.94|151.502": 1790659888.77874,
   "_level_ready|AAVEUSD|30m|short|154.17|155.583": 1790354176.51945,
   "_level_ready|AAVEUSD|30m|short|155.57|156.895": 1790439682.89093,
+  "_level_ready|AAVEUSD|30m|short|155.85|156.675": 1790663166.058186,
   "_level_ready|AVAXUSD|30m|long|10.15|10.05": 1790239282.105593,
   "_level_ready|AVAXUSD|30m|long|10.252|10.192": 1790607072.388885,
   "_level_ready|AVAXUSD|30m|long|10.594|10.509": 1790170564.383325,
@@ -75,6 +86,7 @@
   "_level_ready|BTCUSD|30m|short|81300|81410": 1789759567.207625,
   "_level_ready|BTCUSD|30m|short|81650.6|81756.1": 1789827962.138469,
   "_level_ready|BTCUSD|30m|short|81750|82406.2": 1789968964.199582,
+  "_level_ready|BTCUSD|30m|short|84000|84437.5": 1790663166.058186,
   "_level_ready|BTCUSD|30m|short|84167.5|84329.4": 1790447771.711785,
   "_level_ready|BTCUSD|30m|short|84841.5|84914.6": 1790328725.2927,
   "_level_ready|BTCUSD|30m|short|84893.5|85306.6": 1790496381.746297,
@@ -289,7 +301,7 @@
   "_level_ready|ZORAUSD|30m|short|0.0094246|0.00951885": 1790145663.440149,
   "_level_ready|ZORAUSD|4h|long|0.007895|0.0078525": 1790586680.897774,
   "_ready|0G/USDT|30m": 1789441569.595457,
-  "_ready|AAVEUSD|30m": 1790659888.77874,
+  "_ready|AAVEUSD|30m": 1790663166.058186,
   "_ready|AAVEUSD|4h": 1789057560.102114,
   "_ready|ACE/USDT|30m": 1789278662.30266,
   "_ready|AERO/USDT|30m": 1789444875.534929,
@@ -306,7 +318,7 @@
   "_ready|BNBUSD|30m": 1790580691.527452,
   "_ready|BNBUSD|4h": 1790577087.860535,
   "_ready|BOME/USDT|30m": 1789466760.110004,
-  "_ready|BTCUSD|30m": 1790649372.856629,
+  "_ready|BTCUSD|30m": 1790663166.058186,
   "_ready|BTCUSD|4h": 1789740370.930292,
   "_ready|BTW/USDT|30m": 1789194664.716904,
   "_ready|CAP/USDT|30m": 1789361459.428611,
@@ -380,10 +392,6 @@
   "_ready|ZIL/USDT|4h": 1788885653.347347,
   "_ready|ZORAUSD|30m": 1790607976.387554,
   "_ready|ZORAUSD|4h": 1790586680.897774,
-  "_silent_ready|AAVEUSD|30m|short|155.85|156.675": {
-    "price": 154.67,
-    "time": "2026-09-29T11:36:21.767681+05:30"
-  },
   "_silent_ready|BLESSUSD|30m|long|0.00822326|0.00814168": {
     "price": 0.00824,
     "time": "2026-09-28T21:36:23.432732+05:30"
