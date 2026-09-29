@@ -4,11 +4,6 @@
     "stage": 3,
     "stopped_out": true
   },
-  "BNBUSD|30m|long|754.9|753.075": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "BTCUSD|30m|long|82991|82377.2": {
     "reached_entry": true,
     "stage": 2,
@@ -17,6 +12,11 @@
   "HYPEUSD|30m|long|85.98|85.5525": {
     "reached_entry": true,
     "stage": 3,
+    "stopped_out": false
+  },
+  "LINKUSD|30m|long|14.649|14.5578": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "LTCUSD|30m|long|67.42|67.02": {
@@ -157,6 +157,7 @@
   "_level_ready|HYPEUSD|30m|short|94.519|94.6352": 1789972562.42741,
   "_level_ready|HYPEUSD|30m|short|95.927|96.147": 1790080005.205343,
   "_level_ready|LINKUSD|30m|long|13.76|13.64": 1790568383.99806,
+  "_level_ready|LINKUSD|30m|long|14.649|14.5578": 1790701296.169859,
   "_level_ready|LINKUSD|30m|short|11.911|11.9735": 1789725961.678031,
   "_level_ready|LINKUSD|30m|short|12.1032|12.2242": 1789741560.535448,
   "_level_ready|LINKUSD|30m|short|12.578|12.6442": 1789819312.708133,
@@ -377,7 +378,7 @@
   "_ready|ICP/USDT|30m": 1789439750.580446,
   "_ready|KGEN/USDT|30m": 1789463159.791482,
   "_ready|LA/USDT|30m": 1789440963.456523,
-  "_ready|LINKUSD|30m": 1790568383.99806,
+  "_ready|LINKUSD|30m": 1790701296.169859,
   "_ready|LTCUSD|30m": 1790696199.292519,
   "_ready|LTCUSD|4h": 1789990565.578549,
   "_ready|METAXUSD|30m": 1790521875.327194,
