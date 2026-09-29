@@ -63,7 +63,9 @@ SEEDED_KEY = "__seeded__"
 # Bumped when what counts as an alert changes, so the first pass under the new
 # rule seeds silently instead of posting everything the new rule now catches.
 # v2 (2026-09-29): 0-1.5% band instead of inside-zone / per-timeframe touch.
-SEED_VERSION = "v2"
+# v3 (2026-09-29): full history for 4H and NSE daily+ - some live fibs get a new
+# base/top, i.e. a new key, and would otherwise all post as new on the first pass.
+SEED_VERSION = "v3"
 NSE_LAST_SCAN_KEY = "__nse_last_scan__"
 NSE_MIN_INTERVAL_SECONDS = 8 * 60
 STATE_RETENTION_SECONDS = 120 * 24 * 3600
@@ -112,20 +114,34 @@ def line_distance(kind, level, price):
 
 
 def in_band(distance):
-    if distance is None or distance < -FIB_TL_MAX_DISTANCE_PCT:
-        return False
-    return FIB_TL_MIN_DISTANCE_PCT <= max(distance, 0.0) <= FIB_TL_MAX_DISTANCE_PCT
+    """1.5% away down to 0.00% (Shiva). Never beyond 0: a fib zone price has gone
+    through is None already, and price through a trendline before the candle
+    closes is a break in progress - alerting it as a BUY at support (as the
+    first version did, calling it "0.00%") pointed the wrong way. A close
+    through the line has its own BROKEN alert."""
+    return distance is not None and FIB_TL_MIN_DISTANCE_PCT <= distance <= FIB_TL_MAX_DISTANCE_PCT
 
 
 # ----------------------------------------------------------------- analysis
 
-def analyse(market, symbol, tf, candles, now):
+def current_price(charts):
+    """The close of the freshest candle across a symbol's timeframes.
+
+    Each timeframe's own last close would do on Delta, but Yahoo's daily and
+    weekly candles can lag the intraday ones; one price for all timeframes means
+    a 1W level is judged against the same price as a 4H one.
+    """
+    last = [c[-1] for c in charts.values() if c]
+    return max(last, key=lambda c: c[0])[4] if last else None
+
+
+def analyse(market, symbol, tf, candles, now, price=None):
     """Everything alertable on one chart right now. Pure - no state, no sends."""
     result = {"fib": [], "touch": [], "break": [], "bars": 0, "price": None}
     if len(candles) < 2:
         return result
     closed = candles if candle_is_closed(market, candles[-1][0], tf, now) else candles[:-1]
-    price = candles[-1][4]
+    price = candles[-1][4] if price is None else price
     result.update(bars=len(closed), price=price)
     if len(closed) < MIN_BARS:
         return result
@@ -208,10 +224,7 @@ def format_touch_alert(market, symbol, tf, price, t):
     places = scanner.price_decimals(t["level"])
     support = t["kind"] == SUPPORT
     name, side = ("SUPPORT", "BUY") if support else ("RESISTANCE", "SELL")
-    if t["distance"] > 0:
-        where = f"{t['distance']:.2f}% {'above' if support else 'below'} the line"
-    else:
-        where = "0.00% - at the line" if t["distance"] == 0 else "0.00% - through the line, candle not closed"
+    where = f"{t['distance']:.2f}% {'above' if support else 'below'} the line"
     return (
         f"{display(market, symbol)} | {name} TRENDLINE | {side}\n"
         f"{_header(market, tf)}\n"
@@ -313,7 +326,8 @@ def scan_crypto(timeframes, now):
             return symbol, None, "not a Delta contract"
         try:
             charts = crypto_charts(contract, timeframes, now)
-            return symbol, {tf: analyse(CRYPTO, symbol, tf, charts[tf], now) for tf in timeframes}, None
+            price = current_price(charts)
+            return symbol, {tf: analyse(CRYPTO, symbol, tf, charts[tf], now, price) for tf in timeframes}, None
         except Exception as error:     # noqa: BLE001 - one bad symbol must not stop the pass
             return symbol, None, str(error)
 
@@ -344,7 +358,9 @@ def scan_nse(timeframes, now):
     results = []
     for symbol in symbols:
         try:
-            results.append((symbol, {tf: analyse(NSE, symbol, tf, charts[symbol][tf], now) for tf in timeframes}, None))
+            price = current_price(charts[symbol])
+            results.append((symbol, {tf: analyse(NSE, symbol, tf, charts[symbol][tf], now, price)
+                                     for tf in timeframes}, None))
         except Exception as error:     # noqa: BLE001
             results.append((symbol, None, str(error)))
     return results
@@ -434,14 +450,18 @@ def run_once(dry_run=False, force_nse=False):
             f"{'fib zones' if channel == 'fib' else 'trendlines'} price was already within range. "
             "Only new ones will alert from here."
         )
+    # Saved before anything that can raise: the alerts above are already in
+    # Discord, and a crash here would otherwise send them all again next pass.
+    save_state(state, now)
+    try:
+        import fib_trendline_daily_report
+        fib_trendline_daily_report.maybe_send(state, now)
+        save_state(state, now)
+    except Exception as error:     # noqa: BLE001 - the report retries next pass
+        print(f"daily fib/trendline report failed: {error}")
     crypto_results = markets[CRYPTO]
     if crypto_results and all(a is None for _, a, _ in crypto_results):
         raise RuntimeError("every crypto symbol failed: " + "; ".join(failures[:3]))
-    save_state(state, now)
-
-    import fib_trendline_daily_report
-    fib_trendline_daily_report.maybe_send(state, now)
-    save_state(state, now)
 
 
 def main(argv=None):

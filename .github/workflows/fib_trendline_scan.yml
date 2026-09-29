@@ -64,7 +64,10 @@ jobs:
         # most every 8 minutes - that pass takes ~3 minutes on its own.
         run: python fib_trendline_scanner.py
 
+      # always(): alerts already posted are recorded even if the scan step failed
+      # afterwards - otherwise the next pass would post them again.
       - name: Persist runtime state
+        if: always()
         run: bash .github/scripts/persist_runtime_state.sh fib_trendline_state.json fib_trendline_alert_records.jsonl fib_trendline_results.json
 
       - name: Notify on failure

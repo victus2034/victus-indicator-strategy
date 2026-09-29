@@ -72,11 +72,25 @@ def score(records, results, now):
     for record in pending:
         resolution = trades.EVAL_RESOLUTION[record["market"]][record["tf"]]
         groups[(record["market"], record["symbol"], resolution)].append(record)
+    # NSE in one Yahoo call per resolution, not one per stock: pending 1W/1M
+    # alerts stay open for months, so the list only grows.
+    nse = {}
+    for resolution in {res for m, _, res in groups if m == NSE}:
+        symbols = sorted({s for m, s, res in groups if m == NSE and res == resolution})
+        try:
+            nse[resolution] = nse_download(symbols, resolution)
+        except Exception as error:     # noqa: BLE001 - retried tomorrow
+            print(f"daily report: NSE {resolution} download failed: {error}")
     for (market, symbol, resolution), rows in groups.items():
         try:
-            candles = eval_candles(market, symbol, resolution, min(r["sent_ts"] for r in rows), now)
+            if market == NSE:
+                candles = nse.get(resolution, {}).get(symbol, [])
+            else:
+                candles = eval_candles(market, symbol, resolution, min(r["sent_ts"] for r in rows), now)
         except Exception as error:     # noqa: BLE001 - retried tomorrow
             print(f"daily report: no {resolution} candles for {symbol}: {error}")
+            continue
+        if not candles:
             continue
         for record in rows:
             results[record["id"]] = trades.simulate(record["plan"], market, record["tf"], record["sent_ts"], candles)

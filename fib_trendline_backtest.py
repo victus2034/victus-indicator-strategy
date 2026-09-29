@@ -74,7 +74,7 @@ def crypto_data(symbol, now):
     daily = _cached(f"c_{contract}_1d", lambda: delta_candles(contract, "1d", since_launch, now))
     base = {
         "30m": _cached(f"c_{contract}_30m", lambda: delta_candles(contract, "30m", now - 3999 * 1800, now)),
-        "4h": _cached(f"c_{contract}_4h", lambda: delta_candles(contract, "4h", now - 3999 * 14400, now)),
+        "4h": _cached(f"c_{contract}_4h_all", lambda: delta_candles(contract, "4h", since_launch, now)),
         "1d": daily,
         "1w": _cached(f"c_{contract}_1w", lambda: delta_candles(contract, "1w", since_launch, now)),
         "1M": monthly_from_daily(daily),
@@ -160,7 +160,8 @@ def replay(market, symbol, tf, base, evalc, now):
                 if held(ts) or l > hi_band or h < lo_band:
                     continue
                 fired.add(key)
-                out.append(trade("fib", trades.fib_plan(d, zone), k, {"zone": zone["zone"]}))
+                out.append(trade("fib", trades.fib_plan(d, zone), k,
+                                 {"zone": zone["zone"], "fib_id": f"{symbol}|{tf}|{d}|{times[s['Ot']]}|{top}"}))
                 break
 
     for line in build_trendlines(highs, lows, closes, TRENDLINE_SWING_LENGTH, TRENDLINES_KEEP, history=True):
@@ -170,7 +171,8 @@ def replay(market, symbol, tf, base, evalc, now):
             level = line.price_at(i)
             if level <= 0:
                 continue
-            lo_band, hi_band = level * (1 - BAND), level * (1 + BAND)
+            # the approach side only, as the live in_band: never through the line
+            lo_band, hi_band = (level, level * (1 + BAND)) if line.kind == SUPPORT else (level * (1 - BAND), level)
             e0, e1 = bar_slice(i)
             for k in range(e0, e1):
                 ts, _o, h, l, _c = evalc[k]
@@ -234,6 +236,27 @@ def span_days(items):
     return max(1.0, (max(ts) - min(ts)) / 86400)
 
 
+def touch_order(fib_trades):
+    """Split fib trades into the first touch of each fib and the later ones.
+
+    A fib is one base and one top (a new top is a new fib). Its trades - at most
+    one per zone - are ranked by when they filled: the first is the first time
+    price reached the fib at all, usually Zone 1; a later one is the other zone
+    after the first already traded, usually Zone 2 after price went through
+    Zone 1. Unfilled alerts never touched the entry and are left out.
+    """
+    by_fib = defaultdict(list)
+    for t in fib_trades:
+        if t["result"]["filled"]:
+            by_fib[t["fib_id"]].append(t)
+    first, later = [], []
+    for items in by_fib.values():
+        items.sort(key=lambda t: t["result"]["fill_ts"])
+        first.append(items[0])
+        later += items[1:]
+    return first, later
+
+
 def write_report(all_trades, symbol_counts, started):
     rows = trades.summarise(all_trades)
     by_group = defaultdict(list)
@@ -291,6 +314,24 @@ def write_report(all_trades, symbol_counts, started):
                 f"{trades.r(row['net_r_2r'])} | {row['median_risk_pct']:.2f}% |"
             )
         out.append("")
+    first, later = touch_order([t for t in all_trades if t["kind"] == "fib"])
+    out += ["## Fib - first touch vs later touches", "",
+            "Filled fib trades only, split by whether it was the first time price reached that fib "
+            "(one base, one top) or a later touch of the same fib - the other zone, after the first "
+            "had already traded. See `touch_order`.", "",
+            "| Market | TF | Touch | Trades | SL | 1R | 2R | Win @1R | Win @2R | Net R @1R | Net R @2R | "
+            "Zone 1 share |",
+            "|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    tagged = [{**t, "kind": "first"} for t in first] + [{**t, "kind": "later"} for t in later]
+    for row in sorted(trades.summarise(tagged), key=lambda r: (r["market"], TIMEFRAMES.index(r["tf"]), r["kind"])):
+        items = [t for t in tagged if (t["market"], t["tf"], t["kind"]) == (row["market"], row["tf"], row["kind"])]
+        zone1 = sum(1 for t in items if t["zone"] == 1) / len(items)
+        out.append(
+            f"| {row['market'].upper()} | {TF_LABEL[row['tf']]} | {row['kind']} | {row['filled']} | {row['SL']} | "
+            f"{row['1R']} | {row['2R']} | {trades.pct(row['win_1r'])} | {trades.pct(row['win_2r'])} | "
+            f"{trades.r(row['net_r_1r'])} | {trades.r(row['net_r_2r'])} | {zone1:.0%} |"
+        )
+    out.append("")
     real = [t for t in all_trades if t["kind"] != "random"]
     ambiguous = sum(1 for t in real if t["result"]["ambiguous"])
     out.append(f"{ambiguous} of {len(real)} alert trades had a candle touching both SL and a target "

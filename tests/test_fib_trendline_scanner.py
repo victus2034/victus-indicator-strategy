@@ -76,14 +76,21 @@ class DistanceBandTests(unittest.TestCase):
     def test_band_is_zero_to_one_and_a_half(self):
         self.assertTrue(fts.in_band(1.5))
         self.assertTrue(fts.in_band(0.0))
-        self.assertTrue(fts.in_band(-0.4))          # through the line, candle not closed: shown as 0.00%
+        self.assertFalse(fts.in_band(-0.4))         # through the line before the close: a break, not a BUY
         self.assertFalse(fts.in_band(1.51))
-        self.assertFalse(fts.in_band(-1.6))
         self.assertFalse(fts.in_band(None))
 
     def test_line_distance_is_on_the_approach_side(self):
         self.assertAlmostEqual(fts.line_distance(SUPPORT, 100.0, 101.0), 1.0)
         self.assertAlmostEqual(fts.line_distance(RESISTANCE, 100.0, 99.0), 1.0)
+
+
+class CurrentPriceTests(unittest.TestCase):
+    def test_every_timeframe_uses_the_freshest_candle(self):
+        charts = {"4h": [[100, 0, 0, 0, 10.0], [200, 0, 0, 0, 11.0]],
+                  "1d": [[50, 0, 0, 0, 9.0]],            # a lagging daily candle
+                  "1M": [[10, 0, 0, 0, 8.0]]}
+        self.assertEqual(fts.current_price(charts), 11.0)
 
 
 class AlertTextTests(unittest.TestCase):
@@ -332,6 +339,15 @@ class SeedingTests(unittest.TestCase):
         self.assertEqual(self.sent, [fts.FIB_ENV])                      # seeded, still no burst
         self.assertIn(self.touches[0]["key"], fts.load_state())
         self.assertEqual(len(self.status), 2)
+
+    def test_a_failing_daily_report_cannot_lose_the_alerts_it_follows(self):
+        fts.run_once()                                                   # seed
+        self.fibs.append(OnceOnlyTests().fib("fib|X|4h|1|0|130|1"))
+        with mock.patch("fib_trendline_daily_report.maybe_send", side_effect=RuntimeError("boom")):
+            fts.run_once()                                               # must not raise
+        self.assertIn("fib|X|4h|1|0|130|1", fts.load_state())             # the sent alert is saved
+        fts.run_once()
+        self.assertEqual(self.sent, [fts.FIB_ENV])                       # and never sent twice
 
     def test_a_new_rule_version_reseeds(self):
         fts.run_once()

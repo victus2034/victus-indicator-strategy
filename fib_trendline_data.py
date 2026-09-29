@@ -84,16 +84,29 @@ def monthly_from_daily(daily, tz=timezone.utc):
     return [m for _, m in months]
 
 
+ALL_HISTORY_DAYS = 2000                # further back than Delta India exists (Dec 2023)
+
+
 def crypto_charts(contract, timeframes, now, intraday_bars=1500):
-    """Live charts for one crypto contract: {tf: candles}."""
+    """Live charts for one crypto contract: {tf: candles}.
+
+    4H and up load everything Delta has, not a recent window. The fib engine is a
+    state machine that runs from the first candle, and where it starts changes
+    where it ends: over 12 symbols of 4H, a 1500-candle window disagreed with the
+    full history on 5.7% of bars (UNI: a down fib from 4.561 instead of an up
+    fib from 2.303). The chart runs from the first candle it loads, so the full
+    history is what matches it - and a start fixed at the listing never slides.
+    30m (off by default) keeps a window: its full history is ~12 requests a symbol.
+    """
+    since = now - ALL_HISTORY_DAYS * 86400
     out, daily = {}, None
     for tf in timeframes:
         if tf in ("1d", "1M"):
             if daily is None:
-                daily = delta_candles(contract, "1d", now - 2000 * 86400, now)
+                daily = delta_candles(contract, "1d", since, now)
             out[tf] = daily if tf == "1d" else monthly_from_daily(daily)
-        elif tf == "1w":
-            out[tf] = delta_candles(contract, "1w", now - 2000 * 86400, now)
+        elif tf in ("1w", "4h"):
+            out[tf] = delta_candles(contract, tf, since, now)
         else:
             out[tf] = delta_candles(contract, tf, now - intraday_bars * TF_SECONDS[tf], now)
     return out
@@ -102,7 +115,9 @@ def crypto_charts(contract, timeframes, now, intraday_bars=1500):
 # ----------------------------------------------------------------- NSE (yfinance)
 
 YF_INTERVAL = {"5m": "5m", "15m": "15m", "30m": "30m", "1h": "1h", "1d": "1d", "1w": "1wk", "1M": "1mo"}
-YF_PERIOD = {"5m": "60d", "15m": "60d", "30m": "60d", "1h": "700d", "1d": "5y", "1w": "10y", "1M": "max"}
+# Daily and up: everything Yahoo has, for the same reason crypto_charts loads the
+# full history. Intraday is capped by Yahoo itself (60 days of 5m-30m, 730 of 1h).
+YF_PERIOD = {"5m": "60d", "15m": "60d", "30m": "60d", "1h": "700d", "1d": "max", "1w": "max", "1M": "max"}
 
 
 def _frame_to_candles(frame):

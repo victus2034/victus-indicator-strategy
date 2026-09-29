@@ -134,6 +134,12 @@ server). NSE posts to the same two channels (Shiva's choice); every alert says
   calendar month. History starts Dec 2023, so young coins get no 1M fib yet.
 - NSE: the zone scanner's 200 stocks (`nse_scanner.load_watchlist`), scanned only in the session
   and at most every 8 minutes - that pass takes ~3 minutes (Yahoo, 5 intervals).
+- **Audit, 2026-09-29** (fixed, each with a test): the fib engine is a state machine whose end
+  state depends on where history starts - a 1500-candle 4H window disagreed with full history on
+  5.7% of bars - so 4H and NSE daily+ load everything; trendlines converge and don't care. Touch
+  alerts are approach-side only (price through a support before the close used to post BUY). One
+  current price per symbol across timeframes. State is saved before anything that can raise, and
+  persisted `if: always()`, so posted alerts can't be re-sent. Replay == live verified on 225 bars.
 - Each channel seeds silently per market on its first pass with a webhook, so adding a webhook
   never dumps a backlog. Deleting the state file re-seeds rather than bursting.
 - `python fib_trendline_scanner.py --dry-run [--force-nse]` prints what would alert, sends nothing.
