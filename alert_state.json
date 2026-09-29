@@ -1829,7 +1829,8 @@
     "DOGEUSD|4h|long|0.09127|0.09174": 1790607127.8291895,
     "TRUMP/USDT|4h|long|1.938|1.948": 1790607218.026629,
     "shadow:TRUMP/USDT|4h|long|1.938|1.95639": 1790607396.989058,
-    "TSLAXUSD|4h|long|355|356.65": 1790659934.9905238
+    "TSLAXUSD|4h|long|355|356.65": 1790659934.9905238,
+    "shadow:TSLAXUSD|4h|long|355|355.848": 1790660114.1879687
   },
   "ARBUSD|supply|0.08030000|0.08180000": {
     "in_zone": false,
@@ -5408,7 +5409,7 @@
     "last_alert_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1790659916.2329671
+    "4h": 1790660186.3482294
   },
   "HOOD/USDT:USDT|demand|83.83000000|84.37120000": {
     "in_zone": false,
@@ -26757,8 +26758,9 @@
     "last_alert_at": 0.0
   },
   "shadow:TSLAXUSD|demand|355.00000000|355.84847472": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790660114.1879687,
+    "last_attempt_at": 1790660114.1879687
   },
   "METAXUSD|demand|637.75000000|638.00000000": {
     "in_zone": false,
