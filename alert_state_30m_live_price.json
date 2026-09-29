@@ -3838,12 +3838,13 @@
     "SNDKBUSD|30m|short|1745.8|1759.77": 1790692904.7221308,
     "BNBUSD|30m|long|753.44|754.9": 1790695620.0976949,
     "shadow:BNBUSD|30m|long|753.44|754.196": 1790695620.0976949,
-    "shadow:LTCUSD|30m|long|67.1|67.2563": 1790695709.4965298,
+    "shadow:LTCUSD|30m|long|67.1|67.2563": 1790702600.8793895,
     "LTCUSD|30m|long|67.1|67.42": 1790702211.4538972,
-    "HYPEUSD|30m|long|85.638|85.98": 1790700405.0587418,
-    "shadow:HYPEUSD|30m|long|85.638|85.7806": 1790700405.0587418,
+    "HYPEUSD|30m|long|85.638|85.98": 1790702600.6672843,
+    "shadow:HYPEUSD|30m|long|85.638|85.7806": 1790702600.6672843,
     "LINKUSD|30m|long|14.576|14.649": 1790700970.048128,
-    "TSLAXUSD|30m|long|351|352.35": 1790701333.5773473
+    "TSLAXUSD|30m|long|351|352.35": 1790701333.5773473,
+    "shadow:LINKUSD|30m|long|14.576|14.6277": 1790702510.6601257
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15392,7 +15393,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790702277.8877275
+    "30m": 1790702578.2493203
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -146322,14 +146323,14 @@
     "last_attempt_at": 0.0
   },
   "HYPEUSD|demand|85.63800000|85.98000000": {
-    "in_zone": false,
-    "last_alert_at": 1790700405.0587418,
-    "last_attempt_at": 1790700405.0587418
+    "in_zone": true,
+    "last_alert_at": 1790702600.6672843,
+    "last_attempt_at": 1790702600.6672843
   },
   "shadow:HYPEUSD|demand|85.63800000|85.78058945": {
-    "in_zone": false,
-    "last_alert_at": 1790700405.0587418,
-    "last_attempt_at": 1790700405.0587418
+    "in_zone": true,
+    "last_alert_at": 1790702600.6672843,
+    "last_attempt_at": 1790702600.6672843
   },
   "BEAT/USDT|demand|0.08810000|0.08860000": {
     "in_zone": false,
@@ -146367,9 +146368,9 @@
     "last_attempt_at": 1790702211.4538972
   },
   "shadow:LTCUSD|demand|67.10000000|67.25629431": {
-    "in_zone": false,
-    "last_alert_at": 1790695709.4965298,
-    "last_attempt_at": 1790695709.4965298
+    "in_zone": true,
+    "last_alert_at": 1790702600.8793895,
+    "last_attempt_at": 1790702600.8793895
   },
   "shadow:BNBUSD|demand|753.44000000|754.19621795": {
     "in_zone": true,
@@ -146498,8 +146499,8 @@
   },
   "shadow:LINKUSD|demand|14.57600000|14.62772707": {
     "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "last_alert_at": 1790702510.6601257,
+    "last_attempt_at": 1790702510.6601257
   },
   "shadow:TSLAXUSD|demand|351.00000000|351.31953691": {
     "in_zone": false,
