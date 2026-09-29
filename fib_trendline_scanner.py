@@ -205,16 +205,27 @@ def _header(market, tf):
     return f"Timeframe: {TF_LABEL[tf]} | {MARKET_LABEL[market]}"
 
 
+def zone_name(d, number):
+    """Shiva reads the chart as upper and lower zone, not 1 and 2 (2026-09-29).
+
+    Zone 1 is the upper box on an up move and the lower one on a down move;
+    Zone 2, the deeper one, the other. The numbers stay underneath - in the
+    state keys, the records and the backtest - so renaming re-alerts nothing.
+    """
+    return "UPPER" if (number == 1) == (d == 1) else "LOWER"
+
+
 def format_fib_alert(market, symbol, tf, price, z):
     places = scanner.price_decimals(z["entry"])
     side = "LONG" if z["d"] == 1 else "SHORT"
-    deeper = " (deeper zone)" if z["zone"] == 2 else ""
+    name = zone_name(z["d"], z["zone"])
+    deeper = " (deeper)" if z["zone"] == 2 else ""
     where = "inside the zone" if z["distance"] <= 0 else f"{z['distance']:.2f}% away"
     return (
-        f"{display(market, symbol)} | FIB ZONE {z['zone']} | {side}\n"
+        f"{display(market, symbol)} | FIB {name} ZONE | {side}\n"
         f"{_header(market, tf)}\n"
         f"Price: {_fmt(price, places)} | {where}\n"
-        f"Zone {z['zone']}: {_fmt(z['low'], places)} - {_fmt(z['high'], places)}{deeper}\n"
+        f"{name.capitalize()} zone: {_fmt(z['low'], places)} - {_fmt(z['high'], places)}{deeper}\n"
         f"Entry: {_fmt(z['entry'], places)} | SL: {_fmt(z['sl'], places)} | {trades.risk_pct(z['plan']):.2f}%\n"
         f"Fib: {_fmt(z['base'], places)} -> {_fmt(z['top'], places)}"
     )
@@ -223,10 +234,10 @@ def format_fib_alert(market, symbol, tf, price, z):
 def format_touch_alert(market, symbol, tf, price, t):
     places = scanner.price_decimals(t["level"])
     support = t["kind"] == SUPPORT
-    name, side = ("SUPPORT", "BUY") if support else ("RESISTANCE", "SELL")
+    name, side = ("SUP", "BUY") if support else ("RES", "SELL")
     where = f"{t['distance']:.2f}% {'above' if support else 'below'} the line"
     return (
-        f"{display(market, symbol)} | {name} TRENDLINE | {side}\n"
+        f"{display(market, symbol)} | {name} TL | {side}\n"
         f"{_header(market, tf)}\n"
         f"Price: {_fmt(price, places)} | {where}\n"
         f"Entry (line): {_fmt(t['level'], places)} | SL: {_fmt(t['plan']['sl'], places)} | "
@@ -237,10 +248,10 @@ def format_touch_alert(market, symbol, tf, price, t):
 
 def format_break_alert(market, symbol, tf, b):
     places = scanner.price_decimals(b["level"])
-    name = "SUPPORT" if b["kind"] == SUPPORT else "RESISTANCE"
+    name = "SUP" if b["kind"] == SUPPORT else "RES"
     side = "below" if b["kind"] == SUPPORT else "above"
     return (
-        f"{display(market, symbol)} | {name} TRENDLINE BROKEN\n"
+        f"{display(market, symbol)} | {name} TL BR\n"
         f"{_header(market, tf)}\n"
         f"Close {_fmt(b['close'], places)} {side} the line at {_fmt(b['level'], places)} ({b['time']} IST)\n"
         f"Drawn: {_fmt(b['from'][0], places)} ({b['from'][1]}) -> {_fmt(b['to'][0], places)} ({b['to'][1]})"

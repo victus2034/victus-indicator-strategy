@@ -99,13 +99,27 @@ class AlertTextTests(unittest.TestCase):
         z["plan"] = ftt.fib_plan(1, z)
         text = fts.format_fib_alert(ftd.NSE, "RELIANCE.NS", "4h", 100.0, z)
         self.assertIn("Timeframe: 4H | NSE", text)
-        self.assertIn("RELIANCE | FIB ZONE 2", text)
+        self.assertIn("RELIANCE | FIB LOWER ZONE | LONG", text)      # zone 2 of an up move
+        self.assertIn("Lower zone: ", text)
         self.assertIn("0.80% away", text)
         t = {"kind": SUPPORT, "level": 100.0, "distance": 1.2, "from": (90, "a"), "to": (95, "b"),
              "plan": ftt.trendline_plan(True, 100.0, "1d")}
         text = fts.format_touch_alert(ftd.CRYPTO, "BTCUSD", "1d", 101.2, t)
         self.assertIn("Timeframe: 1D | Crypto", text)
         self.assertIn("SL: 98.500000 | 1.50%", text)
+        self.assertIn("BTC | SUP TL | BUY", text)
+
+    def test_zone_names_follow_the_chart(self):
+        self.assertEqual([fts.zone_name(1, 1), fts.zone_name(1, 2)], ["UPPER", "LOWER"])
+        self.assertEqual([fts.zone_name(-1, 1), fts.zone_name(-1, 2)], ["LOWER", "UPPER"])
+        for d, base, top in ((1, 90, 110), (-1, 110, 90)):
+            z = zones_by_number(d, base, top)
+            upper = 1 if fts.zone_name(d, 1) == "UPPER" else 2
+            self.assertGreater(z[upper]["low"], z[3 - upper]["high"])     # "UPPER" really is higher
+
+    def test_broken_line_wording(self):
+        b = {"kind": RESISTANCE, "level": 100.0, "close": 101.0, "time": "t", "from": (90, "a"), "to": (95, "b")}
+        self.assertIn("ETH | RES TL BR", fts.format_break_alert(ftd.CRYPTO, "ETHUSD", "4h", b))
 
 
 def rising_lows_then_break():
