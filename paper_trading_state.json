@@ -55176,6 +55176,33 @@
       "target_half": 11.162500000000001,
       "timeframe": "30m",
       "trade_id": "AVAXUSD|30m|short|11.21|11.305"
+    },
+    {
+      "alert_time": "2026-09-29T12:48:14.727680+05:30",
+      "cost_r": 0.472556521739093,
+      "date": "2026-09-29",
+      "entry": 2717.2,
+      "entry_time": "2026-09-29T13:05:00+05:30",
+      "exit_price": 2711.4499999999994,
+      "exit_time": "2026-09-29T13:20:00+05:30",
+      "final_result": "+1R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.527443478260907,
+      "outcome": "+1R",
+      "rating": 7,
+      "realized_r": 1.0,
+      "risk": 5.750000000000455,
+      "side": "short",
+      "stop": 2722.9500000000003,
+      "stream": "live",
+      "symbol": "ETHUSD",
+      "target_1": 2711.4499999999994,
+      "target_2": 2705.699999999999,
+      "target_half": 2714.325,
+      "timeframe": "30m",
+      "trade_id": "ETHUSD|30m|short|2717.2|2722.95"
     }
   ],
   "handled": {
@@ -56130,6 +56157,7 @@
     "AVAXUSD|30m|short|10.352|10.432": "filled",
     "AVAXUSD|30m|short|10.6071|10.7132": "filled",
     "AVAXUSD|30m|short|11.21|11.305": "filled",
+    "AVAXUSD|30m|short|11.3274|11.4407": "filled",
     "AVAXUSD|30m|short|7.447|7.4595": "filled",
     "AVAXUSD|30m|short|7.456|7.4685": "filled",
     "AVAXUSD|30m|short|7.614|7.619": "filled",
@@ -57443,6 +57471,24 @@
       "target_half": 497.73875,
       "timeframe": "30m"
     },
+    "AVAXUSD|30m|short|11.3274|11.4407": {
+      "alert_time": "2026-09-29T13:16:52.657462+05:30",
+      "entry": 11.32738095238095,
+      "entry_time": "2026-09-29T13:20:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 3,
+      "risk": 0.11327380952381105,
+      "side": "short",
+      "stop": 11.440654761904762,
+      "stream": "live",
+      "symbol": "AVAXUSD",
+      "target_1": 11.21410714285714,
+      "target_2": 11.100833333333329,
+      "target_half": 11.270744047619045,
+      "timeframe": "30m"
+    },
     "BTCUSD|30m|short|84000|84437.5": {
       "alert_time": "2026-09-29T12:26:41.506444+05:30",
       "entry": 84000.0,
@@ -57477,24 +57523,6 @@
       "target_1": 0.0944575,
       "target_2": 0.093845,
       "target_half": 0.09476375000000001,
-      "timeframe": "30m"
-    },
-    "ETHUSD|30m|short|2717.2|2722.95": {
-      "alert_time": "2026-09-29T12:48:14.727680+05:30",
-      "entry": 2717.2,
-      "entry_time": "2026-09-29T13:05:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": true,
-      "market": "crypto",
-      "rating": 7,
-      "risk": 5.750000000000455,
-      "side": "short",
-      "stop": 2722.9500000000003,
-      "stream": "live",
-      "symbol": "ETHUSD",
-      "target_1": 2711.4499999999994,
-      "target_2": 2705.699999999999,
-      "target_half": 2714.325,
       "timeframe": "30m"
     }
   }
