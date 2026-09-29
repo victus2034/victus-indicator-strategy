@@ -32,12 +32,22 @@
   "DOGEUSD|30m|short|0.09507|0.0956825": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "ETHUSD|30m|short|2717.2|2722.95": {
     "reached_entry": true,
     "stage": 2,
     "stopped_out": true
+  },
+  "NVDAXUSD|30m|short|231.95|233.575": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
+  "SOLUSD|30m|short|120|120.964": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
   },
   "TSLAXUSD|4h|long|356.65|354.587": {
     "reached_entry": true,
@@ -207,6 +217,7 @@
   "_level_ready|NVDAXUSD|30m|short|225.395|225.401": 1790315769.358617,
   "_level_ready|NVDAXUSD|30m|short|227.6|228.537": 1790071565.863518,
   "_level_ready|NVDAXUSD|30m|short|229.7|229.95": 1790598982.417983,
+  "_level_ready|NVDAXUSD|30m|short|231.95|233.575": 1790670380.876731,
   "_level_ready|NVDAXUSD|4h|short|228.9|230.15": 1790598679.420447,
   "_level_ready|RIVERUSD|30m|long|1.139|1.12775": 1790604381.571461,
   "_level_ready|RIVERUSD|30m|long|1.173|1.163": 1789580468.013141,
@@ -247,6 +258,7 @@
   "_level_ready|SOLUSD|30m|short|101.03|101.47": 1789651563.778331,
   "_level_ready|SOLUSD|30m|short|104.52|104.845": 1789703760.104018,
   "_level_ready|SOLUSD|30m|short|119.459|120.186": 1790334074.690617,
+  "_level_ready|SOLUSD|30m|short|120|120.964": 1790670380.876731,
   "_level_ready|SOLUSD|30m|short|122.314|123.112": 1790495162.943965,
   "_level_ready|SOLUSD|4h|short|104.973|106.023": 1789704356.64535,
   "_level_ready|SOLUSD|4h|short|109.911|110.816": 1789742770.728918,
@@ -380,7 +392,7 @@
   "_ready|MRVL/USDT:USDT|4h": 1790014567.180453,
   "_ready|MSFT/USDT:USDT|30m": 1789542964.512681,
   "_ready|MSFT/USDT:USDT|4h": 1789376756.136711,
-  "_ready|NVDAXUSD|30m": 1790598982.417983,
+  "_ready|NVDAXUSD|30m": 1790670380.876731,
   "_ready|NVDAXUSD|4h": 1790598679.420447,
   "_ready|O/USDT|30m": 1789481164.028485,
   "_ready|RE/USDT|30m": 1789390557.764438,
@@ -391,7 +403,7 @@
   "_ready|SLVONUSD|4h": 1789377364.322639,
   "_ready|SNDKBUSD|30m": 1790562975.920281,
   "_ready|SNDKBUSD|4h": 1790565116.939107,
-  "_ready|SOLUSD|30m": 1790562975.920281,
+  "_ready|SOLUSD|30m": 1790670380.876731,
   "_ready|SOLUSD|4h": 1789742770.728918,
   "_ready|SOON/USDT|30m": 1789447859.694797,
   "_ready|SOXLBUSD|30m": 1790313363.195128,
@@ -420,6 +432,10 @@
   "_silent_ready|AAVEUSD|30m|short|157.487|157.503": {
     "price": 156.04,
     "time": "2026-09-29T12:16:35.091469+05:30"
+  },
+  "_silent_ready|BCHUSD|30m|short|314.48|315.855": {
+    "price": 312.87,
+    "time": "2026-09-29T13:56:20.876731+05:30"
   },
   "_silent_ready|BLESSUSD|30m|long|0.00822326|0.00814168": {
     "price": 0.00824,
@@ -488,10 +504,6 @@
   "_silent_ready|SOLUSD|30m|long|116.271|115.791": {
     "price": 116.582,
     "time": "2026-09-29T08:06:12.856629+05:30"
-  },
-  "_silent_ready|SOLUSD|30m|short|120|120.964": {
-    "price": 119.42,
-    "time": "2026-09-29T12:36:01.276949+05:30"
   },
   "_silent_ready|TACUSD|4h|long|0.00148075|0.00146606": {
     "price": 0.0015,
