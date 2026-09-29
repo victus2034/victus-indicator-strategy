@@ -20,7 +20,7 @@ concurrency:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -37,7 +37,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Restore runtime state
-        run: bash .github/scripts/restore_runtime_state.sh fib_trendline_state.json
+        run: bash .github/scripts/restore_runtime_state.sh fib_trendline_state.json fib_trendline_alert_records.jsonl fib_trendline_results.json
 
       - name: Check fib/trendline Discord webhook configuration
         env:
@@ -57,10 +57,15 @@ jobs:
           DISCORD_FIB_WEBHOOK_URL: ${{ secrets.DISCORD_FIB_WEBHOOK_URL }}
           DISCORD_TRENDLINE_WEBHOOK_URL: ${{ secrets.DISCORD_TRENDLINE_WEBHOOK_URL }}
           DISCORD_STATUS_WEBHOOK_URL: ${{ secrets.DISCORD_STATUS_WEBHOOK_URL }}
+          # The once-a-day score of the live fib/trendline alerts goes to the
+          # existing daily-backtest channel (fib_trendline_daily_report.py).
+          DISCORD_DAILY_BACKTEST_WEBHOOK_URL: ${{ secrets.DISCORD_DAILY_BACKTEST_WEBHOOK_URL }}
+        # Crypto every pass; NSE (200 stocks, Yahoo) only in the session and at
+        # most every 8 minutes - that pass takes ~3 minutes on its own.
         run: python fib_trendline_scanner.py
 
       - name: Persist runtime state
-        run: bash .github/scripts/persist_runtime_state.sh fib_trendline_state.json
+        run: bash .github/scripts/persist_runtime_state.sh fib_trendline_state.json fib_trendline_alert_records.jsonl fib_trendline_results.json
 
       - name: Notify on failure
         if: failure()

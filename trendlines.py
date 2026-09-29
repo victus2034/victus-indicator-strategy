@@ -30,6 +30,13 @@ class Trendline:
     y2: float
     created: int       # bar the line appeared on (x2 + length)
     broken_at: int = None
+    trimmed_at: int = None   # bar a newer line pushed it out of the newest `keep`
+
+    def live_during(self, bar):
+        """True if the chart shows this line, unbroken, while `bar` is forming."""
+        return (self.created < bar
+                and (self.broken_at is None or self.broken_at >= bar)
+                and (self.trimmed_at is None or self.trimmed_at >= bar))
 
     @property
     def alive(self):
@@ -65,19 +72,26 @@ def _best_anchor(xs, ys, nx, ny, lower):
     return best
 
 
-def build_trendlines(highs, lows, closes, length=10, keep=6):
-    """Replay every bar as the Pine does and return the lines it would hold."""
+def build_trendlines(highs, lows, closes, length=10, keep=6, history=False):
+    """Replay every bar as the Pine does and return the lines it would hold.
+
+    history=True returns every line ever drawn instead, trimmed ones included,
+    so a backtest can ask which were live on any past bar (Trendline.live_during).
+    """
     n = len(closes)
     lines = []
+    everything = []
     pl_x, pl_y, ph_x, ph_y = [], [], [], []
 
     def add(line):
         lines.append(line)
+        everything.append(line)
         count = 0
         for k in range(len(lines) - 1, -1, -1):
             if lines[k].kind == line.kind:
                 count += 1
                 if count > keep:
+                    lines[k].trimmed_at = line.created
                     del lines[k]
 
     for bar in range(n):
@@ -108,4 +122,4 @@ def build_trendlines(highs, lows, closes, length=10, keep=6):
                 if (closes[bar] < y) if line.kind == SUPPORT else (closes[bar] > y):
                     line.broken_at = bar
 
-    return lines
+    return everything if history else lines

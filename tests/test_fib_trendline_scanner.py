@@ -1,10 +1,16 @@
-"""Fib + trendline alerts: the engines, the zone numbering and the once-only rules."""
+"""Fib + trendline alerts: the engines, the 0-1.5% band, trade scoring, replay and the once-only rules."""
+import os
 import pathlib
+import tempfile
 import unittest
 from datetime import datetime, timezone
+from unittest import mock
 
 import fib_engine
+import fib_trendline_backtest as ftb
+import fib_trendline_data as ftd
 import fib_trendline_scanner as fts
+import fib_trendline_trades as ftt
 from trendlines import RESISTANCE, SUPPORT, build_trendlines
 
 REFERENCE = pathlib.Path(__file__).resolve().parents[2] / "indicator improvent by claude" / "fib_reference.py"
@@ -25,21 +31,74 @@ class FibEngineIsTheIndicatorsTests(unittest.TestCase):
         self.assertEqual([round(v, 2) for v in fib_engine.levels(94.89, 110.55)], [105.23, 103.50, 101.94, 100.21])
 
 
+def zones_by_number(d, base, top):
+    return {z["zone"]: z for z in fts.fib_zones(d, base, top)}
+
+
 class FibZoneNumberingTests(unittest.TestCase):
     def test_zone_2_is_the_lower_box_on_an_up_move(self):
-        zones = {n: (lo, hi) for n, lo, hi, _, _ in fts.fib_zones(1, 94.89, 110.55)}
-        self.assertLess(zones[2][1], zones[1][0])
+        z = zones_by_number(1, 94.89, 110.55)
+        self.assertLess(z[2]["high"], z[1]["low"])
 
     def test_zone_2_is_the_upper_box_on_a_down_move(self):
-        zones = {n: (lo, hi) for n, lo, hi, _, _ in fts.fib_zones(-1, 110.55, 94.89)}
-        self.assertGreater(zones[2][0], zones[1][1])
+        z = zones_by_number(-1, 110.55, 94.89)
+        self.assertGreater(z[2]["low"], z[1]["high"])
 
-    def test_ex2_entry_and_sl_inside_zone(self):
-        # EX 2 ETH: 2562.8 -> 2806.6, SL fibs 2714.87/2711.85 and 2663.51/2660.49
-        # (labels read off his chart, so within 0.02% - fib_examples_check.py uses a tolerance too)
-        zones = {n: (e, s) for n, _, _, e, s in fts.fib_zones(1, 2562.8, 2806.6)}
-        for got, want in zip(zones[1] + zones[2], (2714.87, 2711.85, 2663.51, 2660.49)):
-            self.assertLess(abs(got - want) / want, 0.0002)
+    def test_entry_and_sl_are_shivas_ex2_trades(self):
+        # EX 2/278 ETH, fib 2562.8 -> 2806.6. His trades: entry 2723.94 / SL 2711.79 (zone 1),
+        # 2672.86 / 2660.74 (zone 2) - entry at the zone top, SL on the inner 0.55 line.
+        # (Read off his chart, so within 0.02% - fib_examples_check.py uses a tolerance too.)
+        z = zones_by_number(1, 2562.8, 2806.6)
+        got = (z[1]["entry"], z[1]["sl"], z[2]["entry"], z[2]["sl"])
+        for g, want in zip(got, (2723.94, 2711.79, 2672.86, 2660.74)):
+            self.assertLess(abs(g - want) / want, 0.0002)
+
+    def test_short_entry_is_the_zone_bottom(self):
+        z = zones_by_number(-1, 110.55, 94.89)[1]
+        self.assertEqual(z["entry"], z["low"])
+        self.assertGreater(z["sl"], z["entry"])
+
+
+class DistanceBandTests(unittest.TestCase):
+    """Shiva: alerts from 1.5% away down to 0.00%."""
+
+    zone = {"low": 100.0, "high": 110.0}
+
+    def test_long_fib_distance_is_down_to_the_zone_top(self):
+        self.assertAlmostEqual(fts.fib_distance(1, self.zone, 111.1), 1.0)
+        self.assertEqual(fts.fib_distance(1, self.zone, 105.0), 0.0)
+        self.assertIsNone(fts.fib_distance(1, self.zone, 99.0))       # already past it
+
+    def test_short_fib_distance_is_up_to_the_zone_bottom(self):
+        self.assertAlmostEqual(fts.fib_distance(-1, self.zone, 99.0), 1.0)
+        self.assertIsNone(fts.fib_distance(-1, self.zone, 111.0))
+
+    def test_band_is_zero_to_one_and_a_half(self):
+        self.assertTrue(fts.in_band(1.5))
+        self.assertTrue(fts.in_band(0.0))
+        self.assertTrue(fts.in_band(-0.4))          # through the line, candle not closed: shown as 0.00%
+        self.assertFalse(fts.in_band(1.51))
+        self.assertFalse(fts.in_band(-1.6))
+        self.assertFalse(fts.in_band(None))
+
+    def test_line_distance_is_on_the_approach_side(self):
+        self.assertAlmostEqual(fts.line_distance(SUPPORT, 100.0, 101.0), 1.0)
+        self.assertAlmostEqual(fts.line_distance(RESISTANCE, 100.0, 99.0), 1.0)
+
+
+class AlertTextTests(unittest.TestCase):
+    def test_every_alert_names_its_timeframe_and_market(self):
+        z = {**zones_by_number(1, 90, 110)[2], "d": 1, "base": 90, "top": 110, "distance": 0.8}
+        z["plan"] = ftt.fib_plan(1, z)
+        text = fts.format_fib_alert(ftd.NSE, "RELIANCE.NS", "4h", 100.0, z)
+        self.assertIn("Timeframe: 4H | NSE", text)
+        self.assertIn("RELIANCE | FIB ZONE 2", text)
+        self.assertIn("0.80% away", text)
+        t = {"kind": SUPPORT, "level": 100.0, "distance": 1.2, "from": (90, "a"), "to": (95, "b"),
+             "plan": ftt.trendline_plan(True, 100.0, "1d")}
+        text = fts.format_touch_alert(ftd.CRYPTO, "BTCUSD", "1d", 101.2, t)
+        self.assertIn("Timeframe: 1D | Crypto", text)
+        self.assertIn("SL: 98.500000 | 1.50%", text)
 
 
 def rising_lows_then_break():
@@ -65,6 +124,9 @@ class TrendlineTests(unittest.TestCase):
         closes[50] = 100.0            # line is at 116 by bar 50
         line = [l for l in build_trendlines(highs, lows, closes, 10, 6) if l.kind == SUPPORT][0]
         self.assertEqual(line.broken_at, 50)
+        self.assertTrue(line.live_during(50))       # still on the chart while bar 50 forms
+        self.assertFalse(line.live_during(51))
+        self.assertFalse(line.live_during(45))      # drawn at bar 45's close
 
     def test_a_close_before_the_line_is_drawn_is_not_checked(self):
         highs, lows, closes = rising_lows_then_break()
@@ -79,78 +141,174 @@ class TrendlineTests(unittest.TestCase):
         lines = build_trendlines(highs, lows, [v - 2 for v in highs], 10, 6)
         self.assertEqual([(l.kind, l.y1, l.y2) for l in lines], [(RESISTANCE, 150.0, 140.0)])
 
+    def test_history_keeps_lines_pushed_out_by_newer_ones(self):
+        lows = [200.0] * 200
+        for k, i in enumerate(range(10, 190, 12)):
+            lows[i] = 100.0 + k       # rising swing lows: a new support line on each
+        highs = [v + 5 for v in lows]
+        closes = [v + 50 for v in lows]
+        kept = build_trendlines(highs, lows, closes, 5, 3)
+        everything = build_trendlines(highs, lows, closes, 5, 3, history=True)
+        self.assertEqual(len([l for l in kept if l.kind == SUPPORT]), 3)
+        self.assertGreater(len(everything), len(kept))
+        self.assertTrue(all(l.trimmed_at is not None for l in everything if l not in kept))
+
 
 class CandleTests(unittest.TestCase):
     def test_monthly_candles_group_by_calendar_month(self):
         day = lambda y, m, d: int(datetime(y, m, d, tzinfo=timezone.utc).timestamp())
         daily = [[day(2026, 8, 30), 1, 5, 1, 2], [day(2026, 8, 31), 2, 6, 0.5, 3], [day(2026, 9, 1), 3, 4, 2, 3.5]]
-        months = fts.monthly_from_daily(daily)
+        months = ftd.monthly_from_daily(daily)
         self.assertEqual(months[0], [day(2026, 8, 1), 1, 6, 0.5, 3])
         self.assertEqual(months[1], [day(2026, 9, 1), 3, 4, 2, 3.5])
 
     def test_the_current_month_is_still_forming(self):
         sept = int(datetime(2026, 9, 1, tzinfo=timezone.utc).timestamp())
-        self.assertFalse(fts.candle_is_closed(sept, "1M", datetime(2026, 9, 29, tzinfo=timezone.utc).timestamp()))
-        self.assertTrue(fts.candle_is_closed(sept, "1M", datetime(2026, 10, 1, tzinfo=timezone.utc).timestamp()))
+        self.assertFalse(ftd.candle_is_closed(ftd.CRYPTO, sept, "1M", datetime(2026, 9, 29, tzinfo=timezone.utc).timestamp()))
+        self.assertTrue(ftd.candle_is_closed(ftd.CRYPTO, sept, "1M", datetime(2026, 10, 1, tzinfo=timezone.utc).timestamp()))
+
+    def test_nse_candles_close_with_the_session(self):
+        at = lambda h, m: datetime(2026, 9, 29, h, m, tzinfo=ftd.IST).timestamp()
+        # the 13:15 4h candle ends at the 15:30 close, not 17:15
+        self.assertTrue(ftd.candle_is_closed(ftd.NSE, int(at(13, 15)), "4h", at(15, 31)))
+        self.assertFalse(ftd.candle_is_closed(ftd.NSE, int(at(13, 15)), "4h", at(15, 0)))
+        self.assertFalse(ftd.candle_is_closed(ftd.NSE, int(at(0, 0)), "1d", at(14, 0)))
+
+
+class SimulateTests(unittest.TestCase):
+    plan = {"side": "long", "entry": 100.0, "sl": 99.0}
+
+    def run_bars(self, *bars, tf="30m"):
+        candles = [[1000 + 300 * (k + 1), 0, h, l, 0] for k, (h, l) in enumerate(bars)]
+        return ftt.simulate(self.plan, ftd.CRYPTO, tf, 1000, candles)
+
+    def test_fill_then_two_r(self):
+        r = self.run_bars((101, 99.9), (101.5, 100.2), (102.1, 101))
+        self.assertEqual((r["outcome"], r["r1"], r["r2"]), ("2R", True, True))
+
+    def test_sl_before_1r(self):
+        self.assertEqual(self.run_bars((101, 99.9), (100.5, 98.9))["outcome"], "SL")
+
+    def test_one_r_then_stop_is_1r_with_the_stop_counted(self):
+        r = self.run_bars((100.5, 99.9), (101.2, 100.1), (100.5, 98.8))
+        self.assertEqual((r["outcome"], r["r1"], r["sl"]), ("1R", True, True))
+
+    def test_a_candle_with_both_is_the_stop(self):
+        r = self.run_bars((100.5, 99.9), (102.5, 98.5))
+        self.assertEqual((r["outcome"], r["ambiguous"]), ("SL", True))
+
+    def test_no_fill_after_the_wait(self):
+        bars = [(102, 101)] * 31      # 5 x 30m = 30 five-minute candles
+        self.assertEqual(self.run_bars(*bars)["outcome"], "no fill")
+        self.assertEqual(self.run_bars(*bars[:30])["outcome"], "open")
+
+    def test_nse_holds_count_trading_candles_not_the_night(self):
+        # 20 x 30m hold = 120 five-minute candles, however many hours apart they are
+        plan = {"side": "long", "entry": 100.0, "sl": 99.0}
+        candles = [[1000 + 86400 * k, 0, 100.5, 99.5 if k == 1 else 100.1, 0] for k in range(1, 100)]
+        self.assertEqual(ftt.simulate(plan, ftd.NSE, "30m", 1000, candles)["outcome"], "open")
+        candles += [[1000 + 86400 * k, 0, 100.5, 100.1, 0] for k in range(100, 130)]
+        self.assertEqual(ftt.simulate(plan, ftd.NSE, "30m", 1000, candles)["outcome"], "timeout")
+
+    def test_candles_up_to_the_alert_are_ignored(self):
+        candles = [[1000, 0, 101, 99.5, 0], [1300, 0, 101, 100.5, 0]]
+        self.assertFalse(ftt.simulate(self.plan, ftd.CRYPTO, "30m", 1000, candles)["filled"])
+
+    def test_summary_counts_and_costs(self):
+        trades = [
+            {"market": ftd.CRYPTO, "kind": "fib", "tf": "4h", "plan": self.plan,
+             "result": {"outcome": o, "filled": True, "r1": o in ("1R", "2R"), "r2": o == "2R", "sl": o == "SL"}}
+            for o in ("SL", "1R", "2R", "2R")
+        ]
+        row = ftt.summarise(trades)[0]
+        self.assertEqual((row["SL"], row["1R"], row["2R"]), (1, 1, 2))
+        self.assertAlmostEqual(row["win_1r"], 0.75)
+        self.assertAlmostEqual(row["win_2r"], 2 / 3)
+        self.assertAlmostEqual(row["net_r_1r"], (1 + 1 + 1 - 1) / 4 - 0.1)   # 0.10% cost on a 1% risk
+
+
+class ReplayTests(unittest.TestCase):
+    def test_a_support_line_alerts_once_and_scores(self):
+        # 4h bars; swing lows 100 (bar 10) and 110 (bar 35) -> support rising 0.4 a bar.
+        highs, lows, closes = rising_lows_then_break()
+        n = len(lows)
+        t0 = int(datetime(2026, 1, 1, 12, tzinfo=ftd.IST).timestamp())
+        base = [[t0 + i * 14400, closes[i], highs[i], lows[i], closes[i]] for i in range(n)]
+        # line at bar 50 is 116: price dips to it, then rallies
+        base[50][3] = 116.5
+        evalc = []
+        for i, b in enumerate(base):
+            for k in range(4):        # 1h evaluation candles
+                evalc.append([b[0] + k * 3600, b[1], b[2], b[3], b[4]])
+        now = base[-1][0] + 10 * 14400
+        out = ftb.replay(ftd.NSE, "X.NS", "4h", base, evalc, now)
+        touches = [t for t in out if t["kind"] == "trendline"]
+        self.assertTrue(touches)
+        self.assertEqual(len({t["alert_ts"] // 14400 for t in touches}), len(touches))   # one per band entry
+        self.assertTrue(all(t["plan"]["side"] == "long" for t in touches))
 
 
 class OnceOnlyTests(unittest.TestCase):
     def fib(self, key="fib|X|4h|1|0|110|2"):
         return {"key": key, "d": 1, "zone": 2, "low": 100, "high": 101, "entry": 100.8, "sl": 100.7,
-                "base": 90, "top": 110, "base_time": "a", "top_time": "b"}
+                "base": 90, "top": 110, "distance": 0.4, "plan": {"side": "long", "entry": 100.8, "sl": 100.7}}
 
     def touch(self, key="tl|X|4h|0|1|2"):
-        return {"key": key, "kind": SUPPORT, "level": 100.0, "distance": 0.1, "from": (90, "a"), "to": (95, "b")}
+        return {"key": key, "kind": SUPPORT, "level": 100.0, "distance": 0.1, "from": (90, "a"), "to": (95, "b"),
+                "plan": {"side": "long", "entry": 100.0, "sl": 99.0}}
 
     def analysis(self, fib=(), touch=()):
         return {"fib": list(fib), "touch": list(touch), "break": [], "price": 100.5}
 
+    def plan(self, state, analysis, now):
+        return fts.plan_alerts(state, ftd.CRYPTO, "X", "4h", analysis, now)
+
     def test_a_fib_zone_alerts_once(self):
         state = {}
-        first = fts.plan_alerts(state, "X", "4h", self.analysis(fib=[self.fib()]), 0)
+        first = self.plan(state, self.analysis(fib=[self.fib()]), 0)
         self.assertEqual(len(first), 1)
         fts.mark_sent(state, first[0][1], 0)
-        self.assertEqual(fts.plan_alerts(state, "X", "4h", self.analysis(fib=[self.fib()]), 10**6), [])
+        self.assertEqual(self.plan(state, self.analysis(fib=[self.fib()]), 10**6), [])
 
     def test_fib_and_trendline_go_to_different_channels(self):
-        planned = fts.plan_alerts({}, "X", "4h", self.analysis(fib=[self.fib()], touch=[self.touch()]), 0)
-        self.assertEqual(sorted(c for c, _, _ in planned), ["fib", "trendline"])
+        planned = self.plan({}, self.analysis(fib=[self.fib()], touch=[self.touch()]), 0)
+        self.assertEqual(sorted(c for c, *_ in planned), ["fib", "trendline"])
+
+    def test_alerts_carry_a_record_to_score(self):
+        (_, _, _, record), = self.plan({}, self.analysis(fib=[self.fib()]), 0)
+        self.assertEqual((record["kind"], record["tf"], record["plan"]["sl"]), ("fib", "4h", 100.7))
 
     def test_a_touch_rearms_only_after_leaving_the_band_and_a_candle(self):
         state = {}
-        (_, key, _), = fts.plan_alerts(state, "X", "4h", self.analysis(touch=[self.touch()]), 0)
+        (_, key, _, _), = self.plan(state, self.analysis(touch=[self.touch()]), 0)
         fts.mark_sent(state, key, 0)
-        # still in the band: nothing
-        self.assertEqual(fts.plan_alerts(state, "X", "4h", self.analysis(touch=[self.touch()]), 20000), [])
-        # leaves the band, comes back within the same candle: nothing
-        fts.plan_alerts(state, "X", "4h", self.analysis(), 100)
-        self.assertEqual(fts.plan_alerts(state, "X", "4h", self.analysis(touch=[self.touch()]), 200), [])
-        # leaves again, comes back a candle later: alerts
-        fts.plan_alerts(state, "X", "4h", self.analysis(), 20000)
-        self.assertEqual(len(fts.plan_alerts(state, "X", "4h", self.analysis(touch=[self.touch()]), 20001)), 1)
+        self.assertEqual(self.plan(state, self.analysis(touch=[self.touch()]), 20000), [])
+        self.plan(state, self.analysis(), 100)
+        self.assertEqual(self.plan(state, self.analysis(touch=[self.touch()]), 200), [])
+        self.plan(state, self.analysis(), 20000)
+        self.assertEqual(len(self.plan(state, self.analysis(touch=[self.touch()]), 20001)), 1)
 
 
 class SeedingTests(unittest.TestCase):
-    """A channel's first pass with its webhook seeds silently; before that nothing is recorded."""
+    """A channel's first pass under a rule, per market, seeds silently; before a webhook nothing is recorded."""
 
     def setUp(self):
-        import os
-        import tempfile
-        from unittest import mock
-
         self.tmp = tempfile.TemporaryDirectory()
         self.sent, self.status = [], []
         self.fibs = [OnceOnlyTests().fib("fib|X|4h|1|0|110|2")]
         self.touches = [OnceOnlyTests().touch("tl|X|4h|0|1|2")]
+        tmp = pathlib.Path(self.tmp.name)
+        analysis = lambda: {"4h": {"fib": list(self.fibs), "touch": list(self.touches), "break": [], "price": 100.5}}
         patches = [
-            mock.patch.object(fts, "STATE_FILE", pathlib.Path(self.tmp.name) / "state.json"),
-            mock.patch.object(fts.scanner, "active_watchlist", lambda: ["X"]),
-            mock.patch.object(fts, "scan_symbol", lambda s, tfs, now: (s, {"4h": {
-                "fib": list(self.fibs), "touch": list(self.touches), "break": [], "price": 100.5}}, None)),
+            mock.patch.object(fts, "STATE_FILE", tmp / "state.json"),
+            mock.patch.object(fts, "RECORDS_FILE", tmp / "records.jsonl"),
+            mock.patch.object(fts, "scan_crypto", lambda tfs, now: [("X", analysis(), None)]),
+            mock.patch.object(fts, "nse_session_open", lambda now: False),
             mock.patch.object(fts.scanner, "in_alert_window", lambda: True),
             mock.patch.object(fts.scanner, "send_discord_message",
                               lambda message, webhook_env_name, webhook_config_value: self.sent.append(webhook_env_name) or True),
             mock.patch.object(fts.scanner, "send_status_message", self.status.append),
+            mock.patch("fib_trendline_daily_report.maybe_send", lambda state, now: None),
             mock.patch.dict(os.environ, {fts.FIB_ENV: "https://example.invalid/fib", fts.TL_ENV: ""}),
         ]
         for p in patches:
@@ -159,8 +317,6 @@ class SeedingTests(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
 
     def test_seeds_each_channel_only_once_its_webhook_exists(self):
-        import os
-
         fts.run_once()
         self.assertEqual(self.sent, [])                                  # fib seeded, not posted
         self.assertEqual(len(self.status), 1)
@@ -169,12 +325,56 @@ class SeedingTests(unittest.TestCase):
         self.fibs.append(OnceOnlyTests().fib("fib|X|4h|1|0|120|1"))     # a new fib zone
         fts.run_once()
         self.assertEqual(self.sent, [fts.FIB_ENV])
+        self.assertEqual(len(fts.RECORDS_FILE.read_text().splitlines()), 1)   # recorded for the daily report
 
         os.environ[fts.TL_ENV] = "https://example.invalid/tl"           # trendline webhook added later
         fts.run_once()
         self.assertEqual(self.sent, [fts.FIB_ENV])                      # seeded, still no burst
         self.assertIn(self.touches[0]["key"], fts.load_state())
         self.assertEqual(len(self.status), 2)
+
+    def test_a_new_rule_version_reseeds(self):
+        fts.run_once()
+        state = fts.load_state()
+        self.assertIn(f"fib:crypto:{fts.SEED_VERSION}", state[fts.SEEDED_KEY])
+
+
+class DailyReportTests(unittest.TestCase):
+    def setUp(self):
+        import fib_trendline_daily_report as report
+
+        self.report = report
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        tmp = pathlib.Path(self.tmp.name)
+        for p in (mock.patch.object(report, "RECORDS_FILE", tmp / "records.jsonl"),
+                  mock.patch.object(report, "RESULTS_FILE", tmp / "results.json")):
+            p.start()
+            self.addCleanup(p.stop)
+        self.sent_ts = int(datetime(2026, 9, 29, 10, 0, tzinfo=ftd.IST).timestamp())
+        record = {"id": "a", "market": ftd.CRYPTO, "symbol": "BTCUSD", "tf": "30m", "kind": "fib",
+                  "sent_ts": self.sent_ts, "plan": {"side": "long", "entry": 100.0, "sl": 99.0}}
+        report.RECORDS_FILE.write_text(__import__("json").dumps(record) + "\n")
+        self.candles = [[self.sent_ts + 300, 0, 100.5, 99.9, 0], [self.sent_ts + 600, 0, 102.2, 100.1, 0]]
+
+    def test_scores_yesterdays_alerts_and_keeps_final_results(self):
+        with mock.patch.object(self.report, "eval_candles", lambda *a: self.candles) as _:
+            text = self.report.run(datetime(2026, 9, 29).date(), self.sent_ts + 86400)
+        self.assertIn("30m CRYPTO: 1 alert - 2R 1", text)
+        self.assertTrue(self.report.load_results()["a"]["resolved"])
+        with mock.patch.object(self.report, "eval_candles", side_effect=AssertionError("re-scored")):
+            self.report.run(datetime(2026, 9, 29).date(), self.sent_ts + 2 * 86400)
+
+    def test_posts_once_a_day_after_eight(self):
+        state = {}
+        calls = []
+        at = lambda h: datetime(2026, 9, 30, h, 0, tzinfo=ftd.IST).timestamp()
+        with mock.patch.object(self.report, "run", lambda day, now, send: calls.append(day)), \
+                mock.patch.dict(os.environ, {self.report.WEBHOOK_ENV: "https://example.invalid/bt"}):
+            self.report.maybe_send(state, at(7))
+            self.report.maybe_send(state, at(9))
+            self.report.maybe_send(state, at(12))
+        self.assertEqual(calls, [datetime(2026, 9, 29).date()])
 
 
 if __name__ == "__main__":

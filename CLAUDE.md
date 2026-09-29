@@ -99,24 +99,44 @@ just the ones that existed when the file was named.
 ## Fib + trendline alerts (added 2026-09-29)
 
 `fib_trendline_scanner.py` — Shiva asked for fib and trendline alerts in Discord channels of
-their own, on 30m / 4h / 1D / 1W / 1M. Separate from the zone alerts in every way: own
-state (`fib_trendline_state.json`, on the runtime-state branch), own workflow
-(`fib_trendline_scan.yml`, runs after each 30m scan finishes via `workflow_run`), and two
-webhooks — `DISCORD_FIB_WEBHOOK_URL` → `#fib-alerts`, `DISCORD_TRENDLINE_WEBHOOK_URL` →
-`#trendline-alerts` (both channels under CRYPTO in the VICTUS Alert System server).
+their own, on 4H / 1D / 1W / 1M, for crypto and NSE (30m is built but off - see below). Separate from the zone alerts in
+every way: own state (`fib_trendline_state.json`, alert records and results, all on the
+runtime-state branch), own workflow (`fib_trendline_scan.yml`, runs after each 30m crypto scan
+finishes via `workflow_run`), and two webhooks — `DISCORD_FIB_WEBHOOK_URL` → `#fib-alerts`,
+`DISCORD_TRENDLINE_WEBHOOK_URL` → `#trendline-alerts` (under CRYPTO in the VICTUS Alert System
+server). NSE posts to the same two channels (Shiva's choice); every alert says
+`Timeframe: 4H | NSE` / `| Crypto`.
 
-- **Fib** = `fib_engine.py`, a verbatim copy of `../indicator improvent by claude/fib_reference.py`
-  (the indicator's v12.3 fib spec). Change the reference first, then re-copy it below the
-  marker; `tests/test_fib_trendline_scanner.py` fails locally when the two differ. Alerts once
-  per zone per fib when price is inside Zone 1 or Zone 2 (Zone 2 = the deeper box).
-- **Trendlines** = `trendlines.py`, a port of the indicator's Pine §6b (v11.0). Alerts on a
-  touch (within `TRENDLINE_TOUCH_PCT` for that timeframe) and on a close through a line.
-- Delta India only. `1w` is Delta's weekly candle; `1M` does not exist on Delta and is built
-  from daily candles by calendar month. Delta's history starts Dec 2023, so the monthly chart
-  has ~33 bars and needs 21 before a 10-bar swing can confirm - young coins get no 1M fib yet.
-- Each channel seeds silently on its first pass with a webhook configured, so adding a
-  webhook never dumps a backlog. Deleting the state file re-seeds rather than bursting.
-- `python fib_trendline_scanner.py --dry-run` prints what would alert, sends and saves nothing.
+| File | Role |
+|---|---|
+| `fib_engine.py` | verbatim copy of `../indicator improvent by claude/fib_reference.py` (v12.3 fib spec). Re-copy below the marker when the reference changes; the test fails locally if they differ |
+| `trendlines.py` | port of the indicator's Pine §6b (v11.0); `history=True` keeps trimmed lines for replay |
+| `fib_trendline_data.py` | candles: Delta (paged, 4000/request) for crypto, Yahoo for NSE (4H built from 1h at 09:15) |
+| `fib_trendline_trades.py` | the trade rules - one `simulate` for both the history backtest and the daily report |
+| `fib_trendline_backtest.py` | history replay → `reports/FIB_TRENDLINE_BACKTEST.md` |
+| `fib_trendline_daily_report.py` | scores live alerts once a day after 08:00 IST → daily-backtest channel |
+
+- **Band (Shiva, 2026-09-29): alert from 1.5% away down to 0.00%** (`FIB_TL_MAX_DISTANCE_PCT`),
+  same for every timeframe. Fib distance is to the zone's near edge; trendline distance to the
+  line, and price through the line before a close shows as 0.00%. Changing what counts as an
+  alert means bumping `SEED_VERSION`, or the first pass posts everything the new rule catches.
+- **30m is off (Shiva, 2026-09-29).** At the 1.5% band the history backtest counted ~530 30m
+  alerts a day (crypto + NSE), 90% of the total; 4H-1M is ~75/day. `FIB_TL_TIMEFRAMES` turns it back on.
+- **Backtest verdict (2026-09-29): no edge.** Read win rates against the report's random-level
+  baseline (37-46% at 1R under these rules), not 50%. Fibs and trendlines land at or below it on
+  nearly every timeframe; crypto 1W fib is the only one above, on 115 trades.
+- **Trade rules (Shiva's choice):** fib entry at the zone's near edge / SL on the inner fib's 0.55
+  line - his EX 2 ETH trades (2723.94 / 2711.79). The first version used the inner 0.66 as entry,
+  which misread EX 2 and made stops ~4x too tight; trendline entry
+  at the line, SL `TRENDLINE_SL_PCT` beyond it; 1R and 2R targets; wait 5 / hold 20 candles of
+  the alert's timeframe. A candle touching SL and target counts as SL.
+- Crypto: Delta only. `1w` is Delta's weekly candle; `1M` is built from daily candles by
+  calendar month. History starts Dec 2023, so young coins get no 1M fib yet.
+- NSE: the zone scanner's 200 stocks (`nse_scanner.load_watchlist`), scanned only in the session
+  and at most every 8 minutes - that pass takes ~3 minutes (Yahoo, 5 intervals).
+- Each channel seeds silently per market on its first pass with a webhook, so adding a webhook
+  never dumps a backlog. Deleting the state file re-seeds rather than bursting.
+- `python fib_trendline_scanner.py --dry-run [--force-nse]` prints what would alert, sends nothing.
 
 ## Gotchas
 

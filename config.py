@@ -531,14 +531,31 @@ DISCORD_TRENDLINE_WEBHOOK_URL = ""
 # Higher timeframes only. "1w" is Delta's own weekly candle (Monday 00:00
 # UTC, like TradingView); "1M" has no Delta candle and is built from daily
 # ones by calendar month.
+#
+# 30m is supported but off (Shiva, 2026-09-29): at the 1.5% band the history
+# backtest counted ~530 30m alerts a day across crypto and NSE - 90% of all of
+# them - against ~75 a day for 4H to 1M. It can come back with a tighter band;
+# reports/FIB_TRENDLINE_BACKTEST.md still scores it.
 FIB_TL_TIMEFRAMES = [
-    tf.strip() for tf in os.getenv("VICTUS_FIB_TL_TIMEFRAMES", "30m,4h,1d,1w,1M").split(",") if tf.strip()
+    tf.strip() for tf in os.getenv("VICTUS_FIB_TL_TIMEFRAMES", "4h,1d,1w,1M").split(",") if tf.strip()
 ]
 # The indicator's own lengths: fib_len 10, tl_len 10, tl_keep 6.
 FIB_SWING_LENGTH = 10
 TRENDLINE_SWING_LENGTH = 10
 TRENDLINES_KEEP = 6
-# How close price must come to a live trendline to count as a touch, in % of
-# price. Wider on higher timeframes, where a candle's own range is wider. A
-# fib alert needs no distance - it fires once price is inside a zone box.
-TRENDLINE_TOUCH_PCT = {"30m": 0.20, "4h": 0.35, "1d": 0.60, "1w": 1.00, "1M": 1.50}
+# Shiva, 2026-09-29: alert from 1.5% away down to touching, the same band on
+# every timeframe and for both. Fib distance is to the near edge of a zone (0
+# once price is inside it); trendline distance is to the line (0 once price is
+# on or through it before a candle has closed through).
+FIB_TL_MIN_DISTANCE_PCT = env_float("VICTUS_FIB_TL_MIN_DISTANCE_PCT", 0.0)
+FIB_TL_MAX_DISTANCE_PCT = env_float("VICTUS_FIB_TL_MAX_DISTANCE_PCT", 1.5)
+# Trade rules the alerts print and the backtests score (Shiva's choice,
+# 2026-09-29). Fib: entry at the zone's near edge, SL on the inner fib's 0.55
+# line (his EX 2 ETH trades). Trendline: entry at the line, SL this % on the far side of it.
+TRENDLINE_SL_PCT = {"30m": 0.5, "4h": 1.0, "1d": 1.5, "1w": 2.5, "1M": 3.0}
+# An alert that has not filled within ENTRY_WAIT_BARS candles of its own
+# timeframe is "no fill"; a filled trade still open after MAX_HOLD_BARS is
+# "timeout". Counted in trading candles, not clock time - an NSE 30m trade's
+# clock stops overnight - so 1M waits five months.
+FIB_TL_ENTRY_WAIT_BARS = 5
+FIB_TL_MAX_HOLD_BARS = 20

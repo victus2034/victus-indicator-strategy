@@ -1,150 +1,132 @@
-"""Fib and trendline alerts on 30m / 4h / 1d / 1w / 1M - two Discord channels of their own.
+"""Fib and trendline alerts on 4H / 1D / 1W / 1M (30m off), crypto and NSE - two Discord channels of their own.
 
 Apart from the zone alerts on purpose: nothing here reads or writes the zone
-scanner's state, records or webhooks, and nothing there reads this. It only
-borrows scanner.py's watchlist, symbol names, price formatting, alert window
-and Discord sender.
+scanners' state, records or webhooks, and nothing there reads this. It only
+borrows their watchlists, symbol names, price formatting, alert window and
+Discord sender.
 
-- Fib alerts (DISCORD_FIB_WEBHOOK_URL): price is inside Zone 1 or Zone 2 of the
-  live fib, as indicator v12.3 draws it (fib_engine.py). Once per zone per fib -
-  a new top or base is a new fib and can alert again.
-- Trendline alerts (DISCORD_TRENDLINE_WEBHOOK_URL): price comes within
-  TRENDLINE_TOUCH_PCT of a live trendline (indicator v11.0, trendlines.py), or a
-  candle closes through one. A touch re-arms once price has left the band and a
-  full candle has passed.
+- Fib alerts (DISCORD_FIB_WEBHOOK_URL): price is within FIB_TL_MAX_DISTANCE_PCT
+  (1.5%) of Zone 1 or Zone 2 of the live fib, down to inside it, as indicator
+  v12.3 draws it (fib_engine.py). Once per zone per fib - a new top or base is a
+  new fib and can alert again.
+- Trendline alerts (DISCORD_TRENDLINE_WEBHOOK_URL): price is within the same
+  1.5% of a live trendline (indicator v11.0, trendlines.py), or a candle closes
+  through one. A touch re-arms once price has left the band and a full candle
+  has passed.
 
-Both are built from CLOSED candles, like the chart's confirmed swings; the
-candle still forming only supplies the current price.
+Crypto (Delta) scans on every pass, inside the 08:00-01:00 IST alert window.
+NSE (Yahoo, the zone scanner's 200 stocks) scans during the session only,
+every NSE_MIN_INTERVAL_SECONDS. Both post to the same two channels, the market
+named on each alert.
 
-    python fib_trendline_scanner.py            # one pass
-    python fib_trendline_scanner.py --dry-run  # print alerts, send and save nothing
+Levels come from CLOSED candles, like the chart's confirmed swings; the candle
+still forming only supplies the current price. Every fib and trendline-touch
+alert that is sent is also written to RECORDS_FILE with its entry and SL, which
+fib_trendline_daily_report.py scores once a day.
+
+    python fib_trendline_scanner.py                        # one pass
+    python fib_trendline_scanner.py --dry-run              # print alerts, send and save nothing
+    python fib_trendline_scanner.py --dry-run --force-nse  # include NSE outside the session
 """
 import argparse
 import json
 import os
 import time
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 
 import requests
 
 import fib_engine
+import fib_trendline_trades as trades
 import scanner
 from config import (
-    DELTA_API_BASE_URL,
     DISCORD_FIB_WEBHOOK_URL,
     DISCORD_TRENDLINE_WEBHOOK_URL,
     FIB_SWING_LENGTH,
+    FIB_TL_MAX_DISTANCE_PCT,
+    FIB_TL_MIN_DISTANCE_PCT,
     FIB_TL_TIMEFRAMES,
     SCAN_WORKERS,
     TRENDLINE_SWING_LENGTH,
-    TRENDLINE_TOUCH_PCT,
     TRENDLINES_KEEP,
+)
+from fib_trendline_data import (
+    CRYPTO, IST, NSE, TF_LABEL, TF_SECONDS, candle_is_closed, crypto_charts, nse_charts,
 )
 from trendlines import SUPPORT, build_trendlines
 
 STATE_FILE = Path(__file__).with_name(os.getenv("VICTUS_FIB_TL_STATE_FILE", "fib_trendline_state.json"))
+RECORDS_FILE = Path(__file__).with_name(os.getenv("VICTUS_FIB_TL_RECORDS_FILE", "fib_trendline_alert_records.jsonl"))
 SEEDED_KEY = "__seeded__"
+# Bumped when what counts as an alert changes, so the first pass under the new
+# rule seeds silently instead of posting everything the new rule now catches.
+# v2 (2026-09-29): 0-1.5% band instead of inside-zone / per-timeframe touch.
+SEED_VERSION = "v2"
+NSE_LAST_SCAN_KEY = "__nse_last_scan__"
+NSE_MIN_INTERVAL_SECONDS = 8 * 60
 STATE_RETENTION_SECONDS = 120 * 24 * 3600
-
-TF_SECONDS = {"30m": 1800, "4h": 14400, "1d": 86400, "1w": 7 * 86400, "1M": 31 * 86400}
-TF_LABEL = {"30m": "30m", "4h": "4h", "1d": "1D", "1w": "1W", "1M": "1M"}
-INTRADAY_BARS = 1500
-DAILY_HISTORY_DAYS = 2000        # everything Delta India has (it starts Dec 2023)
 MIN_BARS = 2 * max(FIB_SWING_LENGTH, TRENDLINE_SWING_LENGTH) + 2
+MARKET_LABEL = {CRYPTO: "Crypto", NSE: "NSE"}
 
 FIB_ENV, TL_ENV = "DISCORD_FIB_WEBHOOK_URL", "DISCORD_TRENDLINE_WEBHOOK_URL"
 
 
-# ----------------------------------------------------------------- candles
+# ----------------------------------------------------------------- geometry (shared with the backtest)
 
-def _delta_candles(contract, resolution, start, end):
-    last_error = None
-    for attempt in range(3):
-        try:
-            response = requests.get(
-                f"{DELTA_API_BASE_URL}/v2/history/candles",
-                params={"symbol": contract, "resolution": resolution, "start": start, "end": end},
-                timeout=20,
-            )
-            response.raise_for_status()
-            payload = response.json()
-            if not payload.get("success"):
-                raise RuntimeError(payload)
-            rows = sorted(payload.get("result") or [], key=lambda c: c["time"])
-            return [
-                [int(c["time"]), float(c["open"]), float(c["high"]), float(c["low"]), float(c["close"])]
-                for c in rows
-            ]
-        except Exception as error:     # noqa: BLE001 - retried, then re-raised
-            last_error = error
-            time.sleep(1.5 * (attempt + 1))
-    raise last_error
+def fib_zones(d, base, top):
+    """[{zone, low, high, entry, sl}] for the live fib.
+
+    Zone 2 is always the deeper one: the lower box on an up move, the upper
+    box on a down move. Entry is the zone's near edge - the one price reaches
+    first - and SL the inner fib's 0.55 line, as in Shiva's EX 2/278 ETH trades:
+    entry 2723.94 / SL 2711.79 (zone 1), 2672.86 / 2660.74 (zone 2).
+    """
+    u66, u55, d55, d66 = fib_engine.levels(base, top)
+    (_, upper_sl), (_, lower_sl) = fib_engine.sl_lines(base, top, d)
+    upper = dict(low=u55, high=u66, sl=upper_sl)
+    lower = dict(low=d66, high=d55, sl=lower_sl)
+    for zone in (upper, lower):
+        zone["entry"] = zone["high"] if d == 1 else zone["low"]
+    zone1, zone2 = (upper, lower) if d == 1 else (lower, upper)
+    return [dict(zone=1, **zone1), dict(zone=2, **zone2)]
 
 
-def monthly_from_daily(daily):
-    """Calendar-month candles (UTC) from daily ones: [open_ts, o, h, l, c]."""
-    months = []
-    for ts, o, h, l, c in daily:
-        day = datetime.fromtimestamp(ts, timezone.utc)
-        key = (day.year, day.month)
-        if months and months[-1][0] == key:
-            m = months[-1][1]
-            m[2], m[3], m[4] = max(m[2], h), min(m[3], l), c
-        else:
-            start = int(datetime(day.year, day.month, 1, tzinfo=timezone.utc).timestamp())
-            months.append((key, [start, o, h, l, c]))
-    return [m for _, m in months]
+def fib_distance(d, zone, price):
+    """% from price down to (long) / up to (short) the zone; 0 inside; None once past it."""
+    if d == 1:
+        if price > zone["high"]:
+            return (price - zone["high"]) / zone["high"] * 100
+        return 0.0 if price >= zone["low"] else None
+    if price < zone["low"]:
+        return (zone["low"] - price) / zone["low"] * 100
+    return 0.0 if price <= zone["high"] else None
 
 
-def candle_is_closed(open_ts, tf, now):
-    if tf == "1M":
-        start = datetime.fromtimestamp(open_ts, timezone.utc)
-        year, month = (start.year + 1, 1) if start.month == 12 else (start.year, start.month + 1)
-        return datetime(year, month, 1, tzinfo=timezone.utc).timestamp() <= now
-    return open_ts + TF_SECONDS[tf] <= now
+def line_distance(kind, level, price):
+    """% from price to the line on the side it approaches from; negative = through it."""
+    if kind == SUPPORT:
+        return (price - level) / level * 100
+    return (level - price) / level * 100
 
 
-def fetch_all_timeframes(contract, timeframes, now):
-    out = {}
-    daily = None
-    for tf in timeframes:
-        if tf in ("1d", "1M"):
-            if daily is None:
-                daily = _delta_candles(contract, "1d", int(now) - DAILY_HISTORY_DAYS * 86400, int(now))
-            out[tf] = daily if tf == "1d" else monthly_from_daily(daily)
-        elif tf == "1w":
-            out[tf] = _delta_candles(contract, "1w", int(now) - DAILY_HISTORY_DAYS * 86400, int(now))
-        else:
-            out[tf] = _delta_candles(contract, tf, int(now) - INTRADAY_BARS * TF_SECONDS[tf], int(now))
-    return out
+def in_band(distance):
+    if distance is None or distance < -FIB_TL_MAX_DISTANCE_PCT:
+        return False
+    return FIB_TL_MIN_DISTANCE_PCT <= max(distance, 0.0) <= FIB_TL_MAX_DISTANCE_PCT
 
 
 # ----------------------------------------------------------------- analysis
 
-def fib_zones(d, base, top):
-    """[(zone number, low, high, entry, sl)] for the live fib.
-
-    Zone 2 is always the deeper one: the lower box on an up move, the upper
-    box on a down move. Entry and SL are the inner fib of each box (EX 2/278):
-    its 0.66 and 0.55 lines, SL on the 0.55.
-    """
-    u66, u55, d55, d66 = fib_engine.levels(base, top)
-    (upper_entry, upper_sl), (lower_entry, lower_sl) = fib_engine.sl_lines(base, top, d)
-    upper = (u55, u66, upper_entry, upper_sl)
-    lower = (d66, d55, lower_entry, lower_sl)
-    zone1, zone2 = (upper, lower) if d == 1 else (lower, upper)
-    return [(1, *zone1), (2, *zone2)]
-
-
-def analyse(symbol, tf, candles, now):
+def analyse(market, symbol, tf, candles, now):
     """Everything alertable on one chart right now. Pure - no state, no sends."""
+    result = {"fib": [], "touch": [], "break": [], "bars": 0, "price": None}
     if len(candles) < 2:
-        return {"fib": [], "touch": [], "break": [], "bars": len(candles)}
-    closed = candles[:-1] if not candle_is_closed(candles[-1][0], tf, now) else candles
+        return result
+    closed = candles if candle_is_closed(market, candles[-1][0], tf, now) else candles[:-1]
     price = candles[-1][4]
-    result = {"fib": [], "touch": [], "break": [], "bars": len(closed), "price": price}
+    result.update(bars=len(closed), price=price)
     if len(closed) < MIN_BARS:
         return result
 
@@ -152,38 +134,37 @@ def analyse(symbol, tf, candles, now):
     highs = [c[2] for c in closed]
     lows = [c[3] for c in closed]
     closes = [c[4] for c in closed]
-    stamp = [datetime.fromtimestamp(t, scanner.IST).strftime("%Y-%m-%d %H:%M") for t in times]
+    stamp = [datetime.fromtimestamp(t, IST).strftime("%Y-%m-%d %H:%M") for t in times]
 
     snaps, _ = fib_engine.run(stamp, highs, lows, N=FIB_SWING_LENGTH)
     live = snaps[-1]
     d, base, top = live["d"], live["O"], live["E"]
     inside_box = base < price < top if d == 1 else top < price < base
     if inside_box and base != top:
-        for number, low, high, entry, sl in fib_zones(d, base, top):
-            if low <= price <= high:
+        for zone in fib_zones(d, base, top):
+            distance = fib_distance(d, zone, price)
+            if in_band(distance):
                 result["fib"].append({
-                    "key": f"fib|{symbol}|{tf}|{d}|{times[live['Ot']] if live['Ot'] is not None else base}|{top}|{number}",
-                    "d": d, "zone": number, "low": low, "high": high, "entry": entry, "sl": sl,
-                    "base": base, "top": top,
-                    "base_time": stamp[live["Ot"]] if live["Ot"] is not None else None,
-                    "top_time": stamp[live["Et"]],
+                    **zone, "key": f"fib|{symbol}|{tf}|{d}|{times[live['Ot']]}|{top}|{zone['zone']}",
+                    "d": d, "base": base, "top": top, "distance": distance,
+                    "plan": trades.fib_plan(d, zone),
                 })
 
     lines = build_trendlines(highs, lows, closes, TRENDLINE_SWING_LENGTH, TRENDLINES_KEEP)
     now_bar = len(closed)               # the forming candle
-    band = TRENDLINE_TOUCH_PCT.get(tf, 0.5)
     for line in lines:
         ident = f"{symbol}|{tf}|{line.kind}|{times[line.x1]}|{times[line.x2]}"
-        info = {
-            "kind": line.kind, "from": (line.y1, stamp[line.x1]), "to": (line.y2, stamp[line.x2]),
-        }
+        info = {"kind": line.kind, "from": (line.y1, stamp[line.x1]), "to": (line.y2, stamp[line.x2])}
         if line.alive:
             level = line.price_at(now_bar)
             if level <= 0:
                 continue
-            distance = (price - level) / level * 100
-            if abs(distance) <= band:
-                result["touch"].append({**info, "key": f"tl|{ident}", "level": level, "distance": distance})
+            distance = line_distance(line.kind, level, price)
+            if in_band(distance):
+                result["touch"].append({
+                    **info, "key": f"tl|{ident}", "level": level, "distance": distance,
+                    "plan": trades.trendline_plan(line.kind == SUPPORT, level, tf),
+                })
         elif line.broken_at >= len(closed) - 2:
             result["break"].append({
                 **info, "key": f"tlbreak|{ident}", "level": line.price_at(line.broken_at),
@@ -194,48 +175,66 @@ def analyse(symbol, tf, candles, now):
 
 # ----------------------------------------------------------------- messages
 
+def display(market, symbol):
+    if market == NSE:
+        return symbol[:-3] if symbol.upper().endswith(".NS") else symbol
+    return scanner.alert_symbol(symbol)
+
+
 def _fmt(value, places):
     return f"{value:.{places}f}"
 
 
-def format_fib_alert(symbol, tf, price, z):
+def _header(market, tf):
+    return f"Timeframe: {TF_LABEL[tf]} | {MARKET_LABEL[market]}"
+
+
+def format_fib_alert(market, symbol, tf, price, z):
     places = scanner.price_decimals(z["entry"])
     side = "LONG" if z["d"] == 1 else "SHORT"
     deeper = " (deeper zone)" if z["zone"] == 2 else ""
-    sl_pct = abs(z["entry"] - z["sl"]) / z["entry"] * 100
+    where = "inside the zone" if z["distance"] <= 0 else f"{z['distance']:.2f}% away"
     return (
-        f"{scanner.alert_symbol(symbol)} | FIB ZONE {z['zone']} | {TF_LABEL[tf]} | {side}\n"
-        f"Price: {_fmt(price, places)}\n"
+        f"{display(market, symbol)} | FIB ZONE {z['zone']} | {side}\n"
+        f"{_header(market, tf)}\n"
+        f"Price: {_fmt(price, places)} | {where}\n"
         f"Zone {z['zone']}: {_fmt(z['low'], places)} - {_fmt(z['high'], places)}{deeper}\n"
-        f"Entry: {_fmt(z['entry'], places)} | SL: {_fmt(z['sl'], places)} | {sl_pct:.2f}%\n"
+        f"Entry: {_fmt(z['entry'], places)} | SL: {_fmt(z['sl'], places)} | {trades.risk_pct(z['plan']):.2f}%\n"
         f"Fib: {_fmt(z['base'], places)} -> {_fmt(z['top'], places)}"
     )
 
 
-def format_touch_alert(symbol, tf, price, t):
+def format_touch_alert(market, symbol, tf, price, t):
     places = scanner.price_decimals(t["level"])
-    name = "SUPPORT" if t["kind"] == SUPPORT else "RESISTANCE"
-    side = "above" if t["distance"] >= 0 else "below"
+    support = t["kind"] == SUPPORT
+    name, side = ("SUPPORT", "BUY") if support else ("RESISTANCE", "SELL")
+    if t["distance"] > 0:
+        where = f"{t['distance']:.2f}% {'above' if support else 'below'} the line"
+    else:
+        where = "0.00% - at the line" if t["distance"] == 0 else "0.00% - through the line, candle not closed"
     return (
-        f"{scanner.alert_symbol(symbol)} | {name} TRENDLINE | {TF_LABEL[tf]}\n"
-        f"Price: {_fmt(price, places)} | {abs(t['distance']):.2f}% {side} the line\n"
-        f"Line now: {_fmt(t['level'], places)}\n"
+        f"{display(market, symbol)} | {name} TRENDLINE | {side}\n"
+        f"{_header(market, tf)}\n"
+        f"Price: {_fmt(price, places)} | {where}\n"
+        f"Entry (line): {_fmt(t['level'], places)} | SL: {_fmt(t['plan']['sl'], places)} | "
+        f"{trades.risk_pct(t['plan']):.2f}%\n"
         f"Drawn: {_fmt(t['from'][0], places)} ({t['from'][1]}) -> {_fmt(t['to'][0], places)} ({t['to'][1]})"
     )
 
 
-def format_break_alert(symbol, tf, b):
+def format_break_alert(market, symbol, tf, b):
     places = scanner.price_decimals(b["level"])
     name = "SUPPORT" if b["kind"] == SUPPORT else "RESISTANCE"
     side = "below" if b["kind"] == SUPPORT else "above"
     return (
-        f"{scanner.alert_symbol(symbol)} | {name} TRENDLINE BROKEN | {TF_LABEL[tf]}\n"
+        f"{display(market, symbol)} | {name} TRENDLINE BROKEN\n"
+        f"{_header(market, tf)}\n"
         f"Close {_fmt(b['close'], places)} {side} the line at {_fmt(b['level'], places)} ({b['time']} IST)\n"
         f"Drawn: {_fmt(b['from'][0], places)} ({b['from'][1]}) -> {_fmt(b['to'][0], places)} ({b['to'][1]})"
     )
 
 
-# ----------------------------------------------------------------- state + sending
+# ----------------------------------------------------------------- state, records, sending
 
 def load_state():
     try:
@@ -246,7 +245,8 @@ def load_state():
 
 
 def save_state(state, now):
-    for key in [k for k, v in state.items() if isinstance(v, dict) and now - v.get("seen", now) > STATE_RETENTION_SECONDS]:
+    for key in [k for k, v in state.items()
+                if isinstance(v, dict) and "sent" in v and now - v.get("seen", now) > STATE_RETENTION_SECONDS]:
         del state[key]
     tmp = STATE_FILE.with_suffix(".tmp")
     with tmp.open("w", encoding="utf-8") as file:
@@ -254,29 +254,32 @@ def save_state(state, now):
     os.replace(tmp, STATE_FILE)
 
 
-def plan_alerts(state, symbol, tf, analysis, now):
-    """(channel, key, message) for what is new since the last pass; updates touch bands."""
+def plan_alerts(state, market, symbol, tf, analysis, now):
+    """[(channel, key, message, record)] for what is new since the last pass; updates touch bands."""
     planned = []
     price = analysis.get("price")
+    base = {"market": market, "symbol": symbol, "tf": tf, "price": price}
     for z in analysis["fib"]:
         if z["key"] not in state:
-            planned.append(("fib", z["key"], format_fib_alert(symbol, tf, price, z)))
+            record = {**base, "kind": "fib", "plan": z["plan"], "zone": z["zone"]}
+            planned.append(("fib", z["key"], format_fib_alert(market, symbol, tf, price, z), record))
         else:
             state[z["key"]]["seen"] = now   # still true: keep it from being pruned
     for b in analysis["break"]:
         if b["key"] not in state:
-            planned.append(("trendline", b["key"], format_break_alert(symbol, tf, b)))
+            planned.append(("trendline", b["key"], format_break_alert(market, symbol, tf, b), None))
 
-    in_band = {t["key"] for t in analysis["touch"]}
+    in_band_now = {t["key"] for t in analysis["touch"]}
     prefix = f"tl|{symbol}|{tf}|"
     for key, entry in state.items():
-        if key.startswith(prefix) and key not in in_band and isinstance(entry, dict):
+        if key.startswith(prefix) and key not in in_band_now and isinstance(entry, dict):
             entry["in_band"] = False     # left the band: the next touch may alert
     for t in analysis["touch"]:
         entry = state.get(t["key"])
         if entry is None or (not entry.get("in_band") and now - entry.get("sent", 0) >= TF_SECONDS[tf]):
-            planned.append(("trendline", t["key"], format_touch_alert(symbol, tf, price, t)))
-        elif entry is not None:
+            record = {**base, "kind": "trendline", "plan": t["plan"], "line": t["kind"]}
+            planned.append(("trendline", t["key"], format_touch_alert(market, symbol, tf, price, t), record))
+        else:
             entry["in_band"] = True
             entry["seen"] = now
     return planned
@@ -284,6 +287,12 @@ def plan_alerts(state, symbol, tf, analysis, now):
 
 def mark_sent(state, key, now):
     state[key] = {"sent": now, "seen": now, "in_band": key.startswith("tl|")}
+
+
+def append_record(record, key, now):
+    row = {**record, "id": f"{key}@{int(now)}", "key": key, "sent_ts": int(now)}
+    with RECORDS_FILE.open("a", encoding="utf-8") as file:
+        file.write(json.dumps(row) + "\n")
 
 
 def send(channel, message):
@@ -295,94 +304,152 @@ def send(channel, message):
         return False
 
 
+# ----------------------------------------------------------------- markets
+
+def scan_crypto(timeframes, now):
+    def one(symbol):
+        contract = scanner.delta_contract(symbol)
+        if contract is None:
+            return symbol, None, "not a Delta contract"
+        try:
+            charts = crypto_charts(contract, timeframes, now)
+            return symbol, {tf: analyse(CRYPTO, symbol, tf, charts[tf], now) for tf in timeframes}, None
+        except Exception as error:     # noqa: BLE001 - one bad symbol must not stop the pass
+            return symbol, None, str(error)
+
+    with ThreadPoolExecutor(max_workers=SCAN_WORKERS) as pool:
+        return list(pool.map(one, scanner.active_watchlist()))
+
+
+def nse_session_open(now):
+    import nse_scanner
+    import pandas as pd
+
+    is_open, *_ = nse_scanner.market_window_status(pd.Timestamp.fromtimestamp(now, tz=IST))
+    return is_open
+
+
+def scan_nse(timeframes, now):
+    import nse_scanner
+
+    symbols = nse_scanner.load_watchlist()
+    charts = nse_charts(symbols, timeframes)
+    today = datetime.fromtimestamp(now, IST).date()
+    intraday = next((tf for tf in ("30m", "4h") if tf in timeframes), None)
+    fresh = sum(1 for s in symbols if intraday and charts[s].get(intraday)
+                and datetime.fromtimestamp(charts[s][intraday][-1][0], IST).date() == today)
+    if intraday and fresh < len(symbols) / 2:
+        print(f"NSE: only {fresh}/{len(symbols)} symbols have today's candles - holiday or stale feed, skipping")
+        return []
+    results = []
+    for symbol in symbols:
+        try:
+            results.append((symbol, {tf: analyse(NSE, symbol, tf, charts[symbol][tf], now) for tf in timeframes}, None))
+        except Exception as error:     # noqa: BLE001
+            results.append((symbol, None, str(error)))
+    return results
+
+
 # ----------------------------------------------------------------- main
 
-def scan_symbol(symbol, timeframes, now):
-    contract = scanner.delta_contract(symbol)
-    if contract is None:
-        return symbol, None, "not a Delta contract"
-    try:
-        charts = fetch_all_timeframes(contract, timeframes, now)
-        return symbol, {tf: analyse(symbol, tf, charts[tf], now) for tf in timeframes}, None
-    except Exception as error:         # noqa: BLE001 - one bad symbol must not stop the pass
-        return symbol, None, str(error)
-
-
-def run_once(dry_run=False):
+def run_once(dry_run=False, force_nse=False):
     now = time.time()
-    timeframes = [tf for tf in FIB_TL_TIMEFRAMES if tf in TF_SECONDS]
-    symbols = scanner.active_watchlist()
-    with ThreadPoolExecutor(max_workers=SCAN_WORKERS) as pool:
-        results = list(pool.map(lambda s: scan_symbol(s, timeframes, now), symbols))
-
+    timeframes = [tf for tf in FIB_TL_TIMEFRAMES if tf in TF_LABEL]
     state = load_state()
-    # Per channel: {"fib": ts, "trendline": ts}, set by the first pass that
-    # channel's webhook was configured for.
-    seeded = state.setdefault(SEEDED_KEY, {})
+
+    markets = {CRYPTO: scan_crypto(timeframes, now)}
+    nse_due = now - state.get(NSE_LAST_SCAN_KEY, 0) >= NSE_MIN_INTERVAL_SECONDS
+    if force_nse or (nse_due and nse_session_open(now)):
+        markets[NSE] = scan_nse(timeframes, now)
+        if not dry_run:
+            state[NSE_LAST_SCAN_KEY] = now
+
+    seeded = state.get(SEEDED_KEY)
+    if not isinstance(seeded, dict):
+        seeded = {}
+    state[SEEDED_KEY] = seeded
     configured = {
         "fib": bool(scanner.get_env_or_config(FIB_ENV, DISCORD_FIB_WEBHOOK_URL)),
         "trendline": bool(scanner.get_env_or_config(TL_ENV, DISCORD_TRENDLINE_WEBHOOK_URL)),
     }
-    seeding = {c for c, ok in configured.items() if ok and c not in seeded}
-    awake = scanner.in_alert_window()
-    counts = {"fib": 0, "trendline": 0}
+    awake = {CRYPTO: scanner.in_alert_window(), NSE: True}   # NSE only scans in session
+    seeding = {
+        (channel, market)
+        for market, results in markets.items() if results
+        for channel, ok in configured.items()
+        if ok and f"{channel}:{market}:{SEED_VERSION}" not in seeded
+    }
+    counts = {}
     failures = []
-    for symbol, analyses, error in results:
-        if analyses is None:
-            failures.append(f"{symbol}: {error}")
-            continue
-        for tf, analysis in analyses.items():
-            for channel, key, message in plan_alerts(state, symbol, tf, analysis, now):
-                if dry_run:
+    for market, results in markets.items():
+        for symbol, analyses, error in results:
+            if analyses is None:
+                failures.append(f"{market} {symbol}: {error}")
+                continue
+            for tf, analysis in analyses.items():
+                for channel, key, message, record in plan_alerts(state, market, symbol, tf, analysis, now):
+                    if dry_run:
+                        print(f"[{channel}] {message}\n")
+                        continue
+                    if not configured[channel]:
+                        continue             # nothing recorded: no webhook, no channel yet
+                    tally = (channel, market)
+                    if tally in seeding:
+                        # First pass under this rule with this webhook: everything
+                        # already in range is old news. Record it silently instead
+                        # of posting dozens at once.
+                        mark_sent(state, key, now)
+                        counts[tally] = counts.get(tally, 0) + 1
+                        continue
+                    if not awake[market]:
+                        continue             # held - it alerts later if it is still true
                     print(f"[{channel}] {message}\n")
-                    continue
-                if not configured[channel]:
-                    continue             # nothing recorded: no webhook, no channel yet
-                if channel in seeding:
-                    # First pass with this channel's webhook: everything already
-                    # in a zone or at a line is old news. Record it silently
-                    # instead of posting dozens at once.
-                    mark_sent(state, key, now)
-                    counts[channel] += 1
-                    continue
-                if not awake:
-                    continue             # held - it alerts later if it is still true
-                print(f"[{channel}] {message}\n")
-                if send(channel, message):
-                    mark_sent(state, key, now)
-                    counts[channel] += 1
+                    if send(channel, message):
+                        mark_sent(state, key, now)
+                        if record:
+                            append_record(record, key, now)
+                        counts[tally] = counts.get(tally, 0) + 1
 
-    print(
-        f"Fib/trendline pass: {len(symbols) - len(failures)}/{len(symbols)} symbols, "
-        f"timeframes {', '.join(timeframes)}; fib {counts['fib']}, trendline {counts['trendline']}"
-        + (f" (seeded, not sent: {', '.join(sorted(seeding))})" if seeding else "")
-        + ("" if awake else " - outside alert window, holding")
-    )
+    for market, results in markets.items():
+        ok = sum(1 for _, a, _ in results if a is not None)
+        sent = ", ".join(f"{c} {counts.get((c, market), 0)}" for c in ("fib", "trendline"))
+        print(f"{MARKET_LABEL[market]}: {ok}/{len(results)} symbols, timeframes {', '.join(timeframes)}; {sent}"
+              + (f" (seeded, not sent: {', '.join(sorted(c for c, m in seeding if m == market))})"
+                 if any(m == market for _, m in seeding) else ""))
+    if not awake[CRYPTO]:
+        print("Crypto: outside the alert window, holding")
     for channel, ok in configured.items():
         if not ok:
             print(f"{FIB_ENV if channel == 'fib' else TL_ENV} is not configured - {channel} alerts off.")
-    for line in failures:
+    for line in failures[:20]:
         print(f"  failed {line}")
 
     if dry_run:
         return
-    for channel in sorted(seeding):
-        seeded[channel] = now
+    for channel, market in sorted(seeding):
+        seeded[f"{channel}:{market}:{SEED_VERSION}"] = now
         scanner.send_status_message(
-            f"{channel.capitalize()} alerts started. Seeded silently: {counts[channel]} "
-            f"{'fib zones' if channel == 'fib' else 'trendlines'} price was already at. "
+            f"{channel.capitalize()} alerts ({MARKET_LABEL[market]}, 0-{FIB_TL_MAX_DISTANCE_PCT:g}% band) started. "
+            f"Seeded silently: {counts.get((channel, market), 0)} "
+            f"{'fib zones' if channel == 'fib' else 'trendlines'} price was already within range. "
             "Only new ones will alert from here."
         )
-    if failures and len(failures) == len(symbols):
-        raise RuntimeError("every symbol failed: " + "; ".join(failures[:3]))
+    crypto_results = markets[CRYPTO]
+    if crypto_results and all(a is None for _, a, _ in crypto_results):
+        raise RuntimeError("every crypto symbol failed: " + "; ".join(failures[:3]))
+    save_state(state, now)
+
+    import fib_trendline_daily_report
+    fib_trendline_daily_report.maybe_send(state, now)
     save_state(state, now)
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--dry-run", action="store_true", help="print what would alert; send and save nothing")
+    parser.add_argument("--force-nse", action="store_true", help="scan NSE even outside the session")
     args = parser.parse_args(argv)
-    run_once(dry_run=args.dry_run)
+    run_once(dry_run=args.dry_run, force_nse=args.force_nse)
 
 
 if __name__ == "__main__":

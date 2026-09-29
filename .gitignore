@@ -20,6 +20,8 @@ weekly_backtest_reports_sent.json
 entry_confirm_state.json
 paper_trading_state.json
 fib_trendline_state.json
+fib_trendline_alert_records.jsonl
+fib_trendline_results.json
 backups/
 # Replay scratch output and generated reports - regenerated on demand,
 # and large enough to bury a real diff.
@@ -34,3 +36,7 @@ venv/
 .zone_bt_cache/
 zone_geometry_backtest_*.json
 crypto_shadow_alerts*.jsonl
+
+# fib_trendline_backtest.py: data cache and per-trade CSV (the .md summary is kept)
+.fib_tl_bt_cache/
+reports/fib_trendline_backtest_trades.csv
