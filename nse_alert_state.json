@@ -3114,7 +3114,7 @@
     "NH.NS|4h|long|1812|1826.5": 1790586724.398228,
     "GODREJIND.NS|4h|long|1078|1086.62": 1790571121.708901,
     "MPHASIS.NS|4h|long|2192.1|2209.64": 1790572348.9226975,
-    "ASTRAL.NS|4h|long|1358.9|1369.77": 1790572349.3569474,
+    "ASTRAL.NS|4h|long|1358.9|1369.77": 1790653939.3091373,
     "CONCOR.NS|4h|long|448.7|451.4": 1790573544.8584757,
     "AWL.NS|4h|long|180.6|181.15": 1790574760.6598723,
     "AADHARHFC.NS|4h|long|433.85|436.8": 1790574760.9080713,
@@ -3128,8 +3128,16 @@
     "BHARTIHEXA.NS|4h|long|1431.1|1435.7": 1790584351.8157084,
     "HINDPETRO.NS|4h|long|340.45|341.6": 1790585554.8649375,
     "ABSLAMC.NS|4h|long|974.3|982.094": 1790585555.157587,
-    "BRIGADE.NS|4h|long|576.35|580.961": 1790586724.604555,
-    "NBCC.NS|4h|long|79.72|80.13": 1790587970.1062522
+    "BRIGADE.NS|4h|long|576.35|580.961": 1790653940.5934973,
+    "NBCC.NS|4h|long|79.72|80.13": 1790587970.1062522,
+    "NAM-INDIA.NS|4h|long|1079.9|1088.54": 1790653938.4975667,
+    "ATHERENERG.NS|4h|long|1422.3|1424.3": 1790653938.8660262,
+    "MRF.NS|4h|long|122000|122976": 1790653939.0866547,
+    "IRCTC.NS|4h|long|446.75|450.324": 1790653939.5607626,
+    "CENTRALBK.NS|4h|long|29.92|30.1594": 1790653939.8599355,
+    "FORCEMOT.NS|4h|long|16900|16935": 1790653940.1072865,
+    "DEEPAKNTR.NS|4h|long|1535|1541.3": 1790653940.3584094,
+    "GMDCLTD.NS|4h|long|513.2|516.25": 1790653940.8470695
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -18182,7 +18190,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1790652723.2010832
+    "4h": 1790653898.3778343
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -89670,9 +89678,9 @@
     "last_attempt_at": 0.0
   },
   "NAM-INDIA.NS|demand|1079.9000|1088.5392": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790653938.4975667,
+    "last_attempt_at": 1790653938.4975667
   },
   "HINDPETRO.NS|supply|378.8000|381.6000": {
     "in_zone": false,
@@ -89825,9 +89833,9 @@
     "last_attempt_at": 0.0
   },
   "ATHERENERG.NS|demand|1422.3000|1424.3000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790653938.8660262,
+    "last_attempt_at": 1790653938.8660262
   },
   "OBEROIRLTY.NS|supply|1917.4604|1932.8000": {
     "in_zone": false,
@@ -89880,7 +89888,7 @@
     "last_attempt_at": 0.0
   },
   "KALYANKJIL.NS|demand|556.7000|561.1536": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790586724.1661785,
     "last_attempt_at": 1790586724.1661785
   },
@@ -89995,9 +90003,9 @@
     "last_attempt_at": 0.0
   },
   "MRF.NS|demand|122000.0000|122976.0000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790653939.0866547,
+    "last_attempt_at": 1790653939.0866547
   },
   "PIRAMALFIN.NS|supply|2325.8999|2326.3999": {
     "in_zone": false,
@@ -90580,7 +90588,7 @@
     "last_attempt_at": 0.0
   },
   "ABSLAMC.NS|demand|974.3000|982.0944": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790585555.157587,
     "last_attempt_at": 1790585555.157587
   },
@@ -90780,9 +90788,9 @@
     "last_attempt_at": 0.0
   },
   "CENTRALBK.NS|demand|29.9200|30.1594": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790653939.8599355,
+    "last_attempt_at": 1790653939.8599355
   },
   "RRKABEL.NS|supply|2956.0515|2979.7000": {
     "in_zone": false,
@@ -90935,9 +90943,9 @@
     "last_attempt_at": 0.0
   },
   "FORCEMOT.NS|demand|16900.0000|16935.0000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790653940.1072865,
+    "last_attempt_at": 1790653940.1072865
   },
   "GABRIEL.NS|supply|1597.8000|1599.5000": {
     "in_zone": false,
@@ -91020,9 +91028,9 @@
     "last_attempt_at": 0.0
   },
   "DEEPAKNTR.NS|demand|1535.0000|1541.3000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790653940.3584094,
+    "last_attempt_at": 1790653940.3584094
   },
   "CUB.NS|supply|246.6071|248.5800": {
     "in_zone": false,
@@ -91105,9 +91113,9 @@
     "last_attempt_at": 0.0
   },
   "BRIGADE.NS|demand|576.3500|580.9608": {
-    "in_zone": false,
-    "last_alert_at": 1790586724.604555,
-    "last_attempt_at": 1790586724.604555
+    "in_zone": true,
+    "last_alert_at": 1790653940.5934973,
+    "last_attempt_at": 1790653940.5934973
   },
   "CARBORUNIV.NS|demand|991.2500|999.1800": {
     "in_zone": false,
@@ -91255,9 +91263,9 @@
     "last_attempt_at": 0.0
   },
   "GMDCLTD.NS|demand|513.2000|516.2500": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790653940.8470695,
+    "last_attempt_at": 1790653940.8470695
   },
   "AARTIIND.NS|supply|547.3710|551.7500": {
     "in_zone": false,
@@ -91465,7 +91473,7 @@
     "last_attempt_at": 0.0
   },
   "IPCALAB.NS|demand|1905.8000|1921.0464": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790577166.5022523,
     "last_attempt_at": 1790577166.5022523
   },
@@ -91490,9 +91498,9 @@
     "last_attempt_at": 0.0
   },
   "ASTRAL.NS|demand|1358.9000|1369.7712": {
-    "in_zone": false,
-    "last_alert_at": 1790572349.3569474,
-    "last_attempt_at": 1790572349.3569474
+    "in_zone": true,
+    "last_alert_at": 1790653939.3091373,
+    "last_attempt_at": 1790653939.3091373
   },
   "NH.NS|demand|1812.0000|1826.4960": {
     "in_zone": false,
@@ -91505,9 +91513,9 @@
     "last_attempt_at": 1790571121.708901
   },
   "IRCTC.NS|demand|446.7500|450.3240": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790653939.5607626,
+    "last_attempt_at": 1790653939.5607626
   },
   "DELHIVERY.NS|demand|415.2000|416.4000": {
     "in_zone": true,
@@ -91695,6 +91703,61 @@
     "last_attempt_at": 0.0
   },
   "NHPC.NS|demand|71.6200|72.0200": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "HINDPETRO.NS|demand|316.3000|318.2000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "BAJAJHFL.NS|demand|72.7500|72.8000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "OBEROIRLTY.NS|demand|1695.8000|1705.0000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "BIOCON.NS|demand|370.8000|373.3000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "COROMANDEL.NS|demand|1722.7000|1736.4816": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "ABBOTINDIA.NS|supply|28546.6548|28550.0000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "LINDEINDIA.NS|demand|6025.0000|6073.0000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "HINDCOPPER.NS|demand|446.6500|449.1500": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "CONCOR.NS|demand|437.4500|439.6500": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "MANAPPURAM.NS|demand|282.7000|284.9616": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "CHOLAHLDNG.NS|supply|1655.6874|1656.0000": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
