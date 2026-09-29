@@ -520,3 +520,25 @@ TELEGRAM_BOT_TOKEN = ""
 TELEGRAM_CHAT_ID = ""
 DISCORD_WEBHOOK_URL = ""
 DISCORD_STATUS_WEBHOOK_URL = ""
+
+# ---- Fib + trendline alerts (fib_trendline_scanner.py), added 2026-09-29 ----
+# Their own two Discord channels, apart from the zone alerts: fib zone entries
+# go to one webhook, trendline touches and breaks to the other. Leave empty
+# here like the rest - the workflow reads them from repo secrets of the same
+# name.
+DISCORD_FIB_WEBHOOK_URL = ""
+DISCORD_TRENDLINE_WEBHOOK_URL = ""
+# Higher timeframes only. "1w" is Delta's own weekly candle (Monday 00:00
+# UTC, like TradingView); "1M" has no Delta candle and is built from daily
+# ones by calendar month.
+FIB_TL_TIMEFRAMES = [
+    tf.strip() for tf in os.getenv("VICTUS_FIB_TL_TIMEFRAMES", "30m,4h,1d,1w,1M").split(",") if tf.strip()
+]
+# The indicator's own lengths: fib_len 10, tl_len 10, tl_keep 6.
+FIB_SWING_LENGTH = 10
+TRENDLINE_SWING_LENGTH = 10
+TRENDLINES_KEEP = 6
+# How close price must come to a live trendline to count as a touch, in % of
+# price. Wider on higher timeframes, where a candle's own range is wider. A
+# fib alert needs no distance - it fires once price is inside a zone box.
+TRENDLINE_TOUCH_PCT = {"30m": 0.20, "4h": 0.35, "1d": 0.60, "1w": 1.00, "1M": 1.50}

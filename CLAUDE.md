@@ -96,6 +96,28 @@ so nothing else needs to change. Do not consider a scanner change verified
 against these examples until every entry in `EXAMPLES` has been checked, not
 just the ones that existed when the file was named.
 
+## Fib + trendline alerts (added 2026-09-29)
+
+`fib_trendline_scanner.py` — Shiva asked for fib and trendline alerts in Discord channels of
+their own, on 30m / 4h / 1D / 1W / 1M. Separate from the zone alerts in every way: own
+state (`fib_trendline_state.json`, on the runtime-state branch), own workflow
+(`fib_trendline_scan.yml`, runs after each 30m scan finishes via `workflow_run`), and two
+webhooks — `DISCORD_FIB_WEBHOOK_URL` → `#fib-alerts`, `DISCORD_TRENDLINE_WEBHOOK_URL` →
+`#trendline-alerts` (both channels under CRYPTO in the VICTUS Alert System server).
+
+- **Fib** = `fib_engine.py`, a verbatim copy of `../indicator improvent by claude/fib_reference.py`
+  (the indicator's v12.3 fib spec). Change the reference first, then re-copy it below the
+  marker; `tests/test_fib_trendline_scanner.py` fails locally when the two differ. Alerts once
+  per zone per fib when price is inside Zone 1 or Zone 2 (Zone 2 = the deeper box).
+- **Trendlines** = `trendlines.py`, a port of the indicator's Pine §6b (v11.0). Alerts on a
+  touch (within `TRENDLINE_TOUCH_PCT` for that timeframe) and on a close through a line.
+- Delta India only. `1w` is Delta's weekly candle; `1M` does not exist on Delta and is built
+  from daily candles by calendar month. Delta's history starts Dec 2023, so the monthly chart
+  has ~33 bars and needs 21 before a 10-bar swing can confirm - young coins get no 1M fib yet.
+- Each channel seeds silently on its first pass with a webhook configured, so adding a
+  webhook never dumps a backlog. Deleting the state file re-seeds rather than bursting.
+- `python fib_trendline_scanner.py --dry-run` prints what would alert, sends and saves nothing.
+
 ## Gotchas
 
 - **There is a cap on zone width and deliberately no floor.** `ZONE_MAX_WIDTH_PCT`
