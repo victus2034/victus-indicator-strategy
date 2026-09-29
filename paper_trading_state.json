@@ -55284,6 +55284,33 @@
       "target_half": 0.09476375000000001,
       "timeframe": "30m",
       "trade_id": "DOGEUSD|30m|short|0.09507|0.0956825"
+    },
+    {
+      "alert_time": "2026-09-29T12:26:41.506444+05:30",
+      "cost_r": 0.192,
+      "date": "2026-09-29",
+      "entry": 84000.0,
+      "entry_time": "2026-09-29T12:40:00+05:30",
+      "exit_price": 83899.2,
+      "exit_time": "2026-09-29T12:40:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.03840000000000665,
+      "outcome": "BE",
+      "rating": 6,
+      "realized_r": 0.23040000000000666,
+      "risk": 437.5,
+      "side": "short",
+      "stop": 84437.5,
+      "stream": "live",
+      "symbol": "BTCUSD",
+      "target_1": 83562.5,
+      "target_2": 83125.0,
+      "target_half": 83781.25,
+      "timeframe": "30m",
+      "trade_id": "BTCUSD|30m|short|84000|84437.5"
     }
   ],
   "handled": {
@@ -57551,24 +57578,6 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
-      "timeframe": "30m"
-    },
-    "BTCUSD|30m|short|84000|84437.5": {
-      "alert_time": "2026-09-29T12:26:41.506444+05:30",
-      "entry": 84000.0,
-      "entry_time": "2026-09-29T12:40:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 6,
-      "risk": 437.5,
-      "side": "short",
-      "stop": 84437.5,
-      "stream": "live",
-      "symbol": "BTCUSD",
-      "target_1": 83562.5,
-      "target_2": 83125.0,
-      "target_half": 83781.25,
       "timeframe": "30m"
     }
   }
