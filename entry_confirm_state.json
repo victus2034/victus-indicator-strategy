@@ -2,7 +2,7 @@
   "AVAXUSD|30m|short|11.486|11.571": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BTCUSD|30m|short|84000|84437.5": {
     "reached_entry": true,
@@ -22,6 +22,11 @@
   "SOLUSD|30m|short|120|120.964": {
     "reached_entry": true,
     "stage": 2,
+    "stopped_out": false
+  },
+  "TRUMP/USDT|30m|short|2.04|2.04625": {
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "TSLAXUSD|4h|long|356.65|354.587": {
@@ -251,6 +256,7 @@
   "_level_ready|TACUSD|4h|long|0.00148075|0.00146606": 1790566885.398299,
   "_level_ready|TRUMP/USDT|30m|long|2.021|2.011": 1789798567.609192,
   "_level_ready|TRUMP/USDT|30m|long|2.1289|2.10778": 1790054472.154363,
+  "_level_ready|TRUMP/USDT|30m|short|2.04|2.04625": 1790675476.635453,
   "_level_ready|TRUMP/USDT|30m|short|2.053|2.0655": 1789702558.922297,
   "_level_ready|TRUMP/USDT|30m|short|2.118|2.12425": 1790334977.01829,
   "_level_ready|TRUMP/USDT|30m|short|2.18452|2.20637": 1789989072.59254,
@@ -387,7 +393,7 @@
   "_ready|STORJ/USDT|30m": 1788930963.585849,
   "_ready|TACUSD|30m": 1790566580.565131,
   "_ready|TACUSD|4h": 1790566885.398299,
-  "_ready|TRUMP/USDT|30m": 1790334977.01829,
+  "_ready|TRUMP/USDT|30m": 1790675476.635453,
   "_ready|TRUMP/USDT|4h": 1790607384.010239,
   "_ready|TSLAXUSD|30m": 1790660168.134136,
   "_ready|TSLAXUSD|4h": 1790660168.134136,
@@ -489,10 +495,6 @@
   "_silent_ready|TRUMP/USDT|30m|long|1.938|1.928": {
     "price": 1.946,
     "time": "2026-09-28T20:51:26.729739+05:30"
-  },
-  "_silent_ready|TRUMP/USDT|30m|short|2.04|2.04625": {
-    "price": 2.03,
-    "time": "2026-09-29T15:16:29.185848+05:30"
   },
   "_silent_ready|VELVETUSD|30m|long|0.0546|0.05435": {
     "price": 0.0549,
