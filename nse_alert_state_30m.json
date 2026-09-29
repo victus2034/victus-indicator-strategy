@@ -5686,7 +5686,12 @@
     "FACT.NS|30m|long|753.5|753.75": 1790654516.5975723,
     "CENTRALBK.NS|30m|long|29.92|30.09": 1790654516.8155458,
     "CUB.NS|30m|long|211.34|212.2": 1790654517.0343046,
-    "CHALET.NS|30m|long|839.75|843": 1790654517.1964643
+    "CHALET.NS|30m|long|839.75|843": 1790654517.1964643,
+    "GLENMARK.NS|30m|long|2296.2|2305": 1790655732.815883,
+    "BIOCON.NS|30m|long|370.8|373.3": 1790655733.2140026,
+    "RBLBANK.NS|30m|long|401.1|402.1": 1790655733.4771094,
+    "GODREJPROP.NS|30m|long|1647.6|1652": 1790655733.7561345,
+    "PETRONET.NS|30m|long|283.4|283.85": 1790655733.9817061
   },
   "ANANDRATHI.NS|supply|2187.5000|2221.0000": {
     "in_zone": true,
@@ -32399,7 +32404,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "30m": 1790654487.8552458
+    "30m": 1790655694.3677878
   },
   "3MINDIA.NS|supply|35230.9249|35290.0000": {
     "in_zone": false,
@@ -229387,7 +229392,7 @@
     "last_attempt_at": 0.0
   },
   "MCX.NS|demand|3237.8999|3249.1001": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790654515.7913094,
     "last_attempt_at": 1790654515.7913094
   },
@@ -229587,9 +229592,9 @@
     "last_attempt_at": 0.0
   },
   "GLENMARK.NS|demand|2296.2000|2305.0000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790655732.815883,
+    "last_attempt_at": 1790655732.815883
   },
   "FORTIS.NS|supply|911.6500|918.4000": {
     "in_zone": false,
@@ -229687,9 +229692,9 @@
     "last_attempt_at": 0.0
   },
   "BIOCON.NS|demand|370.8000|373.3000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790655733.2140026,
+    "last_attempt_at": 1790655733.2140026
   },
   "RBLBANK.NS|supply|429.0000|429.5000": {
     "in_zone": false,
@@ -229697,9 +229702,9 @@
     "last_attempt_at": 0.0
   },
   "RBLBANK.NS|demand|401.1000|402.1000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790655733.4771094,
+    "last_attempt_at": 1790655733.4771094
   },
   "KALYANKJIL.NS|supply|591.5000|592.5000": {
     "in_zone": false,
@@ -229792,9 +229797,9 @@
     "last_attempt_at": 0.0
   },
   "GODREJPROP.NS|demand|1647.6000|1652.0000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790655733.7561345,
+    "last_attempt_at": 1790655733.7561345
   },
   "HDBFS.NS|supply|699.0576|704.6500": {
     "in_zone": false,
@@ -231762,7 +231767,7 @@
     "last_attempt_at": 0.0
   },
   "OIL.NS|demand|458.8000|461.9000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790654516.1900203,
     "last_attempt_at": 1790654516.1900203
   },
@@ -231817,9 +231822,9 @@
     "last_attempt_at": 0.0
   },
   "PETRONET.NS|demand|283.4000|283.8500": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790655733.9817061,
+    "last_attempt_at": 1790655733.9817061
   },
   "PAGEIND.NS|demand|37025.0000|37026.9594": {
     "in_zone": false,
@@ -232052,7 +232057,7 @@
     "last_attempt_at": 0.0
   },
   "RADICO.NS|demand|4376.7998|4402.3999": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790654516.41861,
     "last_attempt_at": 1790654516.41861
   },
@@ -232162,6 +232167,31 @@
     "last_attempt_at": 0.0
   },
   "AARTIIND.NS|demand|459.5500|460.1000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "ICICIPRULI.NS|supply|502.9706|503.0000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "PHOENIXLTD.NS|demand|1900.1000|1900.2342": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "FACT.NS|demand|740.0500|740.1500": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "PAGEIND.NS|supply|37843.0493|37845.0000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "CHALET.NS|demand|828.1500|830.0000": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
