@@ -55041,6 +55041,33 @@
       "target_half": 83297.875,
       "timeframe": "30m",
       "trade_id": "BTCUSD|30m|long|82991|82377.2"
+    },
+    {
+      "alert_time": "2026-09-29T10:56:43.521863+05:30",
+      "cost_r": 0.2683377777777778,
+      "date": "2026-09-29",
+      "entry": 150.94,
+      "entry_time": "2026-09-29T11:00:00+05:30",
+      "exit_price": 149.815,
+      "exit_time": "2026-09-29T11:05:00+05:30",
+      "final_result": "+2R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 1.7316622222222222,
+      "outcome": "+2R",
+      "rating": 5,
+      "realized_r": 2.0,
+      "risk": 0.5625,
+      "side": "short",
+      "stop": 151.5025,
+      "stream": "live",
+      "symbol": "AAVEUSD",
+      "target_1": 150.3775,
+      "target_2": 149.815,
+      "target_half": 150.65875,
+      "timeframe": "30m",
+      "trade_id": "AAVEUSD|30m|short|150.94|151.502"
     }
   ],
   "handled": {
@@ -56587,6 +56614,7 @@
     "TSLAXUSD|30m|short|373.45|376.512": "filled",
     "TSLAXUSD|30m|short|380.5|380.75": "stop_too_tight",
     "TSLAXUSD|30m|short|383.3|384.05": "stop_too_tight",
+    "TSLAXUSD|4h|long|356.65|354.587": "filled",
     "TSLAXUSD|4h|short|372.917|376.646": "filled",
     "TSLAXUSD|4h|short|385.65|387.075": "filled",
     "UB/USDT|30m|long|0.11776|0.116847": "filled",
@@ -57302,24 +57330,6 @@
       "target_half": 497.73875,
       "timeframe": "30m"
     },
-    "AAVEUSD|30m|short|150.94|151.502": {
-      "alert_time": "2026-09-29T10:56:43.521863+05:30",
-      "entry": 150.94,
-      "entry_time": "2026-09-29T11:00:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 5,
-      "risk": 0.5625,
-      "side": "short",
-      "stop": 151.5025,
-      "stream": "live",
-      "symbol": "AAVEUSD",
-      "target_1": 150.3775,
-      "target_2": 149.815,
-      "target_half": 150.65875,
-      "timeframe": "30m"
-    },
     "MRVL/USDT:USDT|30m|long|250.5|248.3": {
       "alert_time": "2026-09-29T08:01:57.155074+05:30",
       "entry": 250.5,
@@ -57337,6 +57347,24 @@
       "target_2": 254.89999999999998,
       "target_half": 251.6,
       "timeframe": "30m"
+    },
+    "TSLAXUSD|4h|long|356.65|354.587": {
+      "alert_time": "2026-09-29T11:02:14.990524+05:30",
+      "entry": 356.65,
+      "entry_time": "2026-09-29T11:05:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "rating": 5,
+      "risk": 2.0625,
+      "side": "long",
+      "stop": 354.5875,
+      "stream": "live",
+      "symbol": "TSLAXUSD",
+      "target_1": 358.7125,
+      "target_2": 360.775,
+      "target_half": 357.68125,
+      "timeframe": "4h"
     }
   }
 }
