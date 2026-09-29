@@ -3144,7 +3144,9 @@
     "KEI.NS|4h|long|4448.5|4484.09": 1790656409.7000067,
     "RVNL.NS|4h|long|195.25|196.66": 1790656410.0530546,
     "AWL.NS|4h|long|175.99|176.65": 1790656410.522796,
-    "AFFLE.NS|4h|long|1489.9|1501.82": 1790656410.7269185
+    "AFFLE.NS|4h|long|1489.9|1501.82": 1790656410.7269185,
+    "OIL.NS|4h|long|458.8|461.9": 1790657545.70166,
+    "MAHABANK.NS|4h|long|79.25|79.56": 1790657545.9136574
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -18197,7 +18199,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1790656364.9139924
+    "4h": 1790657507.5020537
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -89610,9 +89612,9 @@
     "last_attempt_at": 0.0
   },
   "OIL.NS|demand|458.8000|461.9000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790657545.70166,
+    "last_attempt_at": 1790657545.70166
   },
   "COFORGE.NS|supply|1988.9000|1994.2000": {
     "in_zone": false,
@@ -90795,7 +90797,7 @@
     "last_attempt_at": 0.0
   },
   "CENTRALBK.NS|demand|29.9200|30.1594": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790653939.8599355,
     "last_attempt_at": 1790653939.8599355
   },
@@ -91460,9 +91462,9 @@
     "last_attempt_at": 0.0
   },
   "MAHABANK.NS|demand|79.2500|79.5600": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790657545.9136574,
+    "last_attempt_at": 1790657545.9136574
   },
   "MOTILALOFS.NS|demand|965.0000|972.7200": {
     "in_zone": false,
@@ -91660,12 +91662,12 @@
     "last_attempt_at": 0.0
   },
   "KEI.NS|demand|4448.5000|4484.0880": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790656409.7000067,
     "last_attempt_at": 1790656409.7000067
   },
   "RVNL.NS|demand|195.2500|196.6600": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790656410.0530546,
     "last_attempt_at": 1790656410.0530546
   },
@@ -91825,6 +91827,11 @@
     "last_attempt_at": 0.0
   },
   "GMDCLTD.NS|demand|466.5000|468.3500": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "CUB.NS|demand|200.9800|201.0000": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
