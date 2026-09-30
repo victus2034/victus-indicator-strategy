@@ -3905,7 +3905,8 @@
     "shadow:TACUSD|30m|short|0.00157434|0.001578": 1790782410.2352364,
     "shadow:HYPEUSD|30m|short|88.9849|89.119": 1790785592.096068,
     "HYPEUSD|30m|short|88.714|89.119": 1790785681.5975971,
-    "HYPEUSD|30m|short|90.321|90.653": 1790787167.1414847
+    "HYPEUSD|30m|short|90.321|90.653": 1790787167.1414847,
+    "shadow:HYPEUSD|30m|short|90.5325|90.653": 1790787693.7957978
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15454,7 +15455,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790787475.1683435
+    "30m": 1790787771.9014544
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -146115,14 +146116,14 @@
     "last_attempt_at": 0.0
   },
   "HYPEUSD|supply|90.32100000|90.65300000": {
-    "in_zone": false,
+    "in_zone": true,
     "last_alert_at": 1790787167.1414847,
     "last_attempt_at": 1790787167.1414847
   },
   "shadow:HYPEUSD|supply|90.53249600|90.65300000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790787693.7957978,
+    "last_attempt_at": 1790787693.7957978
   },
   "ZECUSD|supply|1595.89000000|1600.78000000": {
     "in_zone": false,
@@ -147210,6 +147211,26 @@
     "last_attempt_at": 0.0
   },
   "shadow:TSLAXUSD|demand|346.10000000|346.19820104": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "BLESSUSD|demand|0.00856200|0.00856500": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "shadow:BLESSUSD|demand|0.00856200|0.00858146": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "shadow:TSLAXUSD|supply|355.60833840|355.80000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "shadow:TSLAXUSD|demand|346.10000000|346.19801895": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
