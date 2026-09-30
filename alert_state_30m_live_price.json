@@ -3819,7 +3819,7 @@
     "shadow:BTCUSD|30m|short|84271.2|84350": 1790675512.9261696,
     "ETHUSD|30m|short|2725.55|2742.3": 1790670149.8732486,
     "SOLUSD|30m|short|120|120.771": 1790675293.844054,
-    "NVDAXUSD|30m|short|231.95|233.25": 1790688718.5358465,
+    "NVDAXUSD|30m|short|231.95|233.25": 1790776923.783776,
     "shadow:TACUSD|30m|short|0.00151632|0.00152": 1790674406.9422941,
     "TRUMP/USDT|30m|short|2.04|2.045": 1790675294.1801221,
     "shadow:TRUMP/USDT|30m|short|2.04038|2.045": 1790675294.1801221,
@@ -15443,7 +15443,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790776675.1708646
+    "30m": 1790776905.8231885
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -146310,9 +146310,9 @@
     "last_attempt_at": 1790660294.0236237
   },
   "NVDAXUSD|supply|231.95000000|233.25000000": {
-    "in_zone": false,
-    "last_alert_at": 1790688718.5358465,
-    "last_attempt_at": 1790688718.5358465
+    "in_zone": true,
+    "last_alert_at": 1790776923.783776,
+    "last_attempt_at": 1790776923.783776
   },
   "shadow:NVDAXUSD|supply|233.12423961|233.25000000": {
     "in_zone": false,
@@ -147105,6 +147105,11 @@
     "last_attempt_at": 0.0
   },
   "shadow:BEAT/USDT|demand|0.08940000|0.08966289": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "shadow:TSLAXUSD|demand|346.10000000|346.22776790": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
