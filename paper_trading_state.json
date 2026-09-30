@@ -56337,6 +56337,33 @@
       "target_half": 0.0578125,
       "timeframe": "30m",
       "trade_id": "VELVETUSD|30m|short|0.058|0.058375"
+    },
+    {
+      "alert_time": "2026-10-01T00:06:47.280408+05:30",
+      "cost_r": 0.2386399999999966,
+      "date": "2026-10-01",
+      "entry": 1.4915,
+      "entry_time": "2026-10-01T00:10:00+05:30",
+      "exit_price": 1.4932898000000001,
+      "exit_time": "2026-10-01T00:15:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.04772800000000951,
+      "outcome": "BE",
+      "rating": 5,
+      "realized_r": 0.2863680000000061,
+      "risk": 0.006250000000000089,
+      "side": "long",
+      "stop": 1.48525,
+      "stream": "live",
+      "symbol": "XRPUSD",
+      "target_1": 1.4977500000000001,
+      "target_2": 1.5040000000000002,
+      "target_half": 1.494625,
+      "timeframe": "30m",
+      "trade_id": "XRPUSD|30m|long|1.4915|1.48525"
     }
   ],
   "handled": {
@@ -58646,24 +58673,6 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
-      "timeframe": "30m"
-    },
-    "XRPUSD|30m|long|1.4915|1.48525": {
-      "alert_time": "2026-10-01T00:06:47.280408+05:30",
-      "entry": 1.4915,
-      "entry_time": "2026-10-01T00:10:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 5,
-      "risk": 0.006250000000000089,
-      "side": "long",
-      "stop": 1.48525,
-      "stream": "live",
-      "symbol": "XRPUSD",
-      "target_1": 1.4977500000000001,
-      "target_2": 1.5040000000000002,
-      "target_half": 1.494625,
       "timeframe": "30m"
     }
   }
