@@ -1834,7 +1834,8 @@
     "AVAXUSD|4h|short|11.7024|11.796": 1790681799.3771534,
     "shadow:AVAXUSD|4h|short|11.7297|11.796": 1790681799.3771534,
     "shadow:TSLAXUSD|4h|long|351|351.879": 1790764420.6110988,
-    "BTCUSD|4h|short|84660|85224": 1790771805.9291728
+    "BTCUSD|4h|short|84660|85224": 1790771805.9291728,
+    "shadow:BTCUSD|4h|short|84987.9|85224": 1790772100.4053092
   },
   "ARBUSD|supply|0.08030000|0.08180000": {
     "in_zone": false,
@@ -5413,7 +5414,7 @@
     "last_alert_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1790771790.5755765
+    "4h": 1790772980.2636034
   },
   "HOOD/USDT:USDT|demand|83.83000000|84.37120000": {
     "in_zone": false,
@@ -28618,9 +28619,9 @@
     "last_attempt_at": 0.0
   },
   "shadow:BTCUSD|supply|84987.87323000|85224.00000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790772100.4053092,
+    "last_attempt_at": 1790772100.4053092
   },
   "SOLUSD|supply|124.15000000|124.99000000": {
     "in_zone": false,
@@ -28658,7 +28659,7 @@
     "last_attempt_at": 0.0
   },
   "BTCUSD|supply|84660.00000000|85224.00000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790771805.9291728,
     "last_attempt_at": 1790771805.9291728
   }
