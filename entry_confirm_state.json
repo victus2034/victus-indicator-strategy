@@ -1,9 +1,4 @@
 {
-  "BNBUSD|30m|short|780.03|785.367": {
-    "reached_entry": false,
-    "stage": 1,
-    "stopped_out": false
-  },
   "BTCUSD|4h|short|84660|85365": {
     "reached_entry": true,
     "stage": 3,
@@ -19,15 +14,15 @@
     "stage": 2,
     "stopped_out": false
   },
+  "SLVONUSD|30m|long|54.87|54.6575": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
   "SNDKBUSD|30m|short|1745.8|1763.26": {
     "reached_entry": true,
     "stage": 3,
     "stopped_out": false
-  },
-  "SOXLBUSD|30m|short|149.5|150.188": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
   },
   "TSLAXUSD|4h|long|353.5|350.375": {
     "reached_entry": true,
@@ -239,6 +234,7 @@
   "_level_ready|RIVERUSD|30m|short|1.294|1.29525": 1790148685.497371,
   "_level_ready|RIVERUSD|30m|short|1.30357|1.31661": 1790266875.674939,
   "_level_ready|SAMSUNG/USDT:USDT|30m|short|185.91|187.322": 1789532163.790065,
+  "_level_ready|SLVONUSD|30m|long|54.87|54.6575": 1790779284.865004,
   "_level_ready|SLVONUSD|30m|long|56.81|56.46": 1789586162.300461,
   "_level_ready|SLVONUSD|30m|long|58.15|58.1125": 1790427974.10198,
   "_level_ready|SLVONUSD|30m|long|58.75|58.5375": 1790163972.148115,
@@ -426,7 +422,7 @@
   "_ready|RE/USDT|4h": 1788948356.002419,
   "_ready|RIVERUSD|30m": 1790758559.229396,
   "_ready|SAMSUNG/USDT:USDT|30m": 1789532163.790065,
-  "_ready|SLVONUSD|30m": 1790771776.301532,
+  "_ready|SLVONUSD|30m": 1790779284.865004,
   "_ready|SLVONUSD|4h": 1789377364.322639,
   "_ready|SNDKBUSD|30m": 1790775382.653662,
   "_ready|SNDKBUSD|4h": 1790565116.939107,
@@ -547,10 +543,6 @@
   "_silent_ready|RIVERUSD|30m|short|1.243|1.2455": {
     "price": 1.231,
     "time": "2026-09-30T19:46:28.259879+05:30"
-  },
-  "_silent_ready|SLVONUSD|30m|long|54.87|54.6575": {
-    "price": 55.21,
-    "time": "2026-09-29T21:06:39.292519+05:30"
   },
   "_silent_ready|SOLUSD|30m|long|117.719|117.268": {
     "price": 118.469,
