@@ -3864,7 +3864,8 @@
     "shadow:HUSD|30m|short|0.0697502|0.06995": 1790756812.219433,
     "RIVERUSD|30m|short|1.146|1.155": 1790760195.0107648,
     "AKE/USDT|30m|short|0.034894|0.035029": 1790759015.1149848,
-    "TACUSD|30m|short|0.00156548|0.001578": 1790760194.801669
+    "TACUSD|30m|short|0.00156548|0.001578": 1790760194.801669,
+    "shadow:RIVERUSD|30m|short|1.1522|1.155": 1790760687.6020482
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15413,7 +15414,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790760475.3911839
+    "30m": 1790760675.233223
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -46610,7 +46611,7 @@
     "TACUSD|30m|short|0.00156548|0.001578": 1790759015.6113682,
     "SLVONUSD|30m|short|55.85|55.96": 1790759206.1676278,
     "NVDAXUSD|30m|long|227.25|227.257": 1790758926.608149,
-    "RIVERUSD|30m|short|1.146|1.155": 1790758042.901021,
+    "RIVERUSD|30m|short|1.146|1.155": 1790760687.6020482,
     "HUSD|30m|short|0.07092|0.07105": 1790759294.8420613
   },
   "shadow:BTCUSD|supply|80474.35070115|80522.70000000": {
@@ -146803,14 +146804,14 @@
     "last_attempt_at": 0.0
   },
   "RIVERUSD|supply|1.14600000|1.15500000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790760195.0107648,
     "last_attempt_at": 1790760195.0107648
   },
   "shadow:RIVERUSD|supply|1.15219512|1.15500000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790760687.6020482,
+    "last_attempt_at": 1790760687.6020482
   },
   "METAXUSD|demand|717.90000000|719.35000000": {
     "in_zone": false,
@@ -146938,6 +146939,16 @@
     "last_attempt_at": 0.0
   },
   "shadow:HUSD|demand|0.06717000|0.06735358": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "AVAXUSD|supply|11.47600000|11.55600000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "shadow:AVAXUSD|supply|11.51769924|11.55600000": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
