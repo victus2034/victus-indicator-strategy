@@ -55878,6 +55878,33 @@
       "target_half": 0.0015576488095238096,
       "timeframe": "30m",
       "trade_id": "TACUSD|30m|short|0.00156548|0.00158113"
+    },
+    {
+      "alert_time": "2026-09-30T17:13:15.693510+05:30",
+      "cost_r": 0.22007999999999286,
+      "date": "2026-09-30",
+      "entry": 770.28,
+      "entry_time": "2026-09-30T17:15:00+05:30",
+      "exit_price": 769.3556639999999,
+      "exit_time": "2026-09-30T17:15:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.0440160000000098,
+      "outcome": "BE",
+      "rating": 7,
+      "realized_r": 0.26409600000000266,
+      "risk": 3.5000000000001137,
+      "side": "short",
+      "stop": 773.7800000000001,
+      "stream": "live",
+      "symbol": "BNBUSD",
+      "target_1": 766.7799999999999,
+      "target_2": 763.2799999999997,
+      "target_half": 768.53,
+      "timeframe": "30m",
+      "trade_id": "BNBUSD|30m|short|770.28|773.78"
     }
   ],
   "handled": {
@@ -58169,24 +58196,6 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
-      "timeframe": "30m"
-    },
-    "BNBUSD|30m|short|770.28|773.78": {
-      "alert_time": "2026-09-30T17:13:15.693510+05:30",
-      "entry": 770.28,
-      "entry_time": "2026-09-30T17:15:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 7,
-      "risk": 3.5000000000001137,
-      "side": "short",
-      "stop": 773.7800000000001,
-      "stream": "live",
-      "symbol": "BNBUSD",
-      "target_1": 766.7799999999999,
-      "target_2": 763.2799999999997,
-      "target_half": 768.53,
       "timeframe": "30m"
     }
   }
