@@ -1,12 +1,8 @@
 {
-  "AKE/USDT|30m|short|0.034894|0.0350627": {
-    "reached_entry": true,
-    "stopped_out": true
-  },
   "BNBUSD|30m|short|767.96|769.61": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "RIVERUSD|30m|short|1.146|1.15725": {
     "reached_entry": true,
@@ -18,10 +14,14 @@
     "stage": 2,
     "stopped_out": false
   },
+  "TSLAXUSD|30m|long|352.85|352.35": {
+    "reached_entry": true,
+    "stopped_out": true
+  },
   "TSLAXUSD|4h|long|353.5|350.375": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "_level_ready|AAVEUSD|30m|long|134.06|133.21": 1789911352.70983,
   "_level_ready|AAVEUSD|30m|short|128.48|129.368": 1789665141.396728,
@@ -434,6 +434,10 @@
   "_silent_ready|BCHUSD|30m|long|303.55|302.65": {
     "price": 305.15,
     "time": "2026-09-30T11:56:07.817365+05:30"
+  },
+  "_silent_ready|BLESSUSD|30m|short|0.00885417|0.00894271": {
+    "price": 0.008815,
+    "time": "2026-09-30T16:06:23.173919+05:30"
   },
   "_silent_ready|BNBUSD|30m|short|767.96|769.61": {
     "price": 764.33,
