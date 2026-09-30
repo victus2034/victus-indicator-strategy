@@ -56911,6 +56911,7 @@
     "HUSD|30m|long|0.07839|0.0778025": "filled",
     "HUSD|30m|long|0.08487|0.084495": "filled",
     "HUSD|30m|long|0.0868594|0.0859977": "filled",
+    "HUSD|30m|short|0.06948|0.0700675": "filled",
     "HUSD|30m|short|0.07402|0.0746325": "filled",
     "HUSD|30m|short|0.08254|0.08284": "filled",
     "HUSD|30m|short|0.08264|0.08304": "filled",
@@ -57971,6 +57972,24 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
+      "timeframe": "30m"
+    },
+    "HUSD|30m|short|0.06948|0.0700675": {
+      "alert_time": "2026-09-30T08:03:23.623530+05:30",
+      "entry": 0.06948,
+      "entry_time": "2026-09-30T08:30:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 4,
+      "risk": 0.0005875000000000047,
+      "side": "short",
+      "stop": 0.0700675,
+      "stream": "live",
+      "symbol": "HUSD",
+      "target_1": 0.0688925,
+      "target_2": 0.06830499999999999,
+      "target_half": 0.06918625,
       "timeframe": "30m"
     }
   }
