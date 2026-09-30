@@ -3107,7 +3107,7 @@
     "IOB.NS|4h|long|31.46|31.7117": 1790567564.5628283,
     "DELHIVERY.NS|4h|long|415.2|416.4": 1790567564.8984492,
     "GODREJCP.NS|4h|long|855.45|860.7": 1790568749.2551165,
-    "KALYANKJIL.NS|4h|long|556.7|561.154": 1790586724.1661785,
+    "KALYANKJIL.NS|4h|long|556.7|561.154": 1790742774.734009,
     "ACC.NS|4h|long|1219.3|1223.3": 1790568749.851964,
     "POLYMED.NS|4h|long|1668.4|1681.75": 1790569978.6166902,
     "RECLTD.NS|4h|long|304.1|305.25": 1790571121.2884185,
@@ -18206,7 +18206,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1790741506.517329
+    "4h": 1790742729.2240663
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -89904,9 +89904,9 @@
     "last_attempt_at": 0.0
   },
   "KALYANKJIL.NS|demand|556.7000|561.1536": {
-    "in_zone": false,
-    "last_alert_at": 1790586724.1661785,
-    "last_attempt_at": 1790586724.1661785
+    "in_zone": true,
+    "last_alert_at": 1790742774.734009,
+    "last_attempt_at": 1790742774.734009
   },
   "SBICARD.NS|supply|671.5500|674.4500": {
     "in_zone": false,
@@ -90529,7 +90529,7 @@
     "last_attempt_at": 0.0
   },
   "ESCORTS.NS|demand|2700.6001|2722.2049": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790740356.13539,
     "last_attempt_at": 1790740356.13539
   },
@@ -91964,6 +91964,11 @@
     "last_attempt_at": 0.0
   },
   "NH.NS|demand|1589.1000|1599.6000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "KIMS.NS|demand|714.1000|718.9500": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
