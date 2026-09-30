@@ -13,6 +13,11 @@
     "reached_entry": true,
     "stopped_out": true
   },
+  "BTCUSD|4h|short|84660|85365": {
+    "reached_entry": true,
+    "stage": 3,
+    "stopped_out": false
+  },
   "DOGEUSD|30m|short|0.09786|0.097935": {
     "reached_entry": false,
     "stage": 1,
@@ -26,11 +31,11 @@
   "SOLUSD|30m|short|121.15|121.79": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "TRUMP/USDT|30m|short|2.096|2.11475": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "TSLAXUSD|4h|long|353.5|350.375": {
@@ -122,6 +127,7 @@
   "_level_ready|BTCUSD|30m|short|84893.5|85306.6": 1790496381.746297,
   "_level_ready|BTCUSD|30m|short|87247.5|87420.6": 1790137882.330441,
   "_level_ready|BTCUSD|4h|short|80309|80594": 1789740370.930292,
+  "_level_ready|BTCUSD|4h|short|84660|85365": 1790772077.323224,
   "_level_ready|DOGEUSD|30m|long|0.0789365|0.0781534": 1789564569.716163,
   "_level_ready|DOGEUSD|30m|long|0.09187|0.09112": 1790649372.856629,
   "_level_ready|DOGEUSD|30m|long|0.09504|0.0945275": 1790562975.920281,
@@ -379,7 +385,7 @@
   "_ready|BNBUSD|4h": 1790577087.860535,
   "_ready|BOME/USDT|30m": 1789466760.110004,
   "_ready|BTCUSD|30m": 1790745690.991321,
-  "_ready|BTCUSD|4h": 1789740370.930292,
+  "_ready|BTCUSD|4h": 1790772077.323224,
   "_ready|BTW/USDT|30m": 1789194664.716904,
   "_ready|CAP/USDT|30m": 1789361459.428611,
   "_ready|CL/USDT|30m": 1789488077.641078,
@@ -480,10 +486,6 @@
     "price": 84338.5,
     "time": "2026-09-29T18:56:26.009560+05:30"
   },
-  "_silent_ready|BTCUSD|4h|short|84660|85365": {
-    "price": 84461.0,
-    "time": "2026-09-30T18:01:39.608425+05:30"
-  },
   "_silent_ready|DOGEUSD|30m|short|0.0962|0.0965375": {
     "price": 0.09566,
     "time": "2026-09-30T17:11:27.982641+05:30"
@@ -511,6 +513,10 @@
   "_silent_ready|LINKUSD|30m|long|14.649|14.5578": {
     "price": 14.699,
     "time": "2026-09-29T22:16:29.133675+05:30"
+  },
+  "_silent_ready|LINKUSD|30m|short|14.733|14.7805": {
+    "price": 14.69,
+    "time": "2026-09-30T18:11:17.323224+05:30"
   },
   "_silent_ready|LTCUSD|30m|long|67.42|67.02": {
     "price": 67.79,
