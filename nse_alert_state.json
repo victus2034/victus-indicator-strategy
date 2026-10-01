@@ -3165,7 +3165,9 @@
     "HDBFS.NS|4h|long|613.65|618.559": 1790826767.402753,
     "NATIONALUM.NS|4h|long|331.5|333.5": 1790827943.1081018,
     "LALPATHLAB.NS|4h|short|2018.85|2035": 1790829177.6335235,
-    "NHPC.NS|4h|long|71.62|72.02": 1790832773.0609858
+    "NHPC.NS|4h|long|71.62|72.02": 1790832773.0609858,
+    "OIL.NS|4h|long|435.5|438.6": 1790835168.5512521,
+    "NBCC.NS|4h|long|77.18|77.74": 1790835168.8654075
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -18218,7 +18220,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1790833913.2298257
+    "4h": 1790835119.85473
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -91036,9 +91038,9 @@
     "last_attempt_at": 0.0
   },
   "NBCC.NS|demand|77.1800|77.7400": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790835168.8654075,
+    "last_attempt_at": 1790835168.8654075
   },
   "CREDITACC.NS|supply|1456.3492|1468.0000": {
     "in_zone": false,
@@ -91556,7 +91558,7 @@
     "last_attempt_at": 0.0
   },
   "LALPATHLAB.NS|supply|2018.8492|2035.0000": {
-    "in_zone": false,
+    "in_zone": true,
     "last_alert_at": 1790829177.6335235,
     "last_attempt_at": 1790829177.6335235
   },
@@ -91881,9 +91883,9 @@
     "last_attempt_at": 0.0
   },
   "OIL.NS|demand|435.5000|438.6000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790835168.5512521,
+    "last_attempt_at": 1790835168.5512521
   },
   "KALYANKJIL.NS|supply|615.4000|620.0500": {
     "in_zone": false,
