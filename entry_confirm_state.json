@@ -1,4 +1,14 @@
 {
+  "BNBUSD|30m|long|765.48|762.48": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
+  "METAXUSD|30m|long|727.15|723.212": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "NVDAXUSD|30m|short|231.95|233.575": {
     "reached_entry": true,
     "stage": 2,
@@ -17,6 +27,11 @@
   "TRUMP/USDT|4h|short|2.188|2.19675": {
     "reached_entry": true,
     "stopped_out": true
+  },
+  "VELVETUSD|30m|short|0.058|0.058375": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
   },
   "_level_ready|AAVEUSD|30m|long|134.06|133.21": 1789911352.70983,
   "_level_ready|AAVEUSD|30m|short|128.48|129.368": 1789665141.396728,
@@ -67,6 +82,7 @@
   "_level_ready|BLESSUSD|30m|short|0.01052|0.01062": 1790233283.90552,
   "_level_ready|BNBUSD|30m|long|754.9|753.075": 1790695895.803074,
   "_level_ready|BNBUSD|30m|long|759.53|755.843": 1790580691.527452,
+  "_level_ready|BNBUSD|30m|long|765.48|762.48": 1790839570.871874,
   "_level_ready|BNBUSD|30m|long|766.18|761.993": 1790577684.152055,
   "_level_ready|BNBUSD|30m|long|769.16|766.135": 1790571377.466395,
   "_level_ready|BNBUSD|30m|long|770.447|770.426": 1790564177.428398,
@@ -172,6 +188,7 @@
   "_level_ready|LTCUSD|30m|short|74.68|74.955": 1790417173.072931,
   "_level_ready|LTCUSD|4h|short|54.9|55.4": 1789701967.437765,
   "_level_ready|LTCUSD|4h|short|60.754|61.3615": 1789990565.578549,
+  "_level_ready|METAXUSD|30m|long|727.15|723.212": 1790839570.871874,
   "_level_ready|METAXUSD|30m|long|747.4|747.338": 1790521875.327194,
   "_level_ready|METAXUSD|30m|short|672.238|672.253": 1789906569.980362,
   "_level_ready|METAXUSD|30m|short|674.3|680.925": 1789539365.835788,
@@ -318,7 +335,7 @@
   "_level_ready|UNIUSD|30m|short|8.936|9.016": 1789982174.003005,
   "_level_ready|VELVETUSD|30m|long|0.0589|0.0584": 1790519779.316384,
   "_level_ready|VELVETUSD|30m|short|0.0572|0.057575": 1790693187.151092,
-  "_level_ready|VELVETUSD|30m|short|0.058|0.058375": 1790790983.975061,
+  "_level_ready|VELVETUSD|30m|short|0.058|0.058375": 1790839570.871874,
   "_level_ready|VELVETUSD|30m|short|0.0612103|0.0618224": 1790232967.803001,
   "_level_ready|VELVETUSD|30m|short|0.0622|0.0627": 1790485296.939304,
   "_level_ready|VELVETUSD|30m|short|0.0624|0.06265": 1789987570.285335,
@@ -372,7 +389,7 @@
   "_ready|BCHUSD|4h": 1790073367.004348,
   "_ready|BEAT/USDT|30m": 1790429172.274138,
   "_ready|BLESSUSD|30m": 1790771776.301532,
-  "_ready|BNBUSD|30m": 1790774184.502937,
+  "_ready|BNBUSD|30m": 1790839570.871874,
   "_ready|BNBUSD|4h": 1790577087.860535,
   "_ready|BOME/USDT|30m": 1789466760.110004,
   "_ready|BTCUSD|30m": 1790745690.991321,
@@ -405,7 +422,7 @@
   "_ready|LINKUSD|30m": 1790701296.169859,
   "_ready|LTCUSD|30m": 1790794287.095202,
   "_ready|LTCUSD|4h": 1789990565.578549,
-  "_ready|METAXUSD|30m": 1790521875.327194,
+  "_ready|METAXUSD|30m": 1790839570.871874,
   "_ready|METAXUSD|4h": 1788957356.779043,
   "_ready|MNT/USDT|30m": 1789480563.544585,
   "_ready|MRVL/USDT:USDT|30m": 1790822793.801121,
@@ -438,7 +455,7 @@
   "_ready|UB/USDT|30m": 1789320957.820623,
   "_ready|UNIUSD|30m": 1790778982.041333,
   "_ready|US/USDT|30m": 1789306268.896163,
-  "_ready|VELVETUSD|30m": 1790790983.975061,
+  "_ready|VELVETUSD|30m": 1790839570.871874,
   "_ready|XAUTUSD|30m": 1790790694.624834,
   "_ready|XAUTUSD|4h": 1790221564.238422,
   "_ready|XRPUSD|30m": 1790782297.088594,
@@ -454,6 +471,10 @@
     "price": 164.37,
     "time": "2026-10-01T08:41:27.076602+05:30"
   },
+  "_silent_ready|BCHUSD|30m|long|303.55|302.65": {
+    "price": 304.27,
+    "time": "2026-10-01T12:56:10.871874+05:30"
+  },
   "_silent_ready|BEAT/USDT|30m|short|0.0937|0.094075": {
     "price": 0.0933,
     "time": "2026-10-01T09:36:22.050683+05:30"
@@ -461,10 +482,6 @@
   "_silent_ready|BLESSUSD|30m|short|0.00885417|0.00894271": {
     "price": 0.008834,
     "time": "2026-09-30T19:36:27.019894+05:30"
-  },
-  "_silent_ready|BNBUSD|30m|long|765.48|762.48": {
-    "price": 767.97,
-    "time": "2026-10-01T09:06:08.642009+05:30"
   },
   "_silent_ready|BNBUSD|30m|short|780.03|785.367": {
     "price": 775.91,
@@ -510,6 +527,10 @@
     "price": 90.015,
     "time": "2026-09-30T22:21:32.112936+05:30"
   },
+  "_silent_ready|LINKUSD|30m|long|14.167|14.0295": {
+    "price": 14.222,
+    "time": "2026-10-01T12:56:10.871874+05:30"
+  },
   "_silent_ready|LINKUSD|30m|short|14.733|14.7805": {
     "price": 14.69,
     "time": "2026-09-30T18:11:17.323224+05:30"
@@ -549,6 +570,10 @@
   "_silent_ready|SNDKBUSD|30m|short|1784.14|1784.18": {
     "price": 1771.0,
     "time": "2026-10-01T09:36:22.050683+05:30"
+  },
+  "_silent_ready|SOLUSD|30m|long|117.219|116.993": {
+    "price": 117.586,
+    "time": "2026-10-01T12:56:10.871874+05:30"
   },
   "_silent_ready|SOLUSD|30m|short|123.282|123.482": {
     "price": 122.631,
