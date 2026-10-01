@@ -397,7 +397,11 @@ class DailyReportTests(unittest.TestCase):
     def test_scores_yesterdays_alerts_and_keeps_final_results(self):
         with mock.patch.object(self.report, "eval_candles", lambda *a: self.candles) as _:
             text = self.report.run(datetime(2026, 9, 29).date(), self.sent_ts + 86400)
-        self.assertIn("30m CRYPTO: 1 alert - 2R 1", text)
+        self.assertIn("FIB BACKTEST · 29 SEP 2026", text)
+        self.assertIn("Alerts 1 · Entries 1\n+2R 1\nWin rate 100.0%", text)
+        self.assertIn("30m CRYPTO - Alerts 1 | Entries 1 | +2R 1 | 100.0%", text)
+        self.assertIn("10:00 - Alerts 1 | Entries 1 | +2R 1 | 100.0%", text)
+        self.assertNotIn("TRENDLINE", text)
         self.assertTrue(self.report.load_results()["a"]["resolved"])
         with mock.patch.object(self.report, "eval_candles", side_effect=AssertionError("re-scored")):
             self.report.run(datetime(2026, 9, 29).date(), self.sent_ts + 2 * 86400)

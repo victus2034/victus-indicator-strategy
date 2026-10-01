@@ -3,8 +3,9 @@
 Every fib and trendline-touch alert fib_trendline_scanner.py sends is written to
 fib_trendline_alert_records.jsonl with its entry and SL. Once a day, on the first
 scanner pass after REPORT_HOUR IST, this scores every alert not yet resolved
-(fib_trendline_trades.simulate, on finer candles than the alert's) and posts:
-yesterday's alerts and how they went, plus the running totals per timeframe.
+(fib_trendline_trades.simulate, on finer candles than the alert's) and posts one
+card for fib and one for trendline: yesterday's alerts and how they went, broken
+down by timeframe, side, fib zone, stop size and hour. One day only, no running totals.
 
 A 1W or 1M alert can take months to resolve, so it shows as "open" until it does;
 its result is kept in RESULTS_FILE and never re-scored once final.
@@ -32,7 +33,7 @@ RESULTS_FILE = Path(__file__).with_name(os.getenv("VICTUS_FIB_TL_RESULTS_FILE", 
 WEBHOOK_ENV = "DISCORD_DAILY_BACKTEST_WEBHOOK_URL"
 REPORT_KEY = "__daily_report__"
 REPORT_HOUR = 8
-DISCORD_LIMIT = 1900
+DISCORD_LIMIT = 4000     # an embed description holds 4096
 
 
 def load_records():
@@ -101,42 +102,132 @@ def ist_date(ts):
     return datetime.fromtimestamp(ts, IST).date()
 
 
-def _day_line(label, items):
-    count = defaultdict(int)
-    for _, result in items:
-        count[result["outcome"]] += 1
-    parts = [f"{o} {count[o]}" for o in trades.OUTCOMES if count[o]]
-    return f"{label}: {len(items)} alert{'s' * (len(items) != 1)} - " + (", ".join(parts) or "none")
+def tally(items):
+    """Counts and net R for (record, result) pairs.
+
+    +1R is every trade that reached 1R and not 2R, whatever it did afterwards.
+    Net R is after costs under the two bookings fib_trendline_trades._row uses:
+    out at 1R, or held for 2R (where a 1R trade that then stops is a loss).
+    """
+    t = defaultdict(int)
+    net1 = net2 = 0.0
+    for record, x in items:
+        t["alerts"] += 1
+        if not x["filled"]:
+            t["no_fill" if x["outcome"] == "no fill" else "waiting"] += 1
+            continue
+        t["entries"] += 1
+        t[{"SL": "sl", "1R": "r1", "2R": "r2", "timeout": "timeout"}.get(x["outcome"], "running")] += 1
+        cost_r = trades.COST_PCT[record["market"]] / trades.risk_pct(record["plan"])
+        if x["r1"]:
+            net1 += 1 - cost_r
+        elif x["sl"]:
+            net1 += -1 - cost_r
+        if x["r2"]:
+            net2 += 2 - cost_r
+        elif x["sl"]:
+            net2 += -1 - cost_r
+    wins, decided = t["r1"] + t["r2"], t["r1"] + t["r2"] + t["sl"]
+    t["win"] = f"{wins / decided * 100:.1f}%" if decided else "N/A"
+    t["net1"], t["net2"] = net1, net2
+    return t
+
+
+OUTCOME_PARTS = (("sl", "SL"), ("r1", "+1R"), ("r2", "+2R"), ("timeout", "Timeout"), ("running", "Running"))
+
+
+def _row(label, items):
+    t = tally(items)
+    parts = [f"Alerts {t['alerts']}"]
+    if not t["entries"]:
+        parts.append("waiting" if t["waiting"] else "no fill")
+        return f"{label} - " + " | ".join(parts)
+    parts.append(f"Entries {t['entries']}")
+    parts += [f"{name} {t[key]}" for key, name in OUTCOME_PARTS if t[key]]
+    if t["win"] != "N/A":
+        parts.append(t["win"])
+    return f"{label} - " + " | ".join(parts)
+
+
+def _block(title, groups):
+    rows = [_row(label, items) for label, items in groups if items]
+    return ["", title, *rows] if rows else []
+
+
+def _day_block(day):
+    if not day:
+        return ["No alerts."]
+    t = tally(day)
+    head = [f"Alerts {t['alerts']}", f"Entries {t['entries']}"]
+    head += [f"{name} {t[key]}" for key, name in (("no_fill", "No Fill"), ("waiting", "Waiting")) if t[key]]
+    lines = [" · ".join(head)]
+    counted = " · ".join(f"{name} {t[key]}" for key, name in OUTCOME_PARTS if t[key])
+    if counted:
+        lines.append(counted)
+    lines.append(f"Win rate {t['win']} · TOTAL {trades.r(t['net1'])} booking 1R / {trades.r(t['net2'])} booking 2R")
+    return lines
+
+
+STOP_BUCKETS = (("under 0.5%", 0, 0.5), ("0.5 - 1%", 0.5, 1), ("1 - 2%", 1, 2), ("over 2%", 2, float("inf")))
+
+
+def build_card(kind, title, report_day, joined):
+    """One card for the report day's alerts only: the result on top, then broken down."""
+    if not any(r["kind"] == kind for r, _ in joined):
+        return None
+    items = [(r, x) for r, x in joined if r["kind"] == kind and ist_date(r["sent_ts"]) == report_day]
+    lines = [f"{title} BACKTEST · {report_day:%d %b %Y}".upper(), ""]
+    lines += _day_block(items)
+    lines += _block("TIMEFRAME", [
+        (f"{TF_LABEL[tf]} {market.upper()}", [(r, x) for r, x in items if r["market"] == market and r["tf"] == tf])
+        for market in (CRYPTO, NSE) for tf in TF_LABEL
+    ])
+    sides = (("long", "BUY"), ("short", "SELL")) if kind == "fib" else \
+        (("long", "BUY (support)"), ("short", "SELL (resistance)"))
+    lines += _block("SIDE", [(name, [(r, x) for r, x in items if r["plan"]["side"] == side]) for side, name in sides])
+    if kind == "fib":
+        zones = sorted({r["zone"] for r, _ in items if r.get("zone") is not None})
+        lines += _block("ZONE", [(f"Zone {z}", [(r, x) for r, x in items if r.get("zone") == z]) for z in zones])
+        # A trendline's stop is a fixed % per timeframe, so buckets say nothing there.
+        lines += _block("STOP SIZE", [
+            (name, [(r, x) for r, x in items if x["filled"] and lo <= trades.risk_pct(r["plan"]) < hi])
+            for name, lo, hi in STOP_BUCKETS
+        ])
+    for market in (CRYPTO, NSE):
+        hours = defaultdict(list)
+        for r, x in items:
+            if r["market"] == market:
+                hours[datetime.fromtimestamp(r["sent_ts"], IST).hour].append((r, x))
+        # An hour with no entry is a line saying nothing happened.
+        lines += _block(f"HOURS (IST) · {market.upper()}", [
+            (f"{hour:02d}:00", hours[hour]) for hour in sorted(hours) if any(x["filled"] for _, x in hours[hour])
+        ])
+    return "\n".join(lines)
 
 
 def build_report(report_day, records, results):
+    """The cards to post, fib first; a kind with no alerts yet has none."""
     joined = [(r, results[r["id"]]) for r in records if r["id"] in results]
-    lines = [f"**Fib + Trendline backtest - {report_day:%d %b %Y}**",
-             "Fib: entry at the zone edge, SL inner 0.55 | Trendline: entry at the line, SL beyond it | "
-             "1R/2R targets, a candle hitting SL and target counts as SL"]
-    for kind, title in (("fib", "FIB"), ("trendline", "TRENDLINE")):
-        day = [(r, x) for r, x in joined if r["kind"] == kind and ist_date(r["sent_ts"]) == report_day]
-        lines.append(f"\n**{title}**")
-        if not day:
-            lines.append("Yesterday: no alerts")
-        for market in (CRYPTO, NSE):
-            for tf in TF_LABEL:
-                items = [(r, x) for r, x in day if r["market"] == market and r["tf"] == tf]
-                if items:
-                    lines.append(_day_line(f"{TF_LABEL[tf]} {market.upper()}", items))
-        rows = trades.summarise([
-            {"market": r["market"], "kind": r["kind"], "tf": r["tf"], "plan": r["plan"], "result": x}
-            for r, x in joined if r["kind"] == kind
-        ])
-        if rows:
-            lines.append("All alerts so far (win @1R | win @2R | avg net R booking 1R / 2R):")
-            for row in rows:
-                lines.append(
-                    f"`{TF_LABEL[row['tf']]:>3} {row['market'].upper():<6}` {row['alerts']} alerts, "
-                    f"{row['filled']} filled | {trades.pct(row['win_1r'])} | {trades.pct(row['win_2r'])} | "
-                    f"{trades.r(row['net_r_1r'])} / {trades.r(row['net_r_2r'])} | open {row['open']}"
-                )
-    return "\n".join(lines)
+    cards = [build_card(kind, title, report_day, joined) for kind, title in (("fib", "FIB"), ("trendline", "TRENDLINE"))]
+    return [card for card in cards if card]
+
+
+def send_card(text):
+    """Post one card as an embed, like the crypto and NSE daily cards in the same channel."""
+    url = scanner.get_env_or_config(WEBHOOK_ENV, "")
+    if not url:
+        return
+    payload = {"embeds": [{"description": part.rstrip(), "color": 3447003} for part in chunks(text)[:10]]}
+    for attempt in range(4):
+        response = requests.post(url, json=payload, timeout=15)
+        if response.status_code != 429 or attempt == 3:
+            response.raise_for_status()
+            return
+        try:
+            wait = float(response.json().get("retry_after", 1))
+        except (ValueError, AttributeError):
+            wait = 1.0
+        time.sleep(max(0.25, min(wait, 15.0)))
 
 
 def chunks(text):
@@ -158,11 +249,12 @@ def run(report_day, now, send=False):
         return None
     results = score(records, load_results(), now)
     save_results(results)
-    text = build_report(report_day, records, results)
+    cards = build_report(report_day, records, results)
+    text = "\n\n".join(cards)
     print(text)
     if send:
-        for part in chunks(text):
-            scanner.send_discord_message(part, webhook_env_name=WEBHOOK_ENV, webhook_config_value="")
+        for card in cards:
+            send_card(card)
     return text
 
 
