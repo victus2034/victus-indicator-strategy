@@ -58059,6 +58059,7 @@
     "SOXLBUSD|30m|short|150|151.375": "filled",
     "SOXLBUSD|30m|short|151.6|152.6": "filled",
     "SOXLBUSD|30m|short|152.785|152.804": "stop_too_tight",
+    "SOXLBUSD|30m|short|155.55|156.175": "filled",
     "SOXLBUSD|4h|long|136.45|135.575": "filled",
     "STORJ/USDT|30m|long|0.0283248|0.0280438": "filled",
     "STORJ/USDT|30m|short|0.0309|0.0329": "filled",
@@ -58862,6 +58863,24 @@
       "target_1": 54.9825,
       "target_2": 54.495000000000005,
       "target_half": 55.22625,
+      "timeframe": "30m"
+    },
+    "SOXLBUSD|30m|short|155.55|156.175": {
+      "alert_time": "2026-10-01T10:23:18.964386+05:30",
+      "entry": 155.55,
+      "entry_time": "2026-10-01T10:25:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "rating": 10,
+      "risk": 0.625,
+      "side": "short",
+      "stop": 156.175,
+      "stream": "live",
+      "symbol": "SOXLBUSD",
+      "target_1": 154.925,
+      "target_2": 154.3,
+      "target_half": 155.2375,
       "timeframe": "30m"
     }
   }
