@@ -1,8 +1,4 @@
 {
-  "AAVEUSD|30m|short|165.19|166.64": {
-    "reached_entry": true,
-    "stopped_out": true
-  },
   "HUSD|30m|long|0.06905|0.068475": {
     "reached_entry": true,
     "stage": 2,
@@ -11,6 +7,11 @@
   "MRVL/USDT:USDT|30m|short|267.349|267.363": {
     "reached_entry": true,
     "stopped_out": true
+  },
+  "NVDAXUSD|30m|short|231.43|232.705": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
   },
   "SLVONUSD|30m|short|55.47|55.9575": {
     "reached_entry": true,
@@ -25,7 +26,7 @@
   "SOXLBUSD|4h|short|156.25|157.062": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "TRUMP/USDT|4h|short|2.188|2.19675": {
     "reached_entry": true,
@@ -220,6 +221,7 @@
   "_level_ready|NVDAXUSD|30m|short|225.395|225.401": 1790315769.358617,
   "_level_ready|NVDAXUSD|30m|short|227.6|228.537": 1790071565.863518,
   "_level_ready|NVDAXUSD|30m|short|229.7|229.95": 1790598982.417983,
+  "_level_ready|NVDAXUSD|30m|short|231.43|232.705": 1790831497.642706,
   "_level_ready|NVDAXUSD|30m|short|231.95|233.575": 1790777187.019894,
   "_level_ready|NVDAXUSD|4h|short|228.9|230.15": 1790598679.420447,
   "_level_ready|RIVERUSD|30m|long|1.139|1.12775": 1790604381.571461,
@@ -423,7 +425,7 @@
   "_ready|MRVL/USDT:USDT|4h": 1790014567.180453,
   "_ready|MSFT/USDT:USDT|30m": 1789542964.512681,
   "_ready|MSFT/USDT:USDT|4h": 1789376756.136711,
-  "_ready|NVDAXUSD|30m": 1790777187.019894,
+  "_ready|NVDAXUSD|30m": 1790831497.642706,
   "_ready|NVDAXUSD|4h": 1790598679.420447,
   "_ready|O/USDT|30m": 1789481164.028485,
   "_ready|RE/USDT|30m": 1789390557.764438,
