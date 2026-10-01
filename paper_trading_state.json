@@ -56796,6 +56796,33 @@
       "target_half": 0.00783375,
       "timeframe": "30m",
       "trade_id": "ZORAUSD|30m|long|0.007825|0.0078075"
+    },
+    {
+      "alert_time": "2026-10-01T19:51:52.164863+05:30",
+      "cost_r": 0.10000000000000109,
+      "date": "2026-10-01",
+      "entry": 9.213293650793652,
+      "entry_time": "2026-10-01T19:55:00+05:30",
+      "exit_price": 9.2022376984127,
+      "exit_time": "2026-10-01T19:55:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.019999999999992746,
+      "outcome": "BE",
+      "rating": 3,
+      "realized_r": 0.11999999999999383,
+      "risk": 0.09213293650793553,
+      "side": "short",
+      "stop": 9.305426587301588,
+      "stream": "live",
+      "symbol": "UNIUSD",
+      "target_1": 9.121160714285717,
+      "target_2": 9.029027777777781,
+      "target_half": 9.167227182539683,
+      "timeframe": "30m",
+      "trade_id": "UNIUSD|30m|short|9.21329|9.30543"
     }
   ],
   "handled": {
@@ -59146,24 +59173,6 @@
       "target_1": 731.0875,
       "target_2": 735.025,
       "target_half": 729.11875,
-      "timeframe": "30m"
-    },
-    "UNIUSD|30m|short|9.21329|9.30543": {
-      "alert_time": "2026-10-01T19:51:52.164863+05:30",
-      "entry": 9.213293650793652,
-      "entry_time": "2026-10-01T19:55:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 3,
-      "risk": 0.09213293650793553,
-      "side": "short",
-      "stop": 9.305426587301588,
-      "stream": "live",
-      "symbol": "UNIUSD",
-      "target_1": 9.121160714285717,
-      "target_2": 9.029027777777781,
-      "target_half": 9.167227182539683,
       "timeframe": "30m"
     }
   }
