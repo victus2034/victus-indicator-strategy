@@ -3898,7 +3898,7 @@
     "HYPEUSD|30m|long|84.966|85.126": 1790782009.5465114,
     "shadow:HYPEUSD|30m|long|84.966|85.1169": 1790778798.833914,
     "UNIUSD|30m|long|8.721|8.764": 1790842023.7171178,
-    "shadow:UNIUSD|30m|long|8.721|8.74637": 1790778799.221216,
+    "shadow:UNIUSD|30m|long|8.721|8.74637": 1790842388.711459,
     "SLVONUSD|30m|long|54.7|54.87": 1790781098.380699,
     "shadow:SLVONUSD|30m|long|54.7|54.7495": 1790780527.1408458,
     "XRPUSD|30m|long|1.4865|1.4915": 1790793407.280408,
@@ -3943,7 +3943,9 @@
     "shadow:METAXUSD|30m|long|724|724.615": 1790841726.1173556,
     "shadow:VELVETUSD|30m|short|0.0581484|0.0583": 1790841396.7814057,
     "SOLUSD|30m|long|117.038|117.219": 1790841814.2135785,
-    "LINKUSD|30m|long|14.057|14.167": 1790842023.9376225
+    "LINKUSD|30m|long|14.057|14.167": 1790842023.9376225,
+    "DOGEUSD|30m|long|0.09367|0.09404": 1790842388.4600914,
+    "shadow:DOGEUSD|30m|long|0.09367|0.0938687": 1790842388.4600914
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15492,7 +15494,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790842002.0244398
+    "30m": 1790842373.9731777
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -147213,9 +147215,9 @@
     "last_attempt_at": 1790842023.7171178
   },
   "shadow:UNIUSD|demand|8.72100000|8.74637491": {
-    "in_zone": false,
-    "last_alert_at": 1790778799.221216,
-    "last_attempt_at": 1790778799.221216
+    "in_zone": true,
+    "last_alert_at": 1790842388.711459,
+    "last_attempt_at": 1790842388.711459
   },
   "shadow:TSLAXUSD|demand|346.10000000|346.19098197": {
     "in_zone": false,
@@ -147663,7 +147665,7 @@
     "last_attempt_at": 0.0
   },
   "METAXUSD|demand|724.00000000|727.15000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790841726.1173556,
     "last_attempt_at": 1790841726.1173556
   },
@@ -147698,14 +147700,14 @@
     "last_attempt_at": 0.0
   },
   "DOGEUSD|demand|0.09367000|0.09404000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790842388.4600914,
+    "last_attempt_at": 1790842388.4600914
   },
   "shadow:DOGEUSD|demand|0.09367000|0.09386867": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790842388.4600914,
+    "last_attempt_at": 1790842388.4600914
   },
   "shadow:TRUMP/USDT|supply|2.29203473|2.29700000": {
     "in_zone": false,
