@@ -56904,6 +56904,33 @@
       "target_half": 1788.185,
       "timeframe": "30m",
       "trade_id": "SNDKBUSD|30m|short|1791.11|1796.96"
+    },
+    {
+      "alert_time": "2026-10-01T23:31:58.536318+05:30",
+      "cost_r": 0.2540800000000015,
+      "date": "2026-10-01",
+      "entry": 0.001588,
+      "entry_time": "2026-10-01T23:40:00+05:30",
+      "exit_price": 0.001595047125,
+      "exit_time": "2026-10-01T23:45:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "net_realized_r": -1.3816200000000047,
+      "outcome": "SL",
+      "rating": 5,
+      "realized_r": -1.127540000000003,
+      "risk": 6.249999999999962e-06,
+      "side": "short",
+      "stop": 0.00159425,
+      "stream": "live",
+      "symbol": "TACUSD",
+      "target_1": 0.00158175,
+      "target_2": 0.0015755,
+      "target_half": 0.001584875,
+      "timeframe": "30m",
+      "trade_id": "TACUSD|30m|short|0.001588|0.00159425"
     }
   ],
   "handled": {
@@ -59260,24 +59287,6 @@
       "target_1": 731.0875,
       "target_2": 735.025,
       "target_half": 729.11875,
-      "timeframe": "30m"
-    },
-    "TACUSD|30m|short|0.001588|0.00159425": {
-      "alert_time": "2026-10-01T23:31:58.536318+05:30",
-      "entry": 0.001588,
-      "entry_time": "2026-10-01T23:40:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 5,
-      "risk": 6.249999999999962e-06,
-      "side": "short",
-      "stop": 0.00159425,
-      "stream": "live",
-      "symbol": "TACUSD",
-      "target_1": 0.00158175,
-      "target_2": 0.0015755,
-      "target_half": 0.001584875,
       "timeframe": "30m"
     }
   }
