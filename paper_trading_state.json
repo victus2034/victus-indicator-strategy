@@ -56526,6 +56526,33 @@
       "target_half": 0.0693375,
       "timeframe": "30m",
       "trade_id": "HUSD|30m|long|0.06905|0.068475"
+    },
+    {
+      "alert_time": "2026-10-01T10:23:18.964386+05:30",
+      "cost_r": 0.24888000000000005,
+      "date": "2026-10-01",
+      "entry": 155.55,
+      "entry_time": "2026-10-01T10:25:00+05:30",
+      "exit_price": 156.25308750000002,
+      "exit_time": "2026-10-01T10:30:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "net_realized_r": -1.3738200000000151,
+      "outcome": "SL",
+      "rating": 10,
+      "realized_r": -1.1249400000000152,
+      "risk": 0.625,
+      "side": "short",
+      "stop": 156.175,
+      "stream": "live",
+      "symbol": "SOXLBUSD",
+      "target_1": 154.925,
+      "target_2": 154.3,
+      "target_half": 155.2375,
+      "timeframe": "30m",
+      "trade_id": "SOXLBUSD|30m|short|155.55|156.175"
     }
   ],
   "handled": {
@@ -58061,6 +58088,7 @@
     "SOXLBUSD|30m|short|152.785|152.804": "stop_too_tight",
     "SOXLBUSD|30m|short|155.55|156.175": "filled",
     "SOXLBUSD|4h|long|136.45|135.575": "filled",
+    "SOXLBUSD|4h|short|156.25|157.062": "filled",
     "STORJ/USDT|30m|long|0.0283248|0.0280438": "filled",
     "STORJ/USDT|30m|short|0.0309|0.0329": "filled",
     "STORJ/USDT|4h|long|0.0283248|0.0280438": "filled",
@@ -58865,23 +58893,23 @@
       "target_half": 55.22625,
       "timeframe": "30m"
     },
-    "SOXLBUSD|30m|short|155.55|156.175": {
-      "alert_time": "2026-10-01T10:23:18.964386+05:30",
-      "entry": 155.55,
-      "entry_time": "2026-10-01T10:25:00+05:30",
+    "SOXLBUSD|4h|short|156.25|157.062": {
+      "alert_time": "2026-10-01T10:34:52.956280+05:30",
+      "entry": 156.25,
+      "entry_time": "2026-10-01T10:35:00+05:30",
       "geometry": "wick",
       "half_r_hit": false,
       "market": "xstock",
-      "rating": 10,
-      "risk": 0.625,
+      "rating": 5,
+      "risk": 0.8125,
       "side": "short",
-      "stop": 156.175,
+      "stop": 157.0625,
       "stream": "live",
       "symbol": "SOXLBUSD",
-      "target_1": 154.925,
-      "target_2": 154.3,
-      "target_half": 155.2375,
-      "timeframe": "30m"
+      "target_1": 155.4375,
+      "target_2": 154.625,
+      "target_half": 155.84375,
+      "timeframe": "4h"
     }
   }
 }
