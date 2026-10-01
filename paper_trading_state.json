@@ -58467,6 +58467,7 @@
     "TACUSD|30m|long|0.002376|0.0023585": "filled",
     "TACUSD|30m|long|0.002424|0.0024115": "filled",
     "TACUSD|30m|short|0.00156548|0.00158113": "filled",
+    "TACUSD|30m|short|0.001588|0.00159425": "filled",
     "TACUSD|30m|short|0.001612|0.0016245": "filled",
     "TACUSD|30m|short|0.001645|0.00165375": "filled",
     "TACUSD|30m|short|0.00165179|0.0016683": "filled",
@@ -59259,6 +59260,24 @@
       "target_1": 731.0875,
       "target_2": 735.025,
       "target_half": 729.11875,
+      "timeframe": "30m"
+    },
+    "TACUSD|30m|short|0.001588|0.00159425": {
+      "alert_time": "2026-10-01T23:31:58.536318+05:30",
+      "entry": 0.001588,
+      "entry_time": "2026-10-01T23:40:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 5,
+      "risk": 6.249999999999962e-06,
+      "side": "short",
+      "stop": 0.00159425,
+      "stream": "live",
+      "symbol": "TACUSD",
+      "target_1": 0.00158175,
+      "target_2": 0.0015755,
+      "target_half": 0.001584875,
       "timeframe": "30m"
     }
   }
