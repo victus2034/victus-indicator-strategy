@@ -5751,7 +5751,8 @@
     "EXIDEIND.NS|30m|long|403.35|405.6": 1790839322.5709205,
     "CUB.NS|30m|short|229.93|230.75": 1790839323.0311263,
     "ANANTRAJ.NS|30m|long|571.75|575.2": 1790839323.3271637,
-    "POLYMED.NS|30m|long|1611.7|1624.59": 1790839323.804909
+    "POLYMED.NS|30m|long|1611.7|1624.59": 1790839323.804909,
+    "MRF.NS|30m|long|122760|122780": 1790840512.129319
   },
   "ANANDRATHI.NS|supply|2187.5000|2221.0000": {
     "in_zone": true,
@@ -32464,7 +32465,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "30m": 1790839287.0726745
+    "30m": 1790840479.7087631
   },
   "3MINDIA.NS|supply|35230.9249|35290.0000": {
     "in_zone": false,
@@ -233047,7 +233048,7 @@
     "last_attempt_at": 0.0
   },
   "POLYMED.NS|demand|1611.7000|1624.5936": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790839323.804909,
     "last_attempt_at": 1790839323.804909
   },
@@ -233207,9 +233208,9 @@
     "last_attempt_at": 0.0
   },
   "MRF.NS|demand|122760.0000|122780.0000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790840512.129319,
+    "last_attempt_at": 1790840512.129319
   },
   "ABBOTINDIA.NS|supply|28548.9275|28550.0000": {
     "in_zone": false,
@@ -233602,7 +233603,7 @@
     "last_attempt_at": 0.0
   },
   "BLUESTARCO.NS|demand|1443.2000|1453.3000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790839322.8003159,
     "last_attempt_at": 1790839322.8003159
   },
@@ -233690,5 +233691,35 @@
     "in_zone": true,
     "last_alert_at": 1790839323.3271637,
     "last_attempt_at": 1790839323.3271637
+  },
+  "MOTILALOFS.NS|demand|965.0000|968.1000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "PATANJALI.NS|demand|335.9000|336.6000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "PIIND.NS|demand|2192.0000|2209.3999": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "CUB.NS|supply|238.4000|238.8600": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "GRANULES.NS|demand|816.0000|816.1000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "PINELABS.NS|demand|162.5100|163.7400": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
   }
 }
