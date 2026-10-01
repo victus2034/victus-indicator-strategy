@@ -421,3 +421,36 @@ class DailyReportTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class FailedSendBackoffTests(unittest.TestCase):
+    """A failed Discord send must back off, yet still alert once Discord is back."""
+
+    def run_pass(self, state, sent_ok, now):
+        analysis = {"price": 100.0, "fib": [], "touch": [], "break": [
+            {"key": "brk|X|4h|1", "kind": SUPPORT}]}
+        with mock.patch.object(fts, "load_state", return_value=state), \
+             mock.patch.object(fts, "save_state"), \
+             mock.patch.object(fts, "scan_crypto", return_value=[("X", {"4h": analysis}, None)]), \
+             mock.patch.object(fts, "plan_alerts", wraps=fts.plan_alerts), \
+             mock.patch.object(fts, "format_break_alert", return_value="msg"), \
+             mock.patch.object(fts, "send", return_value=sent_ok) as send, \
+             mock.patch.object(fts.scanner, "get_env_or_config", return_value="http://hook"), \
+             mock.patch.object(fts.scanner, "in_alert_window", return_value=True), \
+             mock.patch.object(fts.scanner, "send_status_message"), \
+             mock.patch.object(fts.time, "time", return_value=now), \
+             mock.patch.dict("sys.modules", {"fib_trendline_daily_report": mock.MagicMock()}):
+            fts.run_once()
+        return send.call_count
+
+    def test_failure_backs_off_then_retries_and_never_suppresses(self):
+        seeded = {f"{c}:{m}:{fts.SEED_VERSION}": 1 for c in ("fib", "trendline") for m in (fts.CRYPTO, fts.NSE)}
+        state = {fts.SEEDED_KEY: seeded}
+        t = 1_000_000.0
+        self.assertEqual(self.run_pass(state, False, t), 1)
+        self.assertNotIn("brk|X|4h|1", state)                     # still alertable
+        self.assertEqual(self.run_pass(state, False, t + 60), 0)  # backed off
+        later = t + fts.RETRY_BACKOFF_SECONDS + 1
+        self.assertEqual(self.run_pass(state, True, later), 1)    # retried, delivered
+        self.assertIn("brk|X|4h|1", state)
+        self.assertEqual(self.run_pass(state, True, later + 60), 0)

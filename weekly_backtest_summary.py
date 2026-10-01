@@ -266,8 +266,9 @@ def build_weekly_workbook(
     trades = filled[[column for column in TRADE_COLUMNS if column in filled.columns]].rename(
         columns=TRADE_COLUMNS
     ) if not filled.empty else pd.DataFrame(columns=list(TRADE_COLUMNS.values()))
-    if "Date" in trades.columns:
-        trades = trades.sort_values(["Date", "Entry Time"], na_position="last")
+    sort_cols = [c for c in ("Date", "Entry Time") if c in trades.columns]
+    if sort_cols:
+        trades = trades.sort_values(sort_cols, na_position="last")
 
     summary = pd.DataFrame(weekly_stats_summary(frame, market), columns=["Metric", "Value"])
 

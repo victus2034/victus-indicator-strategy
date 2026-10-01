@@ -60,6 +60,8 @@ from trendlines import SUPPORT, build_trendlines
 STATE_FILE = Path(__file__).with_name(os.getenv("VICTUS_FIB_TL_STATE_FILE", "fib_trendline_state.json"))
 RECORDS_FILE = Path(__file__).with_name(os.getenv("VICTUS_FIB_TL_RECORDS_FILE", "fib_trendline_alert_records.jsonl"))
 SEEDED_KEY = "__seeded__"
+ATTEMPTS_KEY = "__attempts__"
+RETRY_BACKOFF_SECONDS = 30 * 60   # a failed Discord send is not retried sooner than this
 # Bumped when what counts as an alert changes, so the first pass under the new
 # rule seeds silently instead of posting everything the new rule now catches.
 # v2 (2026-09-29): 0-1.5% band instead of inside-zone / per-timeframe touch.
@@ -397,6 +399,12 @@ def run_once(dry_run=False, force_nse=False):
     if not isinstance(seeded, dict):
         seeded = {}
     state[SEEDED_KEY] = seeded
+    attempts = state.get(ATTEMPTS_KEY)
+    if not isinstance(attempts, dict):
+        attempts = {}
+    state[ATTEMPTS_KEY] = attempts
+    for key in [k for k, t in attempts.items() if now - t > STATE_RETENTION_SECONDS]:
+        del attempts[key]
     configured = {
         "fib": bool(scanner.get_env_or_config(FIB_ENV, DISCORD_FIB_WEBHOOK_URL)),
         "trendline": bool(scanner.get_env_or_config(TL_ENV, DISCORD_TRENDLINE_WEBHOOK_URL)),
@@ -432,12 +440,17 @@ def run_once(dry_run=False, force_nse=False):
                         continue
                     if not awake[market]:
                         continue             # held - it alerts later if it is still true
+                    if now - attempts.get(key, 0) < RETRY_BACKOFF_SECONDS:
+                        continue             # the last send failed: wait out the backoff
                     print(f"[{channel}] {message}\n")
                     if send(channel, message):
+                        attempts.pop(key, None)
                         mark_sent(state, key, now)
                         if record:
                             append_record(record, key, now)
                         counts[tally] = counts.get(tally, 0) + 1
+                    else:
+                        attempts[key] = now  # stays out of state so it still alerts once Discord is back
 
     for market, results in markets.items():
         ok = sum(1 for _, a, _ in results if a is not None)

@@ -7,10 +7,10 @@ def score_wick_zone(zone, distance_pct, min_distance_pct, max_distance_pct):
         return None
 
     score = 4
-    wick_to_body = float(zone.get("wick_to_body", 0.0))
-    wick_atr = float(zone.get("wick_atr", 0.0))
-    departure_atr = float(zone.get("departure_atr", 0.0))
-    touch_count = int(zone.get("touch_count", 0))
+    wick_to_body = float(zone.get("wick_to_body") or 0)
+    wick_atr = float(zone.get("wick_atr") or 0)
+    departure_atr = float(zone.get("departure_atr") or 0)
+    touch_count = int(zone.get("touch_count") or 0)
 
     if wick_to_body >= 2.5:
         score += 1
