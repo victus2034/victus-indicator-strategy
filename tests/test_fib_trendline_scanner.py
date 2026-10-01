@@ -389,7 +389,7 @@ class DailyReportTests(unittest.TestCase):
             p.start()
             self.addCleanup(p.stop)
         self.sent_ts = int(datetime(2026, 9, 29, 10, 0, tzinfo=ftd.IST).timestamp())
-        record = {"id": "a", "market": ftd.CRYPTO, "symbol": "BTCUSD", "tf": "30m", "kind": "fib",
+        record = {"id": "a", "market": ftd.CRYPTO, "symbol": "BTCUSD", "tf": "30m", "kind": "fib", "zone": 2,
                   "sent_ts": self.sent_ts, "plan": {"side": "long", "entry": 100.0, "sl": 99.0}}
         report.RECORDS_FILE.write_text(__import__("json").dumps(record) + "\n")
         self.candles = [[self.sent_ts + 300, 0, 100.5, 99.9, 0], [self.sent_ts + 600, 0, 102.2, 100.1, 0]]
@@ -401,6 +401,7 @@ class DailyReportTests(unittest.TestCase):
         self.assertIn("Alerts 1 · Entries 1\n+2R 1\nWin rate 100.0%", text)
         self.assertIn("30m CRYPTO - Alerts 1 | Entries 1 | +2R 1 | 100.0%", text)
         self.assertIn("10:00 - Alerts 1 | Entries 1 | +2R 1 | 100.0%", text)
+        self.assertIn("Lower zone - Alerts 1", text)     # zone 2 on a long, named as the alert names it
         self.assertNotIn("TRENDLINE", text)
         self.assertTrue(self.report.load_results()["a"]["resolved"])
         with mock.patch.object(self.report, "eval_candles", side_effect=AssertionError("re-scored")):
