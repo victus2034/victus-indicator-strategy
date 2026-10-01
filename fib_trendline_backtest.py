@@ -109,6 +109,35 @@ def crypto_held(ts, seconds):
     return start.date() == end.date() and start.hour >= 1 and (end.hour, end.minute) <= (8, 0)
 
 
+class TouchClock:
+    """The zone scanner's age rules, for a fib zone or a trendline (scanner.record_zone_touch).
+
+    Fed one closed candle at a time, oldest first, from when the level appeared.
+    quiet(i) is too_young_to_alert's age at candle i: candles since the last
+    touch, or the quiet run earned before the touch episode now in progress.
+    max_streak is what the over-touched veto reads (2 in a row = over-touched).
+    Recorded on each backtest alert so candidate filters can be tested without
+    changing what alerts - see the filter study in reports/.
+    """
+
+    def __init__(self, start):
+        self.clock, self.last_gap, self.streak, self.max_streak = start, None, 0, 0
+
+    def feed(self, index, touched):
+        if touched:
+            if self.streak == 0:
+                self.last_gap = index - self.clock
+            self.clock = index
+            self.streak += 1
+        else:
+            self.streak = 0
+        self.max_streak = max(self.max_streak, self.streak)
+
+    def quiet(self, index):
+        run = index - self.clock
+        return max(run, self.last_gap) if self.last_gap is not None else run
+
+
 def replay(market, symbol, tf, base, evalc, now):
     """Every alert the live scanner would have sent on this chart, traded and scored."""
     if base and not candle_is_closed(market, base[-1][0], tf, now):
@@ -160,13 +189,23 @@ def replay(market, symbol, tf, base, evalc, now):
                 if held(ts) or l > hi_band or h < lo_band:
                     continue
                 fired.add(key)
+                clock = TouchClock(s["Et"])
+                for j in range(s["Et"] + 1, i):
+                    clock.feed(j, highs[j] >= zone["low"] and lows[j] <= zone["high"])
+                features = {"swing_gap": s["Et"] - s["Ot"], "age": i - s["Et"],
+                            "quiet": clock.quiet(i), "max_streak": clock.max_streak}
                 out.append(trade("fib", trades.fib_plan(d, zone), k,
-                                 {"zone": zone["zone"], "fib_id": f"{symbol}|{tf}|{d}|{times[s['Ot']]}|{top}"}))
+                                 {"zone": zone["zone"], "fib_id": f"{symbol}|{tf}|{d}|{times[s['Ot']]}|{top}",
+                                  **features}))
                 break
 
     for line in build_trendlines(highs, lows, closes, TRENDLINE_SWING_LENGTH, TRENDLINES_KEEP, history=True):
         last = min(x for x in (line.broken_at, line.trimmed_at, n - 1) if x is not None)
         in_band, last_alert = False, None
+        clock = TouchClock(line.created)
+        for i in range(line.created + 1, first):          # touches before the window still count
+            level = line.price_at(i)
+            clock.feed(i, lows[i] <= level <= highs[i])
         for i in range(max(line.created + 1, first), last + 1):
             level = line.price_at(i)
             if level <= 0:
@@ -183,9 +222,12 @@ def replay(market, symbol, tf, base, evalc, now):
                     continue
                 if not in_band and (last_alert is None or ts - last_alert >= TF_SECONDS[tf]):
                     plan = trades.trendline_plan(line.kind == SUPPORT, level, tf)
-                    out.append(trade("trendline", plan, k, {"line": line.kind}))
+                    out.append(trade("trendline", plan, k, {
+                        "line": line.kind, "swing_gap": line.x2 - line.x1, "age": i - line.created,
+                        "quiet": clock.quiet(i), "max_streak": clock.max_streak}))
                     last_alert = ts
                 in_band = True
+            clock.feed(i, lows[i] <= level <= highs[i])
     return out
 
 
