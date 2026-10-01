@@ -7,10 +7,14 @@ const {
   SECTOR_THEME_DEFINITIONS,
   SECTOR_THEME_THRESHOLD,
   activeDasha,
+  addDays,
   buildDailyPayload,
   buildWeeklyPayload,
   evaluateDay,
+  generateForecast,
+  generateWeeklyForecast,
   houseFromSign,
+  luckyNumber,
   nakshatraDetails,
   planetaryHoras,
   rahuKalam,
@@ -111,23 +115,56 @@ assert.notStrictEqual((horas[0].end - horas[0].start).toFixed(3), "1.000");
 const dailyPayload = buildDailyPayload(regressionDate);
 const daily = dailyPayload.text;
 const dailyEmbedText = JSON.stringify(dailyPayload.payload.embeds);
-assert(daily.includes("Baatcheet & Log"));
-assert(dailyEmbedText.includes("Baatcheet & Log"));
+assert(daily.includes("Today's Lucky Number:"));
+assert(dailyEmbedText.includes("Today's Lucky Number"));
+assert(dailyPayload.payload.embeds[0].description.length > 300);
 assert.strictEqual(dailyPayload.payload.content, "");
 assert.strictEqual(dailyPayload.payload.embeds.length, 1);
 assert(!/romance|dating|marriage|love-life/i.test(daily));
 assert(!/stop-loss|take-profit|leverage|position size|buy\/sell signal/i.test(daily));
 assert(!/disclaimer|not a trade signal/i.test(daily));
 
+// Forecast style: one flowing paragraph, a lucky number, wording that is
+// stable for a date, varies across dates, and never touches excluded topics.
+assert.strictEqual(generateForecast(evaluation), generateForecast(evaluation));
+assert.strictEqual(luckyNumber(evaluation), 2); // Moon in Rohini, ruled by the Moon (2)
+const forecasts = new Set();
+for (let offset = 0; offset < 60; offset += 1) {
+  const day = addDays(regressionDate, offset);
+  const dayEval = evaluateDay(day);
+  const forecast = generateForecast(dayEval);
+  forecasts.add(forecast);
+  assert(!forecast.includes("\n"), "forecast must be a single paragraph");
+  assertRange(forecast.split(". ").length, 6, 11, "forecast sentence count");
+  assertRange(luckyNumber(dayEval), 1, 9, "lucky number");
+  assert(!/romance|dating|marriage|love|spouse|pati|patni/i.test(forecast));
+  assert(!/stop-loss|take-profit|leverage|position size|buy\/sell/i.test(forecast));
+}
+assert(forecasts.size >= 55, `forecasts repeat too much: ${forecasts.size}/60 distinct`);
+
 const weeklyPayload = buildWeeklyPayload({ year: 2026, month: 8, day: 10 });
 const weekly = weeklyPayload.text;
 const weeklyEmbedText = JSON.stringify(weeklyPayload.payload.embeds);
 assert(weekly.includes("NEXT WEEK ASTROLOGY"));
-assert(weekly.includes("Communication & People"));
-assert(weeklyEmbedText.includes("Communication & People"));
+assert(weekly.includes("Lucky Numbers:"));
+assert(weeklyEmbedText.includes("Lucky Numbers"));
+assert(weeklyPayload.payload.embeds[0].description.length > 300);
 assert.strictEqual(weeklyPayload.payload.content, "");
 assert.strictEqual(weeklyPayload.payload.embeds.length, 1);
 assert(!/romance|dating|marriage|love-life/i.test(weekly));
 assert(!/disclaimer|not a trade signal/i.test(weekly));
+
+const weeklyForecasts = new Set();
+for (let week = 0; week < 12; week += 1) {
+  const startDay = addDays({ year: 2026, month: 8, day: 10 }, week * 7);
+  const evals = Array.from({ length: 7 }, (_, i) => evaluateDay(addDays(startDay, i)));
+  const forecast = generateWeeklyForecast(evals);
+  weeklyForecasts.add(forecast);
+  assert(!forecast.includes("\n"), "weekly forecast must be a single paragraph");
+  assertRange(forecast.split(". ").length, 7, 11, "weekly sentence count");
+  assert(!/romance|dating|marriage|love|spouse|\bpati\b|patni/i.test(forecast));
+  assert(!/stop-loss|take-profit|leverage|position size|buy\/sell/i.test(forecast));
+}
+assert(weeklyForecasts.size >= 10, `weekly forecasts repeat: ${weeklyForecasts.size}/12`);
 
 console.log("Astrology engine regression tests passed.");

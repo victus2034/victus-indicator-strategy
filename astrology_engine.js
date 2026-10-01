@@ -884,6 +884,325 @@ function generateDailyInterpretation(evaluation) {
   };
 }
 
+// Number of each nakshatra lord in Vedic numerology; the lucky number is the
+// number of the lord of the nakshatra the Moon is in at 07:00 IST.
+const LORD_NUMBERS = Object.freeze({
+  Sun: 1,
+  Moon: 2,
+  Jupiter: 3,
+  Rahu: 4,
+  Mercury: 5,
+  Venus: 6,
+  Ketu: 7,
+  Saturn: 8,
+  Mars: 9,
+});
+
+function luckyNumber(evaluation) {
+  return LORD_NUMBERS[evaluation.moonNak.lord];
+}
+
+// Same date always gives the same wording; neighbouring days and different
+// slots rotate through the variants so the post does not repeat itself.
+function pickVariant(date, slot, options) {
+  return options[(dayOfYear(date) + slot * 3) % options.length];
+}
+
+// Slow planets (Mercury, Rahu) keep the same optional lines triggered for
+// weeks, so take 3 of the triggered ones starting at a date-based offset; the
+// post then varies daily without ever using a line no transit triggered.
+function rotateOptional(optional, date, limit = 3) {
+  if (optional.length <= limit) return optional;
+  const start = dayOfYear(date) % optional.length;
+  return Array.from({ length: limit }, (_, i) => optional[(start + i) % optional.length]);
+}
+
+// AstroSage-style prediction: one flowing paragraph of short sentences that
+// mixes good and bad across life areas (health, money, work, family, people,
+// travel, speech, devices) instead of one block per topic. Romance and
+// spouse lines are left out on purpose - the reports exclude them. Every
+// sentence is picked from the same transit/dasha/score outputs as the rest of
+// the report; nothing here changes the astronomical calculation.
+function generateForecast(evaluation) {
+  const { date, scores, dasha, chandra, tara, transit, transits } = evaluation;
+  const interpretation = generateDailyInterpretation(evaluation);
+  const { moneyOpportunity, moneyRisk, healthRisk, trustRisk, studyPositive } =
+    interpretation.diagnostics;
+  const overall = scores.overall.value;
+  const study = scores.study.value;
+  const health = scores.health.value;
+  const communication = scores.communication.value;
+  const moonFromLagna = transit.moon.houseFromLagna;
+  const pick = (slot, options) => pickVariant(date, slot, options);
+
+  let opener;
+  if (overall >= 3) {
+    opener = pick(0, [
+      "Din ki shuruaat energy ke saath hogi aur ruke hue kaam aage badhenge.",
+      "Aaj confidence high rahega, jo kaam talte aa rahe the unhe nipta lo.",
+      "Sitare aaj saath dete dikh rahe hain, important kaam ko aage badhao.",
+    ]);
+  } else if (overall >= 0) {
+    opener = pick(0, [
+      "Aaj ka din mixed rahega, kuch kaam smoothly honge aur kuch mein thoda wait karna padega.",
+      "Din normal chalega, bas apni routine pakde raho.",
+      "Aaj mann kabhi halka aur kabhi thoda bhaari reh sakta hai, par sab manageable rahega.",
+    ]);
+  } else {
+    opener = pick(0, [
+      "Aaj mood mein utaar-chadhav reh sakta hai, jaldbaazi mein koi bada faisla mat lo.",
+      "Din thoda sensitive hai, dheere aur soch-samajh kar chalo.",
+      "Kuch cheezein aaj tense kar sakti hain, lekin ghabrane ki zarurat nahi, din nikal jayega.",
+    ]);
+  }
+
+  let healthLine;
+  if (healthRisk >= 3) {
+    healthLine = pick(1, [
+      "Khane-peene mein bilkul laparwahi mat karo, bahar ka khana aur neend ki kami tabiyat bigaad sakti hai.",
+      "Sehat ko halke mein mat lo, paani, neend aur time par khana teeno zaroori hain.",
+    ]);
+  } else if (healthRisk >= 2 || health <= -1) {
+    healthLine = pick(1, [
+      "Khane-peene mein savdhaan raho, laparwahi se sehat bigad sakti hai.",
+      "Energy thodi dheemi lag sakti hai, kaam ke beech break lete raho.",
+    ]);
+  } else if (health >= 2) {
+    healthLine = pick(1, [
+      "Sehat achhi rahegi aur energy high, exercise ya sports ke liye achha din hai.",
+      "Body fit lagegi, aaj ka workout ya walk skip mat karo.",
+    ]);
+  } else {
+    healthLine = pick(1, [
+      "Sehat normal rahegi, bas paani aur neend ka dhyan rakho.",
+      "Health theek rahegi, khane ka time na bigaado.",
+    ]);
+  }
+
+  let moneyLine;
+  if (moneyOpportunity >= 3 && moneyRisk >= 3) {
+    moneyLine = pick(2, [
+      "Paise ki position improve hogi, lekin kharche aur outflow phir bhi kaam mein rukawat daalenge.",
+      "Income ke chances achhe hain, par kharche utni hi tezi se aayenge, trading mein bhi apne rules mat todo.",
+    ]);
+  } else if (moneyOpportunity >= 3) {
+    moneyLine = pick(2, [
+      "Paise ke maamle supportive hain, planning aur practical decisions ke liye din theek hai.",
+      "Financial side achhi rahegi, bas unnecessary risk se bacho.",
+    ]);
+  } else if (moneyOpportunity >= 1 && moneyRisk >= 3) {
+    moneyLine = pick(2, [
+      "Thoda financial improvement dikhega, par kharche aur impulsiveness dominant rahenge.",
+      "Paisa aayega bhi aur jayega bhi, bada financial faisla aaj mat lo.",
+    ]);
+  } else if (moneyRisk >= 3) {
+    moneyLine = pick(2, [
+      "Paise ke maamle mein savdhaan raho, bina soche kharch ya pressure mein liya faisla nuksaan de sakta hai.",
+      "Aaj paisa haath se phisal sakta hai, kharche aur trading dono control mein rakho.",
+    ]);
+  } else if (scores.money.value <= -1) {
+    moneyLine = pick(2, [
+      "Paise ka har faisla apne rules check karke hi lo.",
+      "Financial discipline aaj important rahega, unnecessary activity avoid karo.",
+    ]);
+  } else {
+    moneyLine = pick(2, [
+      "Paise ke maamle balanced rahenge, normal planning chalegi.",
+      "Financial matters stable rahenge, bina setup ke risk mat lo.",
+    ]);
+  }
+
+  const recognition =
+    [6, 10, 11].includes(transit.sun.houseFromLagna) || moonFromLagna === 10;
+  let workLine;
+  if (studyPositive >= 4) {
+    workLine = pick(3, [
+      "Padhai aur career ke liye shandaar din hai, mehnat ka phal milne ke chance hain, mushkil task nipta lo.",
+      "Concentration achha rahega, ek difficult topic ya pending kaam aaj khatam karo.",
+    ]);
+  } else if (recognition && study >= 0) {
+    workLine = pick(3, [
+      "Aapki mehnat par kisi ka dhyan jayega, kaam par recognition mil sakti hai.",
+      "Kaam par aapki mehnat notice hogi, apna best do.",
+    ]);
+  } else if (study >= 1) {
+    workLine = pick(3, [
+      "Padhai aur career workable hain, ek important task ko priority do.",
+      "Kaam mein progress hogi, bas ek cheez pe focus rakho.",
+    ]);
+  } else if (study <= -2) {
+    workLine = pick(3, [
+      "Focus bikhar sakta hai, naya complicated kaam force mat karo, revision aur pending kaam karo.",
+      "Dhyan bhatakne ka din hai, bade topic ke bajay chhote tasks khatam karo.",
+    ]);
+  } else {
+    workLine = pick(3, [
+      "Kaam mein steady progress hogi, speed se zyada consistency chalegi.",
+      "Padhai aur kaam routine mein chalenge, shortcuts mat dhundho.",
+    ]);
+  }
+
+  const familyCaution =
+    ([2, 4].includes(transit.mars.houseFromLagna) ? 1 : 0) +
+    ([2, 4].includes(transit.rahu.houseFromLagna) ? 1 : 0) +
+    ([2, 4].includes(transit.ketu.houseFromLagna) ? 1 : 0) +
+    ([2, 4].includes(transit.saturn.houseFromLagna) ? 1 : 0) +
+    ([8, 12].includes(moonFromLagna) ? 1 : 0);
+  const familySupport =
+    ([2, 4, 5, 9, 11].includes(transit.jupiter.houseFromLagna) ? 1 : 0) +
+    ([2, 4].includes(moonFromLagna) ? 1 : 0) +
+    (tara.favourable ? 1 : 0) +
+    (chandra ? 1 : 0);
+  let familyLine;
+  if (familyCaution >= 2) {
+    familyLine = pick(4, [
+      "Ghar mein chhoti baat par bahas ho sakti hai, bade-buzurgon se tone narm rakho.",
+      "Family mein kisi ki baat chubh sakti hai, jawab dene se pehle ruk jao.",
+    ]);
+  } else if (familySupport >= 3) {
+    familyLine = pick(4, [
+      "Ghar ka mahaul sukoon bhara rahega, family ke saath waqt bitaoge to achha lagega.",
+      "Family ke saath entertainment ya khana mazedaar rahega.",
+    ]);
+  } else {
+    familyLine = pick(4, [
+      "Family ke liye thoda waqt nikalo, unki chhoti zarooraton par dhyan do.",
+      "Ghar mein kisi chhote-bade ko aapki baat ya madad ki zarurat ho sakti hai.",
+    ]);
+  }
+
+  let peopleLine;
+  if (trustRisk >= 3) {
+    peopleLine = pick(5, [
+      "Doosron ki baaton par aankh band karke bharosa mat karo, jo suno use verify karo.",
+      "Koi aapko galat salah ya adhoori jaankari de sakta hai, sochkar hi maano.",
+    ]);
+  } else if (trustRisk >= 1) {
+    peopleLine = pick(5, [
+      "Kisi ki suggestion follow karne se pehle ek baar check kar lo.",
+      "Logon ki baat sunna theek hai, par faisla apna rakho.",
+    ]);
+  } else if (communication >= 2) {
+    peopleLine = pick(5, [
+      "Baat-cheet aur follow-ups ke liye din supportive hai, practical discussions smoothly honge.",
+      "Aapki communication aaj impressive rahegi.",
+    ]);
+  } else {
+    peopleLine = pick(5, [
+      "Logon se baat-cheet normal rahegi, faltu bahas aur assumptions se door raho.",
+      "Kisi ke baare mein jaldi raay mat banao.",
+    ]);
+  }
+
+  // Optional lines, each only when a transit actually triggers it.
+  const optional = [];
+
+  const travelCaution =
+    [1, 4, 8, 12].includes(transit.mars.houseFromLagna) ||
+    ([8, 12].includes(moonFromLagna) && [1, 4].includes(transit.rahu.houseFromLagna));
+  const travelGood =
+    [3, 9].includes(moonFromLagna) ||
+    [3, 9].includes(transit.jupiter.houseFromLagna);
+  if (travelCaution && travelGood) {
+    optional.push(
+      pick(6, [
+        "Safar thaka dene wala aur bhaag-daud bhara ho sakta hai, par faydemand rahega.",
+        "Travel hectic rahega lekin uska result achha milega, gaadi dhyan se chalana.",
+      ]),
+    );
+  } else if (travelCaution) {
+    optional.push(
+      pick(6, [
+        "Gaadi dhyan se chalao, khaaskar chauraho aur mod par, overtake karne mein jaldi mat karo.",
+        "Safar mein jaldbaazi mat karo, thoda extra time lekar nikalo.",
+      ]),
+    );
+  } else if (travelGood) {
+    optional.push(
+      pick(6, [
+        "Chhota safar ya bahar ka kaam faydemand rahega, naye log aur nayi jagah milengi.",
+        "Aaj bahar nikalna achha rahega, naye contacts ban sakte hain.",
+      ]),
+    );
+  }
+
+  if (moneyRisk >= 2 || [4, 8, 12].includes(transit.rahu.houseFromMoon)) {
+    optional.push(
+      pick(7, [
+        "Koi tip, scheme ya sure-shot offer attractive lage to pehle gehrai se verify karo, phir commit karo.",
+        "Jo opportunity bahut easy lage uski poori jaankari nikaalo, apne experts se poochho.",
+      ]),
+    );
+  }
+
+  const mercuryRetro = transits.mercury.speed < 0;
+  if (mercuryRetro) {
+    optional.push(
+      pick(8, [
+        "Mercury vakri hai, phone, apps ya trading platform mein glitch ho sakta hai, message ya order bhejne se pehle double-check karo.",
+        "Technology aur paperwork mein galti ho sakti hai, bheje se pehle ek baar padh lo.",
+      ]),
+    );
+  } else if ([6, 8, 12].includes(transit.mercury.houseFromLagna)) {
+    optional.push(
+      pick(8, [
+        "Mobile par zyada time mat bitao, kaam mein disturbance aur galti ho sakti hai.",
+        "Phone aur screen aaj dhyan bhatka sakte hain, kaam ke time unse door raho.",
+      ]),
+    );
+  }
+
+  const speechRisk =
+    [2, 8, 12].includes(transit.mercury.houseFromLagna) ||
+    transit.mercury.sign === transit.rahu.sign ||
+    transit.mercury.sign === transit.mars.sign;
+  if (speechRisk) {
+    optional.push(
+      pick(9, [
+        "Zubaan par control rakho, ek galat shabd se kaam ya rishta bigad sakta hai.",
+        "Aaj bolne se zyada sunna fayda dega, chup rehna kabhi-kabhi behtar hai.",
+      ]),
+    );
+  }
+
+  const friendSupport =
+    [3, 11].includes(moonFromLagna) ||
+    [3, 11].includes(transit.venus.houseFromLagna) ||
+    [3, 11].includes(transit.jupiter.houseFromLagna);
+  if (friendSupport && trustRisk < 3) {
+    optional.push(
+      pick(10, [
+        "Dosto ke saath achha waqt guzrega, aur kaam ke naye log milne ke mauke hain.",
+        "Doston ya known logon se kisi kaam ki madad mil sakti hai.",
+      ]),
+    );
+  }
+
+  let closing;
+  if (overall >= 2) {
+    closing = pick(11, [
+      "Mauke ka fayda uthao, aaj ki mehnat aage kaam aayegi.",
+      "Jo plan banaya hai use aaj aage badhao.",
+    ]);
+  } else {
+    closing = pick(11, [
+      "Aaj ka din agle kadam ki planning ke liye use karo, future ke liye sochne mein kabhi der nahi hoti.",
+      "Jaldbaazi chhodo aur ek-ek kaam karte jao.",
+    ]);
+  }
+
+  return [
+    opener,
+    healthLine,
+    moneyLine,
+    workLine,
+    familyLine,
+    peopleLine,
+    ...rotateOptional(optional, date),
+    closing,
+  ].join(" ");
+}
+
 function getAstrologicalFocus(evaluation) {
   const { scores, dasha } = evaluation;
   const focusParts = [];
@@ -988,6 +1307,7 @@ function sectorFactorApplies(factor, transit, dasha) {
 function displayDate(date) {
   return new Intl.DateTimeFormat("en-IN", {
     timeZone: "Asia/Kolkata",
+    weekday: "long",
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -999,15 +1319,9 @@ function buildDailyText(evaluation) {
   const lines = [
     `DAILY ASTROLOGY | ${displayDate(evaluation.date)}`,
     "",
-    `Aaj Ka Din: ${interpretation.overallText}`,
+    generateForecast(evaluation),
     "",
-    `Padhai & Career: ${interpretation.careerText}`,
-    "",
-    `Paisa & Trading: ${interpretation.moneyText}`,
-    "",
-    `Health & Energy: ${interpretation.healthText}`,
-    "",
-    `Baatcheet & Log: ${interpretation.socialText}`,
+    `Today's Lucky Number: ${luckyNumber(evaluation)}`,
     "",
     `Accha Time: ${formatWindow(evaluation.favourable)}`,
     `Savdhaan Time: ${formatWindow(evaluation.timings.rahuKalam)}`,
@@ -1025,24 +1339,8 @@ function buildDailyEmbed(evaluation) {
   const interpretation = generateDailyInterpretation(evaluation);
   const fields = [
     {
-      name: "Aaj Ka Din",
-      value: interpretation.overallText,
-    },
-    {
-      name: "Padhai & Career",
-      value: interpretation.careerText,
-    },
-    {
-      name: "Paisa & Trading",
-      value: interpretation.moneyText,
-    },
-    {
-      name: "Health & Energy",
-      value: interpretation.healthText,
-    },
-    {
-      name: "Baatcheet & Log",
-      value: interpretation.socialText,
+      name: "Today's Lucky Number",
+      value: String(luckyNumber(evaluation)),
     },
     {
       name: "Accha Time",
@@ -1070,6 +1368,7 @@ function buildDailyEmbed(evaluation) {
 
   return {
     title: `Victus Daily Astrology - ${displayDate(evaluation.date)}`,
+    description: generateForecast(evaluation),
     color: 0x5865f2,
     fields,
     footer: {
@@ -1169,22 +1468,7 @@ function weekdayLabel(date) {
   }).format(new Date(Date.UTC(date.year, date.month - 1, date.day, 6)));
 }
 
-function summarizeWeekly(evaluations, section) {
-  const values = evaluations.map((item) => item.scores[section].value);
-  const average = values.reduce((sum, value) => sum + value, 0) / values.length;
-  const best = evaluations
-    .map((item) => ({ label: weekdayLabel(item.date), score: item.scores[section].value }))
-    .sort((a, b) => b.score - a.score)[0];
-  const weak = evaluations
-    .map((item) => ({ label: weekdayLabel(item.date), score: item.scores[section].value }))
-    .sort((a, b) => a.score - b.score)[0];
-
-  if (average >= 2) return `Supportive overall. Stronger around ${best.label}; use it for priority work.`;
-  if (average <= -1) return `Caution overall. Be most careful around ${weak.label}; keep expectations simple.`;
-  return `Mixed but workable. Stronger around ${best.label}, slower around ${weak.label}.`;
-}
-
-function buildWeeklyText(start, evaluations) {
+function weeklyHighlights(evaluations) {
   const totals = evaluations.map((item) => item.scores.overall.value);
   const stronger = evaluations
     .filter((item) => item.scores.overall.value >= 2)
@@ -1197,25 +1481,202 @@ function buildWeeklyText(start, evaluations) {
     .sort((a, b) => b.scores.overall.value - a.scores.overall.value)[0];
   const mainFocus =
     totals.reduce((sum, value) => sum + value, 0) >= 7
-      ? "Use stronger days for difficult work; keep routines consistent on the rest."
-      : "Keep the week practical: fewer decisions, cleaner routines, and written priorities.";
-  const avoid =
-    evaluations.some((item) => item.scores.money.value <= -2)
-      ? "Avoid emotional money decisions and changing rules under pressure."
-      : "Avoid overloading the schedule and reacting before checking facts.";
+      ? "Strong days par mushkil kaam karo, baaki din routine consistent rakho."
+      : "Hafta practical rakho: kam faisle, saaf routine aur likhi hui priorities.";
+  const avoid = evaluations.some((item) => item.scores.money.value <= -2)
+    ? "Emotional paisa decisions aur pressure mein rules badalna avoid karo."
+    : "Schedule ko overload karna aur facts check kiye bina react karna avoid karo.";
+  const lucky = evaluations
+    .map((item) => `${weekdayLabel(item.date)}: ${luckyNumber(item)}`)
+    .join(" | ");
+  return { stronger, caution, bestDay, mainFocus, avoid, lucky };
+}
 
+// Weekly counterpart of generateForecast: one flowing Hinglish paragraph for
+// the whole week, built from the seven daily evaluations. Names the best and
+// weakest day per area so the week reads as a plan, not an average. Romance
+// and spouse lines stay out, same as the daily post.
+function generateWeeklyForecast(evaluations) {
+  const days = evaluations.map((evaluation) => ({
+    evaluation,
+    label: weekdayLabel(evaluation.date),
+    diag: generateDailyInterpretation(evaluation).diagnostics,
+  }));
+  const avg = (fn) => days.reduce((sum, day) => sum + fn(day), 0) / days.length;
+  const best = (fn) => days.slice().sort((a, b) => fn(b) - fn(a))[0].label;
+  const worst = (fn) => days.slice().sort((a, b) => fn(a) - fn(b))[0].label;
+  const score = (name) => (day) => day.evaluation.scores[name].value;
+  const first = evaluations[0].date;
+  const pick = (slot, options) => pickVariant(first, slot, options);
+
+  const overall = avg(score("overall"));
+  let opener;
+  if (overall >= 2) {
+    opener = pick(0, [
+      "Ye hafta supportive rahega, ruke hue kaam aage badhane ka achha mauka hai.",
+      "Hafta energy ke saath shuru hoga aur mehnat ka phal milne ke chance hain.",
+    ]);
+  } else if (overall <= -1) {
+    opener = pick(0, [
+      "Ye hafta thoda sensitive rahega, jaldbaazi mein bade faisle mat lo.",
+      "Hafta dheere aur soch-samajh kar chalne ka hai, ghabrane ki zarurat nahi.",
+    ]);
+  } else {
+    opener = pick(0, [
+      "Hafta mixed rahega, kuch din smooth aur kuch din thoda slow.",
+      "Ye hafta normal chalega, bas apni routine pakde raho.",
+    ]);
+  }
+
+  const healthRisk = avg((d) => d.diag.healthRisk);
+  const healthLine =
+    healthRisk >= 2 || avg(score("health")) <= -1
+      ? pick(1, [
+          `Khane-peene aur neend mein laparwahi mat karo, khaaskar ${worst(score("health"))} ko sehat ka dhyan rakho.`,
+          `Energy thodi dheemi reh sakti hai, ${worst(score("health"))} ko extra rest lo.`,
+        ])
+      : avg(score("health")) >= 2
+        ? pick(1, [
+            `Sehat achhi rahegi, exercise ya sports ke liye ${best(score("health"))} sabse achha din hai.`,
+            "Body fit rahegi, hafte bhar walk ya workout ki routine banao.",
+          ])
+        : pick(1, [
+            "Sehat normal rahegi, bas paani, neend aur khane ka time na bigaado.",
+            "Health theek rahegi, thakaan ho to rest skip mat karo.",
+          ]);
+
+  const moneyRisk = avg((d) => d.diag.moneyRisk);
+  const moneyOpportunity = avg((d) => d.diag.moneyOpportunity);
+  const moneyNet = (d) => d.diag.moneyOpportunity - d.diag.moneyRisk;
+  let moneyLine;
+  if (moneyOpportunity >= 2 && moneyRisk >= 2) {
+    moneyLine = pick(2, [
+      `Paise ke chances achhe hain lekin kharche bhi utne hi rahenge, ${best(moneyNet)} sabse supportive aur ${worst(moneyNet)} sabse tight rahega.`,
+      "Income aur outflow dono tez rahenge, trading mein bhi apne rules mat todo.",
+    ]);
+  } else if (moneyRisk >= 2) {
+    moneyLine = pick(2, [
+      `Paise ke maamle mein savdhaan raho, ${worst(score("money"))} ko bina soche kharch ya trade mat karo.`,
+      "Hafte mein paisa haath se phisal sakta hai, kharche aur trading control mein rakho.",
+    ]);
+  } else if (moneyOpportunity >= 2 || avg(score("money")) >= 1) {
+    moneyLine = pick(2, [
+      `Financial side supportive rahegi, planning ke liye ${best(score("money"))} achha rahega.`,
+      "Paise ke maamle stable rahenge, bas unnecessary risk se bacho.",
+    ]);
+  } else {
+    moneyLine = pick(2, [
+      "Paise ke maamle balanced rahenge, normal planning chalegi.",
+      "Financial discipline important rahegi, har faisla rules check karke lo.",
+    ]);
+  }
+
+  const workLine =
+    avg(score("study")) >= 1.5
+      ? pick(3, [
+          `Padhai aur career ke liye achha hafta hai, mushkil kaam ${best(score("study"))} ko nipta lo.`,
+          `Concentration achha rahega, ${best(score("study"))} ko ek bada pending kaam khatam karo.`,
+        ])
+      : avg(score("study")) <= -1
+        ? pick(3, [
+            `Focus bikhar sakta hai, ${worst(score("study"))} ko naya complicated kaam force mat karo.`,
+            "Bade topic ke bajay chhote tasks aur revision pe dhyan do.",
+          ])
+        : pick(3, [
+            "Kaam mein steady progress hogi, speed se zyada consistency chalegi.",
+            "Padhai aur kaam routine mein chalenge, shortcuts mat dhundho.",
+          ]);
+
+  const calmDays = days.filter((d) => d.evaluation.chandra).length;
+  const familyLine =
+    calmDays >= 5
+      ? pick(4, [
+          "Ghar ka mahaul sukoon bhara rahega, family ke saath waqt bitaoge to achha lagega.",
+          "Family ke saath entertainment ya khana mazedaar rahega.",
+        ])
+      : calmDays <= 2
+        ? pick(4, [
+            "Ghar mein chhoti baat par bahas ho sakti hai, bade-buzurgon se tone narm rakho.",
+            "Family mein kisi ki baat chubh sakti hai, jawab dene se pehle ruk jao.",
+          ])
+        : pick(4, [
+            "Family ke liye thoda waqt nikalo, unki chhoti zarooraton par dhyan do.",
+            "Ghar mein kisi ko aapki baat ya madad ki zarurat ho sakti hai.",
+          ]);
+
+  const trustRisk = avg((d) => d.diag.trustRisk);
+  const peopleLine =
+    trustRisk >= 2
+      ? pick(5, [
+          `Doosron ki baaton par aankh band karke bharosa mat karo, khaaskar ${best((d) => d.diag.trustRisk)} ko jo suno use verify karo.`,
+          "Koi galat salah ya adhoori jaankari de sakta hai, sochkar hi maano.",
+        ])
+      : avg(score("communication")) >= 1.5
+        ? pick(5, [
+            `Baat-cheet aur follow-ups ke liye hafta supportive hai, ${best(score("communication"))} sabse achha rahega.`,
+            "Aapki communication impressive rahegi, naye log milne ke mauke hain.",
+          ])
+        : pick(5, [
+            "Logon se baat-cheet normal rahegi, faltu bahas aur assumptions se door raho.",
+            "Kisi ke baare mein jaldi raay mat banao.",
+          ]);
+
+  const optional = [];
+  const travelDays = days
+    .filter((d) => [1, 4, 8, 12].includes(d.evaluation.transit.mars.houseFromLagna))
+    .map((d) => d.label);
+  if (travelDays.length >= 1 && travelDays.length < days.length) {
+    optional.push(
+      `Gaadi dhyan se chalao, khaaskar ${travelDays[0]} se, aur safar mein jaldbaazi mat karo.`,
+    );
+  } else if (travelDays.length === days.length) {
+    optional.push("Hafte bhar gaadi dhyan se chalao aur safar mein extra time lekar nikalo.");
+  }
+  if (moneyRisk >= 1.5) {
+    optional.push(
+      "Koi tip, scheme ya sure-shot offer attractive lage to pehle gehrai se verify karo, phir commit karo.",
+    );
+  }
+  if (evaluations.some((item) => item.transits.mercury.speed < 0)) {
+    optional.push(
+      "Mercury vakri hai, phone, apps ya trading platform mein glitch ho sakta hai, bhejne se pehle double-check karo.",
+    );
+  }
+  if (
+    avg((d) =>
+      d.evaluation.transit.mercury.sign === d.evaluation.transit.rahu.sign ? 1 : 0,
+    ) > 0.5
+  ) {
+    optional.push("Zubaan par control rakho, ek galat shabd se kaam bigad sakta hai.");
+  }
+
+  const bestDay = best(score("overall"));
+  const closing =
+    overall >= 2
+      ? `${bestDay} ko sabse achha mauka hai, us din apna sabse zaroori kaam rakho.`
+      : `${bestDay} sabse achha din rahega, bade kaam uske aas-paas plan karo.`;
+
+  return [
+    opener,
+    healthLine,
+    moneyLine,
+    workLine,
+    familyLine,
+    peopleLine,
+    ...rotateOptional(optional, first),
+    closing,
+  ].join(" ");
+}
+
+function buildWeeklyText(start, evaluations) {
+  const { stronger, caution, bestDay, mainFocus, avoid, lucky } =
+    weeklyHighlights(evaluations);
   const lines = [
     `NEXT WEEK ASTROLOGY | ${weeklyRangeLabel(start)}`,
     "",
-    `Overall: ${summarizeWeekly(evaluations, "overall")}`,
+    generateWeeklyForecast(evaluations),
     "",
-    `Study & Career: ${summarizeWeekly(evaluations, "study")}`,
-    "",
-    `Money & Trading Discipline: ${summarizeWeekly(evaluations, "money")}`,
-    "",
-    `Health & Energy: ${summarizeWeekly(evaluations, "health")}`,
-    "",
-    `Communication & People: ${summarizeWeekly(evaluations, "communication")}`,
+    `Lucky Numbers: ${lucky}`,
     "",
     `Stronger Days: ${stronger.length ? stronger.join(", ") : "None clearly stronger"}`,
     `Caution Days: ${caution.length ? caution.join(", ") : "None clearly caution"}`,
@@ -1240,45 +1701,10 @@ function buildWeeklyText(start, evaluations) {
 }
 
 function buildWeeklyEmbed(start, evaluations) {
-  const totals = evaluations.map((item) => item.scores.overall.value);
-  const stronger = evaluations
-    .filter((item) => item.scores.overall.value >= 2)
-    .map((item) => weekdayLabel(item.date));
-  const caution = evaluations
-    .filter((item) => item.scores.overall.value <= -2 || item.scores.money.value <= -2)
-    .map((item) => weekdayLabel(item.date));
-  const bestDay = evaluations
-    .slice()
-    .sort((a, b) => b.scores.overall.value - a.scores.overall.value)[0];
-  const mainFocus =
-    totals.reduce((sum, value) => sum + value, 0) >= 7
-      ? "Use stronger days for difficult work; keep routines consistent on the rest."
-      : "Keep the week practical: fewer decisions, cleaner routines, and written priorities.";
-  const avoid =
-    evaluations.some((item) => item.scores.money.value <= -2)
-      ? "Avoid emotional money decisions and changing rules under pressure."
-      : "Avoid overloading the schedule and reacting before checking facts.";
+  const { stronger, caution, bestDay, mainFocus, avoid, lucky } =
+    weeklyHighlights(evaluations);
   const fields = [
-    {
-      name: "Overall",
-      value: summarizeWeekly(evaluations, "overall"),
-    },
-    {
-      name: "Study & Career",
-      value: summarizeWeekly(evaluations, "study"),
-    },
-    {
-      name: "Money & Trading Discipline",
-      value: summarizeWeekly(evaluations, "money"),
-    },
-    {
-      name: "Health & Energy",
-      value: summarizeWeekly(evaluations, "health"),
-    },
-    {
-      name: "Communication & People",
-      value: summarizeWeekly(evaluations, "communication"),
-    },
+    { name: "Lucky Numbers", value: lucky },
     {
       name: "Stronger Days",
       value: stronger.length ? stronger.join(", ") : "None clearly stronger",
@@ -1293,14 +1719,8 @@ function buildWeeklyEmbed(start, evaluations) {
       name: "Best Period",
       value: `${weekdayLabel(bestDay.date)} ${formatWindow(bestDay.favourable)}`,
     },
-    {
-      name: "Main Focus",
-      value: mainFocus,
-    },
-    {
-      name: "Avoid",
-      value: avoid,
-    },
+    { name: "Main Focus", value: mainFocus },
+    { name: "Avoid", value: avoid },
   ];
 
   const weeklySectors = mergeWeeklySectors(evaluations);
@@ -1319,10 +1739,11 @@ function buildWeeklyEmbed(start, evaluations) {
 
   return {
     title: `Victus Weekly Astrology - ${weeklyRangeLabel(start)}`,
+    description: generateWeeklyForecast(evaluations),
     color: 0x5865f2,
     fields,
     footer: {
-      text: "Reflection only. Use your setup, stop-loss, and position-size rules.",
+      text: "Sirf reflection ke liye. Apna trading setup, stop-loss aur position-size rules khud follow karna.",
     },
   };
 }
@@ -1424,6 +1845,9 @@ module.exports = {
   buildDailyPayload,
   buildWeeklyPayload,
   evaluateDay,
+  generateForecast,
+  generateWeeklyForecast,
+  luckyNumber,
   getTransits,
   houseFromSign,
   nakshatraDetails,

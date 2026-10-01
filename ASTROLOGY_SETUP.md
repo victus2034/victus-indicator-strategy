@@ -8,20 +8,25 @@ Reports:
 - Daily astrology: every day at 07:00 IST
 - Weekly astrology: every Sunday at 19:00 IST for the next week
 
-The daily post includes:
+The daily post is an AstroSage-style prediction: one flowing Hinglish paragraph of
+short sentences that mixes good and bad across health and food, money, work and
+study, family, people and trust, plus lines that appear only when a transit
+triggers them (travel and driving, tips and schemes, Mercury retrograde or
+phone trouble, speech, friends). It is followed by:
 
-- Overall
-- Study & Career
-- Money & Trading Discipline
-- Health & Energy
-- Communication & People
-- Favourable Period
-- Caution Period
-- Do Today
-- Avoid Today
+- Today's Lucky Number (number of the Moon's nakshatra lord at 07:00 IST)
+- Accha Time and Savdhaan Time
+- Aaj Karo / Aaj Na Karo
+- Astrological Focus
 
-The weekly post includes the same main themes across all 7 upcoming days, plus
-stronger days, caution days, best period of week, main focus, and avoid.
+Wording is chosen from the same transits, dasha, Tara Bala and Chandra Bala the
+scores already used, and rotates by date so consecutive days do not repeat.
+
+The weekly post uses the same style: one Hinglish paragraph for the whole week
+that names the best and weakest day for each area (health, money, work, family,
+people), plus travel, scheme, Mercury and speech lines when triggered. It is
+followed by day-wise Lucky Numbers, stronger days, caution days, best period of
+week, main focus, avoid, and sector themes.
 
 The system intentionally excludes romance content and does not produce trade
 entries, exits, stop-losses, take-profits, leverage, position sizing, or
