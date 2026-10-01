@@ -5684,7 +5684,7 @@
     "OIL.NS|30m|long|458.8|461.9": 1790658140.9872358,
     "RADICO.NS|30m|long|4376.8|4402.4": 1790656927.5046678,
     "FACT.NS|30m|long|753.5|753.75": 1790654516.5975723,
-    "CENTRALBK.NS|30m|long|29.92|30.09": 1790659326.6466732,
+    "CENTRALBK.NS|30m|long|29.92|30.09": 1790833337.4369364,
     "CUB.NS|30m|long|211.34|212.2": 1790654517.0343046,
     "CHALET.NS|30m|long|839.75|843": 1790654517.1964643,
     "GLENMARK.NS|30m|long|2296.2|2305": 1790655732.815883,
@@ -5732,7 +5732,9 @@
     "APLAPOLLO.NS|30m|long|2158.2|2169.9": 1790830954.9722798,
     "LINDEINDIA.NS|30m|short|6469|6488": 1790827339.6870537,
     "IIFL.NS|30m|long|589|590.15": 1790828534.8188558,
-    "HBLENGINE.NS|30m|long|775|780.75": 1790832127.191807
+    "HBLENGINE.NS|30m|long|775|780.75": 1790832127.191807,
+    "ASTRAL.NS|30m|long|1346.5|1350": 1790833337.2167923,
+    "EMMVEE.NS|30m|long|310.75|312.2": 1790833337.6673799
   },
   "ANANDRATHI.NS|supply|2187.5000|2221.0000": {
     "in_zone": true,
@@ -32445,7 +32447,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "30m": 1790832088.0501418
+    "30m": 1790833296.2236059
   },
   "3MINDIA.NS|supply|35230.9249|35290.0000": {
     "in_zone": false,
@@ -230653,9 +230655,9 @@
     "last_attempt_at": 0.0
   },
   "CENTRALBK.NS|demand|29.9200|30.0900": {
-    "in_zone": false,
-    "last_alert_at": 1790659326.6466732,
-    "last_attempt_at": 1790659326.6466732
+    "in_zone": true,
+    "last_alert_at": 1790833337.4369364,
+    "last_attempt_at": 1790833337.4369364
   },
   "RRKABEL.NS|supply|2971.3000|2979.7000": {
     "in_zone": false,
@@ -231988,9 +231990,9 @@
     "last_attempt_at": 0.0
   },
   "EMMVEE.NS|demand|310.7500|312.2000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790833337.6673799,
+    "last_attempt_at": 1790833337.6673799
   },
   "BELRISE.NS|demand|242.2900|243.6100": {
     "in_zone": false,
@@ -233273,9 +233275,9 @@
     "last_attempt_at": 0.0
   },
   "ASTRAL.NS|demand|1346.5000|1350.0000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790833337.2167923,
+    "last_attempt_at": 1790833337.2167923
   },
   "HEXT.NS|demand|476.4000|477.1000": {
     "in_zone": false,
@@ -233498,6 +233500,11 @@
     "last_attempt_at": 0.0
   },
   "COHANCE.NS|supply|467.8000|469.2000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "ELGIEQUIP.NS|demand|572.4500|572.5000": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
