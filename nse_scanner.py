@@ -147,8 +147,13 @@ def load_state():
 
 
 def save_state(state):
-    with STATE_FILE.open("w", encoding="utf-8") as file:
+    # Write beside it and swap in: a plain open("w") truncates first, and a
+    # runner killed mid-write leaves an empty file that load_state reads as
+    # "never alerted", re-sending every zone.
+    temp_path = STATE_FILE.with_name(STATE_FILE.name + ".tmp")
+    with temp_path.open("w", encoding="utf-8") as file:
         json.dump(state, file, indent=2)
+    os.replace(temp_path, STATE_FILE)
 
 
 def record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, now_ts):

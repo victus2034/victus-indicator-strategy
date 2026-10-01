@@ -465,3 +465,16 @@ class DailyReportFetchFailureTests(unittest.TestCase):
             results = fdr.score([record], {}, 2_000_000)
         self.assertEqual(results["a"]["outcome"], "open")
         self.assertFalse(results["a"]["resolved"])
+
+
+class AtomicStateWriteTests(unittest.TestCase):
+    def test_a_crash_mid_write_leaves_the_old_state_intact(self):
+        import scanner
+        with tempfile.TemporaryDirectory() as d:
+            path = pathlib.Path(d) / "alert_state.json"
+            with mock.patch.object(scanner, "STATE_FILE", path):
+                scanner.save_state({"a": 1})
+                with mock.patch.object(scanner.json, "dump", side_effect=RuntimeError("killed")):
+                    with self.assertRaises(RuntimeError):
+                        scanner.save_state({"a": 2})
+                self.assertEqual(scanner.load_state(), {"a": 1})

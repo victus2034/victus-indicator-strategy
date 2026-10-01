@@ -172,7 +172,9 @@ def load_state() -> dict:
 
 
 def save_state(state: dict) -> None:
-    STATE_PATH.write_text(json.dumps(state, indent=2, sort_keys=True), encoding="utf-8")
+    temp_path = STATE_PATH.with_name(STATE_PATH.name + ".tmp")     # atomic: a killed run must not leave a half file
+    temp_path.write_text(json.dumps(state, indent=2, sort_keys=True), encoding="utf-8")
+    os.replace(temp_path, STATE_PATH)
 
 
 # How different a re-alert's entry can be from an earlier one on the same
