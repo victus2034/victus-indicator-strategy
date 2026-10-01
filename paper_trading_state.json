@@ -56391,6 +56391,33 @@
       "target_half": 0.0015218750000000002,
       "timeframe": "30m",
       "trade_id": "TACUSD|30m|long|0.00152|0.00151625"
+    },
+    {
+      "alert_time": "2026-10-01T00:48:54.327018+05:30",
+      "cost_r": 0.26087313019391306,
+      "date": "2026-10-01",
+      "entry": 117.719,
+      "entry_time": "2026-10-01T00:50:00+05:30",
+      "exit_price": 118.17024999999998,
+      "exit_time": "2026-10-01T01:15:00+05:30",
+      "final_result": "+1R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 0.7391268698060869,
+      "outcome": "+1R",
+      "rating": 4,
+      "realized_r": 1.0,
+      "risk": 0.4512499999999875,
+      "side": "long",
+      "stop": 117.26775,
+      "stream": "live",
+      "symbol": "SOLUSD",
+      "target_1": 118.17024999999998,
+      "target_2": 118.62149999999997,
+      "target_half": 117.94462499999999,
+      "timeframe": "30m",
+      "trade_id": "SOLUSD|30m|long|117.719|117.268"
     }
   ],
   "handled": {
@@ -58702,24 +58729,6 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
-      "timeframe": "30m"
-    },
-    "SOLUSD|30m|long|117.719|117.268": {
-      "alert_time": "2026-10-01T00:48:54.327018+05:30",
-      "entry": 117.719,
-      "entry_time": "2026-10-01T00:50:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 4,
-      "risk": 0.4512499999999875,
-      "side": "long",
-      "stop": 117.26775,
-      "stream": "live",
-      "symbol": "SOLUSD",
-      "target_1": 118.17024999999998,
-      "target_2": 118.62149999999997,
-      "target_half": 117.94462499999999,
       "timeframe": "30m"
     }
   }
