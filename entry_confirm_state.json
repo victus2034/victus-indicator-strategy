@@ -1,12 +1,22 @@
 {
+  "BCHUSD|30m|long|303.55|302.65": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "BNBUSD|30m|long|765.48|762.48": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
+    "stopped_out": false
+  },
+  "ETHUSD|30m|long|2676.3|2663.8": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "METAXUSD|30m|long|727.15|723.212": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "NVDAXUSD|30m|short|231.95|233.575": {
@@ -58,7 +68,7 @@
   "_level_ready|AVAXUSD|30m|short|8.154|8.21025": 1789748757.121565,
   "_level_ready|AVAXUSD|4h|short|11.7024|11.8194": 1790682088.785606,
   "_level_ready|AXTI/USDT:USDT|30m|short|59.33|59.9175": 1789540275.035677,
-  "_level_ready|BCHUSD|30m|long|303.55|302.65": 1790704580.279899,
+  "_level_ready|BCHUSD|30m|long|303.55|302.65": 1790839900.237173,
   "_level_ready|BCHUSD|30m|long|327.429|324.18": 1790241969.967429,
   "_level_ready|BCHUSD|30m|short|268.2|269.612": 1789992972.396004,
   "_level_ready|BCHUSD|30m|short|273.8|274.325": 1790073677.156017,
@@ -135,6 +145,7 @@
   "_level_ready|ETHUSD|30m|long|2651|2629.75": 1790241969.967429,
   "_level_ready|ETHUSD|30m|long|2655|2649.62": 1790750790.182198,
   "_level_ready|ETHUSD|30m|long|2657.6|2642.16": 1790173568.354545,
+  "_level_ready|ETHUSD|30m|long|2676.3|2663.8": 1790839900.237173,
   "_level_ready|ETHUSD|30m|long|2731.2|2710.57": 1790153477.609122,
   "_level_ready|ETHUSD|30m|short|2475.89|2484.44": 1789701967.437765,
   "_level_ready|ETHUSD|30m|short|2598.5|2618.69": 1789748757.121565,
@@ -385,7 +396,7 @@
   "_ready|AVAXUSD|30m": 1790751391.074625,
   "_ready|AVAXUSD|4h": 1790682088.785606,
   "_ready|AXTI/USDT:USDT|30m": 1789540275.035677,
-  "_ready|BCHUSD|30m": 1790772692.901651,
+  "_ready|BCHUSD|30m": 1790839900.237173,
   "_ready|BCHUSD|4h": 1790073367.004348,
   "_ready|BEAT/USDT|30m": 1790429172.274138,
   "_ready|BLESSUSD|30m": 1790771776.301532,
@@ -407,7 +418,7 @@
   "_ready|ERA/USDT|30m": 1789467666.170572,
   "_ready|ESP/USDT|30m": 1789458664.421898,
   "_ready|ESP/USDT|4h": 1788956755.098613,
-  "_ready|ETHUSD|30m": 1790772967.421458,
+  "_ready|ETHUSD|30m": 1790839900.237173,
   "_ready|ETHUSD|4h": 1789488358.32405,
   "_ready|EUL/USDT|30m": 1789439750.580446,
   "_ready|GWEI/USDT|30m": 1789391158.458368,
