@@ -3141,7 +3141,7 @@
     "GODREJPROP.NS|4h|long|1647.6|1659.3": 1790655127.6106577,
     "HEXT.NS|4h|long|473.05|476.834": 1790655127.8529537,
     "CUB.NS|4h|long|211.34|212.2": 1790655128.0709574,
-    "KEI.NS|4h|long|4448.5|4484.09": 1790745156.0621676,
+    "KEI.NS|4h|long|4448.5|4484.09": 1790826767.822459,
     "RVNL.NS|4h|long|195.25|196.66": 1790656410.0530546,
     "AWL.NS|4h|long|175.99|176.65": 1790656410.522796,
     "AFFLE.NS|4h|long|1489.9|1501.82": 1790674371.4450855,
@@ -3161,7 +3161,8 @@
     "CRAFTSMAN.NS|4h|long|10350|10354.5": 1790748755.7109084,
     "FLUOROCHEM.NS|4h|long|4345|4365": 1790751154.3242462,
     "FORTIS.NS|4h|long|767.2|773.338": 1790754733.8466837,
-    "CEMPRO.NS|4h|long|1198.1|1203.8": 1790757160.7130063
+    "CEMPRO.NS|4h|long|1198.1|1203.8": 1790757160.7130063,
+    "HDBFS.NS|4h|long|613.65|618.559": 1790826767.402753
   },
   "GESHIP.NS|demand|1057.1000|1070.5000": {
     "in_zone": false,
@@ -18214,7 +18215,7 @@
     "last_attempt_at": 0.0
   },
   "__last_scan_started__": {
-    "4h": 1790825535.30916
+    "4h": 1790826716.9440317
   },
   "360ONE.NS|supply|1214.8851|1220.0000": {
     "in_zone": false,
@@ -90017,9 +90018,9 @@
     "last_attempt_at": 0.0
   },
   "HDBFS.NS|demand|613.6500|618.5592": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790826767.402753,
+    "last_attempt_at": 1790826767.402753
   },
   "MRF.NS|supply|134722.2222|135800.0000": {
     "in_zone": false,
@@ -91677,9 +91678,9 @@
     "last_attempt_at": 0.0
   },
   "KEI.NS|demand|4448.5000|4484.0880": {
-    "in_zone": false,
-    "last_alert_at": 1790745156.0621676,
-    "last_attempt_at": 1790745156.0621676
+    "in_zone": true,
+    "last_alert_at": 1790826767.822459,
+    "last_attempt_at": 1790826767.822459
   },
   "RVNL.NS|demand|195.2500|196.6600": {
     "in_zone": false,
@@ -92062,6 +92063,56 @@
     "last_attempt_at": 0.0
   },
   "CHOICEIN.NS|demand|705.0000|706.5500": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "SBICARD.NS|demand|566.9000|569.0500": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "FLUOROCHEM.NS|demand|3814.6001|3845.1169": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "MFSL.NS|supply|1584.8000|1591.8000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "MEDANTA.NS|demand|1296.1000|1305.0000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "AEGISVOPAK.NS|supply|319.5500|320.9500": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "ACUTAAS.NS|supply|3481.4485|3509.3000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "EMMVEE.NS|supply|351.9841|354.8000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "IFCI.NS|demand|60.6000|60.8500": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "JYOTICNC.NS|supply|1125.5952|1134.6000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "AFFLE.NS|demand|1419.3000|1430.6544": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
