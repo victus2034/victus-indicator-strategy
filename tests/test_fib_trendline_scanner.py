@@ -454,3 +454,14 @@ class FailedSendBackoffTests(unittest.TestCase):
         self.assertEqual(self.run_pass(state, True, later), 1)    # retried, delivered
         self.assertIn("brk|X|4h|1", state)
         self.assertEqual(self.run_pass(state, True, later + 60), 0)
+
+
+class DailyReportFetchFailureTests(unittest.TestCase):
+    def test_failed_download_keeps_the_alert_in_the_tally_as_open(self):
+        import fib_trendline_daily_report as fdr
+        record = {"id": "a", "market": fts.CRYPTO, "symbol": "X", "tf": "4h", "sent_ts": 1_000_000,
+                  "plan": {"side": "long", "entry": 1.0, "sl": 0.9}}
+        with mock.patch.object(fdr, "eval_candles", side_effect=RuntimeError("down")):
+            results = fdr.score([record], {}, 2_000_000)
+        self.assertEqual(results["a"]["outcome"], "open")
+        self.assertFalse(results["a"]["resolved"])

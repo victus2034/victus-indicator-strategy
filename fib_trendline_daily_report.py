@@ -90,8 +90,11 @@ def score(records, results, now):
                 candles = eval_candles(market, symbol, resolution, min(r["sent_ts"] for r in rows), now)
         except Exception as error:     # noqa: BLE001 - retried tomorrow
             print(f"daily report: no {resolution} candles for {symbol}: {error}")
-            continue
+            candles = []
         if not candles:
+            # Still counted, as open, so a failed download cannot shrink the day's card.
+            for record in rows:
+                results.setdefault(record["id"], trades.simulate(record["plan"], market, record["tf"], record["sent_ts"], []))
             continue
         for record in rows:
             results[record["id"]] = trades.simulate(record["plan"], market, record["tf"], record["sent_ts"], candles)

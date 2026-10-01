@@ -190,8 +190,8 @@ def daily_quote_volumes(symbol, exchange, days=30):
         {"exchange": exchange, "symbol": symbol, "interval": "1440", "limit": days + 2},
     )
     candles = payload.get("data") or []
-    candles = sorted(candles, key=lambda candle: candle["start_time"])[-days:]
-    return [float(candle.get("volume") or 0) * float(candle["c"]) for candle in candles]
+    candles = sorted(candles, key=lambda candle: int(candle["start_time"]))[-days:]
+    return [float(candle.get("volume") or 0) * float(candle.get("c") or candle.get("close") or 0) for candle in candles]
 
 
 def verify_candidates(names, delay):
