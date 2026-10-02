@@ -57525,6 +57525,33 @@
       "target_half": 234.63442460317458,
       "timeframe": "4h",
       "trade_id": "NVDAXUSD|4h|short|235.813|238.172"
+    },
+    {
+      "alert_time": "2026-10-02T20:26:43.838243+05:30",
+      "cost_r": 0.2155709844559464,
+      "date": "2026-10-02",
+      "entry": 4160.52,
+      "entry_time": "2026-10-02T20:35:00+05:30",
+      "exit_price": 4139.14939,
+      "exit_time": "2026-10-02T21:20:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "net_realized_r": -1.322856476683907,
+      "outcome": "SL",
+      "rating": 9,
+      "realized_r": -1.1072854922279607,
+      "risk": 19.30000000000109,
+      "side": "long",
+      "stop": 4141.219999999999,
+      "stream": "live",
+      "symbol": "XAUTUSD",
+      "target_1": 4179.8200000000015,
+      "target_2": 4199.120000000003,
+      "target_half": 4170.170000000001,
+      "timeframe": "30m",
+      "trade_id": "XAUTUSD|30m|long|4160.52|4141.22"
     }
   ],
   "handled": {
@@ -59914,7 +59941,7 @@
       "entry": 1721.14,
       "entry_time": "2026-10-02T20:50:00+05:30",
       "geometry": "wick",
-      "half_r_hit": false,
+      "half_r_hit": true,
       "market": "xstock",
       "rating": 6,
       "risk": 15.425000000000182,
@@ -59925,24 +59952,6 @@
       "target_1": 1736.5650000000003,
       "target_2": 1751.9900000000005,
       "target_half": 1728.8525000000002,
-      "timeframe": "30m"
-    },
-    "XAUTUSD|30m|long|4160.52|4141.22": {
-      "alert_time": "2026-10-02T20:26:43.838243+05:30",
-      "entry": 4160.52,
-      "entry_time": "2026-10-02T20:35:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 9,
-      "risk": 19.30000000000109,
-      "side": "long",
-      "stop": 4141.219999999999,
-      "stream": "live",
-      "symbol": "XAUTUSD",
-      "target_1": 4179.8200000000015,
-      "target_2": 4199.120000000003,
-      "target_half": 4170.170000000001,
       "timeframe": "30m"
     }
   }
