@@ -3728,7 +3728,7 @@
     "LINKUSD|30m|short|14.446|14.483": 1790495502.0052476,
     "shadow:LINKUSD|30m|short|14.4463|14.483": 1790495502.0052476,
     "BTCUSD|30m|short|84893.5|85224": 1790771794.2964616,
-    "BNBUSD|30m|short|780.03|784.3": 1790918892.3544807,
+    "BNBUSD|30m|short|780.03|784.3": 1790922806.7567139,
     "shadow:AVAXUSD|30m|short|11.2642|11.298": 1790666476.0775838,
     "shadow:BTCUSD|30m|short|85136|85224": 1790772114.5843585,
     "DOGEUSD|30m|short|0.09879|0.09888": 1790512603.0635116,
@@ -3887,7 +3887,7 @@
     "shadow:TRUMP/USDT|30m|short|2.10642|2.111": 1790772202.1415029,
     "BCHUSD|30m|short|314.48|315.58": 1790772534.2075095,
     "shadow:BCHUSD|30m|short|314.862|315.58": 1790772534.2075095,
-    "ETHUSD|30m|short|2736|2748.4": 1790917084.1521595,
+    "ETHUSD|30m|short|2736|2748.4": 1790922806.5404155,
     "LINKUSD|30m|short|14.733|14.771": 1790772699.0000625,
     "shadow:LINKUSD|30m|short|14.7285|14.771": 1790772699.0000625,
     "shadow:BLESSUSD|30m|short|0.00890371|0.008925": 1790772786.9489448,
@@ -15537,7 +15537,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790922456.5798352
+    "30m": 1790922784.9911067
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -46806,7 +46806,7 @@
     "LINKUSD|30m|short|14.515|14.557": 1790912907.129863,
     "BNBUSD|30m|long|763.01|763.43": 1790882807.9083052,
     "VELVETUSD|30m|short|0.0605|0.0609": 1790908318.3355734,
-    "METAXUSD|30m|short|731.6|736.8": 1790920997.958845,
+    "METAXUSD|30m|short|731.6|736.8": 1790922806.9385333,
     "METAXUSD|30m|long|723|725.45": 1790921211.100967,
     "MRVL/USDT:USDT|30m|short|272.71|273.2": 1790917678.4974515,
     "VELVETUSD|30m|short|0.0623|0.0627": 1790910764.242621,
@@ -144953,9 +144953,9 @@
     "last_attempt_at": 0.0
   },
   "BNBUSD|supply|780.03000000|784.30000000": {
-    "in_zone": false,
-    "last_alert_at": 1790918892.3544807,
-    "last_attempt_at": 1790918892.3544807
+    "in_zone": true,
+    "last_alert_at": 1790922806.7567139,
+    "last_attempt_at": 1790922806.7567139
   },
   "shadow:BNBUSD|demand|768.78000000|769.59429271": {
     "in_zone": true,
@@ -146816,9 +146816,9 @@
     "last_attempt_at": 1790771512.743243
   },
   "ETHUSD|supply|2736.00000000|2748.40000000": {
-    "in_zone": false,
-    "last_alert_at": 1790917084.1521595,
-    "last_attempt_at": 1790917084.1521595
+    "in_zone": true,
+    "last_alert_at": 1790922806.5404155,
+    "last_attempt_at": 1790922806.5404155
   },
   "shadow:ETHUSD|supply|2745.13322872|2748.40000000": {
     "in_zone": false,
@@ -148361,6 +148361,11 @@
     "last_attempt_at": 0.0
   },
   "shadow:ZECUSD|demand|1308.00000000|1312.54043135": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "shadow:BTCUSD|supply|87286.42673650|87386.00000000": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
