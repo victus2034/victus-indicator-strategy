@@ -72,10 +72,6 @@ def is_stock_symbol(symbol):
     return str(symbol).upper() in ALL_XSTOCK_SYMBOLS
 
 
-def is_hybrid_xstock(symbol):
-    return has_underlying_mapping(symbol)
-
-
 def has_underlying_mapping(symbol):
     return str(symbol).upper() in XSTOCK_UNDERLYINGS
 

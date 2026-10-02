@@ -7,6 +7,7 @@ import os
 import tempfile
 import threading
 import time
+import warnings
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import unquote, urlencode
@@ -14,6 +15,7 @@ from zoneinfo import ZoneInfo
 
 import ccxt
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+import numpy as np
 import pandas as pd
 import requests
 
@@ -53,7 +55,6 @@ from config import (
     ZONE_MAX_WIDTH_PCT,
     MAX_ALERT_STOP_PCT,
     ZONE_RATING_GATE,
-    ZONE_SHADOW_GEOMETRY,
     OHLCV_LIMIT,
     OVERLAP_ATR,
     PRIMARY_EXCHANGE_ID,
@@ -98,13 +99,6 @@ ALERT_RECORD_FILE = Path(__file__).with_name(
         "VICTUS_ALERT_RECORD_FILE",
         "crypto_alert_records_30m.jsonl" if TIMEFRAME == "30m" else "crypto_alert_records.jsonl",
     )
-)
-# Alerts the shadow geometry WOULD have sent. Written, never delivered - there is
-# no webhook on this path. paper_trading scores them alongside the live stream so
-# the two constructions can be compared forward and out of sample, which is the
-# one thing a backtest of the same history cannot do.
-SHADOW_ALERT_RECORD_FILE = ALERT_RECORD_FILE.with_name(
-    ALERT_RECORD_FILE.name.replace("crypto_alert_records", "crypto_shadow_alerts")
 )
 # Zones near enough for entry_confirm to start watching, but not near enough to
 # alert on. Its own file on purpose: daily_backtest_summary reads the alert
@@ -369,14 +363,41 @@ def tighten_wide_zone(window, zone_type, far, near):
     return far / (1 + ZONE_MAX_WIDTH_PCT / 100.0) if supply else far * (1 + ZONE_MAX_WIDTH_PCT / 100.0)
 
 
-def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type, geometry=None):
+def _engine_arrays(df, atr_series):
+    """The candle columns and ATR as plain float arrays, read once per build.
+
+    build_zones used to read every value through pandas (`df["close"].iloc[i]`,
+    `window[["open", "close"]].min(axis=1)`), and that indexing was ~90% of the
+    zone build's time. Same numbers, same order of operations; only the
+    container changes. The nan-skipping reductions match pandas' skipna.
+    """
+    arrays = {
+        column: np.asarray(df[column], dtype=float)
+        for column in ("open", "high", "low", "close")
+    }
+    arrays["atr"] = np.asarray(atr_series, dtype=float)
+    return arrays
+
+
+def _skipna_reduce(reduce, values):
+    # pandas' min/max skip NaN and give NaN for an all-NaN slice; numpy's
+    # nan-reductions do the same but warn on the all-NaN case.
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        return reduce(values)
+
+
+def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type, geometry=None, arrays=None):
     # Two ATRs, because the indicator uses two. v7's f_layerData reads
     # `a = ta.atr(atr_len)` on the CONFIRMATION bar and hands that to
     # f_addZone, so the overlap filter on chart is measured swing_length bars
     # after the pivot. The zone's own metadata (wick_atr, departure_atr) is
     # about the pivot candle, so that keeps the pivot-bar reading.
-    pivot_atr = atr_series.iloc[pivot_index]
-    confirm_atr = atr_series.iloc[confirmation_index]
+    if arrays is None:
+        arrays = _engine_arrays(df, atr_series)
+    opens, highs, lows, closes = arrays["open"], arrays["high"], arrays["low"], arrays["close"]
+    pivot_atr = arrays["atr"][pivot_index]
+    confirm_atr = arrays["atr"][confirmation_index]
     if pd.isna(confirm_atr) or float(confirm_atr) <= 0:
         return None
     if pd.isna(pivot_atr) or float(pivot_atr) <= 0:
@@ -384,14 +405,14 @@ def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type
         # has an ATR and the pivot bar does not yet.
         pivot_atr = confirm_atr
 
-    candle_open = float(df["open"].iloc[pivot_index])
-    candle_close = float(df["close"].iloc[pivot_index])
-    candle_high = float(df["high"].iloc[pivot_index])
-    candle_low = float(df["low"].iloc[pivot_index])
+    candle_open = float(opens[pivot_index])
+    candle_close = float(closes[pivot_index])
+    candle_high = float(highs[pivot_index])
+    candle_low = float(lows[pivot_index])
     body_size = abs(candle_close - candle_open)
 
-    departure_closes = df["close"].iloc[pivot_index + 1:confirmation_index + 1]
-    if departure_closes.empty:
+    departure_closes = closes[pivot_index + 1:confirmation_index + 1]
+    if len(departure_closes) == 0:
         return None
 
     # ZONE_GEOMETRY picks the construction; see config.py for what each costs.
@@ -407,11 +428,11 @@ def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type
     if zone_type == "demand":
         wick_top = min(candle_open, candle_close)
         wick_bottom = candle_low
-        departure = float(departure_closes.max() - wick_top)
+        departure = float(_skipna_reduce(np.nanmax, departure_closes) - wick_top)
     else:
         wick_bottom = max(candle_open, candle_close)
         wick_top = candle_high
-        departure = float(wick_bottom - departure_closes.min())
+        departure = float(wick_bottom - _skipna_reduce(np.nanmin, departure_closes))
 
     geometry = geometry or ZONE_GEOMETRY
     # True when the wick had no height at all - the bar that made the window's
@@ -422,21 +443,26 @@ def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type
     degenerate = False
     if geometry == "wick":
         first = max(0, pivot_index - ZONE_BASE_EXTRA)
-        last = min(len(df) - 1, pivot_index + ZONE_BASE_EXTRA, confirmation_index)
-        window = df.iloc[first:last + 1]
+        last = min(len(closes) - 1, pivot_index + ZONE_BASE_EXTRA, confirmation_index)
+        window = {
+            "high": highs[first:last + 1],
+            "low": lows[first:last + 1],
+        }
+        window_open = opens[first:last + 1]
+        window_close = closes[first:last + 1]
         # The near edge is the BODY edge, max/min(open, close). Not the close -
         # a wick ends where the body starts, and which of open or close forms
         # that edge depends on the candle's direction.
         if zone_type == "demand":
-            bottom = float(window["low"].min())
-            top = float(window[["open", "close"]].min(axis=1).min())
+            bottom = float(_skipna_reduce(np.nanmin, window["low"]))
+            top = float(_skipna_reduce(np.nanmin, np.fmin(window_open, window_close)))
             if top <= bottom:
                 degenerate = True
                 top = bottom + float(pivot_atr) * 0.01
             top = tighten_wide_zone(window, "demand", bottom, top)
         else:
-            top = float(window["high"].max())
-            bottom = float(window[["open", "close"]].max(axis=1).max())
+            top = float(_skipna_reduce(np.nanmax, window["high"]))
+            bottom = float(_skipna_reduce(np.nanmax, np.fmax(window_open, window_close)))
             if bottom >= top:
                 degenerate = True
                 bottom = top - float(pivot_atr) * 0.01
@@ -514,6 +540,7 @@ def build_zones(df, geometry=None):
     if atr_series.isna().all():
         return [], []
 
+    arrays = _engine_arrays(df, atr_series)
     pivot_highs, pivot_lows = find_pivots(df, SWING_LENGTH)
     pivot_high_set = set(pivot_highs)
     pivot_low_set = set(pivot_lows)
@@ -537,7 +564,9 @@ def build_zones(df, geometry=None):
     for confirmation_index in range(SWING_LENGTH, len(df)):
         pivot_index = confirmation_index - SWING_LENGTH
         if pivot_index in pivot_high_set:
-            zone = qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, "supply", geometry)
+            zone = qualify_wick_zone(
+                df, pivot_index, confirmation_index, atr_series, "supply", geometry, arrays
+            )
             if zone is not None and add_zone_if_not_overlapping(supply_zones, zone, zone["overlap_atr"]):
                 trim_zone_history(supply_zones, confirmation_index)
                 # A full-length pivot has already replaced the side, so the
@@ -547,7 +576,9 @@ def build_zones(df, geometry=None):
                 # zone up to base_extra bars earlier than the chart draws one.
                 pending_rebuild["supply"] = False
         elif pivot_index in pivot_low_set:
-            zone = qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, "demand", geometry)
+            zone = qualify_wick_zone(
+                df, pivot_index, confirmation_index, atr_series, "demand", geometry, arrays
+            )
             if zone is not None and add_zone_if_not_overlapping(demand_zones, zone, zone["overlap_atr"]):
                 trim_zone_history(demand_zones, confirmation_index)
                 pending_rebuild["demand"] = False
@@ -565,7 +596,7 @@ def build_zones(df, geometry=None):
                 ):
                     if pending_rebuild[side] and short_pivot in pivot_set:
                         rebuilt = qualify_wick_zone(
-                            df, short_pivot, confirmation_index, atr_series, side, geometry
+                            df, short_pivot, confirmation_index, atr_series, side, geometry, arrays
                         )
                         # A wick with no height is not a replacement. v7 tests
                         # `rfS > near` before it will build one and, when that
@@ -581,9 +612,9 @@ def build_zones(df, geometry=None):
                             trim_zone_history(bucket, confirmation_index)
                         pending_rebuild[side] = False
 
-        close = float(df["close"].iloc[confirmation_index])
-        high = float(df["high"].iloc[confirmation_index])
-        low = float(df["low"].iloc[confirmation_index])
+        close = float(arrays["close"][confirmation_index])
+        high = float(arrays["high"][confirmation_index])
+        low = float(arrays["low"][confirmation_index])
         for zone in supply_zones:
             if zone["active"] and confirmation_index > zone["created_idx"]:
                 record_zone_touch(zone, high, low, confirmation_index)
@@ -672,18 +703,22 @@ def get_range_filter_signals(df):
         return average_range.ewm(span=weighted_period, adjust=False).mean() * mult
 
     smooth_range = smoothrng(src, period, multiplier)
-    filt = src.copy()
-    filt.iloc[0] = src.iloc[0]
+    # Plain Python floats for the two bar-by-bar loops: the same arithmetic in
+    # the same order, without a pandas .iloc lookup per value (that lookup was
+    # nearly all of this function's time).
+    prices = [float(value) for value in src.to_numpy(dtype=float)]
+    ranges = [0.0 if math.isnan(value) else float(value) for value in smooth_range.to_numpy(dtype=float)]
+    filt = list(prices)
 
-    for index in range(1, len(src)):
-        previous = filt.iloc[index - 1]
-        price = src.iloc[index]
-        range_value = smooth_range.iloc[index] if not pd.isna(smooth_range.iloc[index]) else 0
+    for index in range(1, len(prices)):
+        previous = filt[index - 1]
+        price = prices[index]
+        range_value = ranges[index]
 
         if price > previous:
-            filt.iloc[index] = previous if price - range_value < previous else price - range_value
+            filt[index] = previous if price - range_value < previous else price - range_value
         else:
-            filt.iloc[index] = previous if price + range_value > previous else price + range_value
+            filt[index] = previous if price + range_value > previous else price + range_value
 
     upward = 0.0
     downward = 0.0
@@ -691,26 +726,30 @@ def get_range_filter_signals(df):
     buy_signal = False
     sell_signal = False
 
-    for index in range(1, len(src)):
-        if filt.iloc[index] > filt.iloc[index - 1]:
+    for index in range(1, len(prices)):
+        current_filt = filt[index]
+        previous_filt = filt[index - 1]
+        price = prices[index]
+        previous_price = prices[index - 1]
+        if current_filt > previous_filt:
             upward += 1
-        elif filt.iloc[index] < filt.iloc[index - 1]:
+        elif current_filt < previous_filt:
             upward = 0
 
-        if filt.iloc[index] < filt.iloc[index - 1]:
+        if current_filt < previous_filt:
             downward += 1
-        elif filt.iloc[index] > filt.iloc[index - 1]:
+        elif current_filt > previous_filt:
             downward = 0
 
         long_condition = (
-            (src.iloc[index] > filt.iloc[index] and src.iloc[index] > src.iloc[index - 1] and upward > 0)
+            (price > current_filt and price > previous_price and upward > 0)
             or
-            (src.iloc[index] > filt.iloc[index] and src.iloc[index] < src.iloc[index - 1] and upward > 0)
+            (price > current_filt and price < previous_price and upward > 0)
         )
         short_condition = (
-            (src.iloc[index] < filt.iloc[index] and src.iloc[index] < src.iloc[index - 1] and downward > 0)
+            (price < current_filt and price < previous_price and downward > 0)
             or
-            (src.iloc[index] < filt.iloc[index] and src.iloc[index] > src.iloc[index - 1] and downward > 0)
+            (price < current_filt and price > previous_price and downward > 0)
         )
 
         previous_state = condition_state
@@ -1314,17 +1353,6 @@ def scan_symbol(symbol):
     latest_index = len(df) - 1
     nearest_supply, supply_dist = nearest_active_zone(price, supply_zones, "supply", latest_index)
     nearest_demand, demand_dist = nearest_active_zone(price, demand_zones, "demand", latest_index)
-    # The other construction, built on the same candles and never delivered.
-    shadow_supply = shadow_demand = None
-    shadow_supply_dist = shadow_demand_dist = 999.0
-    if ZONE_SHADOW_GEOMETRY and ZONE_SHADOW_GEOMETRY != ZONE_GEOMETRY:
-        shadow_supply_zones, shadow_demand_zones = build_zones(df, ZONE_SHADOW_GEOMETRY)
-        shadow_supply, shadow_supply_dist = nearest_active_zone(
-            price, shadow_supply_zones, "supply", latest_index
-        )
-        shadow_demand, shadow_demand_dist = nearest_active_zone(
-            price, shadow_demand_zones, "demand", latest_index
-        )
     buy_signal, sell_signal = get_range_filter_signals(df)
     supply_rating = None
     demand_rating = None
@@ -1405,10 +1433,6 @@ def scan_symbol(symbol):
         "demand_dist": demand_dist,
         "demand_rating": demand_rating,
         "demand_score": demand_score,
-        "shadow_supply": shadow_supply,
-        "shadow_supply_dist": shadow_supply_dist,
-        "shadow_demand": shadow_demand,
-        "shadow_demand_dist": shadow_demand_dist,
         "buy_signal": buy_signal,
         "sell_signal": sell_signal,
     }
@@ -1504,7 +1528,7 @@ def delivered_alert_id(record):
     return hashlib.sha1("|".join(parts).encode("utf-8")).hexdigest()[:16]
 
 
-def record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, now_ts, shadow=False):
+def record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, now_ts):
     """Persist delivered zone alerts for the daily backtest summary."""
     rating = result.get(f"{zone_type}_rating") or {}
     # Prefer the validated rating (ML crypto model or xstock hybrid) when
@@ -1542,12 +1566,10 @@ def record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, 
         "zone_age_candles": zone.get("zone_age_candles"),
         "message": message,
         "geometry": zone.get("geometry", ZONE_GEOMETRY),
-        "shadow": bool(shadow),
     }
     record["trade_id"] = delivered_alert_id(record)
-    destination = SHADOW_ALERT_RECORD_FILE if shadow else ALERT_RECORD_FILE
     try:
-        with destination.open("a", encoding="utf-8") as file:
+        with ALERT_RECORD_FILE.open("a", encoding="utf-8") as file:
             file.write(json.dumps(record, separators=(",", ":")) + "\n")
     except OSError as error:
         print(f"Crypto alert record write failed: {error}")
@@ -1816,7 +1838,7 @@ def send_status_message(message):
         print(f"Discord status message failed: {error}")
 
 
-def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shadow=False):
+def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
     if zone is None:
         return False
 
@@ -1837,17 +1859,11 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shad
             return False
 
     state_key = build_state_key(result["symbol"], zone_type, zone)
-    if shadow:
-        # Its own cooldown namespace, so a shadow alert can never suppress or
-        # re-arm a real one.
-        state_key = "shadow:" + state_key
     entry = state.setdefault(
         state_key, {"in_zone": False, "last_alert_at": 0.0, "last_attempt_at": 0.0}
     )
     noise_state = state.setdefault("_noise_control", {})
     noise_key = exact_zone_identity(result["symbol"], zone_type, zone)
-    if shadow:
-        noise_key = "shadow:" + noise_key
     alert_sent = False
 
     if MIN_DISTANCE_PCT <= distance_pct <= MAX_DISTANCE_PCT:
@@ -1864,28 +1880,18 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shad
         noise_open = not last_success or now_ts - last_success >= ZONE_REPEAT_SUPPRESSION_SECONDS
         if should_alert and noise_open:
             message = format_alert(result, zone_type, zone, distance_pct)
-            if shadow:
-                # Logged only. No webhook is touched on this path.
-                entry["last_alert_at"] = now_ts
+            # in_alert_window() is checked here too (send_alert checks it
+            # again internally) so a hold outside the 08:00-01:00 IST
+            # window - not a delivery failure - never counts as an
+            # attempt and never backs off. Genuine alerts must still fire
+            # the instant the window reopens, exactly as before this fix.
+            if in_alert_window():
                 entry["last_attempt_at"] = now_ts
+            if send_alert(message):
+                entry["last_alert_at"] = now_ts
                 noise_state[noise_key] = now_ts
-                record_delivered_zone_alert(
-                    result, zone_type, zone, distance_pct, message, now_ts, shadow=True
-                )
+                record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, now_ts)
                 alert_sent = True
-            else:
-                # in_alert_window() is checked here too (send_alert checks it
-                # again internally) so a hold outside the 08:00-01:00 IST
-                # window - not a delivery failure - never counts as an
-                # attempt and never backs off. Genuine alerts must still fire
-                # the instant the window reopens, exactly as before this fix.
-                if in_alert_window():
-                    entry["last_attempt_at"] = now_ts
-                if send_alert(message):
-                    entry["last_alert_at"] = now_ts
-                    noise_state[noise_key] = now_ts
-                    record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, now_ts)
-                    alert_sent = True
         elif should_alert and last_success:
             remaining = max(0, int(ZONE_REPEAT_SUPPRESSION_SECONDS - (now_ts - last_success)))
             print(f"Suppressed repeat alert: {noise_key} | {remaining // 60}m remaining")
@@ -1897,9 +1903,7 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shad
 
     # Near enough to watch, not yet near enough to alert. Nothing is sent
     # here - the row exists so entry_confirm can begin tracking the zone
-    # well before price arrives. Shadow candidates are excluded: they are a
-    # geometry experiment scored by paper_trading, not something to be
-    # warned about.
+    # well before price arrives.
     #
     # Strictly ABOVE MAX_DISTANCE_PCT, not from MIN_DISTANCE_PCT: this used
     # to overlap the alert band itself (>= MIN_DISTANCE_PCT), so a zone
@@ -1912,7 +1916,7 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shad
     # about to alert (or already has) is fully covered by the alert record
     # path above; the watch row's only job is the range the alert path never
     # sees at all.
-    if not shadow and MAX_DISTANCE_PCT < distance_pct <= WATCH_DISTANCE_PCT:
+    if MAX_DISTANCE_PCT < distance_pct <= WATCH_DISTANCE_PCT:
         watch_state = state.setdefault("_watch", {})
         last_watch = float(watch_state.get(noise_key, 0.0) or 0.0)
         if not last_watch or now_ts - last_watch >= WATCH_RECORD_COOLDOWN_SECONDS:
@@ -2032,6 +2036,38 @@ def print_summary(results):
 LAST_SCAN_KEY = "__last_scan_started__"
 
 
+def prune_alert_state(state, now_ts, zone_cooldown, signal_cooldown, repeat_suppression, watch_cooldown):
+    """Drop state entries that can no longer change any alert decision.
+
+    process_candidate creates an entry for the nearest zone of every symbol on
+    every scan, and nothing ever removed one: the 30m file reached ~36,000
+    zone keys (4 MB), ~94% of them for zones price left days ago, all parsed,
+    rewritten and committed on every scan. Each rule below drops only what
+    would decide exactly the same way if it were recreated from the default:
+
+    - a zone entry not in_zone, or whose last attempt is older than the
+      cooldown, alerts on its next band entry either way;
+    - a range-filter entry past its cooldown is open either way;
+    - a _noise_control / _watch stamp past its window is open either way.
+    """
+    for key in list(state):
+        value = state[key]
+        if key.startswith("_") or not isinstance(value, dict):
+            continue
+        last = max(float(value.get("last_alert_at", 0.0) or 0.0), float(value.get("last_attempt_at", 0.0) or 0.0))
+        if "|range_filter|" in key:
+            if now_ts - last >= signal_cooldown:
+                del state[key]
+        elif not value.get("in_zone") or now_ts - last >= zone_cooldown:
+            del state[key]
+    for bucket, window in (("_noise_control", repeat_suppression), ("_watch", watch_cooldown)):
+        stamps = state.get(bucket)
+        if isinstance(stamps, dict):
+            for key in [k for k, v in stamps.items() if now_ts - float(v or 0.0) >= window]:
+                del stamps[key]
+    return state
+
+
 def scan_too_soon(state, now=None):
     """True when the previous scan of this timeframe is still recent.
 
@@ -2139,20 +2175,10 @@ def run_scan_once(state):
         if process_candidate(state, result, "demand", result["demand"], result["demand_dist"], now_ts):
             alerts_sent += 1
 
-        # The shadow geometry runs the identical gate and writes to its own log.
-        # No webhook is reachable from here - process_candidate(shadow=True)
-        # cannot call send_alert - so this can never surface as a real alert.
-        if result.get("shadow_supply") is not None:
-            process_candidate(
-                state, result, "supply",
-                result["shadow_supply"], result["shadow_supply_dist"], now_ts, shadow=True,
-            )
-        if result.get("shadow_demand") is not None:
-            process_candidate(
-                state, result, "demand",
-                result["shadow_demand"], result["shadow_demand_dist"], now_ts, shadow=True,
-            )
-
+    prune_alert_state(
+        state, time.time(), ALERT_COOLDOWN_SECONDS, SIGNAL_ALERT_COOLDOWN_SECONDS,
+        ZONE_REPEAT_SUPPRESSION_SECONDS, WATCH_RECORD_COOLDOWN_SECONDS,
+    )
     save_state(state)
 
     if PRINT_SCAN_SUMMARY and results:

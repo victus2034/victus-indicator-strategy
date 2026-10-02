@@ -28,11 +28,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
       - name: Restore runtime state
+        id: restore
         run: bash .github/scripts/restore_runtime_state.sh alert_state.json crypto_alert_records.jsonl crypto_watch_records.jsonl
 
       - name: Check Discord webhook configuration
@@ -71,7 +73,10 @@ jobs:
           # the touch. See .github/scripts/scan_loop.sh.
           bash .github/scripts/scan_loop.sh 1020 90 alert_state.json crypto_alert_records.jsonl crypto_watch_records.jsonl -- python scanner.py --once
 
+      # always(): alerts already sent are recorded even if a later step failed or
+      # timed out. Never after a failed restore - there is nothing safe to save.
       - name: Persist runtime state
+        if: ${{ always() && steps.restore.outcome == 'success' }}
         run: bash .github/scripts/persist_runtime_state.sh alert_state.json crypto_alert_records.jsonl crypto_watch_records.jsonl
 
       - name: Notify on failure

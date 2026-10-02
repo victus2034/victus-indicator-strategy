@@ -30,7 +30,6 @@ import yfinance as yf
 
 import daily_backtest_summary as backtest
 import entry_confirm
-import scanner as scanner_module
 
 
 IST = backtest.IST
@@ -231,7 +230,7 @@ def open_new_positions(
     for record in watched:
         trade_id = entry_confirm.watch_key(record)
         if geometry != "live":
-            # Its own id space. A shadow alert on the same zone as a live one
+            # Its own id space. An alert from another stream on the same zone
             # would otherwise collide and one of the two would be dropped.
             trade_id = f"{geometry}:{trade_id}"
         if trade_id in state["handled"] or trade_id in state["open"]:
@@ -513,23 +512,6 @@ def run_tick_for(args: argparse.Namespace, timeframe: str) -> None:
 
     opened = open_new_positions(state, watched, frames, now, args.market, timeframe)
 
-    # The shadow geometry's alerts, written by the scanner and never delivered.
-    # Filled and scored on exactly the same rules, so the comparison is about
-    # the zones and nothing else.
-    shadow_path = getattr(scanner_module, "SHADOW_ALERT_RECORD_FILE", None)
-    if args.market == "crypto" and shadow_path is not None and shadow_path.exists():
-        shadow_watched = entry_confirm.load_watched_alerts(
-            args.market, timeframe, now, records_path=shadow_path
-        )
-        if shadow_watched:
-            shadow_symbols = sorted({r["symbol"] for r in shadow_watched} - set(frames))
-            if shadow_symbols:
-                frames.update(fetch_crypto_bars(shadow_symbols))
-            opened += open_new_positions(
-                state, shadow_watched, frames, now, args.market, timeframe,
-                geometry="shadow",
-            )
-
     closed = evaluate_open_positions(state, frames, now, args.market)
 
     for trade_id in opened:
@@ -661,41 +643,6 @@ def paper_day_stats(
     return {"entries": len(rows), "decided": len(decided), "wins": wins, "total_r": total}
 
 
-def geometry_lines(state: dict, date_iso: str, timeframe: str) -> list[str]:
-    """Live geometry against the shadow, same rules, same day, same fills.
-
-    Empty until the scanner has written shadow alerts and some have resolved.
-    One day proves nothing - this is here to accumulate.
-    """
-    live = paper_day_stats(state, date_iso, "crypto", timeframe, stream="live")
-    shadow = paper_day_stats(state, date_iso, "crypto", timeframe, stream="shadow")
-    if not shadow:
-        return []
-    lines = [
-        "",
-        f"**Geometry A/B ({timeframe})** - shadow is logged, never alerted",
-    ]
-    for label, stats in (
-        (backtest_geometry_label("live"), live),
-        (backtest_geometry_label("shadow"), shadow),
-    ):
-        if not stats:
-            lines.append(f"  {label:14s} no closed trades")
-            continue
-        rate = f"{stats['wins']}/{stats['decided']}" if stats["decided"] else "0/0"
-        lines.append(
-            f"  {label:14s} {stats['entries']:3d} entries  {rate:>7s} won  "
-            f"{stats['total_r']:+.2f}R"
-        )
-    return lines
-
-
-def backtest_geometry_label(stream: str) -> str:
-    import config
-    name = config.ZONE_GEOMETRY if stream == "live" else config.ZONE_SHADOW_GEOMETRY
-    return f"{stream}/{name}"
-
-
 def side_text(stats: dict | None) -> str:
     if stats is None:
         return "-"
@@ -764,7 +711,6 @@ def build_report(
         "Gap is paper minus backtest. Persistent negatives mean the",
         "backtest is optimistic, not that paper was unlucky.",
     ])
-    lines.extend(geometry_lines(state, date_iso, timeframe))
     return "\n".join(lines)
 
 

@@ -4,7 +4,7 @@
 > at a history depth too short to exercise one of the two fixes. Both corrected
 > below. The revised answer is at the end.
 
-Run 2026-09-05 with `zone_geometry_backtest.py`. 42 crypto symbols, 30m, up to
+Run 2026-09-05 with `zone_geometry_backtest.py` (removed 2026-10-02; still in git history). 42 crypto symbols, 30m, up to
 3,000 bars each (~62 days), one identical trade simulator across all four arms.
 
 ## Result

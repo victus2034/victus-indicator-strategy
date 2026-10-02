@@ -116,10 +116,6 @@ CRYPTO_BREAK_EVEN_OFFSET_PCT = round(CRYPTO_ROUND_TRIP_COST_PCT * 1.129, 4)
 # than argued about - paper_trading reads the same flag so the two cannot
 # drift apart.
 BREAK_EVEN_ENABLED = True
-# Below this stop distance the +0.5R trigger arrives while the trade is
-# still net negative (0.5 x SL% < BREAK_EVEN_OFFSET_PCT), so the rule cannot
-# protect capital at all.
-MIN_SAFE_STOP_PCT = BREAK_EVEN_OFFSET_PCT * 2
 # A resting SL is a stop order, not a limit order - once triggered it fills
 # at whatever price is next available, not necessarily the exact trigger
 # price, especially since the same fast move that triggered it is often
@@ -211,8 +207,16 @@ def configure_nse_data(timeframe: str) -> Path:
 
 
 def configure_crypto_data(timeframe: str) -> Path:
-    crypto_scanner.TIMEFRAME = timeframe
-    return TIMEFRAME_SETTINGS[timeframe]["crypto_records"]
+    # Same fine evaluation candles as NSE (see configure_nse_data). This used
+    # to set the alert's own timeframe, so crypto was graded on 30m and 4h
+    # bars: every fill landed on :00 or :30, and a 4h fill bar could carry a
+    # target printed hours before the fill. Zone levels still come from the
+    # alert record; only touch/target/SL detection uses these candles.
+    settings = TIMEFRAME_SETTINGS[timeframe]
+    crypto_scanner.TIMEFRAME = settings["eval_interval"]
+    # 1500 5m candles is ~5 days; keep a pending trade's whole window in reach.
+    crypto_scanner.OHLCV_LIMIT = EVALUATION_OHLCV_LIMIT
+    return settings["crypto_records"]
 
 
 def load_records(path: Path, timeframe_filter: str) -> pd.DataFrame:
@@ -836,14 +840,14 @@ def run_backtest(
             continue
 
         if market == "crypto":
-            tracking_end_index, window_mature = crypto_tracking_end(frame, event_time)
+            tracking_end_index, window_mature = crypto_tracking_end(frame, event_time, alert.get("timeframe"))
         elif market == "xstock":
             # Same six-hour horizon as crypto: same venues, same clock,
             # same alert cadence. Tracking every available bar instead
             # let a trade run for days before it resolved.
-            tracking_end_index, window_mature = crypto_tracking_end(frame, event_time)
+            tracking_end_index, window_mature = crypto_tracking_end(frame, event_time, alert.get("timeframe"))
         elif market == "other":
-            tracking_end_index, window_mature = crypto_tracking_end(frame, event_time)
+            tracking_end_index, window_mature = crypto_tracking_end(frame, event_time, alert.get("timeframe"))
         else:
             # NSE is traded intraday - a position is squared off same-day
             # on any timeframe, never carried overnight.
@@ -935,14 +939,23 @@ def infer_bar_duration(frame: pd.DataFrame) -> pd.Timedelta:
 def crypto_tracking_end(
     frame: pd.DataFrame,
     event_time: pd.Timestamp,
+    timeframe: str | None = None,
 ) -> tuple[int | None, bool]:
     """Return a provisional crypto search window after alert time.
 
     Actual final evaluation is limited to 6 hours after entry. This provisional
-    window only gives the entry finder enough future candles to locate entry.
+    window only gives the entry finder enough future candles to locate entry,
+    so it spans the whole entry window plus that evaluation. It used to stop
+    at 7 hours, short of a 4h alert's 12-hour entry window: such an alert
+    could never fill after hour 7, and one that never filled was "immature"
+    for good because the window it waited on could never close.
     """
     event_time = event_time.tz_convert(IST)
-    provisional_expiry = event_time + timedelta(hours=CRYPTO_EVALUATION_HOURS + 1)
+    entry_window = ALERT_BAR_DURATION.get(str(timeframe), pd.Timedelta(0)) * ENTRY_WAIT_BARS
+    provisional_expiry = event_time + max(
+        timedelta(hours=CRYPTO_EVALUATION_HOURS + 1),
+        entry_window + timedelta(hours=CRYPTO_EVALUATION_HOURS),
+    )
     positions = [
         index for index, timestamp in enumerate(frame.index)
         if timestamp <= provisional_expiry
@@ -952,11 +965,6 @@ def crypto_tracking_end(
     return positions[-1], True
 
 
-def all_available_tracking_end(frame: pd.DataFrame) -> tuple[int | None, bool]:
-    """Use all currently available bars when no fixed horizon is approved."""
-    if frame.empty:
-        return None, True
-    return len(frame.index) - 1, True
 
 
 def simulate_alert(
@@ -1039,6 +1047,21 @@ def simulate_alert(
     for index in range(entry_index, end_index + 1):
         high = float(frame["high"].iloc[index])
         low = float(frame["low"].iloc[index])
+        if index == entry_index:
+            # Targets count from the candle AFTER the fill. On the fill candle
+            # the target-side extreme usually came BEFORE the fill - price was
+            # approaching the entry from there - and its order cannot be
+            # known, so only the stop counts on it (price can only reach a
+            # stop beyond the entry once the entry has filled). The one
+            # exception is a candle that opens at or through the entry: it
+            # fills on its first tick, so all of it comes after the fill.
+            bar_open = float(frame["open"].iloc[index])
+            filled_at_open = bar_open <= entry_price if side == "long" else bar_open >= entry_price
+            if not filled_at_open:
+                if side == "long":
+                    high = min(high, entry_price)
+                else:
+                    low = max(low, entry_price)
         favorable = high - entry_price if side == "long" else entry_price - low
         adverse = entry_price - low if side == "long" else high - entry_price
         max_favorable_r = max(max_favorable_r, favorable / risk)
@@ -1373,6 +1396,10 @@ def pending_trade(
             "entry_time": frame.index[entry_index],
             "entry_price": entry_price,
             "entry_basis": "body",
+            # unfilled() blanks the stop. A pending row is re-graded from this
+            # row tomorrow, and without the alert's own stop it fell back to
+            # the old 0.10% rule instead of the zone stop the alert printed.
+            "stop_price": original_stop_price(alert),
             "outcome": "Pending",
             "final_result": "Pending",
             "timing_status": timing_status,
@@ -1383,8 +1410,6 @@ def pending_trade(
     return result
 
 
-def is_crypto_symbol(symbol: str) -> bool:
-    return market_class(symbol) == MARKET_CRYPTO
 
 
 def is_xstock_symbol(symbol: str) -> bool:
@@ -1681,14 +1706,6 @@ def zone_cooldown_overlap(current: dict, previous: dict, market: str) -> bool:
     return zones_overlap(current, previous)
 
 
-def same_day_overlap(current: dict, previous: dict) -> bool:
-    current_day = pd.Timestamp(current["entry_time"]).tz_convert(IST).date()
-    previous_day = pd.Timestamp(previous["entry_time"]).tz_convert(IST).date()
-    if current_day != previous_day:
-        return False
-    return max(float(current["zone_bottom"]), float(previous["zone_bottom"])) <= min(
-        float(current["zone_top"]), float(previous["zone_top"])
-    )
 
 
 def zones_overlap(current: dict, previous: dict) -> bool:

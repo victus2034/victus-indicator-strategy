@@ -364,11 +364,11 @@ class DailyBacktestSummaryTests(unittest.TestCase):
             tz=summary.IST,
         )
         # entry 100.00, stop 98.901 -> +0.5R at 100.55, +2R at 102.20.
-        # Bar 1 fills and secures +0.5R, bar 2 trades through the stop,
+        # Bar 1 fills at its open and secures +0.5R, bar 2 trades through the stop,
         # bar 3 recovers past +2R.
         frame = pd.DataFrame(
             {
-                "open": [101.0, 100.8, 99.5, 100.0],
+                "open": [101.0, 100.0, 99.5, 100.0],
                 "high": [101.2, 100.8, 99.5, 103.0],
                 "low": [100.9, 99.8, 98.5, 99.5],
                 "close": [101.0, 100.2, 98.8, 102.5],
@@ -1609,6 +1609,80 @@ class CooldownDtypeTests(unittest.TestCase):
         results, blocked = summary.apply_same_day_zone_cooldown(pd.DataFrame(rows), "xstock")
         self.assertEqual(blocked, 1)
         self.assertEqual(list(results["outcome"].fillna("")).count("zone_cooldown"), 1)
+
+
+class FillCandleTests(unittest.TestCase):
+    """Targets count from the candle after the fill, never the fill candle itself."""
+
+    def setUp(self):
+        # entry 96, stop 95 (1R = 1.0). Bar 1 runs up to 98.6 (+2.6R) BEFORE
+        # dropping to fill at 96; afterwards price never clears 96.4.
+        self.index = pd.date_range("2026-08-04 10:00", periods=6, freq="5min", tz=summary.IST)
+        self.alert = base_alert(
+            zone_bottom=95.2, zone_top=96.0, body_entry=96.0, planned_entry=96.0, stop_price=95.0
+        )
+
+    def frame(self, later_high=96.4, fill_open=97.0):
+        return pd.DataFrame(
+            {
+                "open": [97.0, fill_open, 96.1, 96.1, 96.1, 96.1],
+                "high": [97.2, 98.6, later_high, 96.4, 96.4, 96.4],
+                "low": [96.8, 95.95, 95.9, 95.9, 95.9, 95.9],
+                "close": [97.0, 96.1, 96.2, 96.2, 96.2, 96.2],
+                "volume": [1] * 6,
+            },
+            index=self.index,
+        )
+
+    def test_a_target_on_the_fill_candle_is_not_credited(self):
+        result = summary.simulate_alert(self.frame(), self.alert, 0, 5)
+        self.assertEqual(result["final_result"], "Neither")
+        self.assertLess(result["mfe_r"], 0.5)
+
+    def test_a_target_on_the_next_candle_is_credited(self):
+        result = summary.simulate_alert(self.frame(later_high=98.1), self.alert, 0, 5)
+        self.assertEqual(result["final_result"], "+2R")
+
+    def test_a_candle_that_opens_at_the_entry_fills_first(self):
+        result = summary.simulate_alert(self.frame(fill_open=96.0), self.alert, 0, 5)
+        self.assertEqual(result["final_result"], "+2R")
+
+    def test_the_stop_still_counts_on_the_fill_candle(self):
+        frame = self.frame()
+        frame.iloc[1, frame.columns.get_loc("low")] = 94.8
+        result = summary.simulate_alert(frame, self.alert, 0, 5)
+        self.assertEqual(result["final_result"], "SL")
+
+
+class PendingStopTests(unittest.TestCase):
+    def test_a_pending_trade_keeps_the_alerts_stop(self):
+        frame = crypto_frame(rows=[(101.0, 101.2, 100.8, 101.0), (100.0, 100.6, 100.0, 100.5)])
+        alert = crypto_alert(stop_price=99.25)
+        pending = summary.pending_trade(alert, frame, 1, 100.0)
+        self.assertEqual(pending["stop_price"], 99.25)
+        self.assertEqual(summary.original_stop_price(pending), 99.25)
+
+
+class CryptoEvaluationCandleTests(unittest.TestCase):
+    def test_crypto_is_graded_on_five_minute_candles(self):
+        saved = summary.crypto_scanner.TIMEFRAME, summary.crypto_scanner.OHLCV_LIMIT
+        self.addCleanup(lambda: setattr(summary.crypto_scanner, "TIMEFRAME", saved[0]))
+        self.addCleanup(lambda: setattr(summary.crypto_scanner, "OHLCV_LIMIT", saved[1]))
+        for timeframe in ("30m", "4h"):
+            summary.configure_crypto_data(timeframe)
+            self.assertEqual(summary.crypto_scanner.TIMEFRAME, "5m")
+            self.assertEqual(summary.crypto_scanner.OHLCV_LIMIT, summary.EVALUATION_OHLCV_LIMIT)
+
+    def test_a_4h_alerts_window_covers_its_whole_entry_window(self):
+        index = pd.date_range("2026-08-04 00:00", periods=30 * 12, freq="5min", tz=summary.IST)
+        frame = pd.DataFrame({"open": 1.0, "high": 1.0, "low": 1.0, "close": 1.0, "volume": 1.0}, index=index)
+        event = index[0]
+        end_30m, _ = summary.crypto_tracking_end(frame, event, "30m")
+        end_4h, _ = summary.crypto_tracking_end(frame, event, "4h")
+        # 90-minute entry window + 6 hours of evaluation after it.
+        self.assertEqual(frame.index[end_30m], event + pd.Timedelta(hours=7, minutes=30))
+        # 12-hour entry window + 6 hours of evaluation after it.
+        self.assertEqual(frame.index[end_4h], event + pd.Timedelta(hours=18))
 
 
 if __name__ == "__main__":

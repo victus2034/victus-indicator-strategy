@@ -56,7 +56,6 @@ from zone_scoring import score_wick_zone
 
 STATE_FILE = Path(__file__).with_name("nse_alert_state.json")
 ALERT_RECORD_FILE = Path(__file__).with_name("nse_alert_records.jsonl")
-SL_BUFFER_PCT = 0.10
 # Round-trip Dhan NSE equity intraday charges as a share of turnover, and
 # the stop distance below which the +0.5R capital-protection rule stops
 # working. Kept in step with daily_backtest_summary, which prices results
@@ -322,64 +321,9 @@ def bind_zone_engine(timeframe=None):
     return zone_engine.ZONE_BASE_EXTRA
 
 
-def get_range_filter_signals(df):
-    src = df["close"]
-    period = 100
-    multiplier = 3.0
-
-    def smoothrng(series, length, mult):
-        weighted_period = length * 2 - 1
-        average_range = series.diff().abs().ewm(span=length, adjust=False).mean()
-        return average_range.ewm(span=weighted_period, adjust=False).mean() * mult
-
-    smooth_range = smoothrng(src, period, multiplier)
-    filt = src.copy()
-    filt.iloc[0] = src.iloc[0]
-    upward = 0.0
-    downward = 0.0
-    condition_state = 0
-    buy_signal = False
-    sell_signal = False
-
-    for index in range(1, len(src)):
-        previous = filt.iloc[index - 1]
-        price = src.iloc[index]
-        range_value = smooth_range.iloc[index] if not pd.isna(smooth_range.iloc[index]) else 0
-
-        if price > previous:
-            filt.iloc[index] = previous if price - range_value < previous else price - range_value
-        else:
-            filt.iloc[index] = previous if price + range_value > previous else price + range_value
-
-        if filt.iloc[index] > filt.iloc[index - 1]:
-            upward += 1
-        elif filt.iloc[index] < filt.iloc[index - 1]:
-            upward = 0
-
-        if filt.iloc[index] < filt.iloc[index - 1]:
-            downward += 1
-        elif filt.iloc[index] > filt.iloc[index - 1]:
-            downward = 0
-
-        long_condition = (
-            (src.iloc[index] > filt.iloc[index] and src.iloc[index] > src.iloc[index - 1] and upward > 0)
-            or (src.iloc[index] > filt.iloc[index] and src.iloc[index] < src.iloc[index - 1] and upward > 0)
-        )
-        short_condition = (
-            (src.iloc[index] < filt.iloc[index] and src.iloc[index] < src.iloc[index - 1] and downward > 0)
-            or (src.iloc[index] < filt.iloc[index] and src.iloc[index] > src.iloc[index - 1] and downward > 0)
-        )
-
-        previous_state = condition_state
-        if long_condition:
-            condition_state = 1
-        elif short_condition:
-            condition_state = -1
-
-        buy_signal = long_condition and previous_state == -1
-        sell_signal = short_condition and previous_state == 1
-
-    return buy_signal, sell_signal
+# Identical to the crypto one, so it is the crypto one. NSE still runs it on
+# confirmed candles only (see scan_symbol); that choice lives at the call site.
+get_range_filter_signals = zone_engine.get_range_filter_signals
 
 
 def normalize_yfinance_columns(data):
@@ -679,24 +623,13 @@ def display_symbol(symbol):
     return text
 
 
-def planned_entry_price(zone_type, zone):
-    """Use the near/body edge as the practical planned entry."""
-    return float(zone["top"] if zone_type == "demand" else zone["bottom"])
-
-
-def planned_stop_price(zone_type, zone, buffer_pct=SL_BUFFER_PCT):
-    """Place SL beyond the far zone edge with a small fixed buffer."""
-    if zone_type == "demand":
-        return float(zone["bottom"]) * (1 - buffer_pct / 100.0)
-    return float(zone["top"]) * (1 + buffer_pct / 100.0)
-
-
-def planned_stop_distance_pct(zone_type, zone, buffer_pct=SL_BUFFER_PCT):
-    entry = planned_entry_price(zone_type, zone)
-    if entry == 0:
-        return 0.0
-    stop = planned_stop_price(zone_type, zone, buffer_pct)
-    return abs(entry - stop) / abs(entry) * 100.0
+# The entry and stop come from the crypto engine too, like the zones they sit
+# on. NSE kept its own fixed 0.10%-beyond-the-far-edge stop after crypto moved
+# to v7's rule (a share of the zone's height, config.ZONE_SL_MODE), so the same
+# zone printed a different stop, R:R and stop_too_wide verdict per market.
+planned_entry_price = zone_engine.planned_entry_price
+planned_stop_price = zone_engine.planned_stop_price
+planned_stop_distance_pct = zone_engine.planned_stop_distance_pct
 
 
 def delivered_alert_id(record):
@@ -1093,6 +1026,10 @@ def run_scan_once(state):
         alerts_sent += sum(1 for alert_result in alert_results if alert_result is True)
         alert_delivery_failures += sum(1 for alert_result in alert_results if alert_result is False)
 
+    zone_engine.prune_alert_state(
+        state, time.time(), ALERT_COOLDOWN_SECONDS, SIGNAL_ALERT_COOLDOWN_SECONDS,
+        ZONE_REPEAT_SUPPRESSION_SECONDS, 0,
+    )
     save_state(state)
 
     if PRINT_SCAN_SUMMARY and results:

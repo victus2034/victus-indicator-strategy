@@ -82,6 +82,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Restore runtime state
+        id: restore
         run: |
           bash .github/scripts/restore_runtime_state.sh \
             nse_alert_records_30m.jsonl \
@@ -177,8 +178,10 @@ jobs:
             --market crypto \
             "${EXTRA_ARGS[@]}"
 
+      # always(): alerts already sent are recorded even if a later step failed or
+      # timed out. Never after a failed restore - there is nothing safe to save.
       - name: Persist runtime state
-        if: ${{ github.event.inputs.dry_run != 'true' }}
+        if: ${{ always() && steps.restore.outcome == 'success' && github.event.inputs.dry_run != 'true' }}
         run: |
           bash .github/scripts/persist_runtime_state.sh \
             entry_confirm_state.json \

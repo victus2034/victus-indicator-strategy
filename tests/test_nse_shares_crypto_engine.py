@@ -34,6 +34,10 @@ ENGINE_FUNCTIONS = (
     "build_zones",
     "too_young_to_alert",
     "nearest_active_zone",
+    # The stop the alert prints, filters on and records for the backtest.
+    "planned_entry_price",
+    "planned_stop_price",
+    "planned_stop_distance_pct",
 )
 
 # Every number the engine reads that NSE used to keep its own copy of.

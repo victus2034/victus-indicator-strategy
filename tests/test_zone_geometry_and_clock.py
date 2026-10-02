@@ -149,56 +149,6 @@ class GeometrySwitch(unittest.TestCase):
         self.assertIsNotNone(z)
 
 
-class ShadowNeverDelivers(unittest.TestCase):
-    """The shadow stream must be incapable of sending a real alert."""
-
-    def result(self):
-        return {
-            "symbol": "BTCUSD", "exchange": "delta", "price": 100.0,
-            "supply_rating": None, "demand_rating": None,
-            "supply_score": None, "demand_score": None,
-        }
-
-    def zone(self):
-        return {
-            "type": "demand", "top": 100.5, "bottom": 100.0, "body_entry": 100.5,
-            "active": True, "over_touched": False, "created_idx": 0, "clock": 0,
-            "last_gap": None, "atr": 1.0, "geometry": "wick",
-            "wick_to_body": 1.0, "wick_atr": 1.0, "departure_atr": 1.0,
-            "touch_count": 0,
-        }
-
-    def test_shadow_writes_its_own_log_and_never_calls_send_alert(self):
-        import json, tempfile
-        from pathlib import Path
-
-        def explode(*_args, **_kwargs):
-            raise AssertionError("shadow path reached send_alert")
-
-        with tempfile.TemporaryDirectory() as tmp:
-            shadow = Path(tmp) / "shadow.jsonl"
-            live = Path(tmp) / "live.jsonl"
-            with patch.object(scanner, "send_alert", explode), \
-                 patch.object(scanner, "SHADOW_ALERT_RECORD_FILE", shadow), \
-                 patch.object(scanner, "ALERT_RECORD_FILE", live), \
-                 patch.object(scanner, "MIN_DISTANCE_PCT", 0.0), \
-                 patch.object(scanner, "MAX_DISTANCE_PCT", 100.0), \
-                 patch.object(scanner, "TIMEFRAME", "4h"):
-                sent = scanner.process_candidate(
-                    {}, self.result(), "demand", self.zone(), 0.5, 1.0, shadow=True
-                )
-            self.assertTrue(sent)
-            self.assertTrue(shadow.exists(), "shadow record was not written")
-            self.assertFalse(live.exists(), "shadow leaked into the live log")
-            record = json.loads(shadow.read_text(encoding="utf-8").splitlines()[0])
-            self.assertTrue(record["shadow"])
-            self.assertEqual(record["geometry"], "wick")
-
-    def test_shadow_state_cannot_suppress_a_live_alert(self):
-        live_key = scanner.build_state_key("BTCUSD", "demand", self.zone())
-        self.assertFalse(live_key.startswith("shadow:"))
-
-
 class WatchBandDoesNotOverlapTheAlertBand(unittest.TestCase):
     """A watch row must never exist for a zone the alert path already covers.
 

@@ -103,5 +103,16 @@ class WeeklyBacktestSummaryTests(unittest.TestCase):
         self.assertNotIn("No Touch", blocks)
 
 
+class WeekBoundsTests(unittest.TestCase):
+    def test_nse_week_is_monday_to_friday(self):
+        self.assertEqual(weekly.week_bounds(date(2026, 10, 2), "nse"), (date(2026, 9, 28), date(2026, 10, 2)))
+
+    def test_crypto_week_includes_the_weekend(self):
+        for market in ("crypto", "xstock", "other"):
+            self.assertEqual(
+                weekly.week_bounds(date(2026, 10, 2), market), (date(2026, 9, 26), date(2026, 10, 2))
+            )
+
+
 if __name__ == "__main__":
     unittest.main()

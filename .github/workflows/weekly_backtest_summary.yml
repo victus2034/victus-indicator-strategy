@@ -69,11 +69,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
       - name: Restore runtime state
+        id: restore
         run: |
           bash .github/scripts/restore_runtime_state.sh \
             nse_alert_records.jsonl \
@@ -133,7 +135,10 @@ jobs:
             done
           done
 
+      # always(): alerts already sent are recorded even if a later step failed or
+      # timed out. Never after a failed restore - there is nothing safe to save.
       - name: Persist runtime state
+        if: ${{ always() && steps.restore.outcome == 'success' }}
         run: bash .github/scripts/persist_runtime_state.sh weekly_backtest_reports_sent.json
 
       - name: Notify on failure
