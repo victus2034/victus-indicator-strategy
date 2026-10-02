@@ -1481,6 +1481,19 @@ def planned_entry_price(zone_type, zone):
     return float(zone["top"] if zone_type == "demand" else zone["bottom"])
 
 
+def price_past_entry(zone_type, zone, price):
+    """True once price has gone through the planned entry into the zone.
+
+    nearest_active_zone measures distance in both directions, so a price
+    0.15% INSIDE a demand zone read the same as one 0.15% above it, and the
+    alert went out after the entry had already traded: 19-37% of alerts from
+    1 Sep to 2 Oct 2026 (crypto and NSE, 4h and 30m). Alerts are a warning
+    that price is coming to the level, so only the approach side may fire.
+    """
+    entry = planned_entry_price(zone_type, zone)
+    return float(price) < entry if zone_type == "demand" else float(price) > entry
+
+
 def planned_stop_price(zone_type, zone, buffer_pct=SL_BUFFER_PCT):
     """Place SL beyond the far zone edge.
 
@@ -1909,7 +1922,10 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
         should_alert = (not entry["in_zone"]) or alert_due(entry, now_ts, ALERT_COOLDOWN_SECONDS)
         last_success = float(noise_state.get(noise_key, 0.0) or 0.0)
         noise_open = not last_success or now_ts - last_success >= ZONE_REPEAT_SUPPRESSION_SECONDS
-        if should_alert and noise_open:
+        # Past the entry already: the band is consumed without an alert, so
+        # price bouncing back out through the band does not fire late either.
+        approaching = not price_past_entry(zone_type, zone, result["price"])
+        if should_alert and noise_open and approaching:
             message = format_alert(result, zone_type, zone, distance_pct)
             # in_alert_window() is checked here too (send_alert checks it
             # again internally) so a hold outside the 08:00-01:00 IST
@@ -1923,6 +1939,8 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
                 noise_state[noise_key] = now_ts
                 record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, now_ts)
                 alert_sent = True
+        elif should_alert and not approaching:
+            print(f"Skipped alert, price already past entry: {noise_key}")
         elif should_alert and last_success:
             remaining = max(0, int(ZONE_REPEAT_SUPPRESSION_SECONDS - (now_ts - last_success)))
             print(f"Suppressed repeat alert: {noise_key} | {remaining // 60}m remaining")

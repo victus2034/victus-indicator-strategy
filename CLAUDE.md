@@ -200,5 +200,8 @@ each falling back to the shared one above when unset (so nothing changes until t
   state right after each delivered alert; entry_confirm saves after each digest part and rolls
   back only the records whose lines did not land. The crypto range-filter *signal* runs on
   closed candles (`scanner.confirmed_candles`), like NSE; zones still use the forming candle.
+- **Approach side only (2026-10-02, Lakky).** Distance to the entry is measured both ways, so price
+  already through the entry used to alert as "0.15% away" (19-37% of alerts). `scanner.price_past_entry`
+  now blocks those for crypto and NSE; the band is still consumed, so a bounce back out does not fire.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.
