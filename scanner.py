@@ -7,6 +7,7 @@ import os
 import tempfile
 import threading
 import time
+import warnings
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import unquote, urlencode
@@ -14,6 +15,7 @@ from zoneinfo import ZoneInfo
 
 import ccxt
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+import numpy as np
 import pandas as pd
 import requests
 
@@ -361,14 +363,41 @@ def tighten_wide_zone(window, zone_type, far, near):
     return far / (1 + ZONE_MAX_WIDTH_PCT / 100.0) if supply else far * (1 + ZONE_MAX_WIDTH_PCT / 100.0)
 
 
-def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type, geometry=None):
+def _engine_arrays(df, atr_series):
+    """The candle columns and ATR as plain float arrays, read once per build.
+
+    build_zones used to read every value through pandas (`df["close"].iloc[i]`,
+    `window[["open", "close"]].min(axis=1)`), and that indexing was ~90% of the
+    zone build's time. Same numbers, same order of operations; only the
+    container changes. The nan-skipping reductions match pandas' skipna.
+    """
+    arrays = {
+        column: np.asarray(df[column], dtype=float)
+        for column in ("open", "high", "low", "close")
+    }
+    arrays["atr"] = np.asarray(atr_series, dtype=float)
+    return arrays
+
+
+def _skipna_reduce(reduce, values):
+    # pandas' min/max skip NaN and give NaN for an all-NaN slice; numpy's
+    # nan-reductions do the same but warn on the all-NaN case.
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        return reduce(values)
+
+
+def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type, geometry=None, arrays=None):
     # Two ATRs, because the indicator uses two. v7's f_layerData reads
     # `a = ta.atr(atr_len)` on the CONFIRMATION bar and hands that to
     # f_addZone, so the overlap filter on chart is measured swing_length bars
     # after the pivot. The zone's own metadata (wick_atr, departure_atr) is
     # about the pivot candle, so that keeps the pivot-bar reading.
-    pivot_atr = atr_series.iloc[pivot_index]
-    confirm_atr = atr_series.iloc[confirmation_index]
+    if arrays is None:
+        arrays = _engine_arrays(df, atr_series)
+    opens, highs, lows, closes = arrays["open"], arrays["high"], arrays["low"], arrays["close"]
+    pivot_atr = arrays["atr"][pivot_index]
+    confirm_atr = arrays["atr"][confirmation_index]
     if pd.isna(confirm_atr) or float(confirm_atr) <= 0:
         return None
     if pd.isna(pivot_atr) or float(pivot_atr) <= 0:
@@ -376,14 +405,14 @@ def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type
         # has an ATR and the pivot bar does not yet.
         pivot_atr = confirm_atr
 
-    candle_open = float(df["open"].iloc[pivot_index])
-    candle_close = float(df["close"].iloc[pivot_index])
-    candle_high = float(df["high"].iloc[pivot_index])
-    candle_low = float(df["low"].iloc[pivot_index])
+    candle_open = float(opens[pivot_index])
+    candle_close = float(closes[pivot_index])
+    candle_high = float(highs[pivot_index])
+    candle_low = float(lows[pivot_index])
     body_size = abs(candle_close - candle_open)
 
-    departure_closes = df["close"].iloc[pivot_index + 1:confirmation_index + 1]
-    if departure_closes.empty:
+    departure_closes = closes[pivot_index + 1:confirmation_index + 1]
+    if len(departure_closes) == 0:
         return None
 
     # ZONE_GEOMETRY picks the construction; see config.py for what each costs.
@@ -399,11 +428,11 @@ def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type
     if zone_type == "demand":
         wick_top = min(candle_open, candle_close)
         wick_bottom = candle_low
-        departure = float(departure_closes.max() - wick_top)
+        departure = float(_skipna_reduce(np.nanmax, departure_closes) - wick_top)
     else:
         wick_bottom = max(candle_open, candle_close)
         wick_top = candle_high
-        departure = float(wick_bottom - departure_closes.min())
+        departure = float(wick_bottom - _skipna_reduce(np.nanmin, departure_closes))
 
     geometry = geometry or ZONE_GEOMETRY
     # True when the wick had no height at all - the bar that made the window's
@@ -414,21 +443,26 @@ def qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, zone_type
     degenerate = False
     if geometry == "wick":
         first = max(0, pivot_index - ZONE_BASE_EXTRA)
-        last = min(len(df) - 1, pivot_index + ZONE_BASE_EXTRA, confirmation_index)
-        window = df.iloc[first:last + 1]
+        last = min(len(closes) - 1, pivot_index + ZONE_BASE_EXTRA, confirmation_index)
+        window = {
+            "high": highs[first:last + 1],
+            "low": lows[first:last + 1],
+        }
+        window_open = opens[first:last + 1]
+        window_close = closes[first:last + 1]
         # The near edge is the BODY edge, max/min(open, close). Not the close -
         # a wick ends where the body starts, and which of open or close forms
         # that edge depends on the candle's direction.
         if zone_type == "demand":
-            bottom = float(window["low"].min())
-            top = float(window[["open", "close"]].min(axis=1).min())
+            bottom = float(_skipna_reduce(np.nanmin, window["low"]))
+            top = float(_skipna_reduce(np.nanmin, np.fmin(window_open, window_close)))
             if top <= bottom:
                 degenerate = True
                 top = bottom + float(pivot_atr) * 0.01
             top = tighten_wide_zone(window, "demand", bottom, top)
         else:
-            top = float(window["high"].max())
-            bottom = float(window[["open", "close"]].max(axis=1).max())
+            top = float(_skipna_reduce(np.nanmax, window["high"]))
+            bottom = float(_skipna_reduce(np.nanmax, np.fmax(window_open, window_close)))
             if bottom >= top:
                 degenerate = True
                 bottom = top - float(pivot_atr) * 0.01
@@ -506,6 +540,7 @@ def build_zones(df, geometry=None):
     if atr_series.isna().all():
         return [], []
 
+    arrays = _engine_arrays(df, atr_series)
     pivot_highs, pivot_lows = find_pivots(df, SWING_LENGTH)
     pivot_high_set = set(pivot_highs)
     pivot_low_set = set(pivot_lows)
@@ -529,7 +564,9 @@ def build_zones(df, geometry=None):
     for confirmation_index in range(SWING_LENGTH, len(df)):
         pivot_index = confirmation_index - SWING_LENGTH
         if pivot_index in pivot_high_set:
-            zone = qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, "supply", geometry)
+            zone = qualify_wick_zone(
+                df, pivot_index, confirmation_index, atr_series, "supply", geometry, arrays
+            )
             if zone is not None and add_zone_if_not_overlapping(supply_zones, zone, zone["overlap_atr"]):
                 trim_zone_history(supply_zones, confirmation_index)
                 # A full-length pivot has already replaced the side, so the
@@ -539,7 +576,9 @@ def build_zones(df, geometry=None):
                 # zone up to base_extra bars earlier than the chart draws one.
                 pending_rebuild["supply"] = False
         elif pivot_index in pivot_low_set:
-            zone = qualify_wick_zone(df, pivot_index, confirmation_index, atr_series, "demand", geometry)
+            zone = qualify_wick_zone(
+                df, pivot_index, confirmation_index, atr_series, "demand", geometry, arrays
+            )
             if zone is not None and add_zone_if_not_overlapping(demand_zones, zone, zone["overlap_atr"]):
                 trim_zone_history(demand_zones, confirmation_index)
                 pending_rebuild["demand"] = False
@@ -557,7 +596,7 @@ def build_zones(df, geometry=None):
                 ):
                     if pending_rebuild[side] and short_pivot in pivot_set:
                         rebuilt = qualify_wick_zone(
-                            df, short_pivot, confirmation_index, atr_series, side, geometry
+                            df, short_pivot, confirmation_index, atr_series, side, geometry, arrays
                         )
                         # A wick with no height is not a replacement. v7 tests
                         # `rfS > near` before it will build one and, when that
@@ -573,9 +612,9 @@ def build_zones(df, geometry=None):
                             trim_zone_history(bucket, confirmation_index)
                         pending_rebuild[side] = False
 
-        close = float(df["close"].iloc[confirmation_index])
-        high = float(df["high"].iloc[confirmation_index])
-        low = float(df["low"].iloc[confirmation_index])
+        close = float(arrays["close"][confirmation_index])
+        high = float(arrays["high"][confirmation_index])
+        low = float(arrays["low"][confirmation_index])
         for zone in supply_zones:
             if zone["active"] and confirmation_index > zone["created_idx"]:
                 record_zone_touch(zone, high, low, confirmation_index)
@@ -664,18 +703,22 @@ def get_range_filter_signals(df):
         return average_range.ewm(span=weighted_period, adjust=False).mean() * mult
 
     smooth_range = smoothrng(src, period, multiplier)
-    filt = src.copy()
-    filt.iloc[0] = src.iloc[0]
+    # Plain Python floats for the two bar-by-bar loops: the same arithmetic in
+    # the same order, without a pandas .iloc lookup per value (that lookup was
+    # nearly all of this function's time).
+    prices = [float(value) for value in src.to_numpy(dtype=float)]
+    ranges = [0.0 if math.isnan(value) else float(value) for value in smooth_range.to_numpy(dtype=float)]
+    filt = list(prices)
 
-    for index in range(1, len(src)):
-        previous = filt.iloc[index - 1]
-        price = src.iloc[index]
-        range_value = smooth_range.iloc[index] if not pd.isna(smooth_range.iloc[index]) else 0
+    for index in range(1, len(prices)):
+        previous = filt[index - 1]
+        price = prices[index]
+        range_value = ranges[index]
 
         if price > previous:
-            filt.iloc[index] = previous if price - range_value < previous else price - range_value
+            filt[index] = previous if price - range_value < previous else price - range_value
         else:
-            filt.iloc[index] = previous if price + range_value > previous else price + range_value
+            filt[index] = previous if price + range_value > previous else price + range_value
 
     upward = 0.0
     downward = 0.0
@@ -683,26 +726,30 @@ def get_range_filter_signals(df):
     buy_signal = False
     sell_signal = False
 
-    for index in range(1, len(src)):
-        if filt.iloc[index] > filt.iloc[index - 1]:
+    for index in range(1, len(prices)):
+        current_filt = filt[index]
+        previous_filt = filt[index - 1]
+        price = prices[index]
+        previous_price = prices[index - 1]
+        if current_filt > previous_filt:
             upward += 1
-        elif filt.iloc[index] < filt.iloc[index - 1]:
+        elif current_filt < previous_filt:
             upward = 0
 
-        if filt.iloc[index] < filt.iloc[index - 1]:
+        if current_filt < previous_filt:
             downward += 1
-        elif filt.iloc[index] > filt.iloc[index - 1]:
+        elif current_filt > previous_filt:
             downward = 0
 
         long_condition = (
-            (src.iloc[index] > filt.iloc[index] and src.iloc[index] > src.iloc[index - 1] and upward > 0)
+            (price > current_filt and price > previous_price and upward > 0)
             or
-            (src.iloc[index] > filt.iloc[index] and src.iloc[index] < src.iloc[index - 1] and upward > 0)
+            (price > current_filt and price < previous_price and upward > 0)
         )
         short_condition = (
-            (src.iloc[index] < filt.iloc[index] and src.iloc[index] < src.iloc[index - 1] and downward > 0)
+            (price < current_filt and price < previous_price and downward > 0)
             or
-            (src.iloc[index] < filt.iloc[index] and src.iloc[index] > src.iloc[index - 1] and downward > 0)
+            (price < current_filt and price > previous_price and downward > 0)
         )
 
         previous_state = condition_state
