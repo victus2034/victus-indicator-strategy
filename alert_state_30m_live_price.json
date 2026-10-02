@@ -4010,7 +4010,9 @@
     "HYPEUSD|30m|short|91.623|91.977": 1790948300.4574747,
     "shadow:NVDAXUSD|30m|short|237.528|237.7": 1790948795.7404659,
     "TSLAXUSD|30m|short|374.1|375": 1790952114.6806471,
-    "shadow:TSLAXUSD|30m|short|374.886|375": 1790952114.6806471
+    "shadow:TSLAXUSD|30m|short|374.886|375": 1790952114.6806471,
+    "RIVERUSD|30m|long|1.183|1.189": 1790953003.6245775,
+    "XAUTUSD|30m|long|4145.08|4160.52": 1790953003.8382425
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15559,7 +15561,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790952760.1628518
+    "30m": 1790952989.202345
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -46848,11 +46850,12 @@
     "HYPEUSD|30m|short|91.623|91.977": 1790951002.2071357,
     "XAUTUSD|30m|long|4145.08|4160.52": 1790951285.4089086,
     "NVDAXUSD|30m|short|235.813|237.7": 1790947920.1720412,
-    "SLVONUSD|30m|long|54.62|54.79": 1790943114.1186178,
+    "SLVONUSD|30m|long|54.62|54.79": 1790953003.835215,
     "AVAXUSD|30m|short|11.3303|11.374": 1790945795.4391582,
     "VELVETUSD|30m|short|0.0661|0.0662": 1790946701.9860253,
     "METAXUSD|30m|short|746.25|746.65": 1790947920.1656013,
-    "SNDKBUSD|30m|long|1708.8|1721.14": 1790952681.1000361
+    "SNDKBUSD|30m|long|1708.8|1721.14": 1790952681.1000361,
+    "BNBUSD|30m|long|768.06|769.33": 1790953003.6195276
   },
   "shadow:BTCUSD|supply|80474.35070115|80522.70000000": {
     "in_zone": false,
@@ -146022,7 +146025,7 @@
     "last_attempt_at": 1790822491.7138793
   },
   "TSLAXUSD|supply|374.10000000|375.00000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790952114.6806471,
     "last_attempt_at": 1790952114.6806471
   },
@@ -148310,9 +148313,9 @@
     "last_attempt_at": 0.0
   },
   "RIVERUSD|demand|1.18300000|1.18900000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790953003.6245775,
+    "last_attempt_at": 1790953003.6245775
   },
   "shadow:RIVERUSD|demand|1.18300000|1.18643426": {
     "in_zone": false,
@@ -148485,9 +148488,9 @@
     "last_attempt_at": 0.0
   },
   "XAUTUSD|demand|4145.08000000|4160.52000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790953003.8382425,
+    "last_attempt_at": 1790953003.8382425
   },
   "shadow:XAUTUSD|demand|4145.08000000|4147.44929677": {
     "in_zone": false,
