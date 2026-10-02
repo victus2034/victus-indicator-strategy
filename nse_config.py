@@ -120,8 +120,12 @@ REARM_FACTOR = 1.25
 
 # Shortest gap between two scans of the same timeframe. Every workflow is
 # also dispatched by an external scheduler, so cron in this repo means each
-# scan would otherwise run twice, minutes apart.
-MIN_SCAN_INTERVAL_SECONDS = 8 * 60
+# scan would otherwise run twice, minutes apart. The NSE workflows loop a scan
+# every ~90s inside one dispatch (scan_loop.sh) and lower this to 60s through
+# VICTUS_MIN_SCAN_INTERVAL_SECONDS, the same variable the crypto workflows set.
+from config import env_int  # noqa: E402
+
+MIN_SCAN_INTERVAL_SECONDS = env_int("VICTUS_MIN_SCAN_INTERVAL_SECONDS", 8 * 60)
 SCAN_SLEEP = 300
 ALERT_COOLDOWN_SECONDS = 4 * 60 * 60
 ALERT_RANGE_FILTER_SIGNALS = True

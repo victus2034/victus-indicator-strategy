@@ -955,6 +955,32 @@ def mark_scan_started(state, now=None):
     stamps[TIMEFRAME] = now if now is not None else time.time()
 
 
+def stop_scan_loop():
+    """Tell .github/scripts/scan_loop.sh not to scan again this dispatch.
+
+    Outside the market window every pass would only re-post the same status
+    line, so the loop ends after the first. A no-op outside the loop.
+    """
+    stop_file = os.getenv("SCAN_LOOP_STOP_FILE", "").strip()
+    if stop_file:
+        Path(stop_file).touch()
+
+
+def first_pass_this_loop(tag):
+    """True the first time `tag` is seen in this scan_loop.sh dispatch.
+
+    Always True outside the loop, so a plain --once run behaves as before.
+    """
+    stop_file = os.getenv("SCAN_LOOP_STOP_FILE", "").strip()
+    if not stop_file:
+        return True
+    marker = Path(f"{stop_file}.{tag}")
+    if marker.exists():
+        return False
+    marker.touch()
+    return True
+
+
 def run_scan_once(state):
     if scan_too_soon(state):
         print(
@@ -984,6 +1010,7 @@ def run_scan_once(state):
             f"Trigger: {trigger}\n"
             f"Market window: {market_open.strftime('%H:%M')} - {market_close.strftime('%H:%M')} IST"
         )
+        stop_scan_loop()
         return
 
     trade_start_hour, trade_start_minute = parse_hhmm(MARKET_OPEN)
@@ -994,12 +1021,15 @@ def run_scan_once(state):
         microsecond=0,
     )
     if market_now < trade_start:
-        send_status_message(
-            "Victus NSE scanner context-only pre-open update\n"
-            f"Time: {market_now.strftime('%Y-%m-%d %H:%M:%S %Z')}\n"
-            "Reference Price: Previous Close\n"
-            "Executable alerts begin at 09:15 IST."
-        )
+        # The loop keeps going through pre-open so the first scan after 09:15
+        # is not left to the next dispatch - but the status posts only once.
+        if first_pass_this_loop("preopen"):
+            send_status_message(
+                "Victus NSE scanner context-only pre-open update\n"
+                f"Time: {market_now.strftime('%Y-%m-%d %H:%M:%S %Z')}\n"
+                "Reference Price: Previous Close\n"
+                "Executable alerts begin at 09:15 IST."
+            )
         return
 
     send_status_message(
