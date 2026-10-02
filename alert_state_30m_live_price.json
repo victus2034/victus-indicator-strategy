@@ -3993,7 +3993,8 @@
     "BEAT/USDT|30m|long|0.0894|0.0898": 1790924815.9797401,
     "shadow:BEAT/USDT|30m|long|0.0894|0.0896629": 1790924815.9797401,
     "TSLAXUSD|30m|short|359.45|360.8": 1790928207.2819984,
-    "shadow:SLVONUSD|30m|short|55.9094|55.96": 1790928499.462397
+    "shadow:SLVONUSD|30m|short|55.9094|55.96": 1790928499.462397,
+    "shadow:NVDAXUSD|30m|short|233.124|233.25": 1790928712.6363714
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15542,7 +15543,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790928477.499595
+    "30m": 1790928691.2905052
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -46824,7 +46825,8 @@
     "TSLAXUSD|30m|short|359.45|360.8": 1790927211.0819788,
     "SOLUSD|30m|short|124.463|124.99": 1790917324.8679104,
     "TSLAXUSD|30m|long|354.8|355.65": 1790927000.7104497,
-    "HYPEUSD|30m|short|90.53|90.706": 1790920312.0748584
+    "HYPEUSD|30m|short|90.53|90.706": 1790920312.0748584,
+    "SOXLBUSD|30m|short|161.3|161.9": 1790928712.630148
   },
   "shadow:BTCUSD|supply|80474.35070115|80522.70000000": {
     "in_zone": false,
@@ -146481,9 +146483,9 @@
     "last_attempt_at": 1790881605.8343356
   },
   "shadow:NVDAXUSD|supply|233.12423961|233.25000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0,
-    "last_attempt_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790928712.6363714,
+    "last_attempt_at": 1790928712.6363714
   },
   "shadow:XAUTUSD|demand|4124.39000000|4126.26641182": {
     "in_zone": false,
@@ -147131,12 +147133,12 @@
     "last_attempt_at": 1790772786.9489448
   },
   "SLVONUSD|supply|55.85000000|55.96000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790928499.462397,
     "last_attempt_at": 1790928499.462397
   },
   "shadow:SLVONUSD|supply|55.90938047|55.96000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790928499.462397,
     "last_attempt_at": 1790928499.462397
   },
@@ -148221,7 +148223,7 @@
     "last_attempt_at": 0.0
   },
   "TSLAXUSD|supply|359.45000000|360.80000000": {
-    "in_zone": true,
+    "in_zone": false,
     "last_alert_at": 1790928207.2819984,
     "last_attempt_at": 1790928207.2819984
   },
