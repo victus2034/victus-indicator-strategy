@@ -23,7 +23,7 @@ def parse_args(argv=None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Validate whether the zone rating actually predicts real outcomes."
     )
-    parser.add_argument("--market", choices=["nse", "crypto", "xstock"], default="nse")
+    parser.add_argument("--market", choices=["nse", "crypto", "xstock", "other"], default="nse")
     parser.add_argument("--timeframe", choices=sorted(daily.TIMEFRAME_SETTINGS), default="30m")
     parser.add_argument(
         "--min-sample",

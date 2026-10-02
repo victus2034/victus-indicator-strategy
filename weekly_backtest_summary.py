@@ -40,7 +40,7 @@ def parse_args(argv=None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Post weekly backtest summary.")
     parser.add_argument(
         "--market",
-        choices=["nse", "crypto", "xstock"],
+        choices=["nse", "crypto", "xstock", "other"],
         default="nse",
         help="Market to summarize.",
     )

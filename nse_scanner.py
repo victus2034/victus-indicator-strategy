@@ -108,6 +108,22 @@ def market_window_status(now=None):
     return is_session and market_open <= now <= market_close, now, market_open, market_close
 
 
+def symbol_has_current_data(symbol, now):
+    """True when this symbol's latest candle is from today's session.
+
+    has_current_session_data() only checks the feed as a whole, so one stock
+    whose data stopped at yesterday's close still produced alerts priced off
+    that stale close.
+    """
+    data = MARKET_DATA.get(symbol)
+    if data is None or data.empty or "Datetime" not in data.columns:
+        return False
+    try:
+        return _localized_datetimes(data).iloc[-1].date() == now.date()
+    except Exception:
+        return False
+
+
 def has_current_session_data(watchlist, now=None):
     """Reject stale previous-session data before producing executable alerts.
 
@@ -948,7 +964,7 @@ def run_scan_once(state):
     failures = []
     alerts_sent = 0
     alert_delivery_failures = 0
-    started_at = time.strftime("%Y-%m-%d %H:%M:%S")
+    started_at = pd.Timestamp.now(tz=ZoneInfo(MARKET_TIMEZONE)).strftime("%Y-%m-%d %H:%M:%S IST")
     run_number = os.getenv("GITHUB_RUN_NUMBER", "local")
     trigger = os.getenv("GITHUB_EVENT_NAME", "local")
     is_market_open, market_now, market_open, market_close = market_window_status()
@@ -1001,6 +1017,9 @@ def run_scan_once(state):
     sector_context = build_sector_context(watchlist)
     scanned_by_symbol = {}
     for symbol in watchlist:
+        if not symbol_has_current_data(symbol, market_now):
+            failures.append(f"{symbol} -> no data from today's session (stale)")
+            continue
         try:
             scanned_by_symbol[symbol] = attach_sector_context(scan_symbol(symbol), sector_context)
         except Exception as error:
@@ -1037,7 +1056,7 @@ def run_scan_once(state):
     if PRINT_SCAN_SUMMARY and results:
         print_summary(results)
 
-    finished_at = time.strftime("%Y-%m-%d %H:%M:%S")
+    finished_at = pd.Timestamp.now(tz=ZoneInfo(MARKET_TIMEZONE)).strftime("%Y-%m-%d %H:%M:%S IST")
     status = "OK" if not failures else "WARN"
     message = (
         f"Victus NSE scanner finished ({status})\n"

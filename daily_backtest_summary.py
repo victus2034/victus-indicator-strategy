@@ -1708,7 +1708,9 @@ def zone_cooldown_overlap(current: dict, previous: dict, market: str) -> bool:
         # genuinely distinct trades, not duplicate deliveries of the same
         # setup - never merge them.
         return False
-    if market in {"crypto", "xstock"}:
+    # "other" trades round the clock like crypto; it used to fall through to
+    # NSE's same-calendar-day rule.
+    if market in {"crypto", "xstock", "other"}:
         current_time = pd.Timestamp(current["entry_time"]).tz_convert(IST)
         previous_time = pd.Timestamp(previous["entry_time"]).tz_convert(IST)
         if current_time - previous_time > timedelta(hours=12):
@@ -1803,6 +1805,12 @@ def build_summary(
     if counted:
         lines.append(counted)
     lines.append(f"Win rate {win_rate} · TOTAL {format_r(net_r)}")
+    if data_failures:
+        # Symbols whose candles could not be fetched were silently missing
+        # from the report; their alerts showed up only as fewer entries.
+        names = sorted({display_symbol(str(name).split(" (")[0]) for name in data_failures})
+        shown = ", ".join(names[:8]) + (f" +{len(names) - 8} more" if len(names) > 8 else "")
+        lines.append(f"Fetch failed {len(names)}: {shown}")
 
     rating_block = format_rating_table(records, results)
     if rating_block and rating_block != "None":
@@ -2162,6 +2170,35 @@ def market_traded_today(market: str, records: pd.DataFrame, now=None) -> bool:
     if records is None or records.empty or "report_date" not in records:
         return False
     return (records["report_date"] == now.date()).any()
+
+
+def nse_alerted_today_on_any_timeframe(market: str, now=None) -> bool:
+    """Whether NSE delivered any alert today, on 30m or 4h.
+
+    market_traded_today() reads only the report's own timeframe, and the 4h
+    timeframe can go a whole open session without an alert - so its quiet
+    note read every such day as a holiday and never posted. The 30m feed
+    alerts dozens of times a session, so it settles whether NSE was open.
+    """
+    if market != "nse":
+        return False
+    now = now or pd.Timestamp.now(tz=IST)
+    if now.weekday() >= 5:
+        return False
+    for settings in TIMEFRAME_SETTINGS.values():
+        path = settings["nse_records"]
+        if not path.exists():
+            continue
+        for line in path.read_text(encoding="utf-8-sig").splitlines():
+            try:
+                delivered = pd.Timestamp(json.loads(line)["delivered_at_utc"])
+            except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+                continue
+            if delivered.tzinfo is None:
+                delivered = delivered.tz_localize("UTC")
+            if delivered.tz_convert(IST).date() == now.date():
+                return True
+    return False
 
 
 def quiet_day_line(target_date, timeframe: str, market: str) -> str:
@@ -2579,7 +2616,10 @@ def main() -> None:
         if not args.force and key in load_sent_reports():
             print(f"Skipped duplicate report: {key}")
             quiet_key = quiet_day_key(args.timeframe, args.market)
-            if not market_traded_today(args.market, records):
+            if not (
+                market_traded_today(args.market, records)
+                or nse_alerted_today_on_any_timeframe(args.market)
+            ):
                 print(f"{args.market.upper()} was closed today; staying quiet.")
                 return
             if quiet_key not in load_sent_reports():

@@ -2145,7 +2145,7 @@ def run_scan_once(state):
     failures = []
     alerts_sent = 0
     symbols = active_watchlist()
-    started_at = time.strftime("%Y-%m-%d %H:%M:%S")
+    started_at = datetime.now(IST).strftime("%Y-%m-%d %H:%M:%S IST")
     run_number = os.getenv("GITHUB_RUN_NUMBER", "local")
     trigger = os.getenv("GITHUB_EVENT_NAME", "local")
     print("\n" + "=" * 80)
@@ -2227,7 +2227,7 @@ def run_scan_once(state):
     if PRINT_SCAN_SUMMARY and results:
         print_summary(results)
 
-    finished_at = time.strftime("%Y-%m-%d %H:%M:%S")
+    finished_at = datetime.now(IST).strftime("%Y-%m-%d %H:%M:%S IST")
     no_required_source_data = REQUIRE_COINSWITCH and not results
     status = "ERROR" if no_required_source_data else "OK" if not failures else "WARN"
     message = (
