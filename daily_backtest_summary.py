@@ -840,6 +840,43 @@ def run_backtest(
     market: str = "nse",
     resolution_frames: dict[str, pd.DataFrame] | None = None,
 ) -> tuple[pd.DataFrame, int]:
+    rows = simulate_alerts(alerts, frames, market, resolution_frames)
+    results = pd.DataFrame(rows)
+    return apply_same_day_zone_cooldown(results, market)
+
+
+def rerun_ambiguous(
+    alerts: pd.DataFrame,
+    rows: list[dict],
+    frames: dict[str, pd.DataFrame],
+    market: str,
+    resolution_frames: dict[str, pd.DataFrame],
+) -> list[dict]:
+    """Re-simulate only the ambiguous rows, now with fine candles.
+
+    The second pass used to re-simulate every alert. A row that was not
+    ambiguous never consulted the fine candles (they are read only to order
+    a stop and a target inside one bar), so its result cannot change - the
+    full re-run repeated all of that work for the same answer.
+    """
+    rows = list(rows)
+    records = alerts.to_dict("records")
+    for index, row in enumerate(rows):
+        if row.get("final_result") != DATA_QUALITY_AMBIGUOUS:
+            continue
+        rows[index] = simulate_alerts(
+            pd.DataFrame([records[index]]), frames, market, resolution_frames
+        )[0]
+    return rows
+
+
+def simulate_alerts(
+    alerts: pd.DataFrame,
+    frames: dict[str, pd.DataFrame],
+    market: str = "nse",
+    resolution_frames: dict[str, pd.DataFrame] | None = None,
+) -> list[dict]:
+    """One result row per alert, in alert order, before the duplicate cooldown."""
     rows = []
     resolution_frames = resolution_frames or {}
     for alert in alerts.to_dict("records"):
@@ -884,9 +921,7 @@ def run_backtest(
                 market,
             )
         )
-
-    results = pd.DataFrame(rows)
-    return apply_same_day_zone_cooldown(results, market)
+    return rows
 
 
 def same_day_tracking_end(
@@ -2563,27 +2598,20 @@ def main() -> None:
             frames, data_failures = fetch_crypto_frames(sorted(evaluation_records["symbol"].unique()))
         else:
             frames, data_failures = fetch_frames(sorted(evaluation_records["symbol"].unique()))
-        results, cooldown_blocked = run_backtest(evaluation_records, frames, args.market)
-
-        ambiguous_symbols = sorted(
-            results.loc[
-                results.get("final_result", pd.Series(dtype=str)) == DATA_QUALITY_AMBIGUOUS,
-                "symbol",
-            ].dropna().astype(str).unique()
-        ) if not results.empty and "final_result" in results else []
-        if ambiguous_symbols:
+        rows = simulate_alerts(evaluation_records, frames, args.market)
+        ambiguous_rows = pd.DataFrame(
+            [row for row in rows if row.get("final_result") == DATA_QUALITY_AMBIGUOUS]
+        )
+        if not ambiguous_rows.empty:
+            ambiguous_symbols = sorted(ambiguous_rows["symbol"].dropna().astype(str).unique())
             fine_frames, fine_failures = fetch_resolution_frames(
                 ambiguous_symbols,
                 args.market,
-                windows=resolution_windows(results),
+                windows=resolution_windows(ambiguous_rows),
             )
             data_failures.update({f"{symbol} (fine)": error for symbol, error in fine_failures.items()})
-            results, cooldown_blocked = run_backtest(
-                evaluation_records,
-                frames,
-                args.market,
-                resolution_frames=fine_frames,
-            )
+            rows = rerun_ambiguous(evaluation_records, rows, frames, args.market, fine_frames)
+        results, cooldown_blocked = apply_same_day_zone_cooldown(pd.DataFrame(rows), args.market)
 
     if CRYPTO_FETCH_SOURCE_COUNTS:
         print(f"[backtest-exchange-summary] {CRYPTO_FETCH_SOURCE_COUNTS}", file=sys.stderr)

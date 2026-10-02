@@ -1723,3 +1723,52 @@ class NseQuietNoteTests(unittest.TestCase):
                 self.assertFalse(
                     summary.nse_alerted_today_on_any_timeframe("nse", wednesday + pd.Timedelta(days=1))
                 )
+
+
+class AmbiguousRerunTests(unittest.TestCase):
+    """Re-running only the ambiguous rows gives exactly the full re-run's answer."""
+
+    def _case(self, seed):
+        import numpy as np
+
+        rng = np.random.default_rng(seed)
+        frames, fine, alerts = {}, {}, []
+        for s in range(4):
+            symbol = f"S{s}.NS"
+            idx = pd.date_range("2026-08-04 09:15", periods=24, freq="15min", tz=summary.IST)
+            close = 100 + np.cumsum(rng.normal(0, 0.6, len(idx)))
+            open_ = np.r_[close[0], close[:-1]]
+            high = np.maximum(open_, close) + rng.uniform(0.2, 1.5, len(idx))
+            low = np.minimum(open_, close) - rng.uniform(0.2, 1.5, len(idx))
+            frames[symbol] = pd.DataFrame(
+                {"open": open_, "high": high, "low": low, "close": close, "volume": 1.0}, index=idx
+            )
+            fidx = pd.date_range(idx[0], idx[-1] + pd.Timedelta(minutes=14), freq="1min", tz=summary.IST)
+            fc = np.interp(np.arange(len(fidx)), np.arange(0, len(fidx), 15)[: len(close)], close)
+            fine[symbol] = pd.DataFrame(
+                {"open": fc, "high": fc + 0.05, "low": fc - 0.05, "close": fc, "volume": 1.0}, index=fidx
+            )
+            for a in range(3):
+                t = idx[int(rng.integers(1, 8))]
+                level = float(close[0] + rng.normal(0, 1))
+                side = "long" if rng.random() < 0.5 else "short"
+                bottom, top = level - 0.5, level + 0.5
+                alerts.append(base_alert(
+                    symbol=symbol, side=side, event_time=t, event_time_ist=t,
+                    zone_bottom=bottom, zone_top=top, body_entry=top if side == "long" else bottom,
+                    stop_price=(bottom - 0.3) if side == "long" else (top + 0.3),
+                    zone_id=f"{symbol}|{side}|{bottom:.8f}|{top:.8f}|{a}",
+                ))
+        return pd.DataFrame(alerts), frames, fine
+
+    def test_rerun_matches_the_full_second_pass(self):
+        ambiguous_seen = 0
+        for seed in range(40):
+            alerts, frames, fine = self._case(seed)
+            full, _ = summary.run_backtest(alerts, frames, "nse", resolution_frames=fine)
+            rows = summary.simulate_alerts(alerts, frames, "nse")
+            ambiguous_seen += sum(r.get("final_result") == summary.DATA_QUALITY_AMBIGUOUS for r in rows)
+            rows = summary.rerun_ambiguous(alerts, rows, frames, "nse", fine)
+            fast, _ = summary.apply_same_day_zone_cooldown(pd.DataFrame(rows), "nse")
+            pd.testing.assert_frame_equal(full.reset_index(drop=True), fast.reset_index(drop=True))
+        self.assertGreater(ambiguous_seen, 0)
