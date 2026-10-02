@@ -1214,7 +1214,7 @@ def simulate_alert(
     result = dict(alert)
     result.update(
         {
-            "trade_id": stable_trade_id(alert),
+            "trade_id": alert_trade_id(alert),
             "filled": True,
             "entry_time": frame.index[entry_index],
             "entry_price": entry_price,
@@ -1391,7 +1391,7 @@ def pending_trade(
     result = unfilled(alert, "Pending")
     result.update(
         {
-            "trade_id": stable_trade_id(alert),
+            "trade_id": alert_trade_id(alert),
             "filled": True,
             "entry_time": frame.index[entry_index],
             "entry_price": entry_price,
@@ -1583,7 +1583,7 @@ def unfilled(alert: dict, outcome: str) -> dict:
     result = dict(alert)
     result.update(
         {
-            "trade_id": stable_trade_id(alert),
+            "trade_id": alert_trade_id(alert),
             "filled": False,
             "entry_time": pd.NaT,
             "entry_price": float("nan"),
@@ -1614,6 +1614,21 @@ def unfilled(alert: dict, outcome: str) -> dict:
         }
     )
     return result
+
+
+def alert_trade_id(alert: dict) -> str:
+    """The id a result row carries: the scanner's own trade_id when the alert
+    record has one, as load_records() assigns it.
+
+    Results used to always take stable_trade_id(), so they never matched the
+    ids on the delivered records: pending de-duplication could not find its
+    rows, a same-day rerun counted trades twice, and the reconciliation check
+    reported every delivered trade as missing a backtest.
+    """
+    trade_id = alert.get("trade_id")
+    if isinstance(trade_id, str) and trade_id:
+        return trade_id
+    return stable_trade_id(alert)
 
 
 def stable_trade_id(alert: dict) -> str:

@@ -1663,6 +1663,20 @@ class PendingStopTests(unittest.TestCase):
         self.assertEqual(summary.original_stop_price(pending), 99.25)
 
 
+class TradeIdTests(unittest.TestCase):
+    def test_results_carry_the_scanners_trade_id(self):
+        frame = crypto_frame(rows=[(101.0, 101.2, 100.8, 101.0), (100.0, 100.6, 100.0, 100.5)])
+        alert = crypto_alert(stop_price=99.25)
+        alert["trade_id"] = "scanner-id-1"
+        self.assertEqual(summary.pending_trade(alert, frame, 1, 100.0)["trade_id"], "scanner-id-1")
+        self.assertEqual(summary.unfilled(alert, "zone_not_touched")["trade_id"], "scanner-id-1")
+
+    def test_records_without_one_fall_back_to_the_stable_id(self):
+        alert = crypto_alert(stop_price=99.25)
+        alert.pop("trade_id", None)
+        self.assertEqual(summary.alert_trade_id(alert), summary.stable_trade_id(alert))
+
+
 class CryptoEvaluationCandleTests(unittest.TestCase):
     def test_crypto_is_graded_on_five_minute_candles(self):
         saved = summary.crypto_scanner.TIMEFRAME, summary.crypto_scanner.OHLCV_LIMIT
