@@ -2,17 +2,22 @@
   "BNBUSD|30m|short|777.01|779.685": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BTCUSD|30m|short|85260|85708.8": {
     "reached_entry": true,
     "stage": 3,
     "stopped_out": true
   },
-  "LINKUSD|30m|short|14.515|14.5675": {
+  "ETHUSD|30m|short|2736|2751.5": {
     "reached_entry": true,
     "stage": 2,
     "stopped_out": false
+  },
+  "LINKUSD|30m|short|14.515|14.5675": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": true
   },
   "METAXUSD|30m|short|731.6|738.1": {
     "reached_entry": false,
@@ -146,7 +151,7 @@
   "_level_ready|ETHUSD|30m|short|2649.78|2676.28": 1789833365.529983,
   "_level_ready|ETHUSD|30m|short|2717.2|2722.95": 1790666463.823153,
   "_level_ready|ETHUSD|30m|short|2725.55|2746.49": 1790673693.727535,
-  "_level_ready|ETHUSD|30m|short|2736|2751.5": 1790772967.421458,
+  "_level_ready|ETHUSD|30m|short|2736|2751.5": 1790915161.963091,
   "_level_ready|HUSD|30m|long|0.0665784|0.0659179": 1790078166.602372,
   "_level_ready|HUSD|30m|long|0.06853|0.0679925": 1790588782.015784,
   "_level_ready|HUSD|30m|long|0.06905|0.068475": 1790828794.379023,
@@ -424,7 +429,7 @@
   "_ready|ERA/USDT|30m": 1789467666.170572,
   "_ready|ESP/USDT|30m": 1789458664.421898,
   "_ready|ESP/USDT|4h": 1788956755.098613,
-  "_ready|ETHUSD|30m": 1790839900.237173,
+  "_ready|ETHUSD|30m": 1790915161.963091,
   "_ready|ETHUSD|4h": 1789488358.32405,
   "_ready|EUL/USDT|30m": 1789439750.580446,
   "_ready|GWEI/USDT|30m": 1789391158.458368,
@@ -495,6 +500,10 @@
   "_silent_ready|BNBUSD|30m|short|777.01|779.685": {
     "price": 773.6,
     "time": "2026-10-01T23:01:41.334897+05:30"
+  },
+  "_silent_ready|BTCUSD|4h|short|86875.5|87513.6": {
+    "price": 86543.0,
+    "time": "2026-10-02T09:56:01.963091+05:30"
   },
   "_silent_ready|DOGEUSD|30m|long|0.09336|0.09271": {
     "price": 0.09395,
