@@ -17,7 +17,7 @@ concurrency:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -55,7 +55,13 @@ jobs:
         env:
           DISCORD_NSE_WEBHOOK_URL: ${{ secrets.DISCORD_NSE_30M_WEBHOOK_URL }}
           DISCORD_STATUS_WEBHOOK_URL: ${{ secrets.DISCORD_STATUS_WEBHOOK_URL }}
-        run: python nse_scanner_30m.py --once
+          VICTUS_MIN_SCAN_INTERVAL_SECONDS: "60"
+        run: |
+          # One dispatch scans repeatedly (every ~90s) instead of once, as the
+          # crypto scanners do. A scan takes ~25s, so one scan per 20-minute
+          # dispatch left price unwatched for ~19 minutes at a time. 1020s keeps
+          # the job inside the 20-minute dispatch cycle. See scan_loop.sh.
+          bash .github/scripts/scan_loop.sh 1020 90 nse_alert_state_30m.json nse_alert_records_30m.jsonl -- python nse_scanner_30m.py --once
 
       # always(): alerts already sent are recorded even if a later step failed or
       # timed out. Never after a failed restore - there is nothing safe to save.

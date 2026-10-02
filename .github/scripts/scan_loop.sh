@@ -52,6 +52,12 @@ SCAN_ARGV=("$@")
 SCAN_HEADROOM="${SCAN_LOOP_HEADROOM_SECONDS:-60}"
 PERSIST_CMD="${SCAN_LOOP_PERSIST_COMMAND:-bash .github/scripts/persist_runtime_state.sh}"
 
+# A scan can ask the loop to end early by creating this file - the NSE scanner
+# does outside market hours, where every further pass would only repeat the
+# same "market closed" status post until the run ran out.
+export SCAN_LOOP_STOP_FILE="${SCAN_LOOP_STOP_FILE:-$(mktemp -u)}"
+rm -f "${SCAN_LOOP_STOP_FILE}"
+
 records_fingerprint() {
   local file
   for file in "${RECORDS[@]}"; do
@@ -79,6 +85,12 @@ while :; do
     echo "New alert/watch rows on scan ${COUNT}; publishing them now."
     ${PERSIST_CMD} "${STATE_FILE}" "${RECORDS[@]}" \
       || echo "::warning::could not publish mid-run; the final persist step will retry."
+  fi
+
+  if [ -f "${SCAN_LOOP_STOP_FILE}" ]; then
+    echo "Scan ${COUNT} asked the loop to stop."
+    rm -f "${SCAN_LOOP_STOP_FILE}"
+    break
   fi
 
   ELAPSED=$(( SECONDS - SCAN_START ))
