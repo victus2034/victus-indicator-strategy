@@ -64,8 +64,16 @@ def select_week_ending(requested: str | None):
     return today - timedelta(days=days_since_friday)
 
 
-def week_bounds(week_ending) -> tuple:
+def week_bounds(week_ending, market: str = "nse") -> tuple:
+    """Monday-Friday for NSE; the full seven days ending Friday elsewhere.
+
+    Crypto, xStocks and "other" trade at weekends too. A Monday start left
+    every Saturday and Sunday report date in no week at all - about a
+    quarter of all crypto trades never reached a weekly report.
+    """
     end = pd.Timestamp(week_ending).date()
+    if market != "nse":
+        return end - timedelta(days=6), end
     start = end - timedelta(days=end.weekday())
     return start, end
 
@@ -407,7 +415,7 @@ def main() -> None:
     args = parse_args()
     market_label, _ = daily.MARKET_LABELS.get(args.market, (args.market.upper(), "Symbols"))
     week_end = select_week_ending(args.week_ending)
-    week_start, week_end = week_bounds(week_end)
+    week_start, week_end = week_bounds(week_end, args.market)
     frame = load_finalized_records()
     if not frame.empty:
         frame["date"] = pd.to_datetime(frame["date"]).dt.date
