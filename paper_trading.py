@@ -574,17 +574,8 @@ def run_tick_for(args: argparse.Namespace, timeframe: str) -> None:
 
 def backtest_day_stats(date_iso: str, timeframe: str, market: str = "nse") -> dict | None:
     """Same-day figures from the backtest's own finalized records."""
-    path = backtest.FINALIZED_RECORDS_PATH
-    if not path.exists():
-        return None
     rows = []
-    for line in path.read_text(encoding="utf-8-sig").splitlines():
-        if not line.strip():
-            continue
-        try:
-            row = json.loads(line)
-        except json.JSONDecodeError:
-            continue
+    for row in backtest.read_jsonl(backtest.FINALIZED_RECORDS_PATH):
         if (
             str(row.get("market", "")).lower() == market.lower()
             and row.get("timeframe") == timeframe

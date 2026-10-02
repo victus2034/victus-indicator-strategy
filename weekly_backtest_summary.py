@@ -135,17 +135,7 @@ def nse_alert_dates(timeframe: str, path: Path | None = None) -> set[date] | Non
 
 
 def load_finalized_records(path: Path = daily.FINALIZED_RECORDS_PATH) -> pd.DataFrame:
-    if not path.exists():
-        return pd.DataFrame()
-    rows = []
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if not line.strip():
-            continue
-        try:
-            rows.append(json.loads(line))
-        except json.JSONDecodeError:
-            continue
-    return pd.DataFrame(rows)
+    return pd.DataFrame(daily.read_jsonl(path))
 
 
 def build_weekly_summary(
@@ -411,19 +401,11 @@ def weekly_report_key(week_end, timeframe: str, market: str = "nse") -> str:
 
 
 def load_sent_reports(path: Path = WEEKLY_SENT_REPORTS_PATH) -> dict:
-    if not path.exists():
-        return {}
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return {}
-    return data if isinstance(data, dict) else {}
+    return daily.load_sent_reports(path)
 
 
 def mark_sent_report(key: str, path: Path = WEEKLY_SENT_REPORTS_PATH) -> None:
-    data = load_sent_reports(path)
-    data[key] = datetime.now(tz=daily.IST).isoformat()
-    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    daily.mark_sent_report(key, path)
 
 
 def main() -> None:
