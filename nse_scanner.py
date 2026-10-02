@@ -803,8 +803,7 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
     alert_sent = None
 
     if MIN_DISTANCE_PCT <= distance_pct <= MAX_DISTANCE_PCT:
-        last_attempt_at = max(entry.get("last_alert_at", 0.0), entry.get("last_attempt_at", 0.0))
-        should_alert = (not entry["in_zone"]) or (now_ts - last_attempt_at >= ALERT_COOLDOWN_SECONDS)
+        should_alert = (not entry["in_zone"]) or zone_engine.alert_due(entry, now_ts, ALERT_COOLDOWN_SECONDS)
         last_success = float(noise_state.get(noise_key, 0.0) or 0.0)
         noise_open = not last_success or now_ts - last_success >= ZONE_REPEAT_SUPPRESSION_SECONDS
         if should_alert and noise_open:
@@ -870,8 +869,7 @@ def process_signal_candidate(state, result, signal_type, now_ts):
 
     state_key = build_signal_state_key(result["symbol"], signal_type)
     entry = state.setdefault(state_key, {"last_alert_at": 0.0, "last_attempt_at": 0.0})
-    last_attempt_at = max(entry.get("last_alert_at", 0.0), entry.get("last_attempt_at", 0.0))
-    if now_ts - last_attempt_at < SIGNAL_ALERT_COOLDOWN_SECONDS:
+    if not zone_engine.alert_due(entry, now_ts, SIGNAL_ALERT_COOLDOWN_SECONDS):
         return None
 
     entry["last_attempt_at"] = now_ts
@@ -1025,6 +1023,10 @@ def run_scan_once(state):
         ]
         alerts_sent += sum(1 for alert_result in alert_results if alert_result is True)
         alert_delivery_failures += sum(1 for alert_result in alert_results if alert_result is False)
+        if any(alert_result is not None for alert_result in alert_results):
+            # Saved as soon as anything was sent or attempted, so a crash or
+            # a cancelled run later in the loop cannot re-send it next scan.
+            save_state(state)
 
     zone_engine.prune_alert_state(
         state, time.time(), ALERT_COOLDOWN_SECONDS, SIGNAL_ALERT_COOLDOWN_SECONDS,

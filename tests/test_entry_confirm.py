@@ -1,6 +1,7 @@
 import json
 import pathlib
 import unittest
+import unittest.mock
 from unittest.mock import patch
 
 import pandas as pd
@@ -893,3 +894,61 @@ class ScopeTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PartialDigestTests(unittest.TestCase):
+    """A digest split over several messages, where a later part fails.
+
+    The whole run used to be left unsaved, so the parts that did land were
+    sent again next run. Now only the undelivered records roll back.
+    """
+
+    def _resolve(self, state, record, price, now):
+        before = {k: state.get(k, entry_confirm._MISSING) for k in entry_confirm.record_state_keys(record)}
+        pings, _ = entry_confirm.resolve_pings(record, {"price": price}, state, now)
+        return pings, ([line for _, line in pings], before)
+
+    def test_delivered_part_is_kept_and_undelivered_part_rolls_back(self):
+        now = pd.Timestamp("2026-08-17 11:00", tz=entry_confirm.IST)
+        state = {}
+        sent = watched(symbol="AAA.NS", entry=100.0, stop=98.0)
+        lost = watched(symbol="BBB.NS", entry=200.0, stop=196.0)
+        sent_pings, sent_change = self._resolve(state, sent, 99.5, now)
+        lost_pings, lost_change = self._resolve(state, lost, 199.0, now)
+        self.assertTrue(sent_pings and lost_pings)
+
+        delivered = ["\n".join(line for _, line in sent_pings)]
+        result = entry_confirm.undo_undelivered(state, [sent_change, lost_change], delivered)
+
+        self.assertGreater(result[entry_confirm.watch_key(sent)]["stage"], 0)
+        self.assertNotIn(entry_confirm.watch_key(lost), result)
+        self.assertNotIn(entry_confirm.ready_key(lost), result)
+        # The live state itself is untouched.
+        self.assertIn(entry_confirm.watch_key(lost), state)
+
+        # Next run: the lost record pings again, the delivered one does not.
+        again, _ = entry_confirm.resolve_pings(lost, {"price": 199.0}, result, now)
+        self.assertTrue(again)
+        repeat, _ = entry_confirm.resolve_pings(sent, {"price": 99.5}, result, now)
+        self.assertEqual(repeat, [])
+
+    def test_everything_delivered_changes_nothing(self):
+        now = pd.Timestamp("2026-08-17 11:00", tz=entry_confirm.IST)
+        state = {}
+        record = watched(symbol="AAA.NS")
+        pings, change = self._resolve(state, record, 99.5, now)
+        result = entry_confirm.undo_undelivered(state, [change], ["\n".join(l for _, l in pings)])
+        self.assertEqual(result, state)
+
+
+class SendPingRetryTests(unittest.TestCase):
+    def test_a_rate_limited_post_is_retried(self):
+        limited = unittest.mock.Mock(status_code=429)
+        limited.json.return_value = {"retry_after": 0.01}
+        ok = unittest.mock.Mock(status_code=204)
+        ok.raise_for_status.return_value = None
+        with patch.dict("os.environ", {entry_confirm.WEBHOOK_ENV: "https://discord.com/api/webhooks/123/token"}), \
+                patch.object(entry_confirm.requests, "post", side_effect=[limited, ok]) as post, \
+                patch.object(entry_confirm.time, "sleep"):
+            self.assertTrue(entry_confirm.send_ping("hi"))
+        self.assertEqual(post.call_count, 2)

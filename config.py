@@ -483,6 +483,11 @@ SCAN_WORKERS = 8
 ALERT_COOLDOWN_SECONDS = env_int("VICTUS_ALERT_COOLDOWN_SECONDS", 4 * 60 * 60)
 ALERT_RANGE_FILTER_SIGNALS = True
 SIGNAL_ALERT_COOLDOWN_SECONDS = env_int("VICTUS_SIGNAL_ALERT_COOLDOWN_SECONDS", 4 * 60 * 60)
+# After a send that failed (Discord down, every retry spent), try again this
+# soon rather than waiting out the full cooldown. The full cooldown after a
+# failure muted a real level for four hours over one failed request; retrying
+# every scan had no backoff at all. Ten minutes is the middle ground.
+FAILED_ALERT_RETRY_SECONDS = env_int("VICTUS_FAILED_ALERT_RETRY_SECONDS", 10 * 60)
 # The previous model was trained on the old ATR-strip zones. Keep ratings off
 # until a model trained on the polished wick zones passes out-of-sample checks.
 ENABLE_CRYPTO_ZONE_RATINGS = env_flag(
