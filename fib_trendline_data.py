@@ -22,6 +22,8 @@ TF_SECONDS = {
 }
 TF_LABEL = {"30m": "30m", "4h": "4H", "1d": "1D", "1w": "1W", "1M": "1M"}
 DELTA_MAX_BARS = 4000                  # Delta returns at most this many, the newest
+# A page this long that starts inside its window may have been capped by the API.
+PARTIAL_PAGE_BARS = 500
 NSE_CLOSE = (15, 30)
 
 
@@ -37,9 +39,19 @@ def delta_candles(contract, resolution, start, end, attempts=3):
         rows = _delta_request(contract, resolution, window_start, window_end, attempts)
         for row in rows:
             out[row[0]] = row
-        # Nothing, or the first candle is well inside the window: the contract
-        # was listed inside it, so there is nothing older to page back to.
-        if not rows or rows[0][0] > window_start + 2 * seconds:
+        if not rows:
+            break
+        if rows[0][0] > window_start and len(rows) >= PARTIAL_PAGE_BARS:
+            # A long page that starts after its window start may have been
+            # capped by the API below DELTA_MAX_BARS - stopping there would
+            # silently cut history short, and the fib engine's state depends
+            # on where history starts. Page on from the oldest candle seen;
+            # if that was the listing, the next request comes back empty.
+            window_end = rows[0][0] - 1
+            continue
+        # The first candle is well inside the window: the contract was listed
+        # inside it, so there is nothing older to page back to.
+        if rows[0][0] > window_start + 2 * seconds:
             break
         window_end = window_start - 1
     return [out[k] for k in sorted(out)]
