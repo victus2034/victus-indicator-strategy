@@ -195,5 +195,10 @@ each falling back to the shared one above when unset (so nothing changes until t
   500-candle lookback, the watchlist, webhooks and rating display. Not shared: watch
   rows / entry-confirm, the 90-second scan loop and the live ticker are crypto-only, and
   NSE paper trading is paused.
+- **Delivery rules (2026-10-02).** A send that fails retries after `FAILED_ALERT_RETRY_SECONDS`
+  (10 min), not the full 4h cooldown (`scanner.alert_due`, shared by NSE). Crypto and NSE save
+  state right after each delivered alert; entry_confirm saves after each digest part and rolls
+  back only the records whose lines did not land. The crypto range-filter *signal* runs on
+  closed candles (`scanner.confirmed_candles`), like NSE; zones still use the forming candle.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.
