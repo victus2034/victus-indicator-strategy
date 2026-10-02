@@ -32,6 +32,8 @@ RECORDS_FILE = Path(__file__).with_name(os.getenv("VICTUS_FIB_TL_RECORDS_FILE", 
 RESULTS_FILE = Path(__file__).with_name(os.getenv("VICTUS_FIB_TL_RESULTS_FILE", "fib_trendline_results.json"))
 WEBHOOK_ENV = "DISCORD_DAILY_BACKTEST_WEBHOOK_URL"
 REPORT_KEY = "__daily_report__"
+# Cards of today's report already posted, while it is still incomplete.
+REPORT_PROGRESS_KEY = "__daily_report_progress__"
 REPORT_HOUR = 8
 DISCORD_LIMIT = 4000     # an embed description holds 4096
 
@@ -249,7 +251,7 @@ def chunks(text):
     return out
 
 
-def run(report_day, now, send=False):
+def run(report_day, now, send=False, already_sent=0, on_sent=None):
     records = load_records()
     if not records:
         print("daily report: no fib/trendline alerts recorded yet")
@@ -260,8 +262,14 @@ def run(report_day, now, send=False):
     text = "\n\n".join(cards)
     print(text)
     if send:
-        for card in cards:
+        # Cards a previous attempt already posted are skipped, so a failure on
+        # card 2 no longer re-posts card 1 on every retry.
+        for index, card in enumerate(cards):
+            if index < already_sent:
+                continue
             send_card(card)
+            if on_sent:
+                on_sent(index + 1)
     return text
 
 
@@ -273,12 +281,23 @@ def maybe_send(state, now):
     if not os.getenv(WEBHOOK_ENV, "").strip():
         print(f"{WEBHOOK_ENV} is not configured - daily fib/trendline report skipped")
         return
+    today = local.date().isoformat()
+    progress = state.get(REPORT_PROGRESS_KEY)
+    if not isinstance(progress, dict) or progress.get("day") != today:
+        progress = {"day": today, "cards": 0}
+    state[REPORT_PROGRESS_KEY] = progress
+
+    def on_sent(count):
+        progress["cards"] = count
+
     try:
-        run(local.date() - timedelta(days=1), now, send=True)
-    except requests.RequestException as error:
+        run(local.date() - timedelta(days=1), now, send=True,
+            already_sent=int(progress.get("cards", 0)), on_sent=on_sent)
+    except Exception as error:     # noqa: BLE001 - retried next pass, from the unsent card
         print(f"daily fib/trendline report failed, will retry next pass: {error}")
         return
-    state[REPORT_KEY] = local.date().isoformat()
+    state[REPORT_KEY] = today
+    state.pop(REPORT_PROGRESS_KEY, None)
 
 
 def main(argv=None):

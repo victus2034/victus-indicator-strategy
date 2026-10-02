@@ -411,12 +411,36 @@ class DailyReportTests(unittest.TestCase):
         state = {}
         calls = []
         at = lambda h: datetime(2026, 9, 30, h, 0, tzinfo=ftd.IST).timestamp()
-        with mock.patch.object(self.report, "run", lambda day, now, send: calls.append(day)), \
+        with mock.patch.object(self.report, "run", lambda day, now, send, **kw: calls.append(day)), \
                 mock.patch.dict(os.environ, {self.report.WEBHOOK_ENV: "https://example.invalid/bt"}):
             self.report.maybe_send(state, at(7))
             self.report.maybe_send(state, at(9))
             self.report.maybe_send(state, at(12))
         self.assertEqual(calls, [datetime(2026, 9, 29).date()])
+
+    def test_a_failed_second_card_does_not_repost_the_first(self):
+        state = {}
+        posted = []
+        fail = {"on": True}
+
+        def fake_send(card):
+            if card == "card2" and fail["on"]:
+                raise RuntimeError("discord down")
+            posted.append(card)
+
+        at = lambda h: datetime(2026, 9, 30, h, 0, tzinfo=ftd.IST).timestamp()
+        with mock.patch.object(self.report, "load_records", return_value=[{"x": 1}]), \
+                mock.patch.object(self.report, "score", return_value={}), \
+                mock.patch.object(self.report, "save_results"), \
+                mock.patch.object(self.report, "build_report", return_value=["card1", "card2"]), \
+                mock.patch.object(self.report, "send_card", side_effect=fake_send), \
+                mock.patch.dict(os.environ, {self.report.WEBHOOK_ENV: "https://example.invalid/bt"}):
+            self.report.maybe_send(state, at(9))
+            fail["on"] = False
+            self.report.maybe_send(state, at(10))
+            self.report.maybe_send(state, at(11))
+        self.assertEqual(posted, ["card1", "card2"])
+        self.assertEqual(state[self.report.REPORT_KEY], "2026-09-30")
 
 
 if __name__ == "__main__":

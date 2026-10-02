@@ -466,6 +466,9 @@ def run_once(dry_run=False, force_nse=False):
                         if record:
                             append_record(record, key, now)
                         counts[tally] = counts.get(tally, 0) + 1
+                        # Saved per alert: a crash later in this pass must not
+                        # send the ones already posted again.
+                        save_state(state, now)
                     else:
                         attempts[key] = now  # stays out of state so it still alerts once Discord is back
 
