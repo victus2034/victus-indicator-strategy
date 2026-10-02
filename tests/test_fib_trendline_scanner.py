@@ -352,12 +352,12 @@ class SeedingTests(unittest.TestCase):
 
         self.fibs.append(OnceOnlyTests().fib("fib|X|4h|1|0|120|1"))     # a new fib zone
         fts.run_once()
-        self.assertEqual(self.sent, [fts.FIB_ENV])
+        self.assertEqual(self.sent, [fts.webhook_env("fib", fts.CRYPTO)])
         self.assertEqual(len(fts.RECORDS_FILE.read_text().splitlines()), 1)   # recorded for the daily report
 
         os.environ[fts.TL_ENV] = "https://example.invalid/tl"           # trendline webhook added later
         fts.run_once()
-        self.assertEqual(self.sent, [fts.FIB_ENV])                      # seeded, still no burst
+        self.assertEqual(self.sent, [fts.webhook_env("fib", fts.CRYPTO)])                      # seeded, still no burst
         self.assertIn(self.touches[0]["key"], fts.load_state())
         self.assertEqual(len(self.status), 2)
 
@@ -368,7 +368,7 @@ class SeedingTests(unittest.TestCase):
             fts.run_once()                                               # must not raise
         self.assertIn("fib|X|4h|1|0|130|1", fts.load_state())             # the sent alert is saved
         fts.run_once()
-        self.assertEqual(self.sent, [fts.FIB_ENV])                       # and never sent twice
+        self.assertEqual(self.sent, [fts.webhook_env("fib", fts.CRYPTO)])                       # and never sent twice
 
     def test_a_new_rule_version_reseeds(self):
         fts.run_once()
@@ -478,3 +478,15 @@ class AtomicStateWriteTests(unittest.TestCase):
                     with self.assertRaises(RuntimeError):
                         scanner.save_state({"a": 2})
                 self.assertEqual(scanner.load_state(), {"a": 1})
+
+
+class PerMarketWebhookTests(unittest.TestCase):
+    def test_each_market_has_its_own_channel_and_falls_back_to_the_shared_one(self):
+        self.assertEqual(fts.webhook_env("fib", fts.NSE), "DISCORD_FIB_NSE_WEBHOOK_URL")
+        self.assertEqual(fts.webhook_env("trendline", fts.CRYPTO), "DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL")
+        env = {fts.FIB_ENV: "https://example.invalid/shared", "DISCORD_FIB_NSE_WEBHOOK_URL": "https://example.invalid/nse"}
+        with mock.patch.dict(os.environ, env, clear=False):
+            os.environ.pop("DISCORD_FIB_CRYPTO_WEBHOOK_URL", None)
+            self.assertEqual(fts.webhook_url("fib", fts.NSE), "https://example.invalid/nse")
+            self.assertEqual(fts.webhook_url("fib", fts.CRYPTO), "https://example.invalid/shared")
+

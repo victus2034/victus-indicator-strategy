@@ -43,10 +43,14 @@ jobs:
         env:
           DISCORD_FIB_WEBHOOK_URL: ${{ secrets.DISCORD_FIB_WEBHOOK_URL }}
           DISCORD_TRENDLINE_WEBHOOK_URL: ${{ secrets.DISCORD_TRENDLINE_WEBHOOK_URL }}
+          DISCORD_FIB_CRYPTO_WEBHOOK_URL: ${{ secrets.DISCORD_FIB_CRYPTO_WEBHOOK_URL }}
+          DISCORD_FIB_NSE_WEBHOOK_URL: ${{ secrets.DISCORD_FIB_NSE_WEBHOOK_URL }}
+          DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL: ${{ secrets.DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL }}
+          DISCORD_TRENDLINE_NSE_WEBHOOK_URL: ${{ secrets.DISCORD_TRENDLINE_NSE_WEBHOOK_URL }}
         run: |
-          for name in DISCORD_FIB_WEBHOOK_URL DISCORD_TRENDLINE_WEBHOOK_URL; do
+          for name in DISCORD_FIB_CRYPTO_WEBHOOK_URL DISCORD_FIB_NSE_WEBHOOK_URL DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL DISCORD_TRENDLINE_NSE_WEBHOOK_URL; do
             if [ -z "${!name}" ]; then
-              echo "::warning::$name is not configured - those alerts are held."
+              echo "::warning::$name is not configured - that market falls back to the shared webhook, or is held."
             else
               echo "$name is configured."
             fi
@@ -56,6 +60,10 @@ jobs:
         env:
           DISCORD_FIB_WEBHOOK_URL: ${{ secrets.DISCORD_FIB_WEBHOOK_URL }}
           DISCORD_TRENDLINE_WEBHOOK_URL: ${{ secrets.DISCORD_TRENDLINE_WEBHOOK_URL }}
+          DISCORD_FIB_CRYPTO_WEBHOOK_URL: ${{ secrets.DISCORD_FIB_CRYPTO_WEBHOOK_URL }}
+          DISCORD_FIB_NSE_WEBHOOK_URL: ${{ secrets.DISCORD_FIB_NSE_WEBHOOK_URL }}
+          DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL: ${{ secrets.DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL }}
+          DISCORD_TRENDLINE_NSE_WEBHOOK_URL: ${{ secrets.DISCORD_TRENDLINE_NSE_WEBHOOK_URL }}
           DISCORD_STATUS_WEBHOOK_URL: ${{ secrets.DISCORD_STATUS_WEBHOOK_URL }}
           # The once-a-day score of the live fib/trendline alerts goes to the
           # existing daily-backtest channel (fib_trendline_daily_report.py).

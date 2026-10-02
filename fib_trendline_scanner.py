@@ -77,6 +77,23 @@ MARKET_LABEL = {CRYPTO: "Crypto", NSE: "NSE"}
 FIB_ENV, TL_ENV = "DISCORD_FIB_WEBHOOK_URL", "DISCORD_TRENDLINE_WEBHOOK_URL"
 
 
+def webhook_env(channel, market):
+    """The channel's webhook for one market, e.g. DISCORD_FIB_NSE_WEBHOOK_URL.
+
+    FIB_ENV / TL_ENV stay as the shared fallback, so a market with no channel of
+    its own yet keeps posting where it did.
+    """
+    return f"DISCORD_{'FIB' if channel == 'fib' else 'TRENDLINE'}_{market.upper()}_WEBHOOK_URL"
+
+
+def webhook_url(channel, market):
+    shared = scanner.get_env_or_config(
+        FIB_ENV if channel == "fib" else TL_ENV,
+        DISCORD_FIB_WEBHOOK_URL if channel == "fib" else DISCORD_TRENDLINE_WEBHOOK_URL,
+    )
+    return scanner.get_env_or_config(webhook_env(channel, market), shared)
+
+
 # ----------------------------------------------------------------- geometry (shared with the backtest)
 
 def fib_zones(d, base, top):
@@ -323,10 +340,12 @@ def append_record(record, key, now):
         file.write(json.dumps(row) + "\n")
 
 
-def send(channel, message):
-    env, fallback = (FIB_ENV, DISCORD_FIB_WEBHOOK_URL) if channel == "fib" else (TL_ENV, DISCORD_TRENDLINE_WEBHOOK_URL)
+def send(channel, message, market):
     try:
-        return scanner.send_discord_message(message, webhook_env_name=env, webhook_config_value=fallback)
+        return scanner.send_discord_message(
+            message, webhook_env_name=webhook_env(channel, market),
+            webhook_config_value=webhook_url(channel, market),
+        )
     except requests.RequestException as error:
         print(f"Discord {channel} alert failed: {error}")
         return False
@@ -405,16 +424,14 @@ def run_once(dry_run=False, force_nse=False):
     state[ATTEMPTS_KEY] = attempts
     for key in [k for k, t in attempts.items() if now - t > STATE_RETENTION_SECONDS]:
         del attempts[key]
-    configured = {
-        "fib": bool(scanner.get_env_or_config(FIB_ENV, DISCORD_FIB_WEBHOOK_URL)),
-        "trendline": bool(scanner.get_env_or_config(TL_ENV, DISCORD_TRENDLINE_WEBHOOK_URL)),
-    }
+    configured = {(channel, market): bool(webhook_url(channel, market))
+                  for channel in ("fib", "trendline") for market in (CRYPTO, NSE)}
     awake = {CRYPTO: scanner.in_alert_window(), NSE: True}   # NSE only scans in session
     seeding = {
         (channel, market)
         for market, results in markets.items() if results
-        for channel, ok in configured.items()
-        if ok and f"{channel}:{market}:{SEED_VERSION}" not in seeded
+        for channel in ("fib", "trendline")
+        if configured[(channel, market)] and f"{channel}:{market}:{SEED_VERSION}" not in seeded
     }
     counts = {}
     failures = []
@@ -428,7 +445,7 @@ def run_once(dry_run=False, force_nse=False):
                     if dry_run:
                         print(f"[{channel}] {message}\n")
                         continue
-                    if not configured[channel]:
+                    if not configured[(channel, market)]:
                         continue             # nothing recorded: no webhook, no channel yet
                     tally = (channel, market)
                     if tally in seeding:
@@ -443,7 +460,7 @@ def run_once(dry_run=False, force_nse=False):
                     if now - attempts.get(key, 0) < RETRY_BACKOFF_SECONDS:
                         continue             # the last send failed: wait out the backoff
                     print(f"[{channel}] {message}\n")
-                    if send(channel, message):
+                    if send(channel, message, market):
                         attempts.pop(key, None)
                         mark_sent(state, key, now)
                         if record:
@@ -460,9 +477,9 @@ def run_once(dry_run=False, force_nse=False):
                  if any(m == market for _, m in seeding) else ""))
     if not awake[CRYPTO]:
         print("Crypto: outside the alert window, holding")
-    for channel, ok in configured.items():
-        if not ok:
-            print(f"{FIB_ENV if channel == 'fib' else TL_ENV} is not configured - {channel} alerts off.")
+    for (channel, market), ok in configured.items():
+        if not ok and market in markets:
+            print(f"{webhook_env(channel, market)} is not configured - {MARKET_LABEL[market]} {channel} alerts off.")
     for line in failures[:20]:
         print(f"  failed {line}")
 
