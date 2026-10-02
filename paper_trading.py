@@ -169,8 +169,11 @@ def fetch_bars(symbols: list[str]) -> dict[str, pd.DataFrame]:
         columns = {str(name).lower(): name for name in frame.columns}
         if not {"high", "low", "close"}.issubset(columns):
             continue
-        tidy = frame[[columns["high"], columns["low"], columns["close"]]].copy()
-        tidy.columns = ["high", "low", "close"]
+        # The open is kept when present: the fill candle's targets only count
+        # when it opened at or through the entry (see evaluate_open_positions).
+        wanted = [name for name in ("open", "high", "low", "close") if name in columns]
+        tidy = frame[[columns[name] for name in wanted]].copy()
+        tidy.columns = wanted
         index = pd.DatetimeIndex(pd.to_datetime(tidy.index))
         tidy.index = index.tz_localize(IST) if index.tz is None else index.tz_convert(IST)
         frames[symbol] = tidy.dropna().sort_index()
@@ -331,43 +334,67 @@ def evaluate_open_positions(
         # price action the user is already flat for. Anything from the
         # cut-off onwards must not decide the trade. For crypto the same
         # role is played by six hours from entry.
-        square_off = horizon_end(market, entry_time, now)
+        position_market = position.get("market", market)
+        # The position's own market decides its horizon: a crypto run also
+        # carries xStock and "other" positions, and those follow crypto's
+        # clock, not NSE's 15:10.
+        square_off = horizon_end("nse" if position_market == "nse" else "crypto", entry_time, now)
         window = frame[(frame.index >= entry_time) & (frame.index < square_off)]
         if window.empty:
             continue
 
+        direction = 1.0 if side == "long" else -1.0
+        # Same rule as daily_backtest_summary: +0.5R moves the stop to entry
+        # plus an offset that follows the market's charges (NSE's for NSE,
+        # crypto's for everything else) rather than closing the trade.
+        offset_pct = (
+            backtest.BREAK_EVEN_OFFSET_PCT
+            if position_market == "nse"
+            else backtest.CRYPTO_BREAK_EVEN_OFFSET_PCT
+        )
+        break_even_stop = entry + direction * entry * offset_pct / 100.0
+        # A breakeven stop the wrong side of its own trigger would fill
+        # instantly, forcing the trade out at the offset rather than
+        # protecting it. Same guard as daily_backtest_summary.
+        reachable = direction * (position["target_half"] - break_even_stop) >= 0
+
         outcome = None
         exit_price = None
         exit_time = None
-        for timestamp, bar in window.iterrows():
+        # Re-derived on every walk from the fill bar. It used to be read
+        # from the saved position, so once a tick had seen +0.5R every later
+        # tick applied the break-even stop from the fill bar onwards and
+        # closed the trade at break-even on bars that came before +0.5R.
+        half_r_hit = False
+        closed_in_window = False
+        for bar_number, (timestamp, bar) in enumerate(window.iterrows()):
             high = float(bar["high"])
             low = float(bar["low"])
-            # Same rule as daily_backtest_summary: +0.5R moves the stop to
-            # entry rather than closing the trade, so giving it back exits
-            # flat. Diverging here would compare two different strategies
-            # rather than test the same one against live prices.
-            direction = 1.0 if side == "long" else -1.0
-            break_even_stop = (
-                entry + direction * entry * backtest.BREAK_EVEN_OFFSET_PCT / 100.0
-            )
-            # A breakeven stop the wrong side of its own trigger would fill
-            # instantly, forcing the trade out at the offset rather than
-            # protecting it. Same guard as daily_backtest_summary.
-            reachable = direction * (position["target_half"] - break_even_stop) >= 0
-            stop_moved = (
-                position["half_r_hit"] and backtest.BREAK_EVEN_ENABLED and reachable
-            )
+            if bar_number == 0:
+                # The backtest's fill-candle rule: targets count from the
+                # candle after the fill, unless this candle opened at or
+                # through the entry and so filled on its first tick.
+                bar_open = float(bar["open"]) if "open" in bar else entry
+                filled_at_open = bar_open <= entry if side == "long" else bar_open >= entry
+                if not filled_at_open:
+                    if side == "long":
+                        high = min(high, entry)
+                    else:
+                        low = max(low, entry)
+            stop_moved = half_r_hit and backtest.BREAK_EVEN_ENABLED and reachable
             active_stop = break_even_stop if stop_moved else stop
             stop_hit = low <= active_stop if side == "long" else high >= active_stop
             two_hit = high >= position["target_2"] if side == "long" else low <= position["target_2"]
             one_hit = high >= position["target_1"] if side == "long" else low <= position["target_1"]
             half_hit = high >= position["target_half"] if side == "long" else low <= position["target_half"]
 
-            if outcome is None and stop_hit and (two_hit or one_hit or half_hit):
+            deciding_hit = (one_hit or two_hit) if stop_moved else (half_hit or one_hit or two_hit)
+            if outcome is None and stop_hit and deciding_hit:
                 # Both sides printed inside one bar; the real order is
                 # unknowable here, so report it rather than guess.
                 outcome, exit_time = AMBIGUOUS, timestamp
                 exit_price = float("nan")
+                closed_in_window = True
                 break
             if stop_hit:
                 if outcome is None:
@@ -377,14 +404,23 @@ def evaluate_open_positions(
                         outcome = "SL"
                         exit_price = stop - direction * stop * backtest.SL_FILL_SLIPPAGE_PCT / 100.0
                 exit_time = timestamp
+                closed_in_window = True
                 break
-            if half_hit:
-                position["half_r_hit"] = True
+            if half_hit or one_hit:
+                half_r_hit = True
             if one_hit:
                 outcome, exit_price, exit_time = "+1R", position["target_1"], timestamp
             if two_hit:
                 outcome, exit_price, exit_time = "+2R", position["target_2"], timestamp
+                closed_in_window = True
                 break
+
+        position["half_r_hit"] = half_r_hit
+        if not closed_in_window and now < square_off:
+            # Still running: +1R is banked but the trade stays open for +2R
+            # (or its stop) until the horizon, as in the backtest. It used to
+            # be closed as +1R on the tick that first saw it.
+            continue
 
         if outcome is None and now >= square_off:
             # The user is flat by 15:10, so an unresolved position exits at
@@ -503,7 +539,10 @@ def run_tick_for(args: argparse.Namespace, timeframe: str) -> None:
         | {
             position["symbol"]
             for position in state["open"].values()
-            if position.get("market", "nse") == args.market
+            # A crypto run covers xStock and "other" positions too (they come
+            # from the same alert records). Matching only "crypto" left them
+            # without prices, so they were never evaluated and never closed.
+            if (position.get("market", "nse") == "nse") == (args.market == "nse")
         }
     )
     frames = (

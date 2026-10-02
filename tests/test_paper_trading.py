@@ -483,3 +483,65 @@ class ReportDayTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def ohlc_bars(rows, start="2026-08-17 10:00"):
+    index = pd.date_range(start, periods=len(rows), freq="5min", tz=IST)
+    return pd.DataFrame(rows, index=index, columns=["open", "high", "low", "close"])
+
+
+class AcrossTicksTests(unittest.TestCase):
+    """Positions are re-walked from the fill bar on every tick."""
+
+    def _open(self, frames, symbol="TCS.NS", market="nse"):
+        state = fresh_state()
+        record = alert()
+        record["symbol"] = symbol
+        paper_trading.open_new_positions(state, [record], frames, NOW, market)
+        self.assertEqual(len(state["open"]), 1)
+        return state
+
+    def test_break_even_is_not_applied_before_the_half_r_bar_on_a_later_tick(self):
+        # Fill bar, then a dip to 99.95 (above the 98 stop, below break-even),
+        # then +0.5R (101.0). The next tick must not close it at break-even
+        # on the dip that came before +0.5R.
+        rows = [[100.5, 100.6, 99.9, 100.2], [100.2, 100.3, 99.95, 100.1], [100.1, 101.2, 100.1, 101.1]]
+        frames = {"TCS.NS": ohlc_bars(rows)}
+        state = self._open(frames)
+        tick = pd.Timestamp("2026-08-17 10:20", tz=IST)
+        self.assertEqual(paper_trading.evaluate_open_positions(state, frames, tick), [])
+        self.assertEqual(paper_trading.evaluate_open_positions(state, frames, tick), [])
+        self.assertEqual(len(state["open"]), 1)
+
+    def test_plus_one_r_stays_open_for_plus_two_r(self):
+        rows = [[100.5, 100.6, 99.9, 100.2], [100.2, 102.5, 100.1, 102.3]]
+        frames = {"TCS.NS": ohlc_bars(rows)}
+        state = self._open(frames)
+        tick = pd.Timestamp("2026-08-17 10:15", tz=IST)
+        self.assertEqual(paper_trading.evaluate_open_positions(state, frames, tick), [])
+        rows.append([102.3, 104.5, 102.2, 104.2])
+        frames = {"TCS.NS": ohlc_bars(rows)}
+        closed = paper_trading.evaluate_open_positions(state, frames, tick)
+        self.assertEqual(closed[0]["outcome"], "+2R")
+
+    def test_targets_on_the_fill_candle_do_not_count(self):
+        # Opened above entry, traded down to fill: the high came before it.
+        rows = [[100.5, 104.5, 99.9, 100.2]]
+        frames = {"TCS.NS": ohlc_bars(rows)}
+        state = self._open(frames)
+        tick = pd.Timestamp("2026-08-17 10:10", tz=IST)
+        self.assertEqual(paper_trading.evaluate_open_positions(state, frames, tick), [])
+
+    def test_crypto_uses_the_crypto_break_even_offset(self):
+        rows = [[100.5, 100.6, 99.9, 100.2], [100.2, 101.2, 100.1, 101.1]]
+        frames = {"BTCUSD": ohlc_bars(rows)}
+        state = self._open(frames, symbol="BTCUSD", market="crypto")
+        position = next(iter(state["open"].values()))
+        rows.append([101.0, 101.0, 99.0, 99.2])
+        frames = {"BTCUSD": ohlc_bars(rows)}
+        closed = paper_trading.evaluate_open_positions(
+            state, frames, pd.Timestamp("2026-08-17 10:30", tz=IST), market="crypto"
+        )
+        self.assertEqual(closed[0]["outcome"], backtest.BREAK_EVEN)
+        expected = position["entry"] * (1 + backtest.CRYPTO_BREAK_EVEN_OFFSET_PCT / 100.0)
+        self.assertAlmostEqual(closed[0]["exit_price"], expected)
