@@ -3996,13 +3996,14 @@
     "shadow:SLVONUSD|30m|short|55.9094|55.96": 1790928499.462397,
     "shadow:NVDAXUSD|30m|short|233.124|233.25": 1790930598.1838067,
     "shadow:XRPUSD|30m|short|1.54304|1.5459": 1790934701.5003445,
-    "shadow:BCHUSD|30m|short|317.614|318.17": 1790940110.1747098,
+    "shadow:BCHUSD|30m|short|317.614|318.17": 1790944319.8437352,
     "MRVL/USDT:USDT|30m|short|272.71|273.2": 1790934996.4566288,
     "shadow:MRVL/USDT:USDT|30m|short|272.939|273.2": 1790938699.5686266,
     "SOXLBUSD|30m|short|161.3|161.9": 1790933609.534276,
     "shadow:SOXLBUSD|30m|short|161.524|161.9": 1790943715.5006132,
     "shadow:TACUSD|30m|long|0.001517|0.00151985": 1790936210.2414904,
-    "XRPUSD|30m|short|1.55|1.5624": 1790937721.7722397
+    "XRPUSD|30m|short|1.55|1.5624": 1790937721.7722397,
+    "NVDAXUSD|30m|short|235.813|237.7": 1790944319.8442552
   },
   "METAXUSD|demand|577.00000000|579.20000000": {
     "in_zone": false,
@@ -15551,7 +15552,7 @@
     "last_alert_at": 1787580724.510809
   },
   "__last_scan_started__": {
-    "30m": 1790944073.169438
+    "30m": 1790944298.4931607
   },
   "TAO/USDT|supply|227.92800000|229.00000000": {
     "in_zone": false,
@@ -67822,8 +67823,9 @@
     "last_alert_at": 0.0
   },
   "NVDAXUSD|supply|235.81349206|237.70000000": {
-    "in_zone": false,
-    "last_alert_at": 0.0
+    "in_zone": true,
+    "last_alert_at": 1790944319.8442552,
+    "last_attempt_at": 1790944319.8442552
   },
   "shadow:NVDAXUSD|supply|237.52833177|237.70000000": {
     "in_zone": false,
@@ -147552,9 +147554,9 @@
     "last_attempt_at": 1790927813.8417113
   },
   "shadow:BCHUSD|supply|317.61389393|318.17000000": {
-    "in_zone": false,
-    "last_alert_at": 1790940110.1747098,
-    "last_attempt_at": 1790940110.1747098
+    "in_zone": true,
+    "last_alert_at": 1790944319.8437352,
+    "last_attempt_at": 1790944319.8437352
   },
   "TACUSD|supply|0.00158800|0.00159300": {
     "in_zone": true,
@@ -148502,6 +148504,11 @@
     "last_attempt_at": 0.0
   },
   "shadow:NVDAXUSD|supply|237.52837154|237.70000000": {
+    "in_zone": false,
+    "last_alert_at": 0.0,
+    "last_attempt_at": 0.0
+  },
+  "shadow:BTCUSD|supply|87286.42673664|87386.00000000": {
     "in_zone": false,
     "last_alert_at": 0.0,
     "last_attempt_at": 0.0
