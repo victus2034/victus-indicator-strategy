@@ -528,6 +528,12 @@ DISCORD_STATUS_WEBHOOK_URL = ""
 # name.
 DISCORD_FIB_WEBHOOK_URL = ""
 DISCORD_TRENDLINE_WEBHOOK_URL = ""
+# Per-market channels (2026-10-02): crypto and NSE fib / trendline alerts each
+# to their own channel. Any left empty falls back to the shared one above.
+DISCORD_FIB_CRYPTO_WEBHOOK_URL = ""
+DISCORD_FIB_NSE_WEBHOOK_URL = ""
+DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL = ""
+DISCORD_TRENDLINE_NSE_WEBHOOK_URL = ""
 # Higher timeframes only. "1w" is Delta's own weekly candle (Monday 00:00
 # UTC, like TradingView); "1M" has no Delta candle and is built from daily
 # ones by calendar month.
