@@ -57282,6 +57282,33 @@
       "target_half": 272.40374999999995,
       "timeframe": "30m",
       "trade_id": "MRVL/USDT:USDT|30m|short|272.71|273.322"
+    },
+    {
+      "alert_time": "2026-10-02T00:06:34.391507+05:30",
+      "cost_r": 0.14273846153846154,
+      "date": "2026-10-02",
+      "entry": 231.95,
+      "entry_time": "2026-10-02T00:15:00+05:30",
+      "exit_price": 231.67166,
+      "exit_time": "2026-10-02T05:45:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "xstock",
+      "net_realized_r": 0.028547692307683586,
+      "outcome": "BE",
+      "rating": 5,
+      "realized_r": 0.17128615384614512,
+      "risk": 1.625,
+      "side": "short",
+      "stop": 233.575,
+      "stream": "live",
+      "symbol": "NVDAXUSD",
+      "target_1": 230.325,
+      "target_2": 228.7,
+      "target_half": 231.1375,
+      "timeframe": "30m",
+      "trade_id": "NVDAXUSD|30m|short|231.95|233.575"
     }
   ],
   "handled": {
@@ -58371,6 +58398,7 @@
     "BTCUSD|4h|long|76028|75487.4": "filled",
     "BTCUSD|4h|short|80309|80594": "filled",
     "BTCUSD|4h|short|84660|85365": "filled",
+    "BTCUSD|4h|short|86875.5|87513.6": "filled",
     "BTW/USDT|30m|short|0.4607|0.465087": "filled",
     "BTW/USDT|30m|short|0.46155|0.463675": "filled",
     "BTW/USDT|30m|short|0.48125|0.486062": "filled",
@@ -59638,6 +59666,24 @@
       "target_half": 497.73875,
       "timeframe": "30m"
     },
+    "BTCUSD|4h|short|86875.5|87513.6": {
+      "alert_time": "2026-10-02T10:00:46.750633+05:30",
+      "entry": 86875.5,
+      "entry_time": "2026-10-02T18:00:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "rating": 6,
+      "risk": 638.125,
+      "side": "short",
+      "stop": 87513.625,
+      "stream": "live",
+      "symbol": "BTCUSD",
+      "target_1": 86237.375,
+      "target_2": 85599.25,
+      "target_half": 86556.4375,
+      "timeframe": "4h"
+    },
     "METAXUSD|30m|short|731.6|738.1": {
       "alert_time": "2026-10-02T13:28:19.706805+05:30",
       "entry": 731.6,
@@ -59654,24 +59700,6 @@
       "target_1": 725.1000000000001,
       "target_2": 718.6000000000003,
       "target_half": 728.3500000000001,
-      "timeframe": "30m"
-    },
-    "NVDAXUSD|30m|short|231.95|233.575": {
-      "alert_time": "2026-10-02T00:06:34.391507+05:30",
-      "entry": 231.95,
-      "entry_time": "2026-10-02T00:15:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "xstock",
-      "rating": 5,
-      "risk": 1.625,
-      "side": "short",
-      "stop": 233.575,
-      "stream": "live",
-      "symbol": "NVDAXUSD",
-      "target_1": 230.325,
-      "target_2": 228.7,
-      "target_half": 231.1375,
       "timeframe": "30m"
     }
   }
