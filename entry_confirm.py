@@ -282,8 +282,7 @@ def load_watched_alerts(
 ) -> list[dict]:
     """Alerts still inside their fillable window, newest occurrence wins.
 
-    records_path points this at a different log - paper_trading uses it to read
-    the shadow-geometry alerts, which are written by the scanner but never sent.
+    records_path points this at a different log than the market's own.
     """
     paths = [records_path] if records_path is not None else [ALERT_RECORDS[market][timeframe]]
     window = pd.Timedelta(minutes=BAR_MINUTES[timeframe] * WATCH_BARS)

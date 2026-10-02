@@ -250,8 +250,7 @@ REARM_FACTOR = 1.25
 #                      of 30m) but the same net expectancy per trade, on ~15%
 #                      fewer trades and with less than half the same-bar
 #                      stop/target collisions - so its number rests on far less
-#                      that bar data cannot verify. The shadow now runs "atr", so
-#                      the road not taken keeps being scored.
+#                      that bar data cannot verify.
 #
 # The wick geometry is NOT a drop-in. Flipping this flag alone, leaving the close
 # break rule and OVERLAP_ATR 2.0 in place, was the single worst configuration
@@ -305,8 +304,6 @@ ZONE_BASE_EXTRA = env_int(
     "VICTUS_ZONE_BASE_EXTRA",
     auto_base_extra(TIMEFRAME_MINUTES.get(TIMEFRAME.strip().lower())),
 )
-# Built alongside the live geometry and logged, never sent. Set empty to disable.
-ZONE_SHADOW_GEOMETRY = os.getenv("VICTUS_ZONE_SHADOW_GEOMETRY", "atr").strip().lower()
 
 # When the ring buffer is full, drop the weakest zone rather than the oldest.
 # The original FIFO throws away exactly the old untouched zones the strategy
@@ -448,7 +445,7 @@ MIN_SCAN_INTERVAL_SECONDS = env_int("VICTUS_MIN_SCAN_INTERVAL_SECONDS", 8 * 60)
 # and 2.9% at worst - a zone spliced there would mark a price that never
 # traded on the venue being watched.
 #
-# Filled by venue_divergence.py, which compares every watchlist symbol's
+# Filled by venue_divergence.py (removed 2026-10-02; in git history), which compared every watchlist symbol's
 # 30m closes across both venues. 28 of the 90 it could compare agree
 # inside 0.20% at the 95th percentile. The rest keep CoinSwitch alone -
 # a shorter history is a smaller problem than a level in the wrong place.

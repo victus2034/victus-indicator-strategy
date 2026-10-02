@@ -53,7 +53,6 @@ from config import (
     ZONE_MAX_WIDTH_PCT,
     MAX_ALERT_STOP_PCT,
     ZONE_RATING_GATE,
-    ZONE_SHADOW_GEOMETRY,
     OHLCV_LIMIT,
     OVERLAP_ATR,
     PRIMARY_EXCHANGE_ID,
@@ -98,13 +97,6 @@ ALERT_RECORD_FILE = Path(__file__).with_name(
         "VICTUS_ALERT_RECORD_FILE",
         "crypto_alert_records_30m.jsonl" if TIMEFRAME == "30m" else "crypto_alert_records.jsonl",
     )
-)
-# Alerts the shadow geometry WOULD have sent. Written, never delivered - there is
-# no webhook on this path. paper_trading scores them alongside the live stream so
-# the two constructions can be compared forward and out of sample, which is the
-# one thing a backtest of the same history cannot do.
-SHADOW_ALERT_RECORD_FILE = ALERT_RECORD_FILE.with_name(
-    ALERT_RECORD_FILE.name.replace("crypto_alert_records", "crypto_shadow_alerts")
 )
 # Zones near enough for entry_confirm to start watching, but not near enough to
 # alert on. Its own file on purpose: daily_backtest_summary reads the alert
@@ -1314,17 +1306,6 @@ def scan_symbol(symbol):
     latest_index = len(df) - 1
     nearest_supply, supply_dist = nearest_active_zone(price, supply_zones, "supply", latest_index)
     nearest_demand, demand_dist = nearest_active_zone(price, demand_zones, "demand", latest_index)
-    # The other construction, built on the same candles and never delivered.
-    shadow_supply = shadow_demand = None
-    shadow_supply_dist = shadow_demand_dist = 999.0
-    if ZONE_SHADOW_GEOMETRY and ZONE_SHADOW_GEOMETRY != ZONE_GEOMETRY:
-        shadow_supply_zones, shadow_demand_zones = build_zones(df, ZONE_SHADOW_GEOMETRY)
-        shadow_supply, shadow_supply_dist = nearest_active_zone(
-            price, shadow_supply_zones, "supply", latest_index
-        )
-        shadow_demand, shadow_demand_dist = nearest_active_zone(
-            price, shadow_demand_zones, "demand", latest_index
-        )
     buy_signal, sell_signal = get_range_filter_signals(df)
     supply_rating = None
     demand_rating = None
@@ -1405,10 +1386,6 @@ def scan_symbol(symbol):
         "demand_dist": demand_dist,
         "demand_rating": demand_rating,
         "demand_score": demand_score,
-        "shadow_supply": shadow_supply,
-        "shadow_supply_dist": shadow_supply_dist,
-        "shadow_demand": shadow_demand,
-        "shadow_demand_dist": shadow_demand_dist,
         "buy_signal": buy_signal,
         "sell_signal": sell_signal,
     }
@@ -1504,7 +1481,7 @@ def delivered_alert_id(record):
     return hashlib.sha1("|".join(parts).encode("utf-8")).hexdigest()[:16]
 
 
-def record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, now_ts, shadow=False):
+def record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, now_ts):
     """Persist delivered zone alerts for the daily backtest summary."""
     rating = result.get(f"{zone_type}_rating") or {}
     # Prefer the validated rating (ML crypto model or xstock hybrid) when
@@ -1542,12 +1519,10 @@ def record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, 
         "zone_age_candles": zone.get("zone_age_candles"),
         "message": message,
         "geometry": zone.get("geometry", ZONE_GEOMETRY),
-        "shadow": bool(shadow),
     }
     record["trade_id"] = delivered_alert_id(record)
-    destination = SHADOW_ALERT_RECORD_FILE if shadow else ALERT_RECORD_FILE
     try:
-        with destination.open("a", encoding="utf-8") as file:
+        with ALERT_RECORD_FILE.open("a", encoding="utf-8") as file:
             file.write(json.dumps(record, separators=(",", ":")) + "\n")
     except OSError as error:
         print(f"Crypto alert record write failed: {error}")
@@ -1816,7 +1791,7 @@ def send_status_message(message):
         print(f"Discord status message failed: {error}")
 
 
-def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shadow=False):
+def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
     if zone is None:
         return False
 
@@ -1837,17 +1812,11 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shad
             return False
 
     state_key = build_state_key(result["symbol"], zone_type, zone)
-    if shadow:
-        # Its own cooldown namespace, so a shadow alert can never suppress or
-        # re-arm a real one.
-        state_key = "shadow:" + state_key
     entry = state.setdefault(
         state_key, {"in_zone": False, "last_alert_at": 0.0, "last_attempt_at": 0.0}
     )
     noise_state = state.setdefault("_noise_control", {})
     noise_key = exact_zone_identity(result["symbol"], zone_type, zone)
-    if shadow:
-        noise_key = "shadow:" + noise_key
     alert_sent = False
 
     if MIN_DISTANCE_PCT <= distance_pct <= MAX_DISTANCE_PCT:
@@ -1864,28 +1833,18 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shad
         noise_open = not last_success or now_ts - last_success >= ZONE_REPEAT_SUPPRESSION_SECONDS
         if should_alert and noise_open:
             message = format_alert(result, zone_type, zone, distance_pct)
-            if shadow:
-                # Logged only. No webhook is touched on this path.
-                entry["last_alert_at"] = now_ts
+            # in_alert_window() is checked here too (send_alert checks it
+            # again internally) so a hold outside the 08:00-01:00 IST
+            # window - not a delivery failure - never counts as an
+            # attempt and never backs off. Genuine alerts must still fire
+            # the instant the window reopens, exactly as before this fix.
+            if in_alert_window():
                 entry["last_attempt_at"] = now_ts
+            if send_alert(message):
+                entry["last_alert_at"] = now_ts
                 noise_state[noise_key] = now_ts
-                record_delivered_zone_alert(
-                    result, zone_type, zone, distance_pct, message, now_ts, shadow=True
-                )
+                record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, now_ts)
                 alert_sent = True
-            else:
-                # in_alert_window() is checked here too (send_alert checks it
-                # again internally) so a hold outside the 08:00-01:00 IST
-                # window - not a delivery failure - never counts as an
-                # attempt and never backs off. Genuine alerts must still fire
-                # the instant the window reopens, exactly as before this fix.
-                if in_alert_window():
-                    entry["last_attempt_at"] = now_ts
-                if send_alert(message):
-                    entry["last_alert_at"] = now_ts
-                    noise_state[noise_key] = now_ts
-                    record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, now_ts)
-                    alert_sent = True
         elif should_alert and last_success:
             remaining = max(0, int(ZONE_REPEAT_SUPPRESSION_SECONDS - (now_ts - last_success)))
             print(f"Suppressed repeat alert: {noise_key} | {remaining // 60}m remaining")
@@ -1897,9 +1856,7 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shad
 
     # Near enough to watch, not yet near enough to alert. Nothing is sent
     # here - the row exists so entry_confirm can begin tracking the zone
-    # well before price arrives. Shadow candidates are excluded: they are a
-    # geometry experiment scored by paper_trading, not something to be
-    # warned about.
+    # well before price arrives.
     #
     # Strictly ABOVE MAX_DISTANCE_PCT, not from MIN_DISTANCE_PCT: this used
     # to overlap the alert band itself (>= MIN_DISTANCE_PCT), so a zone
@@ -1912,7 +1869,7 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts, shad
     # about to alert (or already has) is fully covered by the alert record
     # path above; the watch row's only job is the range the alert path never
     # sees at all.
-    if not shadow and MAX_DISTANCE_PCT < distance_pct <= WATCH_DISTANCE_PCT:
+    if MAX_DISTANCE_PCT < distance_pct <= WATCH_DISTANCE_PCT:
         watch_state = state.setdefault("_watch", {})
         last_watch = float(watch_state.get(noise_key, 0.0) or 0.0)
         if not last_watch or now_ts - last_watch >= WATCH_RECORD_COOLDOWN_SECONDS:
@@ -2170,20 +2127,6 @@ def run_scan_once(state):
             alerts_sent += 1
         if process_candidate(state, result, "demand", result["demand"], result["demand_dist"], now_ts):
             alerts_sent += 1
-
-        # The shadow geometry runs the identical gate and writes to its own log.
-        # No webhook is reachable from here - process_candidate(shadow=True)
-        # cannot call send_alert - so this can never surface as a real alert.
-        if result.get("shadow_supply") is not None:
-            process_candidate(
-                state, result, "supply",
-                result["shadow_supply"], result["shadow_supply_dist"], now_ts, shadow=True,
-            )
-        if result.get("shadow_demand") is not None:
-            process_candidate(
-                state, result, "demand",
-                result["shadow_demand"], result["shadow_demand_dist"], now_ts, shadow=True,
-            )
 
     prune_alert_state(
         state, time.time(), ALERT_COOLDOWN_SECONDS, SIGNAL_ALERT_COOLDOWN_SECONDS,

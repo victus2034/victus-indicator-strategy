@@ -24,7 +24,7 @@ def build(module, frame, pivot, confirmation, atr_values, zone_type):
 class IndicatorBoundaryTests(unittest.TestCase):
     """The atr band: a fixed atr * (BOX_WIDTH / 10) hung off the pivot extreme.
 
-    Still selectable (it is the shadow geometry), so still pinned, through both
+    Still selectable (ZONE_GEOMETRY=atr), so still pinned, through both
     entry points. The wick construction both markets now default to has its own
     coverage in test_zone_geometry_and_clock.py.
     """
