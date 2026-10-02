@@ -3,20 +3,25 @@
     "reached_entry": true,
     "stopped_out": true
   },
+  "BEAT/USDT|30m|long|0.0886|0.087975": {
+    "reached_entry": true,
+    "stage": 3,
+    "stopped_out": false
+  },
   "BEAT/USDT|30m|long|0.0898|0.0893": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BNBUSD|30m|long|769.33|767.742": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "DOGEUSD|30m|long|0.09336|0.09271": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "ETHUSD|30m|long|2676.3|2663.8": {
     "reached_entry": true,
@@ -54,8 +59,8 @@
     "stopped_out": true
   },
   "ZORAUSD|4h|long|0.00767693|0.00760077": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "_level_ready|AAVEUSD|30m|long|134.06|133.21": 1789911352.70983,
@@ -94,6 +99,7 @@
   "_level_ready|BCHUSD|30m|short|341.7|344.925": 1790364378.771032,
   "_level_ready|BCHUSD|4h|short|272.43|274.668": 1790073367.004348,
   "_level_ready|BEAT/USDT|30m|long|0.0835|0.083": 1789901763.445102,
+  "_level_ready|BEAT/USDT|30m|long|0.0886|0.087975": 1790966176.621604,
   "_level_ready|BEAT/USDT|30m|long|0.0898|0.0893": 1790963484.198995,
   "_level_ready|BEAT/USDT|30m|short|0.08437|0.084795": 1789642566.116701,
   "_level_ready|BEAT/USDT|30m|short|0.08613|0.0867175": 1789670159.6338,
@@ -461,7 +467,7 @@
   "_ready|AXTI/USDT:USDT|30m": 1789540275.035677,
   "_ready|BCHUSD|30m": 1790924507.198808,
   "_ready|BCHUSD|4h": 1790073367.004348,
-  "_ready|BEAT/USDT|30m": 1790963484.198995,
+  "_ready|BEAT/USDT|30m": 1790966176.621604,
   "_ready|BLESSUSD|30m": 1790850704.303836,
   "_ready|BNBUSD|30m": 1790965589.35312,
   "_ready|BNBUSD|4h": 1790577087.860535,
@@ -586,10 +592,6 @@
     "price": 0.09762,
     "time": "2026-10-02T13:56:21.020006+05:30"
   },
-  "_silent_ready|ETHUSD|30m|short|2720.6|2721.35": {
-    "price": 2707.35,
-    "time": "2026-10-02T00:06:15.260547+05:30"
-  },
   "_silent_ready|ETHUSD|30m|short|2736|2751.5": {
     "price": 2727.75,
     "time": "2026-10-02T12:01:36.770676+05:30"
@@ -669,6 +671,10 @@
   "_silent_ready|TSLAXUSD|4h|short|374.1|375.225": {
     "price": 372.0,
     "time": "2026-10-02T19:36:48.926631+05:30"
+  },
+  "_silent_ready|UNIUSD|30m|long|8.764|8.71025": {
+    "price": 8.829,
+    "time": "2026-10-03T00:06:16.621604+05:30"
   },
   "_silent_ready|UNIUSD|30m|long|8.895|8.86625": {
     "price": 8.978,
