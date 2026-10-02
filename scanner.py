@@ -2032,6 +2032,38 @@ def print_summary(results):
 LAST_SCAN_KEY = "__last_scan_started__"
 
 
+def prune_alert_state(state, now_ts, zone_cooldown, signal_cooldown, repeat_suppression, watch_cooldown):
+    """Drop state entries that can no longer change any alert decision.
+
+    process_candidate creates an entry for the nearest zone of every symbol on
+    every scan, and nothing ever removed one: the 30m file reached ~36,000
+    zone keys (4 MB), ~94% of them for zones price left days ago, all parsed,
+    rewritten and committed on every scan. Each rule below drops only what
+    would decide exactly the same way if it were recreated from the default:
+
+    - a zone entry not in_zone, or whose last attempt is older than the
+      cooldown, alerts on its next band entry either way;
+    - a range-filter entry past its cooldown is open either way;
+    - a _noise_control / _watch stamp past its window is open either way.
+    """
+    for key in list(state):
+        value = state[key]
+        if key.startswith("_") or not isinstance(value, dict):
+            continue
+        last = max(float(value.get("last_alert_at", 0.0) or 0.0), float(value.get("last_attempt_at", 0.0) or 0.0))
+        if "|range_filter|" in key:
+            if now_ts - last >= signal_cooldown:
+                del state[key]
+        elif not value.get("in_zone") or now_ts - last >= zone_cooldown:
+            del state[key]
+    for bucket, window in (("_noise_control", repeat_suppression), ("_watch", watch_cooldown)):
+        stamps = state.get(bucket)
+        if isinstance(stamps, dict):
+            for key in [k for k, v in stamps.items() if now_ts - float(v or 0.0) >= window]:
+                del stamps[key]
+    return state
+
+
 def scan_too_soon(state, now=None):
     """True when the previous scan of this timeframe is still recent.
 
@@ -2153,6 +2185,10 @@ def run_scan_once(state):
                 result["shadow_demand"], result["shadow_demand_dist"], now_ts, shadow=True,
             )
 
+    prune_alert_state(
+        state, time.time(), ALERT_COOLDOWN_SECONDS, SIGNAL_ALERT_COOLDOWN_SECONDS,
+        ZONE_REPEAT_SUPPRESSION_SECONDS, WATCH_RECORD_COOLDOWN_SECONDS,
+    )
     save_state(state)
 
     if PRINT_SCAN_SUMMARY and results:
