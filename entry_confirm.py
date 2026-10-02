@@ -440,6 +440,8 @@ def price_decimals(value: float, market: str = "crypto") -> int:
 # generously wide, which is fine - a wider sweep only helps the same problem
 # there too.
 SWEEP_CANDLES = 2
+# Candles requested per symbol for the price check (see fetch_crypto_prices).
+PRICE_OHLCV_LIMIT = 50
 
 
 def fetch_crypto_prices(symbols: list[str]) -> dict[str, dict[str, float]]:
@@ -471,6 +473,10 @@ def fetch_crypto_prices(symbols: list[str]) -> dict[str, dict[str, float]]:
     except Exception as error:
         print(f"crypto price fetch unavailable: {error}")
         return {}
+
+    # Only the last SWEEP_CANDLES candles and the live price are used here, so
+    # there is no need for the scanner's full 1500-candle history per symbol.
+    scanner.OHLCV_LIMIT = PRICE_OHLCV_LIMIT
 
     def fetch_one(symbol):
         ohlcv, exchange_name = scanner.fetch_symbol_ohlcv(symbol)

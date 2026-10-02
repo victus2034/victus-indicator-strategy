@@ -87,7 +87,15 @@ class NseIndicatorParityTests(unittest.TestCase):
             result = nse_scanner.yfinance_time_range(now=now)
 
         self.assertNotIn("period", result)
-        self.assertEqual(result["end"] - result["start"], pd.Timedelta(days=700))
+        self.assertEqual(
+            result["end"] - result["start"], pd.Timedelta(days=nse_scanner.NSE_1H_HISTORY_DAYS)
+        )
+        # Under Yahoo's 730-day cap, and long enough for OHLCV_LIMIT 4h
+        # candles (two per session, ~250 sessions a year).
+        self.assertLess(nse_scanner.NSE_1H_HISTORY_DAYS, 730)
+        self.assertGreaterEqual(
+            nse_scanner.NSE_1H_HISTORY_DAYS * 5 / 7 * 0.94 * 2, nse_scanner.OHLCV_LIMIT * 1.15
+        )
 
 
 if __name__ == "__main__":

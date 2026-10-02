@@ -354,6 +354,9 @@ def normalize_yfinance_columns(data):
     return {ticker: data.xs(ticker, axis=1, level=0, drop_level=True) for ticker in tickers}
 
 
+NSE_1H_HISTORY_DAYS = 450
+
+
 def yfinance_time_range(now=None):
     if SOURCE_INTERVAL != "1h":
         return {"period": SOURCE_PERIOD}
@@ -361,7 +364,11 @@ def yfinance_time_range(now=None):
     # Yahoo can ignore an intraday period for newer listings and request from
     # the IPO date, which its API rejects when that date is over 730 days old.
     end = now or (pd.Timestamp.now(tz="UTC") + pd.Timedelta(days=1))
-    start = end - pd.Timedelta(days=700)
+    # Only the last OHLCV_LIMIT (500) 4h candles are kept, about 250 sessions;
+    # 450 days of 1h holds ~300 sessions, so the kept candles are identical to
+    # the 700-day download's (the 4h bars anchor to each day's 09:15, not to
+    # where the download starts) for a third less data per scan.
+    start = end - pd.Timedelta(days=NSE_1H_HISTORY_DAYS)
     return {"start": start.to_pydatetime(), "end": end.to_pydatetime()}
 
 
