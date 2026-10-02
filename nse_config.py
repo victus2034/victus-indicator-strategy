@@ -91,9 +91,7 @@ MARKET_TIMEZONE = "Asia/Kolkata"
 MARKET_OPEN = "09:15"
 MARKET_CLOSE = "15:30"
 ALERT_SCAN_START = "09:00"
-TRADE_START = "09:15"
 STRATEGY_CUTOFF = "15:10"
-REPORT_TIME = "16:30"
 
 OHLCV_LIMIT = 500
 # The zone engine is the crypto scanner's, and so are the numbers that drive it.
@@ -112,16 +110,6 @@ from config import (  # noqa: E402  (grouped with the values it replaces)
     OVERLAP_ATR,
     SWING_LENGTH,
 )
-# The Pine indicator applies no wick, body-ratio or departure test - every
-# confirmed pivot becomes a zone. These are kept only as metadata on the zone
-# for the rating and for later analysis, never as filters, so the zone set
-# matches what the chart draws.
-MIN_WICK_ATR = 0.15
-MIN_WICK_TO_BODY = 1.5
-MIN_DEPARTURE_ATR = 0.75
-# Zones are a fixed atr * (BOX_WIDTH / 10) band anchored on the pivot extreme,
-# exactly as the indicator draws them, so no separate padding applies.
-ZONE_PADDING_ATR = 0.0
 
 # Distance is measured to the entry edge - the one price reaches first -
 # so this is "how far is price from the level I would actually trade".
@@ -135,7 +123,6 @@ REARM_FACTOR = 1.25
 # scan would otherwise run twice, minutes apart.
 MIN_SCAN_INTERVAL_SECONDS = 8 * 60
 SCAN_SLEEP = 300
-SCAN_WORKERS = 8
 ALERT_COOLDOWN_SECONDS = 4 * 60 * 60
 ALERT_RANGE_FILTER_SIGNALS = True
 SIGNAL_ALERT_COOLDOWN_SECONDS = 4 * 60 * 60

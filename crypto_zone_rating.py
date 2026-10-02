@@ -7,11 +7,6 @@ import pandas as pd
 
 
 MODEL_PATH = Path(__file__).with_name("crypto_zone_rating_30m.joblib")
-RATING_LABELS = {
-    "A": "best tested",
-    "B": "mixed",
-    "C": "weak",
-}
 def rated_crypto_symbols() -> set[str]:
     """Symbols the loaded model bundle actually validates.
 

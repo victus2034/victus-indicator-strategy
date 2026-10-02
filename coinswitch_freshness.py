@@ -136,11 +136,10 @@ def main() -> None:
     # 751 is the ceiling on a plain limit. If start_time reaches further
     # back, deep history is one paged request away; if not, the only route
     # to a month-old 30m zone is a coarser series.
-    import time as _t
-    thirty_days_ago = int((_t.time() - 30 * 24 * 3600) * 1000)
+    thirty_days_ago = int((time.time() - 30 * 24 * 3600) * 1000)
     for params in (
         {"start_time": thirty_days_ago},
-        {"start_time": thirty_days_ago, "end_time": int(_t.time() * 1000)},
+        {"start_time": thirty_days_ago, "end_time": int(time.time() * 1000)},
         {"from": thirty_days_ago},
     ):
         try:

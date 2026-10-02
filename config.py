@@ -187,16 +187,6 @@ HISTORY_OF_ZONES_TO_KEEP = env_int("VICTUS_HISTORY_OF_ZONES_TO_KEEP", 60)
 # Matches the Pine indicator's f_check_overlapping, which rejects a new zone
 # whose midpoint sits within atr * 2 of an existing one.
 OVERLAP_ATR = 2.0
-# The Pine indicator applies no wick, body-ratio or departure test - every
-# confirmed pivot becomes a zone. These are kept only as metadata on the zone
-# for the rating and for later analysis, never as filters, so the zone set
-# matches what the chart draws.
-MIN_WICK_ATR = 0.15
-MIN_WICK_TO_BODY = 1.5
-MIN_DEPARTURE_ATR = 0.75
-# Zones are a fixed atr * (BOX_WIDTH / 10) band anchored on the pivot extreme,
-# exactly as the indicator draws them, so no separate padding applies.
-ZONE_PADDING_ATR = 0.0
 
 # Distance is measured to the entry edge - the one price reaches first -
 # so this is "how far is price from the level I would actually trade".

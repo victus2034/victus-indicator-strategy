@@ -321,64 +321,9 @@ def bind_zone_engine(timeframe=None):
     return zone_engine.ZONE_BASE_EXTRA
 
 
-def get_range_filter_signals(df):
-    src = df["close"]
-    period = 100
-    multiplier = 3.0
-
-    def smoothrng(series, length, mult):
-        weighted_period = length * 2 - 1
-        average_range = series.diff().abs().ewm(span=length, adjust=False).mean()
-        return average_range.ewm(span=weighted_period, adjust=False).mean() * mult
-
-    smooth_range = smoothrng(src, period, multiplier)
-    filt = src.copy()
-    filt.iloc[0] = src.iloc[0]
-    upward = 0.0
-    downward = 0.0
-    condition_state = 0
-    buy_signal = False
-    sell_signal = False
-
-    for index in range(1, len(src)):
-        previous = filt.iloc[index - 1]
-        price = src.iloc[index]
-        range_value = smooth_range.iloc[index] if not pd.isna(smooth_range.iloc[index]) else 0
-
-        if price > previous:
-            filt.iloc[index] = previous if price - range_value < previous else price - range_value
-        else:
-            filt.iloc[index] = previous if price + range_value > previous else price + range_value
-
-        if filt.iloc[index] > filt.iloc[index - 1]:
-            upward += 1
-        elif filt.iloc[index] < filt.iloc[index - 1]:
-            upward = 0
-
-        if filt.iloc[index] < filt.iloc[index - 1]:
-            downward += 1
-        elif filt.iloc[index] > filt.iloc[index - 1]:
-            downward = 0
-
-        long_condition = (
-            (src.iloc[index] > filt.iloc[index] and src.iloc[index] > src.iloc[index - 1] and upward > 0)
-            or (src.iloc[index] > filt.iloc[index] and src.iloc[index] < src.iloc[index - 1] and upward > 0)
-        )
-        short_condition = (
-            (src.iloc[index] < filt.iloc[index] and src.iloc[index] < src.iloc[index - 1] and downward > 0)
-            or (src.iloc[index] < filt.iloc[index] and src.iloc[index] > src.iloc[index - 1] and downward > 0)
-        )
-
-        previous_state = condition_state
-        if long_condition:
-            condition_state = 1
-        elif short_condition:
-            condition_state = -1
-
-        buy_signal = long_condition and previous_state == -1
-        sell_signal = short_condition and previous_state == 1
-
-    return buy_signal, sell_signal
+# Identical to the crypto one, so it is the crypto one. NSE still runs it on
+# confirmed candles only (see scan_symbol); that choice lives at the call site.
+get_range_filter_signals = zone_engine.get_range_filter_signals
 
 
 def normalize_yfinance_columns(data):
@@ -1081,6 +1026,10 @@ def run_scan_once(state):
         alerts_sent += sum(1 for alert_result in alert_results if alert_result is True)
         alert_delivery_failures += sum(1 for alert_result in alert_results if alert_result is False)
 
+    zone_engine.prune_alert_state(
+        state, time.time(), ALERT_COOLDOWN_SECONDS, SIGNAL_ALERT_COOLDOWN_SECONDS,
+        ZONE_REPEAT_SUPPRESSION_SECONDS, 0,
+    )
     save_state(state)
 
     if PRINT_SCAN_SUMMARY and results:

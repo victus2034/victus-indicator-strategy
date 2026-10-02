@@ -116,10 +116,6 @@ CRYPTO_BREAK_EVEN_OFFSET_PCT = round(CRYPTO_ROUND_TRIP_COST_PCT * 1.129, 4)
 # than argued about - paper_trading reads the same flag so the two cannot
 # drift apart.
 BREAK_EVEN_ENABLED = True
-# Below this stop distance the +0.5R trigger arrives while the trade is
-# still net negative (0.5 x SL% < BREAK_EVEN_OFFSET_PCT), so the rule cannot
-# protect capital at all.
-MIN_SAFE_STOP_PCT = BREAK_EVEN_OFFSET_PCT * 2
 # A resting SL is a stop order, not a limit order - once triggered it fills
 # at whatever price is next available, not necessarily the exact trigger
 # price, especially since the same fast move that triggered it is often
@@ -969,11 +965,6 @@ def crypto_tracking_end(
     return positions[-1], True
 
 
-def all_available_tracking_end(frame: pd.DataFrame) -> tuple[int | None, bool]:
-    """Use all currently available bars when no fixed horizon is approved."""
-    if frame.empty:
-        return None, True
-    return len(frame.index) - 1, True
 
 
 def simulate_alert(
@@ -1419,8 +1410,6 @@ def pending_trade(
     return result
 
 
-def is_crypto_symbol(symbol: str) -> bool:
-    return market_class(symbol) == MARKET_CRYPTO
 
 
 def is_xstock_symbol(symbol: str) -> bool:
@@ -1717,14 +1706,6 @@ def zone_cooldown_overlap(current: dict, previous: dict, market: str) -> bool:
     return zones_overlap(current, previous)
 
 
-def same_day_overlap(current: dict, previous: dict) -> bool:
-    current_day = pd.Timestamp(current["entry_time"]).tz_convert(IST).date()
-    previous_day = pd.Timestamp(previous["entry_time"]).tz_convert(IST).date()
-    if current_day != previous_day:
-        return False
-    return max(float(current["zone_bottom"]), float(previous["zone_bottom"])) <= min(
-        float(current["zone_top"]), float(previous["zone_top"])
-    )
 
 
 def zones_overlap(current: dict, previous: dict) -> bool:
