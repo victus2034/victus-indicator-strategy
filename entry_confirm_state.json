@@ -1,4 +1,9 @@
 {
+  "BTCUSD|30m|short|85260|85708.8": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
   "METAXUSD|30m|short|731.6|738.1": {
     "reached_entry": false,
     "stage": 1,
@@ -6,7 +11,7 @@
   },
   "VELVETUSD|30m|short|0.0605|0.061": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "_level_ready|AAVEUSD|30m|long|134.06|133.21": 1789911352.70983,
@@ -92,6 +97,7 @@
   "_level_ready|BTCUSD|30m|short|84167.5|84329.4": 1790447771.711785,
   "_level_ready|BTCUSD|30m|short|84841.5|84914.6": 1790328725.2927,
   "_level_ready|BTCUSD|30m|short|84893.5|85306.6": 1790496381.746297,
+  "_level_ready|BTCUSD|30m|short|85260|85708.8": 1790910083.879053,
   "_level_ready|BTCUSD|30m|short|87247.5|87420.6": 1790137882.330441,
   "_level_ready|BTCUSD|4h|short|80309|80594": 1789740370.930292,
   "_level_ready|BTCUSD|4h|short|84660|85365": 1790772077.323224,
@@ -387,7 +393,7 @@
   "_ready|BNBUSD|30m": 1790839570.871874,
   "_ready|BNBUSD|4h": 1790577087.860535,
   "_ready|BOME/USDT|30m": 1789466760.110004,
-  "_ready|BTCUSD|30m": 1790843780.542874,
+  "_ready|BTCUSD|30m": 1790910083.879053,
   "_ready|BTCUSD|4h": 1790772077.323224,
   "_ready|BTW/USDT|30m": 1789194664.716904,
   "_ready|CAP/USDT|30m": 1789361459.428611,
@@ -480,10 +486,6 @@
   },
   "_silent_ready|BNBUSD|30m|short|777.01|779.685": {
     "price": 773.6,
-    "time": "2026-10-01T23:01:41.334897+05:30"
-  },
-  "_silent_ready|BTCUSD|30m|short|85260|85708.8": {
-    "price": 84893.0,
     "time": "2026-10-01T23:01:41.334897+05:30"
   },
   "_silent_ready|DOGEUSD|30m|long|0.09336|0.09271": {
