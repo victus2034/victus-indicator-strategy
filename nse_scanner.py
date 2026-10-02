@@ -829,7 +829,9 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
         should_alert = (not entry["in_zone"]) or zone_engine.alert_due(entry, now_ts, ALERT_COOLDOWN_SECONDS)
         last_success = float(noise_state.get(noise_key, 0.0) or 0.0)
         noise_open = not last_success or now_ts - last_success >= ZONE_REPEAT_SUPPRESSION_SECONDS
-        if should_alert and noise_open:
+        # Same rule as crypto (scanner.price_past_entry): approach side only.
+        approaching = not zone_engine.price_past_entry(zone_type, zone, result["price"])
+        if should_alert and noise_open and approaching:
             entry["last_attempt_at"] = now_ts
             message = format_alert(result, zone_type, zone, distance_pct)
             alert_sent = send_alert(message)
@@ -839,6 +841,8 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
                 record_delivered_zone_alert(
                     result, zone_type, zone, distance_pct, message, now_ts
                 )
+        elif should_alert and not approaching:
+            print(f"Skipped alert, price already past entry: {noise_key}")
         elif should_alert and last_success:
             remaining = max(0, int(ZONE_REPEAT_SUPPRESSION_SECONDS - (now_ts - last_success)))
             print(f"Suppressed repeat alert: {noise_key} | {remaining // 60}m remaining")
