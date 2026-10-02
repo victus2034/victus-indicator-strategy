@@ -50,6 +50,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import time as datetime_time
 from pathlib import Path
@@ -439,6 +440,8 @@ def price_decimals(value: float, market: str = "crypto") -> int:
 # generously wide, which is fine - a wider sweep only helps the same problem
 # there too.
 SWEEP_CANDLES = 2
+# Candles requested per symbol for the price check (see fetch_crypto_prices).
+PRICE_OHLCV_LIMIT = 50
 
 
 def fetch_crypto_prices(symbols: list[str]) -> dict[str, dict[str, float]]:
@@ -470,6 +473,10 @@ def fetch_crypto_prices(symbols: list[str]) -> dict[str, dict[str, float]]:
     except Exception as error:
         print(f"crypto price fetch unavailable: {error}")
         return {}
+
+    # Only the last SWEEP_CANDLES candles and the live price are used here, so
+    # there is no need for the scanner's full 1500-candle history per symbol.
+    scanner.OHLCV_LIMIT = PRICE_OHLCV_LIMIT
 
     def fetch_one(symbol):
         ohlcv, exchange_name = scanner.fetch_symbol_ohlcv(symbol)
@@ -679,13 +686,24 @@ def send_ping(message: str) -> bool:
     if not webhook:
         print(f"{WEBHOOK_ENV} is not configured; skipping send.")
         return False
-    try:
-        response = requests.post(webhook, json={"content": message}, timeout=15)
-        response.raise_for_status()
-        return True
-    except requests.RequestException as error:
-        print(f"entry-confirm ping failed: {error}")
-        return False
+    for attempt in range(3):
+        try:
+            response = requests.post(webhook, json={"content": message}, timeout=15)
+            if response.status_code == 429 and attempt < 2:
+                # Discord rate limit: wait what it asks (capped) and retry,
+                # rather than dropping the digest for a whole run.
+                try:
+                    wait = float(response.json().get("retry_after", 1.0))
+                except ValueError:
+                    wait = 1.0
+                time.sleep(min(max(wait, 0.5), 10.0))
+                continue
+            response.raise_for_status()
+            return True
+        except requests.RequestException as error:
+            print(f"entry-confirm ping failed: {error}")
+            return False
+    return False
 
 
 def ready_key(record: dict) -> str:
@@ -876,6 +894,46 @@ def timeframes_for(choice: str) -> list[str]:
     return ["30m", "4h"] if choice == "both" else [choice]
 
 
+_MISSING = object()
+
+
+def record_state_keys(record: dict) -> list[str]:
+    """Every state key resolve_pings can write for this record."""
+    return [watch_key(record), ready_key(record), level_ready_key(record), silent_ready_key(record)]
+
+
+def undo_undelivered(state: dict, changes: list[tuple[list[str], dict]], delivered: list[str]) -> dict:
+    """A copy of state with the stage updates of undelivered pings rolled back.
+
+    A record counts as delivered only when every line it produced is in a
+    posted message. Undelivered records are rolled back newest first, and a
+    key that a delivered record changed afterwards (the per-symbol GET READY
+    budget is shared) is left as the delivered record set it.
+    """
+    result = json.loads(json.dumps(state))
+    sent_text = "\n".join(delivered)
+    delivered_flags = [all(line in sent_text for line in lines) for lines, _ in changes]
+    for index in range(len(changes) - 1, -1, -1):
+        if delivered_flags[index]:
+            continue
+        _, before = changes[index]
+        later_delivered_keys = {
+            key
+            for later in range(index + 1, len(changes))
+            if delivered_flags[later]
+            for key in changes[later][1]
+        }
+        for key, value in before.items():
+            if key in later_delivered_keys:
+                continue
+            if value is _MISSING:
+                result.pop(key, None)
+            else:
+                result[key] = json.loads(json.dumps(value))
+    return result
+
+
+
 def main() -> None:
     args = parse_args()
     now = pd.Timestamp.now(tz=IST)
@@ -937,27 +995,41 @@ def main() -> None:
     # still marked, so its ENTRY NOW - which names a specific level and is
     # worth having per zone - still fires when price arrives.
     pings: list[tuple[int, str]] = []
+    changes: list[tuple[list[str], dict]] = []
     for record in watched:
         price_info = prices.get(record["symbol"])
         if price_info is None:
             continue
+        before = {k: state.get(k, _MISSING) for k in record_state_keys(record)}
         record_pings, _ = resolve_pings(record, price_info, state, now)
         pings.extend(record_pings)
+        if record_pings:
+            changes.append(([line for _, line in record_pings], before))
 
+    active_keys = {watch_key(record) for record in watched}
     messages = build_digest(pings, now)
     if not messages:
         print("Nothing new to report.")
+    delivered: list[str] = []
     for message in messages:
         if args.dry_run:
             print(message + "\n")
-        elif not send_ping(message):
-            # The digest did not land, so nothing in it may be marked sent.
-            print("digest not delivered; stages left unmarked for the next run.")
-            return
+            continue
+        if not send_ping(message):
+            # Only what landed may be marked sent. Records whose lines are in
+            # the undelivered parts go back to their earlier stage, so the
+            # next run reports them - and the parts that did land are not
+            # repeated, as they were when nothing at all was saved.
+            print("digest part not delivered; its stages left unmarked for the next run.")
+            break
+        delivered.append(message)
+        # Saved after every part, so a run cancelled mid-digest cannot
+        # re-send the parts already posted.
+        save_state(prune_state(undo_undelivered(state, changes, delivered), active_keys))
 
-    state = prune_state(state, {watch_key(record) for record in watched})
-    if not args.dry_run:
-        save_state(state)
+    if args.dry_run:
+        return
+    save_state(prune_state(undo_undelivered(state, changes, delivered), active_keys))
 
 
 if __name__ == "__main__":

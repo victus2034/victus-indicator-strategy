@@ -96,12 +96,24 @@ class DistanceWindowTests(unittest.TestCase):
 
         with (
             patch.object(scanner, "TIMEFRAME", "30m"),
+            patch.object(scanner, "ZONE_RATING_GATE", True),
             patch.object(scanner, "send_alert", return_value=True) as send,
         ):
             sent = scanner.process_signal_candidate(state, result, "buy", 20000)
 
         self.assertFalse(sent)
         send.assert_not_called()
+
+        # With the gate off - as it is under the wick geometry - the signal
+        # path follows the zone path and does not apply the score.
+        with (
+            patch.object(scanner, "TIMEFRAME", "30m"),
+            patch.object(scanner, "ZONE_RATING_GATE", False),
+            patch.object(scanner, "send_alert", return_value=True) as send,
+        ):
+            sent = scanner.process_signal_candidate({}, result, "buy", 20000)
+
+        self.assertTrue(sent)
 
     def test_crypto_30m_zone_rating_below_six_is_blocked(self):
         state = {}

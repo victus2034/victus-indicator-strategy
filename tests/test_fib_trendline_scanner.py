@@ -411,12 +411,36 @@ class DailyReportTests(unittest.TestCase):
         state = {}
         calls = []
         at = lambda h: datetime(2026, 9, 30, h, 0, tzinfo=ftd.IST).timestamp()
-        with mock.patch.object(self.report, "run", lambda day, now, send: calls.append(day)), \
+        with mock.patch.object(self.report, "run", lambda day, now, send, **kw: calls.append(day)), \
                 mock.patch.dict(os.environ, {self.report.WEBHOOK_ENV: "https://example.invalid/bt"}):
             self.report.maybe_send(state, at(7))
             self.report.maybe_send(state, at(9))
             self.report.maybe_send(state, at(12))
         self.assertEqual(calls, [datetime(2026, 9, 29).date()])
+
+    def test_a_failed_second_card_does_not_repost_the_first(self):
+        state = {}
+        posted = []
+        fail = {"on": True}
+
+        def fake_send(card):
+            if card == "card2" and fail["on"]:
+                raise RuntimeError("discord down")
+            posted.append(card)
+
+        at = lambda h: datetime(2026, 9, 30, h, 0, tzinfo=ftd.IST).timestamp()
+        with mock.patch.object(self.report, "load_records", return_value=[{"x": 1}]), \
+                mock.patch.object(self.report, "score", return_value={}), \
+                mock.patch.object(self.report, "save_results"), \
+                mock.patch.object(self.report, "build_report", return_value=["card1", "card2"]), \
+                mock.patch.object(self.report, "send_card", side_effect=fake_send), \
+                mock.patch.dict(os.environ, {self.report.WEBHOOK_ENV: "https://example.invalid/bt"}):
+            self.report.maybe_send(state, at(9))
+            fail["on"] = False
+            self.report.maybe_send(state, at(10))
+            self.report.maybe_send(state, at(11))
+        self.assertEqual(posted, ["card1", "card2"])
+        self.assertEqual(state[self.report.REPORT_KEY], "2026-09-30")
 
 
 if __name__ == "__main__":
@@ -490,3 +514,44 @@ class PerMarketWebhookTests(unittest.TestCase):
             self.assertEqual(fts.webhook_url("fib", fts.NSE), "https://example.invalid/nse")
             self.assertEqual(fts.webhook_url("fib", fts.CRYPTO), "https://example.invalid/shared")
 
+
+
+class RetentionTests(unittest.TestCase):
+    def test_weekly_and_monthly_keys_outlive_the_flat_retention(self):
+        import fib_trendline_scanner as fts
+        flat = fts.STATE_RETENTION_SECONDS
+        self.assertEqual(fts.retention_seconds("fib|BTCUSD|4h|1|2|3|1"), flat)
+        self.assertGreater(fts.retention_seconds("fib|BTCUSD|1w|1|2|3|1"), flat)
+        self.assertGreater(fts.retention_seconds("tl|BTCUSD|1M|support|a|b"), 4 * 365 * 86400)
+
+
+class DeltaPagingTests(unittest.TestCase):
+    def test_a_capped_page_keeps_paging_instead_of_stopping(self):
+        import fib_trendline_data as data
+        sec = data.TF_SECONDS["4h"]
+        end = 10_000 * sec
+        all_rows = [[t, 1.0, 1.0, 1.0, 1.0] for t in range(0, end + 1, sec)]
+
+        def capped(contract, resolution, start, stop, attempts):
+            rows = [r for r in all_rows if start <= r[0] <= stop]
+            return rows[-1000:]          # the API returns at most 1000, the newest
+
+        with mock.patch.object(data, "_delta_request", side_effect=capped):
+            rows = data.delta_candles("BTCUSD", "4h", 0, end)
+        self.assertEqual(len(rows), len(all_rows))
+
+    def test_listing_inside_the_window_still_stops(self):
+        import fib_trendline_data as data
+        sec = data.TF_SECONDS["4h"]
+        end = 10_000 * sec
+        listed = 9_800 * sec
+        calls = []
+
+        def short_history(contract, resolution, start, stop, attempts):
+            calls.append(start)
+            return [[t, 1.0, 1.0, 1.0, 1.0] for t in range(max(start, listed), stop + 1, sec)]
+
+        with mock.patch.object(data, "_delta_request", side_effect=short_history):
+            rows = data.delta_candles("NEWUSD", "4h", 0, end)
+        self.assertEqual(len(rows), 201)
+        self.assertEqual(len(calls), 1)

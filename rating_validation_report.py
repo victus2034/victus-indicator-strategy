@@ -8,7 +8,6 @@ over time instead of just trusted on faith.
 from __future__ import annotations
 
 import argparse
-import json
 
 import pandas as pd
 
@@ -23,7 +22,7 @@ def parse_args(argv=None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Validate whether the zone rating actually predicts real outcomes."
     )
-    parser.add_argument("--market", choices=["nse", "crypto", "xstock"], default="nse")
+    parser.add_argument("--market", choices=["nse", "crypto", "xstock", "other"], default="nse")
     parser.add_argument("--timeframe", choices=sorted(daily.TIMEFRAME_SETTINGS), default="30m")
     parser.add_argument(
         "--min-sample",
@@ -35,19 +34,7 @@ def parse_args(argv=None) -> argparse.Namespace:
 
 
 def load_decided_trades(market: str, timeframe: str) -> pd.DataFrame:
-    path = daily.FINALIZED_RECORDS_PATH
-    if not path.exists():
-        return pd.DataFrame()
-
-    rows = []
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if not line.strip():
-            continue
-        try:
-            rows.append(json.loads(line))
-        except json.JSONDecodeError:
-            continue
-    frame = pd.DataFrame(rows)
+    frame = pd.DataFrame(daily.read_jsonl(daily.FINALIZED_RECORDS_PATH))
     if frame.empty:
         return frame
 

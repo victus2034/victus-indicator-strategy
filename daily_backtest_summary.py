@@ -363,15 +363,6 @@ def _same_zone(a_bottom: float, a_top: float, b_bottom: float, b_top: float) -> 
     return bottom_diff <= ZONE_DEDUP_TOLERANCE_PCT and top_diff <= ZONE_DEDUP_TOLERANCE_PCT
 
 
-def parse_rating(value) -> float:
-    if value is None or value == "":
-        return float("nan")
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return float("nan")
-
-
 def parse_optional_float(value) -> float:
     if value is None or value == "":
         return float("nan")
@@ -379,6 +370,30 @@ def parse_optional_float(value) -> float:
         return float(value)
     except (TypeError, ValueError):
         return float("nan")
+
+
+parse_rating = parse_optional_float
+
+
+def read_jsonl(path: Path | None) -> list[dict]:
+    """Every JSON object in a JSONL file; blank or unreadable lines skipped.
+
+    The one reader for the lifecycle files, shared by the weekly report,
+    the rating report and paper trading, which each kept their own copy.
+    """
+    if path is None or not path.exists():
+        return []
+    rows = []
+    for line in path.read_text(encoding="utf-8-sig").splitlines():
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(row, dict):
+            rows.append(row)
+    return rows
 
 
 def json_optional_float(value):
@@ -1214,7 +1229,7 @@ def simulate_alert(
     result = dict(alert)
     result.update(
         {
-            "trade_id": stable_trade_id(alert),
+            "trade_id": alert_trade_id(alert),
             "filled": True,
             "entry_time": frame.index[entry_index],
             "entry_price": entry_price,
@@ -1391,7 +1406,7 @@ def pending_trade(
     result = unfilled(alert, "Pending")
     result.update(
         {
-            "trade_id": stable_trade_id(alert),
+            "trade_id": alert_trade_id(alert),
             "filled": True,
             "entry_time": frame.index[entry_index],
             "entry_price": entry_price,
@@ -1583,7 +1598,7 @@ def unfilled(alert: dict, outcome: str) -> dict:
     result = dict(alert)
     result.update(
         {
-            "trade_id": stable_trade_id(alert),
+            "trade_id": alert_trade_id(alert),
             "filled": False,
             "entry_time": pd.NaT,
             "entry_price": float("nan"),
@@ -1614,6 +1629,21 @@ def unfilled(alert: dict, outcome: str) -> dict:
         }
     )
     return result
+
+
+def alert_trade_id(alert: dict) -> str:
+    """The id a result row carries: the scanner's own trade_id when the alert
+    record has one, as load_records() assigns it.
+
+    Results used to always take stable_trade_id(), so they never matched the
+    ids on the delivered records: pending de-duplication could not find its
+    rows, a same-day rerun counted trades twice, and the reconciliation check
+    reported every delivered trade as missing a backtest.
+    """
+    trade_id = alert.get("trade_id")
+    if isinstance(trade_id, str) and trade_id:
+        return trade_id
+    return stable_trade_id(alert)
 
 
 def stable_trade_id(alert: dict) -> str:
@@ -1693,7 +1723,9 @@ def zone_cooldown_overlap(current: dict, previous: dict, market: str) -> bool:
         # genuinely distinct trades, not duplicate deliveries of the same
         # setup - never merge them.
         return False
-    if market in {"crypto", "xstock"}:
+    # "other" trades round the clock like crypto; it used to fall through to
+    # NSE's same-calendar-day rule.
+    if market in {"crypto", "xstock", "other"}:
         current_time = pd.Timestamp(current["entry_time"]).tz_convert(IST)
         previous_time = pd.Timestamp(previous["entry_time"]).tz_convert(IST)
         if current_time - previous_time > timedelta(hours=12):
@@ -1788,6 +1820,12 @@ def build_summary(
     if counted:
         lines.append(counted)
     lines.append(f"Win rate {win_rate} · TOTAL {format_r(net_r)}")
+    if data_failures:
+        # Symbols whose candles could not be fetched were silently missing
+        # from the report; their alerts showed up only as fewer entries.
+        names = sorted({display_symbol(str(name).split(" (")[0]) for name in data_failures})
+        shown = ", ".join(names[:8]) + (f" +{len(names) - 8} more" if len(names) > 8 else "")
+        lines.append(f"Fetch failed {len(names)}: {shown}")
 
     rating_block = format_rating_table(records, results)
     if rating_block and rating_block != "None":
@@ -2023,20 +2061,16 @@ def format_r(value: float) -> str:
     return f"{sign}{value:.2f}R"
 
 
-def send_discord_message(message: str) -> None:
-    webhook_url = os.getenv(WEBHOOK_ENV, "").strip()
-    if not webhook_url:
-        raise RuntimeError(f"{WEBHOOK_ENV} is not configured")
-    webhook_url = discord_wait_url(webhook_url)
-    payload = discord_payload(message)
+def _post_with_retry(post, label: str) -> None:
+    """Post to the report webhook, honouring Discord 429s, and require a message id."""
     for attempt in range(6):
-        response = requests.post(webhook_url, json=payload, timeout=15)
+        response = post()
         if response.status_code != 429:
             response.raise_for_status()
             message_id = discord_message_id(response)
             if not message_id:
                 raise RuntimeError("Discord webhook accepted the request but did not return a message id")
-            print(f"Discord daily backtest message posted: {message_id}")
+            print(f"{label} posted: {message_id}")
             return
         try:
             retry_after = float(response.json().get("retry_after", 1.0))
@@ -2047,13 +2081,27 @@ def send_discord_message(message: str) -> None:
         time.sleep(max(0.25, min(retry_after, 30.0)))
 
 
-def send_discord_message_with_attachment(message: str, filename: str, file_bytes: bytes) -> None:
+def _report_webhook_url() -> str:
     webhook_url = os.getenv(WEBHOOK_ENV, "").strip()
     if not webhook_url:
         raise RuntimeError(f"{WEBHOOK_ENV} is not configured")
-    webhook_url = discord_wait_url(webhook_url)
+    return discord_wait_url(webhook_url)
+
+
+def send_discord_message(message: str) -> None:
+    webhook_url = _report_webhook_url()
     payload = discord_payload(message)
-    for attempt in range(6):
+    _post_with_retry(
+        lambda: requests.post(webhook_url, json=payload, timeout=15),
+        "Discord daily backtest message",
+    )
+
+
+def send_discord_message_with_attachment(message: str, filename: str, file_bytes: bytes) -> None:
+    webhook_url = _report_webhook_url()
+    payload = discord_payload(message)
+
+    def post():
         files = {
             "file": (
                 filename,
@@ -2062,21 +2110,9 @@ def send_discord_message_with_attachment(message: str, filename: str, file_bytes
             )
         }
         data = {"payload_json": json.dumps(payload)}
-        response = requests.post(webhook_url, data=data, files=files, timeout=30)
-        if response.status_code != 429:
-            response.raise_for_status()
-            message_id = discord_message_id(response)
-            if not message_id:
-                raise RuntimeError("Discord webhook accepted the request but did not return a message id")
-            print(f"Discord message with attachment posted: {message_id}")
-            return
-        try:
-            retry_after = float(response.json().get("retry_after", 1.0))
-        except (TypeError, ValueError, requests.JSONDecodeError):
-            retry_after = 1.0
-        if attempt == 5:
-            response.raise_for_status()
-        time.sleep(max(0.25, min(retry_after, 30.0)))
+        return requests.post(webhook_url, data=data, files=files, timeout=30)
+
+    _post_with_retry(post, "Discord message with attachment")
 
 
 def discord_wait_url(webhook_url: str) -> str:
@@ -2147,6 +2183,35 @@ def market_traded_today(market: str, records: pd.DataFrame, now=None) -> bool:
     if records is None or records.empty or "report_date" not in records:
         return False
     return (records["report_date"] == now.date()).any()
+
+
+def nse_alerted_today_on_any_timeframe(market: str, now=None) -> bool:
+    """Whether NSE delivered any alert today, on 30m or 4h.
+
+    market_traded_today() reads only the report's own timeframe, and the 4h
+    timeframe can go a whole open session without an alert - so its quiet
+    note read every such day as a holiday and never posted. The 30m feed
+    alerts dozens of times a session, so it settles whether NSE was open.
+    """
+    if market != "nse":
+        return False
+    now = now or pd.Timestamp.now(tz=IST)
+    if now.weekday() >= 5:
+        return False
+    for settings in TIMEFRAME_SETTINGS.values():
+        path = settings["nse_records"]
+        if not path.exists():
+            continue
+        for line in path.read_text(encoding="utf-8-sig").splitlines():
+            try:
+                delivered = pd.Timestamp(json.loads(line)["delivered_at_utc"])
+            except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+                continue
+            if delivered.tzinfo is None:
+                delivered = delivered.tz_localize("UTC")
+            if delivered.tz_convert(IST).date() == now.date():
+                return True
+    return False
 
 
 def quiet_day_line(target_date, timeframe: str, market: str) -> str:
@@ -2261,13 +2326,7 @@ def lifecycle_payload(row: dict, target_date, timeframe: str, market: str) -> di
 def load_lifecycle_rows(finalized_path: Path, pending_path: Path | None) -> dict[str, dict]:
     rows: dict[str, dict] = {}
     for path in (finalized_path, pending_path):
-        if path is None or not path.exists():
-            continue
-        for line in path.read_text(encoding="utf-8-sig").splitlines():
-            try:
-                row = json.loads(line)
-            except json.JSONDecodeError:
-                continue
+        for row in read_jsonl(path):
             trade_id = row.get("trade_id")
             if trade_id:
                 rows[str(trade_id)] = row
@@ -2297,14 +2356,8 @@ def write_lifecycle_rows(rows: dict[str, dict], finalized_path: Path, pending_pa
 
 
 def load_pending_records(path: Path = PENDING_RECORDS_PATH, timeframe: str | None = None, market: str | None = None) -> pd.DataFrame:
-    if not path.exists():
-        return pd.DataFrame()
     rows = []
-    for line in path.read_text(encoding="utf-8-sig").splitlines():
-        try:
-            row = json.loads(line)
-        except json.JSONDecodeError:
-            continue
+    for row in read_jsonl(path):
         if timeframe and row.get("timeframe") != timeframe:
             continue
         if market and row.get("market") != market.upper():
@@ -2564,7 +2617,10 @@ def main() -> None:
         if not args.force and key in load_sent_reports():
             print(f"Skipped duplicate report: {key}")
             quiet_key = quiet_day_key(args.timeframe, args.market)
-            if not market_traded_today(args.market, records):
+            if not (
+                market_traded_today(args.market, records)
+                or nse_alerted_today_on_any_timeframe(args.market)
+            ):
                 print(f"{args.market.upper()} was closed today; staying quiet.")
                 return
             if quiet_key not in load_sent_reports():

@@ -1663,6 +1663,20 @@ class PendingStopTests(unittest.TestCase):
         self.assertEqual(summary.original_stop_price(pending), 99.25)
 
 
+class TradeIdTests(unittest.TestCase):
+    def test_results_carry_the_scanners_trade_id(self):
+        frame = crypto_frame(rows=[(101.0, 101.2, 100.8, 101.0), (100.0, 100.6, 100.0, 100.5)])
+        alert = crypto_alert(stop_price=99.25)
+        alert["trade_id"] = "scanner-id-1"
+        self.assertEqual(summary.pending_trade(alert, frame, 1, 100.0)["trade_id"], "scanner-id-1")
+        self.assertEqual(summary.unfilled(alert, "zone_not_touched")["trade_id"], "scanner-id-1")
+
+    def test_records_without_one_fall_back_to_the_stable_id(self):
+        alert = crypto_alert(stop_price=99.25)
+        alert.pop("trade_id", None)
+        self.assertEqual(summary.alert_trade_id(alert), summary.stable_trade_id(alert))
+
+
 class CryptoEvaluationCandleTests(unittest.TestCase):
     def test_crypto_is_graded_on_five_minute_candles(self):
         saved = summary.crypto_scanner.TIMEFRAME, summary.crypto_scanner.OHLCV_LIMIT
@@ -1687,3 +1701,25 @@ class CryptoEvaluationCandleTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class NseQuietNoteTests(unittest.TestCase):
+    def test_a_30m_alert_today_marks_nse_open_for_the_4h_note(self):
+        wednesday = pd.Timestamp("2026-08-05 16:00", tz=summary.IST)
+        with tempfile.TemporaryDirectory() as tmp:
+            path_30m = Path(tmp) / "nse30.jsonl"
+            path_4h = Path(tmp) / "nse4h.jsonl"
+            path_30m.write_text(json.dumps({
+                "symbol": "TCS.NS", "timeframe": "30m", "side": "long",
+                "delivered_at_utc": "2026-08-05T05:00:00+00:00",
+                "zone_bottom": 99.0, "zone_top": 100.0,
+            }) + "\n", encoding="utf-8")
+            settings = {
+                "30m": dict(summary.TIMEFRAME_SETTINGS["30m"], nse_records=path_30m),
+                "4h": dict(summary.TIMEFRAME_SETTINGS["4h"], nse_records=path_4h),
+            }
+            with patch.object(summary, "TIMEFRAME_SETTINGS", settings):
+                self.assertTrue(summary.nse_alerted_today_on_any_timeframe("nse", wednesday))
+                self.assertFalse(
+                    summary.nse_alerted_today_on_any_timeframe("nse", wednesday + pd.Timedelta(days=1))
+                )

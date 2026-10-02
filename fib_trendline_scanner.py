@@ -289,9 +289,21 @@ def load_state():
         return {}
 
 
+# A sent key is kept at least this many candles of its own timeframe. The flat
+# 120 days was shorter than a 1W or 1M level can sit untouched, so a weekly or
+# monthly fib zone price came back to after four months alerted a second time.
+RETENTION_CANDLES = 60
+
+
+def retention_seconds(key):
+    parts = str(key).split("|")
+    tf = parts[2] if len(parts) > 2 else None
+    return max(STATE_RETENTION_SECONDS, TF_SECONDS.get(tf, 0) * RETENTION_CANDLES)
+
+
 def save_state(state, now):
     for key in [k for k, v in state.items()
-                if isinstance(v, dict) and "sent" in v and now - v.get("seen", now) > STATE_RETENTION_SECONDS]:
+                if isinstance(v, dict) and "sent" in v and now - v.get("seen", now) > retention_seconds(k)]:
         del state[key]
     tmp = STATE_FILE.with_suffix(".tmp")
     with tmp.open("w", encoding="utf-8") as file:
@@ -466,6 +478,9 @@ def run_once(dry_run=False, force_nse=False):
                         if record:
                             append_record(record, key, now)
                         counts[tally] = counts.get(tally, 0) + 1
+                        # Saved per alert: a crash later in this pass must not
+                        # send the ones already posted again.
+                        save_state(state, now)
                     else:
                         attempts[key] = now  # stays out of state so it still alerts once Discord is back
 

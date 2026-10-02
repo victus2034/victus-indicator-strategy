@@ -40,7 +40,7 @@ def parse_args(argv=None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Post weekly backtest summary.")
     parser.add_argument(
         "--market",
-        choices=["nse", "crypto", "xstock"],
+        choices=["nse", "crypto", "xstock", "other"],
         default="nse",
         help="Market to summarize.",
     )
@@ -135,17 +135,7 @@ def nse_alert_dates(timeframe: str, path: Path | None = None) -> set[date] | Non
 
 
 def load_finalized_records(path: Path = daily.FINALIZED_RECORDS_PATH) -> pd.DataFrame:
-    if not path.exists():
-        return pd.DataFrame()
-    rows = []
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if not line.strip():
-            continue
-        try:
-            rows.append(json.loads(line))
-        except json.JSONDecodeError:
-            continue
-    return pd.DataFrame(rows)
+    return pd.DataFrame(daily.read_jsonl(path))
 
 
 def build_weekly_summary(
@@ -288,6 +278,10 @@ def build_weekly_workbook(
     return buffer.getvalue()
 
 
+# Days after a week ends that an ambiguous trade may still hold its report.
+AMBIGUOUS_GRACE_DAYS = 3
+
+
 def weekly_readiness(
     finalized: pd.DataFrame,
     pending: pd.DataFrame,
@@ -296,6 +290,7 @@ def weekly_readiness(
     market: str = "nse",
     timeframe: str = "30m",
     alert_dates: set[date] | None = None,
+    today: date | None = None,
 ) -> tuple[bool, str]:
     """Prevent a final weekly report while lifecycle rows remain unresolved.
 
@@ -303,7 +298,14 @@ def weekly_readiness(
     the days that actually had alerts to grade (see nse_alert_dates). Left as
     None it keeps the plain weekday calendar."""
     unresolved = []
-    if not finalized.empty and "final_result" in finalized:
+    # An ambiguous same-candle trade is retried with finer data on later
+    # runs, so it is worth waiting for - but only for a while. Yahoo keeps
+    # 1m bars for about a week, so a trade still ambiguous after the grace
+    # period never resolves, and it used to withhold its week's report
+    # forever. Past the grace it is published, counted as Ambiguous.
+    today = today or date.today()
+    in_grace = today <= pd.Timestamp(week_end).date() + timedelta(days=AMBIGUOUS_GRACE_DAYS)
+    if in_grace and not finalized.empty and "final_result" in finalized:
         ambiguous = finalized[finalized["final_result"] == daily.DATA_QUALITY_AMBIGUOUS]
         if not ambiguous.empty:
             unresolved.append(f"data_quality_ambiguous={len(ambiguous)}")
@@ -311,8 +313,11 @@ def weekly_readiness(
     if market == "nse":
         # NSE trades resolve same-day, so any pending row genuinely means
         # something is still processing (or stuck) - worth withholding for.
-        if not pending.empty:
-            unresolved.append(f"pending={len(pending)}")
+        blocking = pending
+        if not in_grace and not pending.empty and "final_result" in pending:
+            blocking = pending[pending["final_result"] != daily.DATA_QUALITY_AMBIGUOUS]
+        if not blocking.empty:
+            unresolved.append(f"pending={len(blocking)}")
         expected = expected_nse_sessions(week_start, week_end)
         if alert_dates is not None:
             expected &= alert_dates
@@ -396,19 +401,11 @@ def weekly_report_key(week_end, timeframe: str, market: str = "nse") -> str:
 
 
 def load_sent_reports(path: Path = WEEKLY_SENT_REPORTS_PATH) -> dict:
-    if not path.exists():
-        return {}
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return {}
-    return data if isinstance(data, dict) else {}
+    return daily.load_sent_reports(path)
 
 
 def mark_sent_report(key: str, path: Path = WEEKLY_SENT_REPORTS_PATH) -> None:
-    data = load_sent_reports(path)
-    data[key] = datetime.now(tz=daily.IST).isoformat()
-    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    daily.mark_sent_report(key, path)
 
 
 def main() -> None:

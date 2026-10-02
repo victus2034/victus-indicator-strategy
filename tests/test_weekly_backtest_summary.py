@@ -116,3 +116,24 @@ class WeekBoundsTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AmbiguousGraceTests(unittest.TestCase):
+    def _run(self, today):
+        days = ["2026-08-03", "2026-08-04", "2026-08-05", "2026-08-06", "2026-08-07"]
+        finalized = pd.DataFrame([{"date": d, "final_result": "+1R"} for d in days])
+        pending = pd.DataFrame(
+            [{"trade_id": "a", "date": "2026-08-05", "final_result": weekly.daily.DATA_QUALITY_AMBIGUOUS}]
+        )
+        return weekly.weekly_readiness(
+            finalized, pending, date(2026, 8, 3), date(2026, 8, 7), today=today
+        )
+
+    def test_an_ambiguous_trade_holds_the_report_during_the_grace(self):
+        ready, message = self._run(date(2026, 8, 8))
+        self.assertFalse(ready)
+        self.assertIn("pending=1", message)
+
+    def test_an_ambiguous_trade_no_longer_blocks_after_the_grace(self):
+        ready, _ = self._run(date(2026, 8, 7) + pd.Timedelta(days=weekly.AMBIGUOUS_GRACE_DAYS + 1))
+        self.assertTrue(ready)

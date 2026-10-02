@@ -19,6 +19,7 @@ on:
           - "nse"
           - "crypto"
           - "xstock"
+          - "other"
       timeframe:
         description: "Timeframe to summarize"
         required: false
@@ -119,7 +120,7 @@ jobs:
           }
 
           if [ "$MARKET" = "both" ]; then
-            MARKETS="nse crypto xstock"
+            MARKETS="nse crypto xstock other"
           else
             MARKETS="$MARKET"
           fi

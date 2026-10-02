@@ -55,6 +55,7 @@ from config import (
     ZONE_MAX_WIDTH_PCT,
     MAX_ALERT_STOP_PCT,
     ZONE_RATING_GATE,
+    FAILED_ALERT_RETRY_SECONDS,
     OHLCV_LIMIT,
     OVERLAP_ATR,
     PRIMARY_EXCHANGE_ID,
@@ -1353,7 +1354,7 @@ def scan_symbol(symbol):
     latest_index = len(df) - 1
     nearest_supply, supply_dist = nearest_active_zone(price, supply_zones, "supply", latest_index)
     nearest_demand, demand_dist = nearest_active_zone(price, demand_zones, "demand", latest_index)
-    buy_signal, sell_signal = get_range_filter_signals(df)
+    buy_signal, sell_signal = get_range_filter_signals(confirmed_candles(df))
     supply_rating = None
     demand_rating = None
     supply_score = None
@@ -1838,6 +1839,37 @@ def send_status_message(message):
         print(f"Discord status message failed: {error}")
 
 
+def alert_due(entry, now_ts, cooldown_seconds):
+    """Whether a zone or signal already in range may be sent again now.
+
+    The cooldown runs from the last attempt, so a Discord outage backs off
+    instead of retrying every scan. But an attempt that FAILED (last attempt
+    after the last success) retries after FAILED_ALERT_RETRY_SECONDS, not the
+    whole cooldown - one failed request no longer mutes a level for hours.
+    """
+    last_alert = float(entry.get("last_alert_at", 0.0) or 0.0)
+    last_attempt = float(entry.get("last_attempt_at", 0.0) or 0.0)
+    if now_ts - max(last_alert, last_attempt) >= cooldown_seconds:
+        return True
+    return last_attempt > last_alert and now_ts - last_attempt >= FAILED_ALERT_RETRY_SECONDS
+
+
+def confirmed_candles(df, now_ts=None, timeframe=None):
+    """df without its last row when that candle has not closed yet.
+
+    For the range-filter signal only: unlike a zone it can appear on the
+    forming bar and be gone by the close. NSE already does this.
+    """
+    seconds = TIMEFRAME_SECONDS.get(timeframe or TIMEFRAME)
+    if df.empty or seconds is None or "time" not in df.columns:
+        return df
+    now_ts = time.time() if now_ts is None else now_ts
+    last_open = float(df["time"].iloc[-1]) / 1000.0
+    if last_open + seconds > now_ts:
+        return df.iloc[:-1]
+    return df
+
+
 def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
     if zone is None:
         return False
@@ -1874,8 +1906,7 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
         # next scan retried immediately, every scan, for as long as Discord
         # stayed down, with no backoff at all. nse_scanner.py already carries
         # this fix; this mirrors it for crypto.
-        last_attempt_at = max(entry.get("last_alert_at", 0.0), entry.get("last_attempt_at", 0.0))
-        should_alert = (not entry["in_zone"]) or (now_ts - last_attempt_at >= ALERT_COOLDOWN_SECONDS)
+        should_alert = (not entry["in_zone"]) or alert_due(entry, now_ts, ALERT_COOLDOWN_SECONDS)
         last_success = float(noise_state.get(noise_key, 0.0) or 0.0)
         noise_open = not last_success or now_ts - last_success >= ZONE_REPEAT_SUPPRESSION_SECONDS
         if should_alert and noise_open:
@@ -1969,7 +2000,14 @@ def process_signal_candidate(state, result, signal_type, now_ts):
         and not rating.get("alert_allowed")
     ):
         return False
-    if TIMEFRAME == "30m" and rating is not None and rating.get("kind") != "xstock_hybrid":
+    # Same gate as the zone path: off when ZONE_RATING_GATE is off, since the
+    # model is outside its validated domain under the wick geometry.
+    if (
+        TIMEFRAME == "30m"
+        and ZONE_RATING_GATE
+        and rating is not None
+        and rating.get("kind") != "xstock_hybrid"
+    ):
         score = rating.get("score")
         if score is None or score < MIN_CRYPTO_ZONE_SCORE:
             return False
@@ -2107,7 +2145,7 @@ def run_scan_once(state):
     failures = []
     alerts_sent = 0
     symbols = active_watchlist()
-    started_at = time.strftime("%Y-%m-%d %H:%M:%S")
+    started_at = datetime.now(IST).strftime("%Y-%m-%d %H:%M:%S IST")
     run_number = os.getenv("GITHUB_RUN_NUMBER", "local")
     trigger = os.getenv("GITHUB_EVENT_NAME", "local")
     print("\n" + "=" * 80)
@@ -2166,6 +2204,7 @@ def run_scan_once(state):
 
         results.append(result)
         now_ts = time.time()
+        sent_before = alerts_sent
         if process_signal_candidate(state, result, "buy", now_ts):
             alerts_sent += 1
         if process_signal_candidate(state, result, "sell", now_ts):
@@ -2174,6 +2213,10 @@ def run_scan_once(state):
             alerts_sent += 1
         if process_candidate(state, result, "demand", result["demand"], result["demand_dist"], now_ts):
             alerts_sent += 1
+        if alerts_sent != sent_before:
+            # Saved as soon as something is delivered, so a crash or a
+            # cancelled run later in the loop cannot re-send it next scan.
+            save_state(state)
 
     prune_alert_state(
         state, time.time(), ALERT_COOLDOWN_SECONDS, SIGNAL_ALERT_COOLDOWN_SECONDS,
@@ -2184,7 +2227,7 @@ def run_scan_once(state):
     if PRINT_SCAN_SUMMARY and results:
         print_summary(results)
 
-    finished_at = time.strftime("%Y-%m-%d %H:%M:%S")
+    finished_at = datetime.now(IST).strftime("%Y-%m-%d %H:%M:%S IST")
     no_required_source_data = REQUIRE_COINSWITCH and not results
     status = "ERROR" if no_required_source_data else "OK" if not failures else "WARN"
     message = (

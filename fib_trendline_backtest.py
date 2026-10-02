@@ -79,7 +79,10 @@ def crypto_data(symbol, now):
         "1w": _cached(f"c_{contract}_1w", lambda: delta_candles(contract, "1w", since_launch, now)),
         "1M": monthly_from_daily(daily),
     }
-    evals = {"1d": daily}
+    # 1d evaluation candles are the daily series, and 4h ones (for 1D alerts)
+    # are the full 4h history already in base - fetching either again only
+    # downloaded the same candles twice.
+    evals = {"1d": daily, "4h": base["4h"]}
     for tf in ("30m", "4h", "1d"):
         res = trades.EVAL_RESOLUTION[CRYPTO][tf]
         if res not in evals and base[tf]:
@@ -90,7 +93,9 @@ def crypto_data(symbol, now):
 
 def nse_data(symbols):
     base = {tf: _cached(f"n_{tf}", lambda tf=tf: nse_download(symbols, tf)) for tf in TIMEFRAMES}
-    evals = {res: _cached(f"n_eval_{res}", lambda res=res: nse_download(symbols, res))
+    # A resolution already downloaded as a base timeframe (1d) is the same
+    # call - reuse it rather than downloading it twice.
+    evals = {res: base[res] if res in base else _cached(f"n_eval_{res}", lambda res=res: nse_download(symbols, res))
              for res in sorted(set(trades.EVAL_RESOLUTION[NSE].values()))}
     return {s: ({tf: base[tf].get(s, []) for tf in TIMEFRAMES},
                 {res: evals[res].get(s, []) for res in evals}) for s in symbols}

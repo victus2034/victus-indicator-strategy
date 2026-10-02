@@ -108,6 +108,22 @@ def market_window_status(now=None):
     return is_session and market_open <= now <= market_close, now, market_open, market_close
 
 
+def symbol_has_current_data(symbol, now):
+    """True when this symbol's latest candle is from today's session.
+
+    has_current_session_data() only checks the feed as a whole, so one stock
+    whose data stopped at yesterday's close still produced alerts priced off
+    that stale close.
+    """
+    data = MARKET_DATA.get(symbol)
+    if data is None or data.empty or "Datetime" not in data.columns:
+        return False
+    try:
+        return _localized_datetimes(data).iloc[-1].date() == now.date()
+    except Exception:
+        return False
+
+
 def has_current_session_data(watchlist, now=None):
     """Reject stale previous-session data before producing executable alerts.
 
@@ -338,6 +354,9 @@ def normalize_yfinance_columns(data):
     return {ticker: data.xs(ticker, axis=1, level=0, drop_level=True) for ticker in tickers}
 
 
+NSE_1H_HISTORY_DAYS = 450
+
+
 def yfinance_time_range(now=None):
     if SOURCE_INTERVAL != "1h":
         return {"period": SOURCE_PERIOD}
@@ -345,7 +364,11 @@ def yfinance_time_range(now=None):
     # Yahoo can ignore an intraday period for newer listings and request from
     # the IPO date, which its API rejects when that date is over 730 days old.
     end = now or (pd.Timestamp.now(tz="UTC") + pd.Timedelta(days=1))
-    start = end - pd.Timedelta(days=700)
+    # Only the last OHLCV_LIMIT (500) 4h candles are kept, about 250 sessions;
+    # 450 days of 1h holds ~300 sessions, so the kept candles are identical to
+    # the 700-day download's (the 4h bars anchor to each day's 09:15, not to
+    # where the download starts) for a third less data per scan.
+    start = end - pd.Timedelta(days=NSE_1H_HISTORY_DAYS)
     return {"start": start.to_pydatetime(), "end": end.to_pydatetime()}
 
 
@@ -803,8 +826,7 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
     alert_sent = None
 
     if MIN_DISTANCE_PCT <= distance_pct <= MAX_DISTANCE_PCT:
-        last_attempt_at = max(entry.get("last_alert_at", 0.0), entry.get("last_attempt_at", 0.0))
-        should_alert = (not entry["in_zone"]) or (now_ts - last_attempt_at >= ALERT_COOLDOWN_SECONDS)
+        should_alert = (not entry["in_zone"]) or zone_engine.alert_due(entry, now_ts, ALERT_COOLDOWN_SECONDS)
         last_success = float(noise_state.get(noise_key, 0.0) or 0.0)
         noise_open = not last_success or now_ts - last_success >= ZONE_REPEAT_SUPPRESSION_SECONDS
         if should_alert and noise_open:
@@ -870,8 +892,7 @@ def process_signal_candidate(state, result, signal_type, now_ts):
 
     state_key = build_signal_state_key(result["symbol"], signal_type)
     entry = state.setdefault(state_key, {"last_alert_at": 0.0, "last_attempt_at": 0.0})
-    last_attempt_at = max(entry.get("last_alert_at", 0.0), entry.get("last_attempt_at", 0.0))
-    if now_ts - last_attempt_at < SIGNAL_ALERT_COOLDOWN_SECONDS:
+    if not zone_engine.alert_due(entry, now_ts, SIGNAL_ALERT_COOLDOWN_SECONDS):
         return None
 
     entry["last_attempt_at"] = now_ts
@@ -950,7 +971,7 @@ def run_scan_once(state):
     failures = []
     alerts_sent = 0
     alert_delivery_failures = 0
-    started_at = time.strftime("%Y-%m-%d %H:%M:%S")
+    started_at = pd.Timestamp.now(tz=ZoneInfo(MARKET_TIMEZONE)).strftime("%Y-%m-%d %H:%M:%S IST")
     run_number = os.getenv("GITHUB_RUN_NUMBER", "local")
     trigger = os.getenv("GITHUB_EVENT_NAME", "local")
     is_market_open, market_now, market_open, market_close = market_window_status()
@@ -1003,6 +1024,9 @@ def run_scan_once(state):
     sector_context = build_sector_context(watchlist)
     scanned_by_symbol = {}
     for symbol in watchlist:
+        if not symbol_has_current_data(symbol, market_now):
+            failures.append(f"{symbol} -> no data from today's session (stale)")
+            continue
         try:
             scanned_by_symbol[symbol] = attach_sector_context(scan_symbol(symbol), sector_context)
         except Exception as error:
@@ -1025,6 +1049,10 @@ def run_scan_once(state):
         ]
         alerts_sent += sum(1 for alert_result in alert_results if alert_result is True)
         alert_delivery_failures += sum(1 for alert_result in alert_results if alert_result is False)
+        if any(alert_result is not None for alert_result in alert_results):
+            # Saved as soon as anything was sent or attempted, so a crash or
+            # a cancelled run later in the loop cannot re-send it next scan.
+            save_state(state)
 
     zone_engine.prune_alert_state(
         state, time.time(), ALERT_COOLDOWN_SECONDS, SIGNAL_ALERT_COOLDOWN_SECONDS,
@@ -1035,7 +1063,7 @@ def run_scan_once(state):
     if PRINT_SCAN_SUMMARY and results:
         print_summary(results)
 
-    finished_at = time.strftime("%Y-%m-%d %H:%M:%S")
+    finished_at = pd.Timestamp.now(tz=ZoneInfo(MARKET_TIMEZONE)).strftime("%Y-%m-%d %H:%M:%S IST")
     status = "OK" if not failures else "WARN"
     message = (
         f"Victus NSE scanner finished ({status})\n"
