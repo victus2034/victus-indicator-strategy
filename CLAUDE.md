@@ -104,8 +104,10 @@ every way: own state (`fib_trendline_state.json`, alert records and results, all
 runtime-state branch), own workflow (`fib_trendline_scan.yml`, runs after each 30m crypto scan
 finishes via `workflow_run`), and two webhooks — `DISCORD_FIB_WEBHOOK_URL` → `#fib-alerts`,
 `DISCORD_TRENDLINE_WEBHOOK_URL` → `#trendline-alerts` (under CRYPTO in the VICTUS Alert System
-server). NSE posts to the same two channels (Shiva's choice); every alert says
-`Timeframe: 4H | NSE` / `| Crypto`.
+server). Since 2026-10-02 each market can have its own pair:
+`DISCORD_{FIB,TRENDLINE}_{CRYPTO,NSE}_WEBHOOK_URL` (secrets of the same name); any left
+unset falls back to the shared one, so NSE and crypto share a channel until it is set.
+Every alert says `Timeframe: 4H | NSE` / `| Crypto`.
 
 | File | Role |
 |---|---|

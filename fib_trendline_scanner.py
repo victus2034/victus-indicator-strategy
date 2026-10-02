@@ -1,4 +1,4 @@
-"""Fib and trendline alerts on 4H / 1D / 1W / 1M (30m off), crypto and NSE - two Discord channels of their own.
+"""Fib and trendline alerts on 4H / 1D / 1W / 1M (30m off), crypto and NSE - Discord channels of their own.
 
 Apart from the zone alerts on purpose: nothing here reads or writes the zone
 scanners' state, records or webhooks, and nothing there reads this. It only
@@ -16,8 +16,9 @@ Discord sender.
 
 Crypto (Delta) scans on every pass, inside the 08:00-01:00 IST alert window.
 NSE (Yahoo, the zone scanner's 200 stocks) scans during the session only,
-every NSE_MIN_INTERVAL_SECONDS. Both post to the same two channels, the market
-named on each alert.
+every NSE_MIN_INTERVAL_SECONDS. Each market has its own fib and trendline
+channel (DISCORD_{FIB,TRENDLINE}_{CRYPTO,NSE}_WEBHOOK_URL); one left unset falls
+back to the shared webhook above. The market is named on each alert either way.
 
 Levels come from CLOSED candles, like the chart's confirmed swings; the candle
 still forming only supplies the current price. Every fib and trendline-touch
@@ -42,7 +43,11 @@ import fib_engine
 import fib_trendline_trades as trades
 import scanner
 from config import (
+    DISCORD_FIB_CRYPTO_WEBHOOK_URL,
+    DISCORD_FIB_NSE_WEBHOOK_URL,
     DISCORD_FIB_WEBHOOK_URL,
+    DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL,
+    DISCORD_TRENDLINE_NSE_WEBHOOK_URL,
     DISCORD_TRENDLINE_WEBHOOK_URL,
     FIB_SWING_LENGTH,
     FIB_TL_MAX_DISTANCE_PCT,
@@ -75,6 +80,27 @@ MIN_BARS = 2 * max(FIB_SWING_LENGTH, TRENDLINE_SWING_LENGTH) + 2
 MARKET_LABEL = {CRYPTO: "Crypto", NSE: "NSE"}
 
 FIB_ENV, TL_ENV = "DISCORD_FIB_WEBHOOK_URL", "DISCORD_TRENDLINE_WEBHOOK_URL"
+# One channel per market and kind (2026-10-02). A market's own webhook wins;
+# while it is unset that market keeps posting to the shared one above.
+GENERIC_WEBHOOK = {"fib": (FIB_ENV, DISCORD_FIB_WEBHOOK_URL), "trendline": (TL_ENV, DISCORD_TRENDLINE_WEBHOOK_URL)}
+MARKET_WEBHOOK = {
+    ("fib", CRYPTO): ("DISCORD_FIB_CRYPTO_WEBHOOK_URL", DISCORD_FIB_CRYPTO_WEBHOOK_URL),
+    ("fib", NSE): ("DISCORD_FIB_NSE_WEBHOOK_URL", DISCORD_FIB_NSE_WEBHOOK_URL),
+    ("trendline", CRYPTO): ("DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL", DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL),
+    ("trendline", NSE): ("DISCORD_TRENDLINE_NSE_WEBHOOK_URL", DISCORD_TRENDLINE_NSE_WEBHOOK_URL),
+}
+
+
+def webhook(channel, market):
+    """(env name, config value) of the webhook this channel's alerts for this market go to."""
+    env, value = MARKET_WEBHOOK[(channel, market)]
+    if scanner.get_env_or_config(env, value):
+        return env, value
+    return GENERIC_WEBHOOK[channel]
+
+
+def webhook_configured(channel, market):
+    return bool(scanner.get_env_or_config(*webhook(channel, market)))
 
 
 # ----------------------------------------------------------------- geometry (shared with the backtest)
@@ -323,8 +349,8 @@ def append_record(record, key, now):
         file.write(json.dumps(row) + "\n")
 
 
-def send(channel, message):
-    env, fallback = (FIB_ENV, DISCORD_FIB_WEBHOOK_URL) if channel == "fib" else (TL_ENV, DISCORD_TRENDLINE_WEBHOOK_URL)
+def send(channel, market, message):
+    env, fallback = webhook(channel, market)
     try:
         return scanner.send_discord_message(message, webhook_env_name=env, webhook_config_value=fallback)
     except requests.RequestException as error:
@@ -405,16 +431,13 @@ def run_once(dry_run=False, force_nse=False):
     state[ATTEMPTS_KEY] = attempts
     for key in [k for k, t in attempts.items() if now - t > STATE_RETENTION_SECONDS]:
         del attempts[key]
-    configured = {
-        "fib": bool(scanner.get_env_or_config(FIB_ENV, DISCORD_FIB_WEBHOOK_URL)),
-        "trendline": bool(scanner.get_env_or_config(TL_ENV, DISCORD_TRENDLINE_WEBHOOK_URL)),
-    }
+    configured = {key: webhook_configured(*key) for key in MARKET_WEBHOOK}
     awake = {CRYPTO: scanner.in_alert_window(), NSE: True}   # NSE only scans in session
     seeding = {
         (channel, market)
         for market, results in markets.items() if results
-        for channel, ok in configured.items()
-        if ok and f"{channel}:{market}:{SEED_VERSION}" not in seeded
+        for channel in ("fib", "trendline")
+        if configured[(channel, market)] and f"{channel}:{market}:{SEED_VERSION}" not in seeded
     }
     counts = {}
     failures = []
@@ -428,7 +451,7 @@ def run_once(dry_run=False, force_nse=False):
                     if dry_run:
                         print(f"[{channel}] {message}\n")
                         continue
-                    if not configured[channel]:
+                    if not configured[(channel, market)]:
                         continue             # nothing recorded: no webhook, no channel yet
                     tally = (channel, market)
                     if tally in seeding:
@@ -443,7 +466,7 @@ def run_once(dry_run=False, force_nse=False):
                     if now - attempts.get(key, 0) < RETRY_BACKOFF_SECONDS:
                         continue             # the last send failed: wait out the backoff
                     print(f"[{channel}] {message}\n")
-                    if send(channel, message):
+                    if send(channel, market, message):
                         attempts.pop(key, None)
                         mark_sent(state, key, now)
                         if record:
@@ -460,9 +483,10 @@ def run_once(dry_run=False, force_nse=False):
                  if any(m == market for _, m in seeding) else ""))
     if not awake[CRYPTO]:
         print("Crypto: outside the alert window, holding")
-    for channel, ok in configured.items():
+    for (channel, market), ok in configured.items():
         if not ok:
-            print(f"{FIB_ENV if channel == 'fib' else TL_ENV} is not configured - {channel} alerts off.")
+            print(f"{MARKET_WEBHOOK[(channel, market)][0]} / {GENERIC_WEBHOOK[channel][0]} not configured"
+                  f" - {MARKET_LABEL[market]} {channel} alerts off.")
     for line in failures[:20]:
         print(f"  failed {line}")
 

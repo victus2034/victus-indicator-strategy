@@ -376,6 +376,33 @@ class SeedingTests(unittest.TestCase):
         self.assertIn(f"fib:crypto:{fts.SEED_VERSION}", state[fts.SEEDED_KEY])
 
 
+class MarketWebhookTests(unittest.TestCase):
+    """Crypto and NSE each get their own fib / trendline webhook, falling back to the shared one."""
+
+    def env(self, **values):
+        names = [fts.FIB_ENV, fts.TL_ENV] + [env for env, _ in fts.MARKET_WEBHOOK.values()]
+        patch = mock.patch.dict(os.environ, {name: values.get(name, "") for name in names})
+        patch.start()
+        self.addCleanup(patch.stop)
+
+    def test_market_webhook_wins_and_unset_falls_back(self):
+        self.env(DISCORD_FIB_WEBHOOK_URL="https://example.invalid/fib",
+                 DISCORD_FIB_NSE_WEBHOOK_URL="https://example.invalid/fib-nse")
+        self.assertEqual(fts.webhook("fib", ftd.NSE)[0], "DISCORD_FIB_NSE_WEBHOOK_URL")
+        self.assertEqual(fts.webhook("fib", ftd.CRYPTO)[0], fts.FIB_ENV)
+        self.assertFalse(fts.webhook_configured("trendline", ftd.CRYPTO))
+
+    def test_a_market_webhook_alone_turns_on_only_that_market(self):
+        self.env(DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL="https://example.invalid/tl-crypto")
+        self.assertTrue(fts.webhook_configured("trendline", ftd.CRYPTO))
+        self.assertFalse(fts.webhook_configured("trendline", ftd.NSE))
+        sent = []
+        with mock.patch.object(fts.scanner, "send_discord_message",
+                               lambda message, webhook_env_name, webhook_config_value: sent.append(webhook_env_name) or True):
+            fts.send("trendline", ftd.CRYPTO, "x")
+        self.assertEqual(sent, ["DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL"])
+
+
 class DailyReportTests(unittest.TestCase):
     def setUp(self):
         import fib_trendline_daily_report as report
