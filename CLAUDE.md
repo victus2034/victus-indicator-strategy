@@ -174,6 +174,8 @@ server). NSE posts to the same two channels (Shiva's choice); every alert says
   `scanner` functions (`nse_scanner.build_zones is scanner.build_zones`) and `nse_config`
   imports its zone numbers from `config.py`, so a change to either is a change to both.
   `tests/test_nse_shares_crypto_engine.py` fails if a copy comes back.
+  Since 2026-10-02 that includes the planned entry and stop (`planned_stop_price`, v7's
+  `zone_pct` rule): NSE had kept a fixed 0.10%-beyond-the-far-edge stop until then.
 
   The engine reads one timeframe-dependent number, `ZONE_BASE_EXTRA` (30m → 5, 4h → 1).
   `nse_scanner.bind_zone_engine()` sets it from NSE's own timeframe when NSE actually scans

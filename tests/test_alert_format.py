@@ -72,8 +72,8 @@ class AlertFormatTests(unittest.TestCase):
             "PIDILITIND | SELL\n"
             "Price: 1610.90 | 0.97%\n"
             "Zone: 1624.95 - 1626.60\n"
-            "SL: 1628.23 | 0.20%\n"
-            "WARNING SL under 0.24% - at +0.5R the move is only 0.101%, "
+            "SL: 1627.01 | 0.13%\n"
+            "WARNING SL under 0.24% - at +0.5R the move is only 0.063%, "
             "under the 0.1063% round trip, so moving the stop up cannot "
             "protect capital here",
         )
@@ -108,7 +108,7 @@ class AlertFormatTests(unittest.TestCase):
             "INFY | BUY\n"
             "Price: 100.00 | 0.60%\n"
             "Zone: 99.00 - 99.50\n"
-            "SL: 98.90 | 0.60%\n"
+            "SL: 98.88 | 0.63%\n"
             "Technology & Telecom: -2.10% | Risk",
         )
 

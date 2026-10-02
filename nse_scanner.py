@@ -56,7 +56,6 @@ from zone_scoring import score_wick_zone
 
 STATE_FILE = Path(__file__).with_name("nse_alert_state.json")
 ALERT_RECORD_FILE = Path(__file__).with_name("nse_alert_records.jsonl")
-SL_BUFFER_PCT = 0.10
 # Round-trip Dhan NSE equity intraday charges as a share of turnover, and
 # the stop distance below which the +0.5R capital-protection rule stops
 # working. Kept in step with daily_backtest_summary, which prices results
@@ -679,24 +678,13 @@ def display_symbol(symbol):
     return text
 
 
-def planned_entry_price(zone_type, zone):
-    """Use the near/body edge as the practical planned entry."""
-    return float(zone["top"] if zone_type == "demand" else zone["bottom"])
-
-
-def planned_stop_price(zone_type, zone, buffer_pct=SL_BUFFER_PCT):
-    """Place SL beyond the far zone edge with a small fixed buffer."""
-    if zone_type == "demand":
-        return float(zone["bottom"]) * (1 - buffer_pct / 100.0)
-    return float(zone["top"]) * (1 + buffer_pct / 100.0)
-
-
-def planned_stop_distance_pct(zone_type, zone, buffer_pct=SL_BUFFER_PCT):
-    entry = planned_entry_price(zone_type, zone)
-    if entry == 0:
-        return 0.0
-    stop = planned_stop_price(zone_type, zone, buffer_pct)
-    return abs(entry - stop) / abs(entry) * 100.0
+# The entry and stop come from the crypto engine too, like the zones they sit
+# on. NSE kept its own fixed 0.10%-beyond-the-far-edge stop after crypto moved
+# to v7's rule (a share of the zone's height, config.ZONE_SL_MODE), so the same
+# zone printed a different stop, R:R and stop_too_wide verdict per market.
+planned_entry_price = zone_engine.planned_entry_price
+planned_stop_price = zone_engine.planned_stop_price
+planned_stop_distance_pct = zone_engine.planned_stop_distance_pct
 
 
 def delivered_alert_id(record):
