@@ -9,11 +9,6 @@
     "stage": 2,
     "stopped_out": false
   },
-  "BNBUSD|30m|short|780.03|785.367": {
-    "reached_entry": true,
-    "stage": 2,
-    "stopped_out": false
-  },
   "BTCUSD|4h|short|86875.5|87513.6": {
     "reached_entry": true,
     "stage": 2,
@@ -30,6 +25,11 @@
     "stopped_out": false
   },
   "SNDKBUSD|30m|short|1793.85|1800.29": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
+  "TSLAXUSD|30m|short|359.45|361.138": {
     "reached_entry": false,
     "stage": 1,
     "stopped_out": false
@@ -344,6 +344,7 @@
   "_level_ready|TSLAXUSD|30m|long|371.762|371.747": 1790431571.793892,
   "_level_ready|TSLAXUSD|30m|long|376.2|373.263": 1790239282.105593,
   "_level_ready|TSLAXUSD|30m|long|378.8|378.238": 1790221875.347665,
+  "_level_ready|TSLAXUSD|30m|short|359.45|361.138": 1790928389.244065,
   "_level_ready|TSLAXUSD|30m|short|360.15|360.275": 1790866295.555219,
   "_level_ready|TSLAXUSD|30m|short|365.079|368.73": 1789646770.464048,
   "_level_ready|TSLAXUSD|30m|short|365.69|365.702": 1789832162.867763,
@@ -489,7 +490,7 @@
   "_ready|TACUSD|4h": 1790566885.398299,
   "_ready|TRUMP/USDT|30m": 1790771776.301532,
   "_ready|TRUMP/USDT|4h": 1790607384.010239,
-  "_ready|TSLAXUSD|30m": 1790866295.555219,
+  "_ready|TSLAXUSD|30m": 1790928389.244065,
   "_ready|TSLAXUSD|4h": 1790763689.448166,
   "_ready|UB/USDT|30m": 1789320957.820623,
   "_ready|UNIUSD|30m": 1790916096.38229,
@@ -518,6 +519,10 @@
   "_silent_ready|BNBUSD|30m|short|777.01|779.685": {
     "price": 773.6,
     "time": "2026-10-01T23:01:41.334897+05:30"
+  },
+  "_silent_ready|BNBUSD|30m|short|780.03|785.367": {
+    "price": 777.01,
+    "time": "2026-10-02T13:36:29.244065+05:30"
   },
   "_silent_ready|BTCUSD|30m|short|87247.5|87420.6": {
     "price": 86350.5,
@@ -642,9 +647,5 @@
   "_silent_ready|ZECUSD|30m|long|1366.05|1359.74": {
     "price": 1371.01,
     "time": "2026-10-01T21:01:47.103309+05:30"
-  },
-  "_silent_ready|ZORAUSD|30m|long|0.007825|0.0078075": {
-    "price": 0.007858,
-    "time": "2026-10-01T13:36:27.630251+05:30"
   }
 }

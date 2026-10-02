@@ -58853,6 +58853,7 @@
     "XRPUSD|30m|short|1.44772|1.4622": "filled",
     "XRPUSD|30m|short|1.44861|1.4631": "filled",
     "XRPUSD|30m|short|1.5097|1.5122": "stop_too_tight",
+    "XRPUSD|30m|short|1.536|1.54838": "filled",
     "XRPUSD|30m|short|1.5703|1.5768": "filled",
     "XRPUSD|4h|short|1.4808|1.49493": "filled",
     "ZAMA/USDT|30m|long|0.04573|0.0453675": "filled",
@@ -59513,6 +59514,24 @@
       "target_1": 230.325,
       "target_2": 228.7,
       "target_half": 231.1375,
+      "timeframe": "30m"
+    },
+    "XRPUSD|30m|short|1.536|1.54838": {
+      "alert_time": "2026-10-02T13:26:53.531551+05:30",
+      "entry": 1.536,
+      "entry_time": "2026-10-02T13:30:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 5,
+      "risk": 0.012375000000000025,
+      "side": "short",
+      "stop": 1.548375,
+      "stream": "live",
+      "symbol": "XRPUSD",
+      "target_1": 1.523625,
+      "target_2": 1.51125,
+      "target_half": 1.5298125,
       "timeframe": "30m"
     }
   }
