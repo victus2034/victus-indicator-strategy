@@ -4,6 +4,11 @@
     "stage": 1,
     "stopped_out": false
   },
+  "BEAT/USDT|30m|long|0.0898|0.0893": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
   "BNBUSD|30m|short|780.03|785.367": {
     "reached_entry": true,
     "stage": 2,
@@ -23,11 +28,6 @@
     "reached_entry": true,
     "stage": 2,
     "stopped_out": false
-  },
-  "XAUTUSD|30m|short|4194.65|4199.95": {
-    "reached_entry": true,
-    "stage": 2,
-    "stopped_out": true
   },
   "_level_ready|AAVEUSD|30m|long|134.06|133.21": 1789911352.70983,
   "_level_ready|AAVEUSD|30m|short|128.48|129.368": 1789665141.396728,
@@ -65,6 +65,7 @@
   "_level_ready|BCHUSD|30m|short|341.7|344.925": 1790364378.771032,
   "_level_ready|BCHUSD|4h|short|272.43|274.668": 1790073367.004348,
   "_level_ready|BEAT/USDT|30m|long|0.0835|0.083": 1789901763.445102,
+  "_level_ready|BEAT/USDT|30m|long|0.0898|0.0893": 1790925087.495209,
   "_level_ready|BEAT/USDT|30m|short|0.08437|0.084795": 1789642566.116701,
   "_level_ready|BEAT/USDT|30m|short|0.08613|0.0867175": 1789670159.6338,
   "_level_ready|BEAT/USDT|30m|short|0.0891865|0.0900784": 1790050270.299762,
@@ -410,7 +411,7 @@
   "_ready|AXTI/USDT:USDT|30m": 1789540275.035677,
   "_ready|BCHUSD|30m": 1790924507.198808,
   "_ready|BCHUSD|4h": 1790073367.004348,
-  "_ready|BEAT/USDT|30m": 1790429172.274138,
+  "_ready|BEAT/USDT|30m": 1790925087.495209,
   "_ready|BLESSUSD|30m": 1790850704.303836,
   "_ready|BNBUSD|30m": 1790919985.599916,
   "_ready|BNBUSD|4h": 1790577087.860535,
@@ -498,10 +499,6 @@
   "_silent_ready|BCHUSD|30m|short|315.95|318.725": {
     "price": 313.36,
     "time": "2026-10-02T10:06:27.704069+05:30"
-  },
-  "_silent_ready|BEAT/USDT|30m|long|0.0898|0.0893": {
-    "price": 0.0904,
-    "time": "2026-10-02T12:16:32.800186+05:30"
   },
   "_silent_ready|BLESSUSD|30m|short|0.009287|0.00930325": {
     "price": 0.00926,
