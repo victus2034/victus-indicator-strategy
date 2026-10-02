@@ -1,7 +1,12 @@
 {
   "BTCUSD|30m|short|85260|85708.8": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
+    "stopped_out": false
+  },
+  "LINKUSD|30m|short|14.515|14.5675": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "METAXUSD|30m|short|731.6|738.1": {
@@ -12,6 +17,11 @@
   "VELVETUSD|30m|short|0.0605|0.061": {
     "reached_entry": true,
     "stage": 3,
+    "stopped_out": true
+  },
+  "XRPUSD|30m|short|1.5097|1.5122": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "_level_ready|AAVEUSD|30m|long|134.06|133.21": 1789911352.70983,
@@ -165,7 +175,7 @@
   "_level_ready|LINKUSD|30m|short|12.588|12.6405": 1789814163.053415,
   "_level_ready|LINKUSD|30m|short|13.16|13.225": 1790274080.977571,
   "_level_ready|LINKUSD|30m|short|14.446|14.4923": 1790495775.408113,
-  "_level_ready|LINKUSD|30m|short|14.515|14.5675": 1790882498.31379,
+  "_level_ready|LINKUSD|30m|short|14.515|14.5675": 1790910384.908022,
   "_level_ready|LTCUSD|30m|long|56.83|56.6675": 1789872965.628717,
   "_level_ready|LTCUSD|30m|long|66.03|65.53": 1790794287.095202,
   "_level_ready|LTCUSD|30m|long|67.42|67.02": 1790696199.292519,
@@ -363,7 +373,7 @@
   "_level_ready|XRPUSD|30m|short|1.44772|1.4622": 1789824365.25911,
   "_level_ready|XRPUSD|30m|short|1.44861|1.4631": 1789978569.844119,
   "_level_ready|XRPUSD|30m|short|1.4888|1.49293": 1789980968.820682,
-  "_level_ready|XRPUSD|30m|short|1.5097|1.5122": 1790880090.394496,
+  "_level_ready|XRPUSD|30m|short|1.5097|1.5122": 1790910384.908022,
   "_level_ready|XRPUSD|4h|short|1.4808|1.49493": 1789983964.89935,
   "_level_ready|ZECUSD|30m|long|1390.64|1377.34": 1790752591.242914,
   "_level_ready|ZECUSD|30m|long|1527.64|1514.07": 1790608886.729739,
@@ -420,7 +430,7 @@
   "_ready|ICP/USDT|30m": 1789439750.580446,
   "_ready|KGEN/USDT|30m": 1789463159.791482,
   "_ready|LA/USDT|30m": 1789440963.456523,
-  "_ready|LINKUSD|30m": 1790882498.31379,
+  "_ready|LINKUSD|30m": 1790910384.908022,
   "_ready|LTCUSD|30m": 1790794287.095202,
   "_ready|LTCUSD|4h": 1789990565.578549,
   "_ready|METAXUSD|30m": 1790909781.732885,
@@ -459,7 +469,7 @@
   "_ready|VELVETUSD|30m": 1790908924.3021,
   "_ready|XAUTUSD|30m": 1790882781.362108,
   "_ready|XAUTUSD|4h": 1790221564.238422,
-  "_ready|XRPUSD|30m": 1790880090.394496,
+  "_ready|XRPUSD|30m": 1790910384.908022,
   "_ready|XRPUSD|4h": 1789983964.89935,
   "_ready|ZAMA/USDT|30m": 1789225271.699613,
   "_ready|ZAMA/USDT|4h": 1789458964.864873,
