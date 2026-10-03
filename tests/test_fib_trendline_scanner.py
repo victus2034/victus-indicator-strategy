@@ -217,9 +217,37 @@ class SimulateTests(unittest.TestCase):
     def test_sl_before_1r(self):
         self.assertEqual(self.run_bars((101, 99.9), (100.5, 98.9))["outcome"], "SL")
 
-    def test_one_r_then_stop_is_1r_with_the_stop_counted(self):
-        r = self.run_bars((100.5, 99.9), (101.2, 100.1), (100.5, 98.8))
-        self.assertEqual((r["outcome"], r["r1"], r["sl"]), ("1R", True, True))
+    def test_one_r_then_falling_back_is_1r_closed_at_breakeven(self):
+        r = self.run_bars((100.5, 99.9), (101.2, 100.2), (100.5, 98.8))
+        self.assertEqual((r["outcome"], r["r1"], r["be"], r["sl"]), ("1R", True, True, False))
+
+    def test_half_r_then_back_is_breakeven_not_sl(self):
+        # +0.5R (100.5) trades, then price falls through the old stop: out at BE
+        r = self.run_bars((100.2, 99.9), (100.6, 100.2), (100.3, 98.5))
+        self.assertEqual((r["outcome"], r["half"], r["be"], r["sl"]), ("BE", True, True, False))
+        be = ftt.break_even_stop(self.plan, ftd.CRYPTO)
+        self.assertAlmostEqual(be, 100 * (1 + ftt.BREAK_EVEN_PCT[ftd.CRYPTO] / 100))
+        self.assertGreater(be, 100)          # clears the round trip, not bare entry
+
+    def test_breakeven_moves_from_the_candle_after_half_r(self):
+        # the candle that reaches +0.5R also dips under entry: order unknown, stop still the SL
+        r = self.run_bars((100.2, 99.9), (100.6, 99.95))
+        self.assertEqual(r["outcome"], "open")
+        self.assertTrue(r["half"])
+        self.assertEqual(self.run_bars((100.2, 99.9), (100.6, 99.95), (100.3, 100.05))["outcome"], "BE")
+
+    def test_tight_stop_keeps_its_stop_when_breakeven_is_past_half_r(self):
+        plan = {"side": "short", "entry": 100.0, "sl": 100.15}   # +0.5R = 99.925, BE stop 99.887
+        candles = [[1300, 0, 100.05, 99.95, 0], [1600, 0, 99.95, 99.92, 0], [1900, 0, 100.0, 99.95, 0],
+                   [2200, 0, 100.2, 99.95, 0]]
+        r = ftt.simulate(plan, ftd.CRYPTO, "30m", 1000, candles)
+        self.assertEqual((r["outcome"], r["half"], r["sl"]), ("SL", True, True))
+
+    def test_short_breakeven(self):
+        plan = {"side": "short", "entry": 100.0, "sl": 101.0}
+        candles = [[1300, 0, 100.1, 99.9, 0], [1600, 0, 99.8, 99.4, 0], [1900, 0, 101.5, 99.7, 0]]
+        r = ftt.simulate(plan, ftd.CRYPTO, "30m", 1000, candles)
+        self.assertEqual((r["outcome"], r["be"]), ("BE", True))
 
     def test_a_candle_with_both_is_the_stop(self):
         r = self.run_bars((100.5, 99.9), (102.5, 98.5))
@@ -233,9 +261,9 @@ class SimulateTests(unittest.TestCase):
     def test_nse_holds_count_trading_candles_not_the_night(self):
         # 20 x 30m hold = 120 five-minute candles, however many hours apart they are
         plan = {"side": "long", "entry": 100.0, "sl": 99.0}
-        candles = [[1000 + 86400 * k, 0, 100.5, 99.5 if k == 1 else 100.1, 0] for k in range(1, 100)]
+        candles = [[1000 + 86400 * k, 0, 100.4, 99.5 if k == 1 else 100.3, 0] for k in range(1, 100)]
         self.assertEqual(ftt.simulate(plan, ftd.NSE, "30m", 1000, candles)["outcome"], "open")
-        candles += [[1000 + 86400 * k, 0, 100.5, 100.1, 0] for k in range(100, 130)]
+        candles += [[1000 + 86400 * k, 0, 100.4, 100.3, 0] for k in range(100, 130)]
         self.assertEqual(ftt.simulate(plan, ftd.NSE, "30m", 1000, candles)["outcome"], "timeout")
 
     def test_candles_up_to_the_alert_are_ignored(self):
@@ -253,6 +281,20 @@ class SimulateTests(unittest.TestCase):
         self.assertAlmostEqual(row["win_1r"], 0.75)
         self.assertAlmostEqual(row["win_2r"], 2 / 3)
         self.assertAlmostEqual(row["net_r_1r"], (1 + 1 + 1 - 1) / 4 - 0.1)   # 0.10% cost on a 1% risk
+
+    def test_summary_books_breakeven_at_its_offset_and_leaves_it_out_of_win_rate(self):
+        be = {"outcome": "BE", "filled": True, "r1": False, "r2": False, "sl": False, "be": True}
+        one_r_then_be = {"outcome": "1R", "filled": True, "r1": True, "r2": False, "sl": False, "be": True}
+        sl = {"outcome": "SL", "filled": True, "r1": False, "r2": False, "sl": True, "be": False}
+        trades = [{"market": ftd.CRYPTO, "kind": "fib", "tf": "4h", "plan": self.plan, "result": r}
+                  for r in (be, one_r_then_be, sl)]
+        row = ftt.summarise(trades)[0]
+        be_r = ftt.break_even_r(self.plan, ftd.CRYPTO)
+        self.assertAlmostEqual(be_r, ftt.BREAK_EVEN_PCT[ftd.CRYPTO])    # 1% risk: the offset in R
+        self.assertEqual((row["SL"], row["BE"], row["1R"]), (1, 1, 1))
+        self.assertAlmostEqual(row["win_1r"], 0.5)
+        self.assertAlmostEqual(row["net_r_1r"], (be_r + 1 - 1) / 3 - 0.1)
+        self.assertAlmostEqual(row["net_r_2r"], (be_r + be_r - 1) / 3 - 0.1)
 
 
 class ReplayTests(unittest.TestCase):

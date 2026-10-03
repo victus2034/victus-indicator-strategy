@@ -132,6 +132,9 @@ each falling back to the shared one above when unset (so nothing changes until t
   which misread EX 2 and made stops ~4x too tight; trendline entry
   at the line, SL `TRENDLINE_SL_PCT` beyond it; 1R and 2R targets; wait 5 / hold 20 candles of
   the alert's timeframe. A candle touching SL and target counts as SL.
+  **Breakeven (2026-10-03, Lakky):** the zone trades' rule - at +0.5R the stop moves past entry by
+  `BREAK_EVEN_OFFSET_PCT` (NSE) / `CRYPTO_BREAK_EVEN_OFFSET_PCT` (crypto) from the next candle, imported
+  from `daily_backtest_summary` so the two cannot drift. Exits there are `BE`: in net R, not in win rate.
 - Crypto: Delta only. `1w` is Delta's weekly candle; `1M` is built from daily candles by
   calendar month. History starts Dec 2023, so young coins get no 1M fib yet.
 - NSE: the zone scanner's 200 stocks (`nse_scanner.load_watchlist`), scanned only in the session

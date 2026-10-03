@@ -332,12 +332,15 @@ def write_report(all_trades, symbol_counts, started):
         + ", ".join(f"{TF_LABEL[tf]} on {r}" for tf, r in trades.EVAL_RESOLUTION[CRYPTO].items())
         + "; NSE " + ", ".join(f"{TF_LABEL[tf]} on {r}" for tf, r in trades.EVAL_RESOLUTION[NSE].items())
         + ". A candle that touches both the SL and a target counts as the SL.",
+        f"- Breakeven: once +0.5R trades the stop moves {trades.BREAK_EVEN_PCT[CRYPTO]}% (crypto) / "
+        f"{trades.BREAK_EVEN_PCT[NSE]}% (NSE) past entry, from the next candle - the zone trades' rule. "
+        "A stop there is **BE**.",
         f"- Net R subtracts the round trip (crypto {trades.COST_PCT[CRYPTO]}%, NSE {trades.COST_PCT[NSE]}%) "
         "divided by the trade's own risk %, so tight stops pay more R in costs.",
         "",
         "**Win @1R** = reached 1R before the SL, out of trades that did one or the other. **Win @2R** the same "
         "for 2R. **Net R** = average result per filled trade booking everything at that target. "
-        "Timeouts and still-open trades are left out of both.",
+        "Timeouts and still-open trades are left out of both; BE trades count in Net R, not in win rates.",
         "",
         "**Read every win rate against the Baseline table at the end, not against 50%.** Random levels "
         "scored by these same rules win well under 50% at 1R, because a limit order only fills while price "
@@ -348,14 +351,14 @@ def write_report(all_trades, symbol_counts, started):
     for kind, title in (("fib", "Fib"), ("trendline", "Trendline"),
                         ("random", f"Baseline - random levels, no edge ({BASELINE_SAMPLES} per symbol and timeframe)")):
         out += [f"## {title}", "",
-                "| Market | TF | Alerts | Alerts/day | Filled | SL | 1R | 2R | Timeout | Open | No fill | "
+                "| Market | TF | Alerts | Alerts/day | Filled | SL | BE | 1R | 2R | Timeout | Open | No fill | "
                 "Win @1R | Win @2R | Net R @1R | Net R @2R | Median risk |",
-                "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+                "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
         for row in (r for r in rows if r["kind"] == kind):
             items = by_group[(row["market"], kind, row["tf"])]
             out.append(
                 f"| {row['market'].upper()} | {TF_LABEL[row['tf']]} | {row['alerts']} | "
-                f"{row['alerts'] / span_days(items):.1f} | {row['filled']} | {row['SL']} | {row['1R']} | "
+                f"{row['alerts'] / span_days(items):.1f} | {row['filled']} | {row['SL']} | {row['BE']} | {row['1R']} | "
                 f"{row['2R']} | {row['timeout']} | {row['open']} | {row['no fill']} | "
                 f"{trades.pct(row['win_1r'])} | {trades.pct(row['win_2r'])} | {trades.r(row['net_r_1r'])} | "
                 f"{trades.r(row['net_r_2r'])} | {row['median_risk_pct']:.2f}% |"
@@ -366,15 +369,15 @@ def write_report(all_trades, symbol_counts, started):
             "Filled fib trades only, split by whether it was the first time price reached that fib "
             "(one base, one top) or a later touch of the same fib - the other zone, after the first "
             "had already traded. See `touch_order`.", "",
-            "| Market | TF | Touch | Trades | SL | 1R | 2R | Win @1R | Win @2R | Net R @1R | Net R @2R | "
+            "| Market | TF | Touch | Trades | SL | BE | 1R | 2R | Win @1R | Win @2R | Net R @1R | Net R @2R | "
             "Zone 1 share |",
-            "|---|---|---|---|---|---|---|---|---|---|---|---|"]
+            "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     tagged = [{**t, "kind": "first"} for t in first] + [{**t, "kind": "later"} for t in later]
     for row in sorted(trades.summarise(tagged), key=lambda r: (r["market"], TIMEFRAMES.index(r["tf"]), r["kind"])):
         items = [t for t in tagged if (t["market"], t["tf"], t["kind"]) == (row["market"], row["tf"], row["kind"])]
         zone1 = sum(1 for t in items if t["zone"] == 1) / len(items)
         out.append(
-            f"| {row['market'].upper()} | {TF_LABEL[row['tf']]} | {row['kind']} | {row['filled']} | {row['SL']} | "
+            f"| {row['market'].upper()} | {TF_LABEL[row['tf']]} | {row['kind']} | {row['filled']} | {row['SL']} | {row['BE']} | "
             f"{row['1R']} | {row['2R']} | {trades.pct(row['win_1r'])} | {trades.pct(row['win_2r'])} | "
             f"{trades.r(row['net_r_1r'])} | {trades.r(row['net_r_2r'])} | {zone1:.0%} |"
         )
@@ -389,13 +392,14 @@ def write_report(all_trades, symbol_counts, started):
     with TRADES_CSV.open("w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow(["market", "symbol", "tf", "kind", "alert_ist", "side", "entry", "sl", "risk_pct",
-                         "outcome", "filled", "fill_ist", "r1", "r2", "sl_hit", "ambiguous"])
+                         "outcome", "filled", "fill_ist", "half_r", "r1", "r2", "sl_hit", "be_hit", "ambiguous"])
         for t in sorted(real, key=lambda t: t["alert_ts"]):
             r, p = t["result"], t["plan"]
             ist = lambda ts: datetime.fromtimestamp(ts, IST).strftime("%Y-%m-%d %H:%M") if ts else ""
             writer.writerow([t["market"], t["symbol"], t["tf"], t["kind"], ist(t["alert_ts"]), p["side"],
                              f"{p['entry']:.8g}", f"{p['sl']:.8g}", f"{trades.risk_pct(p):.3f}", r["outcome"],
-                             r["filled"], ist(r["fill_ts"]), r["r1"], r["r2"], r["sl"], r["ambiguous"]])
+                             r["filled"], ist(r["fill_ts"]), r["half"], r["r1"], r["r2"], r["sl"], r["be"],
+                             r["ambiguous"]])
     return rows
 
 
