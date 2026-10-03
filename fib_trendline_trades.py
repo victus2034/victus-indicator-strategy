@@ -15,10 +15,21 @@ Rules (Shiva, 2026-09-29):
   a candle is unknown, so the result can only be understated, never flattered.
   Scoring runs on finer candles than the alert's (EVAL_RESOLUTION) to keep
   those same-candle cases rare.
+- Breakeven, the same rule as the zone trades (daily_backtest_summary,
+  paper_trading): once +0.5R trades, the stop moves just past entry to clear the
+  round trip (NSE 0.120%, crypto CRYPTO_BREAK_EVEN_OFFSET_PCT), from the next
+  candle on. A stop there is "BE". A tight stop whose +0.5R is short of that
+  level keeps its original stop, since a stop above the market fills at once.
 """
 from collections import defaultdict
 
 from config import FIB_TL_ENTRY_WAIT_BARS, FIB_TL_MAX_HOLD_BARS, TRENDLINE_SL_PCT
+from daily_backtest_summary import (
+    BREAK_EVEN_ENABLED,
+    BREAK_EVEN_OFFSET_PCT,
+    CRYPTO_BREAK_EVEN_OFFSET_PCT,
+    HALF_R,
+)
 from fib_trendline_data import CRYPTO, NSE
 
 # Round trip, % of notional - the same numbers daily_backtest_summary.py uses.
@@ -34,7 +45,9 @@ EVAL_PER_BAR = {
     CRYPTO: {"30m": 6, "4h": 4, "1d": 6, "1w": 7, "1M": 30},
     NSE: {"30m": 6, "4h": 4, "1d": 7, "1w": 5, "1M": 21},
 }
-OUTCOMES = ["SL", "1R", "2R", "timeout", "open", "no fill"]
+# Where the stop goes once +0.5R trades, as % past entry - the zone trades' numbers.
+BREAK_EVEN_PCT = {CRYPTO: CRYPTO_BREAK_EVEN_OFFSET_PCT, NSE: BREAK_EVEN_OFFSET_PCT}
+OUTCOMES = ["SL", "BE", "1R", "2R", "timeout", "open", "no fill"]
 
 
 def fib_plan(d, zone):
@@ -48,22 +61,41 @@ def trendline_plan(kind_is_support, level, tf):
     return {"side": "short", "entry": level, "sl": level * (1 + pct)}
 
 
+def break_even_stop(plan, market):
+    entry = plan["entry"]
+    sign = 1 if plan["side"] == "long" else -1
+    return entry + sign * entry * BREAK_EVEN_PCT[market] / 100
+
+
+def break_even_r(plan, market):
+    """Gross R booked when the breakeven stop is hit - a little above 0."""
+    sign = 1 if plan["side"] == "long" else -1
+    return sign * (break_even_stop(plan, market) - plan["entry"]) / abs(plan["entry"] - plan["sl"])
+
+
 def simulate(plan, market, tf, alert_ts, candles):
     """Score one alert on evaluation candles; `candles` must start after the alert moment.
 
-    Returns dict(outcome, filled, fill_ts, r1, r2, sl, ambiguous, resolved, end_ts).
-    outcome: SL (stopped before 1R) | 1R (reached 1R, not 2R) | 2R | timeout
-    (filled, neither SL nor 1R in time) | open (data ran out first) | no fill.
+    Returns dict(outcome, filled, fill_ts, half, r1, r2, sl, be, ambiguous, resolved, end_ts).
+    outcome: SL (stopped before 1R) | BE (reached +0.5R, then the breakeven stop
+    before 1R) | 1R (reached 1R, not 2R) | 2R | timeout (filled, neither a stop
+    nor 1R in time) | open (data ran out first) | no fill.
+    sl / be say which stop finally closed the trade, also after 1R.
     """
     side, entry, sl = plan["side"], plan["entry"], plan["sl"]
     risk = abs(entry - sl)
     long = side == "long"
     t1 = entry + risk if long else entry - risk
     t2 = entry + 2 * risk if long else entry - 2 * risk
+    half = entry + HALF_R * risk if long else entry - HALF_R * risk
+    be_stop = break_even_stop(plan, market)
+    # On a tight stop the offset can be past +0.5R itself; that stop would fill
+    # at once, so nobody places it and the original stop stays.
+    be_reachable = (half >= be_stop) if long else (half <= be_stop)
     per_bar = EVAL_PER_BAR[market][tf]
     wait_n, hold_n = FIB_TL_ENTRY_WAIT_BARS * per_bar, FIB_TL_MAX_HOLD_BARS * per_bar
-    res = dict(outcome="open", filled=False, fill_ts=None, r1=False, r2=False, sl=False,
-               ambiguous=False, resolved=False, end_ts=None)
+    res = dict(outcome="open", filled=False, fill_ts=None, half=False, r1=False, r2=False, sl=False,
+               be=False, ambiguous=False, resolved=False, end_ts=None)
     if risk <= 0:
         res.update(outcome="no fill", resolved=True)
         return res
@@ -86,14 +118,22 @@ def simulate(plan, market, tf, alert_ts, candles):
         if seen - fill_index > hold_n:
             res.update(outcome="1R" if res["r1"] else "timeout", resolved=True, end_ts=ts)
             return res
-        hit_sl = (l <= sl) if long else (h >= sl)
+        # The stop moves from the candle after +0.5R traded - inside that candle
+        # the order is unknown.
+        moved = res["half"] and BREAK_EVEN_ENABLED and be_reachable
+        stop = be_stop if moved else sl
+        hit_stop = (l <= stop) if long else (h >= stop)
+        hit_half = (h >= half) if long else (l <= half)
         hit1 = (h >= t1) if long else (l <= t1)
         hit2 = (h >= t2) if long else (l <= t2)
-        if hit_sl:
+        if hit_stop:
             if (hit1 and not res["r1"]) or hit2:
                 res["ambiguous"] = True
-            res.update(outcome="1R" if res["r1"] else "SL", sl=True, resolved=True, end_ts=ts)
+            outcome = "1R" if res["r1"] else ("BE" if moved else "SL")
+            res.update({"outcome": outcome, "be" if moved else "sl": True, "resolved": True, "end_ts": ts})
             return res
+        if hit_half or hit1:
+            res["half"] = True
         if hit1:
             res["r1"] = True
         if hit2:
@@ -106,6 +146,15 @@ def simulate(plan, market, tf, alert_ts, candles):
 
 def risk_pct(plan):
     return abs(plan["entry"] - plan["sl"]) / plan["entry"] * 100
+
+
+def booked_r(plan, market, result):
+    """Net R after costs (out at 1R, held for 2R) - None where that booking is undecided."""
+    cost_r = COST_PCT[market] / risk_pct(plan)
+    stop_r = -1 if result["sl"] else break_even_r(plan, market) if result.get("be") else None
+    at1 = 1 if result["r1"] else stop_r
+    at2 = 2 if result["r2"] else stop_r
+    return (None if at1 is None else at1 - cost_r, None if at2 is None else at2 - cost_r)
 
 
 def summarise(trades):
@@ -128,15 +177,11 @@ def _row(key, trades):
         count[r["outcome"]] += 1
         if not r["filled"]:
             continue
-        cost_r = COST_PCT[market] / risk_pct(t["plan"])
-        if r["r1"]:
-            net1.append(1 - cost_r)
-        elif r["sl"]:
-            net1.append(-1 - cost_r)
-        if r["r2"]:
-            net2.append(2 - cost_r)
-        elif r["sl"]:
-            net2.append(-1 - cost_r)
+        at1, at2 = booked_r(t["plan"], market, r)
+        if at1 is not None:
+            net1.append(at1)
+        if at2 is not None:
+            net2.append(at2)
     hits1 = count["1R"] + count["2R"]
     stops2 = count["SL"] + sum(1 for t in trades if t["result"]["outcome"] == "1R" and t["result"]["sl"])
     return {

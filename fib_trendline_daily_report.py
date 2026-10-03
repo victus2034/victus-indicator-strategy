@@ -112,7 +112,8 @@ def tally(items):
 
     +1R is every trade that reached 1R and not 2R, whatever it did afterwards.
     Net R is after costs under the two bookings fib_trendline_trades._row uses:
-    out at 1R, or held for 2R (where a 1R trade that then stops is a loss).
+    out at 1R, or held for 2R (where a 1R trade that falls back books the breakeven
+    stop). BE is left out of the win rate, as in the zone report.
     """
     t = defaultdict(int)
     net1 = net2 = 0.0
@@ -122,23 +123,17 @@ def tally(items):
             t["no_fill" if x["outcome"] == "no fill" else "waiting"] += 1
             continue
         t["entries"] += 1
-        t[{"SL": "sl", "1R": "r1", "2R": "r2", "timeout": "timeout"}.get(x["outcome"], "running")] += 1
-        cost_r = trades.COST_PCT[record["market"]] / trades.risk_pct(record["plan"])
-        if x["r1"]:
-            net1 += 1 - cost_r
-        elif x["sl"]:
-            net1 += -1 - cost_r
-        if x["r2"]:
-            net2 += 2 - cost_r
-        elif x["sl"]:
-            net2 += -1 - cost_r
+        t[{"SL": "sl", "BE": "be", "1R": "r1", "2R": "r2", "timeout": "timeout"}.get(x["outcome"], "running")] += 1
+        at1, at2 = trades.booked_r(record["plan"], record["market"], x)
+        net1 += at1 or 0.0
+        net2 += at2 or 0.0
     wins, decided = t["r1"] + t["r2"], t["r1"] + t["r2"] + t["sl"]
     t["win"] = f"{wins / decided * 100:.1f}%" if decided else "N/A"
     t["net1"], t["net2"] = net1, net2
     return t
 
 
-OUTCOME_PARTS = (("sl", "SL"), ("r1", "+1R"), ("r2", "+2R"), ("timeout", "Timeout"), ("running", "Running"))
+OUTCOME_PARTS = (("sl", "SL"), ("be", "BE"), ("r1", "+1R"), ("r2", "+2R"), ("timeout", "Timeout"), ("running", "Running"))
 
 
 def _row(label, items):
