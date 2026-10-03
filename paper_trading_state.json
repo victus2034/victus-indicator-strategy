@@ -57957,6 +57957,33 @@
       "target_half": 1.231875,
       "timeframe": "30m",
       "trade_id": "RIVERUSD|30m|short|1.235|1.24125"
+    },
+    {
+      "alert_time": "2026-10-03T12:56:14.984235+05:30",
+      "cost_r": 0.10923636363636294,
+      "date": "2026-10-03",
+      "entry": 0.001502,
+      "entry_time": "2026-10-03T13:00:00+05:30",
+      "exit_price": 0.001495,
+      "exit_time": "2026-10-03T18:55:00+05:30",
+      "final_result": "Neither",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "net_realized_r": -0.6183272727272732,
+      "outcome": "Neither",
+      "rating": 3,
+      "realized_r": -0.5090909090909103,
+      "risk": 1.375000000000009e-05,
+      "side": "long",
+      "stop": 0.00148825,
+      "stream": "live",
+      "symbol": "TACUSD",
+      "target_1": 0.0015157500000000002,
+      "target_2": 0.0015295000000000003,
+      "target_half": 0.0015088750000000002,
+      "timeframe": "30m",
+      "trade_id": "TACUSD|30m|long|0.001502|0.00148825"
     }
   ],
   "handled": {
@@ -60336,24 +60363,6 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
-      "timeframe": "30m"
-    },
-    "TACUSD|30m|long|0.001502|0.00148825": {
-      "alert_time": "2026-10-03T12:56:14.984235+05:30",
-      "entry": 0.001502,
-      "entry_time": "2026-10-03T13:00:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 3,
-      "risk": 1.375000000000009e-05,
-      "side": "long",
-      "stop": 0.00148825,
-      "stream": "live",
-      "symbol": "TACUSD",
-      "target_1": 0.0015157500000000002,
-      "target_2": 0.0015295000000000003,
-      "target_half": 0.0015088750000000002,
       "timeframe": "30m"
     }
   }
