@@ -59539,6 +59539,7 @@
     "STORJ/USDT|30m|short|0.0309|0.0329": "filled",
     "STORJ/USDT|4h|long|0.0283248|0.0280438": "filled",
     "TACUSD|30m|long|0.00148075|0.00146606": "filled",
+    "TACUSD|30m|long|0.001502|0.00148825": "filled",
     "TACUSD|30m|long|0.00152|0.00151625": "filled",
     "TACUSD|30m|long|0.001598|0.00158675": "filled",
     "TACUSD|30m|long|0.001877|0.00187575": "filled",
@@ -60335,6 +60336,24 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
+      "timeframe": "30m"
+    },
+    "TACUSD|30m|long|0.001502|0.00148825": {
+      "alert_time": "2026-10-03T12:56:14.984235+05:30",
+      "entry": 0.001502,
+      "entry_time": "2026-10-03T13:00:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 3,
+      "risk": 1.375000000000009e-05,
+      "side": "long",
+      "stop": 0.00148825,
+      "stream": "live",
+      "symbol": "TACUSD",
+      "target_1": 0.0015157500000000002,
+      "target_2": 0.0015295000000000003,
+      "target_half": 0.0015088750000000002,
       "timeframe": "30m"
     }
   }

@@ -1,10 +1,20 @@
 {
+  "BNBUSD|30m|long|763.65|759.312": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "MRVL/USDT:USDT|30m|long|272.013|271.997": {
     "reached_entry": false,
     "stage": 1,
     "stopped_out": false
   },
   "RIVERUSD|30m|short|1.235|1.24125": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
+  "TACUSD|30m|long|0.001502|0.00148825": {
     "reached_entry": true,
     "stage": 2,
     "stopped_out": false
@@ -304,6 +314,7 @@
   "_level_ready|SOXLBUSD|4h|short|156.25|157.062": 1790831162.701182,
   "_level_ready|SOXLBUSD|4h|short|166.964|168.634": 1790948798.588421,
   "_level_ready|TACUSD|30m|long|0.00148075|0.00146606": 1790566580.565131,
+  "_level_ready|TACUSD|30m|long|0.001502|0.00148825": 1791012695.995822,
   "_level_ready|TACUSD|30m|long|0.00152|0.00151625": 1790936482.523706,
   "_level_ready|TACUSD|30m|short|0.00156548|0.00158113": 1790760385.42848,
   "_level_ready|TACUSD|30m|short|0.001588|0.00159425": 1790877989.294084,
@@ -482,7 +493,7 @@
   "_ready|SOXLBUSD|30m": 1790931708.931695,
   "_ready|SOXLBUSD|4h": 1790948798.588421,
   "_ready|STORJ/USDT|30m": 1788930963.585849,
-  "_ready|TACUSD|30m": 1790936482.523706,
+  "_ready|TACUSD|30m": 1791012695.995822,
   "_ready|TACUSD|4h": 1790566885.398299,
   "_ready|TRUMP/USDT|30m": 1790771776.301532,
   "_ready|TRUMP/USDT|4h": 1790607384.010239,
@@ -595,10 +606,6 @@
   "_silent_ready|SOLUSD|30m|long|116.999|116.634": {
     "price": 117.659,
     "time": "2026-10-03T00:16:35.737809+05:30"
-  },
-  "_silent_ready|TACUSD|30m|long|0.001502|0.00148825": {
-    "price": 0.001507,
-    "time": "2026-10-03T12:22:10.891926+05:30"
   },
   "_silent_ready|TRUMP/USDT|30m|long|2.04|2.0225": {
     "price": 2.056,
