@@ -449,6 +449,18 @@ class DailyReportTests(unittest.TestCase):
         with mock.patch.object(self.report, "eval_candles", side_effect=AssertionError("re-scored")):
             self.report.run(datetime(2026, 9, 29).date(), self.sent_ts + 2 * 86400)
 
+    def test_results_scored_before_breakeven_are_scored_once_more(self):
+        old = {"a": {"outcome": "SL", "filled": True, "resolved": True, "r1": False, "r2": False, "sl": True}}
+        # +0.5R (100.5) trades, then price falls through the stop: BE under the new rule
+        candles = [[self.sent_ts + 300, 0, 100.2, 99.9, 0], [self.sent_ts + 600, 0, 100.6, 100.2, 0],
+                   [self.sent_ts + 900, 0, 100.3, 98.5, 0]]
+        records = self.report.load_records()
+        with mock.patch.object(self.report, "eval_candles", lambda *a: candles):
+            results = self.report.score(records, dict(old), self.sent_ts + 86400)
+        self.assertEqual(results["a"]["outcome"], "BE")
+        with mock.patch.object(self.report, "eval_candles", side_effect=AssertionError("re-scored")):
+            self.report.score(records, results, self.sent_ts + 2 * 86400)
+
     def test_posts_once_a_day_after_eight(self):
         state = {}
         calls = []

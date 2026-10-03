@@ -70,7 +70,10 @@ def eval_candles(market, symbol, resolution, start, now):
 
 def score(records, results, now):
     """Simulate every record without a final result; returns the updated results."""
-    pending = [r for r in records if not results.get(r["id"], {}).get("resolved")]
+    # A result without "be" was scored before the breakeven rule (2026-10-03);
+    # it is scored once more so a trade that reached +0.5R and came back reads BE.
+    pending = [r for r in records
+               if not results.get(r["id"], {}).get("resolved") or "be" not in results[r["id"]]]
     groups = defaultdict(list)
     for record in pending:
         resolution = trades.EVAL_RESOLUTION[record["market"]][record["tf"]]
