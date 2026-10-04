@@ -1,0 +1,61 @@
+$FIRSTCRY.NS: 1m data not available for startTime=1786430400 and endTime=1786430700. The requested range must be within the last 30 days.
+
+1 Failed download:
+['FIRSTCRY.NS']: 1m data not available for startTime=1786430400 and endTime=1786430700. The requested range must be within the last 30 days.
+stored rows: 4874
+crypto 30m: 53 alerts, frames for 28/28 symbols
+skip AVGO/USDT:USDT: no Delta contract
+skip BABA/USDT:USDT: no Delta contract
+skip FLNC/USDT:USDT: no Delta contract
+skip HOOD/USDT:USDT: no Delta contract
+skip MSFT/USDT:USDT: no Delta contract
+skip SOXX/USDT:USDT: no Delta contract
+xstock 30m: 27 alerts, frames for 11/17 symbols
+other 30m: 2 alerts, frames for 1/1 symbols
+crypto 4h: 7 alerts, frames for 7/7 symbols
+skip MSFT/USDT:USDT: no Delta contract
+xstock 4h: 4 alerts, frames for 3/4 symbols
+other 4h: 1 alerts, frames for 1/1 symbols
+nse 30m: 66 alerts, frames for 57/57 symbols
+nse 4h: 33 alerts, frames for 33/33 symbols
+# Backtest audit - stored vs re-simulated (current code)
+
+| market | tf | stored trades | stored net R | resim trades | resim net R | resim trail R |
+|---|---|---|---|---|---|---|
+| CRYPTO | 30m | 30 | -22.5 | 34 | -21.3 | -19.8 |
+| CRYPTO | 4h | 6 | -0.5 | 6 | -0.3 | +1.4 |
+| NSE | 30m | 47 | -19.3 | 46 | -23.9 | -25.5 |
+| NSE | 4h | 30 | -7.0 | 30 | -7.9 | -13.2 |
+| OTHER | 30m | 1 | -1.4 | 1 | -1.4 | -1.4 |
+| XSTOCK | 30m | 6 | +1.5 | 6 | +0.6 | +2.2 |
+| XSTOCK | 4h | 3 | +0.5 | 3 | +0.5 | +0.7 |
+
+Rows that grade differently now: 33
+
+## Transitions (stored -> resim), changed only
+
+| market | tf | stored | resim | n |
+|---|---|---|---|---|
+| XSTOCK | 30m | alert_before_data | no_candles | 7 |
+| CRYPTO | 30m | alert_before_data | zone_not_touched | 4 |
+| CRYPTO | 30m | alert_before_data | data_missing | 3 |
+| NSE | 30m | +1R | BE | 3 |
+| NSE | 30m | BE | Neither | 3 |
+| CRYPTO | 30m | zone_not_touched | +2R | 1 |
+| CRYPTO | 30m | alert_before_data | +2R | 1 |
+| CRYPTO | 30m | alert_before_data | BE | 1 |
+| CRYPTO | 30m | alert_before_data | SL | 1 |
+| CRYPTO | 30m | +1R | BE | 1 |
+| XSTOCK | 30m | +1R | BE | 1 |
+| CRYPTO | 4h | Neither | BE | 1 |
+| XSTOCK | 4h | immature | no_candles | 1 |
+| OTHER | 4h | alert_before_data | zone_not_touched | 1 |
+| NSE | 30m | BE | data_quality_ambiguous | 1 |
+| NSE | 30m | BE | SL | 1 |
+| NSE | 4h | +1R | BE | 1 |
+
+## Independent reference vs production: 3 disagreements
+
+| production | reference | n |
+|---|---|---|
+| data_missing | alert_before_data | 3 |
