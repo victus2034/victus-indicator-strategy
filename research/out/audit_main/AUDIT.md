@@ -2,16 +2,16 @@
 
 | market | tf | stored trades | stored net R | resim trades | resim net R | resim trail R |
 |---|---|---|---|---|---|---|
-| CRYPTO | 30m | 564 | -51.9 | 561 | -225.8 | -185.8 |
-| CRYPTO | 4h | 191 | -45.4 | 166 | -82.3 | -68.3 |
-| NSE | 30m | 1303 | -438.4 | 1269 | -868.6 | -816.0 |
-| NSE | 4h | 434 | -108.0 | 433 | -144.7 | -146.2 |
-| OTHER | 30m | 22 | -10.3 | 26 | -13.3 | -16.5 |
-| OTHER | 4h | 8 | +0.3 | 9 | -2.2 | -2.4 |
-| XSTOCK | 30m | 115 | -41.6 | 118 | -60.6 | -46.0 |
-| XSTOCK | 4h | 55 | -11.1 | 48 | -11.1 | -4.1 |
+| CRYPTO | 30m | 564 | -51.9 | 561 | -210.1 | -185.8 |
+| CRYPTO | 4h | 191 | -45.4 | 166 | -78.9 | -68.3 |
+| NSE | 30m | 1303 | -438.4 | 1269 | -815.3 | -816.0 |
+| NSE | 4h | 434 | -108.0 | 433 | -134.3 | -146.2 |
+| OTHER | 30m | 22 | -10.3 | 26 | -12.3 | -16.5 |
+| OTHER | 4h | 8 | +0.3 | 9 | -1.9 | -2.4 |
+| XSTOCK | 30m | 115 | -41.6 | 118 | -58.4 | -46.0 |
+| XSTOCK | 4h | 55 | -11.1 | 48 | -9.3 | -4.1 |
 
-Rows that grade differently now: 2069
+Rows that grade differently now: 1647
 
 ## Transitions (stored -> resim), changed only
 
@@ -19,10 +19,10 @@ Rows that grade differently now: 2069
 |---|---|---|---|---|
 | CRYPTO | 30m | alert_before_data | data_missing | 160 |
 | XSTOCK | 30m | alert_before_data | no_candles | 133 |
-| NSE | 30m | +1R | BE | 101 |
+| NSE | 30m | +1R | BE | 102 |
 | CRYPTO | 30m | alert_before_data | zone_not_touched | 90 |
-| NSE | 30m | +1R | SL | 78 |
-| NSE | 30m | BE | SL | 74 |
+| NSE | 30m | +1R | SL | 77 |
+| NSE | 30m | BE | SL | 73 |
 | CRYPTO | 30m | alert_before_data | SL | 63 |
 | CRYPTO | 30m | SL | data_missing | 56 |
 | CRYPTO | 30m | +1R | BE | 42 |
@@ -33,10 +33,10 @@ Rows that grade differently now: 2069
 | CRYPTO | 30m | zone_not_touched | +2R | 22 |
 | CRYPTO | 30m | +2R | data_missing | 21 |
 | CRYPTO | 4h | immature | zone_not_touched | 20 |
-| CRYPTO | 30m | alert_before_data | +2R | 19 |
+| CRYPTO | 30m | alert_before_data | +2R | 18 |
 | CRYPTO | 30m | +1R | SL | 18 |
 | CRYPTO | 30m | BE | SL | 18 |
-| CRYPTO | 30m | alert_before_data | BE | 16 |
+| CRYPTO | 30m | alert_before_data | BE | 17 |
 | XSTOCK | 30m | zone_not_touched | no_candles | 16 |
 | CRYPTO | 4h | SL | data_missing | 16 |
 | NSE | 30m | BE | data_quality_ambiguous | 16 |
@@ -45,10 +45,10 @@ Rows that grade differently now: 2069
 | CRYPTO | 30m | +2R | SL | 13 |
 | NSE | 30m | +1R | data_quality_ambiguous | 13 |
 | NSE | 30m | BE | Neither | 12 |
+| CRYPTO | 30m | SL | BE | 10 |
 | CRYPTO | 30m | zone_not_touched | BE | 10 |
 | XSTOCK | 30m | stop_too_tight | no_candles | 10 |
 | XSTOCK | 4h | immature | no_candles | 10 |
-| CRYPTO | 30m | SL | BE | 9 |
 | CRYPTO | 4h | immature | data_missing | 9 |
 | CRYPTO | 4h | Neither | data_missing | 9 |
 | CRYPTO | 4h | +2R | SL | 9 |
@@ -172,9 +172,8 @@ Rows that grade differently now: 2069
 | NSE | 4h | BE | +1R | 1 |
 | NSE | 4h | BE | data_quality_ambiguous | 1 |
 
-## Independent reference vs production: 1045 disagreements
+## Independent reference vs production: 387 disagreements
 
 | production | reference | n |
 |---|---|---|
-| BE | BE | 658 |
 | data_missing | alert_before_data | 387 |
