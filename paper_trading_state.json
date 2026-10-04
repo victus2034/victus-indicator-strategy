@@ -59013,6 +59013,7 @@
     "BLESSUSD|30m|short|0.00839782|0.0084818": "filled",
     "BLESSUSD|30m|short|0.00850198|0.008587": "filled",
     "BLESSUSD|30m|short|0.00885417|0.00894271": "filled",
+    "BLESSUSD|30m|short|0.008965|0.009015": "filled",
     "BLESSUSD|30m|short|0.009054|0.0091065": "filled",
     "BLESSUSD|30m|short|0.009287|0.00930325": "stop_too_tight",
     "BLESSUSD|30m|short|0.00952183|0.00961704": "filled",
@@ -60384,6 +60385,24 @@
       "target_1": 181.03500000000005,
       "target_2": 179.7100000000001,
       "target_half": 181.69750000000005,
+      "timeframe": "30m"
+    },
+    "BLESSUSD|30m|short|0.008965|0.009015": {
+      "alert_time": "2026-10-04T08:33:11.334564+05:30",
+      "entry": 0.008965,
+      "entry_time": "2026-10-04T08:35:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 5,
+      "risk": 4.99999999999997e-05,
+      "side": "short",
+      "stop": 0.009015,
+      "stream": "live",
+      "symbol": "BLESSUSD",
+      "target_1": 0.008915000000000001,
+      "target_2": 0.008865000000000001,
+      "target_half": 0.00894,
       "timeframe": "30m"
     }
   }
