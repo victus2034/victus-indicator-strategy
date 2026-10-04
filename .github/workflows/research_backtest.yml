@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   research:
+    concurrency: research-${{ github.ref }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -34,4 +35,4 @@ jobs:
           git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
           git add research/out
           git commit -m "Research backtest results [skip ci]" || exit 0
-          git push origin HEAD:${GITHUB_REF_NAME}
+          git pull --rebase origin ${GITHUB_REF_NAME} && git push origin HEAD:${GITHUB_REF_NAME}
