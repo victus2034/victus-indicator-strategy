@@ -50,3 +50,29 @@ Crypto, "with trend" = long above / short below the daily EMA50 (recorded net R)
 
 See EDGE_REPORT.md. No bucket (stop size, touches, rating, hour, weekday) is
 reliably positive. The rating does not separate winners.
+
+## Trailing-stop grid (119 rules, 2026-10-04)
+
+Start trailing at +a R, stop d R behind the best price (a 0.5-1.5, d 0.25-1.0),
+breakeven on/off, 6/12/24h; plus structure trails (lowest low of last 3/6/12
+5m candles). "+slip" also charges 0.05% slippage on every trailed/BE stop exit,
+not just the full stop - a trailed stop is a stop order too.
+
+Crypto with the daily trend filter (258 trades):
+
+| rule | R | R +slip | first half | second half | win % |
+|---|---:|---:|---:|---:|---:|
+| current scoring | -43 | -52 | -38 | -15 | 33 |
+| honest 2R target | -75 | -84 | -42 | -42 | 18 |
+| trail 0.5R after +1R | -28 | -42 | -24 | -18 | 33 |
+| **trail 0.25R after +0.5R** | **-5** | **-19** | -11 | -8 | 48 |
+| trail 0.5R after +0.5R | -23 | -38 | -20 | -18 | 38 |
+| structure trail, last 3 candles | -33 | -48 | -26 | -22 | 37 |
+
+- Best everywhere: start early (+0.5R) and trail tight (0.25R). Breakeven on/off and
+  12h vs 24h barely matter (most trades are out well before).
+- With the trend filter it is close to break-even (-0.07R/trade after slippage), but
+  still not positive in either half.
+- All crypto (no filter): best rule -128R vs -222R honest 2R. NSE: nothing beats the current rule.
+- Caveat: a 0.25R trail on 5m candles is only practical with an automated trailing stop;
+  by hand it will slip more than modelled.
