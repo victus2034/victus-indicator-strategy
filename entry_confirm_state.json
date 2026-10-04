@@ -1,4 +1,9 @@
 {
+  "NVDAXUSD|30m|long|234.25|234.125": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "SLVONUSD|30m|long|54.74|54.7275": {
     "reached_entry": false,
     "stage": 1,
@@ -7,9 +12,14 @@
   "SNDKBUSD|30m|short|1719.18|1719.24": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "TSLAXUSD|30m|short|373.8|375.738": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
+  "UNIUSD|30m|long|8.969|8.9365": {
     "reached_entry": false,
     "stage": 1,
     "stopped_out": false
@@ -243,6 +253,7 @@
   "_level_ready|NVDAXUSD|30m|long|228.4|227.9": 1790867508.28259,
   "_level_ready|NVDAXUSD|30m|long|233.757|233.748": 1791091890.668559,
   "_level_ready|NVDAXUSD|30m|long|234.154|234.149": 1791082591.347346,
+  "_level_ready|NVDAXUSD|30m|long|234.25|234.125": 1791122821.404184,
   "_level_ready|NVDAXUSD|30m|short|213.55|214.113": 1789529155.735761,
   "_level_ready|NVDAXUSD|30m|short|216.25|217.062": 1789613166.898256,
   "_level_ready|NVDAXUSD|30m|short|221.85|222.1": 1789715768.437191,
@@ -379,6 +390,7 @@
   "_level_ready|UNIUSD|30m|long|8.735|8.66375": 1790607072.388885,
   "_level_ready|UNIUSD|30m|long|8.764|8.71025": 1790842298.984707,
   "_level_ready|UNIUSD|30m|long|8.895|8.86625": 1790963484.198995,
+  "_level_ready|UNIUSD|30m|long|8.969|8.9365": 1791122821.404184,
   "_level_ready|UNIUSD|30m|long|9.092|9.02887": 1790579463.945383,
   "_level_ready|UNIUSD|30m|long|9.109|9.02525": 1790239881.93561,
   "_level_ready|UNIUSD|30m|short|8.936|9.016": 1789982174.003005,
@@ -497,7 +509,7 @@
   "_ready|MRVL/USDT:USDT|4h": 1790014567.180453,
   "_ready|MSFT/USDT:USDT|30m": 1789542964.512681,
   "_ready|MSFT/USDT:USDT|4h": 1789376756.136711,
-  "_ready|NVDAXUSD|30m": 1791091890.668559,
+  "_ready|NVDAXUSD|30m": 1791122821.404184,
   "_ready|NVDAXUSD|4h": 1790944300.723606,
   "_ready|O/USDT|30m": 1789481164.028485,
   "_ready|RE/USDT|30m": 1789390557.764438,
@@ -521,7 +533,7 @@
   "_ready|TSLAXUSD|30m": 1791121864.970132,
   "_ready|TSLAXUSD|4h": 1790950593.091482,
   "_ready|UB/USDT|30m": 1789320957.820623,
-  "_ready|UNIUSD|30m": 1790963484.198995,
+  "_ready|UNIUSD|30m": 1791122821.404184,
   "_ready|US/USDT|30m": 1789306268.896163,
   "_ready|VELVETUSD|30m": 1790908924.3021,
   "_ready|VELVETUSD|4h": 1790917594.264559,
