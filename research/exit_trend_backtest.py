@@ -49,6 +49,20 @@ VARIANTS = {
     "t3_24h": dict(target=3.0, be=0.5, horizon_h=24),
     "trail1_24h": dict(target=None, be=0.5, trail=(1.0, 1.0), horizon_h=24),
 }
+# Trailing-stop grid (Lakky asked for more on the 0.5R trail, 2026-10-04):
+# start trailing at +a R, keep the stop d R behind the best price, with or
+# without the +0.5R breakeven step, over 6/12/24h (NSE is always same day).
+for _a in (0.5, 0.75, 1.0, 1.5):
+    for _d in (0.25, 0.5, 0.75, 1.0):
+        for _be in (0.5, None):
+            for _h in (6, 12, 24):
+                VARIANTS[f"g_a{_a}_d{_d}_{'be' if _be else 'nobe'}_{_h}h"] = dict(
+                    target=None, be=_be, trail=(_a, _d), horizon_h=_h)
+# Structure trail: after +a R, stop under the lowest low (long) of the last n 5m candles.
+for _a in (0.5, 1.0):
+    for _n in (3, 6, 12):
+        for _h in (6, 24):
+            VARIANTS[f"bars_a{_a}_n{_n}_{_h}h"] = dict(target=None, be=0.5, trail_bars=(_a, _n), horizon_h=_h)
 
 
 def market_key(market: str) -> str:
@@ -138,7 +152,7 @@ def trend_tags(htf: pd.DataFrame | None, seconds: int, nse: bool, at: pd.Timesta
 
 
 def simulate(highs, lows, closes, ends, i0, side, entry, stop, horizon_end, cost_r, be_offset_pct,
-             target=None, be=None, trail=None, partial=None, bank_best=False, **_):
+             target=None, be=None, trail=None, partial=None, bank_best=False, trail_bars=None, **_):
     direction = 1.0 if side == "long" else -1.0
     risk = direction * (entry - stop)
     if risk <= 0:
@@ -183,6 +197,11 @@ def simulate(highs, lows, closes, ends, i0, side, entry, stop, horizon_end, cost
             active = be_stop
         if trail and peak >= trail[0]:
             level = entry + direction * (peak - trail[1]) * risk
+            if direction * (level - active) > 0:
+                active = level
+        if trail_bars and peak >= trail_bars[0]:
+            lo_k = max(i0, j - trail_bars[1] + 1)
+            level = lows[lo_k:j + 1].min() if direction > 0 else highs[lo_k:j + 1].max()
             if direction * (level - active) > 0:
                 active = level
     r = direction * (closes[last] - entry) / risk
