@@ -26,6 +26,7 @@ jobs:
         run: bash .github/scripts/restore_runtime_state.sh daily_backtest_finalized_records.jsonl
       - name: Replay trades
         run: python research/exit_trend_backtest.py --records daily_backtest_finalized_records.jsonl --out research/out 2>&1 | tee research/out.log
+      - run: pip install tabulate && python research/edge_report.py --records daily_backtest_finalized_records.jsonl
       - name: Commit results to this branch
         run: |
           mkdir -p research/out && mv research/out.log research/out/run.log
