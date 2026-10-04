@@ -908,6 +908,39 @@ class DailyBacktestSummaryTests(unittest.TestCase):
         self.assertAlmostEqual(result["exit_price"], 100.6)
         self.assertLess(result["realized_r"], 1.0)
 
+    def test_trail_shadow_follows_the_best_price(self):
+        # Runs to 101.6, then falls back: the trail sits 0.25R under the
+        # best price and the slipped stop there is the exit.
+        frame = crypto_frame(
+            rows=[
+                (101.0, 101.2, 100.8, 101.0),
+                (100.0, 100.4, 100.0, 100.3),
+                (100.3, 101.6, 100.3, 101.5),
+                (101.5, 101.5, 100.5, 100.6),
+            ]
+        )
+
+        result = summary.simulate_alert(frame, crypto_alert(), 0, 3)
+
+        risk = result["entry_price"] - result["stop_price"]
+        level = 101.6 - summary.TRAIL_DISTANCE_R * risk
+        expected_exit = level * (1 - summary.SL_FILL_SLIPPAGE_PCT / 100)
+        expected = (expected_exit - result["entry_price"]) / risk
+        self.assertAlmostEqual(result["trail_net_r"], expected - result["cost_r"], places=6)
+        self.assertGreater(result["trail_net_r"], 1.0)
+
+    def test_trail_shadow_takes_the_full_stop_before_it_starts(self):
+        frame = crypto_frame(
+            rows=[
+                (101.0, 101.2, 100.8, 101.0),
+                (100.0, 100.3, 98.8, 99.0),
+            ]
+        )
+
+        result = summary.simulate_alert(frame, crypto_alert(), 0, 1)
+
+        self.assertLess(result["trail_net_r"], -1.0)
+
     def test_crypto_two_r_stops_tracking(self):
         frame = crypto_frame(
             rows=[

@@ -215,5 +215,10 @@ each falling back to the shared one above when unset (so nothing changes until t
 - **Daily report scoring (2026-10-04).** Only +2R is an exit. A trade that touches +1R and
   comes back is closed by the live stop (BE), and "+1R" now means "reached +1R, closed by
   the time limit", priced at that close. It used to be credited a flat 1R either way.
+- **Trail test shadow score (2026-10-04, Lakky).** Every filled zone trade is also scored as
+  if the stop trailed 0.25R behind the best price once +0.5R traded (`TRAIL_START_R`,
+  `TRAIL_DISTANCE_R`, `trail_shadow_r`) - the best of 119 exit rules in
+  `research/out/RESULTS.md`. Stored as `trail_net_r` and shown as "Trail test" beside
+  TOTAL in the daily report. It changes no trade and no alert; it is there to be watched.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

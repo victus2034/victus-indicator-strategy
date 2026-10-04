@@ -131,6 +131,16 @@ SL_FILL_SLIPPAGE_PCT = 0.05
 # scored "stop_too_tight" (not taken) instead of being left to distort
 # every total. 0.5R is a stop of about 0.20% at the crypto fee rate.
 MAX_COST_R = 0.5
+# Shadow score, not the trade rule (Lakky, 2026-10-04). Every filled trade is
+# also scored as if the stop trailed TRAIL_DISTANCE_R behind the best price
+# once +TRAIL_START_R had traded - the best of 119 exit rules replayed in
+# research/out/RESULTS.md. It rides along as trail_net_r and one report line
+# so it can be watched on live trades before anyone decides to trade it.
+# Scored conservatively: the stop counts on the fill candle, the trail moves
+# only from the next one, a candle touching both counts as the stop, and
+# every stop exit pays SL_FILL_SLIPPAGE_PCT.
+TRAIL_START_R = 0.5
+TRAIL_DISTANCE_R = 0.25
 TARGET_1_R = 1.0
 TARGET_2_R = 2.0
 HALF_R = 0.5
@@ -1255,6 +1265,9 @@ def simulate_alert(
     # stop. Reporting gross would overstate every outcome by that amount.
     cost_r = round_trip_cost_r(entry_price, risk, market)
     net_realized_r = realized_r - cost_r if pd.notna(realized_r) else realized_r
+    trail_net_r = trail_shadow_r(
+        frame, entry_index, end_index, direction, entry_price, stop, risk
+    ) - cost_r
     evaluation_end_time = candle_ends(frame)[exit_index]
     final_resolution_time = resolution_time_for_outcome(
         outcome,
@@ -1288,6 +1301,7 @@ def simulate_alert(
             "realized_r": realized_r,
             "net_realized_r": net_realized_r,
             "cost_r": cost_r,
+            "trail_net_r": trail_net_r,
             "mfe_r": max_favorable_r,
             "mae_r": max_adverse_r,
             "time_to_half_r": time_to_half_r,
@@ -1303,6 +1317,34 @@ def simulate_alert(
         }
     )
     return result
+
+
+def trail_shadow_r(
+    frame: pd.DataFrame,
+    entry_index: int,
+    end_index: int,
+    direction: float,
+    entry_price: float,
+    stop: float,
+    risk: float,
+) -> float:
+    """Gross R of the trailing-stop shadow score (see TRAIL_START_R)."""
+    active = stop
+    peak = 0.0
+    for index in range(entry_index, end_index + 1):
+        high = float(frame["high"].iloc[index])
+        low = float(frame["low"].iloc[index])
+        if (low <= active) if direction > 0 else (high >= active):
+            exit_price = active - direction * active * SL_FILL_SLIPPAGE_PCT / 100.0
+            return direction * (exit_price - entry_price) / risk
+        if index == entry_index:
+            continue
+        peak = max(peak, ((high - entry_price) if direction > 0 else (entry_price - low)) / risk)
+        if peak >= TRAIL_START_R:
+            level = entry_price + direction * (peak - TRAIL_DISTANCE_R) * risk
+            if direction * (level - active) > 0:
+                active = level
+    return direction * (float(frame["close"].iloc[end_index]) - entry_price) / risk
 
 
 def resolution_time_for_outcome(
@@ -1857,7 +1899,14 @@ def build_summary(
     ]
     if counted:
         lines.append(counted)
-    lines.append(f"Win rate {win_rate} · TOTAL {format_r(net_r)}")
+    totals = f"Win rate {win_rate} · TOTAL {format_r(net_r)}"
+    trail_r = pd.to_numeric(
+        finalized.get("trail_net_r", pd.Series(dtype=float)), errors="coerce"
+    )
+    if trail_r.notna().any():
+        # The shadow score (TRAIL_START_R), shown beside the real total.
+        totals += f" · Trail test {format_r(trail_r.sum())}"
+    lines.append(totals)
     if data_failures:
         # Symbols whose candles could not be fetched were silently missing
         # from the report; their alerts showed up only as fewer entries.
@@ -2352,6 +2401,7 @@ def lifecycle_payload(row: dict, target_date, timeframe: str, market: str) -> di
         "time_to_best_secured_milestone_seconds": json_optional_float(row.get("time_to_best_secured_milestone_seconds")),
         "realized_r": json_optional_float(row.get("realized_r")),
         "net_realized_r": json_optional_float(row.get("net_realized_r")),
+        "trail_net_r": json_optional_float(row.get("trail_net_r")),
         "cooldown_blocked": bool(row.get("cooldown_blocked", False)),
         "ambiguous_interval_start": format_optional_timestamp(row.get("ambiguous_interval_start")),
         "ambiguous_interval_end": format_optional_timestamp(row.get("ambiguous_interval_end")),
