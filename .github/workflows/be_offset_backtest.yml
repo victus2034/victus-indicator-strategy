@@ -1,0 +1,44 @@
+name: BE offset backtest (research)
+
+# Research only: re-runs recorded trades under several breakeven offsets, posts nothing,
+# touches no live state. Runs here because the candle APIs are reachable from
+# GitHub runners and not from the cloud sessions that wrote it.
+on:
+  push:
+    branches: [claude/project-thread-ts1bzx]
+    paths: [research/be_offset_backtest.py, .github/workflows/be_offset_backtest.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    concurrency: be-offset-${{ github.ref }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Restore recorded trades (read-only)
+        run: >
+          bash .github/scripts/restore_runtime_state.sh
+          daily_backtest_finalized_records.jsonl
+          crypto_alert_records.jsonl crypto_alert_records_30m.jsonl
+          nse_alert_records.jsonl nse_alert_records_30m.jsonl
+      - name: BE offset backtest
+        run: python research/be_offset_backtest.py 2>&1 | tee research/be_offset.log
+      - name: Commit results to this branch
+        if: always()
+        run: |
+          mkdir -p research/out/be_offset
+          mv research/be_offset.log research/out/be_offset/run.log || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
+          git add research/out/be_offset
+          git commit -m "BE offset backtest results [skip ci]" || exit 0
+          git pull --rebase origin ${GITHUB_REF_NAME} && git push origin HEAD:${GITHUB_REF_NAME}
