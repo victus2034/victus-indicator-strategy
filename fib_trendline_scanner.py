@@ -115,7 +115,16 @@ def fib_zones(d, base, top):
 
 
 def fib_distance(d, zone, price):
-    """% from price down to (long) / up to (short) the zone; 0 inside; None once past it."""
+    """% from price down to (long) / up to (short) the zone; 0 inside; None once past it.
+
+    Also None once price is through the zone's stop. The SL line sits inside
+    the zone (the inner fib's 0.55), so "inside the zone" used to include
+    price already below a long's stop: 54 of the first 213 live fib alerts
+    were sent that way, and every one was scored a -1R the moment it filled.
+    """
+    sl = zone.get("sl")
+    if sl is not None and ((price <= sl) if d == 1 else (price >= sl)):
+        return None
     if d == 1:
         if price > zone["high"]:
             return (price - zone["high"]) / zone["high"] * 100

@@ -244,10 +244,13 @@ class DailyBacktestSummaryTests(unittest.TestCase):
         result = summary.simulate_alert(frame, base_alert(), 0, 2)
 
         self.assertEqual(result["final_result"], summary.BREAK_EVEN)
-        # The stop sits far enough past entry to clear the round trip, so
-        # this scratches a hair positive rather than losing the charges.
-        self.assertGreater(result["net_realized_r"], 0.0)
-        self.assertLess(result["net_realized_r"], 0.05)
+        # The stop sits past entry to clear the round trip; it is still a
+        # stop order, so it pays the same slip as an SL. Net it is a scratch.
+        be_stop = 100.0 * (1 + summary.BREAK_EVEN_OFFSET_PCT / 100)
+        self.assertAlmostEqual(
+            result["exit_price"], be_stop * (1 - summary.SL_FILL_SLIPPAGE_PCT / 100)
+        )
+        self.assertAlmostEqual(result["net_realized_r"], 0.0, delta=0.05)
 
 
     def test_a_stop_tighter_than_the_offset_leaves_the_stop_alone(self):
@@ -488,7 +491,78 @@ class DailyBacktestSummaryTests(unittest.TestCase):
         result = summary.simulate_alert(frame, base_alert(), 0, 1, resolution_frame)
 
         self.assertEqual(result["final_result"], summary.BREAK_EVEN)
-        self.assertGreater(result["net_realized_r"], 0.0)
+        self.assertAlmostEqual(result["net_realized_r"], 0.0, delta=0.05)
+
+    def test_same_candle_target_then_two_r_before_stop_is_two_r(self):
+        # Inside one bar the fine candles go +1R, then +2R, then the stop.
+        # The first event alone read this as a breakeven exit.
+        index = pd.DatetimeIndex(["2026-08-04 10:00", "2026-08-04 10:30"], tz=summary.IST)
+        frame = pd.DataFrame(
+            {"open": [101.0, 100.0], "high": [101.2, 102.3], "low": [100.8, 98.8],
+             "close": [101.0, 99.0], "volume": [1, 1]},
+            index=index,
+        )
+        fine = pd.DataFrame(
+            {"open": [100.0, 101.0, 101.5], "high": [101.15, 102.3, 101.6],
+             "low": [99.9, 100.9, 98.8], "close": [101.0, 101.5, 99.0], "volume": [1, 1, 1]},
+            index=pd.date_range("2026-08-04 10:30", periods=3, freq="1min", tz=summary.IST),
+        )
+        result = summary.simulate_alert(frame, base_alert(), 0, 1, fine)
+        self.assertEqual(result["final_result"], "+2R")
+
+    def test_same_candle_target_first_without_reachable_breakeven_is_a_stop(self):
+        # A stop so tight that the breakeven offset sits past +0.5R: the stop
+        # never moves, so +0.5R then the stop inside one bar is a full SL,
+        # not a breakeven exit at a level nobody could have placed.
+        index = pd.DatetimeIndex(["2026-08-04 10:00", "2026-08-04 10:30"], tz=summary.IST)
+        alert = base_alert()
+        alert["stop_price"] = 99.78         # 0.22% risk; +0.5R = 100.11 < BE 100.12
+        frame = pd.DataFrame(
+            {"open": [101.0, 100.0], "high": [101.2, 100.15], "low": [100.8, 99.7],
+             "close": [101.0, 99.8], "volume": [1, 1]},
+            index=index,
+        )
+        fine = pd.DataFrame(
+            {"open": [100.0, 100.1], "high": [100.15, 100.1], "low": [99.95, 99.7],
+             "close": [100.1, 99.8], "volume": [1, 1]},
+            index=pd.date_range("2026-08-04 10:30", periods=2, freq="1min", tz=summary.IST),
+        )
+        result = summary.simulate_alert(frame, alert, 0, 1, fine)
+        self.assertEqual(result["final_result"], "SL")
+
+    def test_report_shows_trades_settled_from_earlier_days(self):
+        results = pd.DataFrame([
+            {**base_alert(), "trade_id": tid, "filled": True, "outcome": res, "final_result": res,
+             "net_realized_r": net, "entry_time": pd.Timestamp("2026-08-04 10:05", tz=summary.IST)}
+            for tid, res, net in (("old", "SL", -1.1), ("new", "+2R", 1.9), ("still", "Pending", None))
+        ])
+        pending = pd.DataFrame([
+            {"trade_id": "old", "report_date": datetime.date(2026, 8, 3)},
+            {"trade_id": "still", "report_date": datetime.date(2026, 8, 3)},
+        ])
+        settled = summary.settled_from_earlier_days(results, pending, "2026-08-04")
+        self.assertEqual(list(settled["trade_id"]), ["old"])
+        records = pd.DataFrame([base_alert(trade_id="new")])
+        message = summary.build_summary(
+            records, "2026-08-04", results[results["trade_id"] == "new"], {}, 0, "4h", "crypto",
+            settled_earlier=settled,
+        )
+        self.assertIn("Settled from earlier days 1 · -1.10R", message)
+
+    def test_immature_rows_wait_in_pending_with_their_stop(self):
+        alert = base_alert()
+        alert["stop_price"] = 99.4
+        row = summary.unfilled(alert, "immature")
+        self.assertEqual(row["stop_price"], 99.4)
+        with tempfile.TemporaryDirectory() as tmp:
+            finalized = Path(tmp) / "f.jsonl"
+            pending = Path(tmp) / "p.jsonl"
+            payload = summary.lifecycle_payload(row, "2026-08-04", "4h", "crypto")
+            summary.write_lifecycle_rows({payload["trade_id"]: payload}, finalized, pending)
+            self.assertEqual(finalized.read_text(), "")
+            stored = json.loads(pending.read_text())
+            self.assertEqual(stored["stop_price"], 99.4)
+            self.assertEqual(stored["timing_status"], "")
 
     def test_same_candle_resolution_accepts_timezone_naive_fine_data(self):
         index = pd.DatetimeIndex(["2026-08-04 10:00", "2026-08-04 10:30"], tz=summary.IST)
@@ -871,9 +945,8 @@ class DailyBacktestSummaryTests(unittest.TestCase):
 
         self.assertEqual(result["final_result"], summary.BREAK_EVEN)
         # Crypto pays charges too, so the stop moves past entry far enough
-        # to cover them and the exit is a true scratch rather than a loss
-        # the size of the round trip.
-        self.assertGreaterEqual(result["net_realized_r"], 0.0)
+        # to cover them and the exit is a scratch (less the stop's slip)
+        # rather than a loss the size of the round trip.
         self.assertAlmostEqual(result["net_realized_r"], 0.0, places=1)
 
     def test_crypto_reaching_one_r_then_reversing_exits_at_breakeven(self):

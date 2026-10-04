@@ -72,6 +72,15 @@ def score(records, results, now):
     """Simulate every record without a final result; returns the updated results."""
     # A result without "be" was scored before the breakeven rule (2026-10-03);
     # it is scored once more so a trade that reached +0.5R and came back reads BE.
+    for record in records:
+        # Sent with price already through the stop: no trade, not a -1R.
+        if trades.already_stopped(record["plan"], record.get("price")) and not results.get(
+            record["id"], {}
+        ).get("past_sl"):
+            results[record["id"]] = dict(
+                outcome="no fill", filled=False, fill_ts=None, half=False, r1=False, r2=False,
+                sl=False, be=False, ambiguous=False, resolved=True, end_ts=None, past_sl=True,
+            )
     pending = [r for r in records
                if not results.get(r["id"], {}).get("resolved") or "be" not in results[r["id"]]]
     groups = defaultdict(list)

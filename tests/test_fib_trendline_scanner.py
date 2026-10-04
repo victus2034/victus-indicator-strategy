@@ -69,6 +69,15 @@ class DistanceBandTests(unittest.TestCase):
         self.assertEqual(fts.fib_distance(1, self.zone, 105.0), 0.0)
         self.assertIsNone(fts.fib_distance(1, self.zone, 99.0))       # already past it
 
+    def test_no_fib_alert_once_price_is_through_the_stop(self):
+        # The SL line sits inside the zone; below it a long is already stopped.
+        zone = {"low": 100.0, "high": 110.0, "sl": 104.5}
+        self.assertEqual(fts.fib_distance(1, zone, 106.0), 0.0)
+        self.assertIsNone(fts.fib_distance(1, zone, 104.0))
+        short = {"low": 100.0, "high": 110.0, "sl": 105.5}
+        self.assertEqual(fts.fib_distance(-1, short, 104.0), 0.0)
+        self.assertIsNone(fts.fib_distance(-1, short, 106.0))
+
     def test_short_fib_distance_is_up_to_the_zone_bottom(self):
         self.assertAlmostEqual(fts.fib_distance(-1, self.zone, 99.0), 1.0)
         self.assertIsNone(fts.fib_distance(-1, self.zone, 111.0))
@@ -460,6 +469,16 @@ class DailyReportTests(unittest.TestCase):
         self.assertEqual(results["a"]["outcome"], "BE")
         with mock.patch.object(self.report, "eval_candles", side_effect=AssertionError("re-scored")):
             self.report.score(records, results, self.sent_ts + 2 * 86400)
+
+    def test_an_alert_sent_already_through_its_stop_is_no_fill_not_a_loss(self):
+        records = self.report.load_records()
+        records[0]["price"] = 98.5          # long, SL 99.0: already stopped when sent
+        old = {"a": {"outcome": "SL", "filled": True, "resolved": True, "r1": False, "r2": False,
+                     "sl": True, "be": False}}
+        with mock.patch.object(self.report, "eval_candles", side_effect=AssertionError("scored")):
+            results = self.report.score(records, dict(old), self.sent_ts + 86400)
+        self.assertEqual(results["a"]["outcome"], "no fill")
+        self.assertFalse(results["a"]["filled"])
 
     def test_posts_once_a_day_after_eight(self):
         state = {}
