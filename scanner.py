@@ -46,6 +46,7 @@ from config import (
     ZONE_GEOMETRY,
     ZONE_BASE_EXTRA,
     ZONE_EVICT_WEAKEST,
+    ZONE_SURVIVE_BEFORE_CREATE,
     ZONE_CLOCK_RESTARTS_ON_TOUCH,
     ZONE_BREAK_ON_WICK,
     ZONE_REBUILD_AFTER_BREAK,
@@ -536,7 +537,36 @@ def trim_zone_history(zones, current_index):
     return zones
 
 
-def build_zones(df, geometry=None):
+def _resolve_candidates(candidates, zones_by_side, index, high, low, close):
+    """The indicator's v10.0 survival gate, run once per candle.
+
+    Pine resolves its awaiting queue after the bar's pivots are proposed and
+    before live zones are checked, so a candidate proposed on this candle is
+    checked against it too. A break drops it (never drawn), a touch restarts
+    its wait, and one left alone for MIN_ZONE_AGE_CANDLES candles is created
+    with its clock backdated by that much, so it is mature at birth.
+    """
+    for candidate in list(candidates):
+        zone = candidate["zone"]
+        side = candidate["side"]
+        if side == "supply":
+            broke = high >= zone["top"] if ZONE_BREAK_ON_WICK else close >= zone["top"]
+        else:
+            broke = low <= zone["bottom"] if ZONE_BREAK_ON_WICK else close <= zone["bottom"]
+        if broke:
+            candidates.remove(candidate)
+        elif high >= zone["bottom"] and low <= zone["top"]:
+            candidate["clock"] = index
+        elif index - candidate["clock"] >= MIN_ZONE_AGE_CANDLES:
+            candidates.remove(candidate)
+            zone["created_idx"] = index
+            zone["clock"] = index - MIN_ZONE_AGE_CANDLES
+            bucket = zones_by_side[side]
+            if add_zone_if_not_overlapping(bucket, zone, zone["overlap_atr"]):
+                trim_zone_history(bucket, index)
+
+
+def build_zones(df, geometry=None, on_candle=None):
     atr_series = atr(df, ATR_PERIOD)
     if atr_series.isna().all():
         return [], []
@@ -559,6 +589,7 @@ def build_zones(df, geometry=None):
     else:
         short_high_set = short_low_set = set()
     pending_rebuild = {"supply": False, "demand": False}
+    candidates = []          # ZONE_SURVIVE_BEFORE_CREATE only
 
     # Create zones only after pivot confirmation, using the original pivot
     # candle's wick and the confirmed post-pivot departure.
@@ -568,7 +599,11 @@ def build_zones(df, geometry=None):
             zone = qualify_wick_zone(
                 df, pivot_index, confirmation_index, atr_series, "supply", geometry, arrays
             )
-            if zone is not None and add_zone_if_not_overlapping(supply_zones, zone, zone["overlap_atr"]):
+            if zone is not None and ZONE_SURVIVE_BEFORE_CREATE:
+                # Pine clears the armed rebuild as soon as a candidate is queued.
+                candidates.append({"side": "supply", "zone": zone, "clock": confirmation_index})
+                pending_rebuild["supply"] = False
+            elif zone is not None and add_zone_if_not_overlapping(supply_zones, zone, zone["overlap_atr"]):
                 trim_zone_history(supply_zones, confirmation_index)
                 # A full-length pivot has already replaced the side, so the
                 # armed rebuild is spent - v7's f_tryCreate does exactly this
@@ -580,7 +615,10 @@ def build_zones(df, geometry=None):
             zone = qualify_wick_zone(
                 df, pivot_index, confirmation_index, atr_series, "demand", geometry, arrays
             )
-            if zone is not None and add_zone_if_not_overlapping(demand_zones, zone, zone["overlap_atr"]):
+            if zone is not None and ZONE_SURVIVE_BEFORE_CREATE:
+                candidates.append({"side": "demand", "zone": zone, "clock": confirmation_index})
+                pending_rebuild["demand"] = False
+            elif zone is not None and add_zone_if_not_overlapping(demand_zones, zone, zone["overlap_atr"]):
                 trim_zone_history(demand_zones, confirmation_index)
                 pending_rebuild["demand"] = False
 
@@ -609,13 +647,24 @@ def build_zones(df, geometry=None):
                         if rebuilt is None or rebuilt.get("degenerate"):
                             continue
                         rebuilt["rebuilt"] = True
-                        if add_zone_if_not_overlapping(bucket, rebuilt, rebuilt["overlap_atr"]):
+                        if ZONE_SURVIVE_BEFORE_CREATE:
+                            candidates.append({"side": side, "zone": rebuilt, "clock": confirmation_index})
+                        elif add_zone_if_not_overlapping(bucket, rebuilt, rebuilt["overlap_atr"]):
                             trim_zone_history(bucket, confirmation_index)
                         pending_rebuild[side] = False
 
         close = float(arrays["close"][confirmation_index])
         high = float(arrays["high"][confirmation_index])
         low = float(arrays["low"][confirmation_index])
+        if candidates:
+            _resolve_candidates(
+                candidates,
+                {"supply": supply_zones, "demand": demand_zones},
+                confirmation_index, high, low, close,
+            )
+        if on_candle is not None:
+            # Research hook: sees the zones as a scan during this candle would.
+            on_candle(confirmation_index, supply_zones, demand_zones)
         for zone in supply_zones:
             if zone["active"] and confirmation_index > zone["created_idx"]:
                 record_zone_touch(zone, high, low, confirmation_index)

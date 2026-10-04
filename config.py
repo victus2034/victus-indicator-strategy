@@ -318,6 +318,14 @@ ZONE_BREAK_ON_WICK = env_flag("VICTUS_ZONE_BREAK_ON_WICK", ZONE_GEOMETRY == "wic
 
 ZONE_EVICT_WEAKEST = env_flag("VICTUS_ZONE_EVICT_WEAKEST", True)
 
+# The indicator's v10.0 "survive before create" gate (require_survival_before_create,
+# on by default on the chart). A confirmed pivot is held as a candidate: a wick
+# through its far edge kills it before it is ever drawn, a touch restarts its
+# wait, and only after MIN_ZONE_AGE_CANDLES quiet candles is it created - with
+# its age clock already mature. Off (default) keeps the scanner's behaviour: the
+# zone exists at once and only its alert waits. Off until the backtest is read.
+ZONE_SURVIVE_BEFORE_CREATE = env_flag("VICTUS_ZONE_SURVIVE_BEFORE_CREATE", False)
+
 # Restart the minimum-age clock on every touch, so MIN_ZONE_AGE_CANDLES means
 # "untouched for this long" rather than "created this long ago". Worth +7% on net
 # expectancy, and it gets there by removing trades on zones price is already
