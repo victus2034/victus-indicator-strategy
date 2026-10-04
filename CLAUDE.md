@@ -206,5 +206,14 @@ each falling back to the shared one above when unset (so nothing changes until t
 - **Approach side only (2026-10-02, Lakky).** Distance to the entry is measured both ways, so price
   already through the entry used to alert as "0.15% away" (19-37% of alerts). `scanner.price_past_entry`
   now blocks those for crypto and NSE; the band is still consumed, so a bounce back out does not fire.
+- **Daily trend filter, crypto only (2026-10-04, Lakky).** A crypto demand zone alerts only
+  while the last closed daily candle is above its EMA50, a supply zone only below
+  (`CRYPTO_TREND_FILTER`, `scanner.daily_trend`). Counter-trend zones get no alert and no
+  watch row; an unknown trend (fetch failed, short history) never blocks. Backtested on
+  564 recorded trades: -79R -> -8R. NSE, xStocks and "other" are not filtered - it did
+  not help them. Research and numbers: `research/out/RESULTS.md`.
+- **Daily report scoring (2026-10-04).** Only +2R is an exit. A trade that touches +1R and
+  comes back is closed by the live stop (BE), and "+1R" now means "reached +1R, closed by
+  the time limit", priced at that close. It used to be credited a flat 1R either way.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

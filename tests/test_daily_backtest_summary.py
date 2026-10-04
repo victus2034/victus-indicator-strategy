@@ -876,7 +876,7 @@ class DailyBacktestSummaryTests(unittest.TestCase):
         self.assertGreaterEqual(result["net_realized_r"], 0.0)
         self.assertAlmostEqual(result["net_realized_r"], 0.0, places=1)
 
-    def test_crypto_one_r_supersedes_half_r_after_reversal(self):
+    def test_crypto_reaching_one_r_then_reversing_exits_at_breakeven(self):
         frame = crypto_frame(
             rows=[
                 (101.0, 101.2, 100.8, 101.0),
@@ -887,7 +887,26 @@ class DailyBacktestSummaryTests(unittest.TestCase):
 
         result = summary.simulate_alert(frame, crypto_alert(), 0, 2)
 
+        # Only +2R is an exit. Touching +1R and coming back is closed by the
+        # breakeven stop, not credited a full 1R that was never banked.
+        self.assertEqual(result["final_result"], summary.BREAK_EVEN)
+        self.assertTrue(result["target_1_hit"])
+        self.assertLess(result["realized_r"], 0.5)
+
+    def test_crypto_one_r_at_the_time_limit_is_priced_at_the_close(self):
+        frame = crypto_frame(
+            rows=[
+                (101.0, 101.2, 100.8, 101.0),
+                (100.0, 101.2, 100.0, 101.0),
+                (101.0, 101.1, 100.5, 100.6),
+            ]
+        )
+
+        result = summary.simulate_alert(frame, crypto_alert(), 0, 2)
+
         self.assertEqual(result["final_result"], "+1R")
+        self.assertAlmostEqual(result["exit_price"], 100.6)
+        self.assertLess(result["realized_r"], 1.0)
 
     def test_crypto_two_r_stops_tracking(self):
         frame = crypto_frame(
@@ -1101,7 +1120,12 @@ class DailyBacktestSummaryTests(unittest.TestCase):
             self.assertEqual(payload["time_to_half_r"], frame.index[1].isoformat())
             self.assertEqual(payload["time_to_1r"], frame.index[1].isoformat())
             self.assertIsNone(payload["time_to_2r"])
-            self.assertEqual(payload["final_resolution_time"], frame.index[1].isoformat())
+            # +1R is passed, not exited at, so the trade resolves when the
+            # time limit closes it - the end of the last candle.
+            self.assertEqual(
+                payload["final_resolution_time"],
+                (frame.index[1] + pd.Timedelta(minutes=30)).isoformat(),
+            )
 
     def test_neither_resolution_time_uses_last_usable_candle_end(self):
         frame = crypto_frame(
