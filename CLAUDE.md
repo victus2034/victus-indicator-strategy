@@ -206,5 +206,9 @@ each falling back to the shared one above when unset (so nothing changes until t
 - **Approach side only (2026-10-02, Lakky).** Distance to the entry is measured both ways, so price
   already through the entry used to alert as "0.15% away" (19-37% of alerts). `scanner.price_past_entry`
   now blocks those for crypto and NSE; the band is still consumed, so a bounce back out does not fire.
+- **`ZONE_SURVIVE_BEFORE_CREATE` (off, 2026-10-04).** The indicator's v10.0 gate: a pivot is a
+  candidate until it goes `MIN_ZONE_AGE_CANDLES` (15) candles untouched; a break before then means it
+  is never a zone. Built as an opt-in so `research/survival_gate_backtest.py` can compare it; Lakky
+  decides from those results. Zones only - fib and trendline alerts never use it.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.
