@@ -32,7 +32,7 @@ from pathlib import Path
 
 import pandas as pd
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.append(str(Path(__file__).resolve().parents[1]))  # after PYTHONPATH, so a CI step can swap in main's scoring
 
 import daily_backtest_summary as dbs  # noqa: E402
 import fib_trendline_data as ftd  # noqa: E402
@@ -266,6 +266,10 @@ def main() -> None:
     out.mkdir(parents=True, exist_ok=True)
 
     stored = {r["trade_id"]: r for r in dbs.read_jsonl(Path(args.records))}
+    # Rows graded before 2026-09-17 carry the backtest's own stable id, not
+    # the scanner's trade_id that load_records now prefers, so join on the
+    # zone and the delivery moment instead.
+    by_key = {(r.get("zone_id"), str(r.get("alert_time"))[:26]): r["trade_id"] for r in stored.values()}
     print(f"stored rows: {len(stored)}")
     diffs, rescored, ref_diffs, traces = [], [], [], []
     summary = defaultdict(lambda: defaultdict(float))
@@ -277,6 +281,10 @@ def main() -> None:
         alerts = dbs.load_records(path, tf)
         if alerts.empty:
             continue
+        alerts["trade_id"] = [
+            by_key.get((z, t.isoformat()[:26]), tid)
+            for z, t, tid in zip(alerts["zone_id"], alerts["event_time_ist"], alerts["trade_id"])
+        ]
         alerts = alerts[alerts["trade_id"].astype(str).isin(stored)].copy()
         if alerts.empty:
             continue

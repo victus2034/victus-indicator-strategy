@@ -144,6 +144,15 @@ def simulate(plan, market, tf, alert_ts, candles):
     return res
 
 
+def already_stopped(plan, price):
+    """True when price was already through the stop as the alert went out - not
+    a trade anyone could take. The scanner no longer sends these
+    (fib_trendline_scanner.fib_distance); the ones it sent are scored as no fill."""
+    if price is None:
+        return False
+    return price <= plan["sl"] if plan["side"] == "long" else price >= plan["sl"]
+
+
 def risk_pct(plan):
     return abs(plan["entry"] - plan["sl"]) / plan["entry"] * 100
 

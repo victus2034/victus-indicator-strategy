@@ -397,19 +397,21 @@ def evaluate_open_positions(
                 closed_in_window = True
                 break
             if stop_hit:
-                if outcome is None:
-                    if stop_moved:
-                        outcome, exit_price = backtest.BREAK_EVEN, break_even_stop
-                    else:
-                        outcome = "SL"
-                        exit_price = stop - direction * stop * backtest.SL_FILL_SLIPPAGE_PCT / 100.0
+                # Whichever stop was live closes the trade, also after +1R:
+                # +1R is not an exit (only +2R is), so a trade that touched it
+                # and came back is out on its stop. It used to keep the +1R
+                # label and a full 1R it never banked - the bug the backtest
+                # dropped on 2026-10-04. Both stops pay the stop slip.
+                live = break_even_stop if stop_moved else stop
+                outcome = backtest.BREAK_EVEN if stop_moved else "SL"
+                exit_price = live - direction * live * backtest.SL_FILL_SLIPPAGE_PCT / 100.0
                 exit_time = timestamp
                 closed_in_window = True
                 break
             if half_hit or one_hit:
                 half_r_hit = True
             if one_hit:
-                outcome, exit_price, exit_time = "+1R", position["target_1"], timestamp
+                outcome, exit_time = "+1R", timestamp
             if two_hit:
                 outcome, exit_price, exit_time = "+2R", position["target_2"], timestamp
                 closed_in_window = True
@@ -422,20 +424,21 @@ def evaluate_open_positions(
             # be closed as +1R on the tick that first saw it.
             continue
 
-        if outcome is None and now >= square_off:
+        if outcome in (None, "+1R") and not closed_in_window and now >= square_off:
             # The user is flat by 15:10, so an unresolved position exits at
             # the last price before that, priced off the real close the same
-            # way the backtest now prices its "Neither" trades.
+            # way the backtest prices its "Neither" and "+1R" trades - "+1R"
+            # only says it got there on the way.
             exit_price = float(window["close"].iloc[-1])
             exit_time = window.index[-1]
-            outcome = "Neither"
+            outcome = outcome or "Neither"
 
         if outcome is None:
             continue
 
         if outcome == AMBIGUOUS:
             realized_r = float("nan")
-        elif outcome in {"+1R", "+2R"}:
+        elif outcome == "+2R":
             realized_r = backtest.FINAL_RESULT_R[outcome]
         else:
             direction = 1.0 if side == "long" else -1.0

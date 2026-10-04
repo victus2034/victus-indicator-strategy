@@ -161,8 +161,21 @@ class OutcomeTests(unittest.TestCase):
             state, frames, pd.Timestamp("2026-08-17 11:00", tz=IST)
         )
         self.assertEqual(closed[0]["outcome"], backtest.BREAK_EVEN)
-        self.assertGreater(closed[0]["net_realized_r"], 0.0)
-        self.assertLess(closed[0]["net_realized_r"], 0.05)
+        # A scratch: the offset covers the round trip, the stop's slip is paid.
+        self.assertAlmostEqual(closed[0]["net_realized_r"], 0.0, delta=0.05)
+
+    def test_one_r_then_back_to_the_stop_is_breakeven_not_one_r(self):
+        # +1R is not an exit, so touching it and coming back closes on the
+        # breakeven stop - it used to stay "+1R" and book a full 1R.
+        state = self._open()
+        position = next(iter(state["open"].values()))
+        high = position["target_1"] + 0.05
+        frames = {"TCS.NS": bars([[high, 99.9, 100.1], [100.0, 97.0, 97.2]])}
+        closed = paper_trading.evaluate_open_positions(
+            state, frames, pd.Timestamp("2026-08-17 11:00", tz=IST)
+        )
+        self.assertEqual(closed[0]["outcome"], backtest.BREAK_EVEN)
+        self.assertLess(closed[0]["realized_r"], 0.5)
 
     def test_a_stop_before_any_milestone_still_closes_as_sl(self):
         state = self._open()
@@ -544,4 +557,5 @@ class AcrossTicksTests(unittest.TestCase):
         )
         self.assertEqual(closed[0]["outcome"], backtest.BREAK_EVEN)
         expected = position["entry"] * (1 + backtest.CRYPTO_BREAK_EVEN_OFFSET_PCT / 100.0)
+        expected *= 1 - backtest.SL_FILL_SLIPPAGE_PCT / 100.0
         self.assertAlmostEqual(closed[0]["exit_price"], expected)

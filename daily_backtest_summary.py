@@ -501,6 +501,20 @@ def report_results_for_current_day(
     return results.iloc[0:0].copy()
 
 
+def settled_from_earlier_days(results: pd.DataFrame, pending: pd.DataFrame, target_date) -> pd.DataFrame:
+    """Rows from an earlier day's pending list that this run graded to a final result."""
+    if results.empty or pending.empty or "trade_id" not in pending:
+        return results.iloc[0:0]
+    target = pd.Timestamp(target_date).date()
+    earlier_ids = {
+        str(row["trade_id"])
+        for row in pending.to_dict("records")
+        if normalized_report_date(row.get("report_date")) not in (None, target)
+    }
+    done = results["final_result"].isin(set(OUTCOME_ORDER) - {DATA_QUALITY_AMBIGUOUS})
+    return results[done & (results["filled"] == True) & results["trade_id"].astype(str).isin(earlier_ids)]  # noqa: E712
+
+
 def crypto_report_date(event_time_ist) -> object:
     timestamp = pd.Timestamp(event_time_ist).tz_convert(IST)
     if timestamp.time() > CRYPTO_REPORT_BOUNDARY:
@@ -1149,6 +1163,14 @@ def simulate_alert(
             else (first_target_hit or second_target_hit)
         )
         if outcome == "Neither" and stop_hit and deciding_target_hit:
+            # After a target prints, the stop that is live for the rest of
+            # this bar is the breakeven one - unless it cannot be placed, in
+            # which case the original stop stays.
+            follow_stop = (
+                break_even_stop
+                if stop_moved or (BREAK_EVEN_ENABLED and break_even_reachable)
+                else stop
+            )
             resolution = resolve_same_candle_order(
                 resolution_frame,
                 frame,
@@ -1159,6 +1181,7 @@ def simulate_alert(
                 target_1,
                 target_2,
                 market=market,
+                follow_stop=follow_stop,
             )
             if resolution == DATA_QUALITY_AMBIGUOUS:
                 outcome = DATA_QUALITY_AMBIGUOUS
@@ -1174,13 +1197,16 @@ def simulate_alert(
                 break
             # A target printed before the stop did, then the stop traded
             # inside this same bar. Only +2R is an exit; +0.5R and +1R are
-            # passed on the way and the stop, by then at breakeven, closes
-            # the trade.
+            # passed on the way and the stop that is live after them closes
+            # the trade: breakeven, or the original stop when breakeven could
+            # not be placed. resolve_same_candle_order keeps reading the fine
+            # candles past the first target, so a +2R printed before that
+            # stop is still a +2R.
             if resolution in {"+0.5R", "+1R", "+2R"}:
                 half_r_hit = True
                 if time_to_half_r is None:
                     time_to_half_r = frame.index[index]
-                outcome = BREAK_EVEN
+                outcome = BREAK_EVEN if follow_stop == break_even_stop else "SL"
             if resolution in {"+1R", "+2R"}:
                 target_1_hit = True
                 if time_to_1r is None:
@@ -1241,8 +1267,11 @@ def simulate_alert(
     elif outcome == DATA_QUALITY_AMBIGUOUS:
         exit_price = float("nan")
     elif outcome == BREAK_EVEN:
-        # The stop had already moved past entry to clear costs by then.
-        exit_price = break_even_stop
+        # The stop had already moved past entry to clear costs by then. It is
+        # still a stop order, so it pays the same slip as any other stop -
+        # it used to fill at exactly its trigger while SL exits and the
+        # trail shadow score both paid SL_FILL_SLIPPAGE_PCT.
+        exit_price = break_even_stop - direction * break_even_stop * SL_FILL_SLIPPAGE_PCT / 100.0
     elif outcome == "+0.5R":
         exit_price = target_half
     elif outcome == "+2R":
@@ -1374,8 +1403,16 @@ def resolve_same_candle_order(
     target_1: float,
     target_2: float,
     market: str | None = None,
+    follow_stop: float | None = None,
 ) -> str:
-    """Use finer candles to resolve an otherwise ambiguous SL/target candle."""
+    """Use finer candles to resolve an otherwise ambiguous SL/target candle.
+
+    Returns the furthest target reached before a stop: "SL" when the stop came
+    first, "+0.5R"/"+1R" when that target came first and `follow_stop` (the
+    stop live after it, from the next fine candle) then traded, "+2R" when +2R
+    printed before any stop. Without `follow_stop` it stops at the first
+    event, as it used to - which read +1R-then-+2R-then-stop as a breakeven.
+    """
     if resolution_frame is None or resolution_frame.empty:
         return DATA_QUALITY_AMBIGUOUS
 
@@ -1401,13 +1438,27 @@ def resolve_same_candle_order(
         if fine.empty:
             return DATA_QUALITY_AMBIGUOUS
 
+    first = None
     for _, candle in fine.iterrows():
         high = float(candle["high"])
         low = float(candle["low"])
+        two_hit = high >= target_2 if side == "long" else low <= target_2
+        if first is not None:
+            # Past the first target: only the stop live now or +2R decide.
+            stop_hit = low <= follow_stop if side == "long" else high >= follow_stop
+            if stop_hit and two_hit:
+                return DATA_QUALITY_AMBIGUOUS
+            if two_hit:
+                return "+2R"
+            one_hit = high >= target_1 if side == "long" else low <= target_1
+            if one_hit:
+                first = "+1R"
+            if stop_hit:
+                return first
+            continue
         stop_hit = low <= stop if side == "long" else high >= stop
         half_hit = high >= target_half if side == "long" else low <= target_half
         one_hit = high >= target_1 if side == "long" else low <= target_1
-        two_hit = high >= target_2 if side == "long" else low <= target_2
         target_hit = half_hit or one_hit or two_hit
         if stop_hit and target_hit:
             return DATA_QUALITY_AMBIGUOUS
@@ -1415,12 +1466,14 @@ def resolve_same_candle_order(
             return "SL"
         if two_hit:
             return "+2R"
-        if one_hit:
-            return "+1R"
-        if half_hit:
-            return "+0.5R"
+        first = "+1R" if one_hit else "+0.5R" if half_hit else None
+        if first is not None and follow_stop is None:
+            return first
 
-    return DATA_QUALITY_AMBIGUOUS
+    # The coarse bar did trade the stop, so a target with no stop after it in
+    # the fine feed is a mismatch between the two feeds; keep the first
+    # target, which closes the trade on the stop as before.
+    return first if first is not None else DATA_QUALITY_AMBIGUOUS
 
 
 def best_secured_milestone_time(time_to_half_r, time_to_1r, time_to_2r):
@@ -1682,7 +1735,9 @@ def unfilled(alert: dict, outcome: str) -> dict:
             "filled": False,
             "entry_time": pd.NaT,
             "entry_price": float("nan"),
-            "stop_price": float("nan"),
+            # An immature row is re-graded from its stored copy, and without
+            # the alert's own stop it would fall back to the old 0.10% rule.
+            "stop_price": original_stop_price(alert) if outcome == "immature" else float("nan"),
             "target_1_price": float("nan"),
             "target_2_price": float("nan"),
             "exit_time": pd.NaT,
@@ -1842,6 +1897,7 @@ def build_summary(
     cooldown_blocked: int,
     timeframe: str,
     market: str = "nse",
+    settled_earlier: pd.DataFrame | None = None,
 ) -> str:
     market_label, asset_label = MARKET_LABELS.get(market, (market.upper(), "Symbols"))
     header = f"{market_label} {timeframe} BACKTEST"
@@ -1900,13 +1956,22 @@ def build_summary(
     if counted:
         lines.append(counted)
     totals = f"Win rate {win_rate} · TOTAL {format_r(net_r)}"
+    # Only trades TOTAL counts, so the two numbers compare like for like - an
+    # unresolved same-candle trade has no TOTAL but did get a trail score.
     trail_r = pd.to_numeric(
         finalized.get("trail_net_r", pd.Series(dtype=float)), errors="coerce"
-    )
+    ).where(pd.to_numeric(finalized.get("net_realized_r", pd.Series(dtype=float)), errors="coerce").notna())
     if trail_r.notna().any():
         # The shadow score (TRAIL_START_R), shown beside the real total.
         totals += f" · Trail test {format_r(trail_r.sum())}"
     lines.append(totals)
+    if settled_earlier is not None and not settled_earlier.empty:
+        # Trades still open when their own day was reported (a 4h crypto
+        # fill waits up to 12h, then runs 6h) settle on a later run. They
+        # reach the finalized records and the weekly report, but no daily
+        # card ever showed them - about a fifth of crypto 4h trades.
+        earlier_r = pd.to_numeric(settled_earlier["net_realized_r"], errors="coerce").sum()
+        lines.append(f"Settled from earlier days {len(settled_earlier)} · {format_r(earlier_r)}")
     if data_failures:
         # Symbols whose candles could not be fetched were silently missing
         # from the report; their alerts showed up only as fewer entries.
@@ -2391,7 +2456,9 @@ def lifecycle_payload(row: dict, target_date, timeframe: str, market: str) -> di
         "filled": bool(row.get("filled", False)),
         "outcome": row.get("outcome", ""),
         "final_result": row.get("final_result", ""),
-        "timing_status": row.get("timing_status", ""),
+        # NaN when a row came through a DataFrame without one; json.dumps
+        # wrote it as a bare NaN, which is not JSON to anything but Python.
+        "timing_status": row.get("timing_status") if isinstance(row.get("timing_status"), str) else "",
         "final_resolution_time": format_optional_timestamp(row.get("final_resolution_time")),
         "time_to_half_r": format_optional_timestamp(row.get("time_to_half_r")),
         "time_to_1r": format_optional_timestamp(row.get("time_to_1r")),
@@ -2427,6 +2494,11 @@ def write_lifecycle_rows(rows: dict[str, dict], finalized_path: Path, pending_pa
     for row in rows.values():
         if (
             row.get("final_result") in {"Pending", DATA_QUALITY_AMBIGUOUS}
+            # An alert whose entry window had not closed when the report ran
+            # (a 4h alert waits 12 hours for its fill). It used to be written
+            # here as final and never looked at again, so every one of them
+            # was silently dropped - including the ones that went on to fill.
+            or row.get("outcome") == "immature"
             or str(row.get("timing_status", "")).endswith("_tbd")
         ):
             pending.append(row)
@@ -2672,6 +2744,7 @@ def main() -> None:
     # The Discord report represents only today's newly delivered alerts. Pending
     # rows are reconciled in storage, but must not inflate today's alert counts.
     report_results = report_results_for_current_day(results, current_day_records, target_date)
+    settled_earlier = settled_from_earlier_days(results, pending, target_date)
 
     message = build_summary(
         current_day_records,
@@ -2681,6 +2754,7 @@ def main() -> None:
         cooldown_blocked,
         args.timeframe,
         args.market,
+        settled_earlier=settled_earlier,
     )
     print(message)
     if not args.dry_run:

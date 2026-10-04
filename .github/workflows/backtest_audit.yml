@@ -30,14 +30,21 @@ jobs:
           daily_backtest_finalized_records.jsonl
           crypto_alert_records.jsonl crypto_alert_records_30m.jsonl
           nse_alert_records.jsonl nse_alert_records_30m.jsonl
-      - name: Audit
+      - name: Audit with main's scoring
+        run: |
+          git fetch --quiet origin main
+          mkdir -p /tmp/main && git show origin/main:daily_backtest_summary.py > /tmp/main/daily_backtest_summary.py
+          PYTHONPATH=/tmp/main python research/backtest_audit.py --out research/out/audit_main 2>&1 | tee research/audit_main.log
+      - name: Audit with this branch's scoring
         run: python research/backtest_audit.py 2>&1 | tee research/audit.log
       - name: Commit results to this branch
         if: always()
         run: |
-          mkdir -p research/out/audit && mv research/audit.log research/out/audit/run.log
+          mkdir -p research/out/audit research/out/audit_main
+          mv research/audit.log research/out/audit/run.log || true
+          mv research/audit_main.log research/out/audit_main/run.log || true
           git config user.name "github-actions[bot]"
           git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
-          git add research/out/audit
+          git add research/out/audit research/out/audit_main
           git commit -m "Backtest audit results [skip ci]" || exit 0
           git pull --rebase origin ${GITHUB_REF_NAME} && git push origin HEAD:${GITHUB_REF_NAME}
