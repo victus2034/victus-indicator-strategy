@@ -370,6 +370,16 @@ ZONE_SL_HEIGHT_PCT = env_float("VICTUS_ZONE_SL_HEIGHT_PCT", 25.0)
 # Retrain on wick-geometry outcomes and turn this back on.
 ZONE_RATING_GATE = env_flag("VICTUS_ZONE_RATING_GATE", ZONE_GEOMETRY != "wick")
 
+# Daily trend filter, crypto only (Lakky, 2026-10-04). A demand zone alerts
+# only while the last closed daily candle is above its EMA50, a supply zone
+# only while it is below. Measured on 564 recorded crypto trades, 2026-08-11
+# to 2026-10-04 (research/out/RESULTS.md): with-trend -8R, counter-trend
+# -79R, and the gap held in both halves of the period. It did nothing for
+# NSE or xStocks, so they are left alone. The zones themselves are not
+# touched - this only decides which of them is worth a ping.
+CRYPTO_TREND_FILTER = env_flag("VICTUS_CRYPTO_TREND_FILTER", True)
+CRYPTO_TREND_EMA = env_int("VICTUS_CRYPTO_TREND_EMA", 50)
+
 # EX 6, 2026-09-06. A zone can be right by the geometry and still untradeable:
 # LTC 4h came out 54.446-55.559, which is 2.05% wide. "WE CAN NOT TAKE ANY TRADE
 # WITH SL LIKE 2% SO WE NEED TO REDUCE THE LEVEL OF ZONE."

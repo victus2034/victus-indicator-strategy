@@ -1162,8 +1162,10 @@ def simulate_alert(
                 exit_index = index
                 time_to_sl = frame.index[index]
                 break
-            # A target printed before the stop did. Bank the best level
-            # reached, then close - the stop trades inside this same bar.
+            # A target printed before the stop did, then the stop traded
+            # inside this same bar. Only +2R is an exit; +0.5R and +1R are
+            # passed on the way and the stop, by then at breakeven, closes
+            # the trade.
             if resolution in {"+0.5R", "+1R", "+2R"}:
                 half_r_hit = True
                 if time_to_half_r is None:
@@ -1173,7 +1175,6 @@ def simulate_alert(
                 target_1_hit = True
                 if time_to_1r is None:
                     time_to_1r = frame.index[index]
-                outcome = "+1R"
             if resolution == "+2R":
                 target_2_hit = True
                 if time_to_2r is None:
@@ -1187,8 +1188,11 @@ def simulate_alert(
             # closed here. Without this the loop kept running and let later
             # price action upgrade a trade that was already out - crediting,
             # say, +2R to a position flat well before the +2R print.
-            if outcome == "Neither":
-                outcome = BREAK_EVEN if stop_moved else "SL"
+            # +1R is not an exit - only +2R is - so a trade that touched it
+            # and came back is closed by whichever stop was live, exactly
+            # like one that never got there. It used to keep the +1R label
+            # and be credited a full 1R it never banked.
+            outcome = BREAK_EVEN if stop_moved else "SL"
             exit_index = index
             time_to_sl = frame.index[index]
             break
@@ -1231,13 +1235,14 @@ def simulate_alert(
         exit_price = break_even_stop
     elif outcome == "+0.5R":
         exit_price = target_half
-    elif outcome == "+1R":
-        exit_price = target_1
     elif outcome == "+2R":
         exit_price = target_2
     else:
+        # "Neither" and "+1R" both mean the time limit closed the trade -
+        # "+1R" just says it had reached +1R on the way - so both are
+        # priced at the close it was squared off at.
         exit_price = float(frame["close"].iloc[exit_index])
-    if outcome in {"SL", "Neither", BREAK_EVEN}:
+    if outcome in {"SL", "Neither", BREAK_EVEN, "+1R"}:
         # Price off the real exit level instead of crediting a flat number -
         # a "Neither" trade that quietly drifted against (or in favor of)
         # the position without confirming SL/target must not be scored as
@@ -1310,8 +1315,6 @@ def resolution_time_for_outcome(
 ):
     if outcome == "+2R":
         return time_to_2r
-    if outcome == "+1R":
-        return time_to_1r
     if outcome == "+0.5R":
         return time_to_half_r
     if outcome == "SL":

@@ -29,6 +29,9 @@ from config import (
     COINSWITCH_EXCHANGE,
     COINSWITCH_SECRET_KEY,
     COINSWITCH_WATCHLIST,
+    CRYPTO_TREND_EMA,
+    CRYPTO_TREND_FILTER,
+    CRYPTO_WATCHLIST,
     DELTA_API_BASE_URL,
     DISCORD_STATUS_WEBHOOK_URL,
     DISCORD_WEBHOOK_URL,
@@ -1343,6 +1346,52 @@ def lookback_line(results):
     )
 
 
+def trend_filter_applies(symbol):
+    return CRYPTO_TREND_FILTER and symbol in CRYPTO_WATCHLIST
+
+
+def daily_trend(symbol):
+    """+1 when the last closed daily candle is above its EMA, -1 below, None
+    when it cannot be told (not a Delta contract, too little history, or the
+    fetch failed). None never blocks an alert: a missing number must not
+    silently mute a level."""
+    contract = delta_contract(symbol)
+    if contract is None:
+        return None
+    day = 86400
+    end_ts = int(time.time())
+    try:
+        response = requests.get(
+            f"{DELTA_API_BASE_URL}/v2/history/candles",
+            params={
+                "symbol": contract,
+                "resolution": "1d",
+                "start": end_ts - (CRYPTO_TREND_EMA * 4) * day,
+                "end": end_ts,
+            },
+            timeout=20,
+        )
+        response.raise_for_status()
+        payload = response.json()
+        if not payload.get("success"):
+            raise RuntimeError(payload)
+    except Exception as error:
+        print(f"Daily trend unavailable for {symbol}: {error}")
+        return None
+    candles = sorted(payload.get("result") or [], key=lambda candle: candle["time"])
+    closes = [float(c["close"]) for c in candles if int(c["time"]) + day <= end_ts]
+    if len(closes) < CRYPTO_TREND_EMA + 5:
+        return None
+    ema = pd.Series(closes).ewm(span=CRYPTO_TREND_EMA, adjust=False).mean().iloc[-1]
+    return 1 if closes[-1] > ema else -1
+
+
+def against_daily_trend(zone_type, trend):
+    if trend is None:
+        return False
+    return (zone_type == "demand" and trend < 0) or (zone_type == "supply" and trend > 0)
+
+
 def scan_symbol(symbol):
     ohlcv, exchange_name = fetch_symbol_ohlcv(symbol)
 
@@ -1414,9 +1463,14 @@ def scan_symbol(symbol):
                 XSTOCK_EXTENDED_MIN_SCORE,
             )
 
+    trend = None
+    if trend_filter_applies(symbol) and min(supply_dist, demand_dist) <= WATCH_DISTANCE_PCT:
+        trend = daily_trend(symbol)
+
     return {
         "symbol": symbol,
         "exchange": exchange_name,
+        "daily_trend": trend,
         "candle_time": int(df["time"].iloc[-1]),
         # How far back this scan could actually see. A venue can cap the
         # limit we ask for - CoinSwitch serves 751 candles however many we
@@ -1888,6 +1942,13 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
         return False
 
     if stop_too_wide(zone_type, zone):
+        return False
+
+    # Before any state is touched, so a counter-trend zone neither alerts
+    # nor feeds entry_confirm a watch row, and alerts normally the moment
+    # the daily trend turns its way.
+    if against_daily_trend(zone_type, result.get("daily_trend")):
+        print(f"Skipped alert, against daily trend: {result['symbol']} {zone_type}")
         return False
 
     rating = result.get(f"{zone_type}_rating")
