@@ -549,6 +549,17 @@ class DailyBacktestSummaryTests(unittest.TestCase):
         )
         self.assertIn("Settled from earlier days 1 · -1.10R", message)
 
+    def test_old_pending_row_with_a_different_id_is_still_the_same_delivery(self):
+        moment = pd.Timestamp("2026-08-04 10:00:01.5", tz=summary.IST)
+        records = pd.DataFrame([{"zone_id": "Z", "event_time_ist": moment, "trade_id": "scanner-id"},
+                                {"zone_id": "Z", "event_time_ist": moment + pd.Timedelta(hours=1),
+                                 "trade_id": "other"}])
+        pending = pd.DataFrame([{"zone_id": "Z", "alert_time": moment.isoformat(), "trade_id": "stable-id"}])
+        self.assertEqual(list(summary.same_delivery_as_pending(records, pending)), [True, False])
+
+    def test_crypto_cost_is_delta_maker_in_taker_out_with_gst(self):
+        self.assertAlmostEqual(summary.CRYPTO_ROUND_TRIP_COST_PCT, round((0.02 + 0.05) * 1.18, 4))
+
     def test_immature_rows_wait_in_pending_with_their_stop(self):
         alert = base_alert()
         alert["stop_price"] = 99.4

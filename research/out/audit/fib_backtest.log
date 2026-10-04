@@ -1,34 +1,3 @@
-# Fib + trendline alerts - history backtest
-
-Generated 2026-10-04 19:25 IST by `fib_trendline_backtest.py` in 3 min. Symbols: CRYPTO 31, NSE 200.
-
-## Rules
-
-- **Alert**: price comes within 0.75% of a fib zone or a live trendline (down to touching it), with the live scanner's levels, once-only and re-arm rules, and the crypto 01:00-08:00 IST hold.
-- **Fib trade**: entry at the zone's near edge, SL on the inner fib's 0.55 line - Shiva's EX 2 ETH trades (entry 2723.94 / SL 2711.79, 2672.86 / 2660.74).
-- **Trendline trade**: entry at the line, SL 30m 0.5%, 4H 1.0%, 1D 1.5%, 1W 2.5%, 1M 3.0% beyond it.
-- Limit entry, filled only from the evaluation candle after the alert and within 5 candles of the alert's timeframe; held up to 20 candles (trading candles - an NSE trade's clock stops overnight).
-- Scored on finer candles: crypto 30m on 5m, 4H on 1h, 1D on 4h, 1W on 1d, 1M on 1d; NSE 30m on 5m, 4H on 1h, 1D on 1h, 1W on 1d, 1M on 1d. A candle that touches both the SL and a target counts as the SL.
-- Breakeven: once +0.5R trades the stop moves 0.0933% (crypto) / 0.12% (NSE) past entry, from the next candle - the zone trades' rule. A stop there is **BE**.
-- Net R subtracts the round trip (crypto 0.0826%, NSE 0.1063%) divided by the trade's own risk %, so tight stops pay more R in costs.
-
-**Win @1R** = reached 1R before the SL, out of trades that did one or the other. **Win @2R** the same for 2R. **Net R** = average result per filled trade booking everything at that target. Timeouts and still-open trades are left out of both; BE trades count in Net R, not in win rates.
-
-**Read every win rate against the Baseline table at the end, not against 50%.** Random levels scored by these same rules win well under 50% at 1R, because a limit order only fills while price moves against it and a candle touching both SL and target counts as the SL. An alert type has an edge only where it beats the baseline for the same market and timeframe.
-
-## Fib
-
-| Market | TF | Alerts | Alerts/day | Filled | SL | BE | 1R | 2R | Timeout | Open | No fill | Win @1R | Win @2R | Net R @1R | Net R @2R | Median risk |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| CRYPTO | 30m | 3211 | 38.9 | 1619 | 981 | 139 | 164 | 334 | 1 | 0 | 1592 | 34% | 25% | -0.88R | -0.80R | 0.20% |
-| CRYPTO | 4H | 1683 | 1.7 | 1327 | 744 | 168 | 158 | 257 | 0 | 1 | 355 | 36% | 26% | -0.39R | -0.31R | 1.10% |
-| CRYPTO | 1D | 476 | 0.5 | 425 | 248 | 54 | 47 | 76 | 0 | 1 | 50 | 33% | 23% | -0.36R | -0.29R | 2.18% |
-| CRYPTO | 1W | 116 | 0.1 | 109 | 62 | 11 | 12 | 24 | 0 | 1 | 6 | 37% | 28% | -0.27R | -0.16R | 4.14% |
-| CRYPTO | 1M | 10 | 0.0 | 10 | 5 | 2 | 2 | 0 | 0 | 1 | 0 | 29% | 0% | -0.35R | -0.64R | 5.91% |
-| NSE | 30m | 8278 | 104.7 | 4259 | 2552 | 343 | 442 | 921 | 0 | 43 | 3977 | 35% | 25% | -1.02R | -0.97R | 0.20% |
-| NSE | 4H | 5978 | 8.8 | 4717 | 2734 | 561 | 531 | 891 | 0 | 14 | 1247 | 34% | 25% | -0.47R | -0.38R | 0.78% |
-| NSE | 1D | 2773 | 4.0 | 2313 | 1238 | 386 | 286 | 400 | 0 | 13 | 450 | 36% | 24% | -0.36R | -0.30R | 1.13% |
-| NSE | 1W | 5278 | 0.5 | 4517 | 2559 | 448 | 527 | 978 | 1 | 17 | 748 | 37% | 28% | -0.29R | -0.18R | 2.82% |
 | NSE | 1M | 2090 | 0.2 | 1933 | 938 | 358 | 257 | 379 | 0 | 5 | 153 | 40% | 29% | -0.18R | -0.12R | 5.25% |
 
 ## Trendline
@@ -88,3 +57,4 @@ Filled fib trades only, split by whether it was the first time price reached tha
 | NSE | 1M | later | 609 | 312 | 114 | 64 | 118 | 37% | 27% | -0.24R | -0.15R | 12% |
 
 2718 of 106128 alert trades had a candle touching both SL and a target (scored as SL).
+

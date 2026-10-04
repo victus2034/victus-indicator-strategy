@@ -28,12 +28,15 @@ from daily_backtest_summary import (
     BREAK_EVEN_ENABLED,
     BREAK_EVEN_OFFSET_PCT,
     CRYPTO_BREAK_EVEN_OFFSET_PCT,
+    CRYPTO_ROUND_TRIP_COST_PCT,
     HALF_R,
+    ROUND_TRIP_COST_PCT,
+    SL_FILL_SLIPPAGE_PCT,
 )
 from fib_trendline_data import CRYPTO, NSE
 
 # Round trip, % of notional - the same numbers daily_backtest_summary.py uses.
-COST_PCT = {CRYPTO: 0.10, NSE: 0.1063}
+COST_PCT = {CRYPTO: CRYPTO_ROUND_TRIP_COST_PCT, NSE: ROUND_TRIP_COST_PCT}
 # Candles each alert timeframe is scored on.
 EVAL_RESOLUTION = {
     CRYPTO: {"30m": "5m", "4h": "1h", "1d": "4h", "1w": "1d", "1M": "1d"},
@@ -67,10 +70,23 @@ def break_even_stop(plan, market):
     return entry + sign * entry * BREAK_EVEN_PCT[market] / 100
 
 
-def break_even_r(plan, market):
-    """Gross R booked when the breakeven stop is hit - a little above 0."""
+def slipped(price, plan):
+    """A stop's fill: SL_FILL_SLIPPAGE_PCT past its trigger, as the zone trades pay."""
     sign = 1 if plan["side"] == "long" else -1
-    return sign * (break_even_stop(plan, market) - plan["entry"]) / abs(plan["entry"] - plan["sl"])
+    return price - sign * price * SL_FILL_SLIPPAGE_PCT / 100
+
+
+def stop_r(plan):
+    """Gross R of a full stop, slip included - a little worse than -1."""
+    sign = 1 if plan["side"] == "long" else -1
+    return sign * (slipped(plan["sl"], plan) - plan["entry"]) / abs(plan["entry"] - plan["sl"])
+
+
+def break_even_r(plan, market):
+    """Gross R booked when the breakeven stop is hit, slip included - near 0."""
+    sign = 1 if plan["side"] == "long" else -1
+    exit_price = slipped(break_even_stop(plan, market), plan)
+    return sign * (exit_price - plan["entry"]) / abs(plan["entry"] - plan["sl"])
 
 
 def simulate(plan, market, tf, alert_ts, candles):
@@ -160,9 +176,10 @@ def risk_pct(plan):
 def booked_r(plan, market, result):
     """Net R after costs (out at 1R, held for 2R) - None where that booking is undecided."""
     cost_r = COST_PCT[market] / risk_pct(plan)
-    stop_r = -1 if result["sl"] else break_even_r(plan, market) if result.get("be") else None
-    at1 = 1 if result["r1"] else stop_r
-    at2 = 2 if result["r2"] else stop_r
+    # Stops pay the slip, like the zone trades; it used to be a flat -1.
+    closed_r = stop_r(plan) if result["sl"] else break_even_r(plan, market) if result.get("be") else None
+    at1 = 1 if result["r1"] else closed_r
+    at2 = 2 if result["r2"] else closed_r
     return (None if at1 is None else at1 - cost_r, None if at2 is None else at2 - cost_r)
 
 

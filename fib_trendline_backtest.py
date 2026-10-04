@@ -193,6 +193,11 @@ def replay(market, symbol, tf, base, evalc, now):
                     break                    # the fib died inside this bar
                 if held(ts) or l > hi_band or h < lo_band:
                     continue
+                if trades.already_stopped(trades.fib_plan(d, zone), _c):
+                    # The live scanner sends nothing once price is through
+                    # the stop (fib_trendline_scanner.fib_distance); this
+                    # candle closed there, so it is not an alert either.
+                    continue
                 fired.add(key)
                 clock = TouchClock(s["Et"])
                 for j in range(s["Et"] + 1, i):
