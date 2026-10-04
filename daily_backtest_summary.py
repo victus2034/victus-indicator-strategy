@@ -97,9 +97,18 @@ ROUND_TRIP_COST_PCT = 0.1063
 # close enough to carry one number for both. The earlier 0.10% placeholder
 # happened to be right, so no backtest result shifts.
 #
+# That was CoinSwitch. Trades are taken on Delta India now (2026-10-04),
+# whose published futures schedule is 0.02% maker / 0.05% taker plus 18%
+# GST on the fee. Entry here is a resting limit (maker); most exits are
+# stops, which fill as taker. So one round trip is (0.02 + 0.05) x 1.18 =
+# 0.0826%. A +2R target exit is a limit too and pays less (0.047%), so this
+# slightly overstates costs there - on purpose, rather than per-exit rates.
+# Not yet reconciled against a Delta fee statement; do that when one is
+# available, as was done for CoinSwitch.
+#
 # Override with VICTUS_CRYPTO_ROUND_TRIP_COST_PCT if the fee tier changes.
 CRYPTO_ROUND_TRIP_COST_PCT = float(
-    os.getenv("VICTUS_CRYPTO_ROUND_TRIP_COST_PCT", "0.10")
+    os.getenv("VICTUS_CRYPTO_ROUND_TRIP_COST_PCT", "0.0826")
 )
 # Where the stop goes once +0.5R trades. Entry alone is not breakeven - the
 # round trip has already been paid - so the stop sits far enough past entry
@@ -499,6 +508,29 @@ def report_results_for_current_day(
             return matched
 
     return results.iloc[0:0].copy()
+
+
+def _delivery_key(zone_id, moment) -> tuple[str, str]:
+    try:
+        stamp = pd.Timestamp(moment).tz_convert(IST).isoformat()[:26]
+    except (TypeError, ValueError):
+        stamp = str(moment)[:26]
+    return str(zone_id), stamp
+
+
+def same_delivery_as_pending(records: pd.DataFrame, pending: pd.DataFrame) -> pd.Series:
+    """True for each record that is the same delivery as a pending row,
+    whatever id either side carries."""
+    if records.empty or pending.empty or "zone_id" not in pending:
+        return pd.Series(False, index=records.index)
+    keys = {
+        _delivery_key(row.get("zone_id"), row.get("alert_time") or row.get("event_time_ist"))
+        for row in pending.to_dict("records")
+    }
+    return pd.Series(
+        [_delivery_key(z, t) in keys for z, t in zip(records["zone_id"], records["event_time_ist"])],
+        index=records.index,
+    )
 
 
 def settled_from_earlier_days(results: pd.DataFrame, pending: pd.DataFrame, target_date) -> pd.DataFrame:
@@ -2694,7 +2726,15 @@ def main() -> None:
         pending = pending[pending["market_class"] == wanted_market].copy()
         pending_ids = set(pending.get("trade_id", pd.Series(dtype=str)).astype(str))
         if not records.empty and "trade_id" in records:
-            records = records[~records["trade_id"].astype(str).isin(pending_ids)].copy()
+            # Rows graded before 2026-09-17 carry the backtest's own stable
+            # id, while load_records now prefers the scanner's trade_id, so
+            # the id alone missed them and the same trade was evaluated twice.
+            # Match on the zone and delivery moment too, and keep the pending
+            # row's id so it updates in place.
+            records = records[
+                ~records["trade_id"].astype(str).isin(pending_ids)
+                & ~same_delivery_as_pending(records, pending)
+            ].copy()
     target_date = select_target_date(records, args.date, args.market, args.timeframe)
     if target_date is None and not pending.empty and not args.date:
         # A pending-only run is a reconciliation run.  It must continue even

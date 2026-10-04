@@ -289,7 +289,9 @@ class SimulateTests(unittest.TestCase):
         self.assertEqual((row["SL"], row["1R"], row["2R"]), (1, 1, 2))
         self.assertAlmostEqual(row["win_1r"], 0.75)
         self.assertAlmostEqual(row["win_2r"], 2 / 3)
-        self.assertAlmostEqual(row["net_r_1r"], (1 + 1 + 1 - 1) / 4 - 0.1)   # 0.10% cost on a 1% risk
+        cost = ftt.COST_PCT[ftd.CRYPTO]                    # % cost on a 1% risk = R
+        self.assertAlmostEqual(row["net_r_1r"], (1 + 1 + 1 + ftt.stop_r(self.plan)) / 4 - cost)
+        self.assertLess(ftt.stop_r(self.plan), -1)          # a stop pays its slip
 
     def test_summary_books_breakeven_at_its_offset_and_leaves_it_out_of_win_rate(self):
         be = {"outcome": "BE", "filled": True, "r1": False, "r2": False, "sl": False, "be": True}
@@ -299,11 +301,14 @@ class SimulateTests(unittest.TestCase):
                   for r in (be, one_r_then_be, sl)]
         row = ftt.summarise(trades)[0]
         be_r = ftt.break_even_r(self.plan, ftd.CRYPTO)
-        self.assertAlmostEqual(be_r, ftt.BREAK_EVEN_PCT[ftd.CRYPTO])    # 1% risk: the offset in R
+        # 1% risk: the offset in R, less the stop's slip
+        self.assertLess(be_r, ftt.BREAK_EVEN_PCT[ftd.CRYPTO])
+        self.assertGreater(be_r, ftt.BREAK_EVEN_PCT[ftd.CRYPTO] - 0.06)
         self.assertEqual((row["SL"], row["BE"], row["1R"]), (1, 1, 1))
         self.assertAlmostEqual(row["win_1r"], 0.5)
-        self.assertAlmostEqual(row["net_r_1r"], (be_r + 1 - 1) / 3 - 0.1)
-        self.assertAlmostEqual(row["net_r_2r"], (be_r + be_r - 1) / 3 - 0.1)
+        cost, sl_r = ftt.COST_PCT[ftd.CRYPTO], ftt.stop_r(self.plan)
+        self.assertAlmostEqual(row["net_r_1r"], (be_r + 1 + sl_r) / 3 - cost)
+        self.assertAlmostEqual(row["net_r_2r"], (be_r + be_r + sl_r) / 3 - cost)
 
 
 class ReplayTests(unittest.TestCase):

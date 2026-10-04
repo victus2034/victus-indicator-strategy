@@ -192,7 +192,7 @@ def reference(frame: pd.DataFrame, alert: dict, market: str) -> dict:
             return {"outcome": "AMB", "entry_time": starts[fill], "exit_time": starts[i]}
         if stop_hit:
             outcome, exit_i = ("BE" if moved else "SL"), i
-            exit_px = be_stop if moved else stop * (1 - sign * dbs.SL_FILL_SLIPPAGE_PCT / 100)
+            exit_px = (be_stop if moved else stop) * (1 - sign * dbs.SL_FILL_SLIPPAGE_PCT / 100)
             break
         if hit_half or hit_1:
             reached_half = True

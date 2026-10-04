@@ -6,7 +6,7 @@ name: Backtest audit (research)
 on:
   push:
     branches: [claude/project-thread-ts1bzx]
-    paths: [research/backtest_audit.py, .github/workflows/backtest_audit.yml]
+    paths: [research/backtest_audit.py, .github/workflows/backtest_audit.yml, fib_trendline_*.py, daily_backtest_summary.py]
   workflow_dispatch:
 
 permissions:
@@ -16,7 +16,7 @@ jobs:
   audit:
     concurrency: audit-${{ github.ref }}
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -30,21 +30,18 @@ jobs:
           daily_backtest_finalized_records.jsonl
           crypto_alert_records.jsonl crypto_alert_records_30m.jsonl
           nse_alert_records.jsonl nse_alert_records_30m.jsonl
-      - name: Audit with main's scoring
-        run: |
-          git fetch --quiet origin main
-          mkdir -p /tmp/main && git show origin/main:daily_backtest_summary.py > /tmp/main/daily_backtest_summary.py
-          PYTHONPATH=/tmp/main python research/backtest_audit.py --out research/out/audit_main 2>&1 | tee research/audit_main.log
-      - name: Audit with this branch's scoring
+      - name: Audit
         run: python research/backtest_audit.py 2>&1 | tee research/audit.log
+      - name: Fib / trendline history backtest
+        run: python fib_trendline_backtest.py 2>&1 | tail -60 | tee research/fib_backtest.log
       - name: Commit results to this branch
         if: always()
         run: |
-          mkdir -p research/out/audit research/out/audit_main
+          mkdir -p research/out/audit
           mv research/audit.log research/out/audit/run.log || true
-          mv research/audit_main.log research/out/audit_main/run.log || true
+          mv research/fib_backtest.log research/out/audit/fib_backtest.log || true
           git config user.name "github-actions[bot]"
           git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
-          git add research/out/audit research/out/audit_main
+          git add research/out/audit reports
           git commit -m "Backtest audit results [skip ci]" || exit 0
           git pull --rebase origin ${GITHUB_REF_NAME} && git push origin HEAD:${GITHUB_REF_NAME}
