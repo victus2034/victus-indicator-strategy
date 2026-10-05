@@ -1,4 +1,83 @@
-Traceback (most recent call last):
-  File "/home/runner/work/victus-indicator-strategy/victus-indicator-strategy/research/bitunix_probe.py", line 11, in <module>
-    import config
-ModuleNotFoundError: No module named 'config'
+GET /api/v1/futures/market/trading_pairs {} -> 200
+pairs keys: ['symbol', 'base', 'quote', 'minTradeVolume', 'minBuyPriceOffset', 'maxSellPriceOffset', 'maxLimitOrderVolume', 'maxMarketOrderVolume', 'basePrecision', 'quotePrecision', 'maxLeverage', 'minLeverage', 'defaultLeverage', 'defaultMarginMode', 'priceProtectScope', 'symbolStatus', 'isApiSupported', 'maxFundingRate', 'minFundingRate', 'launchTime']
+total pairs: 776
+  BTCUSD             base=BTC      -> ['BTCUSDT']
+  ETHUSD             base=ETH      -> ['ETHFIUSDT', 'ETHUSDT', 'ETHWUSDT']
+  SOLUSD             base=SOL      -> ['SOLUSDT', 'SOLVUSDT']
+  XRPUSD             base=XRP      -> ['XRPUSDT']
+  HYPEUSD            base=HYPE     -> ['HYPERUSDT', 'HYPEUSDT']
+  AKE/USDT           base=AKE      -> ['AKEUSDT']
+  ZECUSD             base=ZEC      -> ['ZECUSDT']
+  DOGEUSD            base=DOGE     -> ['DOGEUSDT']
+  AAVEUSD            base=AAVE     -> ['AAVEUSDT']
+  BEAT/USDT          base=BEAT     -> ['BEATUSDT']
+  UNIUSD             base=UNI      -> ['UNITREEUSDT', 'UNIUSDT']
+  LINKUSD            base=LINK     -> ['LINKUSDT']
+  AVAXUSD            base=AVAX     -> ['AVAXUSDT']
+  LTCUSD             base=LTC      -> ['LTCUSDT']
+  BNBUSD             base=BNB      -> ['BNBUSDT']
+  TRUMP/USDT         base=TRUMP    -> ['TRUMPUSDT']
+  BCHUSD             base=BCH      -> ['BCHUSDT']
+  TACUSD             base=TAC      -> ['TACUSDT']
+  ZORAUSD            base=ZORA     -> ['ZORAUSDT']
+  BLESSUSD           base=BLESS    -> ['BLESSUSDT']
+  HUSD               base=H        -> ['HAEDALUSDT', 'HAJIMIUSDT', 'HANAUSDT', 'HANMIUSDT']
+  VELVETUSD          base=VELVET   -> ['VELVETUSDT']
+  RIVERUSD           base=RIVER    -> ['RIVERUSDT']
+  SLVONUSD           base=SLVON    -> []
+  XAUTUSD            base=XAUT     -> ['XAUTUSDT']
+  TSLAXUSD           base=TSLAX    -> []
+  METAXUSD           base=METAX    -> []
+  SOXLBUSD           base=SOXLB    -> []
+  SNDKBUSD           base=SNDKB    -> []
+  MRVL/USDT:USDT     base=MRVL     -> ['MRVLUSDT']
+  NVDAXUSD           base=NVDAX    -> []
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '4h', 'limit': 3} -> 200
+{"code": 0, "data": [{"open": "86482.8", "high": "86969.7", "low": "85974.1", "close": "86050.2", "quoteVol": "424504819.14217", "baseVol": "4907.0599", "time": "1791158400000"}, {"open": "85387.4", "high": "86769.9", "low": "85354.5", "close": "86482.8", "quoteVol": "555439514.8765", "baseVol": "6446.3614", "time": "1791144000000"}, {"open": "85212.9", "high": "85552.2", "low": "85132.4", "close": "85387.4", "quoteVol": "101738529.47038", "baseVol": "1191.9266", "time": "1791129600000"}], "msg": "Success"}
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '30m', 'limit': 200, 'endTime': 1788591062495} -> 200
+  end only: n=200 first=1788229800000 last=1788589800000 order=desc
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '30m', 'limit': 200, 'startTime': 1788591062495} -> 200
+  start only: n=200 first=1790821800000 last=1791180000000 order=desc
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '30m', 'limit': 200, 'startTime': 1788591062495, 'endTime': 1789455062495} -> 200
+  start+end 10d: n=200 first=1789093800000 last=1789453800000 order=desc
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '5m', 'limit': 5, 'startTime': 1786863062495, 'endTime': 1786884662495} -> 200
+  5m 50d back: n=5
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '5m', 'limit': 5, 'startTime': 1782543062495, 'endTime': 1782564662495} -> 200
+  5m 100d back: n=5
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '5m', 'limit': 5, 'startTime': 1773903062495, 'endTime': 1773924662495} -> 200
+  5m 200d back: n=5
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '5m', 'limit': 5, 'startTime': 1756623062495, 'endTime': 1756644662495} -> 200
+  5m 400d back: n=5
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '30m', 'limit': 5, 'startTime': 1782543062495, 'endTime': 1782564662495} -> 200
+  30m 100d back: n=5
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '30m', 'limit': 5, 'startTime': 1773903062495, 'endTime': 1773924662495} -> 200
+  30m 200d back: n=5
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '30m', 'limit': 5, 'startTime': 1756623062495, 'endTime': 1756644662495} -> 200
+  30m 400d back: n=5
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '30m', 'limit': 5, 'startTime': 1722063062495, 'endTime': 1722084662495} -> 200
+  30m 800d back: n=5
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '4h', 'limit': 5, 'startTime': 1775026262495, 'endTime': 1775047862495} -> 200
+  4h 187d back: n=5
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '4h', 'limit': 5, 'startTime': 1758783062495, 'endTime': 1758804662495} -> 200
+  4h 375d back: n=5
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '4h', 'limit': 5, 'startTime': 1726383062495, 'endTime': 1726404662495} -> 200
+  4h 750d back: n=5
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '4h', 'limit': 5, 'startTime': 1661583062495, 'endTime': 1661604662495} -> 200
+  4h 1500d back: n=5
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '1d', 'limit': 5, 'startTime': 1758783062495, 'endTime': 1759301462495} -> 200
+  1d 375d back: n=5
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '1d', 'limit': 5, 'startTime': 1726383062495, 'endTime': 1726901462495} -> 200
+  1d 750d back: n=5
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '1d', 'limit': 5, 'startTime': 1661583062495, 'endTime': 1662101462495} -> 200
+  1d 1500d back: n=5
+GET /api/v1/futures/market/kline {'symbol': 'BTCUSDT', 'interval': '1d', 'limit': 5, 'startTime': 1531983062495, 'endTime': 1532501462495} -> 200
+  1d 3000d back: n=0
+GET /api/v1/futures/market/kline {'symbol': 'ETHUSDT', 'interval': '1d', 'limit': 200, 'startTime': 1661583062495} -> 200
+  ETHUSDT 1d from 1500d back: n=200 first=1773878400000
+GET /api/v1/futures/market/kline {'symbol': 'HUSDT', 'interval': '1d', 'limit': 200, 'startTime': 1661583062495} -> 200
+  HUSDT 1d from 1500d back: n=200 first=1773878400000
+GET /api/v1/futures/market/kline {'symbol': 'TACUSDT', 'interval': '1d', 'limit': 200, 'startTime': 1661583062495} -> 200
+  TACUSDT 1d from 1500d back: n=200 first=1773878400000
+GET /api/v1/futures/market/kline {'symbol': 'RIVERUSDT', 'interval': '1d', 'limit': 200, 'startTime': 1661583062495} -> 200
+  RIVERUSDT 1d from 1500d back: n=200 first=1773878400000
+delta: {"success": true, "result": [{"close": 86042.5, "high": 86152.5, "low": 85366.5, "open": 86050.0, "time": 1791172800, "volume": 2162960.0}, {"close": 86050.0, "high": 86966.5, "low": 85980.5, "open": 86480.0, "time": 1791158400, "volume": 1836776.0}, {"close": 86482.5, "high": 86770.0, "low": 85354.0, "open": 85387.0, "time": 1791144000, "volume": 1549384.0}]}
