@@ -58308,6 +58308,33 @@
       "target_half": 736.475,
       "timeframe": "30m",
       "trade_id": "METAXUSD|30m|short|738.6|742.85"
+    },
+    {
+      "alert_time": "2026-10-05T20:06:39.478542+05:30",
+      "cost_r": 0.4378167111110946,
+      "date": "2026-10-05",
+      "entry": 119.26,
+      "entry_time": "2026-10-05T20:10:00+05:30",
+      "exit_price": 119.31158394521,
+      "exit_time": "2026-10-05T20:20:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": -0.20855473240000016,
+      "outcome": "BE",
+      "rating": 10,
+      "realized_r": 0.22926197871109444,
+      "risk": 0.22500000000000853,
+      "side": "long",
+      "stop": 119.035,
+      "stream": "live",
+      "symbol": "SOLUSD",
+      "target_1": 119.48500000000001,
+      "target_2": 119.71000000000002,
+      "target_half": 119.3725,
+      "timeframe": "30m",
+      "trade_id": "SOLUSD|30m|long|119.26|119.035"
     }
   ],
   "handled": {
@@ -60738,24 +60765,6 @@
       "target_2": 233.25,
       "target_half": 235.6875,
       "timeframe": "4h"
-    },
-    "SOLUSD|30m|long|119.26|119.035": {
-      "alert_time": "2026-10-05T20:06:39.478542+05:30",
-      "entry": 119.26,
-      "entry_time": "2026-10-05T20:10:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": true,
-      "market": "crypto",
-      "rating": 10,
-      "risk": 0.22500000000000853,
-      "side": "long",
-      "stop": 119.035,
-      "stream": "live",
-      "symbol": "SOLUSD",
-      "target_1": 119.48500000000001,
-      "target_2": 119.71000000000002,
-      "target_half": 119.3725,
-      "timeframe": "30m"
     }
   }
 }
