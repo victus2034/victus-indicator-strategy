@@ -1,0 +1,37 @@
+name: Bitunix research (candles + backtest)
+
+# Research only: compares Delta and Bitunix candles and replays the alerts on
+# each. Posts nothing, touches no live state. Runs here because the candle
+# APIs are not reachable from the cloud sandbox.
+on:
+  push:
+    branches: [claude/project-thread-at1n3c]
+    paths: [research/bitunix_*.py, .github/workflows/bitunix_research.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  research:
+    concurrency: bitunix-${{ github.ref }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Probe Bitunix API
+        run: python research/bitunix_probe.py 2>&1 | tee research/bitunix_probe.log
+      - name: Commit results to this branch
+        if: always()
+        run: |
+          mkdir -p research/out/bitunix && mv research/*.log research/out/bitunix/ 2>/dev/null || true
+          git config user.name "github-actions[bot]"
+          git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
+          git add research/out/bitunix
+          git commit -m "Bitunix research results [skip ci]" || exit 0
+          git pull --rebase origin ${GITHUB_REF_NAME} && git push origin HEAD:${GITHUB_REF_NAME}
