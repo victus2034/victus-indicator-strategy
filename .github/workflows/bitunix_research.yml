@@ -19,17 +19,20 @@ jobs:
       fail-fast: false
       matrix:
         part: [zones-30m, zones-4h, fib]
-    if: contains(inputs.parts, matrix.part)
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
       - uses: actions/checkout@v4
+        if: contains(inputs.parts, matrix.part)
       - uses: actions/setup-python@v5
+        if: contains(inputs.parts, matrix.part)
         with:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt tabulate
+        if: contains(inputs.parts, matrix.part)
       - name: Run
+        if: contains(inputs.parts, matrix.part)
         run: |
           mkdir -p research/out/bitunix
           case "${{ matrix.part }}" in
@@ -38,7 +41,7 @@ jobs:
             fib)       python research/bitunix_compare.py --part fib ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
       - name: Commit results to this branch
-        if: always()
+        if: always() && contains(inputs.parts, matrix.part)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
