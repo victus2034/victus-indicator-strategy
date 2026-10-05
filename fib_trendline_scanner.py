@@ -54,7 +54,7 @@ from config import (
     TRENDLINES_KEEP,
 )
 from fib_trendline_data import (
-    CRYPTO, IST, NSE, TF_LABEL, TF_SECONDS, candle_is_closed, crypto_charts, nse_charts,
+    CRYPTO, IST, NSE, TF_LABEL, TF_SECONDS, candle_close_ts, candle_is_closed, crypto_charts, nse_charts,
 )
 from trendlines import SUPPORT, build_trendlines
 
@@ -74,6 +74,13 @@ SEED_VERSION = "v3"
 if bitunix_data.CRYPTO_CANDLE_SOURCE == "bitunix":
     SEED_VERSION += "-bitunix"
 NSE_LAST_SCAN_KEY = "__nse_last_scan__"
+# {market: when that market was last scanned with alerts awake}. A BROKEN alert
+# goes out only on the first scans after the breaking candle closed: once a pass
+# has run after that, a break seen later is old news (Lakky, 2026-10-05 - PFIZER's
+# 1M break on September's close posted on Oct 5, four sessions late, while the
+# other 1M breaks went out on Oct 1).
+LAST_SCAN_KEY = "__last_scan__"
+BREAK_GRACE_SECONDS = 3600      # a symbol whose data was missing for a pass can still catch up within this
 NSE_MIN_INTERVAL_SECONDS = 8 * 60
 STATE_RETENTION_SECONDS = 120 * 24 * 3600
 MIN_BARS = 2 * max(FIB_SWING_LENGTH, TRENDLINE_SWING_LENGTH) + 2
@@ -218,6 +225,7 @@ def analyse(market, symbol, tf, candles, now, price=None):
             result["break"].append({
                 **info, "key": f"tlbreak|{ident}", "level": line.price_at(line.broken_at),
                 "close": closes[line.broken_at], "time": stamp[line.broken_at],
+                "closed_at": candle_close_ts(market, times[line.broken_at], tf),
             })
     return result
 
@@ -325,8 +333,16 @@ def save_state(state, now):
     os.replace(tmp, STATE_FILE)
 
 
-def plan_alerts(state, market, symbol, tf, analysis, now):
-    """[(channel, key, message, record)] for what is new since the last pass; updates touch bands."""
+def break_is_fresh(b, last_scan):
+    """True unless a pass already ran (with alerts awake) after the breaking candle closed."""
+    return last_scan is None or b.get("closed_at") is None or b["closed_at"] >= last_scan - BREAK_GRACE_SECONDS
+
+
+def plan_alerts(state, market, symbol, tf, analysis, now, last_scan=None):
+    """[(channel, key, message, record)] for what is new since the last pass; updates touch bands.
+
+    last_scan: when this market was last scanned awake - a break older than that is not sent.
+    """
     planned = []
     price = analysis.get("price")
     base = {"market": market, "symbol": symbol, "tf": tf, "price": price}
@@ -337,7 +353,7 @@ def plan_alerts(state, market, symbol, tf, analysis, now):
         else:
             state[z["key"]]["seen"] = now   # still true: keep it from being pruned
     for b in analysis["break"]:
-        if b["key"] not in state:
+        if b["key"] not in state and break_is_fresh(b, last_scan):
             planned.append(("trendline", b["key"], format_break_alert(market, symbol, tf, b), None))
 
     in_band_now = {t["key"] for t in analysis["touch"]}
@@ -460,6 +476,11 @@ def run_once(dry_run=False, force_nse=False):
     configured = {(channel, market): bool(webhook_url(channel, market))
                   for channel in ("fib", "trendline") for market in (CRYPTO, NSE)}
     awake = {CRYPTO: scanner.in_alert_window(), NSE: True}   # NSE only scans in session
+    last_scans = state.get(LAST_SCAN_KEY)
+    if not isinstance(last_scans, dict):
+        last_scans = {}
+    state[LAST_SCAN_KEY] = last_scans
+    previous_scan = dict(last_scans)
     seeding = {
         (channel, market)
         for market, results in markets.items() if results
@@ -474,7 +495,8 @@ def run_once(dry_run=False, force_nse=False):
                 failures.append(f"{market} {symbol}: {error}")
                 continue
             for tf, analysis in analyses.items():
-                for channel, key, message, record in plan_alerts(state, market, symbol, tf, analysis, now):
+                for channel, key, message, record in plan_alerts(state, market, symbol, tf, analysis, now,
+                                                                 previous_scan.get(market)):
                     if dry_run:
                         print(f"[{channel}] {message}\n")
                         continue
@@ -504,6 +526,11 @@ def run_once(dry_run=False, force_nse=False):
                         save_state(state, now)
                     else:
                         attempts[key] = now  # stays out of state so it still alerts once Discord is back
+
+    if not dry_run:
+        for market, results in markets.items():
+            if results and awake[market]:
+                last_scans[market] = now
 
     for market, results in markets.items():
         ok = sum(1 for _, a, _ in results if a is not None)

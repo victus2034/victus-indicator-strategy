@@ -145,6 +145,16 @@ each falling back to the shared one above when unset (so nothing changes until t
   alerts are approach-side only (price through a support before the close used to post BUY). One
   current price per symbol across timeframes. State is saved before anything that can raise, and
   persisted `if: always()`, so posted alerts can't be re-sent. Replay == live verified on 225 bars.
+- **Trendline swing length stays 10 (Lakky, 2026-10-05).** A line appears only once its second
+  swing has 10 candles after it, here and in Pine (`tl_len`). Backtested 3/5/7/10/15/20 on
+  trendlines only (`research/trendline_length_backtest.py`, `research/out/trendline_length/`): every
+  length scores ~-0.28R a trade at ~24% wins - the length only changes how many alerts there are.
+  "Alert but no line on my chart" has so far always been the chart, not the bot: wrong timeframe
+  (a 4H alert on a 30m chart) or feed (INDEX vs Bitunix/Delta); `research/trendline_trace.py` checks.
+- **No late BROKEN alerts (Lakky, 2026-10-05).** A break posts only if its candle closed after
+  the market's previous awake pass (`__last_scan__` in the state, `BREAK_GRACE_SECONDS` = 1h of
+  catch-up). PFIZER's 1M break on September's close posted on Oct 5 while the other 1M breaks went
+  out on Oct 1; a break first seen sessions later is now dropped.
 - Each channel seeds silently per market on its first pass with a webhook, so adding a webhook
   never dumps a backlog. Deleting the state file re-seeds rather than bursting.
 - `python fib_trendline_scanner.py --dry-run [--force-nse]` prints what would alert, sends nothing.

@@ -1,0 +1,4186 @@
+[
+ {
+  "symbol": "UNIUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-03 02:39",
+  "price": 9.121,
+  "entry": 9.160239999999998,
+  "x1": "2026-09-23 00:00",
+  "x2": "2026-09-27 04:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9772,
+     "first": "2022-04-17 16:00",
+     "gaps": 4,
+     "x1": "10.947 swing",
+     "x2": "10.197 swing",
+     "status": "live @ 9.147",
+     "live_same_side": [
+      "10.947 2026-09-23 00:00 -> 10.197 2026-09-27 04:00 @ 9.147"
+     ]
+    },
+    "now": {
+     "bars": 9786,
+     "first": "2022-04-17 16:00",
+     "gaps": 4,
+     "x1": "10.947 swing",
+     "x2": "10.197 swing",
+     "status": "broken 2026-10-03 00:00",
+     "live_same_side": []
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5399,
+     "first": "2024-04-16 04:00",
+     "gaps": 0,
+     "x1": "10.936 swing",
+     "x2": "10.1961 swing",
+     "status": "live @ 9.16024",
+     "live_same_side": [
+      "10.936 2026-09-23 00:00 -> 10.1961 2026-09-27 04:00 @ 9.16024"
+     ]
+    },
+    "now": {
+     "bars": 5413,
+     "first": "2024-04-16 04:00",
+     "gaps": 0,
+     "x1": "10.936 swing",
+     "x2": "10.1961 swing",
+     "status": "broken 2026-10-03 00:00",
+     "live_same_side": []
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2985,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "10.95 swing",
+     "x2": "10.195 swing",
+     "status": "live @ 9.138",
+     "live_same_side": [
+      "10.95 2026-09-23 00:00 -> 10.195 2026-09-27 04:00 @ 9.138"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "10.95 swing",
+     "x2": "10.195 swing",
+     "status": "broken 2026-10-03 00:00",
+     "live_same_side": []
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "BNBUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-03 03:08",
+  "price": 767.56,
+  "entry": 762.362252964427,
+  "x1": "2026-08-18 12:00",
+  "x2": "2026-09-29 16:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9772,
+     "first": "2022-04-17 16:00",
+     "gaps": 4,
+     "x1": "600.19 swing",
+     "x2": "750.83 swing",
+     "status": "live @ 762.738",
+     "live_same_side": [
+      "600.19 2026-08-18 12:00 -> 704.68 2026-09-16 08:00 @ 765.079",
+      "600.19 2026-08-18 12:00 -> 750.83 2026-09-29 16:00 @ 762.738"
+     ]
+    },
+    "now": {
+     "bars": 9786,
+     "first": "2022-04-17 16:00",
+     "gaps": 4,
+     "x1": "600.19 swing",
+     "x2": "750.83 swing",
+     "status": "live @ 771.074",
+     "live_same_side": [
+      "600.19 2026-08-18 12:00 -> 750.83 2026-09-29 16:00 @ 771.074",
+      "600.19 2026-08-18 12:00 -> 760.71 2026-10-02 16:00 @ 770.187"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5427,
+     "first": "2024-04-11 12:00",
+     "gaps": 0,
+     "x1": "599.76 swing",
+     "x2": "750.45 swing",
+     "status": "live @ 762.362",
+     "live_same_side": [
+      "599.76 2026-08-18 12:00 -> 704.12 2026-09-16 08:00 @ 764.444",
+      "599.76 2026-08-18 12:00 -> 750.45 2026-09-29 16:00 @ 762.362"
+     ]
+    },
+    "now": {
+     "bars": 5441,
+     "first": "2024-04-11 12:00",
+     "gaps": 0,
+     "x1": "599.76 swing",
+     "x2": "750.45 swing",
+     "status": "live @ 770.701",
+     "live_same_side": [
+      "599.76 2026-08-18 12:00 -> 750.45 2026-09-29 16:00 @ 770.701",
+      "599.76 2026-08-18 12:00 -> 760.18 2026-10-02 16:00 @ 769.651"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2985,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "599.3 swing",
+     "x2": "749.9 swing",
+     "status": "live @ 761.805",
+     "live_same_side": [
+      "599.3 2026-08-18 12:00 -> 703.8 2026-09-16 08:00 @ 764.205",
+      "599.3 2026-08-18 12:00 -> 749.9 2026-09-29 16:00 @ 761.805"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "599.3 swing",
+     "x2": "749.9 swing",
+     "status": "live @ 770.139",
+     "live_same_side": [
+      "599.3 2026-08-18 12:00 -> 749.9 2026-09-29 16:00 @ 770.139",
+      "599.3 2026-08-18 12:00 -> 759.7 2026-10-02 16:00 @ 769.17"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "TRUMP/USDT",
+  "tf": "1d",
+  "kind": "SUP",
+  "sent": "2026-10-03 07:44",
+  "price": 2.049,
+  "entry": 2.0404999999999998,
+  "x1": "2026-08-13 00:00",
+  "x2": "2026-09-16 00:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 623,
+     "first": "2025-01-18 00:00",
+     "gaps": 0,
+     "x1": "1.364 swing",
+     "x2": "1.812 swing",
+     "status": "live @ 2.036",
+     "live_same_side": [
+      "1.364 2026-08-13 00:00 -> 1.812 2026-09-16 00:00 @ 2.036"
+     ]
+    },
+    "now": {
+     "bars": 625,
+     "first": "2025-01-18 00:00",
+     "gaps": 0,
+     "x1": "1.364 swing",
+     "x2": "1.812 swing",
+     "status": "live @ 2.06235",
+     "live_same_side": [
+      "1.364 2026-08-13 00:00 -> 1.812 2026-09-16 00:00 @ 2.06235"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 623,
+     "first": "2025-01-18 00:00",
+     "gaps": 0,
+     "x1": "1.364 swing",
+     "x2": "1.815 swing",
+     "status": "live @ 2.0405",
+     "live_same_side": [
+      "1.304 2025-10-10 00:00 -> 1.364 2026-08-13 00:00 @ 1.37397",
+      "1.364 2026-08-13 00:00 -> 1.815 2026-09-16 00:00 @ 2.0405"
+     ]
+    },
+    "now": {
+     "bars": 625,
+     "first": "2025-01-18 00:00",
+     "gaps": 0,
+     "x1": "1.364 swing",
+     "x2": "1.815 swing",
+     "status": "live @ 2.06703",
+     "live_same_side": [
+      "1.304 2025-10-10 00:00 -> 1.364 2026-08-13 00:00 @ 1.37436",
+      "1.364 2026-08-13 00:00 -> 1.815 2026-09-16 00:00 @ 2.06703"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "status": "no data"
+    },
+    "now": {
+     "status": "no data"
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "SOLUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-03 08:04",
+  "price": 119.31,
+  "entry": 119.1298947368421,
+  "x1": "2026-09-15 16:00",
+  "x2": "2026-10-01 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9778,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "95.73 swing",
+     "x2": "116.64 swing",
+     "status": "live @ 119.061",
+     "live_same_side": [
+      "74.03 2026-08-16 20:00 -> 95.73 2026-09-15 16:00 @ 108.58",
+      "95.73 2026-09-15 16:00 -> 116.64 2026-10-01 12:00 @ 119.061"
+     ]
+    },
+    "now": {
+     "bars": 9790,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "95.73 swing",
+     "x2": "116.64 swing",
+     "status": "broken 2026-10-03 20:00",
+     "live_same_side": [
+      "74.03 2026-08-16 20:00 -> 95.73 2026-09-15 16:00 @ 110.035"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5447,
+     "first": "2024-04-08 12:00",
+     "gaps": 0,
+     "x1": "95.782 swing",
+     "x2": "116.707 swing",
+     "status": "live @ 119.13",
+     "live_same_side": [
+      "74.043 2026-08-16 20:00 -> 95.782 2026-09-15 16:00 @ 108.655",
+      "95.782 2026-09-15 16:00 -> 116.707 2026-10-01 12:00 @ 119.13"
+     ]
+    },
+    "now": {
+     "bars": 5459,
+     "first": "2024-04-08 12:00",
+     "gaps": 0,
+     "x1": "95.782 swing",
+     "x2": "116.707 swing",
+     "status": "broken 2026-10-03 20:00",
+     "live_same_side": [
+      "74.043 2026-08-16 20:00 -> 95.782 2026-09-15 16:00 @ 110.113"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2987,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "95.66 swing",
+     "x2": "116.62 swing",
+     "status": "live @ 119.047",
+     "live_same_side": [
+      "73.92 2026-08-16 20:00 -> 95.66 2026-09-15 16:00 @ 108.534",
+      "95.66 2026-09-15 16:00 -> 116.62 2026-10-01 12:00 @ 119.047"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "95.66 swing",
+     "x2": "116.62 swing",
+     "status": "broken 2026-10-03 20:00",
+     "live_same_side": [
+      "73.92 2026-08-16 20:00 -> 95.66 2026-09-15 16:00 @ 109.991"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "BLESSUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-03 08:04",
+  "price": 0.008723,
+  "entry": 0.008740473372781065,
+  "x1": "2026-08-06 04:00",
+  "x2": "2026-10-01 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 2239,
+     "first": "2025-09-24 12:00",
+     "gaps": 4,
+     "x1": "0.030195 swing",
+     "x2": "0.009432 swing",
+     "status": "live @ 0.00875628",
+     "live_same_side": [
+      "0.030195 2026-08-06 04:00 -> 0.009432 2026-10-01 12:00 @ 0.00875628"
+     ]
+    },
+    "now": {
+     "bars": 2251,
+     "first": "2025-09-24 12:00",
+     "gaps": 4,
+     "x1": "0.030195 swing",
+     "x2": "0.009432 swing",
+     "status": "broken 2026-10-03 16:00",
+     "live_same_side": []
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 2166,
+     "first": "2025-10-07 08:00",
+     "gaps": 0,
+     "x1": "0.0303 swing",
+     "x2": "0.00942 swing",
+     "status": "live @ 0.00874047",
+     "live_same_side": [
+      "0.0303 2026-08-06 04:00 -> 0.00942 2026-10-01 12:00 @ 0.00874047"
+     ]
+    },
+    "now": {
+     "bars": 2178,
+     "first": "2025-10-07 08:00",
+     "gaps": 0,
+     "x1": "0.0303 swing",
+     "x2": "0.00942 swing",
+     "status": "broken 2026-10-03 16:00",
+     "live_same_side": []
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "LTCUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-03 09:44",
+  "price": 68.7,
+  "entry": 68.26906976744186,
+  "x1": "2026-09-23 12:00",
+  "x2": "2026-09-30 16:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9778,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "58.53 swing",
+     "x2": "65.61 swing",
+     "status": "live @ 68.2444",
+     "live_same_side": [
+      "43.37 2026-08-14 16:00 -> 43.81 2026-08-17 08:00 @ 51.565",
+      "51.6 2026-09-10 12:00 -> 58.53 2026-09-23 12:00 @ 63.7719",
+      "58.53 2026-09-23 12:00 -> 65.61 2026-09-30 16:00 @ 68.2444"
+     ]
+    },
+    "now": {
+     "bars": 9790,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "58.53 swing",
+     "x2": "65.61 swing",
+     "status": "live @ 70.2202",
+     "live_same_side": [
+      "43.37 2026-08-14 16:00 -> 43.81 2026-08-17 08:00 @ 51.895",
+      "51.6 2026-09-10 12:00 -> 58.53 2026-09-23 12:00 @ 64.8381",
+      "58.53 2026-09-23 12:00 -> 65.61 2026-09-30 16:00 @ 70.2202"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5434,
+     "first": "2024-04-10 16:00",
+     "gaps": 0,
+     "x1": "58.98 swing",
+     "x2": "65.75 swing",
+     "status": "live @ 68.2691",
+     "live_same_side": [
+      "43.41 2026-08-14 16:00 -> 43.87 2026-08-17 08:00 @ 51.9775",
+      "51.67 2026-09-10 12:00 -> 58.98 2026-09-23 12:00 @ 64.5094",
+      "58.98 2026-09-23 12:00 -> 65.75 2026-09-30 16:00 @ 68.2691"
+     ]
+    },
+    "now": {
+     "bars": 5446,
+     "first": "2024-04-10 16:00",
+     "gaps": 0,
+     "x1": "58.98 swing",
+     "x2": "65.75 swing",
+     "status": "live @ 70.1584",
+     "live_same_side": [
+      "43.41 2026-08-14 16:00 -> 43.87 2026-08-17 08:00 @ 52.3225",
+      "51.67 2026-09-10 12:00 -> 58.98 2026-09-23 12:00 @ 65.634",
+      "58.98 2026-09-23 12:00 -> 65.75 2026-09-30 16:00 @ 70.1584"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2987,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "58.65 swing",
+     "x2": "65.6 swing",
+     "status": "NOT DRAWN",
+     "live_same_side": [
+      "43.76 2026-08-17 08:00 -> 50.12 2026-09-16 16:00 @ 53.6145",
+      "50.12 2026-09-16 16:00 -> 65.6 2026-09-30 16:00 @ 68.5486"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "58.65 swing",
+     "x2": "65.6 swing",
+     "status": "NOT DRAWN",
+     "live_same_side": [
+      "43.76 2026-08-17 08:00 -> 50.12 2026-09-16 16:00 @ 54.0338"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "BNBUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-03 11:14",
+  "price": 769.04,
+  "entry": 763.5534782608696,
+  "x1": "2026-08-18 12:00",
+  "x2": "2026-09-29 16:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9774,
+     "first": "2022-04-17 16:00",
+     "gaps": 4,
+     "x1": "600.19 swing",
+     "x2": "750.83 swing",
+     "status": "live @ 763.929",
+     "live_same_side": [
+      "600.19 2026-08-18 12:00 -> 750.83 2026-09-29 16:00 @ 763.929"
+     ]
+    },
+    "now": {
+     "bars": 9786,
+     "first": "2022-04-17 16:00",
+     "gaps": 4,
+     "x1": "600.19 swing",
+     "x2": "750.83 swing",
+     "status": "live @ 771.074",
+     "live_same_side": [
+      "600.19 2026-08-18 12:00 -> 750.83 2026-09-29 16:00 @ 771.074",
+      "600.19 2026-08-18 12:00 -> 760.71 2026-10-02 16:00 @ 770.187"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5429,
+     "first": "2024-04-11 12:00",
+     "gaps": 0,
+     "x1": "599.76 swing",
+     "x2": "750.45 swing",
+     "status": "live @ 763.553",
+     "live_same_side": [
+      "599.76 2026-08-18 12:00 -> 750.45 2026-09-29 16:00 @ 763.553"
+     ]
+    },
+    "now": {
+     "bars": 5441,
+     "first": "2024-04-11 12:00",
+     "gaps": 0,
+     "x1": "599.76 swing",
+     "x2": "750.45 swing",
+     "status": "live @ 770.701",
+     "live_same_side": [
+      "599.76 2026-08-18 12:00 -> 750.45 2026-09-29 16:00 @ 770.701",
+      "599.76 2026-08-18 12:00 -> 760.18 2026-10-02 16:00 @ 769.651"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2987,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "599.3 swing",
+     "x2": "749.9 swing",
+     "status": "live @ 762.996",
+     "live_same_side": [
+      "599.3 2026-08-18 12:00 -> 749.9 2026-09-29 16:00 @ 762.996"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "599.3 swing",
+     "x2": "749.9 swing",
+     "status": "live @ 770.139",
+     "live_same_side": [
+      "599.3 2026-08-18 12:00 -> 749.9 2026-09-29 16:00 @ 770.139",
+      "599.3 2026-08-18 12:00 -> 759.7 2026-10-02 16:00 @ 769.17"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "SOLUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-03 12:49",
+  "price": 119.409,
+  "entry": 119.35015789473684,
+  "x1": "2026-09-15 16:00",
+  "x2": "2026-10-01 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9779,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "95.73 swing",
+     "x2": "116.64 swing",
+     "status": "live @ 119.281",
+     "live_same_side": [
+      "74.03 2026-08-16 20:00 -> 95.73 2026-09-15 16:00 @ 108.702",
+      "95.73 2026-09-15 16:00 -> 116.64 2026-10-01 12:00 @ 119.281"
+     ]
+    },
+    "now": {
+     "bars": 9790,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "95.73 swing",
+     "x2": "116.64 swing",
+     "status": "broken 2026-10-03 20:00",
+     "live_same_side": [
+      "74.03 2026-08-16 20:00 -> 95.73 2026-09-15 16:00 @ 110.035"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5448,
+     "first": "2024-04-08 12:00",
+     "gaps": 0,
+     "x1": "95.782 swing",
+     "x2": "116.707 swing",
+     "status": "live @ 119.35",
+     "live_same_side": [
+      "74.043 2026-08-16 20:00 -> 95.782 2026-09-15 16:00 @ 108.777",
+      "95.782 2026-09-15 16:00 -> 116.707 2026-10-01 12:00 @ 119.35"
+     ]
+    },
+    "now": {
+     "bars": 5459,
+     "first": "2024-04-08 12:00",
+     "gaps": 0,
+     "x1": "95.782 swing",
+     "x2": "116.707 swing",
+     "status": "broken 2026-10-03 20:00",
+     "live_same_side": [
+      "74.043 2026-08-16 20:00 -> 95.782 2026-09-15 16:00 @ 110.113"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2988,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "95.66 swing",
+     "x2": "116.62 swing",
+     "status": "live @ 119.268",
+     "live_same_side": [
+      "73.92 2026-08-16 20:00 -> 95.66 2026-09-15 16:00 @ 108.655",
+      "95.66 2026-09-15 16:00 -> 116.62 2026-10-01 12:00 @ 119.268"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "95.66 swing",
+     "x2": "116.62 swing",
+     "status": "broken 2026-10-03 20:00",
+     "live_same_side": [
+      "73.92 2026-08-16 20:00 -> 95.66 2026-09-15 16:00 @ 109.991"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "BLESSUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-03 13:44",
+  "price": 0.008626,
+  "entry": 0.00867869822485207,
+  "x1": "2026-08-06 04:00",
+  "x2": "2026-10-01 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 2240,
+     "first": "2025-09-24 12:00",
+     "gaps": 4,
+     "x1": "0.030195 swing",
+     "x2": "0.009432 swing",
+     "status": "live @ 0.00869485",
+     "live_same_side": [
+      "0.030195 2026-08-06 04:00 -> 0.009432 2026-10-01 12:00 @ 0.00869485"
+     ]
+    },
+    "now": {
+     "bars": 2251,
+     "first": "2025-09-24 12:00",
+     "gaps": 4,
+     "x1": "0.030195 swing",
+     "x2": "0.009432 swing",
+     "status": "broken 2026-10-03 16:00",
+     "live_same_side": []
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 2167,
+     "first": "2025-10-07 08:00",
+     "gaps": 0,
+     "x1": "0.0303 swing",
+     "x2": "0.00942 swing",
+     "status": "live @ 0.0086787",
+     "live_same_side": [
+      "0.0303 2026-08-06 04:00 -> 0.00942 2026-10-01 12:00 @ 0.0086787"
+     ]
+    },
+    "now": {
+     "bars": 2178,
+     "first": "2025-10-07 08:00",
+     "gaps": 0,
+     "x1": "0.0303 swing",
+     "x2": "0.00942 swing",
+     "status": "broken 2026-10-03 16:00",
+     "live_same_side": []
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "HYPEUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-03 16:44",
+  "price": 89.105,
+  "entry": 89.74778260869566,
+  "x1": "2026-09-23 04:00",
+  "x2": "2026-09-30 20:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 3332,
+     "first": "2025-03-27 08:00",
+     "gaps": 0,
+     "x1": "98 swing",
+     "x2": "91.902 swing",
+     "status": "live @ 89.6484",
+     "live_same_side": [
+      "98 2026-09-23 04:00 -> 91.902 2026-09-30 20:00 @ 89.6484"
+     ]
+    },
+    "now": {
+     "bars": 3342,
+     "first": "2025-03-27 08:00",
+     "gaps": 0,
+     "x1": "98 swing",
+     "x2": "91.902 swing",
+     "status": "broken 2026-10-04 00:00",
+     "live_same_side": []
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 2917,
+     "first": "2025-06-04 12:00",
+     "gaps": 0,
+     "x1": "98.009 swing",
+     "x2": "91.977 swing",
+     "status": "live @ 89.7478",
+     "live_same_side": [
+      "98.009 2026-09-23 04:00 -> 91.977 2026-09-30 20:00 @ 89.7478"
+     ]
+    },
+    "now": {
+     "bars": 2927,
+     "first": "2025-06-04 12:00",
+     "gaps": 0,
+     "x1": "98.009 swing",
+     "x2": "91.977 swing",
+     "status": "broken 2026-10-04 00:00",
+     "live_same_side": []
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2989,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "97.983 swing",
+     "x2": "91.845 swing",
+     "status": "live @ 89.5766",
+     "live_same_side": [
+      "97.983 2026-09-23 04:00 -> 91.845 2026-09-30 20:00 @ 89.5766"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "97.983 swing",
+     "x2": "91.845 swing",
+     "status": "broken 2026-10-04 00:00",
+     "live_same_side": []
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "BNBUSD",
+  "tf": "1d",
+  "kind": "RES",
+  "sent": "2026-10-03 17:04",
+  "price": 782.3,
+  "entry": 787.4397667638483,
+  "x1": "2025-10-13 00:00",
+  "x2": "2026-09-21 00:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 1630,
+     "first": "2022-04-17 00:00",
+     "gaps": 0,
+     "x1": "1374.48 swing",
+     "x2": "808.22 swing",
+     "status": "live @ 788.409",
+     "live_same_side": [
+      "1374.48 2025-10-13 00:00 -> 808.22 2026-09-21 00:00 @ 788.409"
+     ]
+    },
+    "now": {
+     "bars": 1632,
+     "first": "2022-04-17 00:00",
+     "gaps": 0,
+     "x1": "1374.48 swing",
+     "x2": "808.22 swing",
+     "status": "broken 2026-10-04 00:00",
+     "live_same_side": []
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 905,
+     "first": "2024-04-11 00:00",
+     "gaps": 0,
+     "x1": "1374.38 swing",
+     "x2": "807.28 swing",
+     "status": "live @ 787.44",
+     "live_same_side": [
+      "1374.38 2025-10-13 00:00 -> 807.28 2026-09-21 00:00 @ 787.44"
+     ]
+    },
+    "now": {
+     "bars": 907,
+     "first": "2024-04-11 00:00",
+     "gaps": 0,
+     "x1": "1374.38 swing",
+     "x2": "807.28 swing",
+     "status": "broken 2026-10-04 00:00",
+     "live_same_side": []
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 1380,
+     "first": "2022-12-23 00:00",
+     "gaps": 0,
+     "x1": "1374.9 swing",
+     "x2": "807.4 swing",
+     "status": "live @ 787.546",
+     "live_same_side": [
+      "1374.9 2025-10-13 00:00 -> 807.4 2026-09-21 00:00 @ 787.546"
+     ]
+    },
+    "now": {
+     "bars": 1382,
+     "first": "2022-12-23 00:00",
+     "gaps": 0,
+     "x1": "1374.9 swing",
+     "x2": "807.4 swing",
+     "status": "broken 2026-10-04 00:00",
+     "live_same_side": []
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "ZECUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-03 17:24",
+  "price": 1310.77,
+  "entry": 1319.8181818181818,
+  "x1": "2026-09-26 20:00",
+  "x2": "2026-09-30 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 6774,
+     "first": "2023-08-28 20:00",
+     "gaps": 1,
+     "x1": "1698.46 swing",
+     "x2": "1493.97 swing",
+     "status": "live @ 1317.37",
+     "live_same_side": [
+      "1698.46 2026-09-26 20:00 -> 1493.97 2026-09-30 12:00 @ 1317.37"
+     ]
+    },
+    "now": {
+     "bars": 6784,
+     "first": "2023-08-28 20:00",
+     "gaps": 1,
+     "x1": "1698.46 swing",
+     "x2": "1493.97 swing",
+     "status": "broken 2026-10-03 16:00",
+     "live_same_side": []
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 2173,
+     "first": "2025-10-06 12:00",
+     "gaps": 0,
+     "x1": "1700 swing",
+     "x2": "1496 swing",
+     "status": "live @ 1319.82",
+     "live_same_side": [
+      "1700 2026-09-26 20:00 -> 1496 2026-09-30 12:00 @ 1319.82"
+     ]
+    },
+    "now": {
+     "bars": 2183,
+     "first": "2025-10-06 12:00",
+     "gaps": 0,
+     "x1": "1700 swing",
+     "x2": "1496 swing",
+     "status": "broken 2026-10-03 16:00",
+     "live_same_side": []
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "status": "no data"
+    },
+    "now": {
+     "status": "no data"
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "BCHUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-03 17:24",
+  "price": 315.67,
+  "entry": 318.03499999999997,
+  "x1": "2026-09-23 08:00",
+  "x2": "2026-09-27 08:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 6771,
+     "first": "2023-08-31 00:00",
+     "gaps": 5,
+     "x1": "366.33 swing",
+     "x2": "347.58 swing",
+     "status": "live @ 317.892",
+     "live_same_side": [
+      "488.89 2026-05-06 04:00 -> 366.33 2026-09-23 08:00 @ 357.251",
+      "366.33 2026-09-23 08:00 -> 347.58 2026-09-27 08:00 @ 317.892"
+     ]
+    },
+    "now": {
+     "bars": 6781,
+     "first": "2023-08-31 00:00",
+     "gaps": 5,
+     "x1": "366.33 swing",
+     "x2": "347.58 swing",
+     "status": "broken 2026-10-03 20:00",
+     "live_same_side": [
+      "488.89 2026-05-06 04:00 -> 366.33 2026-09-23 08:00 @ 355.787"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5437,
+     "first": "2024-04-10 12:00",
+     "gaps": 0,
+     "x1": "366.24 swing",
+     "x2": "347.58 swing",
+     "status": "live @ 318.035",
+     "live_same_side": [
+      "488.73 2026-05-06 04:00 -> 366.24 2026-09-23 08:00 @ 357.21",
+      "366.24 2026-09-23 08:00 -> 347.58 2026-09-27 08:00 @ 318.035"
+     ]
+    },
+    "now": {
+     "bars": 5447,
+     "first": "2024-04-10 12:00",
+     "gaps": 0,
+     "x1": "366.24 swing",
+     "x2": "347.58 swing",
+     "status": "broken 2026-10-03 20:00",
+     "live_same_side": [
+      "488.73 2026-05-06 04:00 -> 366.24 2026-09-23 08:00 @ 355.753"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2989,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "366 swing",
+     "x2": "347.5 swing",
+     "status": "live @ 318.208",
+     "live_same_side": [
+      "489 2026-05-06 04:00 -> 366 2026-09-23 08:00 @ 356.932",
+      "366 2026-09-23 08:00 -> 347.5 2026-09-27 08:00 @ 318.208"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "366 swing",
+     "x2": "347.5 swing",
+     "status": "broken 2026-10-03 20:00",
+     "live_same_side": [
+      "489 2026-05-06 04:00 -> 366 2026-09-23 08:00 @ 355.47"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "LTCUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-03 17:34",
+  "price": 68.83,
+  "entry": 68.58395348837209,
+  "x1": "2026-09-23 12:00",
+  "x2": "2026-09-30 16:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9780,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "58.53 swing",
+     "x2": "65.61 swing",
+     "status": "live @ 68.5737",
+     "live_same_side": [
+      "43.37 2026-08-14 16:00 -> 43.81 2026-08-17 08:00 @ 51.62",
+      "51.6 2026-09-10 12:00 -> 58.53 2026-09-23 12:00 @ 63.9496",
+      "58.53 2026-09-23 12:00 -> 65.61 2026-09-30 16:00 @ 68.5737"
+     ]
+    },
+    "now": {
+     "bars": 9790,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "58.53 swing",
+     "x2": "65.61 swing",
+     "status": "live @ 70.2202",
+     "live_same_side": [
+      "43.37 2026-08-14 16:00 -> 43.81 2026-08-17 08:00 @ 51.895",
+      "51.6 2026-09-10 12:00 -> 58.53 2026-09-23 12:00 @ 64.8381",
+      "58.53 2026-09-23 12:00 -> 65.61 2026-09-30 16:00 @ 70.2202"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5436,
+     "first": "2024-04-10 16:00",
+     "gaps": 0,
+     "x1": "58.98 swing",
+     "x2": "65.75 swing",
+     "status": "live @ 68.584",
+     "live_same_side": [
+      "43.41 2026-08-14 16:00 -> 43.87 2026-08-17 08:00 @ 52.035",
+      "51.67 2026-09-10 12:00 -> 58.98 2026-09-23 12:00 @ 64.6968",
+      "58.98 2026-09-23 12:00 -> 65.75 2026-09-30 16:00 @ 68.584"
+     ]
+    },
+    "now": {
+     "bars": 5446,
+     "first": "2024-04-10 16:00",
+     "gaps": 0,
+     "x1": "58.98 swing",
+     "x2": "65.75 swing",
+     "status": "live @ 70.1584",
+     "live_same_side": [
+      "43.41 2026-08-14 16:00 -> 43.87 2026-08-17 08:00 @ 52.3225",
+      "51.67 2026-09-10 12:00 -> 58.98 2026-09-23 12:00 @ 65.634",
+      "58.98 2026-09-23 12:00 -> 65.75 2026-09-30 16:00 @ 70.1584"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2989,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "58.65 swing",
+     "x2": "65.6 swing",
+     "status": "NOT DRAWN",
+     "live_same_side": [
+      "43.76 2026-08-17 08:00 -> 50.12 2026-09-16 16:00 @ 53.6844",
+      "50.12 2026-09-16 16:00 -> 65.6 2026-09-30 16:00 @ 68.9171"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "58.65 swing",
+     "x2": "65.6 swing",
+     "status": "NOT DRAWN",
+     "live_same_side": [
+      "43.76 2026-08-17 08:00 -> 50.12 2026-09-16 16:00 @ 54.0338"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "TRUMP/USDT",
+  "tf": "1d",
+  "kind": "RES",
+  "sent": "2026-10-04 02:34",
+  "price": 2.051,
+  "entry": 2.0623501805054154,
+  "x1": "2025-02-14 00:00",
+  "x2": "2026-08-22 00:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 624,
+     "first": "2025-01-18 00:00",
+     "gaps": 0,
+     "x1": "24.563 swing",
+     "x2": "3.674 swing",
+     "status": "live @ 2.05265",
+     "live_same_side": [
+      "24.563 2025-02-14 00:00 -> 3.674 2026-08-22 00:00 @ 2.05265"
+     ]
+    },
+    "now": {
+     "bars": 625,
+     "first": "2025-01-18 00:00",
+     "gaps": 0,
+     "x1": "24.563 swing",
+     "x2": "3.674 swing",
+     "status": "broken 2026-10-04 00:00",
+     "live_same_side": []
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 624,
+     "first": "2025-01-18 00:00",
+     "gaps": 0,
+     "x1": "24.563 swing",
+     "x2": "3.683 swing",
+     "status": "live @ 2.06235",
+     "live_same_side": [
+      "24.563 2025-02-14 00:00 -> 3.683 2026-08-22 00:00 @ 2.06235"
+     ]
+    },
+    "now": {
+     "bars": 625,
+     "first": "2025-01-18 00:00",
+     "gaps": 0,
+     "x1": "24.563 swing",
+     "x2": "3.683 swing",
+     "status": "broken 2026-10-04 00:00",
+     "live_same_side": []
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "status": "no data"
+    },
+    "now": {
+     "status": "no data"
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "TRUMP/USDT",
+  "tf": "1d",
+  "kind": "SUP",
+  "sent": "2026-10-04 08:04",
+  "price": 2.054,
+  "entry": 2.0537647058823527,
+  "x1": "2026-08-13 00:00",
+  "x2": "2026-09-16 00:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 624,
+     "first": "2025-01-18 00:00",
+     "gaps": 0,
+     "x1": "1.364 swing",
+     "x2": "1.812 swing",
+     "status": "live @ 2.04918",
+     "live_same_side": [
+      "1.364 2026-08-13 00:00 -> 1.812 2026-09-16 00:00 @ 2.04918"
+     ]
+    },
+    "now": {
+     "bars": 625,
+     "first": "2025-01-18 00:00",
+     "gaps": 0,
+     "x1": "1.364 swing",
+     "x2": "1.812 swing",
+     "status": "live @ 2.06235",
+     "live_same_side": [
+      "1.364 2026-08-13 00:00 -> 1.812 2026-09-16 00:00 @ 2.06235"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 624,
+     "first": "2025-01-18 00:00",
+     "gaps": 0,
+     "x1": "1.364 swing",
+     "x2": "1.815 swing",
+     "status": "live @ 2.05376",
+     "live_same_side": [
+      "1.304 2025-10-10 00:00 -> 1.364 2026-08-13 00:00 @ 1.37416",
+      "1.364 2026-08-13 00:00 -> 1.815 2026-09-16 00:00 @ 2.05376"
+     ]
+    },
+    "now": {
+     "bars": 625,
+     "first": "2025-01-18 00:00",
+     "gaps": 0,
+     "x1": "1.364 swing",
+     "x2": "1.815 swing",
+     "status": "live @ 2.06703",
+     "live_same_side": [
+      "1.304 2025-10-10 00:00 -> 1.364 2026-08-13 00:00 @ 1.37436",
+      "1.364 2026-08-13 00:00 -> 1.815 2026-09-16 00:00 @ 2.06703"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "status": "no data"
+    },
+    "now": {
+     "status": "no data"
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "XAUTUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-04 08:04",
+  "price": 4148.55,
+  "entry": 4145.681666666666,
+  "x1": "2026-09-28 12:00",
+  "x2": "2026-10-02 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 3344,
+     "first": "2025-03-25 08:00",
+     "gaps": 4,
+     "x1": "4114.99 swing",
+     "x2": "4130.01 swing",
+     "status": "live @ 4136.89",
+     "live_same_side": [
+      "3960.59 2026-07-17 12:00 -> 4114.99 2026-09-28 12:00 @ 4127.36",
+      "4114.99 2026-09-28 12:00 -> 4130.01 2026-10-02 12:00 @ 4136.89"
+     ]
+    },
+    "now": {
+     "bars": 3350,
+     "first": "2025-03-25 08:00",
+     "gaps": 4,
+     "x1": "4114.99 swing",
+     "x2": "4130.01 swing",
+     "status": "live @ 4140.65",
+     "live_same_side": [
+      "3960.59 2026-07-17 12:00 -> 4114.99 2026-09-28 12:00 @ 4129.48",
+      "4114.99 2026-09-28 12:00 -> 4130.01 2026-10-02 12:00 @ 4140.65"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 1019,
+     "first": "2026-04-17 12:00",
+     "gaps": 0,
+     "x1": "4124.39 swing",
+     "x2": "4138.99 swing",
+     "status": "live @ 4145.68",
+     "live_same_side": [
+      "3991.75 2026-07-29 12:00 -> 4124.39 2026-09-28 12:00 @ 4137.07",
+      "4124.39 2026-09-28 12:00 -> 4138.99 2026-10-02 12:00 @ 4145.68"
+     ]
+    },
+    "now": {
+     "bars": 1025,
+     "first": "2026-04-17 12:00",
+     "gaps": 0,
+     "x1": "4124.39 swing",
+     "x2": "4138.99 swing",
+     "status": "live @ 4149.33",
+     "live_same_side": [
+      "3991.75 2026-07-29 12:00 -> 4124.39 2026-09-28 12:00 @ 4139.25",
+      "4124.39 2026-09-28 12:00 -> 4138.99 2026-10-02 12:00 @ 4149.33"
+     ]
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "METAXUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-04 08:04",
+  "price": 731.3,
+  "entry": 732.15,
+  "x1": "2026-09-25 04:00",
+  "x2": "2026-10-02 12:00",
+  "feeds": {
+   "bitunix": {
+    "status": "error: Bitunix METAXUSDT 4h: {'code': 20015, 'data': None, 'msg': 'this Futures is not allowed to trade.'}"
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 1361,
+     "first": "2026-02-19 12:00",
+     "gaps": 0,
+     "x1": "781.4 swing",
+     "x2": "742 swing",
+     "status": "live @ 732.15",
+     "live_same_side": [
+      "781.4 2026-09-25 04:00 -> 742 2026-10-02 12:00 @ 732.15"
+     ]
+    },
+    "now": {
+     "bars": 1367,
+     "first": "2026-02-19 12:00",
+     "gaps": 0,
+     "x1": "781.4 swing",
+     "x2": "742 swing",
+     "status": "broken 2026-10-04 20:00",
+     "live_same_side": []
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "BTCUSD",
+  "tf": "1d",
+  "kind": "RES",
+  "sent": "2026-10-04 10:19",
+  "price": 85361.0,
+  "entry": 85944.13285714286,
+  "x1": "2025-10-06 00:00",
+  "x2": "2026-09-21 00:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 1631,
+     "first": "2022-04-17 00:00",
+     "gaps": 0,
+     "x1": "126193 swing",
+     "x2": "87378.8 swing",
+     "status": "live @ 85937.1",
+     "live_same_side": [
+      "126193 2025-10-06 00:00 -> 87378.8 2026-09-21 00:00 @ 85937.1"
+     ]
+    },
+    "now": {
+     "bars": 1632,
+     "first": "2022-04-17 00:00",
+     "gaps": 0,
+     "x1": "126193 swing",
+     "x2": "87378.8 swing",
+     "status": "broken 2026-10-04 00:00",
+     "live_same_side": []
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 1010,
+     "first": "2023-12-29 00:00",
+     "gaps": 0,
+     "x1": "126206 swing",
+     "x2": "87386 swing",
+     "status": "live @ 85944.1",
+     "live_same_side": [
+      "126206 2025-10-06 00:00 -> 87386 2026-09-21 00:00 @ 85944.1"
+     ]
+    },
+    "now": {
+     "bars": 1011,
+     "first": "2023-12-29 00:00",
+     "gaps": 0,
+     "x1": "126206 swing",
+     "x2": "87386 swing",
+     "status": "broken 2026-10-04 00:00",
+     "live_same_side": []
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 1498,
+     "first": "2022-08-28 00:00",
+     "gaps": 0,
+     "x1": "126174 swing",
+     "x2": "87374.3 swing",
+     "status": "live @ 85933.2",
+     "live_same_side": [
+      "126174 2025-10-06 00:00 -> 87374.3 2026-09-21 00:00 @ 85933.2"
+     ]
+    },
+    "now": {
+     "bars": 1499,
+     "first": "2022-08-28 00:00",
+     "gaps": 0,
+     "x1": "126174 swing",
+     "x2": "87374.3 swing",
+     "status": "broken 2026-10-04 00:00",
+     "live_same_side": []
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "ETHUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-04 12:04",
+  "price": 2699.4,
+  "entry": 2680.8725490196075,
+  "x1": "2026-09-15 16:00",
+  "x2": "2026-10-02 16:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9785,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "2357.01 swing",
+     "x2": "2647.98 swing",
+     "status": "live @ 2679.36",
+     "live_same_side": [
+      "1868.05 2026-08-16 20:00 -> 2357.01 2026-09-15 16:00 @ 2665.68",
+      "2357.01 2026-09-15 16:00 -> 2647.98 2026-10-02 16:00 @ 2679.36"
+     ]
+    },
+    "now": {
+     "bars": 9790,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "2357.01 swing",
+     "x2": "2647.98 swing",
+     "status": "live @ 2693.62",
+     "live_same_side": [
+      "1868.05 2026-08-16 20:00 -> 2357.01 2026-09-15 16:00 @ 2679.34",
+      "2357.01 2026-09-15 16:00 -> 2647.98 2026-10-02 16:00 @ 2693.62"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5827,
+     "first": "2024-02-06 08:00",
+     "gaps": 0,
+     "x1": "2357.05 swing",
+     "x2": "2649.35 swing",
+     "status": "live @ 2680.87",
+     "live_same_side": [
+      "1868.15 2026-08-16 20:00 -> 2357.05 2026-09-15 16:00 @ 2665.69",
+      "2357.05 2026-09-15 16:00 -> 2649.35 2026-10-02 16:00 @ 2680.87"
+     ]
+    },
+    "now": {
+     "bars": 5832,
+     "first": "2024-02-06 08:00",
+     "gaps": 0,
+     "x1": "2357.05 swing",
+     "x2": "2649.35 swing",
+     "status": "live @ 2695.2",
+     "live_same_side": [
+      "1868.15 2026-08-16 20:00 -> 2357.05 2026-09-15 16:00 @ 2679.34",
+      "2357.05 2026-09-15 16:00 -> 2649.35 2026-10-02 16:00 @ 2695.2"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2994,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "2356.18 swing",
+     "x2": "2646.9 swing",
+     "status": "live @ 2678.25",
+     "live_same_side": [
+      "1868 2026-08-16 20:00 -> 2356.18 2026-09-15 16:00 @ 2664.36",
+      "2356.18 2026-09-15 16:00 -> 2646.9 2026-10-02 16:00 @ 2678.25"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "2356.18 swing",
+     "x2": "2646.9 swing",
+     "status": "live @ 2692.5",
+     "live_same_side": [
+      "1868 2026-08-16 20:00 -> 2356.18 2026-09-15 16:00 @ 2678",
+      "2356.18 2026-09-15 16:00 -> 2646.9 2026-10-02 16:00 @ 2692.5"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "TRUMP/USDT",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-04 12:04",
+  "price": 2.02,
+  "entry": 2.0085952380952383,
+  "x1": "2026-08-18 00:00",
+  "x2": "2026-09-29 00:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 3740,
+     "first": "2025-01-18 12:00",
+     "gaps": 4,
+     "x1": "1.372 swing",
+     "x2": "1.929 swing",
+     "status": "live @ 2.00194",
+     "live_same_side": [
+      "1.372 2026-08-18 00:00 -> 1.929 2026-09-29 00:00 @ 2.00194",
+      "1.372 2026-08-18 00:00 -> 1.976 2026-10-02 16:00 @ 2.00025"
+     ]
+    },
+    "now": {
+     "bars": 3745,
+     "first": "2025-01-18 12:00",
+     "gaps": 4,
+     "x1": "1.372 swing",
+     "x2": "1.929 swing",
+     "status": "live @ 2.01299",
+     "live_same_side": [
+      "1.372 2026-08-18 00:00 -> 1.929 2026-09-29 00:00 @ 2.01299",
+      "1.372 2026-08-18 00:00 -> 1.976 2026-10-02 16:00 @ 2.01127"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 3743,
+     "first": "2025-01-18 16:00",
+     "gaps": 0,
+     "x1": "1.373 swing",
+     "x2": "1.935 swing",
+     "status": "live @ 2.0086",
+     "live_same_side": [
+      "1.373 2026-08-18 00:00 -> 1.935 2026-09-29 00:00 @ 2.0086",
+      "1.373 2026-08-18 00:00 -> 1.979 2026-10-02 16:00 @ 2.00333"
+     ]
+    },
+    "now": {
+     "bars": 3748,
+     "first": "2025-01-18 16:00",
+     "gaps": 0,
+     "x1": "1.373 swing",
+     "x2": "1.935 swing",
+     "status": "live @ 2.01975",
+     "live_same_side": [
+      "1.373 2026-08-18 00:00 -> 1.935 2026-09-29 00:00 @ 2.01975",
+      "1.373 2026-08-18 00:00 -> 1.979 2026-10-02 16:00 @ 2.01439"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2994,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "1.371 swing",
+     "x2": "1.928 swing",
+     "status": "live @ 2.00094",
+     "live_same_side": [
+      "1.371 2026-08-18 00:00 -> 1.928 2026-09-29 00:00 @ 2.00094",
+      "1.371 2026-08-18 00:00 -> 1.975 2026-10-02 16:00 @ 1.99925"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "1.371 swing",
+     "x2": "1.928 swing",
+     "status": "live @ 2.01199",
+     "live_same_side": [
+      "1.371 2026-08-18 00:00 -> 1.928 2026-09-29 00:00 @ 2.01199",
+      "1.371 2026-08-18 00:00 -> 1.975 2026-10-02 16:00 @ 2.01027"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "TSLAXUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-04 12:04",
+  "price": 372.1,
+  "entry": 372.34418604651165,
+  "x1": "2026-09-25 12:00",
+  "x2": "2026-10-02 16:00",
+  "feeds": {
+   "bitunix": {
+    "status": "error: Bitunix TSLAXUSDT 4h: {'code': 20015, 'data': None, 'msg': 'this Futures is not allowed to trade.'}"
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 1362,
+     "first": "2026-02-19 12:00",
+     "gaps": 0,
+     "x1": "387.1 swing",
+     "x2": "375.35 swing",
+     "status": "live @ 372.344",
+     "live_same_side": [
+      "437 2026-07-02 12:00 -> 387.35 2026-09-23 12:00 @ 380.77",
+      "437 2026-07-02 12:00 -> 387.1 2026-09-25 12:00 @ 381.816",
+      "387.1 2026-09-25 12:00 -> 375.35 2026-10-02 16:00 @ 372.344"
+     ]
+    },
+    "now": {
+     "bars": 1367,
+     "first": "2026-02-19 12:00",
+     "gaps": 0,
+     "x1": "387.1 swing",
+     "x2": "375.35 swing",
+     "status": "broken 2026-10-04 12:00",
+     "live_same_side": [
+      "437 2026-07-02 12:00 -> 387.35 2026-09-23 12:00 @ 380.271",
+      "437 2026-07-02 12:00 -> 387.1 2026-09-25 12:00 @ 381.327"
+     ]
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "TSLAXUSD",
+  "tf": "1d",
+  "kind": "RES",
+  "sent": "2026-10-04 13:44",
+  "price": 373.0,
+  "entry": 375.72857142857174,
+  "x1": "2026-05-13 00:00",
+  "x2": "2026-05-27 00:00",
+  "feeds": {
+   "bitunix": {
+    "status": "error: Bitunix TSLAXUSDT 1d: {'code': 20015, 'data': None, 'msg': 'this Futures is not allowed to trade.'}"
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 227,
+     "first": "2026-02-19 00:00",
+     "gaps": 0,
+     "x1": "453.9 swing",
+     "x2": "446.3 swing",
+     "status": "live @ 375.729",
+     "live_same_side": [
+      "453.9 2026-05-13 00:00 -> 446.3 2026-05-27 00:00 @ 375.729",
+      "453.9 2026-05-13 00:00 -> 437 2026-07-02 00:00 @ 405.228",
+      "437 2026-07-02 00:00 -> 387.35 2026-09-23 00:00 @ 380.77"
+     ]
+    },
+    "now": {
+     "bars": 228,
+     "first": "2026-02-19 00:00",
+     "gaps": 0,
+     "x1": "453.9 swing",
+     "x2": "446.3 swing",
+     "status": "live @ 375.186",
+     "live_same_side": [
+      "453.9 2026-05-13 00:00 -> 446.3 2026-05-27 00:00 @ 375.186",
+      "453.9 2026-05-13 00:00 -> 437 2026-07-02 00:00 @ 404.89",
+      "437 2026-07-02 00:00 -> 387.35 2026-09-23 00:00 @ 380.172"
+     ]
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "METAXUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-04 15:04",
+  "price": 731.25,
+  "entry": 731.2545454545455,
+  "x1": "2026-09-25 04:00",
+  "x2": "2026-10-02 12:00",
+  "feeds": {
+   "bitunix": {
+    "status": "error: Bitunix METAXUSDT 4h: {'code': 20015, 'data': None, 'msg': 'this Futures is not allowed to trade.'}"
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 1362,
+     "first": "2026-02-19 12:00",
+     "gaps": 0,
+     "x1": "781.4 swing",
+     "x2": "742 swing",
+     "status": "live @ 731.255",
+     "live_same_side": [
+      "781.4 2026-09-25 04:00 -> 742 2026-10-02 12:00 @ 731.255"
+     ]
+    },
+    "now": {
+     "bars": 1367,
+     "first": "2026-02-19 12:00",
+     "gaps": 0,
+     "x1": "781.4 swing",
+     "x2": "742 swing",
+     "status": "broken 2026-10-04 20:00",
+     "live_same_side": []
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "XAUTUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-04 15:39",
+  "price": 4147.57,
+  "entry": 4149.590967741936,
+  "x1": "2026-09-25 08:00",
+  "x2": "2026-09-30 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 3345,
+     "first": "2025-03-25 08:00",
+     "gaps": 4,
+     "x1": "4308.94 swing",
+     "x2": "4215.66 swing",
+     "status": "live @ 4143.44",
+     "live_same_side": [
+      "4677.54 2026-08-25 00:00 -> 4382.48 2026-09-21 00:00 @ 4234.95",
+      "4308.94 2026-09-25 08:00 -> 4215.66 2026-09-30 12:00 @ 4143.44",
+      "4382.48 2026-09-21 00:00 -> 4221.76 2026-10-02 12:00 @ 4193.81"
+     ]
+    },
+    "now": {
+     "bars": 3350,
+     "first": "2025-03-25 08:00",
+     "gaps": 4,
+     "x1": "4308.94 swing",
+     "x2": "4215.66 swing",
+     "status": "broken 2026-10-04 20:00",
+     "live_same_side": [
+      "4677.54 2026-08-25 00:00 -> 4382.48 2026-09-21 00:00 @ 4225.84",
+      "4382.48 2026-09-21 00:00 -> 4221.76 2026-10-02 12:00 @ 4182.16"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 1020,
+     "first": "2026-04-17 12:00",
+     "gaps": 0,
+     "x1": "4317.27 swing",
+     "x2": "4222.76 swing",
+     "status": "live @ 4149.59",
+     "live_same_side": [
+      "4683.24 2026-08-25 00:00 -> 4390.21 2026-09-21 00:00 @ 4243.69",
+      "4317.27 2026-09-25 08:00 -> 4222.76 2026-09-30 12:00 @ 4149.59",
+      "4390.21 2026-09-21 00:00 -> 4232 2026-10-02 12:00 @ 4204.49"
+     ]
+    },
+    "now": {
+     "bars": 1025,
+     "first": "2026-04-17 12:00",
+     "gaps": 0,
+     "x1": "4317.27 swing",
+     "x2": "4222.76 swing",
+     "status": "broken 2026-10-04 16:00",
+     "live_same_side": [
+      "4683.24 2026-08-25 00:00 -> 4390.21 2026-09-21 00:00 @ 4234.65",
+      "4390.21 2026-09-21 00:00 -> 4232 2026-10-02 12:00 @ 4193.02"
+     ]
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "SLVONUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-04 16:04",
+  "price": 54.81,
+  "entry": 55.221525423728814,
+  "x1": "2026-09-22 16:00",
+  "x2": "2026-10-02 12:00",
+  "feeds": {
+   "bitunix": {
+    "status": "error: Bitunix SLVONUSDT 4h: {'code': 20015, 'data': None, 'msg': 'this Futures is not allowed to trade.'}"
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 1321,
+     "first": "2026-02-26 12:00",
+     "gaps": 0,
+     "x1": "61.25 swing",
+     "x2": "56.31 swing",
+     "status": "live @ 55.2215",
+     "live_same_side": [
+      "81.06 2026-05-13 16:00 -> 61.25 2026-09-22 16:00 @ 59.4491",
+      "61.25 2026-09-22 16:00 -> 56.31 2026-10-02 12:00 @ 55.2215"
+     ]
+    },
+    "now": {
+     "bars": 1325,
+     "first": "2026-02-26 12:00",
+     "gaps": 0,
+     "x1": "61.25 swing",
+     "x2": "56.31 swing",
+     "status": "broken 2026-10-05 00:00",
+     "live_same_side": [
+      "81.06 2026-05-13 16:00 -> 61.25 2026-09-22 16:00 @ 59.349"
+     ]
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "XAUTUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-04 16:24",
+  "price": 4147.28,
+  "entry": 4146.898333333333,
+  "x1": "2026-09-28 12:00",
+  "x2": "2026-10-02 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 3346,
+     "first": "2025-03-25 08:00",
+     "gaps": 4,
+     "x1": "4114.99 swing",
+     "x2": "4130.01 swing",
+     "status": "live @ 4138.15",
+     "live_same_side": [
+      "3960.59 2026-07-17 12:00 -> 4114.99 2026-09-28 12:00 @ 4128.06",
+      "4114.99 2026-09-28 12:00 -> 4130.01 2026-10-02 12:00 @ 4138.15"
+     ]
+    },
+    "now": {
+     "bars": 3350,
+     "first": "2025-03-25 08:00",
+     "gaps": 4,
+     "x1": "4114.99 swing",
+     "x2": "4130.01 swing",
+     "status": "live @ 4140.65",
+     "live_same_side": [
+      "3960.59 2026-07-17 12:00 -> 4114.99 2026-09-28 12:00 @ 4129.48",
+      "4114.99 2026-09-28 12:00 -> 4130.01 2026-10-02 12:00 @ 4140.65"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 1021,
+     "first": "2026-04-17 12:00",
+     "gaps": 0,
+     "x1": "4124.39 swing",
+     "x2": "4138.99 swing",
+     "status": "live @ 4146.9",
+     "live_same_side": [
+      "3991.75 2026-07-29 12:00 -> 4124.39 2026-09-28 12:00 @ 4137.8",
+      "4124.39 2026-09-28 12:00 -> 4138.99 2026-10-02 12:00 @ 4146.9"
+     ]
+    },
+    "now": {
+     "bars": 1025,
+     "first": "2026-04-17 12:00",
+     "gaps": 0,
+     "x1": "4124.39 swing",
+     "x2": "4138.99 swing",
+     "status": "live @ 4149.33",
+     "live_same_side": [
+      "3991.75 2026-07-29 12:00 -> 4124.39 2026-09-28 12:00 @ 4139.25",
+      "4124.39 2026-09-28 12:00 -> 4138.99 2026-10-02 12:00 @ 4149.33"
+     ]
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "ETHUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-04 16:53",
+  "price": 2703.65,
+  "entry": 2683.7382352941177,
+  "x1": "2026-09-15 16:00",
+  "x2": "2026-10-02 16:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9786,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "2357.01 swing",
+     "x2": "2647.98 swing",
+     "status": "live @ 2682.21",
+     "live_same_side": [
+      "1868.05 2026-08-16 20:00 -> 2357.01 2026-09-15 16:00 @ 2668.41",
+      "2357.01 2026-09-15 16:00 -> 2647.98 2026-10-02 16:00 @ 2682.21"
+     ]
+    },
+    "now": {
+     "bars": 9790,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "2357.01 swing",
+     "x2": "2647.98 swing",
+     "status": "live @ 2693.62",
+     "live_same_side": [
+      "1868.05 2026-08-16 20:00 -> 2357.01 2026-09-15 16:00 @ 2679.34",
+      "2357.01 2026-09-15 16:00 -> 2647.98 2026-10-02 16:00 @ 2693.62"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5828,
+     "first": "2024-02-06 08:00",
+     "gaps": 0,
+     "x1": "2357.05 swing",
+     "x2": "2649.35 swing",
+     "status": "live @ 2683.74",
+     "live_same_side": [
+      "1868.15 2026-08-16 20:00 -> 2357.05 2026-09-15 16:00 @ 2668.42",
+      "2357.05 2026-09-15 16:00 -> 2649.35 2026-10-02 16:00 @ 2683.74"
+     ]
+    },
+    "now": {
+     "bars": 5832,
+     "first": "2024-02-06 08:00",
+     "gaps": 0,
+     "x1": "2357.05 swing",
+     "x2": "2649.35 swing",
+     "status": "live @ 2695.2",
+     "live_same_side": [
+      "1868.15 2026-08-16 20:00 -> 2357.05 2026-09-15 16:00 @ 2679.34",
+      "2357.05 2026-09-15 16:00 -> 2649.35 2026-10-02 16:00 @ 2695.2"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2995,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "2356.18 swing",
+     "x2": "2646.9 swing",
+     "status": "live @ 2681.1",
+     "live_same_side": [
+      "1868 2026-08-16 20:00 -> 2356.18 2026-09-15 16:00 @ 2667.09",
+      "2356.18 2026-09-15 16:00 -> 2646.9 2026-10-02 16:00 @ 2681.1"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "2356.18 swing",
+     "x2": "2646.9 swing",
+     "status": "live @ 2692.5",
+     "live_same_side": [
+      "1868 2026-08-16 20:00 -> 2356.18 2026-09-15 16:00 @ 2678",
+      "2356.18 2026-09-15 16:00 -> 2646.9 2026-10-02 16:00 @ 2692.5"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "DOGEUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-04 17:44",
+  "price": 0.09613,
+  "entry": 0.09628147540983606,
+  "x1": "2026-09-22 04:00",
+  "x2": "2026-10-02 08:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9786,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "0.1059 swing",
+     "x2": "0.09795 swing",
+     "status": "live @ 0.0961254",
+     "live_same_side": [
+      "0.11857 2026-05-14 16:00 -> 0.1059 2026-09-22 04:00 @ 0.104686",
+      "0.1059 2026-09-22 04:00 -> 0.09795 2026-10-02 08:00 @ 0.0961254"
+     ]
+    },
+    "now": {
+     "bars": 9790,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "0.1059 swing",
+     "x2": "0.09795 swing",
+     "status": "broken 2026-10-05 04:00",
+     "live_same_side": [
+      "0.11857 2026-05-14 16:00 -> 0.1059 2026-09-22 04:00 @ 0.104622"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5455,
+     "first": "2024-04-08 12:00",
+     "gaps": 0,
+     "x1": "0.10597 swing",
+     "x2": "0.09809 swing",
+     "status": "live @ 0.0962815",
+     "live_same_side": [
+      "0.11865 2026-05-14 16:00 -> 0.10597 2026-09-22 04:00 @ 0.104755",
+      "0.10597 2026-09-22 04:00 -> 0.09809 2026-10-02 08:00 @ 0.0962815"
+     ]
+    },
+    "now": {
+     "bars": 5459,
+     "first": "2024-04-08 12:00",
+     "gaps": 0,
+     "x1": "0.10597 swing",
+     "x2": "0.09809 swing",
+     "status": "broken 2026-10-05 04:00",
+     "live_same_side": [
+      "0.11865 2026-05-14 16:00 -> 0.10597 2026-09-22 04:00 @ 0.104691"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2995,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "0.10598 swing",
+     "x2": "0.09792 swing",
+     "status": "live @ 0.0960702",
+     "live_same_side": [
+      "0.11858 2026-05-14 16:00 -> 0.10598 2026-09-22 04:00 @ 0.104773",
+      "0.10598 2026-09-22 04:00 -> 0.09792 2026-10-02 08:00 @ 0.0960702"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "0.10598 swing",
+     "x2": "0.09792 swing",
+     "status": "broken 2026-10-05 00:00",
+     "live_same_side": [
+      "0.11858 2026-05-14 16:00 -> 0.10598 2026-09-22 04:00 @ 0.104709"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "XRPUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-04 19:19",
+  "price": 1.5091,
+  "entry": 1.5189357142857145,
+  "x1": "2026-09-23 04:00",
+  "x2": "2026-09-25 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9786,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "1.658 swing",
+     "x2": "1.6298 swing",
+     "status": "live @ 1.51901",
+     "live_same_side": [
+      "1.7 2026-08-22 04:00 -> 1.658 2026-09-23 04:00 @ 1.64291",
+      "1.658 2026-09-23 04:00 -> 1.6298 2026-09-25 12:00 @ 1.51901",
+      "1.658 2026-09-23 04:00 -> 1.5551 2026-10-02 12:00 @ 1.53121"
+     ]
+    },
+    "now": {
+     "bars": 9790,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "1.658 swing",
+     "x2": "1.6298 swing",
+     "status": "broken 2026-10-04 20:00",
+     "live_same_side": [
+      "1.7 2026-08-22 04:00 -> 1.658 2026-09-23 04:00 @ 1.64203",
+      "1.658 2026-09-23 04:00 -> 1.5551 2026-10-02 12:00 @ 1.52386"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5443,
+     "first": "2024-04-10 12:00",
+     "gaps": 0,
+     "x1": "1.6594 swing",
+     "x2": "1.6309 swing",
+     "status": "live @ 1.51894",
+     "live_same_side": [
+      "1.7014 2026-08-22 04:00 -> 1.6594 2026-09-23 04:00 @ 1.64431",
+      "1.6594 2026-09-23 04:00 -> 1.6309 2026-09-25 12:00 @ 1.51894",
+      "1.6594 2026-09-23 04:00 -> 1.5567 2026-10-02 12:00 @ 1.53286"
+     ]
+    },
+    "now": {
+     "bars": 5447,
+     "first": "2024-04-10 12:00",
+     "gaps": 0,
+     "x1": "1.6594 swing",
+     "x2": "1.6309 swing",
+     "status": "broken 2026-10-04 20:00",
+     "live_same_side": [
+      "1.7014 2026-08-22 04:00 -> 1.6594 2026-09-23 04:00 @ 1.64343",
+      "1.6594 2026-09-23 04:00 -> 1.5567 2026-10-02 12:00 @ 1.52552"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2995,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "1.6584 swing",
+     "x2": "1.6299 swing",
+     "status": "live @ 1.51794",
+     "live_same_side": [
+      "1.701 2026-08-22 04:00 -> 1.6584 2026-09-23 04:00 @ 1.64309",
+      "1.6584 2026-09-23 04:00 -> 1.6299 2026-09-25 12:00 @ 1.51794",
+      "1.6584 2026-09-23 04:00 -> 1.556 2026-10-02 12:00 @ 1.53223"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "1.6584 swing",
+     "x2": "1.6299 swing",
+     "status": "broken 2026-10-04 20:00",
+     "live_same_side": [
+      "1.701 2026-08-22 04:00 -> 1.6584 2026-09-23 04:00 @ 1.6422",
+      "1.6584 2026-09-23 04:00 -> 1.556 2026-10-02 12:00 @ 1.52491"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "ETHUSD",
+  "tf": "1d",
+  "kind": "RES",
+  "sent": "2026-10-05 02:34",
+  "price": 2727.55,
+  "entry": 2728.4406876790827,
+  "x1": "2025-10-07 00:00",
+  "x2": "2026-09-21 00:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 1632,
+     "first": "2022-04-17 00:00",
+     "gaps": 0,
+     "x1": "4754 swing",
+     "x2": "2806.58 swing",
+     "status": "live @ 2728.46",
+     "live_same_side": [
+      "4754 2025-10-07 00:00 -> 2806.58 2026-09-21 00:00 @ 2728.46"
+     ]
+    },
+    "now": {
+     "bars": 1632,
+     "first": "2022-04-17 00:00",
+     "gaps": 0,
+     "x1": "4754 swing",
+     "x2": "2806.58 swing",
+     "status": "live @ 2728.46",
+     "live_same_side": [
+      "4754 2025-10-07 00:00 -> 2806.58 2026-09-21 00:00 @ 2728.46"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 972,
+     "first": "2024-02-06 00:00",
+     "gaps": 0,
+     "x1": "4755 swing",
+     "x2": "2806.6 swing",
+     "status": "live @ 2728.44",
+     "live_same_side": [
+      "4755 2025-10-07 00:00 -> 2806.6 2026-09-21 00:00 @ 2728.44"
+     ]
+    },
+    "now": {
+     "bars": 972,
+     "first": "2024-02-06 00:00",
+     "gaps": 0,
+     "x1": "4755 swing",
+     "x2": "2806.6 swing",
+     "status": "live @ 2728.44",
+     "live_same_side": [
+      "4755 2025-10-07 00:00 -> 2806.6 2026-09-21 00:00 @ 2728.44"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 1499,
+     "first": "2022-08-28 00:00",
+     "gaps": 0,
+     "x1": "4754.37 swing",
+     "x2": "2806.96 swing",
+     "status": "live @ 2728.84",
+     "live_same_side": [
+      "4754.37 2025-10-07 00:00 -> 2806.96 2026-09-21 00:00 @ 2728.84"
+     ]
+    },
+    "now": {
+     "bars": 1499,
+     "first": "2022-08-28 00:00",
+     "gaps": 0,
+     "x1": "4754.37 swing",
+     "x2": "2806.96 swing",
+     "status": "live @ 2728.84",
+     "live_same_side": [
+      "4754.37 2025-10-07 00:00 -> 2806.96 2026-09-21 00:00 @ 2728.84"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "XRPUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-05 02:34",
+  "price": 1.523,
+  "entry": 1.5291910714285715,
+  "x1": "2026-09-23 04:00",
+  "x2": "2026-10-02 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9788,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "1.658 swing",
+     "x2": "1.5551 swing",
+     "status": "live @ 1.52754",
+     "live_same_side": [
+      "1.7 2026-08-22 04:00 -> 1.658 2026-09-23 04:00 @ 1.64247",
+      "1.658 2026-09-23 04:00 -> 1.5551 2026-10-02 12:00 @ 1.52754"
+     ]
+    },
+    "now": {
+     "bars": 9790,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "1.658 swing",
+     "x2": "1.5551 swing",
+     "status": "live @ 1.52386",
+     "live_same_side": [
+      "1.7 2026-08-22 04:00 -> 1.658 2026-09-23 04:00 @ 1.64203",
+      "1.658 2026-09-23 04:00 -> 1.5551 2026-10-02 12:00 @ 1.52386"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5445,
+     "first": "2024-04-10 12:00",
+     "gaps": 0,
+     "x1": "1.6594 swing",
+     "x2": "1.5567 swing",
+     "status": "live @ 1.52919",
+     "live_same_side": [
+      "1.7014 2026-08-22 04:00 -> 1.6594 2026-09-23 04:00 @ 1.64387",
+      "1.6594 2026-09-23 04:00 -> 1.5567 2026-10-02 12:00 @ 1.52919"
+     ]
+    },
+    "now": {
+     "bars": 5447,
+     "first": "2024-04-10 12:00",
+     "gaps": 0,
+     "x1": "1.6594 swing",
+     "x2": "1.5567 swing",
+     "status": "live @ 1.52552",
+     "live_same_side": [
+      "1.7014 2026-08-22 04:00 -> 1.6594 2026-09-23 04:00 @ 1.64343",
+      "1.6594 2026-09-23 04:00 -> 1.5567 2026-10-02 12:00 @ 1.52552"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2997,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "1.6584 swing",
+     "x2": "1.556 swing",
+     "status": "live @ 1.52857",
+     "live_same_side": [
+      "1.701 2026-08-22 04:00 -> 1.6584 2026-09-23 04:00 @ 1.64265",
+      "1.6584 2026-09-23 04:00 -> 1.556 2026-10-02 12:00 @ 1.52857"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "1.6584 swing",
+     "x2": "1.556 swing",
+     "status": "live @ 1.52491",
+     "live_same_side": [
+      "1.701 2026-08-22 04:00 -> 1.6584 2026-09-23 04:00 @ 1.6422",
+      "1.6584 2026-09-23 04:00 -> 1.556 2026-10-02 12:00 @ 1.52491"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "ZORAUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-05 02:34",
+  "price": 0.007827,
+  "entry": 0.007859499999999998,
+  "x1": "2026-09-23 08:00",
+  "x2": "2026-09-26 16:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 2609,
+     "first": "2025-07-26 12:00",
+     "gaps": 4,
+     "x1": "0.009624 swing",
+     "x2": "0.009122 swing",
+     "status": "live @ 0.007867",
+     "live_same_side": [
+      "0.011216 2026-08-31 04:00 -> 0.009624 2026-09-23 08:00 @ 0.00882227",
+      "0.009624 2026-09-23 08:00 -> 0.009122 2026-09-26 16:00 @ 0.007867"
+     ]
+    },
+    "now": {
+     "bars": 2611,
+     "first": "2025-07-26 12:00",
+     "gaps": 4,
+     "x1": "0.009624 swing",
+     "x2": "0.009122 swing",
+     "status": "broken 2026-10-05 04:00",
+     "live_same_side": [
+      "0.011216 2026-08-31 04:00 -> 0.009624 2026-09-23 08:00 @ 0.00879937"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 2500,
+     "first": "2025-08-14 08:00",
+     "gaps": 0,
+     "x1": "0.009641 swing",
+     "x2": "0.009132 swing",
+     "status": "live @ 0.0078595",
+     "live_same_side": [
+      "0.01128 2026-08-31 04:00 -> 0.009641 2026-09-23 08:00 @ 0.0088156",
+      "0.009641 2026-09-23 08:00 -> 0.009132 2026-09-26 16:00 @ 0.0078595"
+     ]
+    },
+    "now": {
+     "bars": 2502,
+     "first": "2025-08-14 08:00",
+     "gaps": 0,
+     "x1": "0.009641 swing",
+     "x2": "0.009132 swing",
+     "status": "broken 2026-10-05 04:00",
+     "live_same_side": [
+      "0.01128 2026-08-31 04:00 -> 0.009641 2026-09-23 08:00 @ 0.00879202"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "status": "no data"
+    },
+    "now": {
+     "status": "no data"
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "SOXLBUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-05 02:34",
+  "price": 168.2,
+  "entry": 168.83853118712273,
+  "x1": "2026-07-11 16:00",
+  "x2": "2026-10-02 12:00",
+  "feeds": {
+   "bitunix": {
+    "status": "error: Bitunix SOXLBUSDT 4h: {'code': 20015, 'data': None, 'msg': 'this Futures is not allowed to trade.'}"
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 525,
+     "first": "2026-07-09 12:00",
+     "gaps": 0,
+     "x1": "199.95 swing",
+     "x2": "169.75 swing",
+     "status": "live @ 168.839",
+     "live_same_side": [
+      "199.95 2026-07-11 16:00 -> 169.75 2026-10-02 12:00 @ 168.839"
+     ]
+    },
+    "now": {
+     "bars": 527,
+     "first": "2026-07-09 12:00",
+     "gaps": 0,
+     "x1": "199.95 swing",
+     "x2": "169.75 swing",
+     "status": "live @ 168.717",
+     "live_same_side": [
+      "199.95 2026-07-11 16:00 -> 169.75 2026-10-02 12:00 @ 168.717"
+     ]
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "NVDAXUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-05 02:34",
+  "price": 235.95,
+  "entry": 236.934375,
+  "x1": "2026-05-15 00:00",
+  "x2": "2026-09-09 08:00",
+  "feeds": {
+   "bitunix": {
+    "status": "error: Bitunix NVDAXUSDT 4h: {'code': 20015, 'data': None, 'msg': 'this Futures is not allowed to trade.'}"
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 1365,
+     "first": "2026-02-19 12:00",
+     "gaps": 0,
+     "x1": "241.2 swing",
+     "x2": "237.7 swing",
+     "status": "live @ 236.934",
+     "live_same_side": [
+      "241.2 2026-05-15 00:00 -> 237.7 2026-09-09 08:00 @ 236.934",
+      "241.2 2026-05-15 00:00 -> 237.8 2026-10-02 12:00 @ 237.74"
+     ]
+    },
+    "now": {
+     "bars": 1367,
+     "first": "2026-02-19 12:00",
+     "gaps": 0,
+     "x1": "241.2 swing",
+     "x2": "237.7 swing",
+     "status": "live @ 236.924",
+     "live_same_side": [
+      "241.2 2026-05-15 00:00 -> 237.7 2026-09-09 08:00 @ 236.924",
+      "241.2 2026-05-15 00:00 -> 237.8 2026-10-02 12:00 @ 237.731"
+     ]
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "NVDAXUSD",
+  "tf": "1d",
+  "kind": "RES",
+  "sent": "2026-10-05 02:34",
+  "price": 235.95,
+  "entry": 236.92222222222222,
+  "x1": "2026-05-15 00:00",
+  "x2": "2026-09-09 00:00",
+  "feeds": {
+   "bitunix": {
+    "status": "error: Bitunix NVDAXUSDT 1d: {'code': 20015, 'data': None, 'msg': 'this Futures is not allowed to trade.'}"
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 228,
+     "first": "2026-02-19 00:00",
+     "gaps": 0,
+     "x1": "241.2 swing",
+     "x2": "237.7 swing",
+     "status": "live @ 236.922",
+     "live_same_side": [
+      "241.2 2026-05-15 00:00 -> 237.7 2026-09-09 00:00 @ 236.922"
+     ]
+    },
+    "now": {
+     "bars": 228,
+     "first": "2026-02-19 00:00",
+     "gaps": 0,
+     "x1": "241.2 swing",
+     "x2": "237.7 swing",
+     "status": "live @ 236.922",
+     "live_same_side": [
+      "241.2 2026-05-15 00:00 -> 237.7 2026-09-09 00:00 @ 236.922"
+     ]
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "BTCUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-05 02:39",
+  "price": 86588.5,
+  "entry": 87185.4140625,
+  "x1": "2026-09-21 20:00",
+  "x2": "2026-10-02 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9788,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "87378.8 swing",
+     "x2": "87241.6 swing",
+     "status": "live @ 87209.4",
+     "live_same_side": [
+      "87378.8 2026-09-21 20:00 -> 87241.6 2026-10-02 12:00 @ 87209.4"
+     ]
+    },
+    "now": {
+     "bars": 9790,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "87378.8 swing",
+     "x2": "87241.6 swing",
+     "status": "live @ 87205.2",
+     "live_same_side": [
+      "87378.8 2026-09-21 20:00 -> 87241.6 2026-10-02 12:00 @ 87205.2"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 6063,
+     "first": "2023-12-29 12:00",
+     "gaps": 0,
+     "x1": "87386 swing",
+     "x2": "87223.5 swing",
+     "status": "live @ 87185.4",
+     "live_same_side": [
+      "87386 2026-09-21 20:00 -> 87223.5 2026-10-02 12:00 @ 87185.4"
+     ]
+    },
+    "now": {
+     "bars": 6065,
+     "first": "2023-12-29 12:00",
+     "gaps": 0,
+     "x1": "87386 swing",
+     "x2": "87223.5 swing",
+     "status": "live @ 87180.3",
+     "live_same_side": [
+      "87386 2026-09-21 20:00 -> 87223.5 2026-10-02 12:00 @ 87180.3"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2997,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "87374.3 swing",
+     "x2": "87239 swing",
+     "status": "live @ 87207.3",
+     "live_same_side": [
+      "87374.3 2026-09-21 20:00 -> 87239 2026-10-02 12:00 @ 87207.3"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "87374.3 swing",
+     "x2": "87239 swing",
+     "status": "live @ 87203.1",
+     "live_same_side": [
+      "87374.3 2026-09-21 20:00 -> 87239 2026-10-02 12:00 @ 87203.1"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "TRUMP/USDT",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-05 02:59",
+  "price": 2.097,
+  "entry": 2.1094016736401677,
+  "x1": "2026-08-22 04:00",
+  "x2": "2026-10-01 00:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 3743,
+     "first": "2025-01-18 12:00",
+     "gaps": 4,
+     "x1": "3.674 swing",
+     "x2": "2.25 swing",
+     "status": "live @ 2.107",
+     "live_same_side": [
+      "3.674 2026-08-22 04:00 -> 2.25 2026-10-01 00:00 @ 2.107"
+     ]
+    },
+    "now": {
+     "bars": 3745,
+     "first": "2025-01-18 12:00",
+     "gaps": 4,
+     "x1": "3.674 swing",
+     "x2": "2.25 swing",
+     "status": "live @ 2.09509",
+     "live_same_side": [
+      "3.674 2026-08-22 04:00 -> 2.25 2026-10-01 00:00 @ 2.09509"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 3746,
+     "first": "2025-01-18 16:00",
+     "gaps": 0,
+     "x1": "3.683 swing",
+     "x2": "2.253 swing",
+     "status": "live @ 2.1094",
+     "live_same_side": [
+      "3.683 2026-08-22 04:00 -> 2.253 2026-10-01 00:00 @ 2.1094"
+     ]
+    },
+    "now": {
+     "bars": 3748,
+     "first": "2025-01-18 16:00",
+     "gaps": 0,
+     "x1": "3.683 swing",
+     "x2": "2.253 swing",
+     "status": "live @ 2.09744",
+     "live_same_side": [
+      "3.683 2026-08-22 04:00 -> 2.253 2026-10-01 00:00 @ 2.09744"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2997,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "3.684 swing",
+     "x2": "2.25 swing",
+     "status": "live @ 2.106",
+     "live_same_side": [
+      "3.684 2026-08-22 04:00 -> 2.25 2026-10-01 00:00 @ 2.106"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "3.684 swing",
+     "x2": "2.25 swing",
+     "status": "live @ 2.094",
+     "live_same_side": [
+      "3.684 2026-08-22 04:00 -> 2.25 2026-10-01 00:00 @ 2.094"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "XAUTUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-05 03:19",
+  "price": 4151.63,
+  "entry": 4148.115,
+  "x1": "2026-09-28 12:00",
+  "x2": "2026-10-02 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 3348,
+     "first": "2025-03-25 08:00",
+     "gaps": 4,
+     "x1": "4114.99 swing",
+     "x2": "4130.01 swing",
+     "status": "live @ 4139.4",
+     "live_same_side": [
+      "3960.59 2026-07-17 12:00 -> 4114.99 2026-09-28 12:00 @ 4128.77",
+      "4114.99 2026-09-28 12:00 -> 4130.01 2026-10-02 12:00 @ 4139.4"
+     ]
+    },
+    "now": {
+     "bars": 3350,
+     "first": "2025-03-25 08:00",
+     "gaps": 4,
+     "x1": "4114.99 swing",
+     "x2": "4130.01 swing",
+     "status": "live @ 4140.65",
+     "live_same_side": [
+      "3960.59 2026-07-17 12:00 -> 4114.99 2026-09-28 12:00 @ 4129.48",
+      "4114.99 2026-09-28 12:00 -> 4130.01 2026-10-02 12:00 @ 4140.65"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 1023,
+     "first": "2026-04-17 12:00",
+     "gaps": 0,
+     "x1": "4124.39 swing",
+     "x2": "4138.99 swing",
+     "status": "live @ 4148.11",
+     "live_same_side": [
+      "3991.75 2026-07-29 12:00 -> 4124.39 2026-09-28 12:00 @ 4138.52",
+      "4124.39 2026-09-28 12:00 -> 4138.99 2026-10-02 12:00 @ 4148.11"
+     ]
+    },
+    "now": {
+     "bars": 1025,
+     "first": "2026-04-17 12:00",
+     "gaps": 0,
+     "x1": "4124.39 swing",
+     "x2": "4138.99 swing",
+     "status": "live @ 4149.33",
+     "live_same_side": [
+      "3991.75 2026-07-29 12:00 -> 4124.39 2026-09-28 12:00 @ 4139.25",
+      "4124.39 2026-09-28 12:00 -> 4138.99 2026-10-02 12:00 @ 4149.33"
+     ]
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "AVAXUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-05 03:24",
+  "price": 10.944,
+  "entry": 10.914000000000001,
+  "x1": "2026-09-16 16:00",
+  "x2": "2026-10-02 16:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9784,
+     "first": "2022-04-17 16:00",
+     "gaps": 4,
+     "x1": "7.171 swing",
+     "x2": "10.432 swing",
+     "status": "live @ 10.9076",
+     "live_same_side": [
+      "6.231 2026-08-18 00:00 -> 7.171 2026-09-16 16:00 @ 7.7519",
+      "7.171 2026-09-16 16:00 -> 10.432 2026-10-02 16:00 @ 10.9076"
+     ]
+    },
+    "now": {
+     "bars": 9786,
+     "first": "2022-04-17 16:00",
+     "gaps": 4,
+     "x1": "7.171 swing",
+     "x2": "10.432 swing",
+     "status": "live @ 10.9755",
+     "live_same_side": [
+      "6.231 2026-08-18 00:00 -> 7.171 2026-09-16 16:00 @ 7.76246",
+      "7.171 2026-09-16 16:00 -> 10.432 2026-10-02 16:00 @ 10.9755"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5457,
+     "first": "2024-04-08 12:00",
+     "gaps": 0,
+     "x1": "7.174 swing",
+     "x2": "10.438 swing",
+     "status": "live @ 10.914",
+     "live_same_side": [
+      "6.236 2026-08-18 00:00 -> 7.174 2026-09-16 16:00 @ 7.75366",
+      "7.174 2026-09-16 16:00 -> 10.438 2026-10-02 16:00 @ 10.914"
+     ]
+    },
+    "now": {
+     "bars": 5459,
+     "first": "2024-04-08 12:00",
+     "gaps": 0,
+     "x1": "7.174 swing",
+     "x2": "10.438 swing",
+     "status": "live @ 10.982",
+     "live_same_side": [
+      "6.236 2026-08-18 00:00 -> 7.174 2026-09-16 16:00 @ 7.7642",
+      "7.174 2026-09-16 16:00 -> 10.438 2026-10-02 16:00 @ 10.982"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2997,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "7.168 swing",
+     "x2": "10.434 swing",
+     "status": "live @ 10.9103",
+     "live_same_side": [
+      "6.229 2026-08-18 00:00 -> 7.168 2026-09-16 16:00 @ 7.74828",
+      "7.168 2026-09-16 16:00 -> 10.434 2026-10-02 16:00 @ 10.9103"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "7.168 swing",
+     "x2": "10.434 swing",
+     "status": "live @ 10.9783",
+     "live_same_side": [
+      "6.229 2026-08-18 00:00 -> 7.168 2026-09-16 16:00 @ 7.75883",
+      "7.168 2026-09-16 16:00 -> 10.434 2026-10-02 16:00 @ 10.9783"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "LTCUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-05 03:24",
+  "price": 70.36,
+  "entry": 69.84348837209302,
+  "x1": "2026-09-23 12:00",
+  "x2": "2026-09-30 16:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9788,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "58.53 swing",
+     "x2": "65.61 swing",
+     "status": "live @ 69.8909",
+     "live_same_side": [
+      "43.37 2026-08-14 16:00 -> 43.81 2026-08-17 08:00 @ 51.84",
+      "51.6 2026-09-10 12:00 -> 58.53 2026-09-23 12:00 @ 64.6604",
+      "58.53 2026-09-23 12:00 -> 65.61 2026-09-30 16:00 @ 69.8909"
+     ]
+    },
+    "now": {
+     "bars": 9790,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "58.53 swing",
+     "x2": "65.61 swing",
+     "status": "live @ 70.2202",
+     "live_same_side": [
+      "43.37 2026-08-14 16:00 -> 43.81 2026-08-17 08:00 @ 51.895",
+      "51.6 2026-09-10 12:00 -> 58.53 2026-09-23 12:00 @ 64.8381",
+      "58.53 2026-09-23 12:00 -> 65.61 2026-09-30 16:00 @ 70.2202"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5444,
+     "first": "2024-04-10 16:00",
+     "gaps": 0,
+     "x1": "58.98 swing",
+     "x2": "65.75 swing",
+     "status": "live @ 69.8435",
+     "live_same_side": [
+      "43.41 2026-08-14 16:00 -> 43.87 2026-08-17 08:00 @ 52.265",
+      "51.67 2026-09-10 12:00 -> 58.98 2026-09-23 12:00 @ 65.4465",
+      "58.98 2026-09-23 12:00 -> 65.75 2026-09-30 16:00 @ 69.8435"
+     ]
+    },
+    "now": {
+     "bars": 5446,
+     "first": "2024-04-10 16:00",
+     "gaps": 0,
+     "x1": "58.98 swing",
+     "x2": "65.75 swing",
+     "status": "live @ 70.1584",
+     "live_same_side": [
+      "43.41 2026-08-14 16:00 -> 43.87 2026-08-17 08:00 @ 52.3225",
+      "51.67 2026-09-10 12:00 -> 58.98 2026-09-23 12:00 @ 65.634",
+      "58.98 2026-09-23 12:00 -> 65.75 2026-09-30 16:00 @ 70.1584"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2997,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "58.65 swing",
+     "x2": "65.6 swing",
+     "status": "NOT DRAWN",
+     "live_same_side": [
+      "43.76 2026-08-17 08:00 -> 50.12 2026-09-16 16:00 @ 53.964"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "58.65 swing",
+     "x2": "65.6 swing",
+     "status": "NOT DRAWN",
+     "live_same_side": [
+      "43.76 2026-08-17 08:00 -> 50.12 2026-09-16 16:00 @ 54.0338"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "DOGEUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-05 03:59",
+  "price": 0.09595,
+  "entry": 0.09602311475409836,
+  "x1": "2026-09-22 04:00",
+  "x2": "2026-10-02 08:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9788,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "0.1059 swing",
+     "x2": "0.09795 swing",
+     "status": "live @ 0.0958648",
+     "live_same_side": [
+      "0.11857 2026-05-14 16:00 -> 0.1059 2026-09-22 04:00 @ 0.104654",
+      "0.1059 2026-09-22 04:00 -> 0.09795 2026-10-02 08:00 @ 0.0958648"
+     ]
+    },
+    "now": {
+     "bars": 9790,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "0.1059 swing",
+     "x2": "0.09795 swing",
+     "status": "broken 2026-10-05 04:00",
+     "live_same_side": [
+      "0.11857 2026-05-14 16:00 -> 0.1059 2026-09-22 04:00 @ 0.104622"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5457,
+     "first": "2024-04-08 12:00",
+     "gaps": 0,
+     "x1": "0.10597 swing",
+     "x2": "0.09809 swing",
+     "status": "live @ 0.0960231",
+     "live_same_side": [
+      "0.11865 2026-05-14 16:00 -> 0.10597 2026-09-22 04:00 @ 0.104723",
+      "0.10597 2026-09-22 04:00 -> 0.09809 2026-10-02 08:00 @ 0.0960231"
+     ]
+    },
+    "now": {
+     "bars": 5459,
+     "first": "2024-04-08 12:00",
+     "gaps": 0,
+     "x1": "0.10597 swing",
+     "x2": "0.09809 swing",
+     "status": "broken 2026-10-05 04:00",
+     "live_same_side": [
+      "0.11865 2026-05-14 16:00 -> 0.10597 2026-09-22 04:00 @ 0.104691"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2997,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "0.10598 swing",
+     "x2": "0.09792 swing",
+     "status": "live @ 0.0958059",
+     "live_same_side": [
+      "0.11858 2026-05-14 16:00 -> 0.10598 2026-09-22 04:00 @ 0.104741",
+      "0.10598 2026-09-22 04:00 -> 0.09792 2026-10-02 08:00 @ 0.0958059"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "0.10598 swing",
+     "x2": "0.09792 swing",
+     "status": "broken 2026-10-05 00:00",
+     "live_same_side": [
+      "0.11858 2026-05-14 16:00 -> 0.10598 2026-09-22 04:00 @ 0.104709"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "ETHUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-05 04:09",
+  "price": 2711.9,
+  "entry": 2692.3352941176468,
+  "x1": "2026-09-15 16:00",
+  "x2": "2026-10-02 16:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9789,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "2357.01 swing",
+     "x2": "2647.98 swing",
+     "status": "live @ 2690.77",
+     "live_same_side": [
+      "1868.05 2026-08-16 20:00 -> 2357.01 2026-09-15 16:00 @ 2676.61",
+      "2357.01 2026-09-15 16:00 -> 2647.98 2026-10-02 16:00 @ 2690.77"
+     ]
+    },
+    "now": {
+     "bars": 9790,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "2357.01 swing",
+     "x2": "2647.98 swing",
+     "status": "live @ 2693.62",
+     "live_same_side": [
+      "1868.05 2026-08-16 20:00 -> 2357.01 2026-09-15 16:00 @ 2679.34",
+      "2357.01 2026-09-15 16:00 -> 2647.98 2026-10-02 16:00 @ 2693.62"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5831,
+     "first": "2024-02-06 08:00",
+     "gaps": 0,
+     "x1": "2357.05 swing",
+     "x2": "2649.35 swing",
+     "status": "live @ 2692.34",
+     "live_same_side": [
+      "1868.15 2026-08-16 20:00 -> 2357.05 2026-09-15 16:00 @ 2676.61",
+      "2357.05 2026-09-15 16:00 -> 2649.35 2026-10-02 16:00 @ 2692.34"
+     ]
+    },
+    "now": {
+     "bars": 5832,
+     "first": "2024-02-06 08:00",
+     "gaps": 0,
+     "x1": "2357.05 swing",
+     "x2": "2649.35 swing",
+     "status": "live @ 2695.2",
+     "live_same_side": [
+      "1868.15 2026-08-16 20:00 -> 2357.05 2026-09-15 16:00 @ 2679.34",
+      "2357.05 2026-09-15 16:00 -> 2649.35 2026-10-02 16:00 @ 2695.2"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2998,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "2356.18 swing",
+     "x2": "2646.9 swing",
+     "status": "live @ 2689.65",
+     "live_same_side": [
+      "1868 2026-08-16 20:00 -> 2356.18 2026-09-15 16:00 @ 2675.27",
+      "2356.18 2026-09-15 16:00 -> 2646.9 2026-10-02 16:00 @ 2689.65"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "2356.18 swing",
+     "x2": "2646.9 swing",
+     "status": "live @ 2692.5",
+     "live_same_side": [
+      "1868 2026-08-16 20:00 -> 2356.18 2026-09-15 16:00 @ 2678",
+      "2356.18 2026-09-15 16:00 -> 2646.9 2026-10-02 16:00 @ 2692.5"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "UNIUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-05 04:28",
+  "price": 9.032,
+  "entry": 8.97357731958763,
+  "x1": "2026-09-16 12:00",
+  "x2": "2026-10-02 16:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9785,
+     "first": "2022-04-17 16:00",
+     "gaps": 4,
+     "x1": "5.999 swing",
+     "x2": "8.572 swing",
+     "status": "live @ 8.96989",
+     "live_same_side": [
+      "3.223 2026-08-18 00:00 -> 5.999 2026-09-16 12:00 @ 7.75556",
+      "5.999 2026-09-16 12:00 -> 8.572 2026-10-02 16:00 @ 8.96989"
+     ]
+    },
+    "now": {
+     "bars": 9786,
+     "first": "2022-04-17 16:00",
+     "gaps": 4,
+     "x1": "5.999 swing",
+     "x2": "8.572 swing",
+     "status": "live @ 8.99641",
+     "live_same_side": [
+      "3.223 2026-08-18 00:00 -> 5.999 2026-09-16 12:00 @ 7.77125",
+      "5.999 2026-09-16 12:00 -> 8.572 2026-10-02 16:00 @ 8.99641"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5412,
+     "first": "2024-04-16 04:00",
+     "gaps": 0,
+     "x1": "6.005 swing",
+     "x2": "8.576 swing",
+     "status": "live @ 8.97358",
+     "live_same_side": [
+      "3.23 2026-08-18 00:00 -> 6.005 2026-09-16 12:00 @ 7.76093",
+      "6.005 2026-09-16 12:00 -> 8.576 2026-10-02 16:00 @ 8.97358"
+     ]
+    },
+    "now": {
+     "bars": 5413,
+     "first": "2024-04-16 04:00",
+     "gaps": 0,
+     "x1": "6.005 swing",
+     "x2": "8.576 swing",
+     "status": "live @ 9.00008",
+     "live_same_side": [
+      "3.23 2026-08-18 00:00 -> 6.005 2026-09-16 12:00 @ 7.77661",
+      "6.005 2026-09-16 12:00 -> 8.576 2026-10-02 16:00 @ 9.00008"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2998,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "5.985 swing",
+     "x2": "8.568 swing",
+     "status": "live @ 8.96743",
+     "live_same_side": [
+      "3.224 2026-08-18 00:00 -> 5.985 2026-09-16 12:00 @ 7.73207",
+      "5.985 2026-09-16 12:00 -> 8.568 2026-10-02 16:00 @ 8.96743"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "5.985 swing",
+     "x2": "8.568 swing",
+     "status": "live @ 8.99406",
+     "live_same_side": [
+      "3.224 2026-08-18 00:00 -> 5.985 2026-09-16 12:00 @ 7.74767",
+      "5.985 2026-09-16 12:00 -> 8.568 2026-10-02 16:00 @ 8.99406"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "ZECUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-05 04:34",
+  "price": 1318.61,
+  "entry": 1313.582372881356,
+  "x1": "2026-08-14 12:00",
+  "x2": "2026-10-02 16:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 6783,
+     "first": "2023-08-28 20:00",
+     "gaps": 1,
+     "x1": "480.27 swing",
+     "x2": "1270.65 swing",
+     "status": "live @ 1310.84",
+     "live_same_side": [
+      "480.27 2026-08-14 12:00 -> 1270.65 2026-10-02 16:00 @ 1310.84"
+     ]
+    },
+    "now": {
+     "bars": 6784,
+     "first": "2023-08-28 20:00",
+     "gaps": 1,
+     "x1": "480.27 swing",
+     "x2": "1270.65 swing",
+     "status": "live @ 1313.52",
+     "live_same_side": [
+      "480.27 2026-08-14 12:00 -> 1270.65 2026-10-02 16:00 @ 1313.52"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 2182,
+     "first": "2025-10-06 12:00",
+     "gaps": 0,
+     "x1": "481.08 swing",
+     "x2": "1273.3 swing",
+     "status": "live @ 1313.58",
+     "live_same_side": [
+      "481.08 2026-08-14 12:00 -> 1273.3 2026-10-02 16:00 @ 1313.58"
+     ]
+    },
+    "now": {
+     "bars": 2183,
+     "first": "2025-10-06 12:00",
+     "gaps": 0,
+     "x1": "481.08 swing",
+     "x2": "1273.3 swing",
+     "status": "live @ 1316.27",
+     "live_same_side": [
+      "481.08 2026-08-14 12:00 -> 1273.3 2026-10-02 16:00 @ 1316.27"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "status": "no data"
+    },
+    "now": {
+     "status": "no data"
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "XAUTUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-05 04:39",
+  "price": 4140.68,
+  "entry": 4138.886174863388,
+  "x1": "2026-07-29 12:00",
+  "x2": "2026-09-28 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 3349,
+     "first": "2025-03-25 08:00",
+     "gaps": 4,
+     "x1": "3990.75 swing",
+     "x2": "4114.99 swing",
+     "status": "NOT DRAWN",
+     "live_same_side": [
+      "3960.59 2026-07-17 12:00 -> 4114.99 2026-09-28 12:00 @ 4129.12",
+      "4114.99 2026-09-28 12:00 -> 4130.01 2026-10-02 12:00 @ 4140.02"
+     ]
+    },
+    "now": {
+     "bars": 3350,
+     "first": "2025-03-25 08:00",
+     "gaps": 4,
+     "x1": "3990.75 swing",
+     "x2": "4114.99 swing",
+     "status": "NOT DRAWN",
+     "live_same_side": [
+      "3960.59 2026-07-17 12:00 -> 4114.99 2026-09-28 12:00 @ 4129.48",
+      "4114.99 2026-09-28 12:00 -> 4130.01 2026-10-02 12:00 @ 4140.65"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 1024,
+     "first": "2026-04-17 12:00",
+     "gaps": 0,
+     "x1": "3991.75 swing",
+     "x2": "4124.39 swing",
+     "status": "live @ 4138.89",
+     "live_same_side": [
+      "3991.75 2026-07-29 12:00 -> 4124.39 2026-09-28 12:00 @ 4138.89",
+      "4124.39 2026-09-28 12:00 -> 4138.99 2026-10-02 12:00 @ 4148.72"
+     ]
+    },
+    "now": {
+     "bars": 1025,
+     "first": "2026-04-17 12:00",
+     "gaps": 0,
+     "x1": "3991.75 swing",
+     "x2": "4124.39 swing",
+     "status": "live @ 4139.25",
+     "live_same_side": [
+      "3991.75 2026-07-29 12:00 -> 4124.39 2026-09-28 12:00 @ 4139.25",
+      "4124.39 2026-09-28 12:00 -> 4138.99 2026-10-02 12:00 @ 4149.33"
+     ]
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "ETHUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-05 05:23",
+  "price": 2695.3,
+  "entry": 2676.6103351955308,
+  "x1": "2026-08-16 20:00",
+  "x2": "2026-09-15 16:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9789,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "1868.05 swing",
+     "x2": "2357.01 swing",
+     "status": "live @ 2676.61",
+     "live_same_side": [
+      "1868.05 2026-08-16 20:00 -> 2357.01 2026-09-15 16:00 @ 2676.61",
+      "2357.01 2026-09-15 16:00 -> 2647.98 2026-10-02 16:00 @ 2690.77"
+     ]
+    },
+    "now": {
+     "bars": 9790,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "1868.05 swing",
+     "x2": "2357.01 swing",
+     "status": "live @ 2679.34",
+     "live_same_side": [
+      "1868.05 2026-08-16 20:00 -> 2357.01 2026-09-15 16:00 @ 2679.34",
+      "2357.01 2026-09-15 16:00 -> 2647.98 2026-10-02 16:00 @ 2693.62"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5831,
+     "first": "2024-02-06 08:00",
+     "gaps": 0,
+     "x1": "1868.15 swing",
+     "x2": "2357.05 swing",
+     "status": "live @ 2676.61",
+     "live_same_side": [
+      "1868.15 2026-08-16 20:00 -> 2357.05 2026-09-15 16:00 @ 2676.61",
+      "2357.05 2026-09-15 16:00 -> 2649.35 2026-10-02 16:00 @ 2692.34"
+     ]
+    },
+    "now": {
+     "bars": 5832,
+     "first": "2024-02-06 08:00",
+     "gaps": 0,
+     "x1": "1868.15 swing",
+     "x2": "2357.05 swing",
+     "status": "live @ 2679.34",
+     "live_same_side": [
+      "1868.15 2026-08-16 20:00 -> 2357.05 2026-09-15 16:00 @ 2679.34",
+      "2357.05 2026-09-15 16:00 -> 2649.35 2026-10-02 16:00 @ 2695.2"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2998,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "1868 swing",
+     "x2": "2356.18 swing",
+     "status": "live @ 2675.27",
+     "live_same_side": [
+      "1868 2026-08-16 20:00 -> 2356.18 2026-09-15 16:00 @ 2675.27",
+      "2356.18 2026-09-15 16:00 -> 2646.9 2026-10-02 16:00 @ 2689.65"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "1868 swing",
+     "x2": "2356.18 swing",
+     "status": "live @ 2678",
+     "live_same_side": [
+      "1868 2026-08-16 20:00 -> 2356.18 2026-09-15 16:00 @ 2678",
+      "2356.18 2026-09-15 16:00 -> 2646.9 2026-10-02 16:00 @ 2692.5"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "NVDAXUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-05 06:39",
+  "price": 235.2,
+  "entry": 236.9294034090909,
+  "x1": "2026-05-15 00:00",
+  "x2": "2026-09-09 08:00",
+  "feeds": {
+   "bitunix": {
+    "status": "error: Bitunix NVDAXUSDT 4h: {'code': 20015, 'data': None, 'msg': 'this Futures is not allowed to trade.'}"
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 1366,
+     "first": "2026-02-19 12:00",
+     "gaps": 0,
+     "x1": "241.2 swing",
+     "x2": "237.7 swing",
+     "status": "live @ 236.929",
+     "live_same_side": [
+      "241.2 2026-05-15 00:00 -> 237.7 2026-09-09 08:00 @ 236.929",
+      "241.2 2026-05-15 00:00 -> 237.8 2026-10-02 12:00 @ 237.735"
+     ]
+    },
+    "now": {
+     "bars": 1367,
+     "first": "2026-02-19 12:00",
+     "gaps": 0,
+     "x1": "241.2 swing",
+     "x2": "237.7 swing",
+     "status": "live @ 236.924",
+     "live_same_side": [
+      "241.2 2026-05-15 00:00 -> 237.7 2026-09-09 08:00 @ 236.924",
+      "241.2 2026-05-15 00:00 -> 237.8 2026-10-02 12:00 @ 237.731"
+     ]
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "XRPUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-05 06:54",
+  "price": 1.5208,
+  "entry": 1.5273571428571429,
+  "x1": "2026-09-23 04:00",
+  "x2": "2026-10-02 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 9789,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "1.658 swing",
+     "x2": "1.5551 swing",
+     "status": "live @ 1.5257",
+     "live_same_side": [
+      "1.7 2026-08-22 04:00 -> 1.658 2026-09-23 04:00 @ 1.64225",
+      "1.658 2026-09-23 04:00 -> 1.5551 2026-10-02 12:00 @ 1.5257"
+     ]
+    },
+    "now": {
+     "bars": 9790,
+     "first": "2022-04-17 16:00",
+     "gaps": 0,
+     "x1": "1.658 swing",
+     "x2": "1.5551 swing",
+     "status": "live @ 1.52386",
+     "live_same_side": [
+      "1.7 2026-08-22 04:00 -> 1.658 2026-09-23 04:00 @ 1.64203",
+      "1.658 2026-09-23 04:00 -> 1.5551 2026-10-02 12:00 @ 1.52386"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 5446,
+     "first": "2024-04-10 12:00",
+     "gaps": 0,
+     "x1": "1.6594 swing",
+     "x2": "1.5567 swing",
+     "status": "live @ 1.52736",
+     "live_same_side": [
+      "1.7014 2026-08-22 04:00 -> 1.6594 2026-09-23 04:00 @ 1.64365",
+      "1.6594 2026-09-23 04:00 -> 1.5567 2026-10-02 12:00 @ 1.52736"
+     ]
+    },
+    "now": {
+     "bars": 5447,
+     "first": "2024-04-10 12:00",
+     "gaps": 0,
+     "x1": "1.6594 swing",
+     "x2": "1.5567 swing",
+     "status": "live @ 1.52552",
+     "live_same_side": [
+      "1.7014 2026-08-22 04:00 -> 1.6594 2026-09-23 04:00 @ 1.64343",
+      "1.6594 2026-09-23 04:00 -> 1.5567 2026-10-02 12:00 @ 1.52552"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2998,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "1.6584 swing",
+     "x2": "1.556 swing",
+     "status": "live @ 1.52674",
+     "live_same_side": [
+      "1.701 2026-08-22 04:00 -> 1.6584 2026-09-23 04:00 @ 1.64243",
+      "1.6584 2026-09-23 04:00 -> 1.556 2026-10-02 12:00 @ 1.52674"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "1.6584 swing",
+     "x2": "1.556 swing",
+     "status": "live @ 1.52491",
+     "live_same_side": [
+      "1.701 2026-08-22 04:00 -> 1.6584 2026-09-23 04:00 @ 1.6422",
+      "1.6584 2026-09-23 04:00 -> 1.556 2026-10-02 12:00 @ 1.52491"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "XAUTUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-05 07:09",
+  "price": 4164.07,
+  "entry": 4195.3136231884055,
+  "x1": "2026-09-21 00:00",
+  "x2": "2026-10-02 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 3349,
+     "first": "2025-03-25 08:00",
+     "gaps": 4,
+     "x1": "4382.48 swing",
+     "x2": "4221.76 swing",
+     "status": "live @ 4184.49",
+     "live_same_side": [
+      "4677.54 2026-08-25 00:00 -> 4382.48 2026-09-21 00:00 @ 4227.66",
+      "4382.48 2026-09-21 00:00 -> 4221.76 2026-10-02 12:00 @ 4184.49"
+     ]
+    },
+    "now": {
+     "bars": 3350,
+     "first": "2025-03-25 08:00",
+     "gaps": 4,
+     "x1": "4382.48 swing",
+     "x2": "4221.76 swing",
+     "status": "live @ 4182.16",
+     "live_same_side": [
+      "4677.54 2026-08-25 00:00 -> 4382.48 2026-09-21 00:00 @ 4225.84",
+      "4382.48 2026-09-21 00:00 -> 4221.76 2026-10-02 12:00 @ 4182.16"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 1024,
+     "first": "2026-04-17 12:00",
+     "gaps": 0,
+     "x1": "4390.21 swing",
+     "x2": "4232 swing",
+     "status": "live @ 4195.31",
+     "live_same_side": [
+      "4683.24 2026-08-25 00:00 -> 4390.21 2026-09-21 00:00 @ 4236.46",
+      "4390.21 2026-09-21 00:00 -> 4232 2026-10-02 12:00 @ 4195.31"
+     ]
+    },
+    "now": {
+     "bars": 1025,
+     "first": "2026-04-17 12:00",
+     "gaps": 0,
+     "x1": "4390.21 swing",
+     "x2": "4232 swing",
+     "status": "live @ 4193.02",
+     "live_same_side": [
+      "4683.24 2026-08-25 00:00 -> 4390.21 2026-09-21 00:00 @ 4234.65",
+      "4390.21 2026-09-21 00:00 -> 4232 2026-10-02 12:00 @ 4193.02"
+     ]
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "TRUMP/USDT",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-05 08:14",
+  "price": 2.082,
+  "entry": 2.097435146443515,
+  "x1": "2026-08-22 04:00",
+  "x2": "2026-10-01 00:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 3745,
+     "first": "2025-01-18 12:00",
+     "gaps": 4,
+     "x1": "3.674 swing",
+     "x2": "2.25 swing",
+     "status": "live @ 2.09509",
+     "live_same_side": [
+      "3.674 2026-08-22 04:00 -> 2.25 2026-10-01 00:00 @ 2.09509"
+     ]
+    },
+    "now": {
+     "bars": 3745,
+     "first": "2025-01-18 12:00",
+     "gaps": 4,
+     "x1": "3.674 swing",
+     "x2": "2.25 swing",
+     "status": "live @ 2.09509",
+     "live_same_side": [
+      "3.674 2026-08-22 04:00 -> 2.25 2026-10-01 00:00 @ 2.09509"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 3748,
+     "first": "2025-01-18 16:00",
+     "gaps": 0,
+     "x1": "3.683 swing",
+     "x2": "2.253 swing",
+     "status": "live @ 2.09744",
+     "live_same_side": [
+      "3.683 2026-08-22 04:00 -> 2.253 2026-10-01 00:00 @ 2.09744"
+     ]
+    },
+    "now": {
+     "bars": 3748,
+     "first": "2025-01-18 16:00",
+     "gaps": 0,
+     "x1": "3.683 swing",
+     "x2": "2.253 swing",
+     "status": "live @ 2.09744",
+     "live_same_side": [
+      "3.683 2026-08-22 04:00 -> 2.253 2026-10-01 00:00 @ 2.09744"
+     ]
+    }
+   },
+   "okx": {
+    "at_alert": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "3.684 swing",
+     "x2": "2.25 swing",
+     "status": "live @ 2.094",
+     "live_same_side": [
+      "3.684 2026-08-22 04:00 -> 2.25 2026-10-01 00:00 @ 2.094"
+     ]
+    },
+    "now": {
+     "bars": 2999,
+     "first": "2025-05-23 12:00",
+     "gaps": 0,
+     "x1": "3.684 swing",
+     "x2": "2.25 swing",
+     "status": "live @ 2.094",
+     "live_same_side": [
+      "3.684 2026-08-22 04:00 -> 2.25 2026-10-01 00:00 @ 2.094"
+     ]
+    }
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "NVDAXUSD",
+  "tf": "4h",
+  "kind": "RES",
+  "sent": "2026-10-05 08:14",
+  "price": 235.95,
+  "entry": 237.7314353499407,
+  "x1": "2026-05-15 00:00",
+  "x2": "2026-10-02 12:00",
+  "feeds": {
+   "bitunix": {
+    "status": "error: Bitunix NVDAXUSDT 4h: {'code': 20015, 'data': None, 'msg': 'this Futures is not allowed to trade.'}"
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 1367,
+     "first": "2026-02-19 12:00",
+     "gaps": 0,
+     "x1": "241.2 swing",
+     "x2": "237.8 swing",
+     "status": "live @ 237.731",
+     "live_same_side": [
+      "241.2 2026-05-15 00:00 -> 237.7 2026-09-09 08:00 @ 236.924",
+      "241.2 2026-05-15 00:00 -> 237.8 2026-10-02 12:00 @ 237.731"
+     ]
+    },
+    "now": {
+     "bars": 1367,
+     "first": "2026-02-19 12:00",
+     "gaps": 0,
+     "x1": "241.2 swing",
+     "x2": "237.8 swing",
+     "status": "live @ 237.731",
+     "live_same_side": [
+      "241.2 2026-05-15 00:00 -> 237.7 2026-09-09 08:00 @ 236.924",
+      "241.2 2026-05-15 00:00 -> 237.8 2026-10-02 12:00 @ 237.731"
+     ]
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ },
+ {
+  "symbol": "XAUTUSD",
+  "tf": "4h",
+  "kind": "SUP",
+  "sent": "2026-10-05 08:54",
+  "price": 4169.82,
+  "entry": 4139.2485792349735,
+  "x1": "2026-07-29 12:00",
+  "x2": "2026-09-28 12:00",
+  "feeds": {
+   "bitunix": {
+    "at_alert": {
+     "bars": 3350,
+     "first": "2025-03-25 08:00",
+     "gaps": 4,
+     "x1": "3990.75 swing",
+     "x2": "4114.99 swing",
+     "status": "NOT DRAWN",
+     "live_same_side": [
+      "3960.59 2026-07-17 12:00 -> 4114.99 2026-09-28 12:00 @ 4129.48",
+      "4114.99 2026-09-28 12:00 -> 4130.01 2026-10-02 12:00 @ 4140.65"
+     ]
+    },
+    "now": {
+     "bars": 3350,
+     "first": "2025-03-25 08:00",
+     "gaps": 4,
+     "x1": "3990.75 swing",
+     "x2": "4114.99 swing",
+     "status": "NOT DRAWN",
+     "live_same_side": [
+      "3960.59 2026-07-17 12:00 -> 4114.99 2026-09-28 12:00 @ 4129.48",
+      "4114.99 2026-09-28 12:00 -> 4130.01 2026-10-02 12:00 @ 4140.65"
+     ]
+    }
+   },
+   "delta": {
+    "at_alert": {
+     "bars": 1025,
+     "first": "2026-04-17 12:00",
+     "gaps": 0,
+     "x1": "3991.75 swing",
+     "x2": "4124.39 swing",
+     "status": "live @ 4139.25",
+     "live_same_side": [
+      "3991.75 2026-07-29 12:00 -> 4124.39 2026-09-28 12:00 @ 4139.25",
+      "4124.39 2026-09-28 12:00 -> 4138.99 2026-10-02 12:00 @ 4149.33"
+     ]
+    },
+    "now": {
+     "bars": 1025,
+     "first": "2026-04-17 12:00",
+     "gaps": 0,
+     "x1": "3991.75 swing",
+     "x2": "4124.39 swing",
+     "status": "live @ 4139.25",
+     "live_same_side": [
+      "3991.75 2026-07-29 12:00 -> 4124.39 2026-09-28 12:00 @ 4139.25",
+      "4124.39 2026-09-28 12:00 -> 4138.99 2026-10-02 12:00 @ 4149.33"
+     ]
+    }
+   },
+   "okx": {
+    "status": "not listed"
+   },
+   "binanceusdm": {
+    "status": "error: binanceusdm GET https://fapi.binance.com/fapi/v1/exchangeInfo 451  {\n  \"code\": 0,\n  \"msg\": \"Service unavailable from a r"
+   },
+   "bybit": {
+    "status": "error: bybit GET https://api.bybit.com/v5/market/instruments-info?category=spot 403 Forbidden {\n    error:The Amazon CloudFront"
+   }
+  }
+ }
+]

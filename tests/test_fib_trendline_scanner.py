@@ -373,6 +373,42 @@ class OnceOnlyTests(unittest.TestCase):
         self.assertEqual(len(self.plan(state, self.analysis(touch=[self.touch()]), 20001)), 1)
 
 
+class LateBreakTests(unittest.TestCase):
+    """A BROKEN alert goes out on the first passes after the breaking candle closes, never days later."""
+
+    def brk(self, closed_at):
+        return {"key": "tlbreak|X|1M|0|1|2", "kind": SUPPORT, "level": 4069.45, "close": 3875.3,
+                "time": "2026-09-01 00:00", "from": (1642, "a"), "to": (3701, "b"), "closed_at": closed_at}
+
+    def plan(self, closed_at, last_scan):
+        analysis = {"fib": [], "touch": [], "break": [self.brk(closed_at)], "price": 3842.2}
+        return fts.plan_alerts({}, ftd.NSE, "PFIZER.NS", "1M", analysis, 0, last_scan)
+
+    def test_a_break_seen_on_the_first_pass_after_the_close_alerts(self):
+        sept_close = datetime(2026, 10, 1, tzinfo=ftd.IST).timestamp()
+        last_session = datetime(2026, 9, 30, 15, 20, tzinfo=ftd.IST).timestamp()
+        self.assertEqual(len(self.plan(sept_close, last_session)), 1)
+
+    def test_a_break_first_seen_sessions_later_is_dropped(self):
+        # PFIZER, 2026-10-05: September's close broke the 1M line, but it posted on Oct 5
+        # although passes had run on Oct 1 - other 1M breaks went out then.
+        sept_close = datetime(2026, 10, 1, tzinfo=ftd.IST).timestamp()
+        oct5_pass = datetime(2026, 10, 5, 15, 0, tzinfo=ftd.IST).timestamp()
+        self.assertEqual(self.plan(sept_close, oct5_pass), [])
+
+    def test_a_short_data_gap_can_still_catch_up(self):
+        close = 1_000_000
+        self.assertEqual(len(self.plan(close, close + fts.BREAK_GRACE_SECONDS - 60)), 1)
+
+    def test_no_last_scan_yet_keeps_the_old_behaviour(self):
+        self.assertEqual(len(self.plan(0, None)), 1)
+
+    def test_break_carries_when_its_candle_closed(self):
+        sept = int(datetime(2026, 9, 1, tzinfo=ftd.IST).timestamp())
+        self.assertEqual(ftd.candle_close_ts(ftd.NSE, sept, "1M"), datetime(2026, 10, 1, tzinfo=ftd.IST).timestamp())
+        self.assertEqual(ftd.candle_close_ts(ftd.CRYPTO, 0, "4h"), 4 * 3600)
+
+
 class SeedingTests(unittest.TestCase):
     """A channel's first pass under a rule, per market, seeds silently; before a webhook nothing is recorded."""
 
@@ -416,6 +452,11 @@ class SeedingTests(unittest.TestCase):
         self.assertEqual(self.sent, [fts.webhook_env("fib", fts.CRYPTO)])                      # seeded, still no burst
         self.assertIn(self.touches[0]["key"], fts.load_state())
         self.assertEqual(len(self.status), 2)
+
+    def test_each_awake_pass_records_when_its_market_was_scanned(self):
+        fts.run_once()
+        self.assertIn(fts.CRYPTO, fts.load_state()[fts.LAST_SCAN_KEY])
+        self.assertNotIn(fts.NSE, fts.load_state()[fts.LAST_SCAN_KEY])   # NSE closed: not scanned
 
     def test_a_failing_daily_report_cannot_lose_the_alerts_it_follows(self):
         fts.run_once()                                                   # seed

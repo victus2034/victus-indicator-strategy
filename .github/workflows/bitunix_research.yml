@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       parts:
-        description: "Which parts to run (any of zones-30m zones-4h fib)"
+        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length)"
         default: "zones-30m zones-4h fib"
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [zones-30m, zones-4h, fib]
+        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length]
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
@@ -39,12 +39,19 @@ jobs:
             zones-30m) VICTUS_TIMEFRAME=30m python research/bitunix_compare.py --part zones --tf 30m ;;
             zones-4h)  VICTUS_TIMEFRAME=4h  python research/bitunix_compare.py --part zones --tf 4h ;;
             fib)       python research/bitunix_compare.py --part fib ;;
+            tl-trace)  git fetch --depth 1 origin scanner-runtime-state
+                       git show FETCH_HEAD:fib_trendline_alert_records.jsonl > /tmp/tl_records.jsonl
+                       python research/trendline_trace.py --records /tmp/tl_records.jsonl --since 2026-10-03 ;;
+            tl-nse)    mkdir -p research/out/trendline_trace
+                       python research/trendline_symbol_trace.py PFIZER.NS --tf 1M --since 2025-01-01 > research/out/trendline_trace/PFIZER_1M.txt 2>&1
+                       cat research/out/trendline_trace/PFIZER_1M.txt ;;
+            tl-length) python research/trendline_length_backtest.py --lengths 10,15,20 ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
       - name: Commit results to this branch
         if: always() && contains(inputs.parts, matrix.part)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
-          git add research/out/bitunix
+          git add -A research/out
           git commit -m "Bitunix research results (${{ matrix.part }}) [skip ci]" || exit 0
           for i in 1 2 3 4 5; do git pull --rebase origin ${GITHUB_REF_NAME} && git push origin HEAD:${GITHUB_REF_NAME} && break; sleep $((i*5)); done

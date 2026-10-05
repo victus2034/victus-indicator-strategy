@@ -204,22 +204,26 @@ def nse_charts(symbols, timeframes):
 
 # ----------------------------------------------------------------- closed or forming
 
-def candle_is_closed(market, open_ts, tf, now):
+def candle_close_ts(market, open_ts, tf):
+    """When the candle that opened at open_ts closes (epoch seconds)."""
     if market == CRYPTO:
         if tf == "1M":
             start = datetime.fromtimestamp(open_ts, timezone.utc)
             year, month = (start.year + 1, 1) if start.month == 12 else (start.year, start.month + 1)
-            return datetime(year, month, 1, tzinfo=timezone.utc).timestamp() <= now
-        return open_ts + TF_SECONDS[tf] <= now
+            return datetime(year, month, 1, tzinfo=timezone.utc).timestamp()
+        return open_ts + TF_SECONDS[tf]
 
     start = datetime.fromtimestamp(open_ts, IST)
     if tf in ("30m", "4h", "1h", "5m", "15m"):
         session_close = start.replace(hour=NSE_CLOSE[0], minute=NSE_CLOSE[1], second=0, microsecond=0)
-        return min(start + timedelta(seconds=TF_SECONDS[tf]), session_close).timestamp() <= now
+        return min(start + timedelta(seconds=TF_SECONDS[tf]), session_close).timestamp()
     if tf == "1d":
-        return start.replace(hour=NSE_CLOSE[0], minute=NSE_CLOSE[1]).timestamp() <= now
+        return start.replace(hour=NSE_CLOSE[0], minute=NSE_CLOSE[1]).timestamp()
     if tf == "1w":
-        friday = (start + timedelta(days=4)).replace(hour=NSE_CLOSE[0], minute=NSE_CLOSE[1])
-        return friday.timestamp() <= now
+        return (start + timedelta(days=4)).replace(hour=NSE_CLOSE[0], minute=NSE_CLOSE[1]).timestamp()
     year, month = (start.year + 1, 1) if start.month == 12 else (start.year, start.month + 1)
-    return datetime(year, month, 1, tzinfo=IST).timestamp() <= now
+    return datetime(year, month, 1, tzinfo=IST).timestamp()
+
+
+def candle_is_closed(market, open_ts, tf, now):
+    return candle_close_ts(market, open_ts, tf) <= now
