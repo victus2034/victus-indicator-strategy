@@ -45,7 +45,7 @@ jobs:
             tl-nse)    mkdir -p research/out/trendline_trace
                        for tf in 30m 4h; do python research/trendline_symbol_trace.py KARURVYSYA.NS --tf $tf --since 2026-09-22 > research/out/trendline_trace/KARURVYSYA_$tf.txt 2>&1; done
                        cat research/out/trendline_trace/KARURVYSYA_*.txt ;;
-            tl-length) python research/trendline_length_backtest.py --lengths 10,7,5,3 ;;
+            tl-length) python research/trendline_length_backtest.py --lengths 10,15,20 ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
       - name: Commit results to this branch
         if: always() && contains(inputs.parts, matrix.part)

@@ -98,7 +98,7 @@ def main():
     for L in lengths:
         s = stats([t for t in results[L] if t["tf"] in LIVE_TFS])
         lines.append(f"| {L} | {s['alerts']} | {s['filled']} | {s['net']:+.1f} | {s['per_trade']:+.3f} |")
-    (OUT / "RESULTS.md").write_text("\n".join(lines) + "\n")
+    (OUT / f"RESULTS_{a.lengths.replace(',', '_')}.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines))
 
 
