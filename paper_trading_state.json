@@ -58254,6 +58254,33 @@
       "target_half": 0.031455374999999994,
       "timeframe": "30m",
       "trade_id": "AKE/USDT|30m|long|0.031351|0.0311422"
+    },
+    {
+      "alert_time": "2026-10-05T19:18:08.971600+05:30",
+      "cost_r": 0.15935938064516128,
+      "date": "2026-10-05",
+      "entry": 373.8,
+      "entry_time": "2026-10-05T19:20:00+05:30",
+      "exit_price": 375.92536875,
+      "exit_time": "2026-10-05T19:20:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "net_realized_r": -1.256323896774197,
+      "outcome": "SL",
+      "rating": 8,
+      "realized_r": -1.0969645161290358,
+      "risk": 1.9375,
+      "side": "short",
+      "stop": 375.7375,
+      "stream": "live",
+      "symbol": "TSLAXUSD",
+      "target_1": 371.8625,
+      "target_2": 369.925,
+      "target_half": 372.83125,
+      "timeframe": "30m",
+      "trade_id": "TSLAXUSD|30m|short|373.8|375.738"
     }
   ],
   "handled": {
@@ -59700,6 +59727,7 @@
     "NVDAXUSD|30m|short|231.43|232.705": "filled",
     "NVDAXUSD|30m|short|231.95|233.575": "filled",
     "NVDAXUSD|30m|short|235.813|238.172": "filled",
+    "NVDAXUSD|30m|short|237.52|237.87": "stop_too_tight",
     "NVDAXUSD|4h|short|228.9|230.15": "filled",
     "NVDAXUSD|4h|short|235.813|238.172": "filled",
     "NVDAXUSD|4h|short|236.5|238.125": "filled",
@@ -60699,24 +60727,6 @@
       "target_2": 233.25,
       "target_half": 235.6875,
       "timeframe": "4h"
-    },
-    "TSLAXUSD|30m|short|373.8|375.738": {
-      "alert_time": "2026-10-05T19:18:08.971600+05:30",
-      "entry": 373.8,
-      "entry_time": "2026-10-05T19:20:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "xstock",
-      "rating": 8,
-      "risk": 1.9375,
-      "side": "short",
-      "stop": 375.7375,
-      "stream": "live",
-      "symbol": "TSLAXUSD",
-      "target_1": 371.8625,
-      "target_2": 369.925,
-      "target_half": 372.83125,
-      "timeframe": "30m"
     }
   }
 }
