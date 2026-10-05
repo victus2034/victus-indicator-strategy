@@ -59854,6 +59854,7 @@
     "SOLUSD|30m|long|115.847|115.537": "filled",
     "SOLUSD|30m|long|117.219|116.993": "stop_too_tight",
     "SOLUSD|30m|long|117.719|117.268": "filled",
+    "SOLUSD|30m|long|119.26|119.035": "filled",
     "SOLUSD|30m|long|120.301|119.988": "filled",
     "SOLUSD|30m|long|98.86|98.16": "filled",
     "SOLUSD|30m|short|101.03|101.47": "filled",
@@ -60102,6 +60103,7 @@
     "ZIL/USDT|4h|short|0.00296825|0.00299794": "filled",
     "ZIL/USDT|4h|short|0.00297024|0.00299994": "filled",
     "ZORAUSD|30m|long|0.00737856|0.00730536": "filled",
+    "ZORAUSD|30m|long|0.00763|0.00762125": "stop_too_tight",
     "ZORAUSD|30m|long|0.007664|0.00759525": "filled",
     "ZORAUSD|30m|long|0.00771|0.0076725": "filled",
     "ZORAUSD|30m|long|0.007723|0.00770925": "stop_too_tight",
@@ -60736,6 +60738,24 @@
       "target_2": 233.25,
       "target_half": 235.6875,
       "timeframe": "4h"
+    },
+    "SOLUSD|30m|long|119.26|119.035": {
+      "alert_time": "2026-10-05T20:06:39.478542+05:30",
+      "entry": 119.26,
+      "entry_time": "2026-10-05T20:10:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 10,
+      "risk": 0.22500000000000853,
+      "side": "long",
+      "stop": 119.035,
+      "stream": "live",
+      "symbol": "SOLUSD",
+      "target_1": 119.48500000000001,
+      "target_2": 119.71000000000002,
+      "target_half": 119.3725,
+      "timeframe": "30m"
     }
   }
 }
