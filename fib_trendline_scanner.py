@@ -38,6 +38,7 @@ from pathlib import Path
 
 import requests
 
+import bitunix_data
 import fib_engine
 import fib_trendline_trades as trades
 import scanner
@@ -68,6 +69,10 @@ RETRY_BACKOFF_SECONDS = 30 * 60   # a failed Discord send is not retried sooner 
 # v3 (2026-09-29): full history for 4H and NSE daily+ - some live fibs get a new
 # base/top, i.e. a new key, and would otherwise all post as new on the first pass.
 SEED_VERSION = "v3"
+# Bitunix candles draw different fibs and lines, each a new key: turning the
+# source on re-seeds silently rather than posting every level already in range.
+if bitunix_data.CRYPTO_CANDLE_SOURCE == "bitunix":
+    SEED_VERSION += "-bitunix"
 NSE_LAST_SCAN_KEY = "__nse_last_scan__"
 NSE_MIN_INTERVAL_SECONDS = 8 * 60
 STATE_RETENTION_SECONDS = 120 * 24 * 3600
@@ -380,7 +385,14 @@ def scan_crypto(timeframes, now):
         if contract is None:
             return symbol, None, "not a Delta contract"
         try:
-            charts = crypto_charts(contract, timeframes, now)
+            source = "bitunix" if bitunix_data.uses_bitunix(symbol) else "delta"
+            try:
+                charts = crypto_charts(contract, timeframes, now, source=source)
+            except Exception as error:     # noqa: BLE001 - Bitunix down: Delta still draws the levels
+                if source == "delta":
+                    raise
+                print(f"{symbol} Bitunix charts unavailable, using Delta: {str(error)[:80]}")
+                charts = crypto_charts(contract, timeframes, now)
             price = current_price(charts)
             return symbol, {tf: analyse(CRYPTO, symbol, tf, charts[tf], now, price) for tf in timeframes}, None
         except Exception as error:     # noqa: BLE001 - one bad symbol must not stop the pass

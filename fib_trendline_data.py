@@ -11,6 +11,7 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 import requests
 
+import bitunix_data
 from config import DELTA_API_BASE_URL
 
 IST = ZoneInfo("Asia/Kolkata")
@@ -99,7 +100,13 @@ def monthly_from_daily(daily, tz=timezone.utc):
 ALL_HISTORY_DAYS = 2000                # further back than Delta India exists (Dec 2023)
 
 
-def crypto_charts(contract, timeframes, now, intraday_bars=1500):
+def bitunix_candles(contract, resolution, start, end):
+    """delta_candles' shape ([open_ts, o, h, l, c]) from Bitunix's book."""
+    pair = bitunix_data.bitunix_pair(contract)
+    return [row[:5] for row in bitunix_data.klines(pair, resolution, int(start), int(end) + 1)]
+
+
+def crypto_charts(contract, timeframes, now, intraday_bars=1500, source="delta"):
     """Live charts for one crypto contract: {tf: candles}.
 
     4H and up load everything Delta has, not a recent window. The fib engine is a
@@ -111,16 +118,17 @@ def crypto_charts(contract, timeframes, now, intraday_bars=1500):
     30m (off by default) keeps a window: its full history is ~12 requests a symbol.
     """
     since = now - ALL_HISTORY_DAYS * 86400
+    fetch = bitunix_candles if source == "bitunix" else delta_candles
     out, daily = {}, None
     for tf in timeframes:
         if tf in ("1d", "1M"):
             if daily is None:
-                daily = delta_candles(contract, "1d", since, now)
+                daily = fetch(contract, "1d", since, now)
             out[tf] = daily if tf == "1d" else monthly_from_daily(daily)
         elif tf in ("1w", "4h"):
-            out[tf] = delta_candles(contract, tf, since, now)
+            out[tf] = fetch(contract, tf, since, now)
         else:
-            out[tf] = delta_candles(contract, tf, now - intraday_bars * TF_SECONDS[tf], now)
+            out[tf] = fetch(contract, tf, now - intraday_bars * TF_SECONDS[tf], now)
     return out
 
 
