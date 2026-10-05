@@ -1,0 +1,115 @@
+okx BTCUSD unavailable: argument of type 'NoneType' is not iterable
+BTCUSD: delta 4430/17292, bitunix 4408/17242
+okx XRPUSD unavailable: argument of type 'NoneType' is not iterable
+ETHUSD: delta 4430/17292, bitunix 4408/17263
+SOLUSD: delta 4430/17292, bitunix 4429/17273
+XRPUSD: delta 4430/17292, bitunix 4408/17242
+HYPEUSD: delta 4430/17288, bitunix 4408/17242
+AKE/USDT: delta 3586/17292, bitunix 4408/17243
+ZECUSD: delta 4430/17292, bitunix 4429/17276
+DOGEUSD: delta 4430/17290, bitunix 4420/17242
+AAVEUSD: delta 4430/17292, bitunix 4408/17242
+BEAT/USDT: delta 4430/17292, bitunix 4408/17243
+UNIUSD: delta 4430/17292, bitunix 4408/17243
+LINKUSD: delta 4430/17292, bitunix 4408/17242
+okx TRUMP/USDT unavailable: okx {"msg":"Too Many Requests","code":"50011"}
+AVAXUSD: delta 4430/17290, bitunix 4408/7800
+LTCUSD: delta 4430/17291, bitunix 4408/7800
+BNBUSD: delta 4430/17292, bitunix 4408/600
+TRUMP/USDT: delta 4429/17288, bitunix 3200/1600
+BCHUSD: delta 4430/17292, bitunix 4408/9800
+TACUSD: delta 4309/17291, bitunix 3400/9400
+ZORAUSD: delta 4428/17253, bitunix 2600/17243
+BLESSUSD: delta 4430/17292, bitunix 4408/17243
+HUSD: delta 4430/17292, bitunix 4408/17243
+VELVETUSD: delta 4430/17292, bitunix 4408/17243
+RIVERUSD: delta 4430/17292, bitunix 4408/17243
+replayed BTCUSD delta: 58 alerts (155s)
+replayed BTCUSD bitunix: 60 alerts (155s)
+replayed ETHUSD delta: 49 alerts (157s)
+replayed ETHUSD bitunix: 49 alerts (157s)
+replayed SOLUSD delta: 41 alerts (314s)
+replayed SOLUSD bitunix: 43 alerts (314s)
+replayed XRPUSD delta: 39 alerts (314s)
+replayed XRPUSD bitunix: 39 alerts (314s)
+replayed HYPEUSD delta: 27 alerts (461s)
+replayed HYPEUSD bitunix: 37 alerts (462s)
+replayed AKE/USDT delta: 22 alerts (462s)
+replayed AKE/USDT bitunix: 7 alerts (478s)
+replayed ZECUSD delta: 33 alerts (622s)
+replayed ZECUSD bitunix: 32 alerts (622s)
+replayed DOGEUSD delta: 47 alerts (622s)
+replayed DOGEUSD bitunix: 43 alerts (628s)
+replayed AAVEUSD delta: 29 alerts (771s)
+replayed AAVEUSD bitunix: 23 alerts (774s)
+replayed BEAT/USDT delta: 19 alerts (782s)
+replayed BEAT/USDT bitunix: 22 alerts (786s)
+replayed UNIUSD delta: 37 alerts (935s)
+replayed UNIUSD bitunix: 34 alerts (935s)
+replayed LINKUSD delta: 30 alerts (941s)
+replayed LINKUSD bitunix: 28 alerts (941s)
+replayed AVAXUSD delta: 35 alerts (1086s)
+replayed AVAXUSD bitunix: 16 alerts (1086s)
+replayed LTCUSD delta: 24 alerts (1097s)
+replayed LTCUSD bitunix: 10 alerts (1097s)
+replayed BNBUSD delta: 45 alerts (1236s)
+replayed BNBUSD bitunix: 3 alerts (1236s)
+replayed TRUMP/USDT delta: 24 alerts (1240s)
+replayed TRUMP/USDT bitunix: 4 alerts (1240s)
+replayed BCHUSD delta: 36 alerts (1368s)
+replayed BCHUSD bitunix: 17 alerts (1381s)
+replayed TACUSD delta: 36 alerts (1393s)
+replayed TACUSD bitunix: 12 alerts (1393s)
+replayed ZORAUSD delta: 12 alerts (1512s)
+replayed ZORAUSD bitunix: 29 alerts (1512s)
+replayed BLESSUSD delta: 32 alerts (1533s)
+replayed BLESSUSD bitunix: 37 alerts (1543s)
+replayed HUSD delta: 28 alerts (1631s)
+replayed HUSD bitunix: 22 alerts (1671s)
+replayed VELVETUSD delta: 24 alerts (1685s)
+replayed VELVETUSD bitunix: 26 alerts (1694s)
+replayed RIVERUSD delta: 30 alerts (1745s)
+replayed RIVERUSD bitunix: 33 alerts (1762s)
+# Zones 30m: Delta vs Bitunix candles
+
+Window: last 60 days to 2026-10-05 12:25 IST; 23 crypto symbols both venues serve. Fees: Delta in every row.
+
+## Candles (evaluation window, closed bars)
+
+| symbol     | tf   |   common_bars |   delta_missing |   bitunix_missing |   close_diff_med_pct |   range_ratio_med |   vol_ratio_bitunix_to_delta |   delta_thin_pct |   bitunix_thin_pct |   delta_zero_vol |   bitunix_zero_vol |   delta_wick_outliers |   bitunix_wick_outliers |   okx_bars |   delta_only_wicks |   bitunix_only_wicks |
+|:-----------|:-----|--------------:|----------------:|------------------:|---------------------:|------------------:|-----------------------------:|-----------------:|-------------------:|-----------------:|-------------------:|----------------------:|------------------------:|-----------:|-------------------:|---------------------:|
+| BTCUSD     | 30m  |          2866 |               0 |                13 |                0.010 |             1.002 |                        2.121 |            0.768 |              0.558 |                1 |                  0 |                     1 |                       6 |    nan     |            nan     |              nan     |
+| ETHUSD     | 30m  |          2866 |               0 |                13 |                0.002 |             1.007 |                        2.258 |            1.605 |              0.105 |                1 |                  0 |                     0 |                       5 |   2866.000 |              0.000 |                0.000 |
+| SOLUSD     | 30m  |          2879 |               0 |                 0 |                0.050 |             1.001 |                        1.989 |            1.424 |              0.069 |                1 |                  0 |                    62 |                      85 |   2879.000 |             44.000 |                1.000 |
+| XRPUSD     | 30m  |          2866 |               0 |                13 |                0.087 |             1.000 |                        8.106 |            3.175 |              0.488 |                2 |                  0 |                   685 |                     741 |    nan     |            nan     |              nan     |
+| HYPEUSD    | 30m  |          2866 |               0 |                13 |                0.077 |             0.829 |                       61.487 |            8.514 |              0.000 |               27 |                  0 |                    73 |                     856 |   2866.000 |             63.000 |               19.000 |
+| AKE/USDT   | 30m  |          2866 |               0 |                13 |                0.117 |             0.939 |                        0.324 |            2.268 |              1.884 |                1 |                  0 |                     1 |                      48 |    nan     |            nan     |              nan     |
+| ZECUSD     | 30m  |          2879 |               0 |                 0 |                0.105 |             0.905 |                       27.410 |            4.029 |              1.424 |                1 |                  0 |                    12 |                     443 |   2879.000 |              9.000 |                7.000 |
+| DOGEUSD    | 30m  |          2870 |               0 |                 9 |                0.129 |             0.980 |                        7.073 |            6.551 |              0.070 |                3 |                  0 |                   985 |                    1240 |   2870.000 |            917.000 |                4.000 |
+| AAVEUSD    | 30m  |          2866 |               0 |                13 |                0.138 |             0.923 |                        2.368 |            7.327 |              0.000 |                5 |                  0 |                   595 |                    1184 |   2866.000 |            566.000 |               10.000 |
+| BEAT/USDT  | 30m  |          2866 |               0 |                13 |                0.122 |             1.000 |                        0.859 |            7.851 |              0.314 |                5 |                  0 |                   124 |                     229 |   2866.000 |             39.000 |               16.000 |
+| UNIUSD     | 30m  |          2866 |               0 |                13 |                0.093 |             0.989 |                        2.084 |           16.015 |              0.105 |               11 |                  0 |                   103 |                     350 |   2866.000 |             87.000 |                6.000 |
+| LINKUSD    | 30m  |          2866 |               0 |                13 |                0.035 |             0.910 |                       10.406 |            5.652 |              0.488 |                8 |                  0 |                    52 |                     247 |   2866.000 |             49.000 |                1.000 |
+| AVAXUSD    | 30m  |          2865 |               0 |                14 |                0.093 |             0.923 |                        6.481 |           10.576 |              0.000 |               22 |                  0 |                   255 |                     841 |   2865.000 |            232.000 |                0.000 |
+| LTCUSD     | 30m  |          2865 |               0 |                14 |                0.123 |             0.913 |                        3.266 |           10.436 |              0.105 |               15 |                  0 |                   805 |                    1527 |   2865.000 |            758.000 |                5.000 |
+| BNBUSD     | 30m  |          2865 |               0 |                14 |                0.079 |             0.891 |                        9.287 |            5.375 |              0.070 |               14 |                  0 |                   712 |                    1623 |   2865.000 |              4.000 |             1336.000 |
+| TRUMP/USDT | 30m  |          2865 |               0 |                14 |                0.229 |             0.833 |                       43.827 |           21.745 |              0.698 |              161 |                  0 |                   606 |                    1537 |    nan     |            nan     |              nan     |
+| BCHUSD     | 30m  |          2865 |               0 |                14 |                0.087 |             0.866 |                        5.766 |           11.449 |              0.000 |               31 |                  0 |                   184 |                    1038 |   2865.000 |            145.000 |                6.000 |
+| TACUSD     | 30m  |          2865 |               0 |                14 |                0.157 |             0.732 |                        1.698 |           20.035 |              0.000 |               88 |                  0 |                    83 |                    1255 |    nan     |            nan     |              nan     |
+| ZORAUSD    | 30m  |          2599 |               0 |                13 |                0.271 |             0.440 |                        9.618 |           29.973 |              0.000 |              478 |                  0 |                   327 |                    1791 |   2599.000 |            285.000 |                4.000 |
+| BLESSUSD   | 30m  |          2865 |               0 |                14 |                0.088 |             0.936 |                        0.623 |            9.948 |              0.000 |                9 |                  0 |                     9 |                     353 |    nan     |            nan     |              nan     |
+| HUSD       | 30m  |          2865 |               0 |                14 |                0.067 |             0.941 |                        0.325 |            6.283 |              0.000 |                5 |                  0 |                     0 |                     195 |   2865.000 |              0.000 |                3.000 |
+| VELVETUSD  | 30m  |          2865 |               0 |                14 |                0.166 |             1.000 |                        1.791 |           13.717 |              4.921 |               21 |                  0 |                   132 |                     406 |    nan     |            nan     |              nan     |
+| RIVERUSD   | 30m  |          2865 |               0 |                14 |                0.107 |             0.923 |                        1.075 |            6.702 |              0.000 |                9 |                  0 |                    88 |                     513 |   2865.000 |             34.000 |               14.000 |
+
+## Alert replay
+
+| alerts_from   | graded_on   |   alerts |   filled |   SL |   BE |   +1R |   +2R |   Neither |   ambiguous |   win_pct |   net_R |   R_per_trade |
+|:--------------|:------------|---------:|---------:|-----:|-----:|------:|------:|----------:|------------:|----------:|--------:|--------------:|
+| delta         | delta       |      658 |      391 |  155 |  152 |     9 |    71 |         4 |          11 |      34   |   -74.9 |        -0.191 |
+| delta         | bitunix     |      659 |      352 |  133 |  153 |     9 |    52 |         5 |          12 |      31.4 |   -80.1 |        -0.227 |
+| bitunix       | delta       |      546 |      335 |  133 |  133 |     8 |    58 |         3 |          15 |      33.2 |   -61   |        -0.182 |
+| bitunix       | bitunix     |      546 |      361 |  141 |  148 |     8 |    58 |         6 |          12 |      31.9 |   -73.7 |        -0.204 |
+| delta only    | delta       |      245 |      125 |   49 |   50 |     2 |    23 |         1 |           4 |      33.8 |   -22   |        -0.176 |
+| bitunix only  | delta       |      134 |       78 |   41 |   23 |     0 |    14 |         0 |           5 |      25.5 |   -27.5 |        -0.352 |
+
