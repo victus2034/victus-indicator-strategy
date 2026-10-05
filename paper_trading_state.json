@@ -58119,6 +58119,33 @@
       "target_half": 0.009183499999999999,
       "timeframe": "30m",
       "trade_id": "BLESSUSD|30m|short|0.009196|0.009221"
+    },
+    {
+      "alert_time": "2026-10-05T08:01:49.260648+05:30",
+      "cost_r": 0.0855185333333331,
+      "date": "2026-10-05",
+      "entry": 0.001553,
+      "entry_time": "2026-10-05T08:05:00+05:30",
+      "exit_price": 0.0015523268265255,
+      "exit_time": "2026-10-05T10:55:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": -0.04064030170001197,
+      "outcome": "BE",
+      "rating": 7,
+      "realized_r": 0.044878231633321136,
+      "risk": 1.500000000000004e-05,
+      "side": "short",
+      "stop": 0.001568,
+      "stream": "live",
+      "symbol": "TACUSD",
+      "target_1": 0.0015379999999999999,
+      "target_2": 0.0015229999999999998,
+      "target_half": 0.0015455,
+      "timeframe": "30m",
+      "trade_id": "TACUSD|30m|short|0.001553|0.001568"
     }
   ],
   "handled": {
@@ -59324,6 +59351,7 @@
     "ETHUSD|30m|long|2651|2629.75": "filled",
     "ETHUSD|30m|long|2657.6|2642.16": "filled",
     "ETHUSD|30m|long|2676.3|2663.8": "filled",
+    "ETHUSD|30m|long|2694.1|2689.72": "stop_too_tight",
     "ETHUSD|30m|long|2731.2|2710.57": "filled",
     "ETHUSD|30m|short|2475.89|2484.44": "filled",
     "ETHUSD|30m|short|2481.01|2484.61": "filled",
@@ -60516,24 +60544,6 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
-      "timeframe": "30m"
-    },
-    "TACUSD|30m|short|0.001553|0.001568": {
-      "alert_time": "2026-10-05T08:01:49.260648+05:30",
-      "entry": 0.001553,
-      "entry_time": "2026-10-05T08:05:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": true,
-      "market": "crypto",
-      "rating": 7,
-      "risk": 1.500000000000004e-05,
-      "side": "short",
-      "stop": 0.001568,
-      "stream": "live",
-      "symbol": "TACUSD",
-      "target_1": 0.0015379999999999999,
-      "target_2": 0.0015229999999999998,
-      "target_half": 0.0015455,
       "timeframe": "30m"
     }
   }
