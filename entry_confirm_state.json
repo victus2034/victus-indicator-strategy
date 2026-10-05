@@ -13,6 +13,11 @@
     "reached_entry": true,
     "stopped_out": true
   },
+  "SNDKBUSD|30m|long|1721.14|1705.71": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "TACUSD|30m|short|0.001553|0.001568": {
     "reached_entry": true,
     "stage": 3,
@@ -33,10 +38,10 @@
     "stage": 3,
     "stopped_out": false
   },
-  "XAUTUSD|30m|long|4140.96|4138.5": {
-    "reached_entry": true,
-    "stage": 2,
-    "stopped_out": true
+  "XAUTUSD|30m|long|4131.06|4122.72": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
   },
   "XAUTUSD|4h|long|4136.23|4121.43": {
     "reached_entry": false,
@@ -310,7 +315,7 @@
   "_level_ready|SLVONUSD|30m|short|60.48|60.9175": 1790100676.633528,
   "_level_ready|SNDKBUSD|30m|long|1517.11|1503.79": 1789586463.952812,
   "_level_ready|SNDKBUSD|30m|long|1517.85|1504.41": 1789496163.451612,
-  "_level_ready|SNDKBUSD|30m|long|1721.14|1705.71": 1790954493.016743,
+  "_level_ready|SNDKBUSD|30m|long|1721.14|1705.71": 1791178588.926171,
   "_level_ready|SNDKBUSD|30m|long|1736.9|1722.86": 1790562975.920281,
   "_level_ready|SNDKBUSD|30m|long|1737.6|1734.81": 1790065876.863258,
   "_level_ready|SNDKBUSD|30m|long|1757.5|1748.76": 1790008566.083756,
@@ -418,6 +423,7 @@
   "_level_ready|VELVETUSD|30m|short|0.0622|0.0627": 1790485296.939304,
   "_level_ready|VELVETUSD|30m|short|0.0624|0.06265": 1789987570.285335,
   "_level_ready|VELVETUSD|4h|short|0.0656746|0.0663313": 1790917594.264559,
+  "_level_ready|XAUTUSD|30m|long|4131.06|4122.72": 1791178588.926171,
   "_level_ready|XAUTUSD|30m|long|4140.96|4138.5": 1791169888.77004,
   "_level_ready|XAUTUSD|30m|long|4146.17|4146.07": 1791111700.552996,
   "_level_ready|XAUTUSD|30m|long|4151.93|4150.47": 1790790694.624834,
@@ -533,7 +539,7 @@
   "_ready|SAMSUNG/USDT:USDT|30m": 1789532163.790065,
   "_ready|SLVONUSD|30m": 1791087095.433826,
   "_ready|SLVONUSD|4h": 1789377364.322639,
-  "_ready|SNDKBUSD|30m": 1791113792.633583,
+  "_ready|SNDKBUSD|30m": 1791178588.926171,
   "_ready|SNDKBUSD|4h": 1790565116.939107,
   "_ready|SOLUSD|30m": 1790841987.630251,
   "_ready|SOLUSD|4h": 1789742770.728918,
@@ -552,7 +558,7 @@
   "_ready|US/USDT|30m": 1789306268.896163,
   "_ready|VELVETUSD|30m": 1790908924.3021,
   "_ready|VELVETUSD|4h": 1790917594.264559,
-  "_ready|XAUTUSD|30m": 1791169888.77004,
+  "_ready|XAUTUSD|30m": 1791178588.926171,
   "_ready|XAUTUSD|4h": 1791173796.672412,
   "_ready|XRPUSD|30m": 1791085626.21976,
   "_ready|XRPUSD|4h": 1789983964.89935,
@@ -646,9 +652,5 @@
   "_silent_ready|XAUTUSD|4h|long|4136.23|4121.43": {
     "price": 4147.99,
     "time": "2026-10-04T20:06:03.343312+05:30"
-  },
-  "_silent_ready|ZORAUSD|30m|short|0.00780561|0.0078061": {
-    "price": 0.007783,
-    "time": "2026-10-04T11:06:18.784346+05:30"
   }
 }
