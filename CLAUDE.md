@@ -220,5 +220,11 @@ each falling back to the shared one above when unset (so nothing changes until t
   `TRAIL_DISTANCE_R`, `trail_shadow_r`) - the best of 119 exit rules in
   `research/out/RESULTS.md`. Stored as `trail_net_r` and shown as "Trail test" beside
   TOTAL in the daily report. It changes no trade and no alert; it is there to be watched.
+- **Crypto alert candles come from Bitunix (2026-10-05, Lakky).** `CRYPTO_CANDLE_SOURCE`
+  (`VICTUS_CRYPTO_CANDLE_SOURCE`, default `bitunix`; `delta` switches back). Zones, entry_confirm,
+  the daily trend filter and fib/trendline levels are drawn from Bitunix (`bitunix_data.py`); any
+  Bitunix failure falls back to Delta. Trades are still taken on Delta, so the daily backtest grades
+  on Delta candles with Delta fees - do not move those. xStocks, XAUT and SLVON stay on Delta.
+  Why: Delta prints thin/zero-volume candles on small coins. Research: `research/bitunix_compare.py`.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

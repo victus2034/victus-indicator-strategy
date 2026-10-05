@@ -28,9 +28,12 @@ class FakeBitunix:
 
 
 class DefaultTests(unittest.TestCase):
-    def test_default_source_is_delta(self):
-        self.assertEqual(config.CRYPTO_CANDLE_SOURCE, "delta")
-        self.assertFalse(bitunix_data.uses_bitunix("BTCUSD"))
+    def test_default_source_is_bitunix(self):
+        self.assertEqual(config.CRYPTO_CANDLE_SOURCE, "bitunix")
+
+    def test_delta_setting_turns_it_off(self):
+        with patch.object(bitunix_data, "CRYPTO_CANDLE_SOURCE", "delta"):
+            self.assertFalse(bitunix_data.uses_bitunix("BTCUSD"))
 
     def test_every_crypto_symbol_maps_to_a_bitunix_pair(self):
         pairs = {s: bitunix_data.bitunix_pair(scanner.delta_contract(s)) for s in config.CRYPTO_WATCHLIST}

@@ -147,13 +147,17 @@ COINSWITCH_WATCHLIST = []
 
 DELTA_API_BASE_URL = "https://api.india.delta.exchange"
 COINSWITCH_API_BASE_URL = "https://coinswitch.co"
-# Where the crypto alert candles come from: "delta" (default) or "bitunix".
-# Bitunix is opt-in and research-backed only - see research/out/bitunix/.
+# Where the crypto alert candles come from: "bitunix" (default since
+# 2026-10-05, Lakky's call) or "delta". Delta prints thin and zero-volume
+# candles on the small coins (ZORA: 478 zero-volume 30m bars in 60 days) that
+# TradingView's other books do not; Bitunix had none. Backtest in
+# research/out/bitunix/: zone alerts -82R on Bitunix vs -87R on Delta, fib/TL
+# ~100R better, both graded on Delta candles with Delta fees.
 # Delta stays the venue the trades are taken on, so the backtest still grades
 # on Delta candles and the fees stay Delta's whichever source draws the zones.
 # Covers the zone scanners (4h and 30m), entry_confirm and the fib/trendline
 # scanner; xStocks and "other" stay on Delta (Bitunix lists none of them).
-CRYPTO_CANDLE_SOURCE = (os.getenv("VICTUS_CRYPTO_CANDLE_SOURCE", "delta").strip().lower() or "delta")
+CRYPTO_CANDLE_SOURCE = (os.getenv("VICTUS_CRYPTO_CANDLE_SOURCE", "bitunix").strip().lower() or "bitunix")
 if CRYPTO_CANDLE_SOURCE not in {"delta", "bitunix"}:
     raise ValueError(f"VICTUS_CRYPTO_CANDLE_SOURCE must be delta or bitunix, not {CRYPTO_CANDLE_SOURCE!r}")
 BITUNIX_API_BASE_URL = "https://fapi.bitunix.com"
