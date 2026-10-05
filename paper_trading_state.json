@@ -58443,6 +58443,33 @@
       "target_half": 2.025375,
       "timeframe": "30m",
       "trade_id": "TRUMP/USDT|30m|long|2.021|2.01225"
+    },
+    {
+      "alert_time": "2026-10-05T18:59:03.909744+05:30",
+      "cost_r": 0.12021476923076922,
+      "date": "2026-10-05",
+      "entry": 236.5,
+      "entry_time": "2026-10-05T19:00:00+05:30",
+      "exit_price": 238.2440625,
+      "exit_time": "2026-10-05T23:45:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "net_realized_r": -1.1934840000000075,
+      "outcome": "SL",
+      "rating": 6,
+      "realized_r": -1.0732692307692384,
+      "risk": 1.625,
+      "side": "short",
+      "stop": 238.125,
+      "stream": "live",
+      "symbol": "NVDAXUSD",
+      "target_1": 234.875,
+      "target_2": 233.25,
+      "target_half": 235.6875,
+      "timeframe": "4h",
+      "trade_id": "NVDAXUSD|4h|short|236.5|238.125"
     }
   ],
   "handled": {
@@ -60863,24 +60890,6 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
-    },
-    "NVDAXUSD|4h|short|236.5|238.125": {
-      "alert_time": "2026-10-05T18:59:03.909744+05:30",
-      "entry": 236.5,
-      "entry_time": "2026-10-05T19:00:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "xstock",
-      "rating": 6,
-      "risk": 1.625,
-      "side": "short",
-      "stop": 238.125,
-      "stream": "live",
-      "symbol": "NVDAXUSD",
-      "target_1": 234.875,
-      "target_2": 233.25,
-      "target_half": 235.6875,
-      "timeframe": "4h"
     }
   }
 }
