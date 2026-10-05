@@ -48,6 +48,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
-          git add research/out/bitunix research/out/trendline_trace
+          git add -A research/out
           git commit -m "Bitunix research results (${{ matrix.part }}) [skip ci]" || exit 0
           for i in 1 2 3 4 5; do git pull --rebase origin ${GITHUB_REF_NAME} && git push origin HEAD:${GITHUB_REF_NAME} && break; sleep $((i*5)); done
