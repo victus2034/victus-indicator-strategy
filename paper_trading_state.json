@@ -59225,6 +59225,7 @@
     "BNBUSD|30m|long|770.447|770.426": "stop_too_tight",
     "BNBUSD|30m|long|772.31|767.898": "filled",
     "BNBUSD|30m|long|785.45|780.25": "filled",
+    "BNBUSD|30m|long|787.47|785.283": "filled",
     "BNBUSD|30m|short|724.87|726.332": "filled",
     "BNBUSD|30m|short|731.75|733.938": "filled",
     "BNBUSD|30m|short|736.3|742.425": "filled",
@@ -60573,6 +60574,24 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
+      "timeframe": "30m"
+    },
+    "BNBUSD|30m|long|787.47|785.283": {
+      "alert_time": "2026-10-05T14:48:06.539863+05:30",
+      "entry": 787.47,
+      "entry_time": "2026-10-05T14:50:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 9,
+      "risk": 2.1875,
+      "side": "long",
+      "stop": 785.2825,
+      "stream": "live",
+      "symbol": "BNBUSD",
+      "target_1": 789.6575,
+      "target_2": 791.845,
+      "target_half": 788.56375,
       "timeframe": "30m"
     }
   }
