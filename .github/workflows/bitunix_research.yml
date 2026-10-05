@@ -4,10 +4,11 @@ name: Bitunix research (candles + backtest)
 # each. Posts nothing, touches no live state. Runs here because the candle
 # APIs are not reachable from the cloud sandbox.
 on:
-  push:
-    branches: [claude/project-thread-at1n3c]
-    paths: [research/bitunix_compare.py, .github/workflows/bitunix_research.yml]
   workflow_dispatch:
+    inputs:
+      parts:
+        description: "Which parts to run (any of zones-30m zones-4h fib)"
+        default: "zones-30m zones-4h fib"
 
 permissions:
   contents: write
@@ -18,6 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         part: [zones-30m, zones-4h, fib]
+    if: contains(inputs.parts, matrix.part)
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:

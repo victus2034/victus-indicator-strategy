@@ -484,6 +484,15 @@ def fib_part() -> None:
             evals["1h"] = [c[:5] for c in candles(source, symbol, "1h", base["4h"][0][0], now)]
         return base, evals
 
+    def regrade_on(t, evals):
+        res = trades.EVAL_RESOLUTION[fbt.CRYPTO][t["tf"]]
+        series = evals.get(res) or []
+        stamps = [c[0] for c in series]
+        k = __import__("bisect").bisect_right(stamps, t["alert_ts"])
+        horizon = (config.FIB_TL_ENTRY_WAIT_BARS + config.FIB_TL_MAX_HOLD_BARS + 1) * trades.EVAL_PER_BAR[fbt.CRYPTO][t["tf"]]
+        after = series[k:k + horizon]
+        return {**t, "graded": "delta", "result": trades.simulate(t["plan"], fbt.CRYPTO, t["tf"], t["alert_ts"], after)}
+
     def one(symbol):
         out = {}
         try:
@@ -494,6 +503,10 @@ def fib_part() -> None:
         for src in SOURCES:
             base, evals = data[src]
             got = fbt.replay_symbol(fbt.CRYPTO, symbol, base, evals, now)
+            if src == "bitunix":
+                # The same Bitunix alerts traded on Delta's candles - where the
+                # order actually sits - so a calmer book cannot flatter the score.
+                got += [regrade_on(t, data["delta"][1]) for t in got]
             # cut to the window both venues cover for this timeframe
             keep = []
             for t in got:
@@ -510,9 +523,14 @@ def fib_part() -> None:
             for src, items in out.items():
                 every[src] += items
 
+    sets = {
+        "delta (graded on delta)": every["delta"],
+        "bitunix (graded on bitunix)": [t for t in every["bitunix"] if t.get("graded") != "delta"],
+        "bitunix (graded on delta)": [t for t in every["bitunix"] if t.get("graded") == "delta"],
+    }
     rows = []
-    for src in SOURCES:
-        for r in trades.summarise(every[src]):
+    for src, items in sets.items():
+        for r in trades.summarise(items):
             r = dict(r)
             filled = r["filled"]
             rows.append({"source": src, "kind": r["kind"], "tf": r["tf"], "alerts": r["alerts"], "filled": filled,
