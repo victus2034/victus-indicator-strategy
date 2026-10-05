@@ -59652,6 +59652,7 @@
     "MRVL/USDT:USDT|30m|long|250.5|248.3": "filled",
     "MRVL/USDT:USDT|30m|long|251.91|251.822": "stop_too_tight",
     "MRVL/USDT:USDT|30m|long|256.94|256.477": "stop_too_tight",
+    "MRVL/USDT:USDT|30m|long|272.013|271.997": "stop_too_tight",
     "MRVL/USDT:USDT|30m|short|223.67|224.245": "filled",
     "MRVL/USDT:USDT|30m|short|223.76|224.235": "filled",
     "MRVL/USDT:USDT|30m|short|234.96|235.722": "filled",
@@ -59700,6 +59701,7 @@
     "NVDAXUSD|30m|short|235.813|238.172": "filled",
     "NVDAXUSD|4h|short|228.9|230.15": "filled",
     "NVDAXUSD|4h|short|235.813|238.172": "filled",
+    "NVDAXUSD|4h|short|236.5|238.125": "filled",
     "O/USDT|30m|long|0.5279|0.525775": "filled",
     "O/USDT|30m|long|0.5309|0.526525": "filled",
     "O/USDT|30m|long|0.5393|0.537175": "filled",
@@ -60659,6 +60661,24 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
+    },
+    "NVDAXUSD|4h|short|236.5|238.125": {
+      "alert_time": "2026-10-05T18:59:03.909744+05:30",
+      "entry": 236.5,
+      "entry_time": "2026-10-05T19:00:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "rating": 6,
+      "risk": 1.625,
+      "side": "short",
+      "stop": 238.125,
+      "stream": "live",
+      "symbol": "NVDAXUSD",
+      "target_1": 234.875,
+      "target_2": 233.25,
+      "target_half": 235.6875,
+      "timeframe": "4h"
     }
   }
 }
