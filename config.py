@@ -147,6 +147,25 @@ COINSWITCH_WATCHLIST = []
 
 DELTA_API_BASE_URL = "https://api.india.delta.exchange"
 COINSWITCH_API_BASE_URL = "https://coinswitch.co"
+# Where the crypto alert candles come from: "bitunix" (default since
+# 2026-10-05, Lakky's call) or "delta". Delta prints thin and zero-volume
+# candles on the small coins (ZORA: 478 zero-volume 30m bars in 60 days) that
+# TradingView's other books do not; Bitunix had none. Backtest in
+# research/out/bitunix/: zone alerts -82R on Bitunix vs -87R on Delta, fib/TL
+# ~100R better, both graded on Delta candles with Delta fees.
+# Delta stays the venue the trades are taken on, so the backtest still grades
+# on Delta candles and the fees stay Delta's whichever source draws the zones.
+# Covers the zone scanners (4h and 30m), entry_confirm and the fib/trendline
+# scanner; xStocks and "other" stay on Delta (Bitunix lists none of them).
+CRYPTO_CANDLE_SOURCE = (os.getenv("VICTUS_CRYPTO_CANDLE_SOURCE", "bitunix").strip().lower() or "bitunix")
+if CRYPTO_CANDLE_SOURCE not in {"delta", "bitunix"}:
+    raise ValueError(f"VICTUS_CRYPTO_CANDLE_SOURCE must be delta or bitunix, not {CRYPTO_CANDLE_SOURCE!r}")
+BITUNIX_API_BASE_URL = "https://fapi.bitunix.com"
+# Bitunix allows 10 requests a second per IP; stay a little under it.
+BITUNIX_MIN_REQUEST_GAP_SECONDS = env_float("VICTUS_BITUNIX_MIN_REQUEST_GAP_SECONDS", 0.12)
+# Every crypto watchlist symbol, checked against Bitunix's trading_pairs on
+# 2026-10-05 (all 23 listed as <base>USDT). Re-check when CRYPTO_WATCHLIST changes.
+BITUNIX_SYMBOLS = set(CRYPTO_WATCHLIST)
 COINSWITCH_EXCHANGE = "EXCHANGE_2"
 COINSWITCH_API_KEY = ""
 COINSWITCH_SECRET_KEY = ""

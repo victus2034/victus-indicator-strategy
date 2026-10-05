@@ -19,6 +19,7 @@ import numpy as np
 import pandas as pd
 import requests
 
+import bitunix_data
 from config import (
     ALERT_COOLDOWN_SECONDS,
     ALERT_RANGE_FILTER_SIGNALS,
@@ -959,6 +960,37 @@ def _fetch_delta_ohlcv_once(symbol, timeframe_seconds):
     ]
 
 
+# Bitunix candles already fetched this process, per (pair, timeframe). The
+# 30m scan loops every 90 seconds and Bitunix serves 200 candles a request, so
+# refetching 1500 candles each pass would be eight requests a symbol; after the
+# first pass only the newest page is asked for and merged in.
+_BITUNIX_HISTORY = {}
+
+
+def fetch_bitunix_ohlcv(symbol):
+    """The last OHLCV_LIMIT candles from Bitunix, in the scanner's ms format."""
+    timeframe_seconds = TIMEFRAME_SECONDS.get(TIMEFRAME)
+    if timeframe_seconds is None:
+        raise RuntimeError(f"Bitunix does not support timeframe {TIMEFRAME}")
+    pair = bitunix_data.bitunix_pair(delta_contract(symbol) or fallback_symbol(symbol).split("/")[0] + "USD")
+    end = int(time.time()) + timeframe_seconds
+    cached = _BITUNIX_HISTORY.get((pair, TIMEFRAME))
+    if cached:
+        # From two candles before the newest cached one, so the candle that
+        # was still forming last pass is replaced by its finished version.
+        start = int(cached[-1][0]) - 2 * timeframe_seconds
+    else:
+        start = end - (OHLCV_LIMIT + SWING_LENGTH * 2 + ATR_PERIOD) * timeframe_seconds
+    fresh = bitunix_data.klines(pair, TIMEFRAME, start, end)
+    if not fresh:
+        raise RuntimeError(f"Bitunix returned no candles for {pair}")
+    merged = {int(row[0]): row for row in (cached or [])}
+    merged.update({int(row[0]): row for row in fresh})
+    candles = [merged[key] for key in sorted(merged)][-OHLCV_LIMIT:]
+    _BITUNIX_HISTORY[(pair, TIMEFRAME)] = candles
+    return [[int(row[0]) * 1000, *row[1:6]] for row in candles]
+
+
 def coinswitch_path_with_query(path, params):
     query = unquote(urlencode(params))
     return f"{path}?{query}" if query else path
@@ -1184,6 +1216,14 @@ def live_ticker_price(exchange_name, symbol, candle_close):
             return price, "coinswitch_fine"
         return candle_close, "candle_close"
 
+    if exchange_name == "bitunix":
+        try:
+            pair = bitunix_data.bitunix_pair(delta_contract(symbol) or symbol)
+            return bitunix_data.last_price(pair), "bitunix_1m"
+        except Exception as error:
+            print(f"{symbol} live price unavailable from bitunix: {str(error)[:80]}")
+            return candle_close, "candle_close"
+
     if exchange_name == "delta_india":
         try:
             return fetch_delta_ticker_price(symbol), "delta_ticker"
@@ -1261,14 +1301,27 @@ def fetch_symbol_ohlcv(symbol):
     exchange_name = None
     symbol_for_fallback = fallback_symbol(symbol)
 
-    try:
-        delta_candles = fetch_delta_ohlcv(symbol)  # None = not a Delta contract
-        if delta_candles is not None:
-            ohlcv = require_fresh_ohlcv(delta_candles, "delta_india")
-            exchange_name = "delta_india"
-    except Exception as error:
-        last_error = error
-        ohlcv = None
+    # Bitunix only when config.CRYPTO_CANDLE_SOURCE asks for it, and only for
+    # the crypto it lists. Any failure falls through to Delta, so a Bitunix
+    # outage costs the scan nothing but the venue.
+    if bitunix_data.uses_bitunix(symbol):
+        try:
+            ohlcv = require_fresh_ohlcv(fetch_bitunix_ohlcv(symbol), "bitunix")
+            exchange_name = "bitunix"
+        except Exception as error:
+            print(f"{symbol} Bitunix candles unavailable, using Delta: {str(error)[:80]}")
+            last_error = error
+            ohlcv = None
+
+    if ohlcv is None:
+        try:
+            delta_candles = fetch_delta_ohlcv(symbol)  # None = not a Delta contract
+            if delta_candles is not None:
+                ohlcv = require_fresh_ohlcv(delta_candles, "delta_india")
+                exchange_name = "delta_india"
+        except Exception as error:
+            last_error = error
+            ohlcv = None
 
     if PREFER_COINSWITCH and ohlcv is None:
         try:
@@ -1360,6 +1413,15 @@ def daily_trend(symbol):
         return None
     day = 86400
     end_ts = int(time.time())
+    if bitunix_data.uses_bitunix(symbol):
+        # The trend is read off the same book the zones were drawn from.
+        try:
+            rows = bitunix_data.klines(
+                bitunix_data.bitunix_pair(contract), "1d", end_ts - (CRYPTO_TREND_EMA * 4) * day, end_ts
+            )
+            return _trend_from_daily([(row[0], row[4]) for row in rows], end_ts)
+        except Exception as error:
+            print(f"Bitunix daily trend unavailable for {symbol}, using Delta: {error}")
     try:
         response = requests.get(
             f"{DELTA_API_BASE_URL}/v2/history/candles",
@@ -1379,7 +1441,12 @@ def daily_trend(symbol):
         print(f"Daily trend unavailable for {symbol}: {error}")
         return None
     candles = sorted(payload.get("result") or [], key=lambda candle: candle["time"])
-    closes = [float(c["close"]) for c in candles if int(c["time"]) + day <= end_ts]
+    return _trend_from_daily([(int(c["time"]), float(c["close"])) for c in candles], end_ts)
+
+
+def _trend_from_daily(rows, end_ts):
+    """rows: (open_ts_seconds, close) oldest first. Closed days only."""
+    closes = [close for ts, close in rows if int(ts) + 86400 <= end_ts]
     if len(closes) < CRYPTO_TREND_EMA + 5:
         return None
     ema = pd.Series(closes).ewm(span=CRYPTO_TREND_EMA, adjust=False).mean().iloc[-1]
