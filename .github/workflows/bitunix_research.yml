@@ -43,8 +43,8 @@ jobs:
                        git show FETCH_HEAD:fib_trendline_alert_records.jsonl > /tmp/tl_records.jsonl
                        python research/trendline_trace.py --records /tmp/tl_records.jsonl --since 2026-10-03 ;;
             tl-nse)    mkdir -p research/out/trendline_trace
-                       for tf in 30m 4h; do python research/trendline_symbol_trace.py KARURVYSYA.NS --tf $tf --since 2026-09-22 > research/out/trendline_trace/KARURVYSYA_$tf.txt 2>&1; done
-                       cat research/out/trendline_trace/KARURVYSYA_*.txt ;;
+                       python research/trendline_symbol_trace.py PFIZER.NS --tf 1M --since 2025-01-01 > research/out/trendline_trace/PFIZER_1M.txt 2>&1
+                       cat research/out/trendline_trace/PFIZER_1M.txt ;;
             tl-length) python research/trendline_length_backtest.py --lengths 10,15,20 ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
       - name: Commit results to this branch

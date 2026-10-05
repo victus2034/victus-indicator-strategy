@@ -28,9 +28,9 @@ def main():
     p.add_argument("--since", default="2026-09-22")
     a = p.parse_args()
     rows = nse_charts([a.symbol], [a.tf])[a.symbol][a.tf]
-    t = [datetime.fromtimestamp(r[0], IST).strftime("%m-%d %H:%M") for r in rows]
+    t = [datetime.fromtimestamp(r[0], IST).strftime("%y-%m-%d %H:%M") for r in rows]
     H = [r[2] for r in rows]; Lo = [r[3] for r in rows]; C = [r[4] for r in rows]
-    start = next(i for i, r in enumerate(rows) if t[i] >= a.since[5:])
+    start = next(i for i, r in enumerate(rows) if datetime.fromtimestamp(r[0], IST).strftime("%Y-%m-%d") >= a.since)
     print(f"{a.symbol} {a.tf}: {len(rows)} bars {t[0]} -> {t[-1]} (last bar may be forming)")
     print("\nbar  time         high     low     close  | swing-low? swing-high?")
     for i in range(start, len(rows)):
