@@ -58470,6 +58470,33 @@
       "target_half": 235.6875,
       "timeframe": "4h",
       "trade_id": "NVDAXUSD|4h|short|236.5|238.125"
+    },
+    {
+      "alert_time": "2026-10-06T09:28:12.269074+05:30",
+      "cost_r": 0.2926022399999959,
+      "date": "2026-10-06",
+      "entry": 8.856,
+      "entry_time": "2026-10-06T09:30:00+05:30",
+      "exit_price": 8.8265845,
+      "exit_time": "2026-10-06T09:35:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "net_realized_r": -1.4692222400000075,
+      "outcome": "SL",
+      "rating": 8,
+      "realized_r": -1.1766200000000115,
+      "risk": 0.025000000000000355,
+      "side": "long",
+      "stop": 8.831,
+      "stream": "live",
+      "symbol": "UNIUSD",
+      "target_1": 8.881,
+      "target_2": 8.906,
+      "target_half": 8.868500000000001,
+      "timeframe": "30m",
+      "trade_id": "UNIUSD|30m|long|8.856|8.831"
     }
   ],
   "handled": {
@@ -60930,24 +60957,6 @@
       "target_2": 234.5,
       "target_half": 238.08928571428572,
       "timeframe": "4h"
-    },
-    "UNIUSD|30m|long|8.856|8.831": {
-      "alert_time": "2026-10-06T09:28:12.269074+05:30",
-      "entry": 8.856,
-      "entry_time": "2026-10-06T09:30:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 8,
-      "risk": 0.025000000000000355,
-      "side": "long",
-      "stop": 8.831,
-      "stream": "live",
-      "symbol": "UNIUSD",
-      "target_1": 8.881,
-      "target_2": 8.906,
-      "target_half": 8.868500000000001,
-      "timeframe": "30m"
     }
   }
 }
