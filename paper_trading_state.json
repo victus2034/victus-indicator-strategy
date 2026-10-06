@@ -58524,6 +58524,33 @@
       "target_half": 13.811500000000002,
       "timeframe": "30m",
       "trade_id": "LINKUSD|30m|long|13.749|13.624"
+    },
+    {
+      "alert_time": "2026-10-06T11:32:06.975387+05:30",
+      "cost_r": 0.16432894545454632,
+      "date": "2026-10-06",
+      "entry": 54.71,
+      "entry_time": "2026-10-06T11:40:00+05:30",
+      "exit_price": 55.26,
+      "exit_time": "2026-10-06T12:45:00+05:30",
+      "final_result": "+2R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "other",
+      "net_realized_r": 1.8356710545454538,
+      "outcome": "+2R",
+      "rating": 9,
+      "realized_r": 2.0,
+      "risk": 0.2749999999999986,
+      "side": "long",
+      "stop": 54.435,
+      "stream": "live",
+      "symbol": "SLVONUSD",
+      "target_1": 54.985,
+      "target_2": 55.26,
+      "target_half": 54.8475,
+      "timeframe": "30m",
+      "trade_id": "SLVONUSD|30m|long|54.71|54.435"
     }
   ],
   "handled": {
@@ -61005,24 +61032,6 @@
       "target_2": 234.5,
       "target_half": 238.08928571428572,
       "timeframe": "4h"
-    },
-    "SLVONUSD|30m|long|54.71|54.435": {
-      "alert_time": "2026-10-06T11:32:06.975387+05:30",
-      "entry": 54.71,
-      "entry_time": "2026-10-06T11:40:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": true,
-      "market": "other",
-      "rating": 9,
-      "risk": 0.2749999999999986,
-      "side": "long",
-      "stop": 54.435,
-      "stream": "live",
-      "symbol": "SLVONUSD",
-      "target_1": 54.985,
-      "target_2": 55.26,
-      "target_half": 54.8475,
-      "timeframe": "30m"
     }
   }
 }
