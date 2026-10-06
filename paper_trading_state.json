@@ -58497,6 +58497,33 @@
       "target_half": 8.868500000000001,
       "timeframe": "30m",
       "trade_id": "UNIUSD|30m|long|8.856|8.831"
+    },
+    {
+      "alert_time": "2026-10-06T08:16:37.924487+05:30",
+      "cost_r": 0.09085339199999873,
+      "date": "2026-10-06",
+      "entry": 13.749,
+      "entry_time": "2026-10-06T08:35:00+05:30",
+      "exit_price": 13.7549469030915,
+      "exit_time": "2026-10-06T11:35:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": -0.043278167267999136,
+      "outcome": "BE",
+      "rating": 8,
+      "realized_r": 0.04757522473199959,
+      "risk": 0.12500000000000178,
+      "side": "long",
+      "stop": 13.623999999999999,
+      "stream": "live",
+      "symbol": "LINKUSD",
+      "target_1": 13.874000000000002,
+      "target_2": 13.999000000000004,
+      "target_half": 13.811500000000002,
+      "timeframe": "30m",
+      "trade_id": "LINKUSD|30m|long|13.749|13.624"
     }
   ],
   "handled": {
@@ -59992,6 +60019,7 @@
     "SAMSUNG/USDT:USDT|4h|long|180.109|178.323": "filled",
     "SAMSUNG/USDT:USDT|4h|short|204.15|207.062": "filled",
     "SLVONUSD|30m|long|54.5|54.3375": "filled",
+    "SLVONUSD|30m|long|54.71|54.435": "filled",
     "SLVONUSD|30m|long|54.79|54.5775": "filled",
     "SLVONUSD|30m|long|54.87|54.6575": "filled",
     "SLVONUSD|30m|long|56.81|56.46": "filled",
@@ -60922,24 +60950,6 @@
       "target_half": 497.73875,
       "timeframe": "30m"
     },
-    "LINKUSD|30m|long|13.749|13.624": {
-      "alert_time": "2026-10-06T08:16:37.924487+05:30",
-      "entry": 13.749,
-      "entry_time": "2026-10-06T08:35:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": true,
-      "market": "crypto",
-      "rating": 8,
-      "risk": 0.12500000000000178,
-      "side": "long",
-      "stop": 13.623999999999999,
-      "stream": "live",
-      "symbol": "LINKUSD",
-      "target_1": 13.874000000000002,
-      "target_2": 13.999000000000004,
-      "target_half": 13.811500000000002,
-      "timeframe": "30m"
-    },
     "NVDAXUSD|4h|short|239.286|241.679": {
       "alert_time": "2026-10-06T08:14:34.949250+05:30",
       "entry": 239.28571428571428,
@@ -60957,6 +60967,24 @@
       "target_2": 234.5,
       "target_half": 238.08928571428572,
       "timeframe": "4h"
+    },
+    "SLVONUSD|30m|long|54.71|54.435": {
+      "alert_time": "2026-10-06T11:32:06.975387+05:30",
+      "entry": 54.71,
+      "entry_time": "2026-10-06T11:40:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "other",
+      "rating": 9,
+      "risk": 0.2749999999999986,
+      "side": "long",
+      "stop": 54.435,
+      "stream": "live",
+      "symbol": "SLVONUSD",
+      "target_1": 54.985,
+      "target_2": 55.26,
+      "target_half": 54.8475,
+      "timeframe": "30m"
     }
   }
 }
