@@ -107,8 +107,27 @@ def _tangent_anchor(values, xs, ys, nx, ny, lower, bar):
     """
     if not xs or ((ys[-1] >= ny) if lower else (ys[-1] <= ny)):
         return None
+    return _rest_on(values, xs[-1], nx, ny, lower, bar)
+
+
+def _last_lower_anchor(values, xs, ys, nx, ny, lower, bar):
+    """Research (Lakky, 2026-10-07, HYPEUSDT 4h): like the tangent rule, but
+    from the most recent earlier swing low BELOW the new one (high above it),
+    not only the one just before - a lower low against the last swing still
+    gets a line from the last swing under it (Aug 19 58.04 -> Sep 15 75.13
+    over the Sep 11 / Sep 13 swings). Returns (x, y) or None."""
+    for i in range(len(xs) - 1, -1, -1):
+        if (ys[i] < ny) if lower else (ys[i] > ny):
+            return _rest_on(values, xs[i], nx, ny, lower, bar)
+    return None
+
+
+def _rest_on(values, x0, nx, ny, lower, bar):
+    """From bar x0 up to the new swing, the bar whose low (high) gives the line
+    no candle in between crosses - the steepest such line for support, ties to
+    the earlier bar - looking back at most MAX_BARS_BACK - 1 bars from `bar`."""
     best = None
-    for k in range(max(xs[-1], bar - (MAX_BARS_BACK - 1)), nx):
+    for k in range(max(x0, bar - (MAX_BARS_BACK - 1)), nx):
         slope = (ny - values[k]) / (nx - k)
         if best is None or ((slope > best[0]) if lower else (slope < best[0])):
             best = (slope, k)
@@ -120,12 +139,13 @@ def build_trendlines(highs, lows, closes, length=10, keep=6, history=False, anch
 
     history=True returns every line ever drawn instead, trimmed ones included,
     so a backtest can ask which were live on any past bar (Trendline.live_during).
-    anchor: "tangent" is the live Pine rule (v12.5); "oldest" (v11.0-v12.4)
-    and "nearest" are kept for research.
+    anchor: "tangent" is the live Pine rule (v12.5); "oldest" (v11.0-v12.4),
+    "nearest" and "last_lower" are for research.
     """
     def pick(values, xs, ys, nx, lower):
-        if anchor == "tangent":
-            return _tangent_anchor(values, xs, ys, nx, values[nx], lower, nx + length)
+        if anchor in ("tangent", "last_lower"):
+            rule = _tangent_anchor if anchor == "tangent" else _last_lower_anchor
+            return rule(values, xs, ys, nx, values[nx], lower, nx + length)
         i = (_nearest_anchor if anchor == "nearest" else _best_anchor)(xs, ys, nx, values[nx], lower)
         return (xs[i], ys[i]) if i >= 0 else None
 

@@ -28,7 +28,7 @@ from trendlines import SUPPORT, build_trendlines  # noqa: E402
 import config  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "trendline_anchor"
-RULES = (("old (v12.4)", "oldest"), ("new (v12.5)", "tangent"))
+RULES = (("old (v12.4)", "oldest"), ("new (v12.5)", "tangent"), ("last lower", "last_lower"))
 HOLD_BARS = 3
 FAR_BARS = 100
 
@@ -80,7 +80,7 @@ def main():
                         agg[key][k] += v
                     spans[key] += sp
     pct = lambda a, b: f"{100 * a / b:.0f}%" if b else "-"
-    lines = ["# Trendline lines: old (v12.4) vs new (v12.5)", "",
+    lines = ["# Trendline lines: old (v12.4) vs new (v12.5) vs last lower (candidate)", "",
              f"Same candles as the backtests (Delta for crypto, Yahoo for NSE), length "
              f"{config.TRENDLINE_SWING_LENGTH}, live timeframes. Cut-through = a candle between the two "
              f"anchors is through the line. Twins = another line starts from the same candle. Far = anchors "

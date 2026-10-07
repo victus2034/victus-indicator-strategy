@@ -7,7 +7,7 @@ lows". This replays both - oldest (live) and nearest - with the same data,
 trade rules and scoring as trendline_length_backtest.py. Also "tangent":
 the line Lakky drew (Aug 19 low -> Sep 15 low). Nothing live changes.
 
-    python research/trendline_anchor_backtest.py
+    python research/trendline_anchor_backtest.py [tangent last_lower ...]
 """
 import sys
 import time
@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from trendline_length_backtest import CRYPTO, LIVE_TFS, NSE, bt, load, no_fibs, run, stats  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "trendline_anchor"
-VARIANTS = ("oldest", "nearest", "tangent")
+VARIANTS = ("oldest", "nearest", "tangent", "last_lower")
 
 
 def main():
@@ -28,14 +28,16 @@ def main():
     data = load(now)
     results = {}
     live = bt.build_trendlines
-    for name in VARIANTS:
+    variants = [a for a in sys.argv[1:] if a in VARIANTS] or VARIANTS
+    for name in variants:
         bt.build_trendlines = lambda *args, _a=name, **kw: live(*args, anchor=_a, **kw)
         results[name] = run(10, data, now)
     bt.build_trendlines = live
     lines = ["# Trendline anchor backtest (trendlines only, length 10)", "",
              "oldest = live Pine rule; nearest = join the last valid earlier swing; tangent = only a rising "
-             "low / falling high vs the previous swing, anchored on the candle the line hugs. Same data, trade rules "
-             "and scoring as `trendline_length_backtest.py`.", "",
+             "low / falling high vs the previous swing, anchored on the candle the line hugs; last_lower = the same "
+             "from the most recent earlier swing below (above) the new one, not only the previous swing. Same data, "
+             "trade rules and scoring as `trendline_length_backtest.py`.", "",
              "| market | tf | anchor | alerts | /day | filled | win@2R | net R | R/trade |",
              "|---|---|---|---|---|---|---|---|---|"]
     for market in (CRYPTO, NSE):
@@ -50,7 +52,8 @@ def main():
         s = stats([t for t in items if t["tf"] in LIVE_TFS])
         lines.append(f"| {name} | {s['alerts']} | {s['filled']} | {s['net']:+.1f} | {s['per_trade']:+.3f} |")
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "RESULTS.md").write_text("\n".join(lines) + "\n")
+    name = "RESULTS.md" if len(variants) == len(VARIANTS) else f"RESULTS_{'_'.join(variants)}.md"
+    (OUT / name).write_text("\n".join(lines) + "\n")
     print("\n".join(lines))
 
 
