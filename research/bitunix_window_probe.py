@@ -41,7 +41,7 @@ def main():
             print(f"  klines end={label:22s}: {len(got):4d} candles {ts(got[0][0] * 1000)} -> {ts(got[-1][0] * 1000)}")
 
 
-if __name__ == "__main__" and "--forming" not in sys.argv:
+if __name__ == "__main__" and len(sys.argv) == 1:
     main()
 
 
@@ -67,3 +67,24 @@ def forming_candle_probe():
 
 if __name__ == "__main__" and "--forming" in sys.argv:
     forming_candle_probe()
+
+
+def forming_detail():
+    """forming_candle next to the 1m rows it was built from."""
+    now = int(time.time())
+    for tf, step in (("30m", 1800), ("4h", 14400)):
+        opened = now // step * step
+        rows = bitunix_data.klines("LTCUSDT", "1m", opened, now + 1)
+        hi = max(rows, key=lambda r: r[2])
+        lo = min(rows, key=lambda r: r[3])
+        print(f"\nLTCUSDT {tf} forming {ts(opened * 1000)}: {len(rows)} 1m rows "
+              f"{ts(rows[0][0] * 1000)} -> {ts(rows[-1][0] * 1000)}")
+        print(f"  max high {hi}  min low {lo}")
+        print(f"  forming_candle {bitunix_data.forming_candle('LTCUSDT', tf)}")
+        print(f"  last closed {bitunix_data.klines('LTCUSDT', tf, opened - 3 * step, opened)}")
+        raw = bitunix_data._request("LTCUSDT", "1m", opened * 1000, now * 1000, 5)
+        print(f"  raw 1m rows {raw[:2]}")
+
+
+if __name__ == "__main__" and "--detail" in sys.argv:
+    forming_detail()

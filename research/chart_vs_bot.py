@@ -43,6 +43,8 @@ def main():
     last = len(df) - 1
     print(f"zones from {venue}: {len(df)} candles {ts(df['time'].iloc[0])} -> {ts(df['time'].iloc[-1])}, "
           f"last close {df['close'].iloc[-1]}")
+    for row in df.tail(3).itertuples():
+        print(f"  candle {ts(row.time)} o {row.open} h {row.high} l {row.low} c {row.close} v {row.volume}")
     for name, zones in (("SUPPLY", supply), ("DEMAND", demand)):
         live = [z for z in zones if z["active"]]
         for z in sorted(live, key=lambda z: -z["top"]):
