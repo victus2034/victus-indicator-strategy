@@ -53,7 +53,7 @@ jobs:
                        for s in LTCUSD HYPEUSD BTCUSD; do VICTUS_TIMEFRAME=4h python research/chart_vs_bot.py $s; done > research/out/chart_vs_bot/4h.txt
                        VICTUS_TIMEFRAME=1d python research/chart_vs_bot.py HYPEUSD > research/out/chart_vs_bot/1d.txt
                        cat research/out/chart_vs_bot/*.txt ;;
-            bitunix-window) python research/bitunix_window_probe.py ;;
+            bitunix-window) python research/bitunix_window_probe.py --forming ;;
             tl-length) python research/trendline_length_backtest.py --lengths 10,15,20 ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
       - name: Commit results to this branch

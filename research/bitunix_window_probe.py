@@ -41,5 +41,29 @@ def main():
             print(f"  klines end={label:22s}: {len(got):4d} candles {ts(got[0][0] * 1000)} -> {ts(got[-1][0] * 1000)}")
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" and "--forming" not in sys.argv:
     main()
+
+
+def forming_candle_probe():
+    """Which request shape returns the candle still forming?"""
+    import requests
+    from config import BITUNIX_API_BASE_URL
+    now = int(time.time())
+    print(f"\nforming candle probe, now {ts(now * 1000)} UTC")
+    for tf, step in (("30m", 1800), ("4h", 14400)):
+        forming = now // step * step * 1000
+        for label, extra in (("no start, no end", {}), ("end=now only", {"endTime": now * 1000}),
+                             ("start=now-10tf only", {"startTime": (now - 10 * step) * 1000}),
+                             ("start+end=now", {"startTime": (now - 10 * step) * 1000, "endTime": now * 1000})):
+            bitunix_data._throttle()
+            rows = requests.get(f"{BITUNIX_API_BASE_URL}/api/v1/futures/market/kline",
+                                params={"symbol": "BTCUSDT", "interval": tf, "limit": 200, **extra},
+                                timeout=20).json().get("data") or []
+            times = sorted(int(r["time"]) for r in rows)
+            print(f"  {tf} {label:20s}: {len(rows):3d} rows, newest {ts(times[-1])}, "
+                  f"forming {ts(forming)} {'PRESENT' if forming in times else 'missing'}")
+
+
+if __name__ == "__main__" and "--forming" in sys.argv:
+    forming_candle_probe()
