@@ -60644,6 +60644,7 @@
     "VELVETUSD|30m|short|0.0805|0.0815": "filled",
     "VELVETUSD|30m|short|0.0812|0.081825": "filled",
     "VELVETUSD|4h|short|0.0656746|0.0663313": "filled",
+    "XAUTUSD|30m|long|4131.34|4117.16": "filled",
     "XAUTUSD|30m|long|4137.5|4135.94": "stop_too_tight",
     "XAUTUSD|30m|long|4139.03|4133.91": "stop_too_tight",
     "XAUTUSD|30m|long|4140.96|4138.5": "stop_too_tight",
@@ -61341,6 +61342,24 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
+      "timeframe": "30m"
+    },
+    "XAUTUSD|30m|long|4131.34|4117.16": {
+      "alert_time": "2026-10-07T14:27:06.380945+05:30",
+      "entry": 4131.34,
+      "entry_time": "2026-10-07T14:35:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 8,
+      "risk": 14.175000000000182,
+      "side": "long",
+      "stop": 4117.165,
+      "stream": "live",
+      "symbol": "XAUTUSD",
+      "target_1": 4145.515,
+      "target_2": 4159.6900000000005,
+      "target_half": 4138.4275,
       "timeframe": "30m"
     }
   }
