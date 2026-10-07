@@ -151,6 +151,14 @@ each falling back to the shared one above when unset (so nothing changes until t
   length scores ~-0.28R a trade at ~24% wins - the length only changes how many alerts there are.
   "Alert but no line on my chart" has so far always been the chart, not the bot: wrong timeframe
   (a 4H alert on a 30m chart) or feed (INDEX vs Bitunix/Delta); `research/trendline_trace.py` checks.
+- **Trendline anchors, v12.5 (Lakky, 2026-10-07, HYPE 1D).** A support line is drawn only when a
+  swing low is above the previous swing low, from the candle low between them that the line rests on
+  (no low in between under it); resistance mirrors it. Up to v12.4 a swing joined the *earliest*
+  earlier swing no swing in between cut, so lines started far back, came in twins, and candles sat
+  through them (Aug 2 -> Sep 15 instead of Aug 19 -> Sep 15). Backtest
+  (`research/trendline_anchor_backtest.py`): 27,862 alerts / -6,762R vs 46,452 / -10,670R, same
+  ~-0.29R a trade. `tests/test_trendline_anchor.py` holds the HYPE line and a transcription of the
+  Pine 6b loop - change both sides together. `SEED_VERSION` v4 re-seeds silently.
 - **No late BROKEN alerts (Lakky, 2026-10-05).** A break posts only if its candle closed after
   the market's previous awake pass (`__last_scan__` in the state, `BREAK_GRACE_SECONDS` = 1h of
   catch-up). PFIZER's 1M break on September's close posted on Oct 5 while the other 1M breaks went
