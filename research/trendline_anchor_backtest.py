@@ -4,7 +4,8 @@ Lakky, 2026-10-07 (HYPEUSDT 1D): lines start far off-screen and come in
 near-parallel twins. Pine 6b joins each new swing to the OLDEST earlier swing
 that no swing in between cuts; its tooltip says "the last two rising swing
 lows". This replays both - oldest (live) and nearest - with the same data,
-trade rules and scoring as trendline_length_backtest.py. Nothing live changes.
+trade rules and scoring as trendline_length_backtest.py. Also "tangent":
+the line Lakky drew (Aug 19 low -> Sep 15 low). Nothing live changes.
 
     python research/trendline_anchor_backtest.py
 """
@@ -15,26 +16,10 @@ from types import SimpleNamespace
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-import trendlines  # noqa: E402
 from trendline_length_backtest import CRYPTO, LIVE_TFS, NSE, bt, load, no_fibs, run, stats  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "trendline_anchor"
-OLDEST = trendlines._best_anchor
-
-
-def nearest(xs, ys, nx, ny, lower):
-    """Latest earlier swing beyond which no swing in between cuts the line."""
-    for i in range(len(xs) - 1, -1, -1):
-        if (ys[i] < ny) if lower else (ys[i] > ny):
-            ok = True
-            for j in range(i + 1, len(xs)):
-                yl = ys[i] + (ny - ys[i]) * (xs[j] - xs[i]) / (nx - xs[i])
-                if (ys[j] < yl) if lower else (ys[j] > yl):
-                    ok = False
-                    break
-            if ok:
-                return i
-    return -1
+VARIANTS = ("oldest", "nearest", "tangent")
 
 
 def main():
@@ -42,12 +27,14 @@ def main():
     now = time.time()
     data = load(now)
     results = {}
-    for name, fn in (("oldest (live)", OLDEST), ("nearest", nearest)):
-        trendlines._best_anchor = fn
+    live = bt.build_trendlines
+    for name in VARIANTS:
+        bt.build_trendlines = lambda *args, _a=name, **kw: live(*args, anchor=_a, **kw)
         results[name] = run(10, data, now)
-    trendlines._best_anchor = OLDEST
+    bt.build_trendlines = live
     lines = ["# Trendline anchor backtest (trendlines only, length 10)", "",
-             "oldest = live Pine rule; nearest = join the last valid earlier swing. Same data, trade rules "
+             "oldest = live Pine rule; nearest = join the last valid earlier swing; tangent = only a rising "
+             "low / falling high vs the previous swing, anchored on the candle the line hugs. Same data, trade rules "
              "and scoring as `trendline_length_backtest.py`.", "",
              "| market | tf | anchor | alerts | /day | filled | win@2R | net R | R/trade |",
              "|---|---|---|---|---|---|---|---|---|"]

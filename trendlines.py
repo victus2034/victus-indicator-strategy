@@ -72,12 +72,53 @@ def _best_anchor(xs, ys, nx, ny, lower):
     return best
 
 
-def build_trendlines(highs, lows, closes, length=10, keep=6, history=False):
+def _nearest_anchor(xs, ys, nx, ny, lower):
+    """Latest earlier swing beyond which no swing in between cuts the line."""
+    for i in range(len(xs) - 1, -1, -1):
+        if (ys[i] < ny) if lower else (ys[i] > ny):
+            ok = True
+            for j in range(i + 1, len(xs)):
+                yl = ys[i] + (ny - ys[i]) * (xs[j] - xs[i]) / (nx - xs[i])
+                if (ys[j] < yl) if lower else (ys[j] > yl):
+                    ok = False
+                    break
+            if ok:
+                return i
+    return -1
+
+
+def _tangent_anchor(values, xs, ys, nx, ny, lower):
+    """Research (Lakky, 2026-10-07): the candle the line hugs, not a swing.
+
+    Only when the new swing low is above the previous one (a swing high below
+    the previous one) - "the last two rising swing lows". From that swing up
+    to the new one, the bar whose low (high) gives the line no candle in
+    between crosses. Returns (x, y) or None.
+    """
+    if not xs or ((ys[-1] >= ny) if lower else (ys[-1] <= ny)):
+        return None
+    i = len(xs) - 1
+    best = None
+    for k in range(xs[i], nx):
+        slope = (ny - values[k]) / (nx - k)
+        if best is None or ((slope > best[0]) if lower else (slope < best[0])):
+            best = (slope, k)
+    return best[1], values[best[1]]
+
+
+def build_trendlines(highs, lows, closes, length=10, keep=6, history=False, anchor="oldest"):
     """Replay every bar as the Pine does and return the lines it would hold.
 
     history=True returns every line ever drawn instead, trimmed ones included,
     so a backtest can ask which were live on any past bar (Trendline.live_during).
+    anchor: "oldest" is the live Pine rule; "nearest" and "tangent" are research.
     """
+    def pick(values, xs, ys, nx, lower):
+        if anchor == "tangent":
+            return _tangent_anchor(values, xs, ys, nx, values[nx], lower)
+        i = (_nearest_anchor if anchor == "nearest" else _best_anchor)(xs, ys, nx, values[nx], lower)
+        return (xs[i], ys[i]) if i >= 0 else None
+
     n = len(closes)
     lines = []
     everything = []
@@ -98,18 +139,18 @@ def build_trendlines(highs, lows, closes, length=10, keep=6, history=False):
         nx = bar - length
         if nx >= length:
             if _is_pivot(lows, nx, length, high=False):
-                best = _best_anchor(pl_x, pl_y, nx, lows[nx], lower=True)
-                if best >= 0:
-                    add(Trendline(SUPPORT, pl_x[best], pl_y[best], nx, lows[nx], bar))
+                best = pick(lows, pl_x, pl_y, nx, lower=True)
+                if best:
+                    add(Trendline(SUPPORT, best[0], best[1], nx, lows[nx], bar))
                 pl_x.append(nx)
                 pl_y.append(lows[nx])
                 if len(pl_x) > SWING_MEMORY:
                     pl_x.pop(0)
                     pl_y.pop(0)
             if _is_pivot(highs, nx, length, high=True):
-                best = _best_anchor(ph_x, ph_y, nx, highs[nx], lower=False)
-                if best >= 0:
-                    add(Trendline(RESISTANCE, ph_x[best], ph_y[best], nx, highs[nx], bar))
+                best = pick(highs, ph_x, ph_y, nx, lower=False)
+                if best:
+                    add(Trendline(RESISTANCE, best[0], best[1], nx, highs[nx], bar))
                 ph_x.append(nx)
                 ph_y.append(highs[nx])
                 if len(ph_x) > SWING_MEMORY:
