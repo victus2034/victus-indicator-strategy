@@ -1,6 +1,3 @@
-
-1 Failed download:
-['CHENNPETRO.NS']: YFRateLimitError('Too Many Requests. Rate limited. Try after a while.')
 # Trendline anchor backtest (trendlines only, length 10)
 
 oldest = live Pine rule; nearest = join the last valid earlier swing; tangent = only a rising low / falling high vs the previous swing, anchored on the candle the line hugs; last_lower = the same from the most recent earlier swing below (above) the new one, not only the previous swing. Same data, trade rules and scoring as `trendline_length_backtest.py`.
