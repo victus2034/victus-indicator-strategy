@@ -59010,6 +59010,33 @@
       "target_half": 54.28,
       "timeframe": "4h",
       "trade_id": "SLVONUSD|4h|long|54.23|54.13"
+    },
+    {
+      "alert_time": "2026-10-07T18:03:23.439875+05:30",
+      "cost_r": 0.08326079999999948,
+      "date": "2026-10-07",
+      "entry": 13.316688000000001,
+      "entry_time": "2026-10-07T18:30:00+05:30",
+      "exit_price": 13.322447913669048,
+      "exit_time": "2026-10-07T19:05:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": -0.039661423200004466,
+      "outcome": "BE",
+      "rating": 4,
+      "realized_r": 0.04359937679999502,
+      "risk": 0.13211000000000084,
+      "side": "long",
+      "stop": 13.184578,
+      "stream": "live",
+      "symbol": "LINKUSD",
+      "target_1": 13.448798000000002,
+      "target_2": 13.580908000000003,
+      "target_half": 13.382743000000001,
+      "timeframe": "30m",
+      "trade_id": "LINKUSD|30m|long|13.3167|13.1846"
     }
   ],
   "handled": {
@@ -60059,6 +60086,7 @@
     "BNBUSD|30m|long|746.65|740.92": "filled",
     "BNBUSD|30m|long|754.9|753.075": "filled",
     "BNBUSD|30m|long|759.53|755.843": "filled",
+    "BNBUSD|30m|long|764.699|757.113": "filled",
     "BNBUSD|30m|long|765.48|762.48": "filled",
     "BNBUSD|30m|long|766.18|761.993": "filled",
     "BNBUSD|30m|long|769.16|766.135": "filled",
@@ -61458,6 +61486,24 @@
       "target_half": 497.73875,
       "timeframe": "30m"
     },
+    "BNBUSD|30m|long|764.699|757.113": {
+      "alert_time": "2026-10-07T18:43:23.115068+05:30",
+      "entry": 764.69904,
+      "entry_time": "2026-10-07T19:05:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 10,
+      "risk": 7.586299999999937,
+      "side": "long",
+      "stop": 757.11274,
+      "stream": "live",
+      "symbol": "BNBUSD",
+      "target_1": 772.2853399999999,
+      "target_2": 779.8716399999998,
+      "target_half": 768.4921899999999,
+      "timeframe": "30m"
+    },
     "DOGEUSD|30m|long|0.0884621|0.0875845": {
       "alert_time": "2026-10-07T18:28:12.424656+05:30",
       "entry": 0.08846208,
@@ -61474,24 +61520,6 @@
       "target_1": 0.08933967999999999,
       "target_2": 0.09021727999999998,
       "target_half": 0.08890087999999999,
-      "timeframe": "30m"
-    },
-    "LINKUSD|30m|long|13.3167|13.1846": {
-      "alert_time": "2026-10-07T18:03:23.439875+05:30",
-      "entry": 13.316688000000001,
-      "entry_time": "2026-10-07T18:30:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": true,
-      "market": "crypto",
-      "rating": 4,
-      "risk": 0.13211000000000084,
-      "side": "long",
-      "stop": 13.184578,
-      "stream": "live",
-      "symbol": "LINKUSD",
-      "target_1": 13.448798000000002,
-      "target_2": 13.580908000000003,
-      "target_half": 13.382743000000001,
       "timeframe": "30m"
     }
   }
