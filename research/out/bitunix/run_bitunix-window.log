@@ -1,28 +1,10 @@
-now 2026-10-07 15:22 UTC
 
-== BTCUSDT 30m ==
-  one page end=now      : 200 rows 2026-10-03 11:00 -> 2026-10-07 14:30
-  one page end=now+1s   : 200 rows 2026-10-03 11:00 -> 2026-10-07 14:30
-  one page end=now+tf/2 : 199 rows 2026-10-03 11:30 -> 2026-10-07 14:30
-  one page end=now+tf   : 199 rows 2026-10-03 11:30 -> 2026-10-07 14:30
-  one page end=now+3tf  : 197 rows 2026-10-03 12:30 -> 2026-10-07 14:30
-  klines end=now+1                 : 1563 candles 2026-09-04 22:30 -> 2026-10-07 14:30
-  klines end=now+tf (live scanner) :  199 candles 2026-10-03 11:30 -> 2026-10-07 14:30
-
-== BTCUSDT 4h ==
-  one page end=now      : 200 rows 2026-09-04 04:00 -> 2026-10-07 08:00
-  one page end=now+1s   : 200 rows 2026-09-04 04:00 -> 2026-10-07 08:00
-  one page end=now+tf/2 : 199 rows 2026-09-04 08:00 -> 2026-10-07 08:00
-  one page end=now+tf   : 199 rows 2026-09-04 08:00 -> 2026-10-07 08:00
-  one page end=now+3tf  : 197 rows 2026-09-04 16:00 -> 2026-10-07 08:00
-  klines end=now+1                 : 1569 candles 2026-01-19 00:00 -> 2026-10-07 08:00
-  klines end=now+tf (live scanner) :  199 candles 2026-09-04 08:00 -> 2026-10-07 08:00
-
-== BTCUSDT 1d ==
-  one page end=now      : 200 rows 2026-03-21 00:00 -> 2026-10-06 00:00
-  one page end=now+1s   : 200 rows 2026-03-21 00:00 -> 2026-10-06 00:00
-  one page end=now+tf/2 : 199 rows 2026-03-22 00:00 -> 2026-10-06 00:00
-  one page end=now+tf   : 199 rows 2026-03-22 00:00 -> 2026-10-06 00:00
-  one page end=now+3tf  : 197 rows 2026-03-24 00:00 -> 2026-10-06 00:00
-  klines end=now+1                 : 1569 candles 2022-06-21 00:00 -> 2026-10-06 00:00
-  klines end=now+tf (live scanner) :  199 candles 2026-03-22 00:00 -> 2026-10-06 00:00
+forming candle probe, now 2026-10-07 15:24 UTC
+  30m no start, no end    : 200 rows, newest 2026-10-07 14:30, forming 2026-10-07 15:00 missing
+  30m end=now only        : 200 rows, newest 2026-10-07 14:30, forming 2026-10-07 15:00 missing
+  30m start=now-10tf only : 200 rows, newest 2026-10-07 14:30, forming 2026-10-07 15:00 missing
+  30m start+end=now       : 200 rows, newest 2026-10-07 14:30, forming 2026-10-07 15:00 missing
+  4h no start, no end    : 200 rows, newest 2026-10-07 08:00, forming 2026-10-07 12:00 missing
+  4h end=now only        : 200 rows, newest 2026-10-07 08:00, forming 2026-10-07 12:00 missing
+  4h start=now-10tf only : 200 rows, newest 2026-10-07 08:00, forming 2026-10-07 12:00 missing
+  4h start+end=now       : 200 rows, newest 2026-10-07 08:00, forming 2026-10-07 12:00 missing
