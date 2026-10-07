@@ -2,13 +2,12 @@
   "_noise_control": {
     "NTPCGREEN.NS|30m|long|89.05|89.6": 1791350623.0084608,
     "ACC.NS|30m|long|1166.1|1171": 1791351428.0767822,
-    "JSL.NS|30m|long|728.1|732": 1791349786.6077516,
-    "JYOTICNC.NS|30m|short|1082.44|1082.55": 1791349877.7298045,
     "PNBHOUSING.NS|30m|short|1129.9|1132.4": 1791350776.732641,
-    "GLAXO.NS|30m|long|2660.5|2680": 1791350887.2002394
+    "GLAXO.NS|30m|long|2660.5|2680": 1791350887.2002394,
+    "MAHABANK.NS|30m|short|81.99|82.33": 1791351728.737009
   },
   "__last_scan_started__": {
-    "30m": 1791351391.1664367
+    "30m": 1791351706.5353189
   },
   "NTPCGREEN.NS|demand|89.0500|89.6000": {
     "in_zone": true,
@@ -29,5 +28,10 @@
     "in_zone": true,
     "last_alert_at": 1791350887.2002394,
     "last_attempt_at": 1791350887.2002394
+  },
+  "MAHABANK.NS|supply|81.9900|82.3300": {
+    "in_zone": true,
+    "last_alert_at": 1791351728.737009,
+    "last_attempt_at": 1791351728.737009
   }
 }
