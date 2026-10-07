@@ -59145,6 +59145,33 @@
       "target_half": 768.4921899999999,
       "timeframe": "30m",
       "trade_id": "BNBUSD|30m|long|764.699|757.113"
+    },
+    {
+      "alert_time": "2026-10-07T22:22:07.864087+05:30",
+      "cost_r": 0.09550850994151988,
+      "date": "2026-10-07",
+      "entry": 1730.08,
+      "entry_time": "2026-10-07T22:50:00+05:30",
+      "exit_price": 1729.33006827768,
+      "exit_time": "2026-10-07T23:35:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "xstock",
+      "net_realized_r": -0.04538775991178965,
+      "outcome": "BE",
+      "rating": 6,
+      "realized_r": 0.05012075002973023,
+      "risk": 14.962500000000091,
+      "side": "short",
+      "stop": 1745.0425,
+      "stream": "live",
+      "symbol": "SNDKBUSD",
+      "target_1": 1715.1174999999998,
+      "target_2": 1700.1549999999997,
+      "target_half": 1722.5987499999999,
+      "timeframe": "30m",
+      "trade_id": "SNDKBUSD|30m|short|1730.08|1745.04"
     }
   ],
   "handled": {
@@ -61616,24 +61643,6 @@
       "target_2": 67.44707999999999,
       "target_half": 66.46293,
       "timeframe": "4h"
-    },
-    "SNDKBUSD|30m|short|1730.08|1745.04": {
-      "alert_time": "2026-10-07T22:22:07.864087+05:30",
-      "entry": 1730.08,
-      "entry_time": "2026-10-07T22:50:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": true,
-      "market": "xstock",
-      "rating": 6,
-      "risk": 14.962500000000091,
-      "side": "short",
-      "stop": 1745.0425,
-      "stream": "live",
-      "symbol": "SNDKBUSD",
-      "target_1": 1715.1174999999998,
-      "target_2": 1700.1549999999997,
-      "target_half": 1722.5987499999999,
-      "timeframe": "30m"
     }
   }
 }
