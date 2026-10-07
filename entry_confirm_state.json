@@ -1,19 +1,4 @@
 {
-  "BNBUSD|30m|long|764.699|757.113": {
-    "reached_entry": true,
-    "stage": 2,
-    "stopped_out": false
-  },
-  "DOGEUSD|30m|long|0.0884621|0.0875845": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": false
-  },
-  "LINKUSD|30m|long|13.3167|13.1846": {
-    "reached_entry": true,
-    "stage": 2,
-    "stopped_out": false
-  },
   "LTCUSD|4h|long|66.1349|65.4788": {
     "reached_entry": true,
     "stage": 2,
@@ -28,10 +13,10 @@
     "reached_entry": true,
     "stopped_out": true
   },
-  "SNDKBUSD|30m|short|1708.28|1721.14": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
+  "SNDKBUSD|30m|short|1730.08|1745.04": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
   },
   "_level_ready|AAVEUSD|30m|long|134.06|133.21": 1789911352.70983,
   "_level_ready|AAVEUSD|30m|long|177.37|175.97": 1791190567.107418,
@@ -342,6 +327,7 @@
   "_level_ready|SNDKBUSD|30m|short|1708.28|1721.14": 1791384400.526526,
   "_level_ready|SNDKBUSD|30m|short|1719.18|1719.24": 1791113792.633583,
   "_level_ready|SNDKBUSD|30m|short|1722.85|1736.11": 1789746358.453917,
+  "_level_ready|SNDKBUSD|30m|short|1730.08|1745.04": 1791392802.537957,
   "_level_ready|SNDKBUSD|30m|short|1745.8|1763.26": 1790775382.653662,
   "_level_ready|SNDKBUSD|30m|short|1776.08|1776.17": 1790494284.589203,
   "_level_ready|SNDKBUSD|30m|short|1784.14|1784.18": 1790832694.847034,
@@ -572,7 +558,7 @@
   "_ready|SAMSUNG/USDT:USDT|30m": 1789532163.790065,
   "_ready|SLVONUSD|30m": 1791363086.455875,
   "_ready|SLVONUSD|4h": 1789377364.322639,
-  "_ready|SNDKBUSD|30m": 1791384400.526526,
+  "_ready|SNDKBUSD|30m": 1791392802.537957,
   "_ready|SNDKBUSD|4h": 1791296794.445214,
   "_ready|SOLUSD|30m": 1791267397.97437,
   "_ready|SOLUSD|4h": 1789742770.728918,
@@ -613,6 +599,10 @@
   "_silent_ready|BTCUSD|4h|long|82914.3|82397.1": {
     "price": 83488.0,
     "time": "2026-10-07T21:41:32.213515+05:30"
+  },
+  "_silent_ready|DOGEUSD|30m|long|0.0884621|0.0875845": {
+    "price": 0.08886,
+    "time": "2026-10-07T22:36:42.537957+05:30"
   },
   "_silent_ready|ETHUSD|30m|long|2677.52|2675.56": {
     "price": 2689.2,
