@@ -40,6 +40,9 @@ def main():
     ohlcv, venue = scanner.fetch_symbol_ohlcv(symbol)
     df = pd.DataFrame(ohlcv, columns=["time", "open", "high", "low", "close", "volume"])
     supply, demand = scanner.build_zones(df)
+    out = Path(__file__).resolve().parent / "out" / "chart_vs_bot"
+    out.mkdir(parents=True, exist_ok=True)
+    df.to_csv(out / f"{symbol}_{tf}_zone_candles.csv", index=False)
     last = len(df) - 1
     print(f"zones from {venue}: {len(df)} candles {ts(df['time'].iloc[0])} -> {ts(df['time'].iloc[-1])}, "
           f"last close {df['close'].iloc[-1]}")
