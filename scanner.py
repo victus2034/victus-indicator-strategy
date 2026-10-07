@@ -968,12 +968,16 @@ _BITUNIX_HISTORY = {}
 
 
 def fetch_bitunix_ohlcv(symbol):
-    """The last OHLCV_LIMIT candles from Bitunix, in the scanner's ms format."""
+    """The last OHLCV_LIMIT candles from Bitunix, in the scanner's ms format.
+
+    The newest is the candle still forming, as on Delta and the chart. Bitunix's
+    kline endpoint leaves it out, so it is built from 1m candles and never cached.
+    """
     timeframe_seconds = TIMEFRAME_SECONDS.get(TIMEFRAME)
     if timeframe_seconds is None:
         raise RuntimeError(f"Bitunix does not support timeframe {TIMEFRAME}")
     pair = bitunix_data.bitunix_pair(delta_contract(symbol) or fallback_symbol(symbol).split("/")[0] + "USD")
-    end = int(time.time()) + timeframe_seconds
+    end = int(time.time()) + 1
     cached = _BITUNIX_HISTORY.get((pair, TIMEFRAME))
     if cached:
         # From two candles before the newest cached one, so the candle that
@@ -988,6 +992,9 @@ def fetch_bitunix_ohlcv(symbol):
     merged.update({int(row[0]): row for row in fresh})
     candles = [merged[key] for key in sorted(merged)][-OHLCV_LIMIT:]
     _BITUNIX_HISTORY[(pair, TIMEFRAME)] = candles
+    forming = bitunix_data.forming_candle(pair, TIMEFRAME)
+    if forming is not None and forming[0] > candles[-1][0]:
+        candles = (candles + [forming])[-OHLCV_LIMIT:]
     return [[int(row[0]) * 1000, *row[1:6]] for row in candles]
 
 

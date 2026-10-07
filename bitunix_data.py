@@ -9,6 +9,11 @@ Public endpoint, no key: GET /api/v1/futures/market/kline. At most 200 candles
 a request, newest first, ending at endTime; 10 requests a second per IP. Every
 candle here is [open_ts_seconds, open, high, low, close, base_volume], oldest
 first.
+
+Probed 2026-10-07 (research/bitunix_window_probe.py): the endpoint never returns
+the candle still forming, whatever the request, and every candle slot between
+now and an endTime in the future still counts against the 200 - so a page asked
+to end one candle ahead comes back with 199.
 """
 import threading
 import time
@@ -24,6 +29,8 @@ from config import (
 
 MAX_BARS_PER_REQUEST = 200
 INTERVALS = {"1m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d", "3d", "1w", "1M"}
+# Candles that open on a multiple of their length from the epoch (UTC).
+INTERVAL_SECONDS = {"5m": 300, "15m": 900, "30m": 1800, "1h": 3600, "2h": 7200, "4h": 14400, "1d": 86400}
 
 # The scanner fetches every symbol from a thread pool, and fib_trendline_scanner
 # from another; one gap shared by all of them keeps the process under the limit.
@@ -86,7 +93,10 @@ def klines(pair, interval, start, end):
     if interval not in INTERVALS:
         raise ValueError(f"Bitunix has no {interval} interval")
     out = {}
-    cursor = int(end) * 1000 - 1
+    # Never past now: future slots count against the page, so the page comes
+    # back short and reads as the listing reached. The zone scan asked one
+    # candle ahead and got 199 of its 1500 (2026-10-05 to 10-07).
+    cursor = min(int(end) * 1000, int(time.time() * 1000)) - 1
     start_ms = int(start) * 1000
     while cursor >= start_ms:
         rows = _request(pair, interval, start_ms, cursor, MAX_BARS_PER_REQUEST)
@@ -102,6 +112,25 @@ def klines(pair, interval, start, end):
             break
         cursor = oldest - 1
     return [out[k] for k in sorted(out)]
+
+
+def forming_candle(pair, interval, now=None):
+    """The candle still forming on `interval`, built from its finished 1m candles.
+
+    The kline endpoint leaves it out, but the chart draws it and the zones are
+    built on it, like the chart (a wick through a far edge kills a zone at once).
+    None in the candle's first minute, or for an interval not in INTERVAL_SECONDS.
+    """
+    step = INTERVAL_SECONDS.get(interval)
+    if step is None:
+        return None
+    now = int(time.time()) if now is None else int(now)
+    opened = now // step * step
+    rows = klines(pair, "1m", opened, now + 1)
+    if not rows:
+        return None
+    return [opened, rows[0][1], max(r[2] for r in rows), min(r[3] for r in rows),
+            rows[-1][4], sum(r[5] for r in rows)]
 
 
 def last_price(pair):

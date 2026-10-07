@@ -244,5 +244,11 @@ each falling back to the shared one above when unset (so nothing changes until t
   Bitunix failure falls back to Delta. Trades are still taken on Delta, so the daily backtest grades
   on Delta candles with Delta fees - do not move those. xStocks, XAUT and SLVON stay on Delta.
   Why: Delta prints thin/zero-volume candles on small coins. Research: `research/bitunix_compare.py`.
+  **Bitunix's kline endpoint never returns the forming candle, and a page asked to end in the future
+  comes back short** (`research/bitunix_window_probe.py`). Until 2026-10-07 that left the zone scan
+  with 199 candles instead of `OHLCV_LIMIT` and no forming candle, and fib/trendline alerts measured
+  against the last *closed* 4H close. Now `bitunix_data.klines` never asks past now, the zone scan
+  builds the forming candle from 1m (`bitunix_data.forming_candle`), and fib/trendline crypto alerts
+  use `bitunix_data.last_price`. `tests/test_bitunix_source.py`'s fake serves the API's real shape.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

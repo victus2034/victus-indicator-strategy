@@ -411,6 +411,13 @@ def scan_crypto(timeframes, now):
                 print(f"{symbol} Bitunix charts unavailable, using Delta: {str(error)[:80]}")
                 charts = crypto_charts(contract, timeframes, now)
             price = current_price(charts)
+            if source == "bitunix":
+                # Bitunix candles stop at the last closed one, so their newest
+                # close is up to a 4H candle old; the distance needs the price now.
+                try:
+                    price = bitunix_data.last_price(bitunix_data.bitunix_pair(contract))
+                except Exception as error:     # noqa: BLE001 - keep the candle close
+                    print(f"{symbol} Bitunix live price unavailable: {str(error)[:80]}")
             return symbol, {tf: analyse(CRYPTO, symbol, tf, charts[tf], now, price) for tf in timeframes}, None
         except Exception as error:     # noqa: BLE001 - one bad symbol must not stop the pass
             return symbol, None, str(error)
