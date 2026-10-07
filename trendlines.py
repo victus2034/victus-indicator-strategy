@@ -1,13 +1,18 @@
-"""Auto trendlines - a port of Shiva_Indicator v12.5+ section 6b.
+"""Auto trendlines - a port of Shiva_Indicator v12.6+ section 6b.
 
-v12.5 (Lakky, 2026-10-07, HYPE 1D): a support line is drawn only when a new
-swing low is ABOVE the previous swing low, and it starts at the candle low
-between the two that the line rests on - no candle low in between is below
-it (Aug 19 58.04 -> Sep 15 75.13, not Aug 2 51.11 -> Sep 15). Resistance is
-the mirror: a swing high below the previous one, from the candle high the
-line hangs from. Up to v12.4 a new swing joined the earliest earlier swing
-that no SWING in between cut (anchor="oldest", kept for research): lines
-started far back, came in twins, and candles could sit through them.
+v12.6 (Lakky, 2026-10-07, HYPE 4h): a new swing low gets a support line from
+the most recent earlier swing low BELOW it - not only the one just before -
+starting at the candle low between the two that the line rests on (no candle
+low in between is below it). Resistance is the mirror. A new line replaces an
+older one that starts from the same candle, so a run of lower lows leaves one
+line, not twins. HYPEUSDT 4h: Aug 19 58.10 -> Sep 15 75.13 over the lower
+Sep 11 and Sep 13 swings, which v12.5 skipped.
+
+Research rules, kept for comparison: "tangent" (v12.5, HYPE 1D: only when the
+new swing low is above the one just before), "last_lower" (v12.6 without the
+twin replacement), "oldest" (v11.0-v12.4: the earliest earlier swing no SWING
+in between cut - lines started far back, came in twins, and candles could sit
+through them) and "nearest".
 
 Lines extend right and stop at the bar that closes through them. Only the
 newest `keep` lines per side are kept, and only the last 30 swings per side
@@ -111,7 +116,7 @@ def _tangent_anchor(values, xs, ys, nx, ny, lower, bar):
 
 
 def _last_lower_anchor(values, xs, ys, nx, ny, lower, bar):
-    """Research (Lakky, 2026-10-07, HYPEUSDT 4h): like the tangent rule, but
+    """v12.6 (Lakky, 2026-10-07, HYPEUSDT 4h): like the tangent rule, but
     from the most recent earlier swing low BELOW the new one (high above it),
     not only the one just before - a lower low against the last swing still
     gets a line from the last swing under it (Aug 19 58.04 -> Sep 15 75.13
@@ -134,14 +139,13 @@ def _rest_on(values, x0, nx, ny, lower, bar):
     return best[1], values[best[1]]
 
 
-def build_trendlines(highs, lows, closes, length=10, keep=6, history=False, anchor="tangent"):
+def build_trendlines(highs, lows, closes, length=10, keep=6, history=False, anchor="last_lower_unique"):
     """Replay every bar as the Pine does and return the lines it would hold.
 
     history=True returns every line ever drawn instead, trimmed ones included,
     so a backtest can ask which were live on any past bar (Trendline.live_during).
-    anchor: "tangent" is the live Pine rule (v12.5); "oldest" (v11.0-v12.4),
-    "nearest", "last_lower" and "last_lower_unique" (a new line replaces an
-    older one from the same candle) are for research.
+    anchor: "last_lower_unique" is the live Pine rule (v12.6); "tangent"
+    (v12.5), "last_lower", "oldest" (v11.0-v12.4) and "nearest" are research.
     """
     def pick(values, xs, ys, nx, lower):
         if anchor in ("tangent", "last_lower", "last_lower_unique"):
@@ -157,7 +161,7 @@ def build_trendlines(highs, lows, closes, length=10, keep=6, history=False, anch
 
     def add(line):
         if anchor == "last_lower_unique":
-            # research: a new line replaces an older one from the same candle
+            # v12.6: a new line replaces an older one from the same candle
             for k in range(len(lines) - 1, -1, -1):
                 if lines[k].kind == line.kind and lines[k].x1 == line.x1:
                     lines[k].trimmed_at = line.created

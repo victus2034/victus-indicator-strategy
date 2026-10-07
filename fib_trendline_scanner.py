@@ -69,7 +69,8 @@ RETRY_BACKOFF_SECONDS = 30 * 60   # a failed Discord send is not retried sooner 
 # v3 (2026-09-29): full history for 4H and NSE daily+ - some live fibs get a new
 # base/top, i.e. a new key, and would otherwise all post as new on the first pass.
 # v4 (2026-10-07): v12.5 trendline anchors - most live lines get a new start point.
-SEED_VERSION = "v4"
+# v5 (2026-10-07): v12.6 trendlines - lower lows get lines from the last swing below.
+SEED_VERSION = "v5"
 # Bitunix candles draw different fibs and lines, each a new key: turning the
 # source on re-seeds silently rather than posting every level already in range.
 if bitunix_data.CRYPTO_CANDLE_SOURCE == "bitunix":
