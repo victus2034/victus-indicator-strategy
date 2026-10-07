@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       parts:
-        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length)"
+        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto)"
         default: "zones-30m zones-4h fib"
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length]
+        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto]
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
@@ -45,6 +45,8 @@ jobs:
             tl-nse)    mkdir -p research/out/trendline_trace
                        python research/trendline_symbol_trace.py PFIZER.NS --tf 1M --since 2025-01-01 > research/out/trendline_trace/PFIZER_1M.txt 2>&1
                        cat research/out/trendline_trace/PFIZER_1M.txt ;;
+            tl-crypto) python research/trendline_crypto_trace.py HYPEUSD --tf 1d
+                       python research/trendline_crypto_trace.py HYPEUSD --tf 1d --source delta ;;
             tl-length) python research/trendline_length_backtest.py --lengths 10,15,20 ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
       - name: Commit results to this branch
