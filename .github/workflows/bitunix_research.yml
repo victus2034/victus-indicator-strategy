@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       parts:
-        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality)"
+        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot)"
         default: "zones-30m zones-4h fib"
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality]
+        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot]
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
@@ -49,6 +49,10 @@ jobs:
                        python research/trendline_crypto_trace.py HYPEUSD --tf 1d --source delta ;;
             tl-anchor) PYTHONPATH=research python research/trendline_anchor_backtest.py ;;
             tl-quality) PYTHONPATH=research python research/trendline_anchor_quality.py ;;
+            chart-vs-bot) mkdir -p research/out/chart_vs_bot
+                       for s in LTCUSD HYPEUSD BTCUSD; do VICTUS_TIMEFRAME=4h python research/chart_vs_bot.py $s; done > research/out/chart_vs_bot/4h.txt
+                       VICTUS_TIMEFRAME=1d python research/chart_vs_bot.py HYPEUSD > research/out/chart_vs_bot/1d.txt
+                       cat research/out/chart_vs_bot/*.txt ;;
             tl-length) python research/trendline_length_backtest.py --lengths 10,15,20 ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
       - name: Commit results to this branch
