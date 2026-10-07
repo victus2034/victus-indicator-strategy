@@ -1,10 +1,14 @@
 {
   "_noise_control": {
     "EXIDEIND.NS|30m|long|402.15|402.95": 1791344789.3073492,
-    "IKS.NS|30m|long|1726.2|1740": 1791344789.5643518
+    "IKS.NS|30m|long|1726.2|1740": 1791344789.5643518,
+    "OBEROIRLTY.NS|30m|long|1727.3|1732.4": 1791344874.876306,
+    "NAVINFLUOR.NS|30m|short|8595|8600": 1791344875.063913,
+    "COCHINSHIP.NS|30m|long|1266|1267.4": 1791344875.2283666,
+    "ACC.NS|30m|long|1166.1|1171": 1791344875.7715604
   },
   "__last_scan_started__": {
-    "30m": 1791344770.6746671
+    "30m": 1791344860.6382742
   },
   "EXIDEIND.NS|demand|402.1500|402.9500": {
     "in_zone": true,
@@ -15,5 +19,25 @@
     "in_zone": true,
     "last_alert_at": 1791344789.5643518,
     "last_attempt_at": 1791344789.5643518
+  },
+  "OBEROIRLTY.NS|demand|1727.3000|1732.4000": {
+    "in_zone": true,
+    "last_alert_at": 1791344874.876306,
+    "last_attempt_at": 1791344874.876306
+  },
+  "NAVINFLUOR.NS|supply|8595.0000|8600.0000": {
+    "in_zone": true,
+    "last_alert_at": 1791344875.063913,
+    "last_attempt_at": 1791344875.063913
+  },
+  "COCHINSHIP.NS|demand|1266.0000|1267.4000": {
+    "in_zone": true,
+    "last_alert_at": 1791344875.2283666,
+    "last_attempt_at": 1791344875.2283666
+  },
+  "ACC.NS|demand|1166.1000|1171.0000": {
+    "in_zone": true,
+    "last_alert_at": 1791344875.7715604,
+    "last_attempt_at": 1791344875.7715604
   }
 }
