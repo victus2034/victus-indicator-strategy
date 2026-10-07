@@ -28,7 +28,8 @@ from trendlines import SUPPORT, build_trendlines  # noqa: E402
 import config  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "trendline_anchor"
-RULES = (("old (v12.4)", "oldest"), ("new (v12.5)", "tangent"), ("last lower", "last_lower"))
+RULES = (("old (v12.4)", "oldest"), ("new (v12.5)", "tangent"), ("last lower", "last_lower"),
+         ("last lower, no twins", "last_lower_unique"))
 HOLD_BARS = 3
 FAR_BARS = 100
 
@@ -37,6 +38,9 @@ def score(highs, lows, closes, anchor):
     lines = build_trendlines(highs, lows, closes, config.TRENDLINE_SWING_LENGTH,
                              config.TRENDLINES_KEEP, history=True, anchor=anchor)
     starts = Counter((l.kind, l.x1) for l in lines)
+    by_start = defaultdict(list)
+    for l in lines:
+        by_start[(l.kind, l.x1)].append(l)
     s = defaultdict(int)
     spans = []
     for l in lines:
@@ -45,6 +49,10 @@ def score(highs, lows, closes, anchor):
         spans.append(l.x2 - l.x1)
         s["far"] += (l.x2 - l.x1) > FAR_BARS
         s["twins"] += starts[(l.kind, l.x1)] > 1
+        gone = l.trimmed_at if l.trimmed_at is not None else len(closes)
+        s["shown_twins"] += any(o is not l and o.kind == l.kind and o.x1 == l.x1 and o.created < gone
+                                and (o.trimmed_at if o.trimmed_at is not None else len(closes)) > l.created
+                                for o in by_start[(l.kind, l.x1)])
         tol = 1e-9 * abs(l.y2)
         s["cut"] += any((lows[k] < l.price_at(k) - tol) if sup else (highs[k] > l.price_at(k) + tol)
                         for k in range(l.x1 + 1, l.x2))
@@ -83,18 +91,18 @@ def main():
     lines = ["# Trendline lines: old (v12.4) vs new (v12.5) vs last lower (candidate)", "",
              f"Same candles as the backtests (Delta for crypto, Yahoo for NSE), length "
              f"{config.TRENDLINE_SWING_LENGTH}, live timeframes. Cut-through = a candle between the two "
-             f"anchors is through the line. Twins = another line starts from the same candle. Far = anchors "
+             f"anchors is through the line. Twins = another line starts from the same candle; on chart together = both shown at once. Far = anchors "
              f"more than {FAR_BARS} bars apart. Held = first touch after the line appears, no close through "
              f"it on that candle or the next {HOLD_BARS}.", "",
-             "| market | tf | rule | lines | cut-through | twins | far | median span | touched | held at 1st touch |",
-             "|---|---|---|---|---|---|---|---|---|---|"]
+             "| market | tf | rule | lines | cut-through | twins | twins on chart together | far | median span | touched | held at 1st touch |",
+             "|---|---|---|---|---|---|---|---|---|---|---|"]
     for market in (CRYPTO, NSE):
         for tf in LIVE_TFS + ["all"]:
             for name, _ in RULES:
                 a = agg[(market, tf, name)]
                 sp = spans[(market, tf, name)]
                 lines.append(f"| {market} | {tf} | {name} | {a['lines']} | {pct(a['cut'], a['lines'])} | "
-                             f"{pct(a['twins'], a['lines'])} | {pct(a['far'], a['lines'])} | "
+                             f"{pct(a['twins'], a['lines'])} | {pct(a['shown_twins'], a['lines'])} | {pct(a['far'], a['lines'])} | "
                              f"{statistics.median(sp) if sp else '-'} | {a['touched']} | {pct(a['held'], a['touched'])} |")
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "QUALITY.md").write_text("\n".join(lines) + "\n")

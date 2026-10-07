@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from trendline_length_backtest import CRYPTO, LIVE_TFS, NSE, bt, load, no_fibs, run, stats  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "trendline_anchor"
-VARIANTS = ("oldest", "nearest", "tangent", "last_lower")
+VARIANTS = ("oldest", "nearest", "tangent", "last_lower", "last_lower_unique")
 
 
 def main():
@@ -36,7 +36,8 @@ def main():
     lines = ["# Trendline anchor backtest (trendlines only, length 10)", "",
              "oldest = live Pine rule; nearest = join the last valid earlier swing; tangent = only a rising "
              "low / falling high vs the previous swing, anchored on the candle the line hugs; last_lower = the same "
-             "from the most recent earlier swing below (above) the new one, not only the previous swing. Same data, "
+             "from the most recent earlier swing below (above) the new one, not only the previous swing; _unique = and a "
+             "new line replaces an older one from the same candle. Same data, "
              "trade rules and scoring as `trendline_length_backtest.py`.", "",
              "| market | tf | anchor | alerts | /day | filled | win@2R | net R | R/trade |",
              "|---|---|---|---|---|---|---|---|---|"]

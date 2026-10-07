@@ -140,10 +140,11 @@ def build_trendlines(highs, lows, closes, length=10, keep=6, history=False, anch
     history=True returns every line ever drawn instead, trimmed ones included,
     so a backtest can ask which were live on any past bar (Trendline.live_during).
     anchor: "tangent" is the live Pine rule (v12.5); "oldest" (v11.0-v12.4),
-    "nearest" and "last_lower" are for research.
+    "nearest", "last_lower" and "last_lower_unique" (a new line replaces an
+    older one from the same candle) are for research.
     """
     def pick(values, xs, ys, nx, lower):
-        if anchor in ("tangent", "last_lower"):
+        if anchor in ("tangent", "last_lower", "last_lower_unique"):
             rule = _tangent_anchor if anchor == "tangent" else _last_lower_anchor
             return rule(values, xs, ys, nx, values[nx], lower, nx + length)
         i = (_nearest_anchor if anchor == "nearest" else _best_anchor)(xs, ys, nx, values[nx], lower)
@@ -155,6 +156,12 @@ def build_trendlines(highs, lows, closes, length=10, keep=6, history=False, anch
     pl_x, pl_y, ph_x, ph_y = [], [], [], []
 
     def add(line):
+        if anchor == "last_lower_unique":
+            # research: a new line replaces an older one from the same candle
+            for k in range(len(lines) - 1, -1, -1):
+                if lines[k].kind == line.kind and lines[k].x1 == line.x1:
+                    lines[k].trimmed_at = line.created
+                    del lines[k]
         lines.append(line)
         everything.append(line)
         count = 0
