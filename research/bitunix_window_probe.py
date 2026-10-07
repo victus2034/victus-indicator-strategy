@@ -1,0 +1,90 @@
+"""How many candles does the live zone scan get from Bitunix, and which?
+
+chart_vs_bot (2026-10-07) showed scanner.fetch_bitunix_ohlcv returning 199
+candles on 4h and 1d, not OHLCV_LIMIT (1500), with the forming candle missing,
+while fib_trendline_data's full-history fetch got everything. The two differ
+only in endTime: the scanner asks up to one candle in the future.
+
+Research only - prints, sends nothing.
+
+    python research/bitunix_window_probe.py
+"""
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+import bitunix_data  # noqa: E402
+
+STEP = {"30m": 1800, "4h": 14400, "1d": 86400}
+
+
+def ts(ms):
+    return datetime.fromtimestamp(int(ms) / 1000, timezone.utc).strftime("%Y-%m-%d %H:%M")
+
+
+def main():
+    now = int(time.time())
+    print(f"now {ts(now * 1000)} UTC")
+    for tf, step in STEP.items():
+        print(f"\n== BTCUSDT {tf} ==")
+        start = (now - 1570 * step) * 1000
+        for label, end in (("end=now", now), ("end=now+1s", now + 1), ("end=now+tf/2", now + step // 2),
+                           ("end=now+tf", now + step), ("end=now+3tf", now + 3 * step)):
+            rows = bitunix_data._request("BTCUSDT", tf, start, end * 1000 - 1, 200)
+            times = sorted(int(r["time"]) for r in rows)
+            print(f"  one page {label:13s}: {len(rows):3d} rows {ts(times[0])} -> {ts(times[-1])}")
+        for label, end in (("now+1", now + 1), ("now+tf (live scanner)", now + step)):
+            got = bitunix_data.klines("BTCUSDT", tf, now - 1570 * step, end)
+            print(f"  klines end={label:22s}: {len(got):4d} candles {ts(got[0][0] * 1000)} -> {ts(got[-1][0] * 1000)}")
+
+
+if __name__ == "__main__" and len(sys.argv) == 1:
+    main()
+
+
+def forming_candle_probe():
+    """Which request shape returns the candle still forming?"""
+    import requests
+    from config import BITUNIX_API_BASE_URL
+    now = int(time.time())
+    print(f"\nforming candle probe, now {ts(now * 1000)} UTC")
+    for tf, step in (("30m", 1800), ("4h", 14400)):
+        forming = now // step * step * 1000
+        for label, extra in (("no start, no end", {}), ("end=now only", {"endTime": now * 1000}),
+                             ("start=now-10tf only", {"startTime": (now - 10 * step) * 1000}),
+                             ("start+end=now", {"startTime": (now - 10 * step) * 1000, "endTime": now * 1000})):
+            bitunix_data._throttle()
+            rows = requests.get(f"{BITUNIX_API_BASE_URL}/api/v1/futures/market/kline",
+                                params={"symbol": "BTCUSDT", "interval": tf, "limit": 200, **extra},
+                                timeout=20).json().get("data") or []
+            times = sorted(int(r["time"]) for r in rows)
+            print(f"  {tf} {label:20s}: {len(rows):3d} rows, newest {ts(times[-1])}, "
+                  f"forming {ts(forming)} {'PRESENT' if forming in times else 'missing'}")
+
+
+if __name__ == "__main__" and "--forming" in sys.argv:
+    forming_candle_probe()
+
+
+def forming_detail():
+    """forming_candle next to the 1m rows it was built from."""
+    now = int(time.time())
+    for tf, step in (("30m", 1800), ("4h", 14400)):
+        opened = now // step * step
+        rows = bitunix_data.klines("LTCUSDT", "1m", opened, now + 1)
+        hi = max(rows, key=lambda r: r[2])
+        lo = min(rows, key=lambda r: r[3])
+        print(f"\nLTCUSDT {tf} forming {ts(opened * 1000)}: {len(rows)} 1m rows "
+              f"{ts(rows[0][0] * 1000)} -> {ts(rows[-1][0] * 1000)}")
+        print(f"  max high {hi}  min low {lo}")
+        print(f"  forming_candle {bitunix_data.forming_candle('LTCUSDT', tf)}")
+        print(f"  last closed {bitunix_data.klines('LTCUSDT', tf, opened - 3 * step, opened)}")
+        raw = bitunix_data._request("LTCUSDT", "1m", opened * 1000, now * 1000, 5)
+        print(f"  raw 1m rows {raw[:2]}")
+
+
+if __name__ == "__main__" and "--detail" in sys.argv:
+    forming_detail()

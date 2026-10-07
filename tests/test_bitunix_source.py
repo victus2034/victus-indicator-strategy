@@ -15,16 +15,28 @@ def _row(ts_s, price=100.0):
 
 
 class FakeBitunix:
-    """Serves the API's real shape: newest first, at most `limit`, ending at endTime."""
+    """Serves the API's real shape (research/bitunix_window_probe.py, 2026-10-07):
+    newest first, at most `limit`, ending at endTime; never the candle still
+    forming at `now`; and each candle slot after the forming one, up to endTime,
+    uses up one of the `limit`, so a page ending in the future comes back short.
+    `minutes` maps a 1m open time to its price, for the forming-candle requests."""
 
-    def __init__(self, first, last, step):
+    def __init__(self, first, last, step, now=None):
         self.series = list(range(first, last + 1, step))
+        self.step = step
+        self.now = int(time.time()) if now is None else now
+        self.minutes = {}
         self.calls = []
 
     def __call__(self, pair, interval, start_ms, end_ms, limit, attempts=3):
         self.calls.append((pair, interval, start_ms, end_ms))
-        inside = [ts for ts in self.series if start_ms <= ts * 1000 <= end_ms]
-        return [_row(ts) for ts in reversed(inside[-limit:])]
+        step, series = (60, sorted(self.minutes)) if interval == "1m" else (self.step, self.series)
+        forming = self.now // step * step
+        closed = [ts for ts in series if ts < forming and start_ms <= ts * 1000 <= end_ms]
+        take = limit - max(0, (end_ms // 1000 - forming) // step)
+        if take <= 0:
+            return []
+        return [_row(ts, self.minutes.get(ts, 100.0)) for ts in reversed(closed[-take:])]
 
 
 class DefaultTests(unittest.TestCase):
@@ -86,19 +98,72 @@ class OnTests(unittest.TestCase):
         self.assertEqual(venue, "delta_india")
         bitunix.assert_not_called()
 
-    def test_second_scan_asks_only_for_the_newest_page(self):
+    def _scan_fake(self):
+        """A symbol 2000 candles old, 25 minutes into its forming candle."""
         step = scanner.TIMEFRAME_SECONDS[scanner.TIMEFRAME]
-        now = int(time.time()) // step * step
-        fake = FakeBitunix(now - 2000 * step, now, step)
-        with patch.object(bitunix_data, "_request", fake):
+        now = 1_790_000_000 // 14400 * 14400 + 3 * 3600 + 25 * 60 + 17
+        forming = now // step * step
+        fake = FakeBitunix(forming - 2000 * step, forming, step, now=now)
+        fake.minutes = {forming + 60 * i: 100.0 + i % 7 for i in range((now - forming) // 60 + 1)}
+        return fake, now, forming, step
+
+    def test_zone_scan_gets_the_full_history_and_the_forming_candle(self):
+        # Live 2026-10-05..07: 199 candles and no forming one, because the page
+        # was asked to end a candle in the future.
+        fake, now, forming, step = self._scan_fake()
+        with patch.object(bitunix_data, "_request", fake), patch("time.time", return_value=now):
+            candles = scanner.fetch_bitunix_ohlcv("BTCUSD")
+        self.assertEqual(len(candles), scanner.OHLCV_LIMIT)
+        times = [c[0] // 1000 for c in candles]
+        self.assertEqual(times, list(range(forming - (scanner.OHLCV_LIMIT - 1) * step, forming + 1, step)))
+        prices = [fake.minutes[t] for t in sorted(fake.minutes) if t < now // 60 * 60]
+        self.assertEqual(candles[-1][1:], [prices[0], max(prices) + 1, min(prices) - 1, prices[-1],
+                                           5.0 * len(prices)])
+
+    def test_second_scan_asks_only_for_the_newest_page(self):
+        fake, now, forming, step = self._scan_fake()
+        with patch.object(bitunix_data, "_request", fake), patch("time.time", return_value=now):
             first = scanner.fetch_bitunix_ohlcv("BTCUSD")
-            calls = len(fake.calls)
+            calls = [c for c in fake.calls if c[1] != "1m"]
             second = scanner.fetch_bitunix_ohlcv("BTCUSD")
-        self.assertEqual(len(first), scanner.OHLCV_LIMIT)
         self.assertEqual(first, second)
-        self.assertGreater(calls, 1)
-        self.assertEqual(len(fake.calls) - calls, 1)
-        self.assertEqual(first[-1][0], now * 1000)
+        self.assertGreater(len(calls), 1)
+        self.assertEqual(len([c for c in fake.calls if c[1] != "1m"]) - len(calls), 1)
+        self.assertEqual(first[-1][0], forming * 1000)
+
+    def test_a_page_never_ends_in_the_future(self):
+        fake, now, forming, step = self._scan_fake()
+        with patch.object(bitunix_data, "_request", fake), patch("time.time", return_value=now):
+            rows = bitunix_data.klines("BTCUSDT", scanner.TIMEFRAME, forming - 1500 * step, now + 3 * step)
+        self.assertEqual(len(rows), 1500)
+        self.assertTrue(all(c[3] <= now * 1000 for c in fake.calls))
+
+    def test_no_forming_candle_in_its_first_minute(self):
+        fake, _, forming, step = self._scan_fake()
+        fake.now = forming + 30
+        with patch.object(bitunix_data, "_request", fake):
+            self.assertIsNone(bitunix_data.forming_candle("BTCUSDT", scanner.TIMEFRAME, now=forming + 30))
+        self.assertIsNone(bitunix_data.forming_candle("BTCUSDT", "1w"))
+
+    def test_fib_trendline_price_is_live_on_bitunix(self):
+        import fib_trendline_scanner as fts
+        charts = {"4h": [[0, 1, 2, 0.5, 1.5]]}
+        seen = {}
+
+        def analyse(market, symbol, tf, candles, now, price=None):
+            seen[symbol] = price
+            return {}
+
+        with patch.object(fts.scanner, "active_watchlist", return_value=["BTCUSD"]), \
+             patch.object(fts, "crypto_charts", return_value=charts), \
+             patch.object(fts, "analyse", analyse), \
+             patch.object(bitunix_data, "last_price", return_value=123.0) as live:
+            fts.scan_crypto(["4h"], 10_000_000)
+            live.assert_called_once_with("BTCUSDT")
+            self.assertEqual(seen["BTCUSD"], 123.0)
+            live.side_effect = RuntimeError("down")
+            fts.scan_crypto(["4h"], 10_000_000)
+            self.assertEqual(seen["BTCUSD"], 1.5)
 
     def test_live_price_from_bitunix(self):
         with patch.object(scanner, "USE_LIVE_TICKER", True), \

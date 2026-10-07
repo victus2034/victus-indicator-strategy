@@ -157,8 +157,16 @@ each falling back to the shared one above when unset (so nothing changes until t
   earlier swing no swing in between cut, so lines started far back, came in twins, and candles sat
   through them (Aug 2 -> Sep 15 instead of Aug 19 -> Sep 15). Backtest
   (`research/trendline_anchor_backtest.py`): 27,862 alerts / -6,762R vs 46,452 / -10,670R, same
-  ~-0.29R a trade. `tests/test_trendline_anchor.py` holds the HYPE line and a transcription of the
-  Pine 6b loop - change both sides together. `SEED_VERSION` v4 re-seeds silently.
+  ~-0.29R a trade. `SEED_VERSION` v4 re-seeds silently.
+- **Trendlines, v12.6 (Lakky, 2026-10-07, HYPE 4h) - the live rule.** v12.5 drew nothing for a swing
+  low below the one just before it, so HYPE 4h Aug 19 58.10 -> Sep 15 75.13 was missing (Sep 11 and
+  Sep 13 are lower lows). Now a new swing low joins the most recent earlier swing low *below* it,
+  still resting on the candle low between them, and a new line replaces an older one from the same
+  candle (no twins). `anchor="last_lower_unique"`; `tangent` (v12.5) and the rest stay for research.
+  Backtest: 46,909 alerts / -11,488R vs v12.5's 28,123 / -6,847R, same ~-0.30R a trade; no candle
+  through a line, 0% twins on the chart (`research/out/trendline_anchor/`). `tests/test_trendline_anchor.py`
+  holds the HYPE 1D and 4h lines (Bitunix fixtures) and a transcription of the Pine v12.6 6b loop -
+  change both sides together. `SEED_VERSION` v5 re-seeds silently.
 - **No late BROKEN alerts (Lakky, 2026-10-05).** A break posts only if its candle closed after
   the market's previous awake pass (`__last_scan__` in the state, `BREAK_GRACE_SECONDS` = 1h of
   catch-up). PFIZER's 1M break on September's close posted on Oct 5 while the other 1M breaks went
@@ -244,5 +252,11 @@ each falling back to the shared one above when unset (so nothing changes until t
   Bitunix failure falls back to Delta. Trades are still taken on Delta, so the daily backtest grades
   on Delta candles with Delta fees - do not move those. xStocks, XAUT and SLVON stay on Delta.
   Why: Delta prints thin/zero-volume candles on small coins. Research: `research/bitunix_compare.py`.
+  **Bitunix's kline endpoint never returns the forming candle, and a page asked to end in the future
+  comes back short** (`research/bitunix_window_probe.py`). Until 2026-10-07 that left the zone scan
+  with 199 candles instead of `OHLCV_LIMIT` and no forming candle, and fib/trendline alerts measured
+  against the last *closed* 4H close. Now `bitunix_data.klines` never asks past now, the zone scan
+  builds the forming candle from 1m (`bitunix_data.forming_candle`), and fib/trendline crypto alerts
+  use `bitunix_data.last_price`. `tests/test_bitunix_source.py`'s fake serves the API's real shape.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.
