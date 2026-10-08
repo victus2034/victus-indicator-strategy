@@ -269,7 +269,7 @@ def stamp_text(stamp):
 
 def _header(market, tf, title, side=None):
     mark = {"BUY": "🟢 ", "LONG": "🟢 ", "SELL": "🔴 ", "SHORT": "🔴 "}.get(side, "⚠️ ")
-    return f"{mark}**{title}** · {TF_LABEL[tf]} {MARKET_LABEL[market]}"
+    return f"{mark}**{title}** · **{TF_LABEL[tf]} {MARKET_LABEL[market]}**"
 
 
 def _line(t):
