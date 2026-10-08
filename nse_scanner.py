@@ -689,11 +689,13 @@ def format_alert(result, zone_type, zone, distance_pct):
         score_text = f" | {zone_rating(zone, distance_pct)}/10"
     stop = planned_stop_price(zone_type, zone)
     stop_distance = planned_stop_distance_pct(zone_type, zone)
+    tf = zone_engine.TF_LABEL.get(TIMEFRAME, TIMEFRAME)
     lines = [
-        f"{display_symbol(result['symbol'])} | {side}{score_text}\n"
-        f"Price: {result['price']:.2f} | {distance_pct:.2f}%\n"
-        f"Zone: {zone['bottom']:.2f} - {zone['top']:.2f}\n"
-        f"SL: {stop:.2f} | {stop_distance:.2f}%"
+        # Plain "SYMBOL | SIDE | ... | 8/10": the journal's alert import reads that line.
+        f"**{display_symbol(result['symbol'])} | {side} | {tf}{score_text}**\n"
+        f"Price {result['price']:.2f} · {distance_pct:.2f}% away\n"
+        f"Zone {zone['bottom']:.2f} – {zone['top']:.2f}\n"
+        f"SL {stop:.2f} ({stop_distance:.2f}%)"
     ]
     if stop_is_too_tight(stop_distance):
         lines.append(
