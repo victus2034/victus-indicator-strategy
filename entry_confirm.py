@@ -1,4 +1,10 @@
-"""Stage pings for zone alerts that were already delivered.
+"""Stage pings for fib and trendline alerts that were already delivered.
+
+Since 2026-10-08 (lakky) this watches only the fib and trendline alerts on
+1D, 1W and 1M, crypto and NSE (FIB_TL_RECORDS, written by
+fib_trendline_scanner.py). The 30m and 4h zone alerts are no longer watched
+here; their own channels are unchanged. The zone loaders below stay because
+paper_trading.py still reads them.
 
 Watches zones a real scanner alert already announced, and reports how
 price is behaving relative to that alert's own recorded entry and stop.
@@ -60,7 +66,8 @@ import pandas as pd
 import requests
 import yfinance as yf
 
-from config import DELTA_LISTED_SYMBOLS, MAX_DISTANCE_PCT, WATCHLIST
+from config import DELTA_LISTED_SYMBOLS, FIB_TL_ENTRY_WAIT_BARS, MAX_DISTANCE_PCT, WATCHLIST
+from fib_trendline_data import TF_LABEL, TF_SECONDS
 
 # Only crypto is checked against its watchlist. The NSE side has no
 # authoritative one here - nse_config carries a FALLBACK_WATCHLIST used when
@@ -82,6 +89,11 @@ ALERT_RECORDS = {
         "4h": Path(__file__).with_name("crypto_alert_records.jsonl"),
     },
 }
+# Fib and trendline alerts, both markets, one file (fib_trendline_scanner.RECORDS_FILE).
+FIB_TL_RECORDS = Path(__file__).with_name("fib_trendline_alert_records.jsonl")
+# The only timeframes watched (lakky, 2026-10-08).
+FIB_TL_WATCH_TIMEFRAMES = ["1d", "1w", "1M"]
+FIB_TL_KIND_LABEL = {"fib": "FIB", "trendline": "TL"}
 # Zones the scanner noted as worth watching but has not (or not yet)
 # alerted on. Read by load_watch_candidates()/note_watch_candidates() to
 # notice a zone's approach earlier than a real alert could - but never
@@ -137,16 +149,14 @@ STAGE_LATE = 3
 
 def parse_args(argv=None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    # Both by default: the user watches 30m and 4h together, so covering
-    # one silently halves the channel.
     parser.add_argument(
-        "--timeframe", choices=["30m", "4h", "both"], default="both"
+        "--timeframe", choices=["all", *FIB_TL_WATCH_TIMEFRAMES], default="all"
     )
     parser.add_argument(
         "--market",
         choices=["nse", "crypto", "all"],
-        default="crypto",
-        help="Which alert records to watch. Crypto covers xStocks too.",
+        default="all",
+        help="Which fib/trendline alerts to watch. Crypto covers xStocks too.",
     )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument(
@@ -304,6 +314,72 @@ def load_watch_candidates(timeframe: str, now: pd.Timestamp) -> list[dict]:
         return []
     window = pd.Timedelta(minutes=BAR_MINUTES[timeframe] * WATCH_BARS)
     return _parse_zone_records([path], timeframe, "crypto", now, window)
+
+
+def fib_tl_window(market: str, timeframe: str) -> pd.Timedelta:
+    """How long a fib/trendline alert stays fillable: FIB_TL_ENTRY_WAIT_BARS
+    candles of its timeframe, the same wait the daily report scores it with.
+    An NSE week has five sessions, so its five daily candles span seven days.
+    """
+    seconds = TF_SECONDS[timeframe] * FIB_TL_ENTRY_WAIT_BARS
+    if market == "nse" and timeframe == "1d":
+        seconds = seconds * 7 // 5
+    return pd.Timedelta(seconds=seconds)
+
+
+def load_fib_tl_alerts(
+    market: str, timeframe: str, now: pd.Timestamp, records_path=None
+) -> list[dict]:
+    """Fib and trendline alerts on this market and timeframe still inside
+    their fillable window, in the same shape resolve_pings() reads.
+
+    A trendline re-alerts as price comes back to the same line; only its
+    newest alert is watched, with the entry and stop that alert planned.
+    """
+    path = records_path if records_path is not None else FIB_TL_RECORDS
+    if not path.exists():
+        return []
+    window = fib_tl_window(market, timeframe)
+    newest: dict[str, dict] = {}
+    for line in path.read_text(encoding="utf-8-sig").splitlines():
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if row.get("market") != market or row.get("tf") != timeframe:
+            continue
+        if row.get("kind") not in FIB_TL_KIND_LABEL:
+            continue
+        symbol = str(row.get("symbol", ""))
+        if market == "crypto" and symbol.upper() not in CRYPTO_WATCHLIST_SET:
+            continue
+        plan = row.get("plan") or {}
+        try:
+            entry = float(plan["entry"])
+            stop = float(plan["sl"])
+            delivered = pd.Timestamp(int(row["sent_ts"]), unit="s", tz="UTC").tz_convert(IST)
+        except (KeyError, TypeError, ValueError):
+            continue
+        if entry <= 0 or stop == entry or plan.get("side") not in ("long", "short"):
+            continue
+        if now - delivered > window or delivered > now:
+            continue
+        record = {
+            "symbol": symbol,
+            "timeframe": timeframe,
+            "side": plan["side"],
+            "kind": row["kind"],
+            "_entry": entry,
+            "_stop": stop,
+            "_delivered": delivered,
+            "_market": market,
+        }
+        key = str(row.get("key") or watch_key(record))
+        if key not in newest or delivered >= newest[key]["_delivered"]:
+            newest[key] = record
+    return list(newest.values())
 
 
 # rating_allowed() (dropped 17 Sep 2026) used to gate this on
@@ -619,7 +695,11 @@ def format_line(stage: int, price: float, record: dict, note: str = "") -> str:
     symbol = display_symbol(record.get("symbol", ""))
     places = price_decimals(entry, record.get("_market", "crypto"))
 
-    head = f"`{symbol}` {side}{score_text}"
+    kind = FIB_TL_KIND_LABEL.get(record.get("kind"))
+    if kind:
+        head = f"`{symbol}` {side} · {TF_LABEL.get(record.get('timeframe'), record.get('timeframe'))} {kind}"
+    else:
+        head = f"`{symbol}` {side}{score_text}"
     levels = f"{entry:.{places}f} → {price:.{places}f}"
     stop_text = f"SL {stop:.{places}f} ({stop_pct:.2f}%)"
 
@@ -891,7 +971,7 @@ def markets_for(choice: str) -> list[str]:
 
 
 def timeframes_for(choice: str) -> list[str]:
-    return ["30m", "4h"] if choice == "both" else [choice]
+    return list(FIB_TL_WATCH_TIMEFRAMES) if choice == "all" else [choice]
 
 
 _MISSING = object()
@@ -939,7 +1019,6 @@ def main() -> None:
     now = pd.Timestamp.now(tz=IST)
 
     watched: list[dict] = []
-    watch_candidates: list[dict] = []
     for market in markets_for(args.market):
         # Crypto never closes, so the 09:15-15:10 guard is an NSE rule and
         # applying it everywhere would silence crypto for most of the day.
@@ -954,11 +1033,9 @@ def main() -> None:
             print("Crypto outside the 08:00-01:00 IST window; skipping.")
             continue
         for timeframe in timeframes_for(args.timeframe):
-            watched.extend(load_watched_alerts(market, timeframe, now))
-            if market == "crypto":
-                watch_candidates.extend(load_watch_candidates(timeframe, now))
+            watched.extend(load_fib_tl_alerts(market, timeframe, now))
 
-    if not watched and not watch_candidates:
+    if not watched:
         print("No alerts inside their entry window.")
         return
 
@@ -973,16 +1050,8 @@ def main() -> None:
         symbol: {"price": price} for symbol, price in nse_prices.items()
     }
     crypto_symbols = {r["symbol"] for r in watched if r["_market"] == "crypto"}
-    crypto_symbols.update(r["symbol"] for r in watch_candidates)
     prices.update(fetch_crypto_prices(sorted(crypto_symbols)))
-
-    # Watch candidates are never pinged directly - see note_watch_candidates().
-    # This only lets a later GET READY (once a real alert confirms the zone)
-    # use the price from when it genuinely first approached, instead of
-    # guessing "moved fast" from whatever was live once the alert showed up.
-    note_watch_candidates(
-        watch_candidates, {watch_key(record) for record in watched}, prices, state, now
-    )
+    # Zone watch rows are no longer read, so nothing adds these any more.
     prune_silent_ready(state, now)
 
     # One heads-up per symbol, not one per level. Widening the watch band to

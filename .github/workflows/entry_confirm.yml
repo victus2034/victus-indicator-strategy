@@ -7,8 +7,12 @@ on:
   # both fire dispatched every job twice.
   workflow_dispatch:
     inputs:
+      # Not passed on any more: since 2026-10-08 (lakky) entry confirm watches
+      # only fib and trendline alerts on 1D/1W/1M, crypto and NSE together.
+      # Kept so cron-job.org's dispatch, which still sends market=crypto and
+      # timeframe=both, is accepted - GitHub rejects inputs it does not know.
       market:
-        description: "Which alert records to watch"
+        description: "Unused (kept for the cron-job.org dispatch)"
         required: false
         default: "crypto"
         type: choice
@@ -17,7 +21,7 @@ on:
           - "nse"
           - "all"
       timeframe:
-        description: "Alert timeframe to watch"
+        description: "Unused (kept for the cron-job.org dispatch)"
         required: false
         default: "both"
         type: choice
@@ -91,6 +95,7 @@ jobs:
             crypto_alert_records.jsonl \
             crypto_watch_records_30m.jsonl \
             crypto_watch_records.jsonl \
+            fib_trendline_alert_records.jsonl \
             entry_confirm_state.json \
             paper_trading_state.json
 
@@ -137,8 +142,6 @@ jobs:
           # so the two stages routinely landed in the same digest - Shiva's
           # Issue 14.
           VICTUS_APPROACH_THRESHOLD_PCT: "0.50"
-          INPUT_TIMEFRAME: ${{ github.event.inputs.timeframe }}
-          INPUT_MARKET: ${{ github.event.inputs.market }}
           INPUT_DRY_RUN: ${{ github.event.inputs.dry_run }}
           INPUT_IGNORE_SESSION: ${{ github.event.inputs.ignore_session }}
         run: |
@@ -149,9 +152,10 @@ jobs:
           if [ "$INPUT_IGNORE_SESSION" = "true" ]; then
             EXTRA_ARGS+=(--ignore-session)
           fi
+          # Fib + trendline alerts, 1D/1W/1M, crypto and NSE (NSE only in session).
           python entry_confirm.py \
-            --timeframe "${INPUT_TIMEFRAME:-both}" \
-            --market "${INPUT_MARKET:-crypto}" \
+            --timeframe all \
+            --market all \
             "${EXTRA_ARGS[@]}"
 
       # Runs in the same job as the pings: identical cadence, same symbols,
