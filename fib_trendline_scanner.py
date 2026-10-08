@@ -269,27 +269,35 @@ def _line(t):
             f"{price_text(t['to'][0])} ({stamp_text(t['to'][1])})")
 
 
-def zone_name(d, number):
-    """Shiva reads the chart as upper and lower zone, not 1 and 2 (2026-09-29).
+def zone_name(number):
+    """The chart's words for a fib box (lakky, 2026-10-08, LINK 1D): the deeper box
+    (zone 2) is the STRONG zone, the shallow one (zone 1) the WEAK zone. The
+    numbers stay underneath - in the state keys, the records and the backtest - so
+    renaming re-alerts nothing."""
+    return "STRONG" if number == 2 else "WEAK"
 
-    Zone 1 is the upper box on an up move and the lower one on a down move;
-    Zone 2, the deeper one, the other. The numbers stay underneath - in the
-    state keys, the records and the backtest - so renaming re-alerts nothing.
-    """
-    return "UPPER" if (number == 1) == (d == 1) else "LOWER"
+
+def entry_level(number):
+    """lakky's level names (2026-10-08): on a buy L3 = strong zone lower level,
+    L2 = strong zone upper level, L1 = weak zone lower level; a sell mirrors it.
+    The alert's entry is the strong zone's near edge, L2. The weak zone's near
+    edge has no name (lakky: not used); zone 1 never alerts live anyway."""
+    return "L2" if number == 2 else None
 
 
 # Short on purpose (lakky, 2026-10-08): side, timeframe, entry, stop and stop %
 # up front, prices at five figures. Nothing parses this text - records carry the plan.
 
 def format_fib_alert(market, symbol, tf, price, z):
-    side = "LONG" if z["d"] == 1 else "SHORT"
-    name = zone_name(z["d"], z["zone"])
+    side = "BUY" if z["d"] == 1 else "SELL"
+    name = zone_name(z["zone"])
+    level = entry_level(z["zone"])
+    title = " · ".join(x for x in (display(market, symbol), f"FIB {name} ZONE", level, side) if x)
     where = "inside zone" if z["distance"] <= 0 else f"{z['distance']:.2f}% away"
     return (
-        f"{_header(market, tf, f'{display(market, symbol)} · FIB {name} ZONE · {side}', side)}\n"
+        f"{_header(market, tf, title, side)}\n"
         f"Price {price_text(price)} · {where}\n"
-        f"Zone {price_text(z['low'])} – {price_text(z['high'])}\n"
+        f"{name.capitalize()} zone {price_text(z['low'])} – {price_text(z['high'])}\n"
         f"Entry {price_text(z['entry'])} · SL {price_text(z['sl'])} ({trades.risk_pct(z['plan']):.2f}%)"
     )
 

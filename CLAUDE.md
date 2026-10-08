@@ -180,6 +180,10 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   NSE -72.8R -> -30.5R, same alert count. The S/R 1.5% stop cap (-75% alerts) and daily trend filter
   (worse for crypto fibs) were tested and not applied. The Pine chart's fib SL lines still show 0.55/0.66.
   `SEED_VERSION` v6 re-seeds silently.
+- **Fib wording (lakky, 2026-10-08).** The deeper box is the STRONG zone, the shallow one WEAK
+  (`zone_name`). Levels: on a buy L3 = strong zone lower level, L2 = strong upper, L1 = weak lower;
+  a sell mirrors it. The entry is L2, so alerts read `LINK · FIB STRONG ZONE · L2 · SELL` and
+  entry confirm `1D FIB L2`. BUY/SELL, not LONG/SHORT. Wording only.
 - **No late BROKEN alerts (Lakky, 2026-10-05).** A break posts only if its candle closed after
   the market's previous awake pass (`__last_scan__` in the state, `BREAK_GRACE_SECONDS` = 1h of
   catch-up). PFIZER's 1M break on September's close posted on Oct 5 while the other 1M breaks went

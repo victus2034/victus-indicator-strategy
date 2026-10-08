@@ -936,6 +936,11 @@ class FibTrendlineSourceTests(unittest.TestCase):
         line = entry_confirm.format_line(entry_confirm.STAGE_ENTRY, 100.2, record)
         self.assertTrue(line.startswith("`BTC` SELL · 1D TL · "), line)
 
+    def test_a_strong_zone_fib_ping_names_its_level(self):
+        [record] = self._load([self._row(zone=2)])
+        line = entry_confirm.format_line(entry_confirm.STAGE_ENTRY, 100.2, record)
+        self.assertTrue(line.startswith("`BTC` BUY · 1D FIB L2 · "), line)
+
 
 if __name__ == "__main__":
     unittest.main()

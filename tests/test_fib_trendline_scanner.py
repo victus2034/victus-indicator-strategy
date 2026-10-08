@@ -144,13 +144,14 @@ class AlertTextTests(unittest.TestCase):
         z["plan"] = ftt.fib_plan(1, z)
         text = fts.format_fib_alert(ftd.NSE, "RELIANCE.NS", "4h", 100.0, z)
         self.assertIn("· **4H NSE**", text)
-        self.assertIn("RELIANCE · FIB LOWER ZONE · LONG", text)      # zone 2 of an up move
-        self.assertIn(f"Zone {fts.price_text(z['low'])} – {fts.price_text(z['high'])}", text)
+        self.assertIn("RELIANCE · FIB STRONG ZONE · L2 · BUY**", text)      # zone 2 of an up move
+        self.assertIn(f"Strong zone {fts.price_text(z['low'])} – {fts.price_text(z['high'])}", text)
         self.assertIn(f"Entry {fts.price_text(z['high'])} · SL", text)                # a long buys the top
         short = {**zones_by_number(-1, 110, 90)[1], "d": -1, "base": 110, "top": 90, "distance": 0.5}
         short["plan"] = ftt.fib_plan(-1, short)
-        self.assertIn(f"Entry {fts.price_text(short['low'])} · SL",
-                      fts.format_fib_alert(ftd.CRYPTO, "BTCUSD", "1d", 95.0, short))   # a short sells the bottom
+        short_text = fts.format_fib_alert(ftd.CRYPTO, "BTCUSD", "1d", 95.0, short)
+        self.assertIn(f"Entry {fts.price_text(short['low'])} · SL", short_text)   # a short sells the bottom
+        self.assertIn("BTC · FIB WEAK ZONE · SELL**", short_text)                # zone 1 has no level name
         self.assertIn("0.80% away", text)
         t = {"kind": SUPPORT, "level": 100.0, "distance": 1.2, "from": (90, "2026-08-06 00:00"), "to": (95, "2026-09-16 00:00"),
              "plan": ftt.trendline_plan(True, 100.0, "1d")}
@@ -168,12 +169,8 @@ class AlertTextTests(unittest.TestCase):
         self.assertEqual(fts.stamp_text("2026-07-08 13:15"), "8 Jul 13:15")
 
     def test_zone_names_follow_the_chart(self):
-        self.assertEqual([fts.zone_name(1, 1), fts.zone_name(1, 2)], ["UPPER", "LOWER"])
-        self.assertEqual([fts.zone_name(-1, 1), fts.zone_name(-1, 2)], ["LOWER", "UPPER"])
-        for d, base, top in ((1, 90, 110), (-1, 110, 90)):
-            z = zones_by_number(d, base, top)
-            upper = 1 if fts.zone_name(d, 1) == "UPPER" else 2
-            self.assertGreater(z[upper]["low"], z[3 - upper]["high"])     # "UPPER" really is higher
+        self.assertEqual([fts.zone_name(1), fts.zone_name(2)], ["WEAK", "STRONG"])
+        self.assertEqual([fts.entry_level(1), fts.entry_level(2)], [None, "L2"])
 
     def test_broken_line_wording(self):
         b = {"kind": RESISTANCE, "level": 100.0, "close": 101.0, "time": "2026-10-08 09:15",
@@ -541,7 +538,7 @@ class DailyReportTests(unittest.TestCase):
         self.assertIn("Alerts 1 · Entries 1\n+2R 1\nWin rate 100.0%", text)
         self.assertIn("30m CRYPTO - Alerts 1 | Entries 1 | +2R 1 | 100.0%", text)
         self.assertIn("10:00 - Alerts 1 | Entries 1 | +2R 1 | 100.0%", text)
-        self.assertIn("Lower zone - Alerts 1", text)     # zone 2 on a long, named as the alert names it
+        self.assertIn("Strong zone - Alerts 1", text)    # zone 2, named as the alert names it
         self.assertNotIn("TRENDLINE", text)
         self.assertTrue(self.report.load_results()["a"]["resolved"])
         with mock.patch.object(self.report, "eval_candles", side_effect=AssertionError("re-scored")):

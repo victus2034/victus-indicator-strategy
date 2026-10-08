@@ -368,6 +368,7 @@ def load_fib_tl_alerts(
             "timeframe": timeframe,
             "side": plan["side"],
             "kind": row["kind"],
+            "zone": row.get("zone"),
             "_entry": entry,
             "_stop": stop,
             "_delivered": delivered,
@@ -679,6 +680,8 @@ def format_line(stage: int, price: float, record: dict, note: str = "") -> str:
     places = price_decimals(entry, record.get("_market", "crypto"))
 
     kind = FIB_TL_KIND_LABEL.get(record.get("kind"))
+    if kind == "FIB" and record.get("zone") == 2:
+        kind = "FIB L2"      # the strong zone's entry level (lakky, 2026-10-08)
     if kind:
         head = f"`{symbol}` {side} · {TF_LABEL.get(record.get('timeframe'), record.get('timeframe'))} {kind}"
     else:
