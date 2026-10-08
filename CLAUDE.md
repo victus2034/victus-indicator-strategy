@@ -105,8 +105,9 @@ runtime-state branch), own workflow (`fib_trendline_scan.yml`, runs after each 3
 finishes via `workflow_run`), and two webhooks — `DISCORD_FIB_WEBHOOK_URL` → `#fib-alerts`,
 `DISCORD_TRENDLINE_WEBHOOK_URL` → `#trendline-alerts` (under CRYPTO in the VICTUS Alert System
 server). Since 2026-10-02 each market can have its own pair: `DISCORD_{FIB,TRENDLINE}_{CRYPTO,NSE}_WEBHOOK_URL`,
-each falling back to the shared one above when unset (so nothing changes until they are added). Every alert says
-`Timeframe: 4H | NSE` / `| Crypto`.
+each falling back to the shared one above when unset (so nothing changes until they are added). Every alert's first line
+ends `· 4H NSE` / `· 4H Crypto`. Since 2026-10-08 (lakky) alerts are 3-4 short lines, prices at five
+significant figures (`price_text`); nothing parses the text - records carry the plan.
 
 | File | Role |
 |---|---|

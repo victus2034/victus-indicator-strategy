@@ -109,21 +109,29 @@ class AlertTextTests(unittest.TestCase):
         z = {**zones_by_number(1, 90, 110)[2], "d": 1, "base": 90, "top": 110, "distance": 0.8}
         z["plan"] = ftt.fib_plan(1, z)
         text = fts.format_fib_alert(ftd.NSE, "RELIANCE.NS", "4h", 100.0, z)
-        self.assertIn("Timeframe: 4H | NSE", text)
-        self.assertIn("RELIANCE | FIB LOWER ZONE | LONG", text)      # zone 2 of an up move
-        self.assertIn(f"Lower zone: bottom {z['low']:.6f} - top {z['high']:.6f} (deeper)", text)
-        self.assertIn(f"Entry: {z['high']:.6f} (zone top)", text)                # a long buys the top
+        self.assertIn("· 4H NSE", text)
+        self.assertIn("RELIANCE · FIB LOWER ZONE · LONG", text)      # zone 2 of an up move
+        self.assertIn(f"Zone {fts.price_text(z['low'])} – {fts.price_text(z['high'])}", text)
+        self.assertIn(f"Entry {fts.price_text(z['high'])} · SL", text)                # a long buys the top
         short = {**zones_by_number(-1, 110, 90)[1], "d": -1, "base": 110, "top": 90, "distance": 0.5}
         short["plan"] = ftt.fib_plan(-1, short)
-        self.assertIn(f"Entry: {short['low']:.6f} (zone bottom)",
+        self.assertIn(f"Entry {fts.price_text(short['low'])} · SL",
                       fts.format_fib_alert(ftd.CRYPTO, "BTCUSD", "1d", 95.0, short))   # a short sells the bottom
         self.assertIn("0.80% away", text)
-        t = {"kind": SUPPORT, "level": 100.0, "distance": 1.2, "from": (90, "a"), "to": (95, "b"),
+        t = {"kind": SUPPORT, "level": 100.0, "distance": 1.2, "from": (90, "2026-08-06 00:00"), "to": (95, "2026-09-16 00:00"),
              "plan": ftt.trendline_plan(True, 100.0, "1d")}
         text = fts.format_touch_alert(ftd.CRYPTO, "BTCUSD", "1d", 101.2, t)
-        self.assertIn("Timeframe: 1D | Crypto", text)
-        self.assertIn("SL: 98.500000 | 1.50%", text)
-        self.assertIn("BTC | SUP TL | BUY", text)
+        self.assertIn("· 1D Crypto", text)
+        self.assertIn("SL 98.50 (1.50%)", text)
+        self.assertIn("BTC · SUP TL · BUY", text)
+
+    def test_prices_read_like_a_chart(self):
+        cases = {1967.699951: "1967.70", 54.86: "54.86", 0.08709: "0.08709",
+                 0.000915: "0.000915", 115.0: "115.00", 0.084943: "0.084943"}
+        for value, text in cases.items():
+            self.assertEqual(fts.price_text(value), text)
+        self.assertEqual(fts.stamp_text("2026-08-10 00:00"), "10 Aug")
+        self.assertEqual(fts.stamp_text("2026-07-08 13:15"), "8 Jul 13:15")
 
     def test_zone_names_follow_the_chart(self):
         self.assertEqual([fts.zone_name(1, 1), fts.zone_name(1, 2)], ["UPPER", "LOWER"])
@@ -134,8 +142,9 @@ class AlertTextTests(unittest.TestCase):
             self.assertGreater(z[upper]["low"], z[3 - upper]["high"])     # "UPPER" really is higher
 
     def test_broken_line_wording(self):
-        b = {"kind": RESISTANCE, "level": 100.0, "close": 101.0, "time": "t", "from": (90, "a"), "to": (95, "b")}
-        self.assertIn("ETH | RES TL BR", fts.format_break_alert(ftd.CRYPTO, "ETHUSD", "4h", b))
+        b = {"kind": RESISTANCE, "level": 100.0, "close": 101.0, "time": "2026-10-08 09:15",
+             "from": (90, "2026-07-08 13:15"), "to": (95, "2026-08-03 00:00")}
+        self.assertIn("ETH · RES TL BROKEN", fts.format_break_alert(ftd.CRYPTO, "ETHUSD", "4h", b))
 
 
 def rising_lows_then_break():
@@ -338,7 +347,7 @@ class OnceOnlyTests(unittest.TestCase):
                 "base": 90, "top": 110, "distance": 0.4, "plan": {"side": "long", "entry": 100.8, "sl": 100.7}}
 
     def touch(self, key="tl|X|4h|0|1|2"):
-        return {"key": key, "kind": SUPPORT, "level": 100.0, "distance": 0.1, "from": (90, "a"), "to": (95, "b"),
+        return {"key": key, "kind": SUPPORT, "level": 100.0, "distance": 0.1, "from": (90, "2026-08-06 00:00"), "to": (95, "2026-09-16 00:00"),
                 "plan": {"side": "long", "entry": 100.0, "sl": 99.0}}
 
     def analysis(self, fib=(), touch=()):
@@ -378,7 +387,7 @@ class LateBreakTests(unittest.TestCase):
 
     def brk(self, closed_at):
         return {"key": "tlbreak|X|1M|0|1|2", "kind": SUPPORT, "level": 4069.45, "close": 3875.3,
-                "time": "2026-09-01 00:00", "from": (1642, "a"), "to": (3701, "b"), "closed_at": closed_at}
+                "time": "2026-09-01 00:00", "from": (1642, "2026-08-06 00:00"), "to": (3701, "2026-09-16 00:00"), "closed_at": closed_at}
 
     def plan(self, closed_at, last_scan):
         analysis = {"fib": [], "touch": [], "break": [self.brk(closed_at)], "price": 3842.2}
