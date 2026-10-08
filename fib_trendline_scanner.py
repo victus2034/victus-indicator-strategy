@@ -45,6 +45,8 @@ import scanner
 from config import (
     DISCORD_FIB_WEBHOOK_URL,
     DISCORD_TRENDLINE_WEBHOOK_URL,
+    FIB_ALERT_ZONES,
+    FIB_SL_HEIGHT_PCT,
     FIB_SWING_LENGTH,
     FIB_TL_MAX_DISTANCE_PCT,
     FIB_TL_MIN_DISTANCE_PCT,
@@ -70,7 +72,9 @@ RETRY_BACKOFF_SECONDS = 30 * 60   # a failed Discord send is not retried sooner 
 # base/top, i.e. a new key, and would otherwise all post as new on the first pass.
 # v4 (2026-10-07): v12.5 trendline anchors - most live lines get a new start point.
 # v5 (2026-10-07): v12.6 trendlines - lower lows get lines from the last swing below.
-SEED_VERSION = "v5"
+# v6 (2026-10-08): deeper fib zone only, stop beyond the box - a zone price sits
+# in below the old (inner) stop alerts now.
+SEED_VERSION = "v6"
 # Bitunix candles draw different fibs and lines, each a new key: turning the
 # source on re-seeds silently rather than posting every level already in range.
 if bitunix_data.CRYPTO_CANDLE_SOURCE == "bitunix":
@@ -115,15 +119,17 @@ def fib_zones(d, base, top):
 
     Zone 2 is always the deeper one: the lower box on an up move, the upper
     box on a down move. Entry is the zone's near edge - the one price reaches
-    first - and SL the inner fib's 0.55 line, as in Shiva's EX 2/278 ETH trades:
-    entry 2723.94 / SL 2711.79 (zone 1), 2672.86 / 2660.74 (zone 2).
+    first, as in Shiva's EX 2/278 ETH trades (entry 2723.94 zone 1, 2672.86
+    zone 2). The stop is the S/R zone rule (Lakky, 2026-10-08):
+    FIB_SL_HEIGHT_PCT of the box's height beyond its far edge.
     """
     u66, u55, d55, d66 = fib_engine.levels(base, top)
-    (_, upper_sl), (_, lower_sl) = fib_engine.sl_lines(base, top, d)
-    upper = dict(low=u55, high=u66, sl=upper_sl)
-    lower = dict(low=d66, high=d55, sl=lower_sl)
+    upper = dict(low=u55, high=u66)
+    lower = dict(low=d66, high=d55)
     for zone in (upper, lower):
+        pad = (zone["high"] - zone["low"]) * FIB_SL_HEIGHT_PCT / 100
         zone["entry"] = zone["high"] if d == 1 else zone["low"]
+        zone["sl"] = zone["low"] - pad if d == 1 else zone["high"] + pad
     zone1, zone2 = (upper, lower) if d == 1 else (lower, upper)
     return [dict(zone=1, **zone1), dict(zone=2, **zone2)]
 
@@ -131,10 +137,10 @@ def fib_zones(d, base, top):
 def fib_distance(d, zone, price):
     """% from price down to (long) / up to (short) the zone; 0 inside; None once past it.
 
-    Also None once price is through the zone's stop. The SL line sits inside
-    the zone (the inner fib's 0.55), so "inside the zone" used to include
-    price already below a long's stop: 54 of the first 213 live fib alerts
-    were sent that way, and every one was scored a -1R the moment it filled.
+    Also None once price is through the zone's stop. Until 2026-10-08 the SL
+    sat inside the zone (the inner fib's 0.55), so "inside the zone" used to
+    include price already below a long's stop: 54 of the first 213 live fib
+    alerts were sent that way, each scored -1R the moment it filled.
     """
     sl = zone.get("sl")
     if sl is not None and ((price <= sl) if d == 1 else (price >= sl)):
@@ -200,6 +206,8 @@ def analyse(market, symbol, tf, candles, now, price=None):
     inside_box = base < price < top if d == 1 else top < price < base
     if inside_box and base != top:
         for zone in fib_zones(d, base, top):
+            if zone["zone"] not in FIB_ALERT_ZONES:
+                continue
             distance = fib_distance(d, zone, price)
             if in_band(distance):
                 result["fib"].append({

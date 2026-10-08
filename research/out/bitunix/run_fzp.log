@@ -1,0 +1,38 @@
+661 fib alerts since 2026-09-01
+# Fib zone preference (Notion 20): 2026-09-01 to now
+
+Zone 1 = shallow box (upper for longs, lower for shorts); Zone 2 = deeper (lower for longs, upper for shorts). Live timeframes, live trade rules (2R target, BE at +0.5R), net R after fees.
+
+| market   | tf   | group                                                 |   alerts |   filled |   SL |   BE |   1R |   2R |   win_1r_% |   net_R |   R_per_trade |
+|:---------|:-----|:------------------------------------------------------|---------:|---------:|-----:|-----:|-----:|-----:|-----------:|--------:|--------------:|
+| crypto   | all  | both zones (live)                                     |      168 |      131 |   66 |   22 |   14 |   26 |         38 |   -33.8 |        -0.268 |
+| crypto   | all  | Zone 1 only (shallow)                                 |      108 |       84 |   47 |   14 |    5 |   15 |         30 |   -29.1 |        -0.369 |
+| crypto   | all  | Zone 2 only (deeper: lower for buys, upper for sells) |       60 |       47 |   19 |    8 |    9 |   11 |         51 |    -4.6 |        -0.098 |
+| crypto   | 4h   | Zone 1                                                |       80 |       60 |   36 |   10 |    2 |   11 |         27 |   -24.9 |        -0.421 |
+| crypto   | 4h   | Zone 2                                                |       49 |       38 |   16 |    5 |    8 |    9 |         52 |    -5.2 |        -0.138 |
+| crypto   | 1d   | Zone 1                                                |       19 |       16 |    9 |    2 |    1 |    4 |         36 |    -2.1 |        -0.134 |
+| crypto   | 1d   | Zone 2                                                |        9 |        7 |    2 |    2 |    1 |    2 |         60 |     1.7 |         0.241 |
+| crypto   | 1w   | Zone 1                                                |        5 |        4 |    1 |    1 |    1 |    0 |         50 |    -1.1 |        -0.566 |
+| crypto   | 1w   | Zone 2                                                |        1 |        1 |    0 |    1 |    0 |    0 |        nan |    -0   |        -0.019 |
+| crypto   | 1M   | Zone 1                                                |        4 |        4 |    1 |    1 |    1 |    0 |         50 |    -1   |        -0.509 |
+| crypto   | 1M   | Zone 2                                                |        1 |        1 |    1 |    0 |    0 |    0 |          0 |    -1   |        -1.023 |
+| crypto   | all  | long Zone 1                                           |       66 |       54 |   27 |   10 |    3 |   13 |         37 |    -6.4 |        -0.121 |
+| crypto   | all  | long Zone 2                                           |       35 |       28 |    9 |    4 |    8 |    7 |         62 |     2   |         0.07  |
+| crypto   | all  | short Zone 1                                          |       42 |       30 |   20 |    4 |    2 |    2 |         17 |   -22.7 |        -0.875 |
+| crypto   | all  | short Zone 2                                          |       25 |       19 |   10 |    4 |    1 |    4 |         33 |    -6.6 |        -0.345 |
+| nse      | all  | both zones (live)                                     |      493 |      394 |  224 |   56 |   44 |   66 |         33 |  -151.7 |        -0.389 |
+| nse      | all  | Zone 1 only (shallow)                                 |      299 |      243 |  134 |   37 |   25 |   46 |         35 |   -80   |        -0.331 |
+| nse      | all  | Zone 2 only (deeper: lower for buys, upper for sells) |      194 |      151 |   90 |   19 |   19 |   20 |         30 |   -71.7 |        -0.485 |
+| nse      | 4h   | Zone 1                                                |      177 |      141 |   79 |   18 |   16 |   28 |         36 |   -50.1 |        -0.355 |
+| nse      | 4h   | Zone 2                                                |      109 |       81 |   50 |    8 |   11 |   12 |         32 |   -40.8 |        -0.504 |
+| nse      | 1d   | Zone 1                                                |       93 |       80 |   42 |   15 |    8 |   15 |         35 |   -21.9 |        -0.273 |
+| nse      | 1d   | Zone 2                                                |       65 |       53 |   29 |    9 |    7 |    8 |         34 |   -19.3 |        -0.364 |
+| nse      | 1w   | Zone 1                                                |       21 |       17 |   10 |    2 |    1 |    3 |         29 |    -4.9 |        -0.307 |
+| nse      | 1w   | Zone 2                                                |       14 |       11 |    7 |    2 |    1 |    0 |         12 |    -7.4 |        -0.742 |
+| nse      | 1M   | Zone 1                                                |        8 |        5 |    3 |    2 |    0 |    0 |          0 |    -3.2 |        -0.631 |
+| nse      | 1M   | Zone 2                                                |        6 |        6 |    4 |    0 |    0 |    0 |          0 |    -4.2 |        -1.047 |
+| nse      | all  | long Zone 1                                           |      156 |      136 |   70 |   27 |   17 |   21 |         35 |   -44.1 |        -0.326 |
+| nse      | all  | long Zone 2                                           |      127 |      105 |   63 |   17 |   16 |    7 |         27 |   -61.6 |        -0.599 |
+| nse      | all  | short Zone 1                                          |      143 |      107 |   64 |   10 |    8 |   25 |         34 |   -35.9 |        -0.336 |
+| nse      | all  | short Zone 2                                          |       67 |       46 |   27 |    2 |    3 |   13 |         37 |   -10.1 |        -0.224 |
+

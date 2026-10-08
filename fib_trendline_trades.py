@@ -3,8 +3,9 @@ history backtest (fib_trendline_backtest.py) and the daily report
 (fib_trendline_daily_report.py), so the two can never grade differently.
 
 Rules (Shiva, 2026-09-29):
-- Fib: entry at the zone's near edge, SL on the inner fib's 0.55 line - Shiva's
-  EX 2/278 ETH trades (entry 2723.94 / SL 2711.79, 2672.86 / 2660.74).
+- Fib: entry at the zone's near edge (Shiva's EX 2/278 ETH trades, 2723.94 /
+  2672.86); SL FIB_SL_HEIGHT_PCT of the box's height beyond its far edge, the
+  S/R zone rule (Lakky, 2026-10-08). It was the inner fib's 0.55 line before.
 - Trendline: entry at the line's price when the alert fired, SL
   TRENDLINE_SL_PCT[tf] % beyond it. Support is a buy, resistance a sell.
 - A limit entry: it fills only if price trades to it within ENTRY_WAIT_BARS

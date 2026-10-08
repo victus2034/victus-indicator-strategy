@@ -129,8 +129,8 @@ significant figures (`price_text`); nothing parses the text - records carry the 
 - **Backtest verdict (2026-09-29): no edge.** Read win rates against the report's random-level
   baseline (37-46% at 1R under these rules), not 50%. Fibs and trendlines land at or below it on
   nearly every timeframe; crypto 1W fib is the only one above, on 115 trades.
-- **Trade rules (Shiva's choice):** fib entry at the zone's near edge / SL on the inner fib's 0.55
-  line - his EX 2 ETH trades (2723.94 / 2711.79). The first version used the inner 0.66 as entry,
+- **Trade rules (Shiva's choice):** fib entry at the zone's near edge - his EX 2 ETH trades
+  (2723.94); SL on the inner fib's 0.55 line until 2026-10-08 (now the S/R rule, below). The first version used the inner 0.66 as entry,
   which misread EX 2 and made stops ~4x too tight; trendline entry
   at the line, SL `TRENDLINE_SL_PCT` beyond it; 1R and 2R targets; wait 5 / hold 20 candles of
   the alert's timeframe. A candle touching SL and target counts as SL.
@@ -169,6 +169,17 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   through a line, 0% twins on the chart (`research/out/trendline_anchor/`). `tests/test_trendline_anchor.py`
   holds the HYPE 1D and 4h lines (Bitunix fixtures) and a transcription of the Pine v12.6 6b loop -
   change both sides together. `SEED_VERSION` v5 re-seeds silently.
+- **Deeper fib zone only (Lakky, 2026-10-08, Notion 20).** Each fib has two boxes; only Zone 2, the
+  deeper one, alerts - the lower box for a buy, the upper for a sell (`FIB_ALERT_ZONES`, crypto and NSE;
+  the history backtest replays the same rule). Sep 1 - Oct 8 (`research/fib_zone_preference.py`): crypto
+  -33.8R / 131 trades with both zones vs -4.6R / 47 deeper only; NSE -151.7R vs -71.7R, though NSE's
+  deeper zone is worse per trade (-0.49R vs -0.33R) - kept on Lakky's call. Pine fib alerts are not changed.
+- **Fib stop = the S/R zone rule (Lakky, 2026-10-08).** `FIB_SL_HEIGHT_PCT` (= `ZONE_SL_HEIGHT_PCT`, 25%)
+  of the box's height beyond its far edge, as `scanner.planned_stop_price`; it was the inner 0.55 line
+  inside the box. Deeper zone, Sep 1 - Oct 8 (`research/fib_sr_logic_backtest.py`): crypto -5.7R -> -3.1R,
+  NSE -72.8R -> -30.5R, same alert count. The S/R 1.5% stop cap (-75% alerts) and daily trend filter
+  (worse for crypto fibs) were tested and not applied. The Pine chart's fib SL lines still show 0.55/0.66.
+  `SEED_VERSION` v6 re-seeds silently.
 - **No late BROKEN alerts (Lakky, 2026-10-05).** A break posts only if its candle closed after
   the market's previous awake pass (`__last_scan__` in the state, `BREAK_GRACE_SECONDS` = 1h of
   catch-up). PFIZER's 1M break on September's close posted on Oct 5 while the other 1M breaks went

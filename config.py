@@ -560,6 +560,20 @@ DISCORD_TRENDLINE_WEBHOOK_URL = ""
 FIB_TL_TIMEFRAMES = [
     tf.strip() for tf in os.getenv("VICTUS_FIB_TL_TIMEFRAMES", "4h,1d,1w,1M").split(",") if tf.strip()
 ]
+# Which fib zones alert (Lakky, 2026-10-08, Notion 20): only Zone 2, the deeper
+# one - the lower box for a buy, the upper box for a sell. Zone 1, the shallow
+# box (upper for a buy, lower for a sell), no longer alerts on either market.
+# Sep 1 - Oct 8 replay (research/fib_zone_preference.py): crypto both zones
+# -33.8R / 131 trades, Zone 2 only -4.6R / 47; NSE -151.7R / 394 vs -71.7R / 151
+# (NSE's Zone 2 is worse per trade, -0.49R vs -0.33R - kept on his call).
+FIB_ALERT_ZONES = (2,)
+# Fib stop = the support/resistance zone rule (Lakky, 2026-10-08, Notion 20):
+# ZONE_SL_HEIGHT_PCT (25%) of the fib box's height beyond its far edge, in place
+# of the inner fib's 0.55 line inside the box. Sep 1 - Oct 8, deeper zone only
+# (research/fib_sr_logic_backtest.py): crypto -5.7R -> -3.1R, NSE -72.8R -> -30.5R,
+# about the same number of alerts. The S/R 1.5% stop cap and daily trend filter
+# were tested too and are not applied to fibs.
+FIB_SL_HEIGHT_PCT = ZONE_SL_HEIGHT_PCT
 # The indicator's own lengths: fib_len 10, tl_len 10, tl_keep 6.
 FIB_SWING_LENGTH = 10
 TRENDLINE_SWING_LENGTH = 10
@@ -575,8 +589,8 @@ TRENDLINES_KEEP = 6
 FIB_TL_MIN_DISTANCE_PCT = env_float("VICTUS_FIB_TL_MIN_DISTANCE_PCT", 0.0)
 FIB_TL_MAX_DISTANCE_PCT = env_float("VICTUS_FIB_TL_MAX_DISTANCE_PCT", 0.75)
 # Trade rules the alerts print and the backtests score (Shiva's choice,
-# 2026-09-29). Fib: entry at the zone's near edge, SL on the inner fib's 0.55
-# line (his EX 2 ETH trades). Trendline: entry at the line, SL this % on the far side of it.
+# 2026-09-29). Fib: entry at the zone's near edge (his EX 2 ETH trades), SL
+# FIB_SL_HEIGHT_PCT beyond the far edge (since 2026-10-08). Trendline: entry at the line, SL this % on the far side of it.
 TRENDLINE_SL_PCT = {"30m": 0.5, "4h": 1.0, "1d": 1.5, "1w": 2.5, "1M": 3.0}
 # An alert that has not filled within ENTRY_WAIT_BARS candles of its own
 # timeframe is "no fill"; a filled trade still open after MAX_HOLD_BARS is
