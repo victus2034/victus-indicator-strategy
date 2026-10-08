@@ -59,6 +59,32 @@ class FibZoneNumberingTests(unittest.TestCase):
         self.assertGreater(z["sl"], z["entry"])
 
 
+class DeeperZoneOnlyTests(unittest.TestCase):
+    """Notion 20 (Lakky, 2026-10-08): a buy alerts the lower zone, a sell the upper one - never the shallow box."""
+
+    def alerts(self, d, price):
+        base, top = (90.0, 110.0) if d == 1 else (110.0, 90.0)
+        snap = {"d": d, "O": base, "E": top, "Ot": 0, "Et": 20}
+        candles = [[i * 14400, 100.0, 111.0, 89.0, 100.0] for i in range(60)]
+        with mock.patch.object(fts.fib_engine, "run", return_value=([snap] * 60, [])), \
+                mock.patch.object(fts, "build_trendlines", return_value=[]):
+            got = fts.analyse(ftd.CRYPTO, "BTCUSD", "4h", candles, 10**10, price=price)["fib"]
+        return [z["zone"] for z in got]
+
+    def test_a_buy_alerts_the_lower_zone_only(self):
+        zones = zones_by_number(1, 90.0, 110.0)
+        self.assertEqual(self.alerts(1, zones[1]["high"] + 0.1), [])      # upper (shallow) box
+        self.assertEqual(self.alerts(1, zones[2]["high"] + 0.1), [2])     # lower (deeper) box
+
+    def test_a_sell_alerts_the_upper_zone_only(self):
+        zones = zones_by_number(-1, 110.0, 90.0)
+        self.assertEqual(self.alerts(-1, zones[1]["low"] - 0.1), [])      # lower (shallow) box
+        self.assertEqual(self.alerts(-1, zones[2]["low"] - 0.1), [2])     # upper (deeper) box
+
+    def test_the_backtest_replays_the_same_rule(self):
+        self.assertEqual(ftb.ALERT_ZONES, fts.FIB_ALERT_ZONES)
+
+
 class DistanceBandTests(unittest.TestCase):
     """Shiva: alerts from 0.75% away down to 0.00% (1.5% at first)."""
 

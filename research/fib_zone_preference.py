@@ -55,6 +55,7 @@ def main() -> None:
     args = parser.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     fbt.TIMEFRAMES = list(config.FIB_TL_TIMEFRAMES)          # live set: 30m is off
+    fbt.ALERT_ZONES = (1, 2)                                 # both, to compare them
     since = pd.Timestamp(args.since, tz=IST).timestamp()
     now = time.time()
     got = []

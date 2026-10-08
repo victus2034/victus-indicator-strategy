@@ -167,6 +167,11 @@ each falling back to the shared one above when unset (so nothing changes until t
   through a line, 0% twins on the chart (`research/out/trendline_anchor/`). `tests/test_trendline_anchor.py`
   holds the HYPE 1D and 4h lines (Bitunix fixtures) and a transcription of the Pine v12.6 6b loop -
   change both sides together. `SEED_VERSION` v5 re-seeds silently.
+- **Deeper fib zone only (Lakky, 2026-10-08, Notion 20).** Each fib has two boxes; only Zone 2, the
+  deeper one, alerts - the lower box for a buy, the upper for a sell (`FIB_ALERT_ZONES`, crypto and NSE;
+  the history backtest replays the same rule). Sep 1 - Oct 8 (`research/fib_zone_preference.py`): crypto
+  -33.8R / 131 trades with both zones vs -4.6R / 47 deeper only; NSE -151.7R vs -71.7R, though NSE's
+  deeper zone is worse per trade (-0.49R vs -0.33R) - kept on Lakky's call. Pine fib alerts are not changed.
 - **No late BROKEN alerts (Lakky, 2026-10-05).** A break posts only if its candle closed after
   the market's previous awake pass (`__last_scan__` in the state, `BREAK_GRACE_SECONDS` = 1h of
   catch-up). PFIZER's 1M break on September's close posted on Oct 5 while the other 1M breaks went

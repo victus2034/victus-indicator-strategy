@@ -560,6 +560,13 @@ DISCORD_TRENDLINE_WEBHOOK_URL = ""
 FIB_TL_TIMEFRAMES = [
     tf.strip() for tf in os.getenv("VICTUS_FIB_TL_TIMEFRAMES", "4h,1d,1w,1M").split(",") if tf.strip()
 ]
+# Which fib zones alert (Lakky, 2026-10-08, Notion 20): only Zone 2, the deeper
+# one - the lower box for a buy, the upper box for a sell. Zone 1, the shallow
+# box (upper for a buy, lower for a sell), no longer alerts on either market.
+# Sep 1 - Oct 8 replay (research/fib_zone_preference.py): crypto both zones
+# -33.8R / 131 trades, Zone 2 only -4.6R / 47; NSE -151.7R / 394 vs -71.7R / 151
+# (NSE's Zone 2 is worse per trade, -0.49R vs -0.33R - kept on his call).
+FIB_ALERT_ZONES = (2,)
 # The indicator's own lengths: fib_len 10, tl_len 10, tl_keep 6.
 FIB_SWING_LENGTH = 10
 TRENDLINE_SWING_LENGTH = 10

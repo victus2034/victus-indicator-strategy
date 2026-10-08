@@ -32,6 +32,7 @@ import fib_engine
 import fib_trendline_trades as trades
 import scanner
 from config import (
+    FIB_ALERT_ZONES,
     FIB_SWING_LENGTH,
     FIB_TL_ENTRY_WAIT_BARS,
     FIB_TL_MAX_DISTANCE_PCT,
@@ -52,6 +53,7 @@ CACHE = HERE / ".fib_tl_bt_cache"
 REPORT_MD = HERE / "reports" / "FIB_TRENDLINE_BACKTEST.md"
 TRADES_CSV = HERE / "reports" / "fib_trendline_backtest_trades.csv"
 BAND = FIB_TL_MAX_DISTANCE_PCT / 100
+ALERT_ZONES = FIB_ALERT_ZONES      # research overrides it to replay both zones
 
 
 # ----------------------------------------------------------------- data (cached per day)
@@ -182,6 +184,8 @@ def replay(market, symbol, tf, base, evalc, now):
             continue
         e0, e1 = bar_slice(i)
         for zone in fib_zones(d, base_px, top):
+            if zone["zone"] not in ALERT_ZONES:
+                continue
             key = (d, times[s["Ot"]], top, zone["zone"])
             if key in fired:
                 continue

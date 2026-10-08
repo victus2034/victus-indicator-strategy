@@ -45,6 +45,7 @@ import scanner
 from config import (
     DISCORD_FIB_WEBHOOK_URL,
     DISCORD_TRENDLINE_WEBHOOK_URL,
+    FIB_ALERT_ZONES,
     FIB_SWING_LENGTH,
     FIB_TL_MAX_DISTANCE_PCT,
     FIB_TL_MIN_DISTANCE_PCT,
@@ -200,6 +201,8 @@ def analyse(market, symbol, tf, candles, now, price=None):
     inside_box = base < price < top if d == 1 else top < price < base
     if inside_box and base != top:
         for zone in fib_zones(d, base, top):
+            if zone["zone"] not in FIB_ALERT_ZONES:
+                continue
             distance = fib_distance(d, zone, price)
             if in_band(distance):
                 result["fib"].append({
