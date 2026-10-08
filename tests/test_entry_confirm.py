@@ -295,6 +295,12 @@ class FormattingTests(unittest.TestCase):
         self.assertIn("SL 4131.63", line)
         self.assertNotIn(".NS", line)
 
+    def test_current_price_comes_first_then_entry(self):
+        # lakky, 2026-10-08: "current price → entry".
+        record = watched(entry=4117.10, stop=4131.63, side="short", symbol="BAYERCROP.NS")
+        line = entry_confirm.format_line(entry_confirm.STAGE_ENTRY, 4120.0, record)
+        self.assertIn("4120.00 → 4117.10", line)
+
     def test_each_alert_takes_one_line(self):
         record = watched(entry=100.0, stop=99.0, side="long", symbol="TCS.NS", score=8)
         line = entry_confirm.format_line(entry_confirm.STAGE_ENTRY, 100.2, record)

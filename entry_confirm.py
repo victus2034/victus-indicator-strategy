@@ -683,7 +683,7 @@ def format_line(stage: int, price: float, record: dict, note: str = "") -> str:
         head = f"`{symbol}` {side} · {TF_LABEL.get(record.get('timeframe'), record.get('timeframe'))} {kind}"
     else:
         head = f"`{symbol}` {side}{score_text}"
-    levels = f"{entry:.{places}f} → {price:.{places}f}"
+    levels = f"{price:.{places}f} → {entry:.{places}f}"
     stop_text = f"SL {stop:.{places}f} ({stop_pct:.2f}%)"
 
     note_text = f" · {note}" if note else ""
