@@ -144,7 +144,7 @@ class AlertTextTests(unittest.TestCase):
         z["plan"] = ftt.fib_plan(1, z)
         text = fts.format_fib_alert(ftd.NSE, "RELIANCE.NS", "4h", 100.0, z)
         self.assertIn("· **4H NSE**", text)
-        self.assertIn("RELIANCE · FIB STRONG ZONE · L2 · BUY**", text)      # zone 2 of an up move
+        self.assertIn("RELIANCE · FIB STRONG ZONE · L1 · BUY**", text)      # zone 2 of an up move
         self.assertIn(f"Strong zone {fts.price_text(z['low'])} – {fts.price_text(z['high'])}", text)
         self.assertIn(f"Entry {fts.price_text(z['high'])} · SL", text)                # a long buys the top
         short = {**zones_by_number(-1, 110, 90)[1], "d": -1, "base": 110, "top": 90, "distance": 0.5}
@@ -170,7 +170,7 @@ class AlertTextTests(unittest.TestCase):
 
     def test_zone_names_follow_the_chart(self):
         self.assertEqual([fts.zone_name(1), fts.zone_name(2)], ["WEAK", "STRONG"])
-        self.assertEqual([fts.entry_level(1), fts.entry_level(2)], [None, "L2"])
+        self.assertEqual([fts.entry_level(1), fts.entry_level(2)], [None, "L1"])
 
     def test_broken_line_wording(self):
         b = {"kind": RESISTANCE, "level": 100.0, "close": 101.0, "time": "2026-10-08 09:15",

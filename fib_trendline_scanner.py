@@ -278,11 +278,11 @@ def zone_name(number):
 
 
 def entry_level(number):
-    """lakky's level names (2026-10-08): on a buy L3 = strong zone lower level,
-    L2 = strong zone upper level, L1 = weak zone lower level; a sell mirrors it.
-    The alert's entry is the strong zone's near edge, L2. The weak zone's near
-    edge has no name (lakky: not used); zone 1 never alerts live anyway."""
-    return "L2" if number == 2 else None
+    """lakky's level names (2026-10-08): in the strong zone L1 is the near level
+    (upper on a buy, lower on a sell) and L2 the far one; the weak zone has only
+    L2 (its far level). The alert's entry is the strong zone's near edge, L1; the
+    weak zone's near edge has no name (zone 1 never alerts live anyway)."""
+    return "L1" if number == 2 else None
 
 
 # Short on purpose (lakky, 2026-10-08): side, timeframe, entry, stop and stop %
