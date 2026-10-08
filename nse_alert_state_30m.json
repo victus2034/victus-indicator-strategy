@@ -2,7 +2,6 @@
   "_noise_control": {
     "HSCL.NS|30m|long|658.5|660.2": 1791442419.764,
     "ICICIGI.NS|30m|short|1624.5|1629.6": 1791442419.4004445,
-    "CESC.NS|30m|long|129.75|130": 1791441417.2607841,
     "AUBANK.NS|30m|long|974.2|981.7": 1791441784.3915443,
     "CGCL.NS|30m|long|241.88|242.82": 1791441874.639169,
     "MSUMI.NS|30m|long|32.73|32.88": 1791441963.4210832,
@@ -13,10 +12,11 @@
     "RBLBANK.NS|30m|long|401.1|402.1": 1791442508.7092268,
     "LINDEINDIA.NS|30m|long|5991|6013": 1791442508.904526,
     "CONCOR.NS|30m|long|434.85|435.25": 1791443032.6030746,
-    "ITCHOTELS.NS|30m|long|155.47|155.5": 1791443117.0397177
+    "ITCHOTELS.NS|30m|long|155.47|155.5": 1791443117.0397177,
+    "ANANDRATHI.NS|30m|long|2092|2099.3": 1791443297.6391304
   },
   "__last_scan_started__": {
-    "30m": 1791443098.1635203
+    "30m": 1791443278.5694118
   },
   "ICICIGI.NS|supply|1624.5000|1629.6000": {
     "in_zone": true,
@@ -27,11 +27,6 @@
     "in_zone": true,
     "last_alert_at": 1791442419.764,
     "last_attempt_at": 1791442419.764
-  },
-  "CESC.NS|demand|129.7500|130.0000": {
-    "in_zone": true,
-    "last_alert_at": 1791441417.2607841,
-    "last_attempt_at": 1791441417.2607841
   },
   "CGCL.NS|demand|241.8800|242.8200": {
     "in_zone": true,
@@ -67,5 +62,10 @@
     "in_zone": true,
     "last_alert_at": 1791443117.0397177,
     "last_attempt_at": 1791443117.0397177
+  },
+  "ANANDRATHI.NS|demand|2092.0000|2099.3000": {
+    "in_zone": true,
+    "last_alert_at": 1791443297.6391304,
+    "last_attempt_at": 1791443297.6391304
   }
 }
