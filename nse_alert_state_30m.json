@@ -1,17 +1,19 @@
 {
   "_noise_control": {
     "COROMANDEL.NS|30m|long|1706.3|1712.8": 1791435234.1947637,
-    "JSWINFRA.NS|30m|long|341.5|343.95": 1791433958.8438742,
     "IFCI.NS|30m|short|65.79|66.06": 1791434519.3473651,
     "NAVINFLUOR.NS|30m|short|8595|8600": 1791434604.774632,
     "CENTRALBK.NS|30m|short|30.6|30.83": 1791434605.0063388,
     "DALBHARAT.NS|30m|long|1630.1|1631.6": 1791434875.16765,
     "JSL.NS|30m|long|715.05|720": 1791435054.2431464,
     "NBCC.NS|30m|long|75.75|75.89": 1791435144.390204,
-    "ITCHOTELS.NS|30m|long|156.33|157.12": 1791435734.9630702
+    "ITCHOTELS.NS|30m|long|156.33|157.12": 1791435734.9630702,
+    "GODFRYPHLP.NS|30m|long|1830.9|1838.5": 1791435820.9274054,
+    "DATAPATTNS.NS|30m|long|4140.5|4173.62": 1791435821.1969006,
+    "JYOTICNC.NS|30m|long|1023.2|1028.3": 1791435821.3915405
   },
   "__last_scan_started__": {
-    "30m": 1791435720.0011773
+    "30m": 1791435809.6391256
   },
   "IFCI.NS|supply|65.7900|66.0600": {
     "in_zone": true,
@@ -23,11 +25,6 @@
     "last_alert_at": 1791434875.16765,
     "last_attempt_at": 1791434875.16765
   },
-  "JSL.NS|demand|715.0500|720.0000": {
-    "in_zone": true,
-    "last_alert_at": 1791435054.2431464,
-    "last_attempt_at": 1791435054.2431464
-  },
   "COROMANDEL.NS|demand|1706.3000|1712.8000": {
     "in_zone": true,
     "last_alert_at": 1791435234.1947637,
@@ -37,5 +34,20 @@
     "in_zone": true,
     "last_alert_at": 1791435734.9630702,
     "last_attempt_at": 1791435734.9630702
+  },
+  "GODFRYPHLP.NS|demand|1830.9000|1838.5000": {
+    "in_zone": true,
+    "last_alert_at": 1791435820.9274054,
+    "last_attempt_at": 1791435820.9274054
+  },
+  "DATAPATTNS.NS|demand|4140.5000|4173.6240": {
+    "in_zone": true,
+    "last_alert_at": 1791435821.1969006,
+    "last_attempt_at": 1791435821.1969006
+  },
+  "JYOTICNC.NS|demand|1023.2000|1028.3000": {
+    "in_zone": true,
+    "last_alert_at": 1791435821.3915405,
+    "last_attempt_at": 1791435821.3915405
   }
 }
