@@ -30,10 +30,11 @@ All in `config.py`, which **is tracked in git**:
   2026-09-15: 64 as of 2026-09-01 cut from 119 on seven-day Delta volume, then
   `CRYPTO_WATCHLIST` cut again to drop every CoinSwitch-only crypto symbol once
   Shiva stopped trading there - see `config.py`'s note on that list)
-- `DELTA_LISTED_SYMBOLS` — the 31 symbols Delta India lists. `entry_confirm.py` tags
-  each alert with the venue this way; since 2026-09-16 `WATCHLIST` (crypto, other,
-  and xStock combined) equals `DELTA_LISTED_SYMBOLS` exactly, so that tag only ever
-  reads "Delta" now - no symbol on the watchlist is CoinSwitch-only any more.
+- `DELTA_LISTED_SYMBOLS` — the 31 symbols Delta India lists. Since 2026-09-16 `WATCHLIST`
+  (crypto, other, and xStock combined) equals it exactly. `entry_confirm.py` used to tag
+  each ping with the venue ("Delta"); dropped 2026-10-08 (lakky) - its crypto prices come
+  from Bitunix, so the tag read as the wrong source. Entry confirm watches only fib and
+  trendline alerts on 1D/1W/1M, crypto and NSE, since the same day.
   Static on purpose; re-audit against Delta's `/v2/products` when the watchlist changes
 - `EXCHANGE_IDS` — exchange fallback order
 - `MAX_DISTANCE_PCT` — how close price must get before alerting

@@ -66,7 +66,7 @@ import pandas as pd
 import requests
 import yfinance as yf
 
-from config import DELTA_LISTED_SYMBOLS, FIB_TL_ENTRY_WAIT_BARS, MAX_DISTANCE_PCT, WATCHLIST
+from config import FIB_TL_ENTRY_WAIT_BARS, MAX_DISTANCE_PCT, WATCHLIST
 from fib_trendline_data import TF_LABEL, TF_SECONDS
 
 # Only crypto is checked against its watchlist. The NSE side has no
@@ -258,11 +258,8 @@ def _parse_zone_records(
                 continue
             if record.get("timeframe") != timeframe:
                 continue
-            # A symbol dropped from the watchlist keeps pinging for as long as its
-            # last alert stays fillable - twelve hours on 4h - and broker_label
-            # would call it CoinSwitch, because that is what anything outside the
-            # Delta list resolves to. Sending someone to the wrong exchange is
-            # worse than saying nothing, and the symbol was dropped on purpose.
+            # A symbol dropped from the watchlist was dropped on purpose; its
+            # last alert must not keep pinging while it stays fillable.
             if market == "crypto" and str(record.get("symbol", "")).upper() not in CRYPTO_WATCHLIST_SET:
                 continue
             delivered = pd.to_datetime(record.get("delivered_at_utc"), errors="coerce", utc=True)
@@ -660,20 +657,6 @@ STAGE_HEADINGS = {
 STAGE_ORDER = [STAGE_ENTRY, STAGE_LATE, STAGE_READY]
 
 
-def broker_label(record: dict) -> str | None:
-    """Where to go and place this trade.
-
-    Only crypto has a venue choice: an NSE symbol is not on either book,
-    so tagging it would be noise. Delta lists what it lists and everything
-    else on the watchlist is reached through CoinSwitch, which is why the
-    fallback is unconditional rather than a second lookup.
-    """
-    if record.get("_market") != "crypto":
-        return None
-    symbol = str(record.get("symbol", "")).strip().upper()
-    return "Delta" if symbol in DELTA_LISTED_SYMBOLS else "CoinSwitch"
-
-
 def format_line(stage: int, price: float, record: dict, note: str = "") -> str:
     """One line per alert. Three lines each turned a busy run into a wall.
 
@@ -703,14 +686,12 @@ def format_line(stage: int, price: float, record: dict, note: str = "") -> str:
     levels = f"{entry:.{places}f} → {price:.{places}f}"
     stop_text = f"SL {stop:.{places}f} ({stop_pct:.2f}%)"
 
-    broker = broker_label(record)
-    venue = f" · {broker}" if broker else ""
     note_text = f" · {note}" if note else ""
 
     if stage == STAGE_READY:
         away = abs(price - entry) / entry * 100.0
-        return f"{head} · {levels} · {away:.2f}% away · {stop_text}{venue}{note_text}"
-    return f"{head} · {levels} · {stop_text} · {progress * 100:.0f}% risk used{venue}{note_text}"
+        return f"{head} · {levels} · {away:.2f}% away · {stop_text}{note_text}"
+    return f"{head} · {levels} · {stop_text} · {progress * 100:.0f}% risk used{note_text}"
 
 
 def build_digest(pings: list[tuple[int, str]], now: pd.Timestamp) -> list[str]:
