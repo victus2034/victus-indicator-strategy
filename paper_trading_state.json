@@ -59766,6 +59766,33 @@
       "target_half": 7.60763,
       "timeframe": "30m",
       "trade_id": "UNIUSD|30m|long|7.57008|7.49498"
+    },
+    {
+      "alert_time": "2026-10-08T18:32:42.433946+05:30",
+      "cost_r": 0.4243624000000262,
+      "date": "2026-10-08",
+      "entry": 757.79,
+      "entry_time": "2026-10-08T19:05:00+05:30",
+      "exit_price": 755.9368425,
+      "exit_time": "2026-10-08T19:10:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "net_realized_r": -1.680740366101766,
+      "outcome": "SL",
+      "rating": 6,
+      "realized_r": -1.2563779661017398,
+      "risk": 1.474999999999909,
+      "side": "long",
+      "stop": 756.315,
+      "stream": "live",
+      "symbol": "BNBUSD",
+      "target_1": 759.2649999999999,
+      "target_2": 760.7399999999998,
+      "target_half": 758.5274999999999,
+      "timeframe": "30m",
+      "trade_id": "BNBUSD|30m|long|757.79|756.315"
     }
   ],
   "handled": {
@@ -60717,6 +60744,7 @@
     "ATOM/USDT|4h|short|1.70635|1.72341": "filled",
     "AVAXUSD|30m|long|10.15|10.05": "filled",
     "AVAXUSD|30m|long|10.252|10.192": "filled",
+    "AVAXUSD|30m|long|10.501|10.4148": "filled",
     "AVAXUSD|30m|long|10.594|10.509": "filled",
     "AVAXUSD|30m|long|10.772|10.7295": "filled",
     "AVAXUSD|30m|long|10.828|10.738": "filled",
@@ -60844,6 +60872,7 @@
     "BNBUSD|30m|short|777.16|777.96": "stop_too_tight",
     "BNBUSD|30m|short|780.03|785.367": "filled",
     "BNBUSD|30m|short|785.18|785.868": "stop_too_tight",
+    "BNBUSD|4h|long|753.92|750.058": "filled",
     "BNBUSD|4h|long|760.9|755.5": "filled",
     "BNBUSD|4h|short|756.21|762.023": "filled",
     "BOME/USDT|30m|long|0.0008367|0.000832325": "filled",
@@ -62247,6 +62276,24 @@
       "target_half": 497.73875,
       "timeframe": "30m"
     },
+    "AVAXUSD|30m|long|10.501|10.4148": {
+      "alert_time": "2026-10-08T19:11:50.979127+05:30",
+      "entry": 10.501,
+      "entry_time": "2026-10-08T19:15:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 4,
+      "risk": 0.08624999999999794,
+      "side": "long",
+      "stop": 10.414750000000002,
+      "stream": "live",
+      "symbol": "AVAXUSD",
+      "target_1": 10.587249999999997,
+      "target_2": 10.673499999999995,
+      "target_half": 10.544124999999998,
+      "timeframe": "30m"
+    },
     "AVAXUSD|4h|long|10.5155|10.4111": {
       "alert_time": "2026-10-08T18:18:08.470407+05:30",
       "entry": 10.515456,
@@ -62265,23 +62312,23 @@
       "target_half": 10.567616000000001,
       "timeframe": "4h"
     },
-    "BNBUSD|30m|long|757.79|756.315": {
-      "alert_time": "2026-10-08T18:32:42.433946+05:30",
-      "entry": 757.79,
-      "entry_time": "2026-10-08T19:05:00+05:30",
+    "BNBUSD|4h|long|753.92|750.058": {
+      "alert_time": "2026-10-08T19:13:27.460883+05:30",
+      "entry": 753.92,
+      "entry_time": "2026-10-08T19:15:00+05:30",
       "geometry": "wick",
       "half_r_hit": false,
       "market": "crypto",
-      "rating": 6,
-      "risk": 1.474999999999909,
+      "rating": 5,
+      "risk": 3.862499999999841,
       "side": "long",
-      "stop": 756.315,
+      "stop": 750.0575000000001,
       "stream": "live",
       "symbol": "BNBUSD",
-      "target_1": 759.2649999999999,
-      "target_2": 760.7399999999998,
-      "target_half": 758.5274999999999,
-      "timeframe": "30m"
+      "target_1": 757.7824999999998,
+      "target_2": 761.6449999999996,
+      "target_half": 755.8512499999999,
+      "timeframe": "4h"
     }
   }
 }
