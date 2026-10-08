@@ -30,10 +30,11 @@ All in `config.py`, which **is tracked in git**:
   2026-09-15: 64 as of 2026-09-01 cut from 119 on seven-day Delta volume, then
   `CRYPTO_WATCHLIST` cut again to drop every CoinSwitch-only crypto symbol once
   Shiva stopped trading there - see `config.py`'s note on that list)
-- `DELTA_LISTED_SYMBOLS` — the 31 symbols Delta India lists. `entry_confirm.py` tags
-  each alert with the venue this way; since 2026-09-16 `WATCHLIST` (crypto, other,
-  and xStock combined) equals `DELTA_LISTED_SYMBOLS` exactly, so that tag only ever
-  reads "Delta" now - no symbol on the watchlist is CoinSwitch-only any more.
+- `DELTA_LISTED_SYMBOLS` — the 31 symbols Delta India lists. Since 2026-09-16 `WATCHLIST`
+  (crypto, other, and xStock combined) equals it exactly. `entry_confirm.py` used to tag
+  each ping with the venue ("Delta"); dropped 2026-10-08 (lakky) - its crypto prices come
+  from Bitunix, so the tag read as the wrong source. Entry confirm watches only fib and
+  trendline alerts on 1D/1W/1M, crypto and NSE, since the same day.
   Static on purpose; re-audit against Delta's `/v2/products` when the watchlist changes
 - `EXCHANGE_IDS` — exchange fallback order
 - `MAX_DISTANCE_PCT` — how close price must get before alerting
@@ -105,8 +106,9 @@ runtime-state branch), own workflow (`fib_trendline_scan.yml`, runs after each 3
 finishes via `workflow_run`), and two webhooks — `DISCORD_FIB_WEBHOOK_URL` → `#fib-alerts`,
 `DISCORD_TRENDLINE_WEBHOOK_URL` → `#trendline-alerts` (under CRYPTO in the VICTUS Alert System
 server). Since 2026-10-02 each market can have its own pair: `DISCORD_{FIB,TRENDLINE}_{CRYPTO,NSE}_WEBHOOK_URL`,
-each falling back to the shared one above when unset (so nothing changes until they are added). Every alert says
-`Timeframe: 4H | NSE` / `| Crypto`.
+each falling back to the shared one above when unset (so nothing changes until they are added). Every alert's first line
+ends `· **4H NSE**` / `· **4H Crypto**` (bold). Since 2026-10-08 (lakky) alerts are 3-4 short lines, prices at five
+significant figures (`price_text`); nothing parses the text - records carry the plan.
 
 | File | Role |
 |---|---|
@@ -240,6 +242,11 @@ each falling back to the shared one above when unset (so nothing changes until t
   state right after each delivered alert; entry_confirm saves after each digest part and rolls
   back only the records whose lines did not land. The crypto range-filter *signal* runs on
   closed candles (`scanner.confirmed_candles`), like NSE; zones still use the forming candle.
+- **Zone alert text (2026-10-08, lakky).** `**BTC | BUY | 4H | 5/10**`, then `Price` / `Zone` / `SL`
+  lines; prices at most 3 decimals from 1 up, 2 from 1000 up (`scanner.price_text` / `short_places`,
+  widened only if two levels would print the same; under 1 keeps `price_decimals`). The journal's
+  "Import Alert Signals" parses pasted alerts (`parseSignals`): keep "SYMBOL | SIDE" first, the score
+  last and each level line starting with its name - `JournalImportCompat` in `tests/test_alert_format.py`.
 - **Approach side only (2026-10-02, Lakky).** Distance to the entry is measured both ways, so price
   already through the entry used to alert as "0.15% away" (19-37% of alerts). `scanner.price_past_entry`
   now blocks those for crypto and NSE; the band is still consumed, so a bounce back out does not fire.

@@ -295,6 +295,12 @@ class FormattingTests(unittest.TestCase):
         self.assertIn("SL 4131.63", line)
         self.assertNotIn(".NS", line)
 
+    def test_current_price_comes_first_then_entry(self):
+        # lakky, 2026-10-08: "current price → entry".
+        record = watched(entry=4117.10, stop=4131.63, side="short", symbol="BAYERCROP.NS")
+        line = entry_confirm.format_line(entry_confirm.STAGE_ENTRY, 4120.0, record)
+        self.assertIn("4120.00 → 4117.10", line)
+
     def test_each_alert_takes_one_line(self):
         record = watched(entry=100.0, stop=99.0, side="long", symbol="TCS.NS", score=8)
         line = entry_confirm.format_line(entry_confirm.STAGE_ENTRY, 100.2, record)
@@ -519,38 +525,18 @@ class WatchRecordsStayOutOfTheBacktestTests(unittest.TestCase):
         self.assertIn("crypto_watch_records_30m.jsonl", ignored)
 
 
-class BrokerLabelTests(unittest.TestCase):
-    def test_a_delta_listed_symbol_names_delta(self):
-        record = watched(symbol="BTCUSD", _market="crypto")
-        self.assertEqual(entry_confirm.broker_label(record), "Delta")
-        line = entry_confirm.format_line(entry_confirm.STAGE_READY, 100.1, record)
-        self.assertTrue(line.endswith(" · Delta"), line)
-
-    def test_anything_else_on_the_watchlist_falls_to_coinswitch(self):
-        record = watched(symbol="CL/USDT", _market="crypto")
-        self.assertEqual(entry_confirm.broker_label(record), "CoinSwitch")
-        line = entry_confirm.format_line(entry_confirm.STAGE_ENTRY, 99.0, record)
-        self.assertTrue(line.endswith(" · CoinSwitch"), line)
-
-    def test_an_nse_symbol_carries_no_venue(self):
-        # NSE trades on neither book, so a venue tag there is pure noise.
-        record = watched(symbol="RELIANCE.NS", _market="nse")
-        self.assertIsNone(entry_confirm.broker_label(record))
-        line = entry_confirm.format_line(entry_confirm.STAGE_READY, 100.1, record)
-        self.assertNotIn("Delta", line)
-        self.assertNotIn("CoinSwitch", line)
-
-    def test_the_venue_map_does_not_drift_from_the_watchlist(self):
-        # A symbol dropped from the watchlist but left in the venue map would
-        # go unnoticed; one added and forgotten would silently read CoinSwitch.
-        self.assertTrue(config.DELTA_LISTED_SYMBOLS <= set(config.WATCHLIST))
-
-    def test_every_scanned_crypto_symbol_gets_a_venue(self):
-        import scanner
-
-        for symbol in scanner.active_watchlist():
-            label = entry_confirm.broker_label({"symbol": symbol, "_market": "crypto"})
-            self.assertIn(label, ("Delta", "CoinSwitch"), symbol)
+class NoVenueTagTests(unittest.TestCase):
+    # lakky, 2026-10-08: crypto prices come from Bitunix, so the "Delta" tag
+    # on each line read as the wrong source. No line names a venue now.
+    def test_no_line_names_a_venue(self):
+        for market, symbol in (("crypto", "BTCUSD"), ("crypto", "TSLAXUSD"), ("nse", "RELIANCE.NS")):
+            record = watched(symbol=symbol, _market=market)
+            for stage, price in ((entry_confirm.STAGE_READY, 100.1), (entry_confirm.STAGE_ENTRY, 99.0)):
+                line = entry_confirm.format_line(stage, price, record)
+                with self.subTest(symbol=symbol, stage=stage):
+                    self.assertNotIn("Delta", line)
+                    self.assertNotIn("CoinSwitch", line)
+                    self.assertNotIn("Bitunix", line)
 
 
 class DigestTests(unittest.TestCase):
@@ -874,22 +860,81 @@ class WatchCandidateTests(unittest.TestCase):
 
 
 class ScopeTests(unittest.TestCase):
-    def test_it_watches_crypto_over_both_timeframes_by_default(self):
-        # NSE was dropped from this job, and covering one timeframe
-        # silently halved the channel.
+    def test_it_watches_fib_and_trendline_on_1d_1w_1m_both_markets_by_default(self):
+        # lakky, 2026-10-08: fib and trendline only, 1D/1W/1M, crypto and NSE.
         args = entry_confirm.parse_args([])
 
-        self.assertEqual(args.market, "crypto")
-        self.assertEqual(entry_confirm.markets_for(args.market), ["crypto"])
-        self.assertEqual(entry_confirm.timeframes_for(args.timeframe), ["30m", "4h"])
+        self.assertEqual(entry_confirm.markets_for(args.market), ["nse", "crypto"])
+        self.assertEqual(entry_confirm.timeframes_for(args.timeframe), ["1d", "1w", "1M"])
 
-    def test_nse_can_still_be_asked_for_explicitly(self):
-        # Paused, not deleted - the records and the code still work.
-        args = entry_confirm.parse_args(["--market", "nse", "--timeframe", "30m"])
+    def test_30m_and_4h_are_not_choices(self):
+        for tf in ("30m", "4h", "both"):
+            with self.subTest(tf=tf), self.assertRaises(SystemExit), \
+                    patch("sys.stderr"):
+                entry_confirm.parse_args(["--timeframe", tf])
 
-        self.assertEqual(entry_confirm.markets_for(args.market), ["nse"])
-        self.assertEqual(entry_confirm.timeframes_for(args.timeframe), ["30m"])
+    def test_the_workflow_runs_fib_tl_for_every_market_whatever_cron_sends(self):
+        # cron-job.org still dispatches market=crypto timeframe=both; those
+        # inputs must not reach the command any more.
+        yaml = (pathlib.Path(__file__).resolve().parents[1] / ".github/workflows/entry_confirm.yml").read_text()
+        self.assertIn("--timeframe all", yaml)
+        self.assertIn("--market all", yaml)
+        self.assertNotIn("INPUT_MARKET", yaml)
+        self.assertIn("fib_trendline_alert_records.jsonl", yaml)
 
+
+class FibTrendlineSourceTests(unittest.TestCase):
+    NOW = pd.Timestamp("2026-10-08 12:00", tz=entry_confirm.IST)
+
+    def _row(self, **overrides):
+        row = {
+            "market": "crypto", "symbol": "BTCUSD", "tf": "1d", "kind": "fib",
+            "price": 101.0, "plan": {"side": "long", "entry": 100.0, "sl": 98.0},
+            "key": "fib|BTCUSD|1d|1|1|2|1",
+            "sent_ts": int((self.NOW - pd.Timedelta(hours=2)).timestamp()),
+        }
+        row.update(overrides)
+        return row
+
+    def _load(self, rows, market="crypto", tf="1d"):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as folder:
+            path = pathlib.Path(folder) / "fib.jsonl"
+            path.write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
+            return entry_confirm.load_fib_tl_alerts(market, tf, self.NOW, records_path=path)
+
+    def test_a_fib_alert_is_watched_with_its_planned_entry_and_stop(self):
+        [record] = self._load([self._row()])
+        self.assertEqual((record["_entry"], record["_stop"], record["side"]), (100.0, 98.0, "long"))
+        self.assertEqual((record["_market"], record["timeframe"], record["kind"]), ("crypto", "1d", "fib"))
+
+    def test_other_timeframes_and_markets_are_left_out(self):
+        rows = [self._row(tf="4h"), self._row(market="nse", symbol="TCS.NS")]
+        self.assertEqual(self._load(rows), [])
+
+    def test_only_the_newest_alert_on_a_line_is_watched(self):
+        old = self._row(kind="trendline", key="tl|BTCUSD|1d|0|1|2",
+                        sent_ts=int((self.NOW - pd.Timedelta(days=2)).timestamp()))
+        new = self._row(kind="trendline", key="tl|BTCUSD|1d|0|1|2",
+                        plan={"side": "long", "entry": 103.0, "sl": 101.0})
+        [record] = self._load([old, new])
+        self.assertEqual(record["_entry"], 103.0)
+
+    def test_the_watch_lasts_the_five_candle_entry_wait(self):
+        inside = self._row(sent_ts=int((self.NOW - pd.Timedelta(days=4, hours=23)).timestamp()))
+        outside = self._row(key="other", sent_ts=int((self.NOW - pd.Timedelta(days=5, hours=1)).timestamp()))
+        self.assertEqual(len(self._load([inside, outside])), 1)
+        self.assertEqual(entry_confirm.fib_tl_window("nse", "1d"), pd.Timedelta(days=7))
+        self.assertEqual(entry_confirm.fib_tl_window("crypto", "1w"), pd.Timedelta(weeks=5))
+
+    def test_a_crypto_symbol_off_the_watchlist_is_dropped(self):
+        self.assertEqual(self._load([self._row(symbol="NOTACOINUSD")]), [])
+
+    def test_the_ping_names_the_timeframe_and_kind(self):
+        [record] = self._load([self._row(kind="trendline", plan={"side": "short", "entry": 100.0, "sl": 101.0})])
+        line = entry_confirm.format_line(entry_confirm.STAGE_ENTRY, 100.2, record)
+        self.assertTrue(line.startswith("`BTC` SELL · 1D TL · "), line)
 
 
 if __name__ == "__main__":

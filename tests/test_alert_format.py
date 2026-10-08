@@ -27,10 +27,10 @@ class AlertFormatTests(unittest.TestCase):
 
         self.assertEqual(
             message,
-            "MSTR | BUY\n"
-            "Price: 100.600000 | 0.40%\n"
-            "Zone: 100.200000 - 100.336450\n"
-            "SL: 100.099800 | 0.24%",
+            "**MSTR | BUY | 4H**\n"
+            "Price 100.60 · 0.40% away\n"
+            "Zone 100.20 – 100.336\n"
+            "SL 100.10 (0.24%)",
         )
 
     def test_crypto_zone_alert_stop_follows_zone_height_under_v7_rule(self):
@@ -48,7 +48,7 @@ class AlertFormatTests(unittest.TestCase):
 
         # 25% of the zone's own height below the far edge - what Screenshot (33)
         # describes and what v7 draws, rather than a fixed share of price.
-        self.assertIn("SL: 100.165887", message)
+        self.assertIn("SL 100.166 (", message)
 
     def test_nse_zone_alert_has_no_market_or_timeframe_lines(self):
         result = {
@@ -69,10 +69,10 @@ class AlertFormatTests(unittest.TestCase):
         # rule to clear costs, so the warning line belongs here.
         self.assertEqual(
             message,
-            "PIDILITIND | SELL\n"
-            "Price: 1610.90 | 0.97%\n"
-            "Zone: 1624.95 - 1626.60\n"
-            "SL: 1627.01 | 0.13%\n"
+            "**PIDILITIND | SELL | 4H**\n"
+            "Price 1610.90 · 0.97% away\n"
+            "Zone 1624.95 – 1626.60\n"
+            "SL 1627.01 (0.13%)\n"
             "WARNING SL under 0.24% - at +0.5R the move is only 0.063%, "
             "under the 0.1063% round trip, so moving the stop up cannot "
             "protect capital here",
@@ -105,10 +105,10 @@ class AlertFormatTests(unittest.TestCase):
 
         self.assertEqual(
             message,
-            "INFY | BUY\n"
-            "Price: 100.00 | 0.60%\n"
-            "Zone: 99.00 - 99.50\n"
-            "SL: 98.88 | 0.63%\n"
+            "**INFY | BUY | 4H**\n"
+            "Price 100.00 · 0.60% away\n"
+            "Zone 99.00 – 99.50\n"
+            "SL 98.88 (0.63%)\n"
             "Technology & Telecom: -2.10% | Risk",
         )
 
@@ -134,7 +134,7 @@ class AlertFormatTests(unittest.TestCase):
 
         message = nse_scanner.format_alert(result, "demand", zone, 0.70)
 
-        self.assertIn("TEST | BUY | 4/10", message)
+        self.assertIn("**TEST | BUY | 30m | 4/10**", message)
 
     def test_nse_4h_zone_alert_has_no_rating(self):
         result = {"symbol": "TEST.NS", "price": 100.0}
@@ -158,7 +158,8 @@ class AlertFormatTests(unittest.TestCase):
 
         message = scanner.format_alert(result, "demand", zone, 0.4)
 
-        self.assertTrue(message.startswith("BTC | BUY | 9/10"))
+        self.assertTrue(message.startswith("**BTC | BUY | " ))
+        self.assertIn("| 9/10**", message)
         self.assertNotIn("\n\n", message)
 
     def test_a_plain_crypto_rating_also_overrides_the_rule_based_score(self):
@@ -179,7 +180,8 @@ class AlertFormatTests(unittest.TestCase):
 
         message = scanner.format_alert(result, "supply", zone, 0.04)
 
-        self.assertTrue(message.startswith("BNB | SELL | 4/10"))
+        self.assertTrue(message.startswith("**BNB | SELL | " ))
+        self.assertIn("| 4/10**", message)
         self.assertNotIn("9/10", message)
 
     def test_xstock_hybrid_score_overrides_base_display_score(self):
@@ -196,7 +198,8 @@ class AlertFormatTests(unittest.TestCase):
 
         message = scanner.format_alert(result, "demand", zone, 0.5)
 
-        self.assertTrue(message.startswith("NVDA | BUY | 8/10"))
+        self.assertTrue(message.startswith("**NVDA | BUY | " ))
+        self.assertIn("| 8/10**", message)
         self.assertNotIn("5/10", message)
         self.assertEqual(message.count("/10"), 1)
 
@@ -429,7 +432,7 @@ class SubCentPrecision(unittest.TestCase):
         with patch.object(scanner, "ZONE_SL_MODE", "zone_pct"):
             message = scanner.format_alert(result, "demand", zone, 0.05)
 
-        levels = [line for line in message.splitlines() if line.startswith(("Zone:", "SL:"))]
+        levels = [line for line in message.splitlines() if line.startswith(("Zone ", "SL "))]
         self.assertIn("0.00090732", levels[0])
         self.assertIn("0.00091456", levels[0])
         # The stop must be a different number from the zone bottom it sits under.
@@ -454,3 +457,27 @@ class SubCentPrecision(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class JournalImportCompat(unittest.TestCase):
+    """The journal's "Import Alert Signals" reads pasted zone alerts (parseSignals in
+    journal/index.html). Discord copies bold as plain text, so the title must still
+    start "SYMBOL | SIDE" and end with the score, and the level lines start with their name.
+    """
+
+    def test_zone_alert_lines_match_the_journal_parser(self):
+        import re
+        result = {"symbol": "BTCUSD", "price": 83050.1, "demand_score": 5}
+        message = scanner.format_alert(result, "demand", {"bottom": 82500.5, "top": 82914.3}, 0.16)
+        lines = message.replace("**", "").splitlines()
+        self.assertRegex(lines[0], r"^BTC\s*\|\s*BUY\b")
+        self.assertRegex(lines[0], r"\|\s*5\s*/\s*10\s*$")
+        self.assertEqual(re.match(r"^price\s*:?\s*([\d.,]+)", lines[1], re.I)[1], "83050.10")
+        self.assertEqual(re.match(r"^zone\s*:?\s*([\d.,]+)\s*[-–—]\s*([\d.,]+)", lines[2], re.I).groups(),
+                         ("82500.50", "82914.30"))
+        self.assertEqual(re.match(r"^(?:sl|stop)\s*:?\s*([\d.,]+)", lines[3], re.I)[1], "82397.05")
+
+    def test_prices_from_one_up_keep_at_most_three_decimals(self):
+        for value, text in ((83050.1, "83050.10"), (298.32768, "298.328"), (5.12345, "5.123"),
+                            (0.08709, "0.08709"), (0.000915, "0.000915")):
+            self.assertEqual(scanner.price_text(value), text)
