@@ -198,12 +198,11 @@ def build_card(kind, title, report_day, joined):
         (("long", "BUY (support)"), ("short", "SELL (resistance)"))
     lines += _block("SIDE", [(name, [(r, x) for r, x in items if r["plan"]["side"] == side]) for side, name in sides])
     if kind == "fib":
-        # The alerts' names (fib_trendline_scanner.zone_name): zone 1 is the
-        # upper box on a long and the lower one on a short.
+        # The alerts' names (fib_trendline_scanner.zone_name): zone 2 is the strong zone.
         def zone(r):
-            return "Upper zone" if (r.get("zone") == 1) == (r["plan"]["side"] == "long") else "Lower zone"
+            return "Strong zone" if r.get("zone") == 2 else "Weak zone"
         lines += _block("ZONE", [(name, [(r, x) for r, x in items if zone(r) == name])
-                                 for name in ("Upper zone", "Lower zone")])
+                                 for name in ("Strong zone", "Weak zone")])
         # A trendline's stop is a fixed % per timeframe, so buckets say nothing there.
         lines += _block("STOP SIZE", [
             (name, [(r, x) for r, x in items if x["filled"] and lo <= trades.risk_pct(r["plan"]) < hi])
