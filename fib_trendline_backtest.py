@@ -33,6 +33,7 @@ import fib_trendline_trades as trades
 import scanner
 from config import (
     FIB_ALERT_ZONES,
+    FIB_SL_HEIGHT_PCT,
     FIB_SWING_LENGTH,
     FIB_TL_ENTRY_WAIT_BARS,
     FIB_TL_MAX_DISTANCE_PCT,
@@ -330,8 +331,8 @@ def write_report(all_trades, symbol_counts, started):
         f"- **Alert**: price comes within {FIB_TL_MAX_DISTANCE_PCT:g}% of a fib zone or a live trendline "
         "(down to touching it), with the live scanner's levels, once-only and re-arm rules, and the crypto "
         "01:00-08:00 IST hold.",
-        "- **Fib trade**: entry at the zone's near edge, SL on the inner fib's 0.55 line - Shiva's EX 2 ETH "
-        "trades (entry 2723.94 / SL 2711.79, 2672.86 / 2660.74).",
+        f"- **Fib trade**: entry at the zone's near edge (Shiva's EX 2 ETH trades), SL {FIB_SL_HEIGHT_PCT:g}% of the "
+        "zone's height beyond its far edge (the S/R zone rule).",
         "- **Trendline trade**: entry at the line, SL "
         + ", ".join(f"{TF_LABEL[tf]} {p}%" for tf, p in TRENDLINE_SL_PCT.items()) + " beyond it.",
         f"- Limit entry, filled only from the evaluation candle after the alert and within "

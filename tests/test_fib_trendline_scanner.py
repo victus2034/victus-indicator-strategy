@@ -44,14 +44,22 @@ class FibZoneNumberingTests(unittest.TestCase):
         z = zones_by_number(-1, 110.55, 94.89)
         self.assertGreater(z[2]["low"], z[1]["high"])
 
-    def test_entry_and_sl_are_shivas_ex2_trades(self):
-        # EX 2/278 ETH, fib 2562.8 -> 2806.6. His trades: entry 2723.94 / SL 2711.79 (zone 1),
-        # 2672.86 / 2660.74 (zone 2) - entry at the zone top, SL on the inner 0.55 line.
-        # (Read off his chart, so within 0.02% - fib_examples_check.py uses a tolerance too.)
+    def test_entry_is_shivas_ex2_trades(self):
+        # EX 2/278 ETH, fib 2562.8 -> 2806.6. His entries: 2723.94 (zone 1), 2672.86 (zone 2),
+        # the zone top. (Read off his chart, so within 0.02%.)
         z = zones_by_number(1, 2562.8, 2806.6)
-        got = (z[1]["entry"], z[1]["sl"], z[2]["entry"], z[2]["sl"])
-        for g, want in zip(got, (2723.94, 2711.79, 2672.86, 2660.74)):
+        for g, want in zip((z[1]["entry"], z[2]["entry"]), (2723.94, 2672.86)):
             self.assertLess(abs(g - want) / want, 0.0002)
+
+    def test_sl_is_the_sr_zone_rule(self):
+        # Lakky, 2026-10-08: 25% of the box's height beyond its far edge, as scanner.planned_stop_price.
+        import scanner
+        for d, a, b in ((1, 2562.8, 2806.6), (-1, 110.55, 94.89)):
+            for zone in zones_by_number(d, a, b).values():
+                zone_type = "demand" if d == 1 else "supply"
+                self.assertAlmostEqual(
+                    zone["sl"], scanner.planned_stop_price(zone_type, {"top": zone["high"], "bottom": zone["low"]}))
+                self.assertTrue(zone["sl"] < zone["low"] if d == 1 else zone["sl"] > zone["high"])
 
     def test_short_entry_is_the_zone_bottom(self):
         z = zones_by_number(-1, 110.55, 94.89)[1]
