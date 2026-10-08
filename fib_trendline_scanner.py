@@ -30,6 +30,7 @@ fib_trendline_daily_report.py scores once a day.
 """
 import argparse
 import json
+import math
 import os
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -240,12 +241,40 @@ def display(market, symbol):
     return scanner.alert_symbol(symbol)
 
 
-def _fmt(value, places):
-    return f"{value:.{places}f}"
+def price_text(value):
+    """A price as a trader reads it: five significant figures, at least two decimals.
+
+    1967.699951 -> 1967.70, 54.86 -> 54.86, 0.087090 -> 0.08709, 0.000915 -> 0.000915.
+    Five figures keep entry, stop and zone edges apart even on a thin zone - the
+    stop % on the same line says how far apart they really are.
+    """
+    value = float(value)
+    if value == 0 or not math.isfinite(value):
+        return f"{value:.2f}"
+    places = max(2, 4 - math.floor(math.log10(abs(value))))
+    text = f"{value:.{places}f}"
+    if places > 2:
+        whole, frac = text.split(".")
+        frac = frac.rstrip("0")
+        text = f"{whole}.{frac.ljust(2, '0')}"
+    return text
 
 
-def _header(market, tf):
-    return f"Timeframe: {TF_LABEL[tf]} | {MARKET_LABEL[market]}"
+def stamp_text(stamp):
+    """'2026-08-10 00:00' -> '10 Aug'; '2026-07-08 13:15' -> '8 Jul 13:15'."""
+    when = datetime.strptime(stamp, "%Y-%m-%d %H:%M")
+    day = f"{when.day} {when:%b}"
+    return day if when.hour == 0 and when.minute == 0 else f"{day} {when:%H:%M}"
+
+
+def _header(market, tf, title, side=None):
+    mark = {"BUY": "🟢 ", "LONG": "🟢 ", "SELL": "🔴 ", "SHORT": "🔴 "}.get(side, "⚠️ ")
+    return f"{mark}**{title}** · {TF_LABEL[tf]} {MARKET_LABEL[market]}"
+
+
+def _line(t):
+    return (f"Line {price_text(t['from'][0])} ({stamp_text(t['from'][1])}) → "
+            f"{price_text(t['to'][0])} ({stamp_text(t['to'][1])})")
 
 
 def zone_name(d, number):
@@ -258,48 +287,40 @@ def zone_name(d, number):
     return "UPPER" if (number == 1) == (d == 1) else "LOWER"
 
 
+# Short on purpose (lakky, 2026-10-08): side, timeframe, entry, stop and stop %
+# up front, prices at five figures. Nothing parses this text - records carry the plan.
+
 def format_fib_alert(market, symbol, tf, price, z):
-    places = scanner.price_decimals(z["entry"])
     side = "LONG" if z["d"] == 1 else "SHORT"
     name = zone_name(z["d"], z["zone"])
-    deeper = " (deeper)" if z["zone"] == 2 else ""
-    where = "inside the zone" if z["distance"] <= 0 else f"{z['distance']:.2f}% away"
+    where = "inside zone" if z["distance"] <= 0 else f"{z['distance']:.2f}% away"
     return (
-        f"{display(market, symbol)} | FIB {name} ZONE | {side}\n"
-        f"{_header(market, tf)}\n"
-        f"Price: {_fmt(price, places)} | {where}\n"
-        # Upper/lower names the zone, top/bottom its edges (Shiva, 2026-09-29).
-        f"{name.capitalize()} zone: bottom {_fmt(z['low'], places)} - top {_fmt(z['high'], places)}{deeper}\n"
-        f"Entry: {_fmt(z['entry'], places)} (zone {'top' if z['d'] == 1 else 'bottom'}) | "
-        f"SL: {_fmt(z['sl'], places)} | {trades.risk_pct(z['plan']):.2f}%\n"
-        f"Fib: {_fmt(z['base'], places)} -> {_fmt(z['top'], places)}"
+        f"{_header(market, tf, f'{display(market, symbol)} · FIB {name} ZONE · {side}', side)}\n"
+        f"Price {price_text(price)} · {where}\n"
+        f"Zone {price_text(z['low'])} – {price_text(z['high'])}\n"
+        f"Entry {price_text(z['entry'])} · SL {price_text(z['sl'])} ({trades.risk_pct(z['plan']):.2f}%)"
     )
 
 
 def format_touch_alert(market, symbol, tf, price, t):
-    places = scanner.price_decimals(t["level"])
     support = t["kind"] == SUPPORT
     name, side = ("SUP", "BUY") if support else ("RES", "SELL")
-    where = f"{t['distance']:.2f}% {'above' if support else 'below'} the line"
+    where = f"{t['distance']:.2f}% {'above' if support else 'below'} line"
     return (
-        f"{display(market, symbol)} | {name} TL | {side}\n"
-        f"{_header(market, tf)}\n"
-        f"Price: {_fmt(price, places)} | {where}\n"
-        f"Entry (line): {_fmt(t['level'], places)} | SL: {_fmt(t['plan']['sl'], places)} | "
-        f"{trades.risk_pct(t['plan']):.2f}%\n"
-        f"Drawn: {_fmt(t['from'][0], places)} ({t['from'][1]}) -> {_fmt(t['to'][0], places)} ({t['to'][1]})"
+        f"{_header(market, tf, f'{display(market, symbol)} · {name} TL · {side}', side)}\n"
+        f"Price {price_text(price)} · {where}\n"
+        f"Entry {price_text(t['level'])} · SL {price_text(t['plan']['sl'])} ({trades.risk_pct(t['plan']):.2f}%)\n"
+        f"{_line(t)}"
     )
 
 
 def format_break_alert(market, symbol, tf, b):
-    places = scanner.price_decimals(b["level"])
     name = "SUP" if b["kind"] == SUPPORT else "RES"
     side = "below" if b["kind"] == SUPPORT else "above"
     return (
-        f"{display(market, symbol)} | {name} TL BR\n"
-        f"{_header(market, tf)}\n"
-        f"Close {_fmt(b['close'], places)} {side} the line at {_fmt(b['level'], places)} ({b['time']} IST)\n"
-        f"Drawn: {_fmt(b['from'][0], places)} ({b['from'][1]}) -> {_fmt(b['to'][0], places)} ({b['to'][1]})"
+        f"{_header(market, tf, f'{display(market, symbol)} · {name} TL BROKEN')}\n"
+        f"Close {price_text(b['close'])} {side} line {price_text(b['level'])} ({stamp_text(b['time'])} IST)\n"
+        f"{_line(b)}"
     )
 
 
