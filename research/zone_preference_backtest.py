@@ -37,7 +37,7 @@ import config
 import scanner
 
 OUT = Path(__file__).resolve().parent / "out" / "zone_preference"
-EVAL_DAYS = {"30m": 90, "4h": 240}
+SINCE = "2026-09-01"             # Lakky, 2026-10-08: Sep 1 to now
 CLUSTERS = (1.0, 2.0, 3.0)        # deepest_X: % below/above the nearest entry
 RANGES = (100, 300)               # discount_N: candles in the range
 VARIANTS = ["nearest (live)"] + [f"deepest_{c:g}%" for c in CLUSTERS] + [f"discount_{n}" for n in RANGES]
@@ -153,13 +153,14 @@ def halves(results: pd.DataFrame, mid: int) -> tuple[float, float]:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--tf", choices=list(EVAL_DAYS), default="30m")
+    parser.add_argument("--tf", choices=["30m", "4h"], default="30m")
+    parser.add_argument("--since", default=SINCE, help="IST date the window starts")
     args = parser.parse_args()
     tf = args.tf
     assert scanner.TIMEFRAME == tf, "set VICTUS_TIMEFRAME to the --tf value"
     OUT.mkdir(parents=True, exist_ok=True)
     now = int(time.time()) // 300 * 300
-    eval_start = now - EVAL_DAYS[tf] * 86400
+    eval_start = int(pd.Timestamp(args.since, tz=bc.IST).timestamp())
     base_start = eval_start - (config.OHLCV_LIMIT + 50) * bc.TF_SECONDS[tf]
     daily_start = eval_start - 400 * 86400
 
@@ -210,7 +211,7 @@ def main() -> None:
     summary = pd.DataFrame(rows)
     summary.to_csv(OUT / f"summary_{tf}.csv", index=False)
     text = [f"# Zone preference (Notion 20): {tf}", "",
-            f"Last {EVAL_DAYS[tf]} days to {datetime.fromtimestamp(now, bc.IST):%Y-%m-%d %H:%M} IST; "
+            f"{args.since} to {datetime.fromtimestamp(now, bc.IST):%Y-%m-%d %H:%M} IST; "
             f"{len(data)} crypto symbols. Alerts on Bitunix candles, graded on Delta 5m with Delta fees.", "",
             summary.to_markdown(index=False), ""]
     (OUT / f"ZONE_PREFERENCE_{tf}.md").write_text("\n".join(text))
