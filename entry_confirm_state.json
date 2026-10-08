@@ -27,9 +27,14 @@
   "LTCUSD|4h|long|66.1349|65.4788": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "METAXUSD|30m|long|722.05|721.862": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
+  "ZECUSD|30m|long|1295.36|1286.9": {
     "reached_entry": false,
     "stage": 1,
     "stopped_out": false
@@ -504,6 +509,7 @@
   "_level_ready|XRPUSD|30m|short|1.55|1.5655": 1790941595.114569,
   "_level_ready|XRPUSD|4h|short|1.4808|1.49493": 1789983964.89935,
   "_level_ready|ZECUSD|30m|long|1293.45|1280.61": 1791215470.422682,
+  "_level_ready|ZECUSD|30m|long|1295.36|1286.9": 1791432082.857584,
   "_level_ready|ZECUSD|30m|long|1390.64|1377.34": 1790752591.242914,
   "_level_ready|ZECUSD|30m|long|1527.64|1514.07": 1790608886.729739,
   "_level_ready|ZECUSD|30m|short|1565.12|1574.11": 1790097669.889665,
@@ -605,7 +611,7 @@
   "_ready|XRPUSD|4h": 1789983964.89935,
   "_ready|ZAMA/USDT|30m": 1789225271.699613,
   "_ready|ZAMA/USDT|4h": 1789458964.864873,
-  "_ready|ZECUSD|30m": 1791215470.422682,
+  "_ready|ZECUSD|30m": 1791432082.857584,
   "_ready|ZIL/USDT|30m": 1789230352.789374,
   "_ready|ZIL/USDT|4h": 1788885653.347347,
   "_ready|ZORAUSD|30m": 1791093687.456539,
@@ -693,6 +699,10 @@
   "_silent_ready|SOXLBUSD|30m|long|158.65|158.213": {
     "price": 159.3,
     "time": "2026-10-07T14:46:30.242777+05:30"
+  },
+  "_silent_ready|TSLAXUSD|30m|long|375.45|375.2": {
+    "price": 377.45,
+    "time": "2026-10-08T09:31:22.857584+05:30"
   },
   "_silent_ready|TSLAXUSD|30m|short|379.762|383.56": {
     "price": 378.6,
