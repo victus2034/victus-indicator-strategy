@@ -1814,6 +1814,47 @@ def price_decimals(value):
     return min(12, first_significant_place + 4)
 
 
+# Short alerts (lakky, 2026-10-08): at most 3 decimals from 1 up, 2 from 1000 up.
+# Under 1 the price_decimals width stays - three decimals would merge a DOGE
+# entry and stop, and print BOME as 0.001.
+TF_LABEL = {"30m": "30m", "4h": "4H", "1d": "1D", "1w": "1W", "1M": "1M"}
+
+
+def short_places(value):
+    value = abs(float(value))
+    if value >= 1000:
+        return 2
+    if value >= 1:
+        return 3
+    return price_decimals(value)
+
+
+def level_places(levels, places):
+    """`places`, widened until no two different levels print the same (up to price_decimals)."""
+    distinct = {float(level) for level in levels}
+    smallest = min((abs(level) for level in distinct if level), default=0)
+    limit = max(places, price_decimals(smallest))
+    while places < limit and len({f"{level:.{places}f}" for level in distinct}) < len(distinct):
+        places += 1
+    return places
+
+
+def price_text(value, places=None):
+    """A price at `places` decimals with trailing zeros dropped, keeping at least two."""
+    places = short_places(value) if places is None else places
+    text = f"{float(value):.{places}f}"
+    if places > 2:
+        whole, frac = text.split(".")
+        text = f"{whole}.{frac.rstrip('0').ljust(2, '0')}"
+    return text
+
+
+def alert_title(title, side, tag):
+    """🟢/🔴, the title in bold, then the timeframe tag in bold."""
+    mark = {"BUY": "🟢 ", "LONG": "🟢 ", "SELL": "🔴 ", "SHORT": "🔴 "}.get(side, "⚠️ ")
+    return f"{mark}**{title}** · **{tag}**"
+
+
 def format_alert(result, zone_type, zone, distance_pct):
     symbol = alert_symbol(result["symbol"])
     price = result["price"]
@@ -1838,15 +1879,17 @@ def format_alert(result, zone_type, zone, distance_pct):
         score_text = f" | {rating['rating']}"
     stop = planned_stop_price(zone_type, zone)
     stop_distance = planned_stop_distance_pct(zone_type, zone)
-    # One width for every number in the message, chosen from the entry - so the
-    # levels line up and none of them is rounded into another.
-    places = price_decimals(planned_entry_price(zone_type, zone))
-
+    # One width for every number in the message, chosen from the entry and
+    # widened only if two levels would otherwise print the same.
+    places = level_places(
+        (zone["bottom"], zone["top"], stop), short_places(planned_entry_price(zone_type, zone))
+    )
     return (
-        f"{symbol} | {side}{score_text}\n"
-        f"Price: {price:.{places}f} | {distance_pct:.2f}%\n"
-        f"Zone: {zone['bottom']:.{places}f} - {zone['top']:.{places}f}\n"
-        f"SL: {stop:.{places}f} | {stop_distance:.2f}%"
+        # Plain "SYMBOL | SIDE | ... | 8/10": the journal's alert import reads that line.
+        f"**{symbol} | {side} | {TF_LABEL.get(TIMEFRAME, TIMEFRAME)}{score_text}**\n"
+        f"Price {price_text(price, places)} · {distance_pct:.2f}% away\n"
+        f"Zone {price_text(zone['bottom'], places)} – {price_text(zone['top'], places)}\n"
+        f"SL {price_text(stop, places)} ({stop_distance:.2f}%)"
     )
 
 

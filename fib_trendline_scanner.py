@@ -30,7 +30,6 @@ fib_trendline_daily_report.py scores once a day.
 """
 import argparse
 import json
-import math
 import os
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -242,22 +241,8 @@ def display(market, symbol):
 
 
 def price_text(value):
-    """A price as a trader reads it: five significant figures, at least two decimals.
-
-    1967.699951 -> 1967.70, 54.86 -> 54.86, 0.087090 -> 0.08709, 0.000915 -> 0.000915.
-    Five figures keep entry, stop and zone edges apart even on a thin zone - the
-    stop % on the same line says how far apart they really are.
-    """
-    value = float(value)
-    if value == 0 or not math.isfinite(value):
-        return f"{value:.2f}"
-    places = max(2, 4 - math.floor(math.log10(abs(value))))
-    text = f"{value:.{places}f}"
-    if places > 2:
-        whole, frac = text.split(".")
-        frac = frac.rstrip("0")
-        text = f"{whole}.{frac.ljust(2, '0')}"
-    return text
+    """Shared with the zone alerts: at most 3 decimals from 1 up (scanner.price_text)."""
+    return scanner.price_text(value)
 
 
 def stamp_text(stamp):
@@ -268,8 +253,7 @@ def stamp_text(stamp):
 
 
 def _header(market, tf, title, side=None):
-    mark = {"BUY": "🟢 ", "LONG": "🟢 ", "SELL": "🔴 ", "SHORT": "🔴 "}.get(side, "⚠️ ")
-    return f"{mark}**{title}** · **{TF_LABEL[tf]} {MARKET_LABEL[market]}**"
+    return scanner.alert_title(title, side, f"{TF_LABEL[tf]} {MARKET_LABEL[market]}")
 
 
 def _line(t):

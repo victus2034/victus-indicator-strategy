@@ -32,7 +32,8 @@ class ZoneScoringTests(unittest.TestCase):
 
         message = scanner.format_alert(result, "demand", zone, 0.5)
 
-        self.assertTrue(message.startswith("BTC | BUY | 8/10"))
+        self.assertTrue(message.startswith("**BTC | BUY | " ))
+        self.assertIn("| 8/10**", message)
 
     def test_nse_four_hour_alert_displays_rule_based_score(self):
         result = {"symbol": "RELIANCE.NS", "price": 100.0, "supply_score": 7}
@@ -40,7 +41,8 @@ class ZoneScoringTests(unittest.TestCase):
 
         message = nse_scanner.format_alert(result, "supply", zone, 1.0)
 
-        self.assertTrue(message.startswith("RELIANCE | SELL | 7/10"))
+        self.assertTrue(message.startswith("**RELIANCE | SELL | " ))
+        self.assertIn("| 7/10**", message)
 
     def test_nse_thirty_minute_alert_displays_full_wick_score(self):
         result = {"symbol": "INDIGO.NS", "price": 100.0, "demand_score": 9}
@@ -48,7 +50,8 @@ class ZoneScoringTests(unittest.TestCase):
 
         message = nse_scanner.format_alert(result, "demand", zone, 0.5)
 
-        self.assertTrue(message.startswith("INDIGO | BUY | 9/10"))
+        self.assertTrue(message.startswith("**INDIGO | BUY | " ))
+        self.assertIn("| 9/10**", message)
 
 
 if __name__ == "__main__":
