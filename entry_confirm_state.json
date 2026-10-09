@@ -370,9 +370,9 @@
     "stage": 2,
     "stopped_out": false
   },
-  "DALBHARAT.NS|1d|long|1606.08|1581.99": {
+  "DALBHARAT.NS|1d|long|1606.07|1581.98": {
     "reached_entry": true,
-    "stage": 3,
+    "stage": 2,
     "stopped_out": false
   },
   "DALBHARAT.NS|1w|long|1606.05|1565.89": {
@@ -1092,12 +1092,13 @@
     "stopped_out": false
   },
   "TSLAXUSD|1d|short|380.172|385.874": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "TSLAXUSD|1w|short|382.103|390": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "UNIUSD|1M|short|8.14976|8.99938": {
@@ -1292,6 +1293,7 @@
   "_level_ready|CONCOR.NS|1w|long|435.084|424.207": 1791517890.620179,
   "_level_ready|CRAFTSMAN.NS|1w|long|10112.9|9838.25": 1791517599.357562,
   "_level_ready|DABUR.NS|1d|short|383.34|389.09": 1791518507.451007,
+  "_level_ready|DALBHARAT.NS|1d|long|1606.07|1581.98": 1791529898.238542,
   "_level_ready|DALBHARAT.NS|1d|long|1606.08|1581.99": 1791517599.357562,
   "_level_ready|DALBHARAT.NS|1w|long|1606.05|1565.89": 1791517599.357562,
   "_level_ready|DOGEUSD|1d|long|0.0849193|0.0836455": 1791472903.216312,
@@ -1640,6 +1642,7 @@
   "_level_ready|TRUMP/USDT|4h|long|1.948|1.9355": 1790607384.010239,
   "_level_ready|TSLAXUSD|1d|short|375.186|380.814": 1791454600.819574,
   "_level_ready|TSLAXUSD|1d|short|380.172|385.874": 1791518798.870888,
+  "_level_ready|TSLAXUSD|1w|short|382.103|390": 1791529898.238542,
   "_level_ready|TSLAXUSD|30m|long|352.35|350.663": 1790701584.724986,
   "_level_ready|TSLAXUSD|30m|long|353.2|353.137": 1790689282.989615,
   "_level_ready|TSLAXUSD|30m|long|356.35|354.663": 1790660168.134136,
@@ -1813,7 +1816,7 @@
   "_ready|CRAFTSMAN.NS|1w": 1791517599.357562,
   "_ready|CRV/USDT|30m": 1789461071.110789,
   "_ready|DABUR.NS|1d": 1791518507.451007,
-  "_ready|DALBHARAT.NS|1d": 1791517599.357562,
+  "_ready|DALBHARAT.NS|1d": 1791529898.238542,
   "_ready|DALBHARAT.NS|1w": 1791517599.357562,
   "_ready|DEXE/USDT|30m": 1789389359.59074,
   "_ready|DEXE/USDT|4h": 1788962475.195541,
@@ -1943,6 +1946,7 @@
   "_ready|TRUMP/USDT|30m": 1791306383.632732,
   "_ready|TRUMP/USDT|4h": 1790607384.010239,
   "_ready|TSLAXUSD|1d": 1791518798.870888,
+  "_ready|TSLAXUSD|1w": 1791529898.238542,
   "_ready|TSLAXUSD|30m": 1791449501.43422,
   "_ready|TSLAXUSD|4h": 1791284789.259019,
   "_ready|UB/USDT|30m": 1789320957.820623,
@@ -1976,10 +1980,6 @@
   "_silent_ready|MRVL/USDT:USDT|30m|long|278.58|276.368": {
     "price": 279.58,
     "time": "2026-10-08T13:36:30.248145+05:30"
-  },
-  "_silent_ready|NVDAXUSD|30m|long|234.852|234.849": {
-    "price": 236.05,
-    "time": "2026-10-08T12:36:34.765243+05:30"
   },
   "_silent_ready|UNIUSD|30m|long|7.736|7.66975": {
     "price": 7.785,
