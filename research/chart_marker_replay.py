@@ -1,5 +1,5 @@
 """Bar-by-bar list of the fib / trendline alerts the bot's rules give on one
-crypto chart, next to what the Pine chart markers (v12.7.3) give on the same
+crypto chart, next to what the Pine chart markers (v12.7.4) give on the same
 candles, so the two can be diffed. Research only - sends nothing.
 
 Lakky, 2026-10-09 (LINK 1D): "signal differs with the alert ... make it strict
@@ -9,9 +9,13 @@ Each bar is judged the way the chart sees it: by its high and low. The bot's
 side mirrors fib_trendline_scanner.analyse / plan_alerts (deeper zone only,
 S/R stop, 0.75% approach band, once per fib + zone; trendline band on the
 approach side, again only after price leaves the band; BROKEN on a close
-through). The Pine side transcribes the v12.7.3 marker code.
+through). The Pine side transcribes the v12.7.4 marker code. v12.7.3 differed
+in two places: a TL re-armed when a candle merely closed outside the band (extra
+TL markers on back-to-back candles), and the fib band ran only to the inner 0.55
+line, the old stop.
 
     python research/chart_marker_replay.py LINKUSD --tf 1d --since 2026-07-01
+    python research/chart_marker_replay.py LINKUSD --tf 1d --csv research/out/chart_markers/LINKUSD_1d.csv
 """
 import argparse
 import csv
@@ -93,7 +97,7 @@ def bot_markers(c, stamp):
 
 
 def pine_markers(c, stamp):
-    """[(bar, kind, text)] as Pine v12.7.3 marks them."""
+    """[(bar, kind, text)] as Pine v12.7.4 marks them."""
     n = len(c)
     opens = [x[1] for x in c]
     highs = [x[2] for x in c]
@@ -101,7 +105,7 @@ def pine_markers(c, stamp):
     closes = [x[4] for x in c]
     out = []
     snaps, _ = fib_engine.run(stamp, highs, lows, N=FIB_SWING_LENGTH)
-    key_now, done = None, {1: False, 2: False}
+    key_now, done = None, False
     for i in range(1, n):
         s = snaps[i - 1]
         d, o, e = s["d"], s["O"], s["E"]
@@ -109,20 +113,16 @@ def pine_markers(c, stamp):
             continue
         key = (d, s["Ot"], e)
         if key != key_now:
-            key_now, done = key, {1: False, 2: False}
+            key_now, done = key, False
         flo, fr = min(o, e), abs(e - o)
         fw = 0.11 * fr
-        for k in (2,):                      # 'Deeper zone only' default
-            upper = (d == 1) == (k == 1)
-            zl = flo + 0.55 * fr if upper else flo + 0.34 * fr
-            zh = zl + fw
-            sl = zl + 0.55 * fw if d == 1 else zh - 0.55 * fw
-            lower = max(sl, o) if d == 1 else max(zl * (1 - BAND), e)
-            upp = min(zh * (1 + BAND), e) if d == 1 else min(sl, o)
-            hit = upp > lower and lows[i] <= upp and highs[i] >= lower and (highs[i] > lower if d == 1 else lows[i] < upp)
-            if hit and not done[k]:
-                done[k] = True
-                out.append((i, "FIB BUY" if d == 1 else "FIB SELL", f"zone {zl:.4f}-{zh:.4f}"))
+        zl = flo + 0.34 * fr if d == 1 else flo + 0.55 * fr      # strong zone only
+        zh = zl + fw
+        lower = max(zl, o) if d == 1 else max(zl * (1 - BAND), e)
+        upp = min(zh * (1 + BAND), e) if d == 1 else min(zh, o)
+        if not done and upp > lower and lows[i] < upp and highs[i] > lower:
+            done = True
+            out.append((i, "FIB BUY" if d == 1 else "FIB SELL", f"zone {zl:.4f}-{zh:.4f}"))
     for ln in build_trendlines(highs, lows, closes, TRENDLINE_SWING_LENGTH, TRENDLINES_KEEP, history=True):
         last = min(x for x in (ln.broken_at, ln.trimmed_at, n - 1) if x is not None)
         was, sent = False, -1
@@ -138,7 +138,7 @@ def pine_markers(c, stamp):
             if hit and not was and i > sent:
                 out.append((i, "TL BUY" if sup else "TL SELL", f"level {level:.4f}"))
                 sent = i
-            was = hit and ((level <= closes[i] <= edge) if sup else (edge <= closes[i] <= level))
+            was = hit
         if ln.broken_at is not None and (ln.trimmed_at is None or ln.broken_at <= ln.trimmed_at):
             out.append((ln.broken_at, "TL BRK " + ("SUP" if ln.kind == SUPPORT else "RES"), ""))
     return sorted(out)
@@ -149,18 +149,23 @@ def main():
     ap.add_argument("symbol")
     ap.add_argument("--tf", default="1d")
     ap.add_argument("--since", default="2026-07-01")
+    ap.add_argument("--csv", help="replay candles saved by an earlier run instead of fetching")
     a = ap.parse_args()
     now = int(time.time())
-    contract = scanner.delta_contract(a.symbol)
-    c = crypto_charts(contract, [a.tf], now, source="bitunix")[a.tf]
-    c = [[int(x[0] / 1000 if x[0] > 1e11 else x[0]), *map(float, x[1:5])] for x in c]
+    if a.csv:
+        with open(a.csv) as f:
+            c = [[int(r["time"]), *(float(r[k]) for k in ("open", "high", "low", "close"))] for r in csv.DictReader(f)]
+    else:
+        contract = scanner.delta_contract(a.symbol)
+        c = crypto_charts(contract, [a.tf], now, source="bitunix")[a.tf]
+        c = [[int(x[0] / 1000 if x[0] > 1e11 else x[0]), *map(float, x[1:5])] for x in c]
+        out = Path(__file__).resolve().parent / "out" / "chart_markers"
+        out.mkdir(parents=True, exist_ok=True)
+        with open(out / f"{a.symbol}_{a.tf}.csv", "w", newline="") as f:
+            w = csv.writer(f)
+            w.writerow(["time", "open", "high", "low", "close"])
+            w.writerows(c)
     stamp = [day(x[0]) for x in c]
-    out = Path(__file__).resolve().parent / "out" / "chart_markers"
-    out.mkdir(parents=True, exist_ok=True)
-    with open(out / f"{a.symbol}_{a.tf}.csv", "w", newline="") as f:
-        w = csv.writer(f)
-        w.writerow(["time", "open", "high", "low", "close"])
-        w.writerows(c)
     forming = not candle_is_closed(CRYPTO, c[-1][0], a.tf, now)
     print(f"== {a.symbol} {a.tf} bitunix: {len(c)} candles {stamp[0]} -> {stamp[-1]}{' (last forming)' if forming else ''}")
     since = datetime.strptime(a.since, "%Y-%m-%d").replace(tzinfo=timezone.utc).timestamp()
@@ -169,7 +174,7 @@ def main():
     print("\n-- BOT RULES --")
     for i, k, t in bot:
         print(f"{stamp[i]}  {k:12s} {t}")
-    print("\n-- PINE v12.7.3 --")
+    print("\n-- PINE v12.7.4 --")
     for i, k, t in pine:
         print(f"{stamp[i]}  {k:12s} {t}")
     bs = {(i, k) for i, k, _ in bot}
