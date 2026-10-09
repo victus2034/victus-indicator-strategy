@@ -62,6 +62,8 @@ def _throttle(gap=0.13):
 
 
 def bitunix_symbol(symbol: str) -> str:
+    if symbol in config.BITUNIX_XSTOCK_PAIRS:
+        return config.BITUNIX_XSTOCK_PAIRS[symbol]
     contract = scanner.delta_contract(symbol) or symbol.split("/")[0] + "USD"
     return contract[:-3] + "USDT"
 
@@ -301,7 +303,8 @@ def replay_zones(args) -> list[dict]:
                 if touched:
                     due = (not st["in_zone"]) or ts - st["last"] >= config.ALERT_COOLDOWN_SECONDS
                     if due and not past and ts - st["last"] >= scanner.ZONE_REPEAT_SUPPRESSION_SECONDS \
-                            and in_window(ts) and not scanner.against_daily_trend(zone_type, daily_trend_at(daily, ts)):
+                            and in_window(ts) and not (symbol in config.CRYPTO_WATCHLIST and scanner.against_daily_trend(
+                                zone_type, daily_trend_at(daily, ts))):
                         st["last"] = ts
                         record = {
                             "delivered_at_utc": pd.Timestamp(ts, unit="s", tz="UTC").isoformat(),
@@ -550,7 +553,14 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--part", choices=["zones", "fib"], required=True)
     parser.add_argument("--tf", choices=list(EVAL_DAYS), default="30m")
+    parser.add_argument("--symbols", choices=["crypto", "xstock"], default="crypto",
+                        help="xstock: the six xStocks (2026-10-09), written to research/out/xstock/")
     args = parser.parse_args()
+    if args.symbols == "xstock":
+        global SYMBOLS, OUT, CACHE
+        SYMBOLS = list(config.XSTOCK_WATCHLIST)
+        OUT = OUT.parent / "xstock"
+        CACHE = CACHE.parent / ".xstock_cache"
     if args.part == "zones":
         zones_part(args.tf)
     else:
