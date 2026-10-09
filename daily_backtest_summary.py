@@ -59,7 +59,6 @@ ALERT_BAR_DURATION = {"30m": pd.Timedelta(minutes=30), "4h": pd.Timedelta(hours=
 EVALUATION_OHLCV_LIMIT = 2500
 
 ENTRY_WAIT_BARS = 3
-MAX_HOLD_BARS = 24
 NSE_BACKTEST_CLOSE_CUTOFF = datetime_time(15, 10)
 NSE_TRADE_START = datetime_time(9, 15)
 CRYPTO_EVALUATION_HOURS = 6
@@ -2650,59 +2649,6 @@ def reconciliation_diagnostics(
         "finalized": len(finalized_ids),
         "issues": issues,
     }
-
-
-def build_timing_analytics(records: pd.DataFrame) -> pd.DataFrame:
-    if records.empty:
-        return pd.DataFrame()
-
-    frame = records.copy()
-    if "filled" not in frame or "final_result" not in frame:
-        return pd.DataFrame()
-
-    frame = frame[
-        (frame["filled"] == True)  # noqa: E712
-        & (frame["final_result"].notna())
-        & (~frame["final_result"].isin(["", "Pending"]))
-    ].copy()
-    if frame.empty:
-        return pd.DataFrame()
-
-    frame["time_to_resolution_seconds"] = pd.to_numeric(
-        frame.get("time_to_resolution_seconds"), errors="coerce"
-    )
-    frame = frame[frame["time_to_resolution_seconds"].notna()].copy()
-    if frame.empty:
-        return pd.DataFrame()
-
-    for column, fallback in (
-        ("market", "UNKNOWN"),
-        ("timeframe", ""),
-        ("side", ""),
-        ("rating", float("nan")),
-        ("final_result", ""),
-    ):
-        if column not in frame:
-            frame[column] = fallback
-
-    rows: list[dict] = []
-    group_columns = ["market", "timeframe", "rating", "side", "final_result"]
-    for key, group in frame.groupby(group_columns, dropna=False):
-        durations = pd.to_numeric(group["time_to_resolution_seconds"], errors="coerce").dropna()
-        if durations.empty:
-            continue
-        row = dict(zip(group_columns, key))
-        row["trades"] = int(len(durations))
-        for hours in range(1, 7):
-            row[f"resolved_within_{hours}h_pct"] = float((durations <= hours * 3600).mean() * 100.0)
-        row["median_resolution_seconds"] = float(durations.median())
-        row["p75_resolution_seconds"] = float(durations.quantile(0.75))
-        row["p90_resolution_seconds"] = float(durations.quantile(0.90))
-        rows.append(row)
-
-    if not rows:
-        return pd.DataFrame()
-    return pd.DataFrame(rows).sort_values(group_columns).reset_index(drop=True)
 
 
 def main() -> None:

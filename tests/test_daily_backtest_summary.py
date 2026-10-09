@@ -1258,48 +1258,6 @@ class DailyBacktestSummaryTests(unittest.TestCase):
         self.assertEqual(result["final_result"], "Neither")
         self.assertEqual(result["final_resolution_time"], frame.index[2] + pd.Timedelta(minutes=30))
 
-    def test_timing_analytics_groups_finalized_trade_durations(self):
-        records = pd.DataFrame(
-            [
-                {
-                    **base_alert(symbol="BTCUSDT", side="long", rating=5),
-                    "market": "CRYPTO",
-                    "timeframe": "30m",
-                    "filled": True,
-                    "final_result": "+1R",
-                    "time_to_resolution_seconds": 1800,
-                },
-                {
-                    **base_alert(symbol="ETHUSDT", side="short", rating=6),
-                    "market": "CRYPTO",
-                    "timeframe": "30m",
-                    "filled": True,
-                    "final_result": "Pending",
-                    "time_to_resolution_seconds": None,
-                },
-                {
-                    **base_alert(symbol="SOLUSDT", side="long", rating=5),
-                    "market": "CRYPTO",
-                    "timeframe": "30m",
-                    "filled": False,
-                    "final_result": "",
-                    "time_to_resolution_seconds": None,
-                },
-            ]
-        )
-
-        analytics = summary.build_timing_analytics(records)
-
-        self.assertEqual(len(analytics), 1)
-        row = analytics.iloc[0]
-        self.assertEqual(row["market"], "CRYPTO")
-        self.assertEqual(row["rating"], 5)
-        self.assertEqual(row["side"], "long")
-        self.assertEqual(row["final_result"], "+1R")
-        self.assertEqual(row["trades"], 1)
-        self.assertEqual(row["resolved_within_1h_pct"], 100.0)
-        self.assertEqual(row["median_resolution_seconds"], 1800.0)
-
     def test_format_rating_table_handles_no_results_yet(self):
         records = pd.DataFrame([
             {"symbol": "BTCUSDT", "rating": 7},
