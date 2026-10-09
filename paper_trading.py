@@ -53,7 +53,7 @@ AMBIGUOUS = backtest.DATA_QUALITY_AMBIGUOUS
 SQUARE_OFF_GRACE_END = datetime_time(16, 0)
 
 
-# "other" is PAXG and SLVON - not crypto, not an xStock, but they still
+# "other" is XAUT and SLVON - not crypto, not an xStock, but they still
 # trade and their results have to land somewhere visible.
 MARKETS = [
     ("nse", "NSE"),
@@ -108,7 +108,12 @@ def save_state(state: dict) -> None:
 
 
 def fetch_crypto_bars(symbols: list[str]) -> dict[str, pd.DataFrame]:
-    """Recent 5m OHLC per symbol, from the scan's own venue chain.
+    """Recent 5m OHLC per symbol, from the venue the trades are taken on.
+
+    Delta first, through the daily backtest's own chain, so paper fills and the
+    daily report grade on the same book. It used the scan's chain until
+    2026-10-09, which since 2026-10-05 puts Bitunix first: paper trades were
+    filled and stopped on Bitunix candles while the trades are taken on Delta.
 
     Imported lazily so the NSE path never pays for ccxt loading, and so a
     crypto venue being unreachable cannot stop an NSE tick.
@@ -122,7 +127,7 @@ def fetch_crypto_bars(symbols: list[str]) -> dict[str, pd.DataFrame]:
     try:
         for symbol in symbols:
             try:
-                ohlcv, _ = scanner.fetch_symbol_ohlcv(symbol)
+                ohlcv = backtest.crypto_fetch_ohlcv(symbol)
             except Exception as error:
                 print(f"{symbol} paper bars unavailable: {str(error)[:70]}")
                 continue

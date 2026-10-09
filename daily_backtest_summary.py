@@ -17,6 +17,7 @@ import yfinance as yf
 
 import nse_scanner
 import scanner as crypto_scanner
+from config import OTHER_WATCHLIST
 from xstock_hybrid_rating import XSTOCK_UNDERLYINGS, is_xstock
 
 
@@ -58,7 +59,6 @@ ALERT_BAR_DURATION = {"30m": pd.Timedelta(minutes=30), "4h": pd.Timedelta(hours=
 EVALUATION_OHLCV_LIMIT = 2500
 
 ENTRY_WAIT_BARS = 3
-MAX_HOLD_BARS = 24
 NSE_BACKTEST_CLOSE_CUTOFF = datetime_time(15, 10)
 NSE_TRADE_START = datetime_time(9, 15)
 CRYPTO_EVALUATION_HOURS = 6
@@ -84,27 +84,13 @@ SL_BUFFER_PCT = 0.10
 # 18% GST on brokerage + exchange + SEBI. Constant at any size below the
 # ~Rs66,667 where the Rs20 brokerage cap starts to bite and the rate falls.
 ROUND_TRIP_COST_PCT = 0.1063
-# CoinSwitch futures, both legs. Measured 31 Aug 2026 from the user's own
-# futures history: 49 filled trades, whose commissions reconcile to the paisa
-# against the account's COMMISSION ledger. Fee-weighted by notional rather
-# than averaged per trade, because the per-trade rate ranges from 0.0236% to
-# 0.118% and a plain mean would over-weight the small fills.
-#
-# Only 20-21 July is used. Before that, 8 of 27 trades were charged nothing
-# at all - a waiver that stopped after 17 July - and including them would
-# understate what the account actually pays now. On the 22 fee-charging
-# trades the round trip is 0.0980%: 0.1004% on crypto, 0.0969% on xStocks,
-# close enough to carry one number for both. The earlier 0.10% placeholder
-# happened to be right, so no backtest result shifts.
-#
-# That was CoinSwitch. Trades are taken on Delta India now (2026-10-04),
-# whose published futures schedule is 0.02% maker / 0.05% taker plus 18%
-# GST on the fee. Entry here is a resting limit (maker); most exits are
+# Trades are taken on Delta India (since 2026-10-04), whose published
+# futures schedule is 0.02% maker / 0.05% taker plus 18% GST on the fee. Entry here is a resting limit (maker); most exits are
 # stops, which fill as taker. So one round trip is (0.02 + 0.05) x 1.18 =
 # 0.0826%. A +2R target exit is a limit too and pays less (0.047%), so this
 # slightly overstates costs there - on purpose, rather than per-exit rates.
 # Not yet reconciled against a Delta fee statement; do that when one is
-# available, as was done for CoinSwitch.
+# available.
 #
 # Override with VICTUS_CRYPTO_ROUND_TRIP_COST_PCT if the fee tier changes.
 CRYPTO_ROUND_TRIP_COST_PCT = float(
@@ -311,9 +297,8 @@ def load_records(path: Path, timeframe_filter: str) -> pd.DataFrame:
     # 44% of deliveries were the same zone alerted again.
     #
     # An EXACT match (originally six significant figures) still missed a
-    # real class of repeat: crypto's fetch_symbol_ohlcv() tries CoinSwitch
-    # first each scan and falls back to Binance/Delta/others when it's slow
-    # or fails, so the same real zone can come back priced from a different
+    # real class of repeat: crypto's fetch_symbol_ohlcv() falls back from
+    # its first venue to others when it's slow or fails, so the same real zone can come back priced from a different
     # venue scan to scan - measured on the real 30m alert log, 290 same
     # symbol/side pairs inside the crypto cooldown window were within 1% of
     # each other (plausibly the same zone) but NOT an exact match, so each
@@ -646,8 +631,7 @@ def delta_fetch_window(symbol: str, resolution: str, start, end):
     """Candles for [start, end) straight from Delta India, or None if the
     symbol is not a Delta contract.
 
-    Delta is where the trades are actually taken and, since CoinSwitch was
-    dropped, where most zones are built - see crypto_fetch_ohlcv().
+    Delta is where the trades are actually taken - see crypto_fetch_ohlcv().
     """
     contract = crypto_scanner.delta_contract(symbol)
     if contract is None:
@@ -807,15 +791,12 @@ def crypto_fetch_ohlcv(symbol: str):
     # Delta first. Trades are taken on Delta India (entry_confirm tags every
     # ping "Delta"), and its book is the one the zones are built from and the
     # one on the chart being watched. The old order - Binance (geo-blocked on
-    # GitHub runners), then OKX/MEXC/etc., then CoinSwitch - graded every
-    # trade against a different venue's candles: real CI logs showed OKX,
-    # MEXC and CoinSwitch and never Delta, and measured against Delta those
+    # GitHub runners), then OKX/MEXC/etc. - graded every trade against a
+    # different venue's candles: real CI logs showed OKX and MEXC, never Delta, and measured against Delta those
     # venues' closes differ by a median 0.04-0.25% on the alts (95th
     # percentile up to 0.9%) - the same size as the 0.20% alert distance and
     # a large share of a 0.1-0.6% stop. A fill or stop that only exists on
-    # another exchange is a wrong grade. 8 of the 31 watchlist symbols (the
-    # xStocks) exist on no other venue at all, so they only ever got graded
-    # off CoinSwitch's separate feed, or not at all.
+    # another exchange is a wrong grade.
     try:
         delta_rows = crypto_scanner.fetch_delta_ohlcv(symbol)
         if delta_rows is not None:  # None = not a Delta contract, go on to the rest
@@ -855,16 +836,6 @@ def crypto_fetch_ohlcv(symbol: str):
             last_error = error
             if CRYPTO_FETCH_DEBUG:
                 print(f"[backtest-exchange-debug] {symbol} fallback({exchange.id}) failed: {error}", file=sys.stderr)
-
-    if crypto_scanner.is_coinswitch_configured():
-        try:
-            ohlcv = crypto_scanner.require_fresh_ohlcv(
-                crypto_scanner.fetch_coinswitch_ohlcv(symbol), "coinswitch"
-            )
-            _log_crypto_fetch_source(symbol, "coinswitch", ohlcv)
-            return ohlcv
-        except Exception as error:
-            last_error = error
 
     raise RuntimeError(f"all crypto exchanges failed for {symbol}: {last_error}")
 
@@ -1546,7 +1517,7 @@ def uses_six_hour_evaluation(symbol: str) -> bool:
     trade on the same venues as crypto, around the clock, and are
     alerted on the same cadence, so they are judged the same way.
 
-    "other" (PAXG, SLVON) is included for the same reason and was missing
+    "other" (XAUT, SLVON) is included for the same reason and was missing
     it: run_backtest() already routes "other" through crypto_tracking_end()
     for its outer, provisional window, but simulate_alert() only applies
     the real six-hour maturity gate and re-scoping when this function says
@@ -1596,14 +1567,18 @@ def is_xstock_symbol(symbol: str) -> bool:
     return is_xstock(str(symbol).upper())
 
 
+# PAXG stays for old records; XAUT replaced it on the watchlist and was
+# graded as crypto until 2026-10-09 because this set was never updated.
+OTHER_DISPLAY_SYMBOLS = {"PAXG", "XAUT", "SLVON"}
+
+
 def market_class(symbol: str) -> str:
     text = str(symbol).strip().upper()
     if text.endswith(".NS"):
         return MARKET_NSE
     if is_xstock_symbol(text):
         return MARKET_XSTOCK
-    normalized = display_symbol(text)
-    if normalized in {"PAXG", "SLVON"}:
+    if text in OTHER_WATCHLIST or display_symbol(text) in OTHER_DISPLAY_SYMBOLS:
         return MARKET_OTHER
     return MARKET_CRYPTO
 
@@ -2645,59 +2620,6 @@ def reconciliation_diagnostics(
         "finalized": len(finalized_ids),
         "issues": issues,
     }
-
-
-def build_timing_analytics(records: pd.DataFrame) -> pd.DataFrame:
-    if records.empty:
-        return pd.DataFrame()
-
-    frame = records.copy()
-    if "filled" not in frame or "final_result" not in frame:
-        return pd.DataFrame()
-
-    frame = frame[
-        (frame["filled"] == True)  # noqa: E712
-        & (frame["final_result"].notna())
-        & (~frame["final_result"].isin(["", "Pending"]))
-    ].copy()
-    if frame.empty:
-        return pd.DataFrame()
-
-    frame["time_to_resolution_seconds"] = pd.to_numeric(
-        frame.get("time_to_resolution_seconds"), errors="coerce"
-    )
-    frame = frame[frame["time_to_resolution_seconds"].notna()].copy()
-    if frame.empty:
-        return pd.DataFrame()
-
-    for column, fallback in (
-        ("market", "UNKNOWN"),
-        ("timeframe", ""),
-        ("side", ""),
-        ("rating", float("nan")),
-        ("final_result", ""),
-    ):
-        if column not in frame:
-            frame[column] = fallback
-
-    rows: list[dict] = []
-    group_columns = ["market", "timeframe", "rating", "side", "final_result"]
-    for key, group in frame.groupby(group_columns, dropna=False):
-        durations = pd.to_numeric(group["time_to_resolution_seconds"], errors="coerce").dropna()
-        if durations.empty:
-            continue
-        row = dict(zip(group_columns, key))
-        row["trades"] = int(len(durations))
-        for hours in range(1, 7):
-            row[f"resolved_within_{hours}h_pct"] = float((durations <= hours * 3600).mean() * 100.0)
-        row["median_resolution_seconds"] = float(durations.median())
-        row["p75_resolution_seconds"] = float(durations.quantile(0.75))
-        row["p90_resolution_seconds"] = float(durations.quantile(0.90))
-        rows.append(row)
-
-    if not rows:
-        return pd.DataFrame()
-    return pd.DataFrame(rows).sort_values(group_columns).reset_index(drop=True)
 
 
 def main() -> None:

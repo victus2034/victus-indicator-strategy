@@ -6,18 +6,18 @@ borrows their watchlists, symbol names, price formatting, alert window and
 Discord sender.
 
 - Fib alerts (DISCORD_FIB_WEBHOOK_URL): price is within FIB_TL_MAX_DISTANCE_PCT
-  (0.75%) of Zone 1 or Zone 2 of the live fib, down to inside it, as indicator
-  v12.3 draws it (fib_engine.py). Once per zone per fib - a new top or base is a
-  new fib and can alert again.
+  (0.75%) of the live fib's deeper (strong) zone, down to its near edge
+  (FIB_ALERT_ZONES; fib_engine.py). Stop = the S/R zone rule. Once per zone per
+  fib - a new top or base is a new fib and can alert again.
 - Trendline alerts (DISCORD_TRENDLINE_WEBHOOK_URL): price is within the same
-  0.75% of a live trendline (indicator v11.0, trendlines.py), or a candle closes
-  through one. A touch re-arms once price has left the band and a full candle
-  has passed.
+  0.75% of a live trendline (indicator v12.6 anchors, trendlines.py), or a
+  candle closes through one. A touch re-arms once price has left the band and a
+  full candle has passed.
 
-Crypto (Delta) scans on every pass, inside the 08:00-01:00 IST alert window.
-NSE (Yahoo, the zone scanner's 200 stocks) scans during the session only,
-every NSE_MIN_INTERVAL_SECONDS. Both post to the same two channels, the market
-named on each alert.
+Crypto and xStocks (Bitunix; XAUT and SLVON on Delta) scan on every pass, inside
+the 08:00-01:00 IST alert window. NSE (Yahoo, the zone scanner's 200 stocks)
+scans during the session only, every NSE_MIN_INTERVAL_SECONDS. Each market can
+have its own pair of channels (DISCORD_{FIB,TRENDLINE}_{CRYPTO,NSE}_WEBHOOK_URL).
 
 Levels come from CLOSED candles, like the chart's confirmed swings; the candle
 still forming only supplies the current price. Every fib and trendline-touch
@@ -74,7 +74,8 @@ RETRY_BACKOFF_SECONDS = 30 * 60   # a failed Discord send is not retried sooner 
 # v5 (2026-10-07): v12.6 trendlines - lower lows get lines from the last swing below.
 # v6 (2026-10-08): deeper fib zone only, stop beyond the box - a zone price sits
 # in below the old (inner) stop alerts now.
-SEED_VERSION = "v6"
+# v7 (2026-10-09): xStocks drawn from Bitunix - their fibs and lines get new keys.
+SEED_VERSION = "v7"
 # Bitunix candles draw different fibs and lines, each a new key: turning the
 # source on re-seeds silently rather than posting every level already in range.
 if bitunix_data.CRYPTO_CANDLE_SOURCE == "bitunix":
@@ -417,19 +418,22 @@ def scan_crypto(timeframes, now):
             return symbol, None, "not a Delta contract"
         try:
             source = "bitunix" if bitunix_data.uses_bitunix(symbol) else "delta"
-            try:
-                charts = crypto_charts(contract, timeframes, now, source=source)
-            except Exception as error:     # noqa: BLE001 - Bitunix down: Delta still draws the levels
-                if source == "delta":
-                    raise
-                print(f"{symbol} Bitunix charts unavailable, using Delta: {str(error)[:80]}")
-                charts = crypto_charts(contract, timeframes, now)
+            pair = bitunix_data.pair_for(symbol, contract) if source == "bitunix" else None
+            # No Delta fallback here, unlike the zone scan. A fib's key names its
+            # base candle, and Delta's history starts Dec 2023 while Bitunix's runs
+            # years further back, so the same chart on Delta is a different fib:
+            # BNB 1M re-alerted on 2026-10-09 with a 2024 base and an entry above
+            # price. Trendline keys carry Delta's own prices too. A pass with
+            # Bitunix down skips the symbol; BREAK_GRACE_SECONDS covers the gap.
+            # A Bitunix pair passes through bitunix_pair unchanged, so the
+            # xStocks' own pairs (TSLAUSDT for TSLAXUSD) reach the API as is.
+            charts = crypto_charts(pair or contract, timeframes, now, source=source)
             price = current_price(charts)
             if source == "bitunix":
                 # Bitunix candles stop at the last closed one, so their newest
                 # close is up to a 4H candle old; the distance needs the price now.
                 try:
-                    price = bitunix_data.last_price(bitunix_data.bitunix_pair(contract))
+                    price = bitunix_data.last_price(pair)
                 except Exception as error:     # noqa: BLE001 - keep the candle close
                     print(f"{symbol} Bitunix live price unavailable: {str(error)[:80]}")
             return symbol, {tf: analyse(CRYPTO, symbol, tf, charts[tf], now, price) for tf in timeframes}, None

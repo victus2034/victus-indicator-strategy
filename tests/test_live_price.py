@@ -1,12 +1,10 @@
 """Every venue in the chain must be able to hand back a live price.
 
 EXCHANGES_BY_ID holds ccxt exchanges only, so live_ticker_price used to return
-the candle close - silently - on CoinSwitch and Delta, which are the two venues
-the production chain reaches first. Both scan_30m.yml and entry_confirm.yml set
+the candle close - silently - on Delta, which the production chain reaches first. Both scan_30m.yml and entry_confirm.yml set
 VICTUS_USE_LIVE_TICKER=true, so both were running on a stale price while their
 configuration said otherwise.
 """
-import time
 import unittest
 from unittest.mock import patch
 
@@ -14,52 +12,12 @@ import scanner
 
 
 class LiveTickerCoversEveryVenue(unittest.TestCase):
-    def setUp(self):
-        scanner._FINE_PRICES.clear()
-
-    tearDown = setUp
-
     def test_disabled_always_returns_the_candle_close(self):
         with patch.object(scanner, "USE_LIVE_TICKER", False):
-            scanner._remember_fine_price("DOGEUSD", [[0, 0, 0, 0, 0.0917, 0]])
             self.assertEqual(
-                scanner.live_ticker_price("coinswitch", "DOGEUSD", 0.0899),
+                scanner.live_ticker_price("delta_india", "DOGEUSD", 0.0899),
                 (0.0899, "candle_close"),
             )
-
-    def test_coinswitch_uses_the_price_the_top_up_already_fetched(self):
-        with patch.object(scanner, "USE_LIVE_TICKER", True):
-            scanner._remember_fine_price("DOGEUSD", [[0, 0, 0, 0, 0.09169, 0]])
-            price, source = scanner.live_ticker_price("coinswitch", "DOGEUSD", 0.090989)
-        self.assertEqual(source, "coinswitch_fine")
-        self.assertAlmostEqual(price, 0.09169)
-
-    def test_a_stale_fine_price_is_not_a_live_price(self):
-        with patch.object(scanner, "USE_LIVE_TICKER", True):
-            scanner._FINE_PRICES["DOGEUSD"] = (time.time() - 3600, 0.09169)
-            self.assertEqual(
-                scanner.live_ticker_price("coinswitch", "DOGEUSD", 0.090989),
-                (0.090989, "candle_close"),
-            )
-
-    def test_a_fine_price_belongs_only_to_its_own_symbol(self):
-        with patch.object(scanner, "USE_LIVE_TICKER", True):
-            scanner._remember_fine_price("DOGEUSD", [[0, 0, 0, 0, 0.09169, 0]])
-            self.assertEqual(
-                scanner.live_ticker_price("coinswitch", "BTCUSD", 79000.0),
-                (79000.0, "candle_close"),
-            )
-
-    def test_a_zero_or_broken_fine_candle_is_ignored(self):
-        with patch.object(scanner, "USE_LIVE_TICKER", True):
-            for bad in ([], [[0, 0, 0, 0, 0.0, 0]], [[0, 0, 0, 0, "n/a", 0]], [[0]]):
-                scanner._FINE_PRICES.clear()
-                scanner._remember_fine_price("DOGEUSD", bad)
-                self.assertEqual(
-                    scanner.live_ticker_price("coinswitch", "DOGEUSD", 0.0899),
-                    (0.0899, "candle_close"),
-                    bad,
-                )
 
     def test_delta_uses_its_own_ticker(self):
         with patch.object(scanner, "USE_LIVE_TICKER", True), \

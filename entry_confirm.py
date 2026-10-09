@@ -6,7 +6,7 @@ fib_trendline_scanner.py). The 30m and 4h zone alerts are no longer watched
 here; their own channels are unchanged. The zone loaders below stay because
 paper_trading.py still reads them.
 
-Watches zones a real scanner alert already announced, and reports how
+Watches levels a real alert already announced, and reports how
 price is behaving relative to that alert's own recorded entry and stop.
 It never re-derives levels, never trades on a candidate the scanner has
 not alerted on, and never writes to the alert records the backtest reads.
@@ -22,21 +22,8 @@ Deliberately silent when the trade is no longer worth taking: price has
 bounced back past entry into profit (entering now would sit far from the
 locked stop), or the stop is already hit.
 
-A real alert only exists once price is already within MAX_DISTANCE_PCT of
-entry, which used to mean a zone's very first look here was routinely
-already at ENTRY NOW or LATE - GET READY never had a real chance to fire
-first. note_watch_candidates() reads the scanner's own pre-alert watch rows
-(crypto only, WATCH_RECORDS) to notice a zone's approach earlier, but never
-turns that into a ping by itself - only a real, delivered alert still
-triggers a notification. It only changes what price that notification
-uses: the moment the zone genuinely first approached (silent_ready_key(),
-consumed once by resolve_pings), instead of a live snapshot dressed up as
-"moved fast". A zone that never gets a real alert never pings, matching
-the same restraint the module always had.
-
-A fast mover can still cross the whole GET READY -> ENTRY gap between two
-polls with no earlier watch sighting at all - genuinely no warning existed
-to give. When that happens the GET READY the user would otherwise never
+A fast mover can cross the whole GET READY -> ENTRY gap between two polls.
+When that happens the GET READY the user would otherwise never
 get is backfilled into the same digest, marked as having moved fast rather
 than printed as a live distance.
 
@@ -94,17 +81,6 @@ FIB_TL_RECORDS = Path(__file__).with_name("fib_trendline_alert_records.jsonl")
 # The only timeframes watched (lakky, 2026-10-08).
 FIB_TL_WATCH_TIMEFRAMES = ["1d", "1w", "1M"]
 FIB_TL_KIND_LABEL = {"fib": "FIB", "trendline": "TL"}
-# Zones the scanner noted as worth watching but has not (or not yet)
-# alerted on. Read by load_watch_candidates()/note_watch_candidates() to
-# notice a zone's approach earlier than a real alert could - but never
-# itself a source of a ping. Announcing a trade before the real crypto
-# alert channel has delivered it stays off the table.
-WATCH_RECORDS = {
-    "crypto": {
-        "30m": Path(__file__).with_name("crypto_watch_records_30m.jsonl"),
-        "4h": Path(__file__).with_name("crypto_watch_records.jsonl"),
-    },
-}
 BAR_MINUTES = {"30m": 30, "4h": 240}
 # Discord rejects anything longer; the digest is split rather than dropped.
 MAX_MESSAGE_CHARS = 1900
@@ -190,9 +166,8 @@ def save_state(state: dict) -> None:
 
 # How different a re-alert's entry can be from an earlier one on the same
 # symbol/side/timeframe and still count as a venue flip on the same real
-# zone rather than a genuinely new one. fetch_symbol_ohlcv() tries CoinSwitch
-# first each scan and falls back to Binance/Delta/others when it is slow or
-# fails, so the same real level can come back priced from a different venue
+# zone rather than a genuinely new one. fetch_symbol_ohlcv() falls back from
+# its first venue to others when it is slow or fails, so the same real level can come back priced from a different venue
 # scan to scan - measured across 205 same-symbol/side/timeframe pairs inside
 # a 3-hour window, the shift was 0.02-0.72%. 1% is generous against that and
 # tight against anything that was ever a genuinely different zone in the
@@ -207,8 +182,7 @@ def coalesce_venue_drift(records: list[dict], window: pd.Timedelta) -> None:
     Left alone, a venue flip shifts the price just enough to clear
     watch_key's 6-significant-figure tolerance and look like a brand-new
     zone, restarting the GET READY -> ENTRY NOW cycle for a trade the user
-    already confirmed - the "coinswitch alert still gets on the entry
-    confirm" report. The first record in a matching run is kept as the
+    already confirmed. The first record in a matching run is kept as the
     group's anchor and every later record within tolerance of it (not of
     its immediate predecessor, so drift cannot creep past the tolerance one
     small hop at a time) is rewritten to the anchor's own levels, which is
@@ -295,22 +269,6 @@ def load_watched_alerts(
     paths = [records_path] if records_path is not None else [ALERT_RECORDS[market][timeframe]]
     window = pd.Timedelta(minutes=BAR_MINUTES[timeframe] * WATCH_BARS)
     return _parse_zone_records(paths, timeframe, market, now, window)
-
-
-def load_watch_candidates(timeframe: str, now: pd.Timestamp) -> list[dict]:
-    """Zones the scanner is watching but has not alerted on yet - crypto only.
-
-    Never a source of pings by itself - see note_watch_candidates(). Only
-    lets entry_confirm notice a zone's approach earlier than a real alert
-    (fired at MAX_DISTANCE_PCT) could tell it, so a later GET READY can use
-    a genuine early price instead of guessing "moved fast" from whatever
-    was live once the real alert showed up already close to entry.
-    """
-    path = WATCH_RECORDS.get("crypto", {}).get(timeframe)
-    if path is None:
-        return []
-    window = pd.Timedelta(minutes=BAR_MINUTES[timeframe] * WATCH_BARS)
-    return _parse_zone_records([path], timeframe, "crypto", now, window)
 
 
 def fib_tl_window(market: str, timeframe: str) -> pd.Timedelta:
@@ -410,74 +368,10 @@ def watch_key(record: dict) -> str:
     return f"{symbol}|{record.get('timeframe')}|{record.get('side')}|{entry}|{stop}"
 
 
-def silent_ready_key(record: dict) -> str:
-    """Bookkeeping for a watch candidate's first sighting in the approach
-    band, before any real alert has confirmed it. Underscore-prefixed like
-    the other bookkeeping keys, so prune_state() does not drop it just
-    because the zone has not (yet, or ever) produced a real alert - see
-    prune_silent_ready() for its own, time-based expiry instead.
-    """
-    return "_silent_ready|" + watch_key(record)
-
-
-# How long an unconfirmed sighting is worth remembering. Long enough that a
-# genuinely slow-building approach (crypto can sit near a level for hours)
-# still gets credited; short enough that a zone which never turns into a
-# real alert does not leave permanent clutter in the state file.
-SILENT_READY_TTL_SECONDS = 24 * 60 * 60
-
-
-def note_watch_candidates(
-    candidates: list[dict],
-    confirmed_keys: set[str],
-    prices: dict[str, dict],
-    state: dict,
-    now: pd.Timestamp,
-) -> None:
-    """Remember the first time an unconfirmed zone enters the approach band.
-
-    Nothing here is ever pinged - only a real, delivered alert can trigger a
-    notification (see resolve_pings' use of silent_ready_key()). This only
-    changes what price that later notification uses: the genuine moment the
-    zone first came within range, instead of whichever price happened to be
-    live once the real alert showed up already close to (or past) entry -
-    the "moved fast, already at entry" case that used to be nearly every
-    ping once alerts only ever surfaced a zone at MAX_DISTANCE_PCT.
-    """
-    for record in candidates:
-        key = watch_key(record)
-        if key in confirmed_keys:
-            # A real alert already exists for this zone this run - the
-            # ordinary confirmed-alert flow handles it, backfilling from
-            # the live price if needed. Nothing extra to remember here.
-            continue
-        skey = silent_ready_key(record)
-        if skey in state:
-            continue
-        price_info = prices.get(record["symbol"])
-        if price_info is None:
-            continue
-        extreme = sweep_extreme(price_info, record.get("side", "long"))
-        stage, _ = classify(extreme, record, False)
-        if stage != STAGE_READY:
-            continue
-        state[skey] = {"price": float(price_info["price"]), "time": now.isoformat()}
-
-
-def prune_silent_ready(state: dict, now: pd.Timestamp) -> None:
-    """Drop unconfirmed sightings older than SILENT_READY_TTL_SECONDS, in place."""
-    stale = []
-    for key, value in state.items():
-        if not key.startswith("_silent_ready|") or not isinstance(value, dict):
-            continue
-        try:
-            seen_at = pd.Timestamp(value["time"])
-        except (KeyError, TypeError, ValueError):
-            stale.append(key)
-            continue
-        if (now - seen_at).total_seconds() > SILENT_READY_TTL_SECONDS:
-            stale.append(key)
-    for key in stale:
+def drop_legacy_keys(state: dict) -> None:
+    """Remove the _silent_ready| keys the zone watch rows (removed 2026-10-09)
+    left behind; prune_state keeps underscore keys, so nothing else would."""
+    for key in [k for k in state if k.startswith("_silent_ready|")]:
         del state[key]
 
 
@@ -530,7 +424,7 @@ def fetch_crypto_prices(symbols: list[str]) -> dict[str, dict[str, float]]:
     loading, and a crypto venue being unreachable must not stop NSE pings.
 
     Run across a thread pool, not sequentially - each symbol here is a
-    fetch_symbol_ohlcv() chain that can try CoinSwitch, Binance, Delta and
+    fetch_symbol_ohlcv() chain that can try Bitunix, Delta and
     every fallback exchange in turn before it gives up. One process running
     "both" timeframes can watch two dozen symbols at once, and at roughly a
     second or more per symbol that is a run comfortably past this job's
@@ -558,9 +452,8 @@ def fetch_crypto_prices(symbols: list[str]) -> dict[str, dict[str, float]]:
         recent = ohlcv[-SWEEP_CANDLES:]
         recent_low = min(float(candle[3]) for candle in recent)
         recent_high = max(float(candle[2]) for candle in recent)
-        # The live ticker can itself be beyond either candle boundary -
-        # CoinSwitch's fine price in particular runs ahead of its own last
-        # closed candle - so fold it in rather than trusting the candles
+        # The live ticker can itself be beyond either candle boundary - it
+        # runs ahead of the last closed candle - so fold it in rather than trusting the candles
         # alone to bound where price has actually been.
         return {
             "price": float(price),
@@ -897,25 +790,12 @@ def resolve_pings(
             # in the first place. Back-fill the GET READY the user would
             # otherwise never see, in the same digest, so a jump straight
             # to ENTRY NOW still comes with its heads-up.
-            #
-            # note_watch_candidates() may already have seen this zone
-            # approaching, before the real alert existed at all - if so,
-            # use that genuine early price/time instead of guessing "moved
-            # fast" from whatever the live price happens to be right now.
             state[ready_key(record)] = now.timestamp()
             state[level_ready_key(record)] = now.timestamp()
-            silent = state.pop(silent_ready_key(record), None)
-            if silent:
-                backfill_price = float(silent["price"])
-                seen_at = pd.Timestamp(silent["time"]).tz_convert(IST)
-                note = f"approaching since {seen_at:%H:%M} IST"
-            else:
-                backfill_price = price
-                note = "moved fast, already at entry"
             pings.append(
                 (
                     STAGE_READY,
-                    format_line(STAGE_READY, backfill_price, record, note=note),
+                    format_line(STAGE_READY, price, record, note="moved fast, already at entry"),
                 )
             )
 
@@ -960,7 +840,7 @@ _MISSING = object()
 
 def record_state_keys(record: dict) -> list[str]:
     """Every state key resolve_pings can write for this record."""
-    return [watch_key(record), ready_key(record), level_ready_key(record), silent_ready_key(record)]
+    return [watch_key(record), ready_key(record), level_ready_key(record)]
 
 
 def undo_undelivered(state: dict, changes: list[tuple[list[str], dict]], delivered: list[str]) -> dict:
@@ -1032,8 +912,7 @@ def main() -> None:
     }
     crypto_symbols = {r["symbol"] for r in watched if r["_market"] == "crypto"}
     prices.update(fetch_crypto_prices(sorted(crypto_symbols)))
-    # Zone watch rows are no longer read, so nothing adds these any more.
-    prune_silent_ready(state, now)
+    drop_legacy_keys(state)
 
     # One heads-up per symbol, not one per level. Widening the watch band to
     # 0.75% put several stacked zones on the same symbol in range at once and

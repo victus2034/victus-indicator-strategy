@@ -93,8 +93,6 @@ jobs:
             nse_alert_records.jsonl \
             crypto_alert_records_30m.jsonl \
             crypto_alert_records.jsonl \
-            crypto_watch_records_30m.jsonl \
-            crypto_watch_records.jsonl \
             fib_trendline_alert_records.jsonl \
             entry_confirm_state.json \
             paper_trading_state.json
@@ -104,9 +102,6 @@ jobs:
           DISCORD_ENTRY_CONFIRM_WEBHOOK_URL: ${{ secrets.DISCORD_ENTRY_CONFIRM_WEBHOOK_URL }}
           # Crypto pings take their price from the same venue chain as
           # the scan, so the level watched is the one on the chart.
-          COINSWITCH_API_KEY: ${{ secrets.COINSWITCH_API_KEY }}
-          COINSWITCH_SECRET_KEY: ${{ secrets.COINSWITCH_SECRET_KEY }}
-          COINSWITCH_EXCHANGE: ${{ secrets.COINSWITCH_EXCHANGE }}
           # Without this the price every entry is judged against is
           # live_ticker_price's fallback: the close of the last COMPLETED
           # candle. Unset, scanner also defaults to 4h, so a 30m zone was
@@ -121,26 +116,8 @@ jobs:
           # for both - 30m is chosen because a stale price is what caused
           # this, and a 30m candle is the fresher of the two for either.
           VICTUS_TIMEFRAME: "30m"
-          # How far out GET READY fires. Tried 0.75% on 8 Sep to match
-          # config.WATCH_DISTANCE_PCT (the scanner's silent watch band) so
-          # GET READY could fire well before the real alert - reverted the
-          # next day: at that point entry_confirm WAS reading the scanner's
-          # pre-alert watch rows for a head start, and 0.75% pinged GET READY
-          # on zones 0.53-0.99% away that never got a real alert at all,
-          # which read as noise rather than an early warning. Went back to
-          # 0.20% (= MAX_DISTANCE_PCT) alongside dropping the watch-row read
-          # entirely - entry_confirm.WATCH_RECORDS is unused now, it only
-          # watches zones a real alert already delivered.
-          #
-          # That changes the tradeoff: with watch rows out of the picture,
-          # widening this can no longer ping a zone that never got a real
-          # alert - every zone entry_confirm ever looks at already has one.
-          # Raised to 0.50% on 17 Sep so GET READY has real separation from
-          # ENTRY NOW instead of firing in the same run: at 0.20% (equal to
-          # the alert's own MAX_DISTANCE_PCT), a zone is already as close as
-          # GET READY's own trigger the moment entry_confirm first sees it,
-          # so the two stages routinely landed in the same digest - Shiva's
-          # Issue 14.
+          # How far from the recorded entry GET READY fires (Shiva's Issue 14,
+          # 17 Sep: 0.20% put GET READY and ENTRY NOW in the same digest).
           VICTUS_APPROACH_THRESHOLD_PCT: "0.50"
           INPUT_DRY_RUN: ${{ github.event.inputs.dry_run }}
           INPUT_IGNORE_SESSION: ${{ github.event.inputs.ignore_session }}

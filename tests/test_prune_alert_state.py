@@ -16,14 +16,13 @@ SUPPRESS = scanner.ZONE_REPEAT_SUPPRESSION_SECONDS
 
 
 def prune(state, now):
-    return scanner.prune_alert_state(state, now, COOLDOWN, 3600, SUPPRESS, 1800)
+    return scanner.prune_alert_state(state, now, COOLDOWN, 3600, SUPPRESS)
 
 
 class PruneAlertStateTests(unittest.TestCase):
     def decide(self, state, now, distance=0.1):
         with mock.patch.object(scanner, "send_alert", return_value=True) as send, \
                 mock.patch.object(scanner, "record_delivered_zone_alert"), \
-                mock.patch.object(scanner, "record_watch_candidate"), \
                 mock.patch.object(scanner, "in_alert_window", return_value=True):
             scanner.process_candidate(state, RESULT, "supply", ZONE, distance, now)
             return send.called
@@ -60,10 +59,9 @@ class PruneAlertStateTests(unittest.TestCase):
         }
         prune(state, now)
         self.assertEqual(
-            sorted(state), ["B|supply|1|2", "D|range_filter|buy", "__last_scan_started__", "_noise_control", "_watch"]
+            sorted(state), ["B|supply|1|2", "D|range_filter|buy", "__last_scan_started__", "_noise_control"]
         )
         self.assertEqual(state["_noise_control"], {"new": now - 60})
-        self.assertEqual(state["_watch"], {"new": now - 60})
 
 
 if __name__ == "__main__":

@@ -33,7 +33,7 @@ net expectancy.**
 ## The prediction that failed
 
 Before running this I argued that the earlier wick revert failed because
-`pine_wick_zones_experimental.pine` used `base_extra = 0`, and that v7's ±5
+`pine_wick_zones_experimental.pine` (removed 2026-10-09; in git history) used `base_extra = 0`, and that v7's ±5
 window would fix it. That was wrong in the way that matters:
 
 * `wick5` vs `wick0` on win rate: **66.4% vs 66.4%** — identical.

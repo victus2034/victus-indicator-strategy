@@ -1,114 +1,108 @@
 # Victus Indicator Strategy
 
-This bot watches your fixed crypto watchlist on the `4h` timeframe, rebuilds the active supply and demand zones from your TradingView Pine logic, and alerts when price gets close to one of those levels.
+Discord alert bot for the Shiva / Victus TradingView indicator. It rebuilds the
+indicator's levels in Python and posts when price comes near one, so an alert in
+Discord is one the chart would have fired.
 
-It also includes an isolated 30-minute workflow. It uses the same logic and watchlist, but keeps its own cooldown state and sends alerts to a separate Discord webhook.
+Three kinds of alert, each with its own channels and state:
 
-## Setup
+| Alert | Timeframes | Markets | Code |
+|---|---|---|---|
+| Supply / demand zones | 4H, 30m | crypto, xStocks, gold/silver, NSE | `scanner.py`, `nse_scanner.py` |
+| Fib zones and trendlines | 4H, 1D, 1W, 1M (30m built, off) | crypto, xStocks, gold/silver, NSE | `fib_trendline_scanner.py` |
+| Entry confirm | 1D, 1W, 1M fib + trendline alerts | crypto, NSE | `entry_confirm.py` |
 
-1. Install dependencies:
+Everything runs on GitHub Actions. There is no server.
 
-```powershell
-pip install -r requirements.txt
-```
+## Watchlist
 
-2. Edit `config.py`:
-   - set your 10 coins in `WATCHLIST`
-   - set exchange fallback order in `EXCHANGE_IDS`
-   - change `MAX_DISTANCE_PCT` if you want a tighter or wider alert
-   - fill `DISCORD_WEBHOOK_URL` if you want Discord alerts
-   - fill `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` only if Telegram is available for you again later
+`config.py` holds it. 31 symbols, exactly the ones Delta India lists (`DELTA_LISTED_SYMBOLS`):
 
-3. Run:
+- `CRYPTO_WATCHLIST`: 23 coins (BTC, ETH, SOL, ...)
+- `XSTOCK_WATCHLIST`: 6 tokenised stocks (TSLA, META, SOXL, SNDK, MRVL, NVDA)
+- `OTHER_WATCHLIST`: XAUT (gold) and SLVON (silver)
 
-```powershell
-python scanner.py
-```
+NSE scans 200 stocks, market-cap ranks 100-300 (`NSE_RANK_START`/`END` in `nse_config.py`, `nse_scanner.load_watchlist`).
 
-For a single scan:
+## Where the candles come from
 
-```powershell
-python scanner.py --once
-```
+| What | Source |
+|---|---|
+| Crypto alert levels (zones, fibs, trendlines, entry confirm, daily trend filter) | Bitunix, Delta if Bitunix fails (zones only) |
+| xStock alert levels | Bitunix pairs in `BITUNIX_XSTOCK_PAIRS` (since 2026-10-09), same fallback |
+| XAUT, SLVON | Delta |
+| Trades, fees, daily backtest, paper trading | Delta (the venue trades are taken on) |
+| NSE | Yahoo Finance |
 
-## How alerts work
+Bitunix never returns the candle still forming; `bitunix_data.forming_candle` builds it from 1m.
+The fib/trendline scan has no Delta fallback: Delta's shorter history draws different fibs.
 
-- 4-hour zone alerts use a `0.25%-1.25%` distance window
-- The separate 30-minute cloud workflows use a `0.25%-0.75%` distance window
-- Distances below `0.25%` are intentionally ignored because they are too close to manage
-- supply alerts use the zone `top`
-- demand alerts use the zone `bottom`
-- `ALERT_COOLDOWN_SECONDS` stops repeated alerts while price stays near the same level
-- `REARM_FACTOR` makes the bot wait until price moves away before it can alert that zone again
+## Alert rules (short)
 
-## Discord setup
+- Zones: alert from 0.00% to 0.20% from the entry edge (`MAX_DISTANCE_PCT`), approach side only,
+  stop 25% of the zone height past the far edge, stops wider than 1.5% skipped, 4h cooldown,
+  crypto alert window 08:00-01:00 IST. Crypto only: daily EMA50 trend filter.
+- Fibs: deeper (strong) zone only, entry at its near edge, stop = the zone rule. Band 0-0.75%.
+- Trendlines: v12.6 anchors, band 0-0.75%, stop `TRENDLINE_SL_PCT` beyond the line, BROKEN posts
+  only on the first scan after the break candle closes.
 
-1. In your Discord server, create a channel for alerts.
-2. Open the channel settings and create a webhook.
-3. Paste the webhook URL into `DISCORD_WEBHOOK_URL` in `config.py`.
+`CLAUDE.md` has the reasoning and the backtest behind each rule. Change a rule only after a backtest.
 
-## Free cloud option
+## Workflows
 
-This project now includes a GitHub Actions workflow at `.github/workflows/scan.yml`.
+Most are dispatched by cron-job.org (GitHub's own cron was too unreliable).
 
-- It runs `python scanner.py --once`
-- it is scheduled every 20 minutes at minutes `1`, `20`, and `40`
-- it can also be run manually from the Actions tab
-- it commits `alert_state.json` after scans so cooldowns still work in the cloud
+| Workflow | What it does |
+|---|---|
+| `scan.yml`, `scan_30m.yml` | crypto zone scans, 4H and 30m (loops every ~90s inside a run) |
+| `nse_scan.yml`, `nse_scan_30m.yml` | NSE zone scans, market hours only |
+| `fib_trendline_scan.yml` | fib + trendline alerts, runs after each 30m crypto scan |
+| `entry_confirm.yml` | entry-confirmed digest |
+| `daily_backtest_summary.yml`, `weekly_backtest_summary.yml`, `daily_catchup.yml` | scores alerts on real candles, posts the reports; paper trading |
+| `daily_astrology.yml`, `weekly_astrology.yml` | astrology posts (`astrology_engine.js`) |
+| `tests.yml` | the test suite on every push |
+| `bitunix_research.yml`, `research_backtest.yml`, `backtest_audit.yml` | research only, run by hand |
 
-Recommended setup:
+Runtime state (cooldowns, alert records, results) lives on the `scanner-runtime-state` branch,
+restored and pushed by `.github/scripts/restore_runtime_state.sh` / `persist_runtime_state.sh`.
+Locally it is gitignored. Deleting it resets cooldowns.
 
-1. Push this project to GitHub.
-2. Add repository secrets named `DISCORD_WEBHOOK_URL` and `DISCORD_STATUS_WEBHOOK_URL`.
-3. Keep your scanner config in the repo.
-4. Let GitHub Actions run it on schedule.
+## Secrets
 
-## 30-minute Discord alerts
+Set as GitHub Actions secrets, never in `config.py` (this repo is public; the fields there stay empty).
 
-The 30-minute scanner runs from `.github/workflows/scan_30m.yml` just after each 30-minute candle closes. It does not change the 4-hour scanner.
-
-1. Create a Discord webhook inside `#30m-alerts`.
-2. Add its URL as the repository secret `DISCORD_30M_WEBHOOK_URL`.
-3. Keep `DISCORD_STATUS_WEBHOOK_URL` pointed at `#scanner-status`.
-4. Run `Victus Crypto Scanner 30m` manually once from GitHub Actions to verify it.
-
-If you keep the repo private, GitHub Free includes limited Actions minutes, so reduce the schedule if needed. If the repo is public, standard GitHub-hosted Actions minutes remain free.
-
-## 30-minute crypto zone ratings
-
-Eligible 30-minute crypto zone alerts include one compact research rating,
-shown as a 1-10 score (percentile against `score_reference`) or a grade:
-
-- `A (best tested)`: top 30% of model scores
-- `B (mixed)`: middle 30-70th percentile
-- `C (weak)`: bottom 30% of model scores
-
-Retrained 2026-09-10 on 340 real decided crypto 30m trades (2026-08-13 to
-2026-09-10), reconstructed from live OHLCV and the production zone builder -
-not a synthetic backtest. The original model (46 Binance pairs, 365 days,
-GradientBoostingClassifier on 32 features) had decayed to *worse* than no
-rating at all on live outcomes (grade A: 51.4% win vs 59.0% baseline) and,
-separately, a missing `score_reference` in the bundle meant it could only
-ever emit three raw scores (3, 6, or 9), not the 1-10 range the code was
-built for. The retrain cuts to 4 features
-(`current_gap_atr`, `alert_close_location_aligned`, `return_vol20_pct`,
-`di_alignment`) to avoid overfitting a dataset this size - a 32-feature
-retrain on the same data still overfit (train/test AUC gap of 0.15 vs the
-4-feature model's 0.02). Validated by 5-fold expanding-window walk-forward,
-not a single split: AUC 0.76-0.92 across folds, mean 0.871.
-
-An `A` rating means better historical relative odds, not a guaranteed
-profitable trade. 340 examples across ~4 weeks is still a thin base by ML
-standards - re-check with `rating_validation_report.py` as more decided
-trades accumulate, and retrain again once volume allows a larger held-out
-set. Ratings are intentionally disabled for 4-hour alerts, NSE stocks,
-xStocks, and crypto symbols outside the validated universe in
-`crypto_zone_rating.py` (now the live crypto watchlist, not a fixed
-46-pair list).
+- `DISCORD_WEBHOOK_URL`, `DISCORD_30M_WEBHOOK_URL`, `DISCORD_NSE_WEBHOOK_URL`, `DISCORD_NSE_30M_WEBHOOK_URL`, `DISCORD_STATUS_WEBHOOK_URL`
+- `DISCORD_FIB_WEBHOOK_URL`, `DISCORD_TRENDLINE_WEBHOOK_URL`, and per market
+  `DISCORD_{FIB,TRENDLINE}_{CRYPTO,NSE}_WEBHOOK_URL`
+- `DISCORD_ENTRY_CONFIRM_WEBHOOK_URL`, `DISCORD_DAILY_BACKTEST_WEBHOOK_URL`,
+  `DISCORD_PAPER_TRADING_WEBHOOK_URL`, `DISCORD_ASTROLOGY_WEBHOOK_URL`
 
 ## Files
 
-- `scanner.py`: main watchlist scanner and alert loop
-- `config.py`: watchlist and alert settings
-- `crypto_zone_rating.py`: isolated 30-minute crypto rating feature builder
-- `alert_state.json`: created automatically to remember which levels already alerted
+| File | Role |
+|---|---|
+| `scanner.py` | crypto zone engine and scan (the one zone engine; NSE imports it) |
+| `nse_scanner.py`, `nse_scanner_30m.py`, `nse_config.py` | NSE scan, session hours, Yahoo data |
+| `bitunix_data.py` | Bitunix candles, forming candle, live price, xStock pairs |
+| `fib_engine.py`, `trendlines.py` | fib and trendline ports of the Pine |
+| `fib_trendline_scanner.py`, `fib_trendline_data.py`, `fib_trendline_trades.py` | fib/trendline alerts, candles, trade rules |
+| `fib_trendline_backtest.py`, `fib_trendline_daily_report.py` | history backtest, daily fib/trendline report |
+| `entry_confirm.py` | entry-confirmed digest |
+| `daily_backtest_summary.py`, `weekly_backtest_summary.py` | zone trade scoring and reports |
+| `paper_trading.py` | paper trades on Delta candles |
+| `zone_scoring.py`, `crypto_zone_rating.py`, `xstock_hybrid_rating.py`, `rating_validation_report.py` | the 1-10 zone score on each alert |
+| `research/` | backtests and probes; results in `research/out/` |
+| `reports/FIB_TRENDLINE_BACKTEST.md` | fib/trendline history backtest |
+| `tests/` | `python -m pytest -q` |
+
+## Running locally
+
+```powershell
+pip install -r requirements.txt
+python scanner.py --once                    # one crypto zone scan
+python fib_trendline_scanner.py --dry-run   # what fib/trendline would alert, sends nothing
+python -m pytest -q
+```
+
+Without webhooks set, nothing is posted. Run `tests/test_indicator_scanner_parity.py` and
+`tests/test_six_worked_examples.py` after any change to the zone code.

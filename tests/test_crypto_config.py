@@ -41,13 +41,8 @@ class CryptoConfigTests(unittest.TestCase):
             ):
                 self.assertIn(symbol, config.XSTOCK_WATCHLIST)
 
-    def test_coinswitch_only_xstock_symbols_are_gone(self):
-        # 2026-09-16: none of these five is in DELTA_LISTED_SYMBOLS, so every
-        # alert on them was only ever reachable on CoinSwitch - same reason
-        # the 2026-09-15 cut removed every CoinSwitch-only crypto symbol.
-        # SLX/USDT:USDT and MSFT/USDT:USDT used to be preserved here
-        # deliberately; that stood only while xStock symbols were allowed to
-        # stay CoinSwitch-only, which is no longer the case.
+    def test_non_delta_xstock_symbols_are_gone(self):
+        # 2026-09-16: none of these five is listed on Delta, where Shiva trades.
         with patch.dict(os.environ, {}, clear=True):
             import config
 
@@ -60,12 +55,8 @@ class CryptoConfigTests(unittest.TestCase):
             ):
                 self.assertNotIn(symbol, config.WATCHLIST)
 
-    def test_coinswitch_only_symbols_from_the_volume_sweep_are_gone(self):
-        # These three passed the 2026-09-01 liquidity sweep on CoinSwitch
-        # volume, since Delta had no figure to judge them on. They came out
-        # anyway in the 2026-09-15 cut: Shiva stopped trading on CoinSwitch
-        # (buggy app and website), so a CoinSwitch-only level is not a trade
-        # he can take, regardless of its volume.
+    def test_non_delta_symbols_from_the_volume_sweep_are_gone(self):
+        # Not listed on Delta, so not a trade Shiva can take (2026-09-15 cut).
         with patch.dict(os.environ, {}, clear=True):
             import config
 
@@ -75,9 +66,6 @@ class CryptoConfigTests(unittest.TestCase):
     def test_every_crypto_symbol_is_delta_listed(self):
         # The 2026-09-15 cut's whole point: no crypto symbol should scan,
         # and therefore alert, for a venue Shiva does not trade on any more.
-        # entry_confirm.broker_label reads DELTA_LISTED_SYMBOLS to tag each
-        # alert's venue, so this is also what keeps that tag from ever
-        # reading "CoinSwitch" for crypto again.
         with patch.dict(os.environ, {}, clear=True):
             import config
 
@@ -86,15 +74,14 @@ class CryptoConfigTests(unittest.TestCase):
     def test_every_watchlist_symbol_is_delta_listed(self):
         # 2026-09-16: the xStock cut extended the same rule to the whole
         # watchlist, not just crypto - WATCHLIST is now exactly
-        # DELTA_LISTED_SYMBOLS, so the venue tag never reads "CoinSwitch"
-        # for anything scanned, xStock included.
+        # DELTA_LISTED_SYMBOLS, xStock included.
         with patch.dict(os.environ, {}, clear=True):
             import config
 
             self.assertEqual(set(config.WATCHLIST), config.DELTA_LISTED_SYMBOLS)
 
     def test_thin_volume_symbols_are_removed(self):
-        # Measured on CoinSwitch over 96 30m candles: all ten traded under
+        # Measured over 96 30m candles: all ten traded under
         # 11,000 per candle against a watchlist median near 200,000, and
         # several had candles with no trades at all.
         with patch.dict(os.environ, {}, clear=True):
@@ -111,8 +98,6 @@ class CryptoConfigTests(unittest.TestCase):
                 "AVGO/USDT:USDT",
                 "TAIKO/USDT",
                 "TQQQ/USDT:USDT",
-                # Measurable only once the xStocks were fetched under the
-                # names CoinSwitch actually uses.
                 "OPENAI/USDT:USDT",
                 "AMZNXUSD",
                 # Not thin but dead: unlisted, last candle ten days old.
@@ -160,7 +145,7 @@ class CryptoConfigTests(unittest.TestCase):
 
     def test_crypto_slx_is_excluded_to_avoid_xstock_symbol_collision(self):
         # SLX/USDT:USDT itself came out of XSTOCK_WATCHLIST entirely on
-        # 2026-09-16 (CoinSwitch-only), but the collision it was named for
+        # 2026-09-16 (not on Delta), but the collision it was named for
         # still matters: CRYPTO_WATCHLIST must never carry the bare
         # SLX/USDT contract, since scanner.active_watchlist() cannot tell
         # it apart from the xStock symbol by suffix alone.

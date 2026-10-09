@@ -35,7 +35,7 @@ jobs:
 
       - name: Restore runtime state
         id: restore
-        run: bash .github/scripts/restore_runtime_state.sh alert_state_30m_live_price.json crypto_alert_records_30m.jsonl crypto_watch_records_30m.jsonl
+        run: bash .github/scripts/restore_runtime_state.sh alert_state_30m_live_price.json crypto_alert_records_30m.jsonl
 
       - name: Check 30-minute Discord webhook configuration
         env:
@@ -65,9 +65,6 @@ jobs:
           VICTUS_SIGNAL_ALERT_COOLDOWN_SECONDS: "1800"
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_30M_WEBHOOK_URL }}
           DISCORD_STATUS_WEBHOOK_URL: ${{ secrets.DISCORD_STATUS_WEBHOOK_URL }}
-          COINSWITCH_API_KEY: ${{ secrets.COINSWITCH_API_KEY }}
-          COINSWITCH_SECRET_KEY: ${{ secrets.COINSWITCH_SECRET_KEY }}
-          COINSWITCH_EXCHANGE: ${{ secrets.COINSWITCH_EXCHANGE }}
           VICTUS_MIN_SCAN_INTERVAL_SECONDS: "60"
           VICTUS_ENABLE_XSTOCK_HYBRID_RATINGS: "true"
           VICTUS_XSTOCK_REGULAR_MIN_SCORE: "5"
@@ -87,13 +84,13 @@ jobs:
           # that queued one starts cancels it outright - verified 8 of 24
           # dispatches cancelled before ever scanning once. 180s keeps the
           # whole job under ~4 minutes, comfortably inside the real cycle.
-          bash .github/scripts/scan_loop.sh 180 90 alert_state_30m_live_price.json crypto_alert_records_30m.jsonl crypto_watch_records_30m.jsonl -- python scanner.py --once
+          bash .github/scripts/scan_loop.sh 180 90 alert_state_30m_live_price.json crypto_alert_records_30m.jsonl -- python scanner.py --once
 
       # always(): alerts already sent are recorded even if a later step failed or
       # timed out. Never after a failed restore - there is nothing safe to save.
       - name: Persist runtime state
         if: ${{ always() && steps.restore.outcome == 'success' }}
-        run: bash .github/scripts/persist_runtime_state.sh alert_state_30m_live_price.json crypto_alert_records_30m.jsonl crypto_watch_records_30m.jsonl
+        run: bash .github/scripts/persist_runtime_state.sh alert_state_30m_live_price.json crypto_alert_records_30m.jsonl
 
       - name: Notify on failure
         if: failure()

@@ -33,19 +33,8 @@ def env_flag(name, default=False):
 # session misranks badly: TAC printed 6% of its weekly average that day)
 # and kept the 31 that earn the scan.
 #
-# CoinSwitch-only symbols dropped entirely, 2026-09-15: Shiva stopped
-# trading on CoinSwitch - its app and website had gotten too buggy to use -
-# so a level only reachable there is not a trade he can take. Every crypto
-# symbol not in DELTA_LISTED_SYMBOLS came out, across all three surfaces
-# that read this list (4h scan, 30m scan, entry_confirm):
-#   COTI, DEXE, SOON, EUL, ZIL, BTW, LA, ZAMA, ESP, UB, ATOM, AERO, CAP,
-#   RE, US, ICP, BOME, O, MNT, ERA, CRV, STORJ, ALGO, 0G, HOME, KGEN,
-#   GWEI, CL, KORU, ACE (all /USDT)
-# What is left is exactly DELTA_LISTED_SYMBOLS's crypto half - every symbol
-# below is Delta-listed by construction, so entry_confirm's venue tag will
-# only ever read "Delta" for crypto from here on. If CoinSwitch trading
-# resumes, the removed list above is where to look, not a fresh liquidity
-# sweep - nothing here says those symbols were thin, only unreachable.
+# Every symbol not listed on Delta India came out on 2026-09-15, when Shiva
+# stopped trading anywhere else; what is left is DELTA_LISTED_SYMBOLS's crypto half.
 CRYPTO_WATCHLIST = [
     "BTCUSD",
     "ETHUSD",
@@ -76,7 +65,7 @@ CRYPTO_WATCHLIST = [
     "RIVERUSD",
 ]
 
-# Keep non-crypto contracts separate from the CoinSwitch crypto liquidity audit.
+# Non-crypto contracts, kept apart from the crypto list.
 # XAUT replaced PAXG here: both are gold, and XAUT traded $3.0B over seven days
 # against PAXG's $749M.
 OTHER_WATCHLIST = [
@@ -89,14 +78,7 @@ OTHER_WATCHLIST = [
 # method that removed them - had all five answering from delta_india. The
 # fetch chain reaches Delta directly now, so that finding no longer holds.
 #
-# BZ/USDT:USDT, SAMSUNG/USDT:USDT, AXTI/USDT:USDT, SLX/USDT:USDT and
-# MSFT/USDT:USDT dropped 2026-09-16, same reason as the 2026-09-15
-# CRYPTO_WATCHLIST cut above: none of the five is in DELTA_LISTED_SYMBOLS,
-# so every alert on them was only ever reachable on CoinSwitch, which Shiva
-# stopped trading on. BZ/USDT:USDT and SLX/USDT:USDT were additionally
-# already flagged in xstock_hybrid_rating.BLOCKED_XSTOCK_SYMBOLS as
-# resolving to unrelated instruments - they were never valid xStock scans
-# to begin with, CoinSwitch-only or not.
+# BZ, SAMSUNG, AXTI, SLX and MSFT dropped 2026-09-16: not listed on Delta.
 XSTOCK_WATCHLIST = [
     "TSLAXUSD",
     "METAXUSD",
@@ -104,18 +86,9 @@ XSTOCK_WATCHLIST = [
     "SNDKBUSD",
     "MRVL/USDT:USDT",
     "NVDAXUSD",
-    # Still out, measured on CoinSwitch over 96 30m candles. The watchlist
-    # median was about 200,000 in traded value per candle; every symbol here
-    # sat under 11,000, and FLNC went a full 30 minutes with no trades at all
-    # seven times in two days. A zone price drifts into on no volume is a
-    # zone nobody can be filled in:
-    #   FLNC, IBM, PHAROS, SOXX, NVDL, BABA, DELL, AVGO, TAIKO, TQQQ
-    # Then OPENAI (2,914 per candle, 3 of 96 bars with no trades at all) and
-    # AMZN (5,279), both measurable only once the xStocks were fetched under
-    # the names CoinSwitch uses. VANRY went with them: not listed on
-    # CoinSwitch, last candle ten days old - never a thin feed but a dead one.
-    # SPY too, at 6,366: the token is thin even though the ETF behind it is
-    # not, and SPY stays in the rating registry as its own sector marker.
+    # Dropped earlier for thin volume: FLNC, IBM, PHAROS, SOXX, NVDL, BABA,
+    # DELL, AVGO, TAIKO, TQQQ, OPENAI, AMZN, VANRY, SPY (SPY stays in the
+    # rating registry as its own sector marker).
     #
     # Dropped in the 2026-09-01 cut for thin seven-day Delta volume, keeping
     # the six xStocks above: AAPLX, CRCLX, GOOGLX, COINX, MUB, SPCXX, INTCB,
@@ -125,8 +98,7 @@ XSTOCK_WATCHLIST = [
 WATCHLIST = CRYPTO_WATCHLIST + OTHER_WATCHLIST + XSTOCK_WATCHLIST
 
 # Which venue each scanned symbol is actually traded on, so an alert can say
-# where to go and place it. Delta India lists these 31; anything else on the
-# watchlist is reached through CoinSwitch instead.
+# where to go and place it. Delta India lists these 31.
 #
 # This is a static list on purpose. Delta's listings drift, but a live lookup
 # on every run would make an alert depend on a third API being up, and the
@@ -141,12 +113,7 @@ DELTA_LISTED_SYMBOLS = {
     "MRVL/USDT:USDT", "NVDAXUSD",
 }
 
-# Was always empty in practice; now also correct in intent - no CoinSwitch-only
-# crypto symbols are scanned any more (see the 2026-09-15 note on CRYPTO_WATCHLIST).
-COINSWITCH_WATCHLIST = []
-
 DELTA_API_BASE_URL = "https://api.india.delta.exchange"
-COINSWITCH_API_BASE_URL = "https://coinswitch.co"
 # Where the crypto alert candles come from: "bitunix" (default since
 # 2026-10-05, Lakky's call) or "delta". Delta prints thin and zero-volume
 # candles on the small coins (ZORA: 478 zero-volume 30m bars in 60 days) that
@@ -156,7 +123,10 @@ COINSWITCH_API_BASE_URL = "https://coinswitch.co"
 # Delta stays the venue the trades are taken on, so the backtest still grades
 # on Delta candles and the fees stay Delta's whichever source draws the zones.
 # Covers the zone scanners (4h and 30m), entry_confirm and the fib/trendline
-# scanner; xStocks and "other" stay on Delta (Bitunix lists none of them).
+# scanner. Since 2026-10-09 (Lakky) the xStocks too, off the stock futures
+# Bitunix lists under the plain ticker (BITUNIX_XSTOCK_PAIRS). "Other" stays on
+# Delta: SLVON is a silver ETF token Bitunix does not list (its XAG is spot
+# silver, a different price), and XAUT is not an xStock.
 CRYPTO_CANDLE_SOURCE = (os.getenv("VICTUS_CRYPTO_CANDLE_SOURCE", "bitunix").strip().lower() or "bitunix")
 if CRYPTO_CANDLE_SOURCE not in {"delta", "bitunix"}:
     raise ValueError(f"VICTUS_CRYPTO_CANDLE_SOURCE must be delta or bitunix, not {CRYPTO_CANDLE_SOURCE!r}")
@@ -165,22 +135,22 @@ BITUNIX_API_BASE_URL = "https://fapi.bitunix.com"
 BITUNIX_MIN_REQUEST_GAP_SECONDS = env_float("VICTUS_BITUNIX_MIN_REQUEST_GAP_SECONDS", 0.12)
 # Every crypto watchlist symbol, checked against Bitunix's trading_pairs on
 # 2026-10-05 (all 23 listed as <base>USDT). Re-check when CRYPTO_WATCHLIST changes.
-BITUNIX_SYMBOLS = set(CRYPTO_WATCHLIST)
-COINSWITCH_EXCHANGE = "EXCHANGE_2"
-COINSWITCH_API_KEY = ""
-COINSWITCH_SECRET_KEY = ""
-# CoinSwitch is the venue actually charted and traded, so zones must be
-# built from its candles. Binance is only a fallback for symbols it does
-# not carry. Defaulting this off meant Binance was always primary and the
-# alerted levels never matched the chart.
-PREFER_COINSWITCH = env_flag("VICTUS_PREFER_COINSWITCH", default=True)
-REQUIRE_COINSWITCH = env_flag("VICTUS_REQUIRE_COINSWITCH")
+# The xStocks are not "<Delta name>T" on Bitunix but the stock's own ticker,
+# so each has its pair here. All six listed and OPEN on 2026-10-09
+# (research/xstock_bitunix_probe.py, research/out/xstock/).
+BITUNIX_XSTOCK_PAIRS = {
+    "TSLAXUSD": "TSLAUSDT",
+    "METAXUSD": "METAUSDT",
+    "SOXLBUSD": "SOXLUSDT",
+    "SNDKBUSD": "SNDKUSDT",
+    "MRVL/USDT:USDT": "MRVLUSDT",
+    "NVDAXUSD": "NVDAUSDT",
+}
+BITUNIX_SYMBOLS = set(CRYPTO_WATCHLIST) | set(BITUNIX_XSTOCK_PAIRS)
 USE_LIVE_TICKER = env_flag("VICTUS_USE_LIVE_TICKER")
 PRIMARY_EXCHANGE_ID = "binance"
-# CoinSwitch first, then Binance. The rest exist because Binance is
-# geo-blocked from GitHub Actions runners - without them a CI scan has no
-# source at all once CoinSwitch misses, which is exactly what happened when
-# this list was trimmed to Binance alone.
+# Last-resort venues after Bitunix and Delta. Binance is geo-blocked from
+# GitHub Actions runners, so the rest are what a CI scan actually reaches.
 EXCHANGE_IDS = ["binance", "kucoin", "okx", "bybit", "mexc", "bitget", "lbank", "coinex"]
 TIMEFRAME = os.getenv("VICTUS_TIMEFRAME", "4h").strip() or "4h"
 # Crypto trades around the clock, so 500 30m candles is only ten days.
@@ -191,8 +161,7 @@ TIMEFRAME = os.getenv("VICTUS_TIMEFRAME", "4h").strip() or "4h"
 # were alertable; at 1500 it was 29 days and 76. Going further to 2880
 # bought only three more, so this is where the curve flattens.
 #
-# One request either way - the venue takes a limit, so this costs no
-# extra calls, which matters while CoinSwitch is rate-limiting us.
+# Bitunix pages 200 candles per request, Delta 4000.
 OHLCV_LIMIT = env_int("VICTUS_OHLCV_LIMIT", 1500)
 
 SWING_LENGTH = 10
@@ -212,40 +181,6 @@ OVERLAP_ATR = 2.0
 # Alert as soon as a symbol comes within MAX_DISTANCE_PCT of it.
 MIN_DISTANCE_PCT = env_float("VICTUS_MIN_DISTANCE_PCT", 0.0)
 MAX_DISTANCE_PCT = env_float("VICTUS_MAX_DISTANCE_PCT", 0.20)
-# How near a zone must come before entry_confirm starts WATCHING it - i.e.
-# before the scanner writes a (silent, no Discord message) watch row for it at
-# all. Deliberately wider than MAX_DISTANCE_PCT so entry_confirm's own stage
-# tracking for a zone has a head start once it does become worth mentioning.
-#
-# This does NOT by itself widen what gets pinged. entry_confirm.
-# APPROACH_THRESHOLD_PCT (set in entry_confirm.yml, independent of this) is
-# what actually gates a GET READY message, and it was briefly matched to this
-# value on 7 Sep, then reverted on 9 Sep the next day: it meant GET READY
-# firing on zones 0.53-0.99% away that the real alert never fired for at all,
-# which read as noise rather than an early warning. Keep these two separate -
-# raising this one without also checking entry_confirm.yml's threshold is
-# exactly the mistake that shipped.
-#
-# Measured over 90 zones that price went on to fill: at 0.20% the median
-# warning between price entering the band and touching the entry is 8 minutes,
-# and 28% of zones enter the band and touch inside the SAME MINUTE - no scan
-# interval can catch those. At 0.75% the median warning is 42 minutes and 81%
-# leave room for at least one scan. Widening the alert threshold itself would
-# have bought that warning at the cost of a far noisier channel, including
-# alerts on approaches that never fill - a third of the zones measured never
-# touched at all. So this stays wide for tracking; what gets pinged stays
-# narrow at 0.20% in entry_confirm.yml.
-#
-# The scanner only writes a watch row strictly ABOVE MAX_DISTANCE_PCT - the
-# range the alert path never covers - not from zero. A zone already inside
-# the alert band is entirely the alert record's job; if that alert fired,
-# entry_confirm already has it, and if it was suppressed by cooldown, no
-# watch row should paper over that silence either. A version of this that
-# started at zero double-covered the alert band and, for a symbol whose
-# alert was suppressed on this exact scan, produced a GET READY in
-# #entry-confirmed for a symbol #crypto-30m-alerts said nothing about at
-# that moment - found 9 Sep, one day after the watch band shipped.
-WATCH_DISTANCE_PCT = env_float("VICTUS_WATCH_DISTANCE_PCT", 0.75)
 REARM_FACTOR = 1.25
 # 0 disables the over-touch veto. The Pine indicator counts no touches and
 # never retires a zone for being revisited - only a close through it kills the
@@ -462,41 +397,9 @@ if ZONE_GEOMETRY == "wick":
 # after the last one steps aside. Zero disables the guard.
 MIN_SCAN_INTERVAL_SECONDS = env_int("VICTUS_MIN_SCAN_INTERVAL_SECONDS", 8 * 60)
 
-# Symbols whose older candles may be spliced in from a deeper venue.
-#
-# CoinSwitch stops at 751 30m candles - 15.6 days - however it is asked,
-# so a month-old 30m zone is unreachable on the book being charted. KuCoin
-# serves 1500 in one request. Splicing its older candles underneath the
-# CoinSwitch ones reaches thirty days, but only where the two venues price
-# the same candle closely enough that the zone still lands where the chart
-# shows it. Measured across the watchlist: BTC, ETH and SOL sit 0.04% apart,
-# five times inside the 0.20% alert distance, while ESPORTS is 1.11% apart
-# and 2.9% at worst - a zone spliced there would mark a price that never
-# traded on the venue being watched.
-#
-# Filled by venue_divergence.py (removed 2026-10-02; in git history), which compared every watchlist symbol's
-# 30m closes across both venues. 28 of the 90 it could compare agree
-# inside 0.20% at the 95th percentile. The rest keep CoinSwitch alone -
-# a shorter history is a smaller problem than a level in the wrong place.
-# Pruned alongside the 2026-09-01 watchlist cut: splicing deep history for a
-# symbol no longer scanned just buys candles nothing reads.
-DEEP_HISTORY_SYMBOLS = {
-    "AAVE", "AVAX", "BCH", "BNB", "BTC", "DOGE", "ETH", "HYPE", "LINK",
-    "LTC", "SOL", "UNI", "XRP", "ZEC"
-}
-# Where the older candles come from. Binance is deliberately absent: it is
-# geo-blocked from GitHub Actions runners, which took the whole scanner
-# down once before.
-DEEP_HISTORY_EXCHANGE = os.getenv("VICTUS_DEEP_HISTORY_EXCHANGE", "kucoin")
-
-# How many candles a feed may be behind before it counts as dead.
-# CoinSwitch omits any bucket with no trades and its higher-timeframe
-# series trails the live market, so at 14:55 the newest 30m candle was
-# 13:30 for BTC and 13:00 for XRP - while their 1m candles and tickers
-# were current to the second. Two bars plus five minutes rejected that
-# as stale and sent the symbol to an exchange the user does not chart,
-# which is the opposite of what the check is for. Four bars still
-# catches a genuinely dead feed - VANRY was ten days behind.
+# How many candles a feed may be behind before it counts as dead. Some
+# venues omit buckets with no trades or publish late, so two bars was too
+# tight; four still catches a genuinely dead feed (VANRY was ten days behind).
 STALE_BARS_ALLOWED = env_int("VICTUS_STALE_BARS_ALLOWED", 4)
 
 # Crypto trades around the clock, but the user does not. Alerts are held

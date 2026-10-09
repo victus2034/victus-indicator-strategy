@@ -1,0 +1,149 @@
+Bitunix pairs listed: 777
+
+=== TSLAXUSD ===
+  listed: {'symbol': 'TSLAUSDT', 'base': 'TSLA', 'quote': 'USDT', 'minTradeVolume': '0.02', 'minBuyPriceOffset': None, 'basePrecision': 2, 'quotePrecision': 2, 'maxLeverage': 50, 'symbolStatus': 'OPEN'}
+  kline TSLAUSDT: ok
+  -> comparing Delta TSLAXUSD vs Bitunix TSLAUSDT
+  30m slots=2880 delta=2880 bitunix=2866 both=2866 only_delta=14 only_bitunix=0
+      close diff %: median=0.108 p90=0.161 max=0.431 | range diff % median=0.049
+      zero-volume delta=157 bitunix=0 | high==low delta=401 bitunix=0
+      weekdays delta={'Fri': 416, 'Mon': 400, 'Sat': 384, 'Sun': 384, 'Thu': 432, 'Tue': 432, 'Wed': 432}
+      weekdays bitunix={'Fri': 414, 'Mon': 397, 'Sat': 384, 'Sun': 381, 'Thu': 429, 'Tue': 431, 'Wed': 430}
+      active zones delta=5 bitunix=4 bitunix-matching-delta(0.3%)=3
+        bitunix ('demand', 346.79, 347.24)
+        bitunix ('demand', 354.28, 354.55)
+        bitunix ('demand', 365.42, 368.24)
+        bitunix ('demand', 368.64, 369.56)
+        delta   ('demand', 346.98, 347.5)
+        delta   ('demand', 354.8, 355.65)
+        delta   ('demand', 356.65, 356.65879)
+        delta   ('demand', 365.85, 368.25)
+        delta   ('demand', 369.25, 370.0)
+   4h slots=360 delta=360 bitunix=359 both=359 only_delta=1 only_bitunix=0
+      close diff %: median=0.108 p90=0.164 max=0.431 | range diff % median=0.038
+      zero-volume delta=0 bitunix=0 | high==low delta=0 bitunix=0
+      weekdays delta={'Fri': 52, 'Mon': 50, 'Sat': 48, 'Sun': 48, 'Thu': 54, 'Tue': 54, 'Wed': 54}
+      weekdays bitunix={'Fri': 52, 'Mon': 50, 'Sat': 48, 'Sun': 47, 'Thu': 54, 'Tue': 54, 'Wed': 54}
+      active zones delta=13 bitunix=13 bitunix-matching-delta(0.3%)=12
+        bitunix ('supply', 452.42, 453.47)
+        bitunix ('supply', 443.9, 445.61)
+        bitunix ('supply', 434.255952, 437.73)
+        bitunix ('supply', 419.86, 420.0)
+        bitunix ('supply', 412.82, 413.33)
+        bitunix ('supply', 403.611111, 406.84)
+        bitunix ('demand', 293.82, 296.17056)
+        bitunix ('demand', 316.0, 317.64)
+        bitunix ('demand', 324.24, 326.4)
+        bitunix ('demand', 331.63, 333.38)
+        bitunix ('demand', 342.94, 344.69)
+        bitunix ('demand', 346.79, 349.56432)
+        bitunix ('demand', 365.42, 368.24)
+        delta   ('supply', 453.1, 453.9)
+        delta   ('supply', 445.1, 446.3)
+        delta   ('supply', 433.531746, 437.0)
+        delta   ('supply', 419.9, 420.25)
+        delta   ('supply', 410.3, 413.3)
+        delta   ('supply', 403.769841, 407.0)
+        delta   ('demand', 294.35, 296.7048)
+        delta   ('demand', 316.4, 318.0)
+        delta   ('demand', 324.6, 326.8)
+        delta   ('demand', 331.95, 333.75)
+        delta   ('demand', 343.6, 344.55)
+        delta   ('demand', 346.98, 349.75584)
+        delta   ('demand', 365.85, 368.25)
+   1d slots=60 delta=60 bitunix=60 both=60 only_delta=0 only_bitunix=0
+      close diff %: median=0.109 p90=0.159 max=0.431 | range diff % median=0.034
+      zero-volume delta=0 bitunix=0 | high==low delta=0 bitunix=0
+      weekdays delta={'Fri': 8, 'Mon': 9, 'Sat': 8, 'Sun': 8, 'Thu': 9, 'Tue': 9, 'Wed': 9}
+      weekdays bitunix={'Fri': 8, 'Mon': 9, 'Sat': 8, 'Sun': 8, 'Thu': 9, 'Tue': 9, 'Wed': 9}
+  last price bitunix=384.59
+
+=== METAXUSD ===
+  listed: {'symbol': 'METAUSDT', 'base': 'META', 'quote': 'USDT', 'minTradeVolume': '0.01', 'minBuyPriceOffset': None, 'basePrecision': 2, 'quotePrecision': 2, 'maxLeverage': 50, 'symbolStatus': 'OPEN'}
+  kline METAUSDT: ok
+  -> comparing Delta METAXUSD vs Bitunix METAUSDT
+  30m slots=2880 delta=2880 bitunix=2866 both=2866 only_delta=14 only_bitunix=0
+      close diff %: median=0.062 p90=0.129 max=0.618 | range diff % median=0.062
+      zero-volume delta=274 bitunix=0 | high==low delta=568 bitunix=0
+      weekdays delta={'Fri': 416, 'Mon': 400, 'Sat': 384, 'Sun': 384, 'Thu': 432, 'Tue': 432, 'Wed': 432}
+      weekdays bitunix={'Fri': 414, 'Mon': 397, 'Sat': 384, 'Sun': 381, 'Thu': 429, 'Tue': 431, 'Wed': 430}
+      active zones delta=15 bitunix=13 bitunix-matching-delta(0.3%)=13
+        bitunix ('supply', 780.41, 781.33)
+        bitunix ('supply', 753.4, 754.09)
+        bitunix ('supply', 747.78, 748.88)
+        bitunix ('supply', 744.09, 744.95)
+        bitunix ('supply', 742.21, 743.02)
+        bitunix ('supply', 728.90873, 734.74)
+        bitunix ('demand', 637.44, 637.83)
+        bitunix ('demand', 657.14, 659.97)
+        bitunix ('demand', 661.93, 666.03)
+        bitunix ('demand', 668.05, 668.13)
+        bitunix ('demand', 670.06, 670.19)
+        bitunix ('demand', 678.75, 680.61)
+        bitunix ('demand', 710.96, 712.95)
+        delta   ('supply', 780.75, 781.4)
+        delta   ('supply', 753.65, 753.9)
+        delta   ('supply', 748.4, 749.25)
+        delta   ('supply', 745.2, 745.55)
+        delta   ('supply', 743.040493, 743.05)
+        delta   ('supply', 728.27381, 734.1)
+        delta   ('demand', 605.35, 609.05)
+        delta   ('demand', 637.75, 638.0)
+        delta   ('demand', 659.0, 659.01953)
+        delta   ('demand', 662.15, 666.9)
+        delta   ('demand', 668.25, 668.257765)
+        delta   ('demand', 670.8, 670.807467)
+        delta   ('demand', 678.95, 679.8)
+        delta   ('demand', 711.35, 712.45)
+        delta   ('demand', 711.8, 717.4)
+   4h slots=360 delta=360 bitunix=359 both=359 only_delta=1 only_bitunix=0
+      close diff %: median=0.062 p90=0.140 max=0.578 | range diff % median=0.060
+      zero-volume delta=0 bitunix=0 | high==low delta=1 bitunix=0
+      weekdays delta={'Fri': 52, 'Mon': 50, 'Sat': 48, 'Sun': 48, 'Thu': 54, 'Tue': 54, 'Wed': 54}
+      weekdays bitunix={'Fri': 52, 'Mon': 50, 'Sat': 48, 'Sun': 47, 'Thu': 54, 'Tue': 54, 'Wed': 54}
+      active zones delta=10 bitunix=10 bitunix-matching-delta(0.3%)=8
+        bitunix ('supply', 777.88, 781.33)
+        bitunix ('supply', 745.61, 748.88)
+        bitunix ('demand', 519.65, 523.8072)
+        bitunix ('demand', 538.44, 542.74752)
+        bitunix ('demand', 547.14, 550.79)
+        bitunix ('demand', 556.84, 561.29472)
+        bitunix ('demand', 608.81, 611.58)
+        bitunix ('demand', 637.44, 637.83)
+        bitunix ('demand', 661.93, 666.03)
+        bitunix ('demand', 710.96, 715.14)
+        delta   ('supply', 778.05, 781.4)
+        delta   ('supply', 746.65, 749.25)
+        delta   ('demand', 519.2, 521.15)
+        delta   ('demand', 539.15, 543.4632)
+        delta   ('demand', 547.75, 550.8)
+        delta   ('demand', 557.3, 561.7584)
+        delta   ('demand', 605.35, 609.05)
+        delta   ('demand', 637.75, 638.0)
+        delta   ('demand', 662.15, 666.9)
+        delta   ('demand', 711.35, 715.45)
+   1d slots=60 delta=60 bitunix=60 both=60 only_delta=0 only_bitunix=0
+      close diff %: median=0.055 p90=0.176 max=0.394 | range diff % median=0.051
+      zero-volume delta=0 bitunix=0 | high==low delta=0 bitunix=0
+      weekdays delta={'Fri': 8, 'Mon': 9, 'Sat': 8, 'Sun': 8, 'Thu': 9, 'Tue': 9, 'Wed': 9}
+      weekdays bitunix={'Fri': 8, 'Mon': 9, 'Sat': 8, 'Sun': 8, 'Thu': 9, 'Tue': 9, 'Wed': 9}
+  last price bitunix=726.16
+
+=== SOXLBUSD ===
+  listed: {'symbol': 'SOXLUSDT', 'base': 'SOXL', 'quote': 'USDT', 'minTradeVolume': '0.06', 'minBuyPriceOffset': None, 'basePrecision': 2, 'quotePrecision': 2, 'maxLeverage': 50, 'symbolStatus': 'OPEN'}
+  kline SOXLUSDT: ok
+  -> comparing Delta SOXLBUSD vs Bitunix SOXLUSDT
+  30m slots=2880 delta=2880 bitunix=2866 both=2866 only_delta=14 only_bitunix=0
+      close diff %: median=0.116 p90=0.263 max=0.792 | range diff % median=0.138
+      zero-volume delta=86 bitunix=0 | high==low delta=263 bitunix=0
+      weekdays delta={'Fri': 416, 'Mon': 400, 'Sat': 384, 'Sun': 384, 'Thu': 432, 'Tue': 432, 'Wed': 432}
+      weekdays bitunix={'Fri': 414, 'Mon': 397, 'Sat': 384, 'Sun': 381, 'Thu': 429, 'Tue': 431, 'Wed': 430}
+      active zones delta=14 bitunix=12 bitunix-matching-delta(0.3%)=10
+        bitunix ('supply', 169.22, 169.79)
+        bitunix ('supply', 165.21, 165.57)
+        bitunix ('supply', 161.19, 161.41)
+        bitunix ('supply', 154.93, 155.39)
+        bitunix ('supply', 151.29, 151.44)
+        bitunix ('demand', 100.16, 100.81)
+        bitunix ('demand', 101.31, 102.12048)
+        bitunix ('demand', 112.39, 112.72)

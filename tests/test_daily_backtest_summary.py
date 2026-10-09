@@ -1258,48 +1258,6 @@ class DailyBacktestSummaryTests(unittest.TestCase):
         self.assertEqual(result["final_result"], "Neither")
         self.assertEqual(result["final_resolution_time"], frame.index[2] + pd.Timedelta(minutes=30))
 
-    def test_timing_analytics_groups_finalized_trade_durations(self):
-        records = pd.DataFrame(
-            [
-                {
-                    **base_alert(symbol="BTCUSDT", side="long", rating=5),
-                    "market": "CRYPTO",
-                    "timeframe": "30m",
-                    "filled": True,
-                    "final_result": "+1R",
-                    "time_to_resolution_seconds": 1800,
-                },
-                {
-                    **base_alert(symbol="ETHUSDT", side="short", rating=6),
-                    "market": "CRYPTO",
-                    "timeframe": "30m",
-                    "filled": True,
-                    "final_result": "Pending",
-                    "time_to_resolution_seconds": None,
-                },
-                {
-                    **base_alert(symbol="SOLUSDT", side="long", rating=5),
-                    "market": "CRYPTO",
-                    "timeframe": "30m",
-                    "filled": False,
-                    "final_result": "",
-                    "time_to_resolution_seconds": None,
-                },
-            ]
-        )
-
-        analytics = summary.build_timing_analytics(records)
-
-        self.assertEqual(len(analytics), 1)
-        row = analytics.iloc[0]
-        self.assertEqual(row["market"], "CRYPTO")
-        self.assertEqual(row["rating"], 5)
-        self.assertEqual(row["side"], "long")
-        self.assertEqual(row["final_result"], "+1R")
-        self.assertEqual(row["trades"], 1)
-        self.assertEqual(row["resolved_within_1h_pct"], 100.0)
-        self.assertEqual(row["median_resolution_seconds"], 1800.0)
-
     def test_format_rating_table_handles_no_results_yet(self):
         records = pd.DataFrame([
             {"symbol": "BTCUSDT", "rating": 7},
@@ -1535,7 +1493,7 @@ class RepeatDeliveryTests(unittest.TestCase):
         self.assertEqual(kept.minute, 0)
 
     def test_a_venue_flipped_repeat_is_still_caught_as_one_trade(self):
-        # A CoinSwitch->Delta (or any) venue flip shifts a real zone's edges
+        # A venue flip shifts a real zone's edges
         # by up to ~0.7%, measured on the real alert log - far past an
         # exact/6-sig-fig match but still the same trade. bottom AND top
         # both drift here, not just top like the exact-match tests above.
@@ -1670,6 +1628,20 @@ class DeltaVenueTests(unittest.TestCase):
 
         self.assertIn("NVDAXUSD", frames)
         self.assertEqual(failures, {})
+
+
+class MarketClassTests(unittest.TestCase):
+    def test_every_watchlist_symbol_lands_in_its_market(self):
+        # XAUT replaced PAXG on the watchlist but was graded as crypto until
+        # 2026-10-09: market_class still named PAXG.
+        import config
+        for symbol in config.OTHER_WATCHLIST:
+            self.assertEqual(summary.market_class(symbol), summary.MARKET_OTHER, symbol)
+        for symbol in config.XSTOCK_WATCHLIST:
+            self.assertEqual(summary.market_class(symbol), summary.MARKET_XSTOCK, symbol)
+        for symbol in config.CRYPTO_WATCHLIST:
+            self.assertEqual(summary.market_class(symbol), summary.MARKET_CRYPTO, symbol)
+        self.assertEqual(summary.market_class("RELIANCE.NS"), summary.MARKET_NSE)
 
 
 class OutcomeLabelTests(unittest.TestCase):

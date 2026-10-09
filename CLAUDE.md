@@ -9,15 +9,17 @@ The most active project here — 4,781 commits, and the only one with an offsite
 
 ## Running it
 
-There is a venv here (`.venv`, 48 packages, created 2026-09-01):
+Live, everything runs on GitHub Actions (README.md has the workflow table). Locally,
+with the Windows venv (`.venv`):
 
 ```powershell
-.venv\Scripts\python.exe scanner.py            # continuous
-.venv\Scripts\python.exe scanner.py --once     # single scan
+.venv\Scripts\python.exe scanner.py --once             # single zone scan
+.venv\Scripts\python.exe fib_trendline_scanner.py --dry-run
+.venv\Scripts\python.exe -m pytest -q
 ```
 
-Verified working 2026-09-01: a `--once` run scanned **64/64 symbols, 0 failures**
-against live Binance data in ~2 minutes.
+Bitunix, Delta and Yahoo may be unreachable from a sandbox; `research/` jobs that need
+candles run on Actions through `bitunix_research.yml` (input `parts`, matched whole-word).
 
 `pandas` resolved to **3.0.5**, a major version above the `>=2.0` in `requirements.txt`.
 Nothing broke, but suspect it first for any dataframe-shaped bug.
@@ -26,10 +28,8 @@ Nothing broke, but suspect it first for any dataframe-shaped bug.
 
 All in `config.py`, which **is tracked in git**:
 
-- `WATCHLIST` — the symbols scanned (the README still says "10 coins"; it is 36 as of
-  2026-09-15: 64 as of 2026-09-01 cut from 119 on seven-day Delta volume, then
-  `CRYPTO_WATCHLIST` cut again to drop every CoinSwitch-only crypto symbol once
-  Shiva stopped trading there - see `config.py`'s note on that list)
+- `WATCHLIST` — the 31 symbols scanned: 23 crypto, 6 xStocks, XAUT + SLVON (64 on
+  2026-09-01, cut on Delta volume and again when CoinSwitch was dropped)
 - `DELTA_LISTED_SYMBOLS` — the 31 symbols Delta India lists. Since 2026-09-16 `WATCHLIST`
   (crypto, other, and xStock combined) equals it exactly. `entry_confirm.py` used to tag
   each ping with the venue ("Delta"); dropped 2026-10-08 (lakky) - its crypto prices come
@@ -49,9 +49,8 @@ placeholders in `tests/test_daily_backtest_summary.py`.
 ## Git
 
 - remote: `github.com/victus2034/victus-indicator-strategy`
-- branch: `main`; also `backup-before-revert`, `agent/astrology-corrections-v2`,
-  `agent/daily-astrology`
-- last commit Aug 31 12:36, clean tree
+- branch: `main`; runtime state on `scanner-runtime-state` (never merge it); `claude/*`
+  branches are PR branches
 
 ## Staying in step with the indicator
 
@@ -137,8 +136,11 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   **Breakeven (2026-10-03, Lakky):** the zone trades' rule - at +0.5R the stop moves past entry by
   `BREAK_EVEN_OFFSET_PCT` (NSE) / `CRYPTO_BREAK_EVEN_OFFSET_PCT` (crypto) from the next candle, imported
   from `daily_backtest_summary` so the two cannot drift. Exits there are `BE`: in net R, not in win rate.
-- Crypto: Delta only. `1w` is Delta's weekly candle; `1M` is built from daily candles by
-  calendar month. History starts Dec 2023, so young coins get no 1M fib yet.
+- Crypto and xStocks: Bitunix (`CRYPTO_CANDLE_SOURCE`), XAUT/SLVON: Delta. `1M` is built from
+  daily candles by calendar month. **No Delta fallback here (2026-10-09):** Delta's history starts
+  Dec 2023 and Bitunix's years earlier, so the same chart on Delta is a different fib under a new key -
+  BNB 1M re-alerted on 2026-10-09 with a 2024 base and the entry above price. A pass with Bitunix
+  down skips the symbol. `SEED_VERSION` v7 (xStocks moved to Bitunix) re-seeds silently.
 - NSE: the zone scanner's 200 stocks (`nse_scanner.load_watchlist`), scanned only in the session
   and at most every 8 minutes - that pass takes ~3 minutes (Yahoo, 5 intervals).
 - **Audit, 2026-09-29** (fixed, each with a test): the fib engine is a state machine whose end
@@ -252,8 +254,7 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   now blocks those for crypto and NSE; the band is still consumed, so a bounce back out does not fire.
 - **Daily trend filter, crypto only (2026-10-04, Lakky).** A crypto demand zone alerts only
   while the last closed daily candle is above its EMA50, a supply zone only below
-  (`CRYPTO_TREND_FILTER`, `scanner.daily_trend`). Counter-trend zones get no alert and no
-  watch row; an unknown trend (fetch failed, short history) never blocks. Backtested on
+  (`CRYPTO_TREND_FILTER`, `scanner.daily_trend`). Counter-trend zones get no alert; an unknown trend (fetch failed, short history) never blocks. Backtested on
   564 recorded trades: -79R -> -8R. NSE, xStocks and "other" are not filtered - it did
   not help them. Research and numbers: `research/out/RESULTS.md`.
 - **Daily report scoring (2026-10-04).** Only +2R is an exit. A trade that touches +1R and
@@ -266,9 +267,13 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   TOTAL in the daily report. It changes no trade and no alert; it is there to be watched.
 - **Crypto alert candles come from Bitunix (2026-10-05, Lakky).** `CRYPTO_CANDLE_SOURCE`
   (`VICTUS_CRYPTO_CANDLE_SOURCE`, default `bitunix`; `delta` switches back). Zones, entry_confirm,
-  the daily trend filter and fib/trendline levels are drawn from Bitunix (`bitunix_data.py`); any
-  Bitunix failure falls back to Delta. Trades are still taken on Delta, so the daily backtest grades
-  on Delta candles with Delta fees - do not move those. xStocks, XAUT and SLVON stay on Delta.
+  the daily trend filter and fib/trendline levels are drawn from Bitunix (`bitunix_data.py`); a
+  Bitunix failure falls back to Delta, except in the fib/trendline scan (below). Trades are still taken on Delta, so the daily backtest grades
+  on Delta candles with Delta fees - do not move those, and paper trading fills on Delta too
+  (`backtest.crypto_fetch_ohlcv`; it read Bitunix-first bars until 2026-10-09). XAUT and SLVON stay
+  on Delta. **xStocks alert off Bitunix since 2026-10-09 (lakky)**: Bitunix lists all six under
+  their own names (`BITUNIX_XSTOCK_PAIRS`, e.g. `TSLAXUSD` -> `TSLAUSDT`), and `bitunix_data.pair_for`
+  maps them. Probe and replay: `research/xstock_bitunix_probe.py`, `research/out/xstock/`.
   Why: Delta prints thin/zero-volume candles on small coins. Research: `research/bitunix_compare.py`.
   **Bitunix's kline endpoint never returns the forming candle, and a page asked to end in the future
   comes back short** (`research/bitunix_window_probe.py`). Until 2026-10-07 that left the zone scan
@@ -276,5 +281,19 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   against the last *closed* 4H close. Now `bitunix_data.klines` never asks past now, the zone scan
   builds the forming candle from 1m (`bitunix_data.forming_candle`), and fib/trendline crypto alerts
   use `bitunix_data.last_price`. `tests/test_bitunix_source.py`'s fake serves the API's real shape.
+  **A page's endTime must sit on a candle open (2026-10-09).** There it is exclusive and correct; off
+  an open Bitunix drops a candle and gives the next one its open (`research/bitunix_page_probe.py`).
+  Paging by "oldest - 1ms" lost one candle per 200 (UNI 30m: 7 in 1500, a demand zone that did not
+  rebuild). `klines` now pages on candle opens; the test fake refuses any other endTime.
+- **Watch rows are gone (2026-10-09).** `crypto_watch_records*.jsonl` fed entry confirm's zone
+  watch; once entry confirm moved to fib/trendline only nothing read them. Old `_watch` /
+  `_silent_ready|` state keys are dropped on load. The old files may remain on the state branch.
+- **XAUT is "other", not crypto, in the reports (2026-10-09).** `market_class` still named PAXG.
+- **CoinSwitch is gone (2026-10-09, lakky: no longer trades there).** Its fetch, signing, 1m top-up,
+  fine price and deep-history splice are removed, with the `COINSWITCH_*` secrets in the workflows
+  (they can be deleted from GitHub too). The candle chain is Bitunix, Delta, then the ccxt fallbacks.
+- **Status posts once per dispatch (2026-10-09, lakky).** The scan loop runs every ~90s; started /
+  finished went out on every pass. Now only the first pass posts (`scanner.first_pass_this_loop`,
+  shared by NSE); a later pass posts only when most symbols failed or, on NSE, an alert failed to send.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

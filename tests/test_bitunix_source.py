@@ -1,4 +1,4 @@
-"""The Bitunix candle source: off by default, opt-in per crypto symbol, Delta behind it."""
+"""The Bitunix candle source: on by default for crypto and xStocks, Delta behind it."""
 import time
 import unittest
 from unittest.mock import patch
@@ -16,10 +16,12 @@ def _row(ts_s, price=100.0):
 
 class FakeBitunix:
     """Serves the API's real shape (research/bitunix_window_probe.py, 2026-10-07):
-    newest first, at most `limit`, ending at endTime; never the candle still
+    newest first, at most `limit`, opening before endTime; never the candle still
     forming at `now`; and each candle slot after the forming one, up to endTime,
     uses up one of the `limit`, so a page ending in the future comes back short.
-    `minutes` maps a 1m open time to its price, for the forming-candle requests."""
+    `minutes` maps a 1m open time to its price, for the forming-candle requests.
+    An endTime off a candle open is refused: the real API then drops a candle
+    and merges two (research/bitunix_page_probe.py, 2026-10-09)."""
 
     def __init__(self, first, last, step, now=None):
         self.series = list(range(first, last + 1, step))
@@ -31,8 +33,10 @@ class FakeBitunix:
     def __call__(self, pair, interval, start_ms, end_ms, limit, attempts=3):
         self.calls.append((pair, interval, start_ms, end_ms))
         step, series = (60, sorted(self.minutes)) if interval == "1m" else (self.step, self.series)
+        if end_ms % (step * 1000):
+            raise AssertionError(f"endTime {end_ms} is not on a {interval} candle open")
         forming = self.now // step * step
-        closed = [ts for ts in series if ts < forming and start_ms <= ts * 1000 <= end_ms]
+        closed = [ts for ts in series if ts < forming and start_ms <= ts * 1000 < end_ms]
         take = limit - max(0, (end_ms // 1000 - forming) // step)
         if take <= 0:
             return []
@@ -62,18 +66,45 @@ class OnTests(unittest.TestCase):
         self.addCleanup(patcher.stop)
         scanner._BITUNIX_HISTORY.clear()
 
-    def test_only_listed_crypto_uses_bitunix(self):
+    def test_crypto_and_xstocks_use_bitunix_other_stays_on_delta(self):
         self.assertTrue(bitunix_data.uses_bitunix("BTCUSD"))
-        self.assertFalse(bitunix_data.uses_bitunix("TSLAXUSD"))
-        self.assertFalse(bitunix_data.uses_bitunix("XAUTUSD"))
+        for symbol in config.XSTOCK_WATCHLIST:
+            self.assertTrue(bitunix_data.uses_bitunix(symbol), symbol)
+        for symbol in config.OTHER_WATCHLIST:
+            self.assertFalse(bitunix_data.uses_bitunix(symbol), symbol)
+
+    def test_xstocks_map_to_the_stock_ticker(self):
+        # Delta's token names would map to pairs Bitunix does not list
+        # (TSLAXUSDT, MRVLBUSDT); Bitunix trades the stock as TSLAUSDT.
+        pairs = {s: bitunix_data.pair_for(s, scanner.delta_contract(s)) for s in config.XSTOCK_WATCHLIST}
+        self.assertEqual(pairs, {
+            "TSLAXUSD": "TSLAUSDT", "METAXUSD": "METAUSDT", "SOXLBUSD": "SOXLUSDT",
+            "SNDKBUSD": "SNDKUSDT", "MRVL/USDT:USDT": "MRVLUSDT", "NVDAXUSD": "NVDAUSDT",
+        })
+        self.assertEqual(bitunix_data.pair_for("BTCUSD", "BTCUSD"), "BTCUSDT")
+
+    def test_xstock_zone_scan_asks_bitunix_for_its_own_pair(self):
+        fake, now, forming, step = self._scan_fake()
+        with patch.object(bitunix_data, "_request", fake), patch("time.time", return_value=now):
+            scanner.fetch_bitunix_ohlcv("MRVL/USDT:USDT")
+        self.assertEqual({c[0] for c in fake.calls}, {"MRVLUSDT"})
 
     def test_klines_pages_back_and_returns_oldest_first(self):
-        fake = FakeBitunix(1_000_000, 1_000_000 + 499 * 1800, 1800)
+        fake = FakeBitunix(1_000_800, 1_000_800 + 499 * 1800, 1800)
         with patch.object(bitunix_data, "_request", fake):
-            rows = bitunix_data.klines("BTCUSDT", "30m", 1_000_000, 1_000_000 + 500 * 1800)
+            rows = bitunix_data.klines("BTCUSDT", "30m", 1_000_800, 1_000_800 + 500 * 1800)
         self.assertEqual([r[0] for r in rows], fake.series)
         self.assertEqual(len(fake.calls), 3)
         self.assertEqual(rows[0][1:], [100.0, 101.0, 99.0, 100.0, 5.0])
+
+    def test_pages_end_on_candle_opens_and_lose_nothing(self):
+        # UNI 30m, 2026-10-08: paging by "oldest - 1ms" lost a candle at every
+        # page edge, so a demand zone did not rebuild. Odd start and end too.
+        fake = FakeBitunix(1_000_800, 1_000_800 + 999 * 1800, 1800)
+        with patch.object(bitunix_data, "_request", fake):
+            rows = bitunix_data.klines("BTCUSDT", "30m", 1_000_800 + 7, 1_000_800 + 999 * 1800 + 5)
+        self.assertEqual([r[0] for r in rows], fake.series[1:])
+        self.assertTrue(all(c[3] % 1_800_000 == 0 for c in fake.calls))
 
     def test_scanner_takes_bitunix_first(self):
         with patch.object(scanner, "fetch_bitunix_ohlcv", return_value=[[1, 1, 1, 1, 1, 1]]), \
@@ -90,11 +121,11 @@ class OnTests(unittest.TestCase):
             _, venue = scanner.fetch_symbol_ohlcv("BTCUSD")
         self.assertEqual(venue, "delta_india")
 
-    def test_xstock_never_asks_bitunix(self):
+    def test_other_never_asks_bitunix(self):
         with patch.object(scanner, "fetch_bitunix_ohlcv") as bitunix, \
              patch.object(scanner, "require_fresh_ohlcv", side_effect=lambda o, n: o), \
              patch.object(scanner, "fetch_delta_ohlcv", return_value=[[1, 1, 1, 1, 1, 1]]):
-            _, venue = scanner.fetch_symbol_ohlcv("TSLAXUSD")
+            _, venue = scanner.fetch_symbol_ohlcv("SLVONUSD")
         self.assertEqual(venue, "delta_india")
         bitunix.assert_not_called()
 
@@ -164,6 +195,34 @@ class OnTests(unittest.TestCase):
             live.side_effect = RuntimeError("down")
             fts.scan_crypto(["4h"], 10_000_000)
             self.assertEqual(seen["BTCUSD"], 1.5)
+
+    def test_fib_trendline_xstock_reads_its_bitunix_pair(self):
+        import fib_trendline_scanner as fts
+        charts = {"4h": [[0, 1, 2, 0.5, 1.5]]}
+        with patch.object(fts.scanner, "active_watchlist", return_value=["TSLAXUSD"]), \
+             patch.object(fts, "crypto_charts", return_value=charts) as fetch, \
+             patch.object(fts, "analyse", return_value={}), \
+             patch.object(bitunix_data, "last_price", return_value=123.0) as live:
+            fts.scan_crypto(["4h"], 10_000_000)
+        self.assertEqual(fetch.call_args.args[0], "TSLAUSDT")
+        live.assert_called_once_with("TSLAUSDT")
+
+    def test_fib_trendline_skips_a_symbol_when_bitunix_is_down(self):
+        # Delta's shorter history draws different fibs (new keys, re-alerts).
+        import fib_trendline_scanner as fts
+
+        def fetch(contract, timeframes, now, source="delta"):
+            if source == "bitunix":
+                raise RuntimeError("down")
+            return {"4h": [[0, 1, 2, 0.5, 1.5]]}
+
+        with patch.object(fts.scanner, "active_watchlist", return_value=["TSLAXUSD"]), \
+             patch.object(fts, "crypto_charts", side_effect=fetch) as charts_mock, \
+             patch.object(fts, "analyse", return_value={}) as analyse:
+            results = fts.scan_crypto(["4h"], 10_000_000)
+        self.assertEqual(charts_mock.call_count, 1)
+        analyse.assert_not_called()
+        self.assertEqual(results[0][:2], ("TSLAXUSD", None))
 
     def test_live_price_from_bitunix(self):
         with patch.object(scanner, "USE_LIVE_TICKER", True), \

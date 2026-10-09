@@ -4,17 +4,14 @@ import hashlib
 import json
 import math
 import os
-import tempfile
 import threading
 import time
 import warnings
 from datetime import datetime
 from pathlib import Path
-from urllib.parse import unquote, urlencode
 from zoneinfo import ZoneInfo
 
 import ccxt
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 import numpy as np
 import pandas as pd
 import requests
@@ -25,11 +22,6 @@ from config import (
     ALERT_RANGE_FILTER_SIGNALS,
     ATR_PERIOD,
     BOX_WIDTH,
-    COINSWITCH_API_BASE_URL,
-    COINSWITCH_API_KEY,
-    COINSWITCH_EXCHANGE,
-    COINSWITCH_SECRET_KEY,
-    COINSWITCH_WATCHLIST,
     CRYPTO_TREND_EMA,
     CRYPTO_TREND_FILTER,
     CRYPTO_WATCHLIST,
@@ -42,7 +34,6 @@ from config import (
     MAX_CONSECUTIVE_ZONE_TOUCHES,
     MIN_ZONE_AGE_CANDLES,
     MAX_DISTANCE_PCT,
-    WATCH_DISTANCE_PCT,
     MIN_CRYPTO_ZONE_SCORE,
     MIN_DISTANCE_PCT,
     MIN_SCAN_INTERVAL_SECONDS,
@@ -65,14 +56,10 @@ from config import (
     PRIMARY_EXCHANGE_ID,
     PRINT_ALERTS_TO_CONSOLE,
     PRINT_SCAN_SUMMARY,
-    PREFER_COINSWITCH,
     REARM_FACTOR,
     SHOW_4H_ZONE_SCORES,
-    REQUIRE_COINSWITCH,
     CRYPTO_ALERT_END,
     CRYPTO_ALERT_START,
-    DEEP_HISTORY_EXCHANGE,
-    DEEP_HISTORY_SYMBOLS,
     SCAN_SLEEP,
     STALE_BARS_ALLOWED,
     SCAN_WORKERS,
@@ -105,22 +92,6 @@ ALERT_RECORD_FILE = Path(__file__).with_name(
         "crypto_alert_records_30m.jsonl" if TIMEFRAME == "30m" else "crypto_alert_records.jsonl",
     )
 )
-# Zones near enough for entry_confirm to start watching, but not near enough to
-# alert on. Its own file on purpose: daily_backtest_summary reads the alert
-# records to score what was actually delivered, and folding un-alerted zones in
-# there would inflate the denominator and quietly wreck every win rate in the
-# summary. Nothing here is ever sent to a webhook.
-WATCH_RECORD_FILE = ALERT_RECORD_FILE.with_name(
-    ALERT_RECORD_FILE.name.replace("crypto_alert_records", "crypto_watch_records")
-)
-# A zone sits inside the watch band for far longer than it sits inside the alert
-# band, and the scanner runs every five minutes, so re-writing one on every pass
-# would bloat the file and the state branch with it. One row per zone per window
-# is enough for entry_confirm, which only needs the row to exist.
-WATCH_RECORD_COOLDOWN_SECONDS = int(os.getenv("VICTUS_WATCH_RECORD_COOLDOWN_SECONDS", "1800"))
-# Rows older than this are dropped on write. entry_confirm stops watching after
-# three bars - twelve hours on 4h - so anything older is dead weight.
-WATCH_RECORD_RETENTION_SECONDS = int(os.getenv("VICTUS_WATCH_RECORD_RETENTION_SECONDS", str(24 * 3600)))
 SL_BUFFER_PCT = 0.10
 # Guards the exact same zone/price re-alerting after price briefly steps
 # outside the alert band (past MAX_DISTANCE_PCT * REARM_FACTOR) and back in -
@@ -175,18 +146,6 @@ TIMEFRAME_SECONDS = {
     "1d": 24 * 60 * 60,
     "1w": 7 * 24 * 60 * 60,
 }
-COINSWITCH_INTERVALS = {
-    "1m": "1",
-    "5m": "5",
-    "15m": "15",
-    "30m": "30",
-    "1h": "60",
-    "2h": "120",
-    "4h": "240",
-    "6h": "360",
-    "12h": "720",
-    "1d": "1440",
-}
 
 
 def load_state():
@@ -215,28 +174,12 @@ def get_env_or_config(env_name, config_value):
     return value if value else config_value
 
 
-def coinswitch_credentials():
-    return (
-        get_env_or_config("COINSWITCH_API_KEY", COINSWITCH_API_KEY),
-        get_env_or_config("COINSWITCH_SECRET_KEY", COINSWITCH_SECRET_KEY),
-    )
-
-
-def is_coinswitch_configured():
-    api_key, secret_key = coinswitch_credentials()
-    return bool(api_key and secret_key)
-
-
 def active_watchlist():
     symbols = [
         symbol
         for symbol in WATCHLIST
         if symbol not in BLOCKED_XSTOCK_SYMBOLS
     ]
-    if is_coinswitch_configured():
-        for symbol in COINSWITCH_WATCHLIST:
-            if symbol not in symbols and symbol not in BLOCKED_XSTOCK_SYMBOLS:
-                symbols.append(symbol)
     return symbols
 
 
@@ -777,8 +720,7 @@ def is_delta_symbol(symbol):
 # strings, but which Delta India does list (checked against /v2/products:
 # all four are live perpetuals). is_delta_symbol() reads a name's shape, so
 # it called these "not Delta" and the scanner never asked Delta for them -
-# their zones came from CoinSwitch/OKX/etc. while every ping still said
-# "Delta". It is left as it is because fallback_symbol() relies on that shape
+# their zones came from other venues while every ping still said "Delta". It is left as it is because fallback_symbol() relies on that shape
 # rule for naming ccxt pairs; this is what the Delta fetches use instead.
 DELTA_CONTRACT_ALIASES = {
     "AKE/USDT": "AKEUSD",
@@ -804,44 +746,11 @@ def fallback_symbol(symbol):
     bogus symbol that could coincidentally match an unrelated token on a
     small exchange. But which is which cannot be read off the suffix:
     AVAXUSD ends "XUSD" and BNBUSD ends "BUSD" while both are ordinary
-    crypto, so the registry decides, the same way it does for the
-    CoinSwitch contract and the display name.
-
-    Until this used the registry, every fallback for AVAX and BNB asked
-    for a pair no exchange lists, so those two had no working fallback at
-    all whenever CoinSwitch was unavailable.
+    crypto, so the registry decides, the same way it does for the display name.
     """
     if is_delta_symbol(symbol) and not is_stock_symbol(symbol):
         return f"{symbol[:-3]}/USDT"
     return symbol
-
-
-def coinswitch_symbol(symbol):
-    stable_symbol_aliases = {
-        "PUMPUSD": "PUMPFUNUSDT",
-        "1000SHIBUSD": "SHIB1000USDT",
-    }
-    upper_symbol = symbol.upper()
-    if upper_symbol in stable_symbol_aliases:
-        return stable_symbol_aliases[upper_symbol]
-    if "/" in symbol:
-        # CCXT perpetual symbols include a settlement suffix such as
-        # AVGO/USDT:USDT, while CoinSwitch expects the contract as AVGOUSDT.
-        return symbol.replace("/", "").split(":", 1)[0].upper()
-    if upper_symbol.endswith("USDT"):
-        return upper_symbol
-    # CoinSwitch quotes everything in USDT and names tokenised stocks after
-    # the ticker: AAPL is AAPLUSDT, not AAPLXUSD. AAPLXUSD is another
-    # venue's string, and asking for it returned nothing, so every xStock
-    # in that form silently fell through to an exchange the user does not
-    # chart. Which suffix means what cannot be read off the string -
-    # AVAXUSD ends "XUSD" and BNBUSD ends "BUSD" while both are ordinary
-    # crypto - so the registry decides.
-    if is_stock_symbol(upper_symbol):
-        return f"{display_symbol(upper_symbol)}USDT"
-    if upper_symbol.endswith("USD"):
-        return f"{upper_symbol[:-3]}USDT"
-    return upper_symbol
 
 
 def exchange_symbol_candidates(symbol):
@@ -976,7 +885,7 @@ def fetch_bitunix_ohlcv(symbol):
     timeframe_seconds = TIMEFRAME_SECONDS.get(TIMEFRAME)
     if timeframe_seconds is None:
         raise RuntimeError(f"Bitunix does not support timeframe {TIMEFRAME}")
-    pair = bitunix_data.bitunix_pair(delta_contract(symbol) or fallback_symbol(symbol).split("/")[0] + "USD")
+    pair = bitunix_data.pair_for(symbol, delta_contract(symbol) or fallback_symbol(symbol).split("/")[0] + "USD")
     end = int(time.time()) + 1
     cached = _BITUNIX_HISTORY.get((pair, TIMEFRAME))
     if cached:
@@ -998,105 +907,6 @@ def fetch_bitunix_ohlcv(symbol):
     return [[int(row[0]) * 1000, *row[1:6]] for row in candles]
 
 
-def coinswitch_path_with_query(path, params):
-    query = unquote(urlencode(params))
-    return f"{path}?{query}" if query else path
-
-
-def sign_coinswitch_request(method, path, params):
-    api_key, secret_key = coinswitch_credentials()
-    if not api_key or not secret_key:
-        raise RuntimeError("CoinSwitch credentials are not configured")
-
-    epoch = str(int(time.time() * 1000))
-    path_query = coinswitch_path_with_query(path, params)
-    message = f"{method.upper()}{path_query}{epoch}".encode("utf-8")
-    private_key = Ed25519PrivateKey.from_private_bytes(bytes.fromhex(secret_key))
-    signature = private_key.sign(message).hex()
-    return path_query, {
-        "Content-Type": "application/json",
-        "X-AUTH-APIKEY": api_key,
-        "X-AUTH-SIGNATURE": signature,
-        "X-AUTH-EPOCH": epoch,
-    }
-
-
-def fetch_coinswitch_ohlcv(symbol, attempts=3, retry_delay=1.5):
-    if not is_coinswitch_configured():
-        return None
-
-    interval = COINSWITCH_INTERVALS.get(TIMEFRAME)
-    if interval is None:
-        raise RuntimeError(f"CoinSwitch does not support timeframe {TIMEFRAME}")
-
-    last_error = None
-    for attempt in range(attempts):
-        try:
-            return top_up_recent_candles(
-                symbol, _fetch_coinswitch_ohlcv_once(symbol, interval)
-            )
-        except Exception as error:
-            last_error = error
-            if attempt < attempts - 1:
-                time.sleep(retry_delay)
-    raise last_error
-
-
-# The interval used to rebuild the buckets CoinSwitch has not published
-# yet. One step down is enough: the lag runs to two or three buckets, and
-# a step down costs one extra request rather than thirty.
-TOP_UP_INTERVAL = {"30m": "1m", "4h": "30m"}
-
-
-def bucket_candles(candles, bucket_seconds):
-    """Aggregate finer candles into whole buckets, oldest first."""
-    bucket_ms = bucket_seconds * 1000
-    buckets = {}
-    for stamp, open_, high, low, close, volume in candles:
-        start = int(stamp) // bucket_ms * bucket_ms
-        current = buckets.get(start)
-        if current is None:
-            buckets[start] = [start, open_, high, low, close, volume]
-            continue
-        current[2] = max(current[2], high)
-        current[3] = min(current[3], low)
-        current[4] = close
-        current[5] = current[5] + volume
-    return [buckets[start] for start in sorted(buckets)]
-
-
-# The last price each symbol's finest CoinSwitch series carried, and when it
-# was read. Written by top_up_recent_candles, which already fetches that series
-# for its own reasons, so nothing here costs an extra request. Symbols are
-# scanned one per thread, and each writes only its own key.
-_FINE_PRICES = {}
-# Older than this and it is not a live price any more. Two minutes covers a 1m
-# top-up plus a slow scan; a 30m top-up (the 4h timeframe) will usually miss it
-# and fall through to the candle close, which is the honest answer there.
-FINE_PRICE_MAX_AGE_SECONDS = int(os.getenv("VICTUS_FINE_PRICE_MAX_AGE_SECONDS", "120"))
-
-
-def _remember_fine_price(symbol, finer):
-    if not finer:
-        return
-    try:
-        price = float(finer[-1][4])
-    except (IndexError, TypeError, ValueError):
-        return
-    if price > 0:
-        _FINE_PRICES[symbol] = (time.time(), price)
-
-
-def fine_price(symbol, max_age_seconds=None):
-    """The freshest CoinSwitch price seen for this symbol, or None."""
-    stamped = _FINE_PRICES.get(symbol)
-    if not stamped:
-        return None
-    seen_at, price = stamped
-    limit = FINE_PRICE_MAX_AGE_SECONDS if max_age_seconds is None else max_age_seconds
-    return price if time.time() - seen_at <= limit else None
-
-
 def fetch_delta_ticker_price(symbol):
     """Delta's own last traded price. Public endpoint, no signing."""
     response = requests.get(
@@ -1114,97 +924,13 @@ def fetch_delta_ticker_price(symbol):
     raise RuntimeError(f"Delta ticker for {symbol} carried no price")
 
 
-def top_up_recent_candles(symbol, candles):
-    """Rebuild the buckets CoinSwitch has not caught up on yet.
-
-    Its 30m series trails the live market by one to three buckets while
-    its 1m series is current to the minute, so a zone price has already
-    closed through can still look alive for over an hour. The chart the
-    user trades from shows those candles; this makes the scan see them
-    too. Only buckets newer than the published series are added - nothing
-    already returned is rewritten.
-    """
-    source = TOP_UP_INTERVAL.get(TIMEFRAME)
-    bucket_seconds = TIMEFRAME_SECONDS.get(TIMEFRAME)
-    if not candles or source is None or bucket_seconds is None:
-        return candles
-
-    interval = COINSWITCH_INTERVALS.get(source)
-    if interval is None:
-        return candles
-
-    last_start = int(candles[-1][0])
-    try:
-        finer = _fetch_coinswitch_ohlcv_once(symbol, interval)
-    except Exception as error:
-        # A missing top-up is not worth failing a scan over; the published
-        # series is still usable, just behind.
-        print(f"{symbol} top-up unavailable: {str(error)[:70]}")
-        return candles
-
-    # The finest series this venue was asked for is also the freshest price it
-    # has - on 30m that is a 1m candle, current to the minute, from the exact
-    # book being charted. Keep it for live_ticker_price, which otherwise has
-    # nothing to offer on CoinSwitch and silently hands back a candle close.
-    _remember_fine_price(symbol, finer)
-
-    # Completed buckets only. The published series carries closed
-    # candles, and letting a half-formed one in would let price dip
-    # through a zone mid-bucket and retire a level that the close
-    # never broke.
-    now_ms = time.time() * 1000
-    bucket_ms = bucket_seconds * 1000
-    fresh = [
-        bucket for bucket in bucket_candles(finer, bucket_seconds)
-        if bucket[0] > last_start and bucket[0] + bucket_ms <= now_ms
-    ]
-    return candles + fresh if fresh else candles
-
-
-def _fetch_coinswitch_ohlcv_once(symbol, interval):
-    path = "/trade/api/v2/futures/klines"
-    params = {
-        "exchange": get_env_or_config("COINSWITCH_EXCHANGE", COINSWITCH_EXCHANGE),
-        "symbol": coinswitch_symbol(symbol),
-        "interval": interval,
-        "limit": OHLCV_LIMIT,
-    }
-    path_query, headers = sign_coinswitch_request("GET", path, params)
-    response = requests.get(
-        f"{COINSWITCH_API_BASE_URL}{path_query}",
-        headers=headers,
-        timeout=20,
-    )
-    response.raise_for_status()
-    payload = response.json()
-    candles = payload.get("data") or []
-    if not candles:
-        raise RuntimeError(f"CoinSwitch returned no candles for {symbol}")
-
-    # CoinSwitch sends start_time as a string. Today every value is the
-    # same width so a text sort happens to match a numeric one, but that
-    # is a coincidence of the epoch, not a guarantee.
-    candles = sorted(candles, key=lambda candle: int(candle["start_time"]))
-    return [
-        [
-            int(candle["start_time"]),
-            float(candle["o"]),
-            float(candle["h"]),
-            float(candle["l"]),
-            float(candle["c"]),
-            float(candle.get("volume") or 0),
-        ]
-        for candle in candles[-OHLCV_LIMIT:]
-    ]
-
-
 def live_ticker_price(exchange_name, symbol, candle_close):
     """Current traded price for alerts, without changing the candle-based zones.
 
     Every venue in the chain gets a path, because for a long time only one did.
-    EXCHANGES_BY_ID holds ccxt exchanges alone, so on CoinSwitch and Delta - the
-    two venues the production chain actually reaches first - this returned the
-    candle close and said nothing about it. Both the 30-minute workflow and
+    EXCHANGES_BY_ID holds ccxt exchanges alone, so on Delta and Bitunix - the
+    venues the production chain actually reaches first - this used to return the
+    candle close and say nothing about it. Both the 30-minute workflow and
     entry_confirm set VICTUS_USE_LIVE_TICKER=true and neither was getting a live
     price: entry_confirm was deciding ENTRY NOW against a close up to half an
     hour old, which is the DOGE case its workflow comment describes.
@@ -1215,17 +941,9 @@ def live_ticker_price(exchange_name, symbol, candle_close):
     if not USE_LIVE_TICKER:
         return candle_close, "candle_close"
 
-    if exchange_name == "coinswitch":
-        # Recorded by the top-up, which has already fetched the finest series
-        # this timeframe uses - so this costs no extra request.
-        price = fine_price(symbol)
-        if price:
-            return price, "coinswitch_fine"
-        return candle_close, "candle_close"
-
     if exchange_name == "bitunix":
         try:
-            pair = bitunix_data.bitunix_pair(delta_contract(symbol) or symbol)
+            pair = bitunix_data.pair_for(symbol, delta_contract(symbol) or symbol)
             return bitunix_data.last_price(pair), "bitunix_1m"
         except Exception as error:
             print(f"{symbol} live price unavailable from bitunix: {str(error)[:80]}")
@@ -1253,53 +971,12 @@ def live_ticker_price(exchange_name, symbol, candle_close):
     return candle_close, "candle_close"
 
 
-def splice_deep_history(symbol, ohlcv):
-    """Extend a CoinSwitch series backwards from a deeper venue.
-
-    CoinSwitch stops at 751 candles however it is asked, so old zones are
-    not filtered out - they are absent. Only candles OLDER than what
-    CoinSwitch returned are taken, so every bar the charted venue does
-    have is the one used: current price, the entry level and whether a
-    zone has broken all still come from the book on screen. The borrowed
-    bars only reveal pivots that would otherwise be invisible.
-
-    Restricted to symbols measured to agree with the deep venue inside
-    the alert distance. Splicing a symbol that disagrees would draw the
-    zone at a price that never traded where the user is looking.
-    """
-    if not ohlcv or display_symbol(symbol) not in DEEP_HISTORY_SYMBOLS:
-        return ohlcv
-
-    exchange = EXCHANGES_BY_ID.get(DEEP_HISTORY_EXCHANGE)
-    if exchange is None:
-        return ohlcv
-
-    oldest = int(ohlcv[0][0])
-    try:
-        deep = fetch_exchange_ohlcv(exchange, fallback_symbol(symbol))
-    except Exception as error:
-        # Losing the extension is not worth failing a scan over - the
-        # charted series is still complete, just shorter.
-        print(f"{symbol} deep history unavailable: {str(error)[:70]}")
-        return ohlcv
-
-    older = [row for row in (deep or []) if int(row[0]) < oldest]
-    if not older:
-        return ohlcv
-    return sorted(older, key=lambda row: int(row[0])) + ohlcv
-
-
 def fetch_symbol_ohlcv(symbol):
     """Candles for one symbol and the venue they came from.
 
-    Delta India first, because that is the book Shiva trades and charts:
-    every entry-confirm ping says "Delta", and TradingView's chart of these
-    symbols is Delta's feed. CoinSwitch used to be first ("the book being
-    charted") until he stopped trading there, but the order was never
-    changed, so about a quarter of recent zones were still built off it and
-    the same zone flipped between venues from scan to scan, restarting
-    entry-confirm cycles. The rest of the chain is a fallback whose levels
-    can drift from the chart. Split out of scan_symbol so anything else
+    Bitunix first for the symbols it lists (config.CRYPTO_CANDLE_SOURCE), then
+    Delta India, the book trades are taken on. The rest of the chain is a
+    fallback whose levels can drift from the chart. Split out of scan_symbol so anything else
     needing a price - the entry-confirm pings, for one - goes through the
     same venue order instead of picking its own exchange.
     """
@@ -1330,16 +1007,6 @@ def fetch_symbol_ohlcv(symbol):
             last_error = error
             ohlcv = None
 
-    if PREFER_COINSWITCH and ohlcv is None:
-        try:
-            ohlcv = require_fresh_ohlcv(fetch_coinswitch_ohlcv(symbol), "CoinSwitch")
-            exchange_name = "coinswitch" if ohlcv is not None else exchange_name
-        except Exception as error:
-            last_error = error
-
-        if ohlcv is None and REQUIRE_COINSWITCH:
-            raise RuntimeError(f"CoinSwitch data unavailable for {symbol}: {last_error}")
-
     primary_exchange = EXCHANGES_BY_ID.get(PRIMARY_EXCHANGE_ID)
     if ohlcv is None and primary_exchange is not None:
         try:
@@ -1368,19 +1035,7 @@ def fetch_symbol_ohlcv(symbol):
                 last_error = error
 
     if ohlcv is None:
-        try:
-            ohlcv = require_fresh_ohlcv(fetch_coinswitch_ohlcv(symbol), "CoinSwitch")
-            exchange_name = "coinswitch" if ohlcv is not None else exchange_name
-        except Exception as error:
-            last_error = error
-
-    if ohlcv is None:
         raise RuntimeError(f"all exchanges failed for {symbol}: {last_error}")
-
-    # Only extend the charted venue. A fallback series is already off-chart,
-    # and stitching a third venue underneath it compounds the drift.
-    if exchange_name == "coinswitch":
-        ohlcv = splice_deep_history(symbol, ohlcv)
 
     return ohlcv, exchange_name
 
@@ -1424,7 +1079,7 @@ def daily_trend(symbol):
         # The trend is read off the same book the zones were drawn from.
         try:
             rows = bitunix_data.klines(
-                bitunix_data.bitunix_pair(contract), "1d", end_ts - (CRYPTO_TREND_EMA * 4) * day, end_ts
+                bitunix_data.pair_for(symbol, contract), "1d", end_ts - (CRYPTO_TREND_EMA * 4) * day, end_ts
             )
             return _trend_from_daily([(row[0], row[4]) for row in rows], end_ts)
         except Exception as error:
@@ -1538,7 +1193,7 @@ def scan_symbol(symbol):
             )
 
     trend = None
-    if trend_filter_applies(symbol) and min(supply_dist, demand_dist) <= WATCH_DISTANCE_PCT:
+    if trend_filter_applies(symbol) and min(supply_dist, demand_dist) <= MAX_DISTANCE_PCT:
         trend = daily_trend(symbol)
 
     return {
@@ -1547,9 +1202,8 @@ def scan_symbol(symbol):
         "daily_trend": trend,
         "candle_time": int(df["time"].iloc[-1]),
         # How far back this scan could actually see. A venue can cap the
-        # limit we ask for - CoinSwitch serves 751 candles however many we
-        # request - and a silently short window means old zones simply do
-        # not exist, which looks identical to there being none.
+        # limit we ask for, and a silently short window means old zones
+        # simply do not exist, which looks identical to there being none.
         "candles": len(df),
         "price": price,
         "candle_close": candle_close,
@@ -1715,82 +1369,6 @@ def record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, 
             file.write(json.dumps(record, separators=(",", ":")) + "\n")
     except OSError as error:
         print(f"Crypto alert record write failed: {error}")
-
-
-def record_watch_candidate(result, zone_type, zone, distance_pct, now_ts):
-    """Note a zone as worth watching, without alerting on it.
-
-    entry_confirm can only track a zone once a row for it exists, and until
-    now the only rows were delivered alerts - written at 0.20%, by which
-    point the median zone is eight minutes from being touched and 28% are
-    already being touched in the same minute. Writing the row at the watch
-    band instead gives entry_confirm the ~42 minutes it needs to say GET
-    READY before price arrives, while the alert itself stays at 0.20%.
-
-    Deliberately not appended to ALERT_RECORD_FILE: the daily backtest
-    scores that file as things that were actually sent.
-    """
-    rating = result.get(f"{zone_type}_rating") or {}
-    score = rating.get("score")
-    if score is None:
-        score = result.get(f"{zone_type}_score")
-
-    record = {
-        "delivered_at_utc": pd.Timestamp.fromtimestamp(now_ts, tz="UTC").isoformat(),
-        "symbol": result["symbol"],
-        "exchange": result.get("exchange"),
-        "timeframe": TIMEFRAME,
-        "side": "short" if zone_type == "supply" else "long",
-        "zone_type": zone_type,
-        "distance_pct": float(distance_pct),
-        "alert_price": float(result["price"]),
-        "zone_bottom": float(zone["bottom"]),
-        "zone_top": float(zone["top"]),
-        "planned_entry": planned_entry_price(zone_type, zone),
-        "stop_price": planned_stop_price(zone_type, zone),
-        "stop_distance_pct": planned_stop_distance_pct(zone_type, zone),
-        "score": score,
-        "watch": True,
-    }
-
-    kept = []
-    try:
-        if WATCH_RECORD_FILE.exists():
-            floor = now_ts - WATCH_RECORD_RETENTION_SECONDS
-            for line in WATCH_RECORD_FILE.read_text(encoding="utf-8-sig").splitlines():
-                if not line.strip():
-                    continue
-                try:
-                    row = json.loads(line)
-                    when = pd.Timestamp(row["delivered_at_utc"]).timestamp()
-                except Exception:
-                    continue
-                if when >= floor:
-                    kept.append(line)
-    except OSError as error:
-        print(f"Crypto watch record read failed: {error}")
-
-    kept.append(json.dumps(record, separators=(",", ":")))
-    content = "\n".join(kept) + "\n"
-
-    # Atomic write: a plain write_text() truncates the file to 0 bytes before
-    # writing, so a run killed mid-write (runner timeout, cancel) leaves
-    # crypto_watch_records.jsonl empty and entry_confirm loses every candidate
-    # it was tracking. Writing to a temp file in the same directory and
-    # renaming over the target is atomic on the same filesystem, so the file
-    # is always either the old content or the new content, never neither.
-    temp_path = None
-    try:
-        with tempfile.NamedTemporaryFile(
-            "w", dir=WATCH_RECORD_FILE.parent, delete=False, encoding="utf-8"
-        ) as handle:
-            handle.write(content)
-            temp_path = Path(handle.name)
-        temp_path.replace(WATCH_RECORD_FILE)
-    except OSError as error:
-        print(f"Crypto watch record write failed: {error}")
-        if temp_path is not None and temp_path.exists():
-            temp_path.unlink()
 
 
 def price_decimals(value):
@@ -2061,9 +1639,8 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
     if stop_too_wide(zone_type, zone):
         return False
 
-    # Before any state is touched, so a counter-trend zone neither alerts
-    # nor feeds entry_confirm a watch row, and alerts normally the moment
-    # the daily trend turns its way.
+    # Before any state is touched, so a counter-trend zone alerts normally
+    # the moment the daily trend turns its way.
     if against_daily_trend(zone_type, result.get("daily_trend")):
         print(f"Skipped alert, against daily trend: {result['symbol']} {zone_type}")
         return False
@@ -2127,28 +1704,6 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
     # must not re-arm the same zone before the suppression window expires.
     elif distance_pct > MAX_DISTANCE_PCT * REARM_FACTOR:
         entry["in_zone"] = False
-
-    # Near enough to watch, not yet near enough to alert. Nothing is sent
-    # here - the row exists so entry_confirm can begin tracking the zone
-    # well before price arrives.
-    #
-    # Strictly ABOVE MAX_DISTANCE_PCT, not from MIN_DISTANCE_PCT: this used
-    # to overlap the alert band itself (>= MIN_DISTANCE_PCT), so a zone
-    # already inside 0.20% whose alert was suppressed by ALERT_COOLDOWN or
-    # ZONE_REPEAT_SUPPRESSION on this scan still got a fresh watch row on its
-    # own separate cooldown - and entry_confirm would then ping GET READY or
-    # ENTRY NOW for a symbol that never appeared in #crypto-30m-alerts at
-    # that moment. 14 of 46 watch rows measured inside the alert band had no
-    # matching alert within 5 minutes either side. A zone that is genuinely
-    # about to alert (or already has) is fully covered by the alert record
-    # path above; the watch row's only job is the range the alert path never
-    # sees at all.
-    if MAX_DISTANCE_PCT < distance_pct <= WATCH_DISTANCE_PCT:
-        watch_state = state.setdefault("_watch", {})
-        last_watch = float(watch_state.get(noise_key, 0.0) or 0.0)
-        if not last_watch or now_ts - last_watch >= WATCH_RECORD_COOLDOWN_SECONDS:
-            record_watch_candidate(result, zone_type, zone, distance_pct, now_ts)
-            watch_state[noise_key] = now_ts
 
     return alert_sent
 
@@ -2270,7 +1825,7 @@ def print_summary(results):
 LAST_SCAN_KEY = "__last_scan_started__"
 
 
-def prune_alert_state(state, now_ts, zone_cooldown, signal_cooldown, repeat_suppression, watch_cooldown):
+def prune_alert_state(state, now_ts, zone_cooldown, signal_cooldown, repeat_suppression):
     """Drop state entries that can no longer change any alert decision.
 
     process_candidate creates an entry for the nearest zone of every symbol on
@@ -2282,7 +1837,8 @@ def prune_alert_state(state, now_ts, zone_cooldown, signal_cooldown, repeat_supp
     - a zone entry not in_zone, or whose last attempt is older than the
       cooldown, alerts on its next band entry either way;
     - a range-filter entry past its cooldown is open either way;
-    - a _noise_control / _watch stamp past its window is open either way.
+    - a _noise_control stamp past its window is open either way;
+    - _watch, left over from the watch rows removed 2026-10-09, goes.
     """
     for key in list(state):
         value = state[key]
@@ -2294,11 +1850,11 @@ def prune_alert_state(state, now_ts, zone_cooldown, signal_cooldown, repeat_supp
                 del state[key]
         elif not value.get("in_zone") or now_ts - last >= zone_cooldown:
             del state[key]
-    for bucket, window in (("_noise_control", repeat_suppression), ("_watch", watch_cooldown)):
-        stamps = state.get(bucket)
-        if isinstance(stamps, dict):
-            for key in [k for k, v in stamps.items() if now_ts - float(v or 0.0) >= window]:
-                del stamps[key]
+    state.pop("_watch", None)
+    stamps = state.get("_noise_control")
+    if isinstance(stamps, dict):
+        for key in [k for k, v in stamps.items() if now_ts - float(v or 0.0) >= repeat_suppression]:
+            del stamps[key]
     return state
 
 
@@ -2324,6 +1880,23 @@ def mark_scan_started(state, now=None):
     stamps[TIMEFRAME] = now if now is not None else time.time()
 
 
+def first_pass_this_loop(tag):
+    """True the first time `tag` is seen in this scan_loop.sh dispatch.
+
+    One dispatch scans every ~90s for ~17 minutes; a status post on every
+    pass buried the status channel. Always True outside the loop, so a plain
+    --once run behaves as before.
+    """
+    stop_file = os.getenv("SCAN_LOOP_STOP_FILE", "").strip()
+    if not stop_file:
+        return True
+    marker = Path(f"{stop_file}.{tag}")
+    if marker.exists():
+        return False
+    marker.touch()
+    return True
+
+
 def run_scan_once(state):
     global XSTOCK_CONTEXTS
 
@@ -2347,26 +1920,18 @@ def run_scan_once(state):
     print("\n" + "=" * 80)
     print(f"Starting scan at {started_at}")
     print("=" * 80)
-    coinswitch_status = (
-        "required and configured"
-        if REQUIRE_COINSWITCH and is_coinswitch_configured()
-        else "REQUIRED BUT NOT CONFIGURED"
-        if REQUIRE_COINSWITCH
-        else "preferred and configured"
-        if PREFER_COINSWITCH and is_coinswitch_configured()
-        else "preferred but not configured"
-        if PREFER_COINSWITCH
-        else "fallback only"
-    )
-    send_status_message(
-        f"Victus scanner started\n"
-        f"Time: {started_at}\n"
-        f"Run: {run_number}\n"
-        f"Trigger: {trigger}\n"
-        f"Timeframe: {TIMEFRAME}\n"
-        f"Watchlist: {len(symbols)} symbols\n"
-        f"CoinSwitch source: {coinswitch_status}"
-    )
+    # Status once per dispatch, not once per pass (2026-10-09, lakky). A later
+    # pass still posts its result when most symbols failed.
+    first_pass = first_pass_this_loop(f"status-{TIMEFRAME}")
+    if first_pass:
+        send_status_message(
+            f"Victus scanner started\n"
+            f"Time: {started_at}\n"
+            f"Run: {run_number}\n"
+            f"Trigger: {trigger}\n"
+            f"Timeframe: {TIMEFRAME}\n"
+            f"Watchlist: {len(symbols)} symbols"
+        )
 
     XSTOCK_CONTEXTS = {}
     if ENABLE_XSTOCK_HYBRID_RATINGS:
@@ -2416,7 +1981,7 @@ def run_scan_once(state):
 
     prune_alert_state(
         state, time.time(), ALERT_COOLDOWN_SECONDS, SIGNAL_ALERT_COOLDOWN_SECONDS,
-        ZONE_REPEAT_SUPPRESSION_SECONDS, WATCH_RECORD_COOLDOWN_SECONDS,
+        ZONE_REPEAT_SUPPRESSION_SECONDS,
     )
     save_state(state)
 
@@ -2424,8 +1989,7 @@ def run_scan_once(state):
         print_summary(results)
 
     finished_at = datetime.now(IST).strftime("%Y-%m-%d %H:%M:%S IST")
-    no_required_source_data = REQUIRE_COINSWITCH and not results
-    status = "ERROR" if no_required_source_data else "OK" if not failures else "WARN"
+    status = "OK" if not failures else "WARN"
     message = (
         f"Victus scanner finished ({status})\n"
         f"Time: {finished_at}\n"
@@ -2440,10 +2004,8 @@ def run_scan_once(state):
     if failures:
         message += "\n" + "\n".join(failures[:5])
 
-    send_status_message(message)
-
-    if no_required_source_data:
-        raise RuntimeError("CoinSwitch-only scan produced no usable market data")
+    if first_pass or len(failures) > len(symbols) / 2:
+        send_status_message(message)
 
 
 def parse_args(argv=None):

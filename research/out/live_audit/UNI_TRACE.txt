@@ -1,0 +1,40 @@
+
+=== alert 2026-10-08 12:47 (candle 2026-10-08 12:30) ===
+paged from alert: 1580 closed; paged from now: 1580 in range
+candles that differ between the two pagings: 0
+missing 30m slots in the alert-time paging: 0
+candles touching 7.51 low or 7.57008:
+    2026-09-17 22:00 [7.7, 7.781, 7.51, 7.591, 164516.0]
+closed + forming: 1500 candles, demand zones 7.3-7.8:
+     7.51-7.57008 active=True created 2026-09-18 03:00
+     7.766-7.775 active=False created 2026-10-07 17:30
+     7.683-7.736 active=False created 2026-10-07 21:00
+closed only: 1499 candles, demand zones 7.3-7.8:
+     7.51-7.57008 active=True created 2026-09-18 03:00
+     7.766-7.775 active=False created 2026-10-07 17:30
+     7.683-7.736 active=False created 2026-10-07 21:00
+Delta closed window 1499 candles, demand zones 7.3-7.8:
+     7.767-7.777 active=False created 2026-10-07 17:30
+     7.697-7.736 active=False created 2026-10-07 21:00
+     7.688-7.705 active=False created 2026-10-08 09:00
+
+=== alert 2026-10-08 13:41 (candle 2026-10-08 13:30) ===
+paged from alert: 1580 closed; paged from now: 1580 in range
+candles that differ between the two pagings: 0
+missing 30m slots in the alert-time paging: 0
+candles touching 7.51 low or 7.57008:
+    2026-09-17 22:00 [7.7, 7.781, 7.51, 7.591, 164516.0]
+    2026-10-08 12:30 [7.662, 7.661, 7.516, 7.57, 207927.0]
+    2026-10-08 13:00 [7.57, 7.671, 7.551, 7.647, 96694.0]
+closed + forming: 1500 candles, demand zones 7.3-7.8:
+     7.51-7.57008 active=True created 2026-09-18 03:00
+     7.766-7.775 active=False created 2026-10-07 17:30
+     7.683-7.736 active=False created 2026-10-07 21:00
+closed only: 1499 candles, demand zones 7.3-7.8:
+     7.51-7.57008 active=True created 2026-09-18 03:00
+     7.766-7.775 active=False created 2026-10-07 17:30
+     7.683-7.736 active=False created 2026-10-07 21:00
+Delta closed window 1499 candles, demand zones 7.3-7.8:
+     7.767-7.777 active=False created 2026-10-07 17:30
+     7.697-7.736 active=False created 2026-10-07 21:00
+     7.688-7.705 active=False created 2026-10-08 09:00
