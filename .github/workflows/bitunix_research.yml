@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       parts:
-        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr)"
+        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock live-audit)"
         default: "zones-30m zones-4h fib"
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr]
+        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr, xstock, live-audit]
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
@@ -59,6 +59,12 @@ jobs:
             fzp) python research/fib_zone_preference.py --since 2026-09-01 ;;
             fpri) python research/fib_priority_backtest.py --since 2026-09-01 ;;
             fsr) python research/fib_sr_logic_backtest.py --since 2026-09-01 ;;
+            xstock) mkdir -p research/out/xstock
+                       python research/xstock_bitunix_probe.py > research/out/xstock/probe.txt 2>&1; cat research/out/xstock/probe.txt ;;
+            live-audit) git fetch --depth 1 origin scanner-runtime-state
+                       mkdir -p /tmp/rt research/out/live_audit
+                       git archive FETCH_HEAD | tar -x -C /tmp/rt
+                       python research/live_audit.py --state /tmp/rt --since 2026-10-05 ;;
             tl-length) python research/trendline_length_backtest.py --lengths 10,15,20 ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
       - name: Commit results to this branch
