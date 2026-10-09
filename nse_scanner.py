@@ -313,6 +313,7 @@ qualify_wick_zone = zone_engine.qualify_wick_zone
 build_zones = zone_engine.build_zones
 too_young_to_alert = zone_engine.too_young_to_alert
 nearest_active_zone = zone_engine.nearest_active_zone
+first_pass_this_loop = zone_engine.first_pass_this_loop
 
 
 def bind_zone_engine(timeframe=None):
@@ -972,21 +973,6 @@ def stop_scan_loop():
         Path(stop_file).touch()
 
 
-def first_pass_this_loop(tag):
-    """True the first time `tag` is seen in this scan_loop.sh dispatch.
-
-    Always True outside the loop, so a plain --once run behaves as before.
-    """
-    stop_file = os.getenv("SCAN_LOOP_STOP_FILE", "").strip()
-    if not stop_file:
-        return True
-    marker = Path(f"{stop_file}.{tag}")
-    if marker.exists():
-        return False
-    marker.touch()
-    return True
-
-
 def run_scan_once(state):
     if scan_too_soon(state):
         print(
@@ -1038,24 +1024,29 @@ def run_scan_once(state):
             )
         return
 
-    send_status_message(
-        f"Victus NSE scanner started\n"
-        f"Time: {started_at}\n"
-        f"Run: {run_number}\n"
-        f"Trigger: {trigger}\n"
-        f"Timeframe: {TIMEFRAME}\n"
-        f"Watchlist: {len(watchlist)} symbols\n"
-        f"Sectors: {sector_coverage_summary(watchlist)}"
-    )
+    # Status once per dispatch, not once per pass (2026-10-09, lakky): a
+    # later pass posts only when an alert failed to send or most symbols failed.
+    first_pass = first_pass_this_loop(f"status-nse-{TIMEFRAME}")
+    if first_pass:
+        send_status_message(
+            f"Victus NSE scanner started\n"
+            f"Time: {started_at}\n"
+            f"Run: {run_number}\n"
+            f"Trigger: {trigger}\n"
+            f"Timeframe: {TIMEFRAME}\n"
+            f"Watchlist: {len(watchlist)} symbols\n"
+            f"Sectors: {sector_coverage_summary(watchlist)}"
+        )
 
     fetch_market_data(watchlist)
     if not has_current_session_data(watchlist, market_now):
-        send_status_message(
-            "Victus NSE scanner skipped - stale or incomplete session data\n"
-            f"Time: {market_now.strftime('%Y-%m-%d %H:%M:%S %Z')}\n"
-            "Reference Price: Previous Close\n"
-            "No executable alerts were generated."
-        )
+        if first_pass_this_loop("stale"):
+            send_status_message(
+                "Victus NSE scanner skipped - stale or incomplete session data\n"
+                f"Time: {market_now.strftime('%Y-%m-%d %H:%M:%S %Z')}\n"
+                "Reference Price: Previous Close\n"
+                "No executable alerts were generated."
+            )
         return
     sector_context = build_sector_context(watchlist)
     scanned_by_symbol = {}
@@ -1114,7 +1105,8 @@ def run_scan_once(state):
     if failures:
         message += "\n" + "\n".join(failures[:5])
 
-    send_status_message(message)
+    if first_pass or alert_delivery_failures or len(failures) > len(watchlist) / 2:
+        send_status_message(message)
 
 
 def parse_args(argv=None):

@@ -1880,6 +1880,23 @@ def mark_scan_started(state, now=None):
     stamps[TIMEFRAME] = now if now is not None else time.time()
 
 
+def first_pass_this_loop(tag):
+    """True the first time `tag` is seen in this scan_loop.sh dispatch.
+
+    One dispatch scans every ~90s for ~17 minutes; a status post on every
+    pass buried the status channel. Always True outside the loop, so a plain
+    --once run behaves as before.
+    """
+    stop_file = os.getenv("SCAN_LOOP_STOP_FILE", "").strip()
+    if not stop_file:
+        return True
+    marker = Path(f"{stop_file}.{tag}")
+    if marker.exists():
+        return False
+    marker.touch()
+    return True
+
+
 def run_scan_once(state):
     global XSTOCK_CONTEXTS
 
@@ -1903,14 +1920,18 @@ def run_scan_once(state):
     print("\n" + "=" * 80)
     print(f"Starting scan at {started_at}")
     print("=" * 80)
-    send_status_message(
-        f"Victus scanner started\n"
-        f"Time: {started_at}\n"
-        f"Run: {run_number}\n"
-        f"Trigger: {trigger}\n"
-        f"Timeframe: {TIMEFRAME}\n"
-        f"Watchlist: {len(symbols)} symbols"
-    )
+    # Status once per dispatch, not once per pass (2026-10-09, lakky). A later
+    # pass still posts its result when most symbols failed.
+    first_pass = first_pass_this_loop(f"status-{TIMEFRAME}")
+    if first_pass:
+        send_status_message(
+            f"Victus scanner started\n"
+            f"Time: {started_at}\n"
+            f"Run: {run_number}\n"
+            f"Trigger: {trigger}\n"
+            f"Timeframe: {TIMEFRAME}\n"
+            f"Watchlist: {len(symbols)} symbols"
+        )
 
     XSTOCK_CONTEXTS = {}
     if ENABLE_XSTOCK_HYBRID_RATINGS:
@@ -1983,7 +2004,8 @@ def run_scan_once(state):
     if failures:
         message += "\n" + "\n".join(failures[:5])
 
-    send_status_message(message)
+    if first_pass or len(failures) > len(symbols) / 2:
+        send_status_message(message)
 
 
 def parse_args(argv=None):
