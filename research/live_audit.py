@@ -154,13 +154,29 @@ def part_a(state, since_ts):
                     candles = closed + [forming]
                 else:
                     candles = closed
-                df = pd.DataFrame([[c[0] * 1000, *c[1:6]] for c in candles],
-                                  columns=["time", "open", "high", "low", "close", "volume"])
-                supply, demand = scanner.build_zones(df)
                 ztype = r["zone_type"]
-                zones = demand if ztype == "demand" else supply
                 price = float(r["alert_price"])
-                found = [z for z in zones if z["active"] and rel(z["bottom"], r["zone_bottom"]) < 1e-6 and rel(z["top"], r["zone_top"]) < 1e-6]
+
+                def rebuilt(window):
+                    frame = pd.DataFrame([[c[0] * 1000, *c[1:6]] for c in window],
+                                         columns=["time", "open", "high", "low", "close", "volume"])
+                    sup, dem = scanner.build_zones(frame)
+                    return frame, (dem if ztype == "demand" else sup)
+
+                def exact(zs):
+                    return [z for z in zs if z["active"] and rel(z["bottom"], r["zone_bottom"]) < 1e-6 and rel(z["top"], r["zone_top"]) < 1e-6]
+
+                df, zones = rebuilt(candles)
+                found = exact(zones)
+                if not found and venue == "bitunix":
+                    # 2026-10-05 to 10-07 the Bitunix scan ran on 199 closed
+                    # candles and no forming one (fixed in PR #20).
+                    for label, window in (("199 closed, no forming", closed[-199:]), ("closed only", closed)):
+                        alt_df, alt = rebuilt(window)
+                        if exact(alt):
+                            totals[f"matched only as {label}"] += 1
+                            df, zones, found = alt_df, alt, exact(alt)
+                            break
                 near = [z for z in zones if z["active"] and rel(z["bottom"], r["zone_bottom"]) < 3e-3 and rel(z["top"], r["zone_top"]) < 3e-3]
                 nearest, ndist = scanner.nearest_active_zone(price, zones, ztype, len(df) - 1)
                 nearest_ok = nearest is not None and rel(nearest["bottom"], r["zone_bottom"]) < 3e-3 and rel(nearest["top"], r["zone_top"]) < 3e-3
@@ -288,6 +304,15 @@ def part_b(state):
             totals["key NOT reproduced"] += 1
             keys = [h["key"] for h in hits]
             problems.append(f"{symbol} {tf} {r['kind']} {datetime.fromtimestamp(sent, timezone.utc):%m-%d %H:%M} key {r['key']} not in replay ({len(hits)} hits, price replay {price} vs rec {r['price']}): {keys[:3]}")
+            try:
+                closed = [c for c in candles if c[0] < candles[-1][0]] if tf == "1M" else candles
+                stamp = [datetime.fromtimestamp(c[0], timezone.utc).strftime("%Y-%m-%d") for c in closed]
+                snaps, _ = fib_engine.run(stamp, [c[2] for c in closed], [c[3] for c in closed], N=config.FIB_SWING_LENGTH)
+                live = snaps[-1]
+                problems.append(f"    replay fib d={live['d']} base={live['O']} ({stamp[live['Ot']]}) top={live['E']}; "
+                                f"{len(rows)} {fetch_tf} candles from {datetime.fromtimestamp(rows[0][0], timezone.utc):%Y-%m-%d}")
+            except Exception as error:     # noqa: BLE001
+                problems.append(f"    replay detail failed: {error!r}")
         totals["plan arithmetic ok" if arith else "plan arithmetic FAIL"] += 1
         if dist is not None:
             band = 0 <= dist <= config.FIB_TL_MAX_DISTANCE_PCT
@@ -364,6 +389,11 @@ def score_zone(bars, rec, tf):
 def part_c(state, since_ts):
     import scanner
     say("\n## C. Crypto zone trades re-scored independently (Delta 5m)\n")
+    alerts = {}
+    for name in ("crypto_alert_records.jsonl", "crypto_alert_records_30m.jsonl"):
+        for a in jl(state / name):
+            if a.get("trade_id"):
+                alerts[a["trade_id"]] = a
     rows = [r for r in jl(state / "daily_backtest_finalized_records.jsonl")
             if r.get("market") in ("CRYPTO", "XSTOCK", "OTHER") and r.get("alert_time") and ts_of(r["alert_time"]) >= since_ts]
     say(f"{len(rows)} finalized crypto/xStock/other rows since the cut")
@@ -379,6 +409,8 @@ def part_c(state, since_ts):
         hi = max(ts_of(r["alert_time"]) for r in recs) + 20 * 3600
         bars = cached(("d5", contract), lambda: [b[:5] for b in delta_rows(contract, "5m", lo, min(hi, time.time()))])
         for r in recs:
+            if r.get("stop_price") is None and r.get("trade_id") in alerts:
+                r = {**r, "stop_price": alerts[r["trade_id"]].get("stop_price")}
             theirs = r.get("final_result") or r.get("outcome")
             tf = r.get("timeframe")
             try:
@@ -388,6 +420,9 @@ def part_c(state, since_ts):
             totals["rows"] += 1
             if mine == "same-candle":
                 totals["same-candle (resolved on finer candles by the bot, skipped)"] += 1
+                continue
+            if theirs == "zone_cooldown":
+                totals["zone_cooldown (same-day dedup, not re-derived)"] += 1
                 continue
             tnet = r.get("net_realized_r")
             agree = mine == theirs and (net is None or tnet is None or abs(net - float(tnet)) < 0.02)
