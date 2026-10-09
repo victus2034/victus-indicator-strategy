@@ -1092,7 +1092,7 @@ def run_scan_once(state):
 
     zone_engine.prune_alert_state(
         state, time.time(), ALERT_COOLDOWN_SECONDS, SIGNAL_ALERT_COOLDOWN_SECONDS,
-        ZONE_REPEAT_SUPPRESSION_SECONDS, 0,
+        ZONE_REPEAT_SUPPRESSION_SECONDS,
     )
     save_state(state)
 

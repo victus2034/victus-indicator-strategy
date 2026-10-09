@@ -226,40 +226,6 @@ OVERLAP_ATR = 2.0
 # Alert as soon as a symbol comes within MAX_DISTANCE_PCT of it.
 MIN_DISTANCE_PCT = env_float("VICTUS_MIN_DISTANCE_PCT", 0.0)
 MAX_DISTANCE_PCT = env_float("VICTUS_MAX_DISTANCE_PCT", 0.20)
-# How near a zone must come before entry_confirm starts WATCHING it - i.e.
-# before the scanner writes a (silent, no Discord message) watch row for it at
-# all. Deliberately wider than MAX_DISTANCE_PCT so entry_confirm's own stage
-# tracking for a zone has a head start once it does become worth mentioning.
-#
-# This does NOT by itself widen what gets pinged. entry_confirm.
-# APPROACH_THRESHOLD_PCT (set in entry_confirm.yml, independent of this) is
-# what actually gates a GET READY message, and it was briefly matched to this
-# value on 7 Sep, then reverted on 9 Sep the next day: it meant GET READY
-# firing on zones 0.53-0.99% away that the real alert never fired for at all,
-# which read as noise rather than an early warning. Keep these two separate -
-# raising this one without also checking entry_confirm.yml's threshold is
-# exactly the mistake that shipped.
-#
-# Measured over 90 zones that price went on to fill: at 0.20% the median
-# warning between price entering the band and touching the entry is 8 minutes,
-# and 28% of zones enter the band and touch inside the SAME MINUTE - no scan
-# interval can catch those. At 0.75% the median warning is 42 minutes and 81%
-# leave room for at least one scan. Widening the alert threshold itself would
-# have bought that warning at the cost of a far noisier channel, including
-# alerts on approaches that never fill - a third of the zones measured never
-# touched at all. So this stays wide for tracking; what gets pinged stays
-# narrow at 0.20% in entry_confirm.yml.
-#
-# The scanner only writes a watch row strictly ABOVE MAX_DISTANCE_PCT - the
-# range the alert path never covers - not from zero. A zone already inside
-# the alert band is entirely the alert record's job; if that alert fired,
-# entry_confirm already has it, and if it was suppressed by cooldown, no
-# watch row should paper over that silence either. A version of this that
-# started at zero double-covered the alert band and, for a symbol whose
-# alert was suppressed on this exact scan, produced a GET READY in
-# #entry-confirmed for a symbol #crypto-30m-alerts said nothing about at
-# that moment - found 9 Sep, one day after the watch band shipped.
-WATCH_DISTANCE_PCT = env_float("VICTUS_WATCH_DISTANCE_PCT", 0.75)
 REARM_FACTOR = 1.25
 # 0 disables the over-touch veto. The Pine indicator counts no touches and
 # never retires a zone for being revisited - only a close through it kills the

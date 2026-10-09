@@ -20,12 +20,6 @@ class MaxAlertStopTests(unittest.TestCase):
         self.assertFalse(sent)
         send.assert_not_called()
 
-    def test_wide_stop_leaves_no_watch_row_either(self):
-        with patch.object(scanner, "send_alert", return_value=True), \
-             patch.object(scanner, "record_watch_candidate") as watch:
-            scanner.process_candidate({}, dict(RESULT), "demand", WIDE, 0.6, 1000)
-        watch.assert_not_called()
-
     def test_normal_stop_still_alerts(self):
         with patch.object(scanner, "send_alert", return_value=True) as send, \
              patch.object(scanner, "record_delivered_zone_alert"):

@@ -4,7 +4,6 @@ import hashlib
 import json
 import math
 import os
-import tempfile
 import threading
 import time
 import warnings
@@ -42,7 +41,6 @@ from config import (
     MAX_CONSECUTIVE_ZONE_TOUCHES,
     MIN_ZONE_AGE_CANDLES,
     MAX_DISTANCE_PCT,
-    WATCH_DISTANCE_PCT,
     MIN_CRYPTO_ZONE_SCORE,
     MIN_DISTANCE_PCT,
     MIN_SCAN_INTERVAL_SECONDS,
@@ -105,22 +103,6 @@ ALERT_RECORD_FILE = Path(__file__).with_name(
         "crypto_alert_records_30m.jsonl" if TIMEFRAME == "30m" else "crypto_alert_records.jsonl",
     )
 )
-# Zones near enough for entry_confirm to start watching, but not near enough to
-# alert on. Its own file on purpose: daily_backtest_summary reads the alert
-# records to score what was actually delivered, and folding un-alerted zones in
-# there would inflate the denominator and quietly wreck every win rate in the
-# summary. Nothing here is ever sent to a webhook.
-WATCH_RECORD_FILE = ALERT_RECORD_FILE.with_name(
-    ALERT_RECORD_FILE.name.replace("crypto_alert_records", "crypto_watch_records")
-)
-# A zone sits inside the watch band for far longer than it sits inside the alert
-# band, and the scanner runs every five minutes, so re-writing one on every pass
-# would bloat the file and the state branch with it. One row per zone per window
-# is enough for entry_confirm, which only needs the row to exist.
-WATCH_RECORD_COOLDOWN_SECONDS = int(os.getenv("VICTUS_WATCH_RECORD_COOLDOWN_SECONDS", "1800"))
-# Rows older than this are dropped on write. entry_confirm stops watching after
-# three bars - twelve hours on 4h - so anything older is dead weight.
-WATCH_RECORD_RETENTION_SECONDS = int(os.getenv("VICTUS_WATCH_RECORD_RETENTION_SECONDS", str(24 * 3600)))
 SL_BUFFER_PCT = 0.10
 # Guards the exact same zone/price re-alerting after price briefly steps
 # outside the alert band (past MAX_DISTANCE_PCT * REARM_FACTOR) and back in -
@@ -1538,7 +1520,7 @@ def scan_symbol(symbol):
             )
 
     trend = None
-    if trend_filter_applies(symbol) and min(supply_dist, demand_dist) <= WATCH_DISTANCE_PCT:
+    if trend_filter_applies(symbol) and min(supply_dist, demand_dist) <= MAX_DISTANCE_PCT:
         trend = daily_trend(symbol)
 
     return {
@@ -1715,82 +1697,6 @@ def record_delivered_zone_alert(result, zone_type, zone, distance_pct, message, 
             file.write(json.dumps(record, separators=(",", ":")) + "\n")
     except OSError as error:
         print(f"Crypto alert record write failed: {error}")
-
-
-def record_watch_candidate(result, zone_type, zone, distance_pct, now_ts):
-    """Note a zone as worth watching, without alerting on it.
-
-    entry_confirm can only track a zone once a row for it exists, and until
-    now the only rows were delivered alerts - written at 0.20%, by which
-    point the median zone is eight minutes from being touched and 28% are
-    already being touched in the same minute. Writing the row at the watch
-    band instead gives entry_confirm the ~42 minutes it needs to say GET
-    READY before price arrives, while the alert itself stays at 0.20%.
-
-    Deliberately not appended to ALERT_RECORD_FILE: the daily backtest
-    scores that file as things that were actually sent.
-    """
-    rating = result.get(f"{zone_type}_rating") or {}
-    score = rating.get("score")
-    if score is None:
-        score = result.get(f"{zone_type}_score")
-
-    record = {
-        "delivered_at_utc": pd.Timestamp.fromtimestamp(now_ts, tz="UTC").isoformat(),
-        "symbol": result["symbol"],
-        "exchange": result.get("exchange"),
-        "timeframe": TIMEFRAME,
-        "side": "short" if zone_type == "supply" else "long",
-        "zone_type": zone_type,
-        "distance_pct": float(distance_pct),
-        "alert_price": float(result["price"]),
-        "zone_bottom": float(zone["bottom"]),
-        "zone_top": float(zone["top"]),
-        "planned_entry": planned_entry_price(zone_type, zone),
-        "stop_price": planned_stop_price(zone_type, zone),
-        "stop_distance_pct": planned_stop_distance_pct(zone_type, zone),
-        "score": score,
-        "watch": True,
-    }
-
-    kept = []
-    try:
-        if WATCH_RECORD_FILE.exists():
-            floor = now_ts - WATCH_RECORD_RETENTION_SECONDS
-            for line in WATCH_RECORD_FILE.read_text(encoding="utf-8-sig").splitlines():
-                if not line.strip():
-                    continue
-                try:
-                    row = json.loads(line)
-                    when = pd.Timestamp(row["delivered_at_utc"]).timestamp()
-                except Exception:
-                    continue
-                if when >= floor:
-                    kept.append(line)
-    except OSError as error:
-        print(f"Crypto watch record read failed: {error}")
-
-    kept.append(json.dumps(record, separators=(",", ":")))
-    content = "\n".join(kept) + "\n"
-
-    # Atomic write: a plain write_text() truncates the file to 0 bytes before
-    # writing, so a run killed mid-write (runner timeout, cancel) leaves
-    # crypto_watch_records.jsonl empty and entry_confirm loses every candidate
-    # it was tracking. Writing to a temp file in the same directory and
-    # renaming over the target is atomic on the same filesystem, so the file
-    # is always either the old content or the new content, never neither.
-    temp_path = None
-    try:
-        with tempfile.NamedTemporaryFile(
-            "w", dir=WATCH_RECORD_FILE.parent, delete=False, encoding="utf-8"
-        ) as handle:
-            handle.write(content)
-            temp_path = Path(handle.name)
-        temp_path.replace(WATCH_RECORD_FILE)
-    except OSError as error:
-        print(f"Crypto watch record write failed: {error}")
-        if temp_path is not None and temp_path.exists():
-            temp_path.unlink()
 
 
 def price_decimals(value):
@@ -2061,9 +1967,8 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
     if stop_too_wide(zone_type, zone):
         return False
 
-    # Before any state is touched, so a counter-trend zone neither alerts
-    # nor feeds entry_confirm a watch row, and alerts normally the moment
-    # the daily trend turns its way.
+    # Before any state is touched, so a counter-trend zone alerts normally
+    # the moment the daily trend turns its way.
     if against_daily_trend(zone_type, result.get("daily_trend")):
         print(f"Skipped alert, against daily trend: {result['symbol']} {zone_type}")
         return False
@@ -2127,28 +2032,6 @@ def process_candidate(state, result, zone_type, zone, distance_pct, now_ts):
     # must not re-arm the same zone before the suppression window expires.
     elif distance_pct > MAX_DISTANCE_PCT * REARM_FACTOR:
         entry["in_zone"] = False
-
-    # Near enough to watch, not yet near enough to alert. Nothing is sent
-    # here - the row exists so entry_confirm can begin tracking the zone
-    # well before price arrives.
-    #
-    # Strictly ABOVE MAX_DISTANCE_PCT, not from MIN_DISTANCE_PCT: this used
-    # to overlap the alert band itself (>= MIN_DISTANCE_PCT), so a zone
-    # already inside 0.20% whose alert was suppressed by ALERT_COOLDOWN or
-    # ZONE_REPEAT_SUPPRESSION on this scan still got a fresh watch row on its
-    # own separate cooldown - and entry_confirm would then ping GET READY or
-    # ENTRY NOW for a symbol that never appeared in #crypto-30m-alerts at
-    # that moment. 14 of 46 watch rows measured inside the alert band had no
-    # matching alert within 5 minutes either side. A zone that is genuinely
-    # about to alert (or already has) is fully covered by the alert record
-    # path above; the watch row's only job is the range the alert path never
-    # sees at all.
-    if MAX_DISTANCE_PCT < distance_pct <= WATCH_DISTANCE_PCT:
-        watch_state = state.setdefault("_watch", {})
-        last_watch = float(watch_state.get(noise_key, 0.0) or 0.0)
-        if not last_watch or now_ts - last_watch >= WATCH_RECORD_COOLDOWN_SECONDS:
-            record_watch_candidate(result, zone_type, zone, distance_pct, now_ts)
-            watch_state[noise_key] = now_ts
 
     return alert_sent
 
@@ -2270,7 +2153,7 @@ def print_summary(results):
 LAST_SCAN_KEY = "__last_scan_started__"
 
 
-def prune_alert_state(state, now_ts, zone_cooldown, signal_cooldown, repeat_suppression, watch_cooldown):
+def prune_alert_state(state, now_ts, zone_cooldown, signal_cooldown, repeat_suppression):
     """Drop state entries that can no longer change any alert decision.
 
     process_candidate creates an entry for the nearest zone of every symbol on
@@ -2282,7 +2165,8 @@ def prune_alert_state(state, now_ts, zone_cooldown, signal_cooldown, repeat_supp
     - a zone entry not in_zone, or whose last attempt is older than the
       cooldown, alerts on its next band entry either way;
     - a range-filter entry past its cooldown is open either way;
-    - a _noise_control / _watch stamp past its window is open either way.
+    - a _noise_control stamp past its window is open either way;
+    - _watch, left over from the watch rows removed 2026-10-09, goes.
     """
     for key in list(state):
         value = state[key]
@@ -2294,11 +2178,11 @@ def prune_alert_state(state, now_ts, zone_cooldown, signal_cooldown, repeat_supp
                 del state[key]
         elif not value.get("in_zone") or now_ts - last >= zone_cooldown:
             del state[key]
-    for bucket, window in (("_noise_control", repeat_suppression), ("_watch", watch_cooldown)):
-        stamps = state.get(bucket)
-        if isinstance(stamps, dict):
-            for key in [k for k, v in stamps.items() if now_ts - float(v or 0.0) >= window]:
-                del stamps[key]
+    state.pop("_watch", None)
+    stamps = state.get("_noise_control")
+    if isinstance(stamps, dict):
+        for key in [k for k, v in stamps.items() if now_ts - float(v or 0.0) >= repeat_suppression]:
+            del stamps[key]
     return state
 
 
@@ -2416,7 +2300,7 @@ def run_scan_once(state):
 
     prune_alert_state(
         state, time.time(), ALERT_COOLDOWN_SECONDS, SIGNAL_ALERT_COOLDOWN_SECONDS,
-        ZONE_REPEAT_SUPPRESSION_SECONDS, WATCH_RECORD_COOLDOWN_SECONDS,
+        ZONE_REPEAT_SUPPRESSION_SECONDS,
     )
     save_state(state)
 
