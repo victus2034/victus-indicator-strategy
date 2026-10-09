@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       parts:
-        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr)"
+        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr chart-markers)"
         default: "zones-30m zones-4h fib"
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr]
+        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr, chart-markers]
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
@@ -59,6 +59,8 @@ jobs:
             fzp) python research/fib_zone_preference.py --since 2026-09-01 ;;
             fpri) python research/fib_priority_backtest.py --since 2026-09-01 ;;
             fsr) python research/fib_sr_logic_backtest.py --since 2026-09-01 ;;
+            chart-markers) for s in LINKUSD HYPEUSD AVAXUSD; do python research/chart_marker_replay.py $s --tf 1d --since 2026-07-01; done
+                       python research/chart_marker_replay.py AVAXUSD --tf 4h --since 2026-09-20 ;;
             tl-length) python research/trendline_length_backtest.py --lengths 10,15,20 ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
       - name: Commit results to this branch
