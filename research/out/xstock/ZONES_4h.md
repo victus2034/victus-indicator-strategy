@@ -1,21 +1,3 @@
-TSLAXUSD: delta 1394/34563, bitunix 1258/34522
-METAXUSD: delta 1394/34533, bitunix 1174/34522
-SOXLBUSD: delta 554/26545, bitunix 862/5400
-SNDKBUSD: delta 554/26542, bitunix 1173/34522
-MRVL/USDT:USDT: delta 506/24156, bitunix 862/34523
-NVDAXUSD: delta 1394/34539, bitunix 1221/34522
-replayed TSLAXUSD delta: 29 alerts (32s)
-replayed TSLAXUSD bitunix: 31 alerts (32s)
-replayed METAXUSD delta: 28 alerts (32s)
-replayed METAXUSD bitunix: 27 alerts (32s)
-replayed SOXLBUSD delta: 13 alerts (32s)
-replayed SOXLBUSD bitunix: 4 alerts (42s)
-replayed SNDKBUSD delta: 6 alerts (42s)
-replayed SNDKBUSD bitunix: 10 alerts (58s)
-replayed MRVL/USDT:USDT delta: 6 alerts (58s)
-replayed MRVL/USDT:USDT bitunix: 22 alerts (58s)
-replayed NVDAXUSD delta: 41 alerts (62s)
-replayed NVDAXUSD bitunix: 42 alerts (64s)
 # Zones 4h: Delta vs Bitunix candles
 
 Window: last 120 days to 2026-10-09 21:45 IST; 6 crypto symbols both venues serve. Fees: Delta in every row.
@@ -41,4 +23,3 @@ Window: last 120 days to 2026-10-09 21:45 IST; 6 crypto symbols both venues serv
 | bitunix       | bitunix     |      112 |       94 |   34 |   34 |     6 |    11 |         9 |           1 |      33.3 |   -18.5 |        -0.197 |
 | delta only    | delta       |       29 |       27 |   13 |    8 |     1 |     3 |         2 |           1 |      23.5 |   -11   |        -0.408 |
 | bitunix only  | delta       |       40 |       23 |   10 |    8 |     1 |     2 |         2 |           1 |      23.1 |    -7.5 |        -0.328 |
-
