@@ -14,6 +14,12 @@ Probed 2026-10-07 (research/bitunix_window_probe.py): the endpoint never returns
 the candle still forming, whatever the request, and every candle slot between
 now and an endTime in the future still counts against the 200 - so a page asked
 to end one candle ahead comes back with 199.
+
+Probed 2026-10-09 (research/bitunix_page_probe.py): endTime must sit on a
+candle open. There it is exclusive and the page is right; anywhere else the
+page loses one candle and the next one carries the lost candle's open. Paging
+back by "oldest - 1ms" hit that once per 200 candles (7 bad candles in UNI's
+1500 30m, and a demand zone that did not rebuild).
 """
 import threading
 import time
@@ -32,6 +38,8 @@ MAX_BARS_PER_REQUEST = 200
 INTERVALS = {"1m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d", "3d", "1w", "1M"}
 # Candles that open on a multiple of their length from the epoch (UTC).
 INTERVAL_SECONDS = {"5m": 300, "15m": 900, "30m": 1800, "1h": 3600, "2h": 7200, "4h": 14400, "1d": 86400}
+# The page edges klines aligns endTime to; 3d, 1w and 1M are not used here.
+_PAGE_STEP = {"1m": 60, **INTERVAL_SECONDS, "6h": 21600, "8h": 28800, "12h": 43200}
 
 # The scanner fetches every symbol from a thread pool, and fib_trendline_scanner
 # from another; one gap shared by all of them keeps the process under the limit.
@@ -93,19 +101,23 @@ def _request(pair, interval, start_ms, end_ms, limit, attempts=3):
 def klines(pair, interval, start, end):
     """Every candle opening in [start, end) (epoch seconds), oldest first.
 
-    Pages backwards from end: each page is the newest 200 at or before its
-    endTime, so the next page ends just before the oldest candle seen. A short
-    page means the listing (or start) was reached.
+    Pages backwards from end: each page is the newest 200 opening before its
+    endTime, a candle open, and the next page ends at the oldest candle seen.
+    A short page means the listing (or start) was reached.
     """
     if interval not in INTERVALS:
         raise ValueError(f"Bitunix has no {interval} interval")
+    step = _PAGE_STEP.get(interval)
     out = {}
     # Never past now: future slots count against the page, so the page comes
     # back short and reads as the listing reached. The zone scan asked one
     # candle ahead and got 199 of its 1500 (2026-10-05 to 10-07).
-    cursor = min(int(end) * 1000, int(time.time() * 1000)) - 1
+    if step:
+        cursor = min(-(-int(end) // step), int(time.time()) // step) * step * 1000
+    else:
+        cursor = min(int(end) * 1000, int(time.time() * 1000)) - 1
     start_ms = int(start) * 1000
-    while cursor >= start_ms:
+    while cursor > start_ms or (not step and cursor == start_ms):
         rows = _request(pair, interval, start_ms, cursor, MAX_BARS_PER_REQUEST)
         for row in rows:
             ts = int(row["time"]) // 1000
@@ -115,9 +127,10 @@ def klines(pair, interval, start, end):
         if len(rows) < MAX_BARS_PER_REQUEST:
             break
         oldest = min(int(row["time"]) for row in rows)
-        if oldest - 1 >= cursor:
+        nxt = oldest if step else oldest - 1
+        if nxt >= cursor:
             break
-        cursor = oldest - 1
+        cursor = nxt
     return [out[k] for k in sorted(out)]
 
 

@@ -16,10 +16,12 @@ def _row(ts_s, price=100.0):
 
 class FakeBitunix:
     """Serves the API's real shape (research/bitunix_window_probe.py, 2026-10-07):
-    newest first, at most `limit`, ending at endTime; never the candle still
+    newest first, at most `limit`, opening before endTime; never the candle still
     forming at `now`; and each candle slot after the forming one, up to endTime,
     uses up one of the `limit`, so a page ending in the future comes back short.
-    `minutes` maps a 1m open time to its price, for the forming-candle requests."""
+    `minutes` maps a 1m open time to its price, for the forming-candle requests.
+    An endTime off a candle open is refused: the real API then drops a candle
+    and merges two (research/bitunix_page_probe.py, 2026-10-09)."""
 
     def __init__(self, first, last, step, now=None):
         self.series = list(range(first, last + 1, step))
@@ -31,8 +33,10 @@ class FakeBitunix:
     def __call__(self, pair, interval, start_ms, end_ms, limit, attempts=3):
         self.calls.append((pair, interval, start_ms, end_ms))
         step, series = (60, sorted(self.minutes)) if interval == "1m" else (self.step, self.series)
+        if end_ms % (step * 1000):
+            raise AssertionError(f"endTime {end_ms} is not on a {interval} candle open")
         forming = self.now // step * step
-        closed = [ts for ts in series if ts < forming and start_ms <= ts * 1000 <= end_ms]
+        closed = [ts for ts in series if ts < forming and start_ms <= ts * 1000 < end_ms]
         take = limit - max(0, (end_ms // 1000 - forming) // step)
         if take <= 0:
             return []
@@ -86,12 +90,21 @@ class OnTests(unittest.TestCase):
         self.assertEqual({c[0] for c in fake.calls}, {"MRVLUSDT"})
 
     def test_klines_pages_back_and_returns_oldest_first(self):
-        fake = FakeBitunix(1_000_000, 1_000_000 + 499 * 1800, 1800)
+        fake = FakeBitunix(1_000_800, 1_000_800 + 499 * 1800, 1800)
         with patch.object(bitunix_data, "_request", fake):
-            rows = bitunix_data.klines("BTCUSDT", "30m", 1_000_000, 1_000_000 + 500 * 1800)
+            rows = bitunix_data.klines("BTCUSDT", "30m", 1_000_800, 1_000_800 + 500 * 1800)
         self.assertEqual([r[0] for r in rows], fake.series)
         self.assertEqual(len(fake.calls), 3)
         self.assertEqual(rows[0][1:], [100.0, 101.0, 99.0, 100.0, 5.0])
+
+    def test_pages_end_on_candle_opens_and_lose_nothing(self):
+        # UNI 30m, 2026-10-08: paging by "oldest - 1ms" lost a candle at every
+        # page edge, so a demand zone did not rebuild. Odd start and end too.
+        fake = FakeBitunix(1_000_800, 1_000_800 + 999 * 1800, 1800)
+        with patch.object(bitunix_data, "_request", fake):
+            rows = bitunix_data.klines("BTCUSDT", "30m", 1_000_800 + 7, 1_000_800 + 999 * 1800 + 5)
+        self.assertEqual([r[0] for r in rows], fake.series[1:])
+        self.assertTrue(all(c[3] % 1_800_000 == 0 for c in fake.calls))
 
     def test_scanner_takes_bitunix_first(self):
         with patch.object(scanner, "fetch_bitunix_ohlcv", return_value=[[1, 1, 1, 1, 1, 1]]), \
