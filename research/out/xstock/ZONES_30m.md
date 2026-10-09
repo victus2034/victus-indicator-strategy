@@ -1,24 +1,3 @@
-okx SOXLBUSD unavailable: argument of type 'NoneType' is not iterable
-okx SNDKBUSD unavailable: argument of type 'NoneType' is not iterable
-okx METAXUSD unavailable: argument of type 'NoneType' is not iterable
-TSLAXUSD: delta 4430/17287, bitunix 4408/17242
-METAXUSD: delta 4430/17276, bitunix 4408/17242
-SOXLBUSD: delta 4425/17291, bitunix 4408/17242
-SNDKBUSD: delta 4425/17288, bitunix 4408/17242
-MRVL/USDT:USDT: delta 4038/17252, bitunix 4408/17242
-NVDAXUSD: delta 4430/17266, bitunix 4408/17243
-replayed TSLAXUSD delta: 98 alerts (73s)
-replayed TSLAXUSD bitunix: 105 alerts (74s)
-replayed METAXUSD delta: 93 alerts (74s)
-replayed METAXUSD bitunix: 105 alerts (75s)
-replayed SOXLBUSD delta: 58 alerts (141s)
-replayed SOXLBUSD bitunix: 64 alerts (144s)
-replayed SNDKBUSD delta: 91 alerts (147s)
-replayed SNDKBUSD bitunix: 93 alerts (147s)
-replayed MRVL/USDT:USDT delta: 63 alerts (209s)
-replayed MRVL/USDT:USDT bitunix: 87 alerts (214s)
-replayed NVDAXUSD delta: 102 alerts (214s)
-replayed NVDAXUSD bitunix: 111 alerts (214s)
 # Zones 30m: Delta vs Bitunix candles
 
 Window: last 60 days to 2026-10-09 21:45 IST; 6 crypto symbols both venues serve. Fees: Delta in every row.
@@ -44,4 +23,3 @@ Window: last 60 days to 2026-10-09 21:45 IST; 6 crypto symbols both venues serve
 | bitunix       | bitunix     |      457 |      216 |   99 |   72 |     3 |    36 |         6 |           6 |      28.3 |   -67.1 |        -0.311 |
 | delta only    | delta       |      105 |       36 |   19 |    8 |     2 |     5 |         2 |           0 |      26.9 |   -16.4 |        -0.456 |
 | bitunix only  | delta       |      153 |       51 |   33 |   10 |     1 |     5 |         2 |           0 |      15.4 |   -34.7 |        -0.681 |
-
