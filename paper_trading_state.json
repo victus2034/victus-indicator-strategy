@@ -60009,6 +60009,33 @@
       "target_half": 54.64500000000001,
       "timeframe": "30m",
       "trade_id": "SLVONUSD|30m|short|54.77|55.02"
+    },
+    {
+      "alert_time": "2026-10-09T11:01:57.646392+05:30",
+      "cost_r": 0.08446874642313547,
+      "date": "2026-10-09",
+      "entry": 4199.15,
+      "entry_time": "2026-10-09T11:05:00+05:30",
+      "exit_price": 4188.45,
+      "exit_time": "2026-10-09T17:00:00+05:30",
+      "final_result": "Neither",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "net_realized_r": 0.17610964018264397,
+      "outcome": "Neither",
+      "rating": 7,
+      "realized_r": 0.2605783866057794,
+      "risk": 41.0625,
+      "side": "short",
+      "stop": 4240.2125,
+      "stream": "live",
+      "symbol": "XAUTUSD",
+      "target_1": 4158.0875,
+      "target_2": 4117.025,
+      "target_half": 4178.61875,
+      "timeframe": "4h",
+      "trade_id": "XAUTUSD|4h|short|4199.15|4240.21"
     }
   ],
   "handled": {
@@ -62517,24 +62544,6 @@
       "target_2": 372.1666666666666,
       "target_half": 377.8630952380952,
       "timeframe": "30m"
-    },
-    "XAUTUSD|4h|short|4199.15|4240.21": {
-      "alert_time": "2026-10-09T11:01:57.646392+05:30",
-      "entry": 4199.15,
-      "entry_time": "2026-10-09T11:05:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 7,
-      "risk": 41.0625,
-      "side": "short",
-      "stop": 4240.2125,
-      "stream": "live",
-      "symbol": "XAUTUSD",
-      "target_1": 4158.0875,
-      "target_2": 4117.025,
-      "target_half": 4178.61875,
-      "timeframe": "4h"
     }
   }
 }
