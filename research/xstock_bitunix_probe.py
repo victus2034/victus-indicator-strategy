@@ -17,10 +17,12 @@ import pandas as pd
 import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import bitunix_data                     # noqa: E402
 import config                           # noqa: E402
 import fib_trendline_data as ftd        # noqa: E402
+from live_audit import delta_rows       # noqa: E402
 
 BASE = config.BITUNIX_API_BASE_URL
 # Delta contract -> underlying names a Bitunix pair could carry.
@@ -81,7 +83,7 @@ def compare(delta_sym, pair, tf):
     seconds = ftd.TF_SECONDS[tf]
     end = int(time.time()) // seconds * seconds          # closed candles only
     start = end - DAYS * 86400
-    d = [r for r in ftd.delta_candles(delta_sym, tf, start, end - 1) if r[0] < end]
+    d = [r for r in delta_rows(delta_sym, tf, start, end - 1) if r[0] < end]
     b = bitunix_data.klines(pair, tf, start, end)
     dm = {r[0]: r for r in d}
     bm = {r[0]: r for r in b}
@@ -105,7 +107,7 @@ def compare(delta_sym, pair, tf):
     if tf in ("30m", "4h"):
         # Zones on the full engine window from each source.
         lookback = (config.OHLCV_LIMIT + 80) * seconds
-        d_full = [r for r in ftd.delta_candles(delta_sym, tf, end - lookback, end - 1) if r[0] < end]
+        d_full = [r for r in delta_rows(delta_sym, tf, end - lookback, end - 1) if r[0] < end]
         b_full = bitunix_data.klines(pair, tf, end - lookback, end)
         try:
             zd, zb = zone_levels(d_full, tf), zone_levels(b_full, tf)
@@ -130,21 +132,27 @@ def main():
                 "symbol", "base", "quote", "symbolStatus", "status", "maxLeverage", "minTradeVolume",
                 "basePrecision", "quotePrecision", "minBuyPriceOffset")} or p)
         chosen = None
+        others = []
         for p in hits:
             sym = p.get("symbol")
             ok, err = kline_ok(sym)
             print(f"  kline {sym}: {'ok' if ok else err}")
-            if ok and chosen is None and sym.endswith("USDT"):
-                chosen = sym
+            if ok and sym.endswith("USDT"):
+                chosen = chosen or sym
+                if delta_sym == "SLVONUSD" or delta_sym == "XAUTUSD":
+                    others.append(sym)
         if not chosen:
             print("  -> no usable Bitunix pair")
             continue
         print(f"  -> comparing Delta {delta_sym} vs Bitunix {chosen}")
-        for tf in TFS:
-            try:
-                compare(delta_sym, chosen, tf)
-            except Exception as error:   # noqa: BLE001
-                print(f"  {tf} failed: {error!r}")
+        for pair in others or [chosen]:
+            if pair != chosen:
+                print(f"  -> also comparing Delta {delta_sym} vs Bitunix {pair}")
+            for tf in TFS:
+                try:
+                    compare(delta_sym, pair, tf)
+                except Exception as error:   # noqa: BLE001
+                    print(f"  {tf} failed: {error!r}")
         try:
             print(f"  last price bitunix={bitunix_data.last_price(chosen)}")
         except Exception as error:      # noqa: BLE001
