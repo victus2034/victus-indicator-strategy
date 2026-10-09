@@ -419,15 +419,15 @@ def scan_crypto(timeframes, now):
         try:
             source = "bitunix" if bitunix_data.uses_bitunix(symbol) else "delta"
             pair = bitunix_data.pair_for(symbol, contract) if source == "bitunix" else None
-            try:
-                # A Bitunix pair passes through bitunix_pair unchanged, so the
-                # xStocks' own pairs (TSLAUSDT for TSLAXUSD) reach the API as is.
-                charts = crypto_charts(pair or contract, timeframes, now, source=source)
-            except Exception as error:     # noqa: BLE001 - Bitunix down: Delta still draws the levels
-                if source == "delta":
-                    raise
-                print(f"{symbol} Bitunix charts unavailable, using Delta: {str(error)[:80]}")
-                charts = crypto_charts(contract, timeframes, now)
+            # No Delta fallback here, unlike the zone scan. A fib's key names its
+            # base candle, and Delta's history starts Dec 2023 while Bitunix's runs
+            # years further back, so the same chart on Delta is a different fib:
+            # BNB 1M re-alerted on 2026-10-09 with a 2024 base and an entry above
+            # price. Trendline keys carry Delta's own prices too. A pass with
+            # Bitunix down skips the symbol; BREAK_GRACE_SECONDS covers the gap.
+            # A Bitunix pair passes through bitunix_pair unchanged, so the
+            # xStocks' own pairs (TSLAUSDT for TSLAXUSD) reach the API as is.
+            charts = crypto_charts(pair or contract, timeframes, now, source=source)
             price = current_price(charts)
             if source == "bitunix":
                 # Bitunix candles stop at the last closed one, so their newest

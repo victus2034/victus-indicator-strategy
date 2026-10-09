@@ -213,7 +213,24 @@ def part_a(state, since_ts):
                     totals[f"{name} ok" if ok else f"{name} FAIL"] += 1
                 bad = [n for n, ok in checks.items() if not ok]
                 if bad:
-                    problems.append(f"{tf} {symbol} {venue} {r['delivered_at_utc'][:16]} {ztype} {bottom}-{top} price {price}: {', '.join(bad)}")
+                    detail = ""
+                    if "nearest" in bad and nearest is not None:
+                        detail += f" | replay nearest {nearest['bottom']:.6g}-{nearest['top']:.6g} at {ndist:.3f}%"
+                    if not found:
+                        # The scan reads its candles before it sends: try forming
+                        # candles cut 1-15 minutes before the delivery.
+                        for back in range(1, 16):
+                            cut = [m for m in ones if opened <= m[0] and m[0] + 60 <= sent - back * 60]
+                            win = closed + ([[opened, cut[0][1], max(m[2] for m in cut), min(m[3] for m in cut),
+                                              cut[-1][4], sum(m[5] for m in cut)]] if cut else [])
+                            if exact(rebuilt(win)[1]):
+                                detail += f" | matches with the forming candle cut {back} min before delivery"
+                                break
+                        else:
+                            close_by = sorted((abs(z["bottom"] - bottom) + abs(z["top"] - top), z["bottom"], z["top"], z["active"])
+                                              for z in zones)[:2]
+                            detail += f" | closest replay zones {close_by}"
+                    problems.append(f"{tf} {symbol} {venue} {r['delivered_at_utc'][:16]} {ztype} {bottom}-{top} price {price}: {', '.join(bad)}{detail}")
     say("")
     for k in sorted(totals):
         say(f"- {k}: {totals[k]}")

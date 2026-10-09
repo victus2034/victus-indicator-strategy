@@ -194,21 +194,22 @@ class OnTests(unittest.TestCase):
         self.assertEqual(fetch.call_args.args[0], "TSLAUSDT")
         live.assert_called_once_with("TSLAUSDT")
 
-    def test_fib_trendline_xstock_falls_back_to_its_delta_contract(self):
+    def test_fib_trendline_skips_a_symbol_when_bitunix_is_down(self):
+        # Delta's shorter history draws different fibs (new keys, re-alerts).
         import fib_trendline_scanner as fts
-        charts = {"4h": [[0, 1, 2, 0.5, 1.5]]}
 
         def fetch(contract, timeframes, now, source="delta"):
             if source == "bitunix":
                 raise RuntimeError("down")
-            return charts
+            return {"4h": [[0, 1, 2, 0.5, 1.5]]}
 
         with patch.object(fts.scanner, "active_watchlist", return_value=["TSLAXUSD"]), \
              patch.object(fts, "crypto_charts", side_effect=fetch) as charts_mock, \
-             patch.object(fts, "analyse", return_value={}), \
-             patch.object(bitunix_data, "last_price", return_value=123.0):
-            fts.scan_crypto(["4h"], 10_000_000)
-        self.assertEqual(charts_mock.call_args.args[0], "TSLAXUSD")
+             patch.object(fts, "analyse", return_value={}) as analyse:
+            results = fts.scan_crypto(["4h"], 10_000_000)
+        self.assertEqual(charts_mock.call_count, 1)
+        analyse.assert_not_called()
+        self.assertEqual(results[0][:2], ("TSLAXUSD", None))
 
     def test_live_price_from_bitunix(self):
         with patch.object(scanner, "USE_LIVE_TICKER", True), \
