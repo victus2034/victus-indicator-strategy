@@ -166,10 +166,10 @@ class VenueDriftTests(unittest.TestCase):
 
         now = pd.Timestamp("2026-09-17 12:00", tz=entry_confirm.IST)
         # Same real zone, ~0.2% apart - inside WATCH_KEY_MERGE_TOLERANCE_PCT -
-        # priced from delta_india then coinswitch, TSLAXUSD-shaped.
+        # priced from delta_india then kucoin, TSLAXUSD-shaped.
         rows = [
             self._row(0.08437, 0.08479, minutes_ago=40, exchange="delta_india"),
-            self._row(0.08454, 0.08496, minutes_ago=10, exchange="coinswitch"),
+            self._row(0.08454, 0.08496, minutes_ago=10, exchange="kucoin"),
         ]
         with tempfile.TemporaryDirectory() as tmp:
             path = self._write(pd.io.common.Path(tmp), rows)
@@ -392,9 +392,8 @@ class ReadyCooldownTests(unittest.TestCase):
 class DroppedSymbolTests(unittest.TestCase):
     def test_a_symbol_off_the_watchlist_is_not_watched(self):
         # Its last alert stays fillable for hours after the symbol is cut, and
-        # broker_label would call it CoinSwitch simply because it is no longer
-        # in the Delta list - pointing at the wrong exchange for a trade that
-        # was deliberately dropped.
+        # a venue tag would point at the wrong exchange for a trade that was
+        # deliberately dropped.
         import json
         import tempfile
         from pathlib import Path
@@ -448,7 +447,6 @@ class NoVenueTagTests(unittest.TestCase):
                 line = entry_confirm.format_line(stage, price, record)
                 with self.subTest(symbol=symbol, stage=stage):
                     self.assertNotIn("Delta", line)
-                    self.assertNotIn("CoinSwitch", line)
                     self.assertNotIn("Bitunix", line)
 
 

@@ -315,28 +315,6 @@ class SymbolNamingTests(unittest.TestCase):
         ):
             self.assertEqual(scanner.alert_symbol(raw), expected)
 
-    def test_coinswitch_pairs_keep_crypto_and_stocks_apart(self):
-        # A wrong pair here is not a loud failure: CoinSwitch simply has no
-        # such contract, the symbol falls through to another exchange, and
-        # the zone is built from a book the chart never shows.
-        for raw, expected in (
-            ("BNBUSD", "BNBUSDT"),
-            ("ARBUSD", "ARBUSDT"),
-            ("LABUSD", "LABUSDT"),
-            ("AVAXUSD", "AVAXUSDT"),
-            ("BTCUSDT", "BTCUSDT"),
-            # CoinSwitch names tokenised stocks after the ticker. SPYXUSD
-            # is another venue's string and returns nothing there, which
-            # is why these zones came from a book the chart never showed.
-            ("SPYXUSD", "SPYUSDT"),
-            ("AAPLXUSD", "AAPLUSDT"),
-            ("MSTRBUSD", "MSTRUSDT"),
-            ("INTCBUSD", "INTCUSDT"),
-            ("SPCXXUSD", "SPCXUSDT"),
-            ("MSFT/USDT:USDT", "MSFTUSDT"),
-        ):
-            self.assertEqual(scanner.coinswitch_symbol(raw), expected)
-
     def test_alert_and_report_names_agree(self):
         # The Discord alert and the backtest report must not disagree about
         # what a symbol is called, or trades cannot be matched between them.
@@ -374,16 +352,14 @@ class FeedFreshnessTests(unittest.TestCase):
         return [[stamp, 1.0, 1.0, 1.0, 1.0, 1.0]]
 
     def test_a_venue_that_skips_empty_buckets_is_not_dead(self):
-        # CoinSwitch omits 30m buckets with no trades, so the newest
-        # candle routinely sits two buckets back while the ticker is
-        # current. Rejecting that sent the symbol to an exchange the
-        # user does not chart.
+        # Some venues omit 30m buckets with no trades, so the newest
+        # candle can sit two buckets back while the ticker is current.
         with patch.object(scanner, "TIMEFRAME", "30m"):
             for minutes in (55, 85, 115):
                 with self.subTest(minutes=minutes):
                     self.assertTrue(
                         scanner.require_fresh_ohlcv(
-                            self._candle(minutes), "CoinSwitch"
+                            self._candle(minutes), "delta_india"
                         )
                     )
 
@@ -391,7 +367,7 @@ class FeedFreshnessTests(unittest.TestCase):
         with patch.object(scanner, "TIMEFRAME", "30m"):
             with self.assertRaises(RuntimeError):
                 # VANRY was ten days behind when it was dropped.
-                scanner.require_fresh_ohlcv(self._candle(10 * 24 * 60), "CoinSwitch")
+                scanner.require_fresh_ohlcv(self._candle(10 * 24 * 60), "delta_india")
 
 class FallbackPairTests(unittest.TestCase):
     def test_crypto_ending_in_a_stock_suffix_still_maps(self):

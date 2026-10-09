@@ -84,27 +84,13 @@ SL_BUFFER_PCT = 0.10
 # 18% GST on brokerage + exchange + SEBI. Constant at any size below the
 # ~Rs66,667 where the Rs20 brokerage cap starts to bite and the rate falls.
 ROUND_TRIP_COST_PCT = 0.1063
-# CoinSwitch futures, both legs. Measured 31 Aug 2026 from the user's own
-# futures history: 49 filled trades, whose commissions reconcile to the paisa
-# against the account's COMMISSION ledger. Fee-weighted by notional rather
-# than averaged per trade, because the per-trade rate ranges from 0.0236% to
-# 0.118% and a plain mean would over-weight the small fills.
-#
-# Only 20-21 July is used. Before that, 8 of 27 trades were charged nothing
-# at all - a waiver that stopped after 17 July - and including them would
-# understate what the account actually pays now. On the 22 fee-charging
-# trades the round trip is 0.0980%: 0.1004% on crypto, 0.0969% on xStocks,
-# close enough to carry one number for both. The earlier 0.10% placeholder
-# happened to be right, so no backtest result shifts.
-#
-# That was CoinSwitch. Trades are taken on Delta India now (2026-10-04),
-# whose published futures schedule is 0.02% maker / 0.05% taker plus 18%
-# GST on the fee. Entry here is a resting limit (maker); most exits are
+# Trades are taken on Delta India (since 2026-10-04), whose published
+# futures schedule is 0.02% maker / 0.05% taker plus 18% GST on the fee. Entry here is a resting limit (maker); most exits are
 # stops, which fill as taker. So one round trip is (0.02 + 0.05) x 1.18 =
 # 0.0826%. A +2R target exit is a limit too and pays less (0.047%), so this
 # slightly overstates costs there - on purpose, rather than per-exit rates.
 # Not yet reconciled against a Delta fee statement; do that when one is
-# available, as was done for CoinSwitch.
+# available.
 #
 # Override with VICTUS_CRYPTO_ROUND_TRIP_COST_PCT if the fee tier changes.
 CRYPTO_ROUND_TRIP_COST_PCT = float(
@@ -311,9 +297,8 @@ def load_records(path: Path, timeframe_filter: str) -> pd.DataFrame:
     # 44% of deliveries were the same zone alerted again.
     #
     # An EXACT match (originally six significant figures) still missed a
-    # real class of repeat: crypto's fetch_symbol_ohlcv() tries CoinSwitch
-    # first each scan and falls back to Binance/Delta/others when it's slow
-    # or fails, so the same real zone can come back priced from a different
+    # real class of repeat: crypto's fetch_symbol_ohlcv() falls back from
+    # its first venue to others when it's slow or fails, so the same real zone can come back priced from a different
     # venue scan to scan - measured on the real 30m alert log, 290 same
     # symbol/side pairs inside the crypto cooldown window were within 1% of
     # each other (plausibly the same zone) but NOT an exact match, so each
@@ -646,8 +631,7 @@ def delta_fetch_window(symbol: str, resolution: str, start, end):
     """Candles for [start, end) straight from Delta India, or None if the
     symbol is not a Delta contract.
 
-    Delta is where the trades are actually taken and, since CoinSwitch was
-    dropped, where most zones are built - see crypto_fetch_ohlcv().
+    Delta is where the trades are actually taken - see crypto_fetch_ohlcv().
     """
     contract = crypto_scanner.delta_contract(symbol)
     if contract is None:
@@ -807,15 +791,12 @@ def crypto_fetch_ohlcv(symbol: str):
     # Delta first. Trades are taken on Delta India (entry_confirm tags every
     # ping "Delta"), and its book is the one the zones are built from and the
     # one on the chart being watched. The old order - Binance (geo-blocked on
-    # GitHub runners), then OKX/MEXC/etc., then CoinSwitch - graded every
-    # trade against a different venue's candles: real CI logs showed OKX,
-    # MEXC and CoinSwitch and never Delta, and measured against Delta those
+    # GitHub runners), then OKX/MEXC/etc. - graded every trade against a
+    # different venue's candles: real CI logs showed OKX and MEXC, never Delta, and measured against Delta those
     # venues' closes differ by a median 0.04-0.25% on the alts (95th
     # percentile up to 0.9%) - the same size as the 0.20% alert distance and
     # a large share of a 0.1-0.6% stop. A fill or stop that only exists on
-    # another exchange is a wrong grade. 8 of the 31 watchlist symbols (the
-    # xStocks) exist on no other venue at all, so they only ever got graded
-    # off CoinSwitch's separate feed, or not at all.
+    # another exchange is a wrong grade.
     try:
         delta_rows = crypto_scanner.fetch_delta_ohlcv(symbol)
         if delta_rows is not None:  # None = not a Delta contract, go on to the rest
@@ -855,16 +836,6 @@ def crypto_fetch_ohlcv(symbol: str):
             last_error = error
             if CRYPTO_FETCH_DEBUG:
                 print(f"[backtest-exchange-debug] {symbol} fallback({exchange.id}) failed: {error}", file=sys.stderr)
-
-    if crypto_scanner.is_coinswitch_configured():
-        try:
-            ohlcv = crypto_scanner.require_fresh_ohlcv(
-                crypto_scanner.fetch_coinswitch_ohlcv(symbol), "coinswitch"
-            )
-            _log_crypto_fetch_source(symbol, "coinswitch", ohlcv)
-            return ohlcv
-        except Exception as error:
-            last_error = error
 
     raise RuntimeError(f"all crypto exchanges failed for {symbol}: {last_error}")
 

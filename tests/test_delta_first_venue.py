@@ -28,30 +28,29 @@ class DeltaContractTests(unittest.TestCase):
 
 
 class DeltaFirstOrderTests(unittest.TestCase):
-    def test_delta_wins_over_coinswitch_when_both_work(self):
+    # BTC/USDT is not a Bitunix symbol, so Delta is the first venue asked.
+    def test_delta_is_asked_first(self):
         with patch.object(scanner, "fetch_delta_ohlcv", return_value=_fresh()) as delta, \
              patch.object(scanner, "require_fresh_ohlcv", side_effect=lambda o, n: o), \
-             patch.object(scanner, "fetch_coinswitch_ohlcv", return_value=_fresh()) as cs:
+             patch.object(scanner, "fetch_exchange_ohlcv", return_value=_fresh()) as other:
             _, venue = scanner.fetch_symbol_ohlcv("BTC/USDT")
         self.assertEqual(venue, "delta_india")
         delta.assert_called_once()
-        cs.assert_not_called()
+        other.assert_not_called()
 
     def test_falls_through_when_delta_raises(self):
         with patch.object(scanner, "fetch_delta_ohlcv", side_effect=RuntimeError("outage")), \
              patch.object(scanner, "require_fresh_ohlcv", side_effect=lambda o, n: o), \
-             patch.object(scanner, "splice_deep_history", side_effect=lambda s, o: o), \
-             patch.object(scanner, "fetch_coinswitch_ohlcv", return_value=_fresh()):
+             patch.object(scanner, "fetch_exchange_ohlcv", return_value=_fresh()):
             _, venue = scanner.fetch_symbol_ohlcv("BTC/USDT")
-        self.assertEqual(venue, "coinswitch")
+        self.assertIn(venue, {e.id for e in scanner.EXCHANGES})
 
     def test_falls_through_when_delta_returns_none(self):
         with patch.object(scanner, "fetch_delta_ohlcv", return_value=None), \
              patch.object(scanner, "require_fresh_ohlcv", side_effect=lambda o, n: o), \
-             patch.object(scanner, "splice_deep_history", side_effect=lambda s, o: o), \
-             patch.object(scanner, "fetch_coinswitch_ohlcv", return_value=_fresh()):
+             patch.object(scanner, "fetch_exchange_ohlcv", return_value=_fresh()):
             _, venue = scanner.fetch_symbol_ohlcv("BTC/USDT")
-        self.assertEqual(venue, "coinswitch")
+        self.assertIn(venue, {e.id for e in scanner.EXCHANGES})
 
 
 if __name__ == "__main__":

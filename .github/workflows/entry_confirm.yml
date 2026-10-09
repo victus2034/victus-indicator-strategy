@@ -102,9 +102,6 @@ jobs:
           DISCORD_ENTRY_CONFIRM_WEBHOOK_URL: ${{ secrets.DISCORD_ENTRY_CONFIRM_WEBHOOK_URL }}
           # Crypto pings take their price from the same venue chain as
           # the scan, so the level watched is the one on the chart.
-          COINSWITCH_API_KEY: ${{ secrets.COINSWITCH_API_KEY }}
-          COINSWITCH_SECRET_KEY: ${{ secrets.COINSWITCH_SECRET_KEY }}
-          COINSWITCH_EXCHANGE: ${{ secrets.COINSWITCH_EXCHANGE }}
           # Without this the price every entry is judged against is
           # live_ticker_price's fallback: the close of the last COMPLETED
           # candle. Unset, scanner also defaults to 4h, so a 30m zone was

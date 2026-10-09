@@ -106,9 +106,6 @@ jobs:
       - name: Post daily backtest summary
         env:
           DISCORD_DAILY_BACKTEST_WEBHOOK_URL: ${{ secrets.DISCORD_DAILY_BACKTEST_WEBHOOK_URL }}
-          COINSWITCH_API_KEY: ${{ secrets.COINSWITCH_API_KEY }}
-          COINSWITCH_SECRET_KEY: ${{ secrets.COINSWITCH_SECRET_KEY }}
-          COINSWITCH_EXCHANGE: ${{ secrets.COINSWITCH_EXCHANGE }}
           INPUT_DATE: ${{ github.event.inputs.date }}
           INPUT_TIMEFRAME: ${{ github.event.inputs.timeframe }}
           INPUT_MARKET: ${{ github.event.inputs.market }}

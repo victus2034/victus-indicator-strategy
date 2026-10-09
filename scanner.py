@@ -9,11 +9,9 @@ import time
 import warnings
 from datetime import datetime
 from pathlib import Path
-from urllib.parse import unquote, urlencode
 from zoneinfo import ZoneInfo
 
 import ccxt
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 import numpy as np
 import pandas as pd
 import requests
@@ -24,11 +22,6 @@ from config import (
     ALERT_RANGE_FILTER_SIGNALS,
     ATR_PERIOD,
     BOX_WIDTH,
-    COINSWITCH_API_BASE_URL,
-    COINSWITCH_API_KEY,
-    COINSWITCH_EXCHANGE,
-    COINSWITCH_SECRET_KEY,
-    COINSWITCH_WATCHLIST,
     CRYPTO_TREND_EMA,
     CRYPTO_TREND_FILTER,
     CRYPTO_WATCHLIST,
@@ -63,14 +56,10 @@ from config import (
     PRIMARY_EXCHANGE_ID,
     PRINT_ALERTS_TO_CONSOLE,
     PRINT_SCAN_SUMMARY,
-    PREFER_COINSWITCH,
     REARM_FACTOR,
     SHOW_4H_ZONE_SCORES,
-    REQUIRE_COINSWITCH,
     CRYPTO_ALERT_END,
     CRYPTO_ALERT_START,
-    DEEP_HISTORY_EXCHANGE,
-    DEEP_HISTORY_SYMBOLS,
     SCAN_SLEEP,
     STALE_BARS_ALLOWED,
     SCAN_WORKERS,
@@ -157,18 +146,6 @@ TIMEFRAME_SECONDS = {
     "1d": 24 * 60 * 60,
     "1w": 7 * 24 * 60 * 60,
 }
-COINSWITCH_INTERVALS = {
-    "1m": "1",
-    "5m": "5",
-    "15m": "15",
-    "30m": "30",
-    "1h": "60",
-    "2h": "120",
-    "4h": "240",
-    "6h": "360",
-    "12h": "720",
-    "1d": "1440",
-}
 
 
 def load_state():
@@ -197,28 +174,12 @@ def get_env_or_config(env_name, config_value):
     return value if value else config_value
 
 
-def coinswitch_credentials():
-    return (
-        get_env_or_config("COINSWITCH_API_KEY", COINSWITCH_API_KEY),
-        get_env_or_config("COINSWITCH_SECRET_KEY", COINSWITCH_SECRET_KEY),
-    )
-
-
-def is_coinswitch_configured():
-    api_key, secret_key = coinswitch_credentials()
-    return bool(api_key and secret_key)
-
-
 def active_watchlist():
     symbols = [
         symbol
         for symbol in WATCHLIST
         if symbol not in BLOCKED_XSTOCK_SYMBOLS
     ]
-    if is_coinswitch_configured():
-        for symbol in COINSWITCH_WATCHLIST:
-            if symbol not in symbols and symbol not in BLOCKED_XSTOCK_SYMBOLS:
-                symbols.append(symbol)
     return symbols
 
 
@@ -759,8 +720,7 @@ def is_delta_symbol(symbol):
 # strings, but which Delta India does list (checked against /v2/products:
 # all four are live perpetuals). is_delta_symbol() reads a name's shape, so
 # it called these "not Delta" and the scanner never asked Delta for them -
-# their zones came from CoinSwitch/OKX/etc. while every ping still said
-# "Delta". It is left as it is because fallback_symbol() relies on that shape
+# their zones came from other venues while every ping still said "Delta". It is left as it is because fallback_symbol() relies on that shape
 # rule for naming ccxt pairs; this is what the Delta fetches use instead.
 DELTA_CONTRACT_ALIASES = {
     "AKE/USDT": "AKEUSD",
@@ -786,44 +746,11 @@ def fallback_symbol(symbol):
     bogus symbol that could coincidentally match an unrelated token on a
     small exchange. But which is which cannot be read off the suffix:
     AVAXUSD ends "XUSD" and BNBUSD ends "BUSD" while both are ordinary
-    crypto, so the registry decides, the same way it does for the
-    CoinSwitch contract and the display name.
-
-    Until this used the registry, every fallback for AVAX and BNB asked
-    for a pair no exchange lists, so those two had no working fallback at
-    all whenever CoinSwitch was unavailable.
+    crypto, so the registry decides, the same way it does for the display name.
     """
     if is_delta_symbol(symbol) and not is_stock_symbol(symbol):
         return f"{symbol[:-3]}/USDT"
     return symbol
-
-
-def coinswitch_symbol(symbol):
-    stable_symbol_aliases = {
-        "PUMPUSD": "PUMPFUNUSDT",
-        "1000SHIBUSD": "SHIB1000USDT",
-    }
-    upper_symbol = symbol.upper()
-    if upper_symbol in stable_symbol_aliases:
-        return stable_symbol_aliases[upper_symbol]
-    if "/" in symbol:
-        # CCXT perpetual symbols include a settlement suffix such as
-        # AVGO/USDT:USDT, while CoinSwitch expects the contract as AVGOUSDT.
-        return symbol.replace("/", "").split(":", 1)[0].upper()
-    if upper_symbol.endswith("USDT"):
-        return upper_symbol
-    # CoinSwitch quotes everything in USDT and names tokenised stocks after
-    # the ticker: AAPL is AAPLUSDT, not AAPLXUSD. AAPLXUSD is another
-    # venue's string, and asking for it returned nothing, so every xStock
-    # in that form silently fell through to an exchange the user does not
-    # chart. Which suffix means what cannot be read off the string -
-    # AVAXUSD ends "XUSD" and BNBUSD ends "BUSD" while both are ordinary
-    # crypto - so the registry decides.
-    if is_stock_symbol(upper_symbol):
-        return f"{display_symbol(upper_symbol)}USDT"
-    if upper_symbol.endswith("USD"):
-        return f"{upper_symbol[:-3]}USDT"
-    return upper_symbol
 
 
 def exchange_symbol_candidates(symbol):
@@ -980,105 +907,6 @@ def fetch_bitunix_ohlcv(symbol):
     return [[int(row[0]) * 1000, *row[1:6]] for row in candles]
 
 
-def coinswitch_path_with_query(path, params):
-    query = unquote(urlencode(params))
-    return f"{path}?{query}" if query else path
-
-
-def sign_coinswitch_request(method, path, params):
-    api_key, secret_key = coinswitch_credentials()
-    if not api_key or not secret_key:
-        raise RuntimeError("CoinSwitch credentials are not configured")
-
-    epoch = str(int(time.time() * 1000))
-    path_query = coinswitch_path_with_query(path, params)
-    message = f"{method.upper()}{path_query}{epoch}".encode("utf-8")
-    private_key = Ed25519PrivateKey.from_private_bytes(bytes.fromhex(secret_key))
-    signature = private_key.sign(message).hex()
-    return path_query, {
-        "Content-Type": "application/json",
-        "X-AUTH-APIKEY": api_key,
-        "X-AUTH-SIGNATURE": signature,
-        "X-AUTH-EPOCH": epoch,
-    }
-
-
-def fetch_coinswitch_ohlcv(symbol, attempts=3, retry_delay=1.5):
-    if not is_coinswitch_configured():
-        return None
-
-    interval = COINSWITCH_INTERVALS.get(TIMEFRAME)
-    if interval is None:
-        raise RuntimeError(f"CoinSwitch does not support timeframe {TIMEFRAME}")
-
-    last_error = None
-    for attempt in range(attempts):
-        try:
-            return top_up_recent_candles(
-                symbol, _fetch_coinswitch_ohlcv_once(symbol, interval)
-            )
-        except Exception as error:
-            last_error = error
-            if attempt < attempts - 1:
-                time.sleep(retry_delay)
-    raise last_error
-
-
-# The interval used to rebuild the buckets CoinSwitch has not published
-# yet. One step down is enough: the lag runs to two or three buckets, and
-# a step down costs one extra request rather than thirty.
-TOP_UP_INTERVAL = {"30m": "1m", "4h": "30m"}
-
-
-def bucket_candles(candles, bucket_seconds):
-    """Aggregate finer candles into whole buckets, oldest first."""
-    bucket_ms = bucket_seconds * 1000
-    buckets = {}
-    for stamp, open_, high, low, close, volume in candles:
-        start = int(stamp) // bucket_ms * bucket_ms
-        current = buckets.get(start)
-        if current is None:
-            buckets[start] = [start, open_, high, low, close, volume]
-            continue
-        current[2] = max(current[2], high)
-        current[3] = min(current[3], low)
-        current[4] = close
-        current[5] = current[5] + volume
-    return [buckets[start] for start in sorted(buckets)]
-
-
-# The last price each symbol's finest CoinSwitch series carried, and when it
-# was read. Written by top_up_recent_candles, which already fetches that series
-# for its own reasons, so nothing here costs an extra request. Symbols are
-# scanned one per thread, and each writes only its own key.
-_FINE_PRICES = {}
-# Older than this and it is not a live price any more. Two minutes covers a 1m
-# top-up plus a slow scan; a 30m top-up (the 4h timeframe) will usually miss it
-# and fall through to the candle close, which is the honest answer there.
-FINE_PRICE_MAX_AGE_SECONDS = int(os.getenv("VICTUS_FINE_PRICE_MAX_AGE_SECONDS", "120"))
-
-
-def _remember_fine_price(symbol, finer):
-    if not finer:
-        return
-    try:
-        price = float(finer[-1][4])
-    except (IndexError, TypeError, ValueError):
-        return
-    if price > 0:
-        _FINE_PRICES[symbol] = (time.time(), price)
-
-
-def fine_price(symbol, max_age_seconds=None):
-    """The freshest CoinSwitch price seen for this symbol, or None."""
-    stamped = _FINE_PRICES.get(symbol)
-    if not stamped:
-        return None
-    seen_at, price = stamped
-    limit = FINE_PRICE_MAX_AGE_SECONDS if max_age_seconds is None else max_age_seconds
-    return price if time.time() - seen_at <= limit else None
-
-
 def fetch_delta_ticker_price(symbol):
     """Delta's own last traded price. Public endpoint, no signing."""
     response = requests.get(
@@ -1096,97 +924,13 @@ def fetch_delta_ticker_price(symbol):
     raise RuntimeError(f"Delta ticker for {symbol} carried no price")
 
 
-def top_up_recent_candles(symbol, candles):
-    """Rebuild the buckets CoinSwitch has not caught up on yet.
-
-    Its 30m series trails the live market by one to three buckets while
-    its 1m series is current to the minute, so a zone price has already
-    closed through can still look alive for over an hour. The chart the
-    user trades from shows those candles; this makes the scan see them
-    too. Only buckets newer than the published series are added - nothing
-    already returned is rewritten.
-    """
-    source = TOP_UP_INTERVAL.get(TIMEFRAME)
-    bucket_seconds = TIMEFRAME_SECONDS.get(TIMEFRAME)
-    if not candles or source is None or bucket_seconds is None:
-        return candles
-
-    interval = COINSWITCH_INTERVALS.get(source)
-    if interval is None:
-        return candles
-
-    last_start = int(candles[-1][0])
-    try:
-        finer = _fetch_coinswitch_ohlcv_once(symbol, interval)
-    except Exception as error:
-        # A missing top-up is not worth failing a scan over; the published
-        # series is still usable, just behind.
-        print(f"{symbol} top-up unavailable: {str(error)[:70]}")
-        return candles
-
-    # The finest series this venue was asked for is also the freshest price it
-    # has - on 30m that is a 1m candle, current to the minute, from the exact
-    # book being charted. Keep it for live_ticker_price, which otherwise has
-    # nothing to offer on CoinSwitch and silently hands back a candle close.
-    _remember_fine_price(symbol, finer)
-
-    # Completed buckets only. The published series carries closed
-    # candles, and letting a half-formed one in would let price dip
-    # through a zone mid-bucket and retire a level that the close
-    # never broke.
-    now_ms = time.time() * 1000
-    bucket_ms = bucket_seconds * 1000
-    fresh = [
-        bucket for bucket in bucket_candles(finer, bucket_seconds)
-        if bucket[0] > last_start and bucket[0] + bucket_ms <= now_ms
-    ]
-    return candles + fresh if fresh else candles
-
-
-def _fetch_coinswitch_ohlcv_once(symbol, interval):
-    path = "/trade/api/v2/futures/klines"
-    params = {
-        "exchange": get_env_or_config("COINSWITCH_EXCHANGE", COINSWITCH_EXCHANGE),
-        "symbol": coinswitch_symbol(symbol),
-        "interval": interval,
-        "limit": OHLCV_LIMIT,
-    }
-    path_query, headers = sign_coinswitch_request("GET", path, params)
-    response = requests.get(
-        f"{COINSWITCH_API_BASE_URL}{path_query}",
-        headers=headers,
-        timeout=20,
-    )
-    response.raise_for_status()
-    payload = response.json()
-    candles = payload.get("data") or []
-    if not candles:
-        raise RuntimeError(f"CoinSwitch returned no candles for {symbol}")
-
-    # CoinSwitch sends start_time as a string. Today every value is the
-    # same width so a text sort happens to match a numeric one, but that
-    # is a coincidence of the epoch, not a guarantee.
-    candles = sorted(candles, key=lambda candle: int(candle["start_time"]))
-    return [
-        [
-            int(candle["start_time"]),
-            float(candle["o"]),
-            float(candle["h"]),
-            float(candle["l"]),
-            float(candle["c"]),
-            float(candle.get("volume") or 0),
-        ]
-        for candle in candles[-OHLCV_LIMIT:]
-    ]
-
-
 def live_ticker_price(exchange_name, symbol, candle_close):
     """Current traded price for alerts, without changing the candle-based zones.
 
     Every venue in the chain gets a path, because for a long time only one did.
-    EXCHANGES_BY_ID holds ccxt exchanges alone, so on CoinSwitch and Delta - the
-    two venues the production chain actually reaches first - this returned the
-    candle close and said nothing about it. Both the 30-minute workflow and
+    EXCHANGES_BY_ID holds ccxt exchanges alone, so on Delta and Bitunix - the
+    venues the production chain actually reaches first - this used to return the
+    candle close and say nothing about it. Both the 30-minute workflow and
     entry_confirm set VICTUS_USE_LIVE_TICKER=true and neither was getting a live
     price: entry_confirm was deciding ENTRY NOW against a close up to half an
     hour old, which is the DOGE case its workflow comment describes.
@@ -1195,14 +939,6 @@ def live_ticker_price(exchange_name, symbol, candle_close):
     disagree with the levels it is being measured against.
     """
     if not USE_LIVE_TICKER:
-        return candle_close, "candle_close"
-
-    if exchange_name == "coinswitch":
-        # Recorded by the top-up, which has already fetched the finest series
-        # this timeframe uses - so this costs no extra request.
-        price = fine_price(symbol)
-        if price:
-            return price, "coinswitch_fine"
         return candle_close, "candle_close"
 
     if exchange_name == "bitunix":
@@ -1235,53 +971,12 @@ def live_ticker_price(exchange_name, symbol, candle_close):
     return candle_close, "candle_close"
 
 
-def splice_deep_history(symbol, ohlcv):
-    """Extend a CoinSwitch series backwards from a deeper venue.
-
-    CoinSwitch stops at 751 candles however it is asked, so old zones are
-    not filtered out - they are absent. Only candles OLDER than what
-    CoinSwitch returned are taken, so every bar the charted venue does
-    have is the one used: current price, the entry level and whether a
-    zone has broken all still come from the book on screen. The borrowed
-    bars only reveal pivots that would otherwise be invisible.
-
-    Restricted to symbols measured to agree with the deep venue inside
-    the alert distance. Splicing a symbol that disagrees would draw the
-    zone at a price that never traded where the user is looking.
-    """
-    if not ohlcv or display_symbol(symbol) not in DEEP_HISTORY_SYMBOLS:
-        return ohlcv
-
-    exchange = EXCHANGES_BY_ID.get(DEEP_HISTORY_EXCHANGE)
-    if exchange is None:
-        return ohlcv
-
-    oldest = int(ohlcv[0][0])
-    try:
-        deep = fetch_exchange_ohlcv(exchange, fallback_symbol(symbol))
-    except Exception as error:
-        # Losing the extension is not worth failing a scan over - the
-        # charted series is still complete, just shorter.
-        print(f"{symbol} deep history unavailable: {str(error)[:70]}")
-        return ohlcv
-
-    older = [row for row in (deep or []) if int(row[0]) < oldest]
-    if not older:
-        return ohlcv
-    return sorted(older, key=lambda row: int(row[0])) + ohlcv
-
-
 def fetch_symbol_ohlcv(symbol):
     """Candles for one symbol and the venue they came from.
 
-    Delta India first, because that is the book Shiva trades and charts:
-    every entry-confirm ping says "Delta", and TradingView's chart of these
-    symbols is Delta's feed. CoinSwitch used to be first ("the book being
-    charted") until he stopped trading there, but the order was never
-    changed, so about a quarter of recent zones were still built off it and
-    the same zone flipped between venues from scan to scan, restarting
-    entry-confirm cycles. The rest of the chain is a fallback whose levels
-    can drift from the chart. Split out of scan_symbol so anything else
+    Bitunix first for the symbols it lists (config.CRYPTO_CANDLE_SOURCE), then
+    Delta India, the book trades are taken on. The rest of the chain is a
+    fallback whose levels can drift from the chart. Split out of scan_symbol so anything else
     needing a price - the entry-confirm pings, for one - goes through the
     same venue order instead of picking its own exchange.
     """
@@ -1312,16 +1007,6 @@ def fetch_symbol_ohlcv(symbol):
             last_error = error
             ohlcv = None
 
-    if PREFER_COINSWITCH and ohlcv is None:
-        try:
-            ohlcv = require_fresh_ohlcv(fetch_coinswitch_ohlcv(symbol), "CoinSwitch")
-            exchange_name = "coinswitch" if ohlcv is not None else exchange_name
-        except Exception as error:
-            last_error = error
-
-        if ohlcv is None and REQUIRE_COINSWITCH:
-            raise RuntimeError(f"CoinSwitch data unavailable for {symbol}: {last_error}")
-
     primary_exchange = EXCHANGES_BY_ID.get(PRIMARY_EXCHANGE_ID)
     if ohlcv is None and primary_exchange is not None:
         try:
@@ -1350,19 +1035,7 @@ def fetch_symbol_ohlcv(symbol):
                 last_error = error
 
     if ohlcv is None:
-        try:
-            ohlcv = require_fresh_ohlcv(fetch_coinswitch_ohlcv(symbol), "CoinSwitch")
-            exchange_name = "coinswitch" if ohlcv is not None else exchange_name
-        except Exception as error:
-            last_error = error
-
-    if ohlcv is None:
         raise RuntimeError(f"all exchanges failed for {symbol}: {last_error}")
-
-    # Only extend the charted venue. A fallback series is already off-chart,
-    # and stitching a third venue underneath it compounds the drift.
-    if exchange_name == "coinswitch":
-        ohlcv = splice_deep_history(symbol, ohlcv)
 
     return ohlcv, exchange_name
 
@@ -1529,9 +1202,8 @@ def scan_symbol(symbol):
         "daily_trend": trend,
         "candle_time": int(df["time"].iloc[-1]),
         # How far back this scan could actually see. A venue can cap the
-        # limit we ask for - CoinSwitch serves 751 candles however many we
-        # request - and a silently short window means old zones simply do
-        # not exist, which looks identical to there being none.
+        # limit we ask for, and a silently short window means old zones
+        # simply do not exist, which looks identical to there being none.
         "candles": len(df),
         "price": price,
         "candle_close": candle_close,
@@ -2231,25 +1903,13 @@ def run_scan_once(state):
     print("\n" + "=" * 80)
     print(f"Starting scan at {started_at}")
     print("=" * 80)
-    coinswitch_status = (
-        "required and configured"
-        if REQUIRE_COINSWITCH and is_coinswitch_configured()
-        else "REQUIRED BUT NOT CONFIGURED"
-        if REQUIRE_COINSWITCH
-        else "preferred and configured"
-        if PREFER_COINSWITCH and is_coinswitch_configured()
-        else "preferred but not configured"
-        if PREFER_COINSWITCH
-        else "fallback only"
-    )
     send_status_message(
         f"Victus scanner started\n"
         f"Time: {started_at}\n"
         f"Run: {run_number}\n"
         f"Trigger: {trigger}\n"
         f"Timeframe: {TIMEFRAME}\n"
-        f"Watchlist: {len(symbols)} symbols\n"
-        f"CoinSwitch source: {coinswitch_status}"
+        f"Watchlist: {len(symbols)} symbols"
     )
 
     XSTOCK_CONTEXTS = {}
@@ -2308,8 +1968,7 @@ def run_scan_once(state):
         print_summary(results)
 
     finished_at = datetime.now(IST).strftime("%Y-%m-%d %H:%M:%S IST")
-    no_required_source_data = REQUIRE_COINSWITCH and not results
-    status = "ERROR" if no_required_source_data else "OK" if not failures else "WARN"
+    status = "OK" if not failures else "WARN"
     message = (
         f"Victus scanner finished ({status})\n"
         f"Time: {finished_at}\n"
@@ -2325,9 +1984,6 @@ def run_scan_once(state):
         message += "\n" + "\n".join(failures[:5])
 
     send_status_message(message)
-
-    if no_required_source_data:
-        raise RuntimeError("CoinSwitch-only scan produced no usable market data")
 
 
 def parse_args(argv=None):

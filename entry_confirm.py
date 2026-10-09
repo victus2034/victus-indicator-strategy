@@ -166,9 +166,8 @@ def save_state(state: dict) -> None:
 
 # How different a re-alert's entry can be from an earlier one on the same
 # symbol/side/timeframe and still count as a venue flip on the same real
-# zone rather than a genuinely new one. fetch_symbol_ohlcv() tries CoinSwitch
-# first each scan and falls back to Binance/Delta/others when it is slow or
-# fails, so the same real level can come back priced from a different venue
+# zone rather than a genuinely new one. fetch_symbol_ohlcv() falls back from
+# its first venue to others when it is slow or fails, so the same real level can come back priced from a different venue
 # scan to scan - measured across 205 same-symbol/side/timeframe pairs inside
 # a 3-hour window, the shift was 0.02-0.72%. 1% is generous against that and
 # tight against anything that was ever a genuinely different zone in the
@@ -183,8 +182,7 @@ def coalesce_venue_drift(records: list[dict], window: pd.Timedelta) -> None:
     Left alone, a venue flip shifts the price just enough to clear
     watch_key's 6-significant-figure tolerance and look like a brand-new
     zone, restarting the GET READY -> ENTRY NOW cycle for a trade the user
-    already confirmed - the "coinswitch alert still gets on the entry
-    confirm" report. The first record in a matching run is kept as the
+    already confirmed. The first record in a matching run is kept as the
     group's anchor and every later record within tolerance of it (not of
     its immediate predecessor, so drift cannot creep past the tolerance one
     small hop at a time) is rewritten to the anchor's own levels, which is
@@ -426,7 +424,7 @@ def fetch_crypto_prices(symbols: list[str]) -> dict[str, dict[str, float]]:
     loading, and a crypto venue being unreachable must not stop NSE pings.
 
     Run across a thread pool, not sequentially - each symbol here is a
-    fetch_symbol_ohlcv() chain that can try CoinSwitch, Binance, Delta and
+    fetch_symbol_ohlcv() chain that can try Bitunix, Delta and
     every fallback exchange in turn before it gives up. One process running
     "both" timeframes can watch two dozen symbols at once, and at roughly a
     second or more per symbol that is a run comfortably past this job's
@@ -454,9 +452,8 @@ def fetch_crypto_prices(symbols: list[str]) -> dict[str, dict[str, float]]:
         recent = ohlcv[-SWEEP_CANDLES:]
         recent_low = min(float(candle[3]) for candle in recent)
         recent_high = max(float(candle[2]) for candle in recent)
-        # The live ticker can itself be beyond either candle boundary -
-        # CoinSwitch's fine price in particular runs ahead of its own last
-        # closed candle - so fold it in rather than trusting the candles
+        # The live ticker can itself be beyond either candle boundary - it
+        # runs ahead of the last closed candle - so fold it in rather than trusting the candles
         # alone to bound where price has actually been.
         return {
             "price": float(price),

@@ -1493,7 +1493,7 @@ class RepeatDeliveryTests(unittest.TestCase):
         self.assertEqual(kept.minute, 0)
 
     def test_a_venue_flipped_repeat_is_still_caught_as_one_trade(self):
-        # A CoinSwitch->Delta (or any) venue flip shifts a real zone's edges
+        # A venue flip shifts a real zone's edges
         # by up to ~0.7%, measured on the real alert log - far past an
         # exact/6-sig-fig match but still the same trade. bottom AND top
         # both drift here, not just top like the exact-match tests above.
