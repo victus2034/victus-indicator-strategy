@@ -74,7 +74,8 @@ RETRY_BACKOFF_SECONDS = 30 * 60   # a failed Discord send is not retried sooner 
 # v5 (2026-10-07): v12.6 trendlines - lower lows get lines from the last swing below.
 # v6 (2026-10-08): deeper fib zone only, stop beyond the box - a zone price sits
 # in below the old (inner) stop alerts now.
-SEED_VERSION = "v6"
+# v7 (2026-10-09): xStocks drawn from Bitunix - their fibs and lines get new keys.
+SEED_VERSION = "v7"
 # Bitunix candles draw different fibs and lines, each a new key: turning the
 # source on re-seeds silently rather than posting every level already in range.
 if bitunix_data.CRYPTO_CANDLE_SOURCE == "bitunix":
@@ -417,8 +418,11 @@ def scan_crypto(timeframes, now):
             return symbol, None, "not a Delta contract"
         try:
             source = "bitunix" if bitunix_data.uses_bitunix(symbol) else "delta"
+            pair = bitunix_data.pair_for(symbol, contract) if source == "bitunix" else None
             try:
-                charts = crypto_charts(contract, timeframes, now, source=source)
+                # A Bitunix pair passes through bitunix_pair unchanged, so the
+                # xStocks' own pairs (TSLAUSDT for TSLAXUSD) reach the API as is.
+                charts = crypto_charts(pair or contract, timeframes, now, source=source)
             except Exception as error:     # noqa: BLE001 - Bitunix down: Delta still draws the levels
                 if source == "delta":
                     raise
@@ -429,7 +433,7 @@ def scan_crypto(timeframes, now):
                 # Bitunix candles stop at the last closed one, so their newest
                 # close is up to a 4H candle old; the distance needs the price now.
                 try:
-                    price = bitunix_data.last_price(bitunix_data.bitunix_pair(contract))
+                    price = bitunix_data.last_price(pair)
                 except Exception as error:     # noqa: BLE001 - keep the candle close
                     print(f"{symbol} Bitunix live price unavailable: {str(error)[:80]}")
             return symbol, {tf: analyse(CRYPTO, symbol, tf, charts[tf], now, price) for tf in timeframes}, None

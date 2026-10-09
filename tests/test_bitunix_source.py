@@ -1,4 +1,4 @@
-"""The Bitunix candle source: off by default, opt-in per crypto symbol, Delta behind it."""
+"""The Bitunix candle source: on by default for crypto and xStocks, Delta behind it."""
 import time
 import unittest
 from unittest.mock import patch
@@ -62,10 +62,28 @@ class OnTests(unittest.TestCase):
         self.addCleanup(patcher.stop)
         scanner._BITUNIX_HISTORY.clear()
 
-    def test_only_listed_crypto_uses_bitunix(self):
+    def test_crypto_and_xstocks_use_bitunix_other_stays_on_delta(self):
         self.assertTrue(bitunix_data.uses_bitunix("BTCUSD"))
-        self.assertFalse(bitunix_data.uses_bitunix("TSLAXUSD"))
-        self.assertFalse(bitunix_data.uses_bitunix("XAUTUSD"))
+        for symbol in config.XSTOCK_WATCHLIST:
+            self.assertTrue(bitunix_data.uses_bitunix(symbol), symbol)
+        for symbol in config.OTHER_WATCHLIST:
+            self.assertFalse(bitunix_data.uses_bitunix(symbol), symbol)
+
+    def test_xstocks_map_to_the_stock_ticker(self):
+        # Delta's token names would map to pairs Bitunix does not list
+        # (TSLAXUSDT, MRVLBUSDT); Bitunix trades the stock as TSLAUSDT.
+        pairs = {s: bitunix_data.pair_for(s, scanner.delta_contract(s)) for s in config.XSTOCK_WATCHLIST}
+        self.assertEqual(pairs, {
+            "TSLAXUSD": "TSLAUSDT", "METAXUSD": "METAUSDT", "SOXLBUSD": "SOXLUSDT",
+            "SNDKBUSD": "SNDKUSDT", "MRVL/USDT:USDT": "MRVLUSDT", "NVDAXUSD": "NVDAUSDT",
+        })
+        self.assertEqual(bitunix_data.pair_for("BTCUSD", "BTCUSD"), "BTCUSDT")
+
+    def test_xstock_zone_scan_asks_bitunix_for_its_own_pair(self):
+        fake, now, forming, step = self._scan_fake()
+        with patch.object(bitunix_data, "_request", fake), patch("time.time", return_value=now):
+            scanner.fetch_bitunix_ohlcv("MRVL/USDT:USDT")
+        self.assertEqual({c[0] for c in fake.calls}, {"MRVLUSDT"})
 
     def test_klines_pages_back_and_returns_oldest_first(self):
         fake = FakeBitunix(1_000_000, 1_000_000 + 499 * 1800, 1800)
@@ -90,11 +108,11 @@ class OnTests(unittest.TestCase):
             _, venue = scanner.fetch_symbol_ohlcv("BTCUSD")
         self.assertEqual(venue, "delta_india")
 
-    def test_xstock_never_asks_bitunix(self):
+    def test_other_never_asks_bitunix(self):
         with patch.object(scanner, "fetch_bitunix_ohlcv") as bitunix, \
              patch.object(scanner, "require_fresh_ohlcv", side_effect=lambda o, n: o), \
              patch.object(scanner, "fetch_delta_ohlcv", return_value=[[1, 1, 1, 1, 1, 1]]):
-            _, venue = scanner.fetch_symbol_ohlcv("TSLAXUSD")
+            _, venue = scanner.fetch_symbol_ohlcv("SLVONUSD")
         self.assertEqual(venue, "delta_india")
         bitunix.assert_not_called()
 
@@ -164,6 +182,33 @@ class OnTests(unittest.TestCase):
             live.side_effect = RuntimeError("down")
             fts.scan_crypto(["4h"], 10_000_000)
             self.assertEqual(seen["BTCUSD"], 1.5)
+
+    def test_fib_trendline_xstock_reads_its_bitunix_pair(self):
+        import fib_trendline_scanner as fts
+        charts = {"4h": [[0, 1, 2, 0.5, 1.5]]}
+        with patch.object(fts.scanner, "active_watchlist", return_value=["TSLAXUSD"]), \
+             patch.object(fts, "crypto_charts", return_value=charts) as fetch, \
+             patch.object(fts, "analyse", return_value={}), \
+             patch.object(bitunix_data, "last_price", return_value=123.0) as live:
+            fts.scan_crypto(["4h"], 10_000_000)
+        self.assertEqual(fetch.call_args.args[0], "TSLAUSDT")
+        live.assert_called_once_with("TSLAUSDT")
+
+    def test_fib_trendline_xstock_falls_back_to_its_delta_contract(self):
+        import fib_trendline_scanner as fts
+        charts = {"4h": [[0, 1, 2, 0.5, 1.5]]}
+
+        def fetch(contract, timeframes, now, source="delta"):
+            if source == "bitunix":
+                raise RuntimeError("down")
+            return charts
+
+        with patch.object(fts.scanner, "active_watchlist", return_value=["TSLAXUSD"]), \
+             patch.object(fts, "crypto_charts", side_effect=fetch) as charts_mock, \
+             patch.object(fts, "analyse", return_value={}), \
+             patch.object(bitunix_data, "last_price", return_value=123.0):
+            fts.scan_crypto(["4h"], 10_000_000)
+        self.assertEqual(charts_mock.call_args.args[0], "TSLAXUSD")
 
     def test_live_price_from_bitunix(self):
         with patch.object(scanner, "USE_LIVE_TICKER", True), \

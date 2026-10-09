@@ -24,6 +24,7 @@ from config import (
     BITUNIX_API_BASE_URL,
     BITUNIX_MIN_REQUEST_GAP_SECONDS,
     BITUNIX_SYMBOLS,
+    BITUNIX_XSTOCK_PAIRS,
     CRYPTO_CANDLE_SOURCE,
 )
 
@@ -50,6 +51,12 @@ def bitunix_pair(contract):
     if not contract.endswith("USD"):
         raise ValueError(f"no Bitunix pair for {contract}")
     return contract[:-3] + "USDT"
+
+
+def pair_for(symbol, contract):
+    """The Bitunix pair a watchlist symbol alerts off: its own entry in
+    BITUNIX_XSTOCK_PAIRS (TSLAXUSD -> TSLAUSDT), else its Delta contract's."""
+    return BITUNIX_XSTOCK_PAIRS.get(symbol) or bitunix_pair(contract)
 
 
 def _throttle():

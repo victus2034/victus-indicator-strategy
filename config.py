@@ -156,7 +156,10 @@ COINSWITCH_API_BASE_URL = "https://coinswitch.co"
 # Delta stays the venue the trades are taken on, so the backtest still grades
 # on Delta candles and the fees stay Delta's whichever source draws the zones.
 # Covers the zone scanners (4h and 30m), entry_confirm and the fib/trendline
-# scanner; xStocks and "other" stay on Delta (Bitunix lists none of them).
+# scanner. Since 2026-10-09 (Lakky) the xStocks too, off the stock futures
+# Bitunix lists under the plain ticker (BITUNIX_XSTOCK_PAIRS). "Other" stays on
+# Delta: SLVON is a silver ETF token Bitunix does not list (its XAG is spot
+# silver, a different price), and XAUT is not an xStock.
 CRYPTO_CANDLE_SOURCE = (os.getenv("VICTUS_CRYPTO_CANDLE_SOURCE", "bitunix").strip().lower() or "bitunix")
 if CRYPTO_CANDLE_SOURCE not in {"delta", "bitunix"}:
     raise ValueError(f"VICTUS_CRYPTO_CANDLE_SOURCE must be delta or bitunix, not {CRYPTO_CANDLE_SOURCE!r}")
@@ -165,7 +168,18 @@ BITUNIX_API_BASE_URL = "https://fapi.bitunix.com"
 BITUNIX_MIN_REQUEST_GAP_SECONDS = env_float("VICTUS_BITUNIX_MIN_REQUEST_GAP_SECONDS", 0.12)
 # Every crypto watchlist symbol, checked against Bitunix's trading_pairs on
 # 2026-10-05 (all 23 listed as <base>USDT). Re-check when CRYPTO_WATCHLIST changes.
-BITUNIX_SYMBOLS = set(CRYPTO_WATCHLIST)
+# The xStocks are not "<Delta name>T" on Bitunix but the stock's own ticker,
+# so each has its pair here. All six listed and OPEN on 2026-10-09
+# (research/xstock_bitunix_probe.py, research/out/xstock/).
+BITUNIX_XSTOCK_PAIRS = {
+    "TSLAXUSD": "TSLAUSDT",
+    "METAXUSD": "METAUSDT",
+    "SOXLBUSD": "SOXLUSDT",
+    "SNDKBUSD": "SNDKUSDT",
+    "MRVL/USDT:USDT": "MRVLUSDT",
+    "NVDAXUSD": "NVDAUSDT",
+}
+BITUNIX_SYMBOLS = set(CRYPTO_WATCHLIST) | set(BITUNIX_XSTOCK_PAIRS)
 COINSWITCH_EXCHANGE = "EXCHANGE_2"
 COINSWITCH_API_KEY = ""
 COINSWITCH_SECRET_KEY = ""

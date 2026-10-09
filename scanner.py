@@ -976,7 +976,7 @@ def fetch_bitunix_ohlcv(symbol):
     timeframe_seconds = TIMEFRAME_SECONDS.get(TIMEFRAME)
     if timeframe_seconds is None:
         raise RuntimeError(f"Bitunix does not support timeframe {TIMEFRAME}")
-    pair = bitunix_data.bitunix_pair(delta_contract(symbol) or fallback_symbol(symbol).split("/")[0] + "USD")
+    pair = bitunix_data.pair_for(symbol, delta_contract(symbol) or fallback_symbol(symbol).split("/")[0] + "USD")
     end = int(time.time()) + 1
     cached = _BITUNIX_HISTORY.get((pair, TIMEFRAME))
     if cached:
@@ -1225,7 +1225,7 @@ def live_ticker_price(exchange_name, symbol, candle_close):
 
     if exchange_name == "bitunix":
         try:
-            pair = bitunix_data.bitunix_pair(delta_contract(symbol) or symbol)
+            pair = bitunix_data.pair_for(symbol, delta_contract(symbol) or symbol)
             return bitunix_data.last_price(pair), "bitunix_1m"
         except Exception as error:
             print(f"{symbol} live price unavailable from bitunix: {str(error)[:80]}")
@@ -1424,7 +1424,7 @@ def daily_trend(symbol):
         # The trend is read off the same book the zones were drawn from.
         try:
             rows = bitunix_data.klines(
-                bitunix_data.bitunix_pair(contract), "1d", end_ts - (CRYPTO_TREND_EMA * 4) * day, end_ts
+                bitunix_data.pair_for(symbol, contract), "1d", end_ts - (CRYPTO_TREND_EMA * 4) * day, end_ts
             )
             return _trend_from_daily([(row[0], row[4]) for row in rows], end_ts)
         except Exception as error:
