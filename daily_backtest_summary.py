@@ -17,6 +17,7 @@ import yfinance as yf
 
 import nse_scanner
 import scanner as crypto_scanner
+from config import OTHER_WATCHLIST
 from xstock_hybrid_rating import XSTOCK_UNDERLYINGS, is_xstock
 
 
@@ -1546,7 +1547,7 @@ def uses_six_hour_evaluation(symbol: str) -> bool:
     trade on the same venues as crypto, around the clock, and are
     alerted on the same cadence, so they are judged the same way.
 
-    "other" (PAXG, SLVON) is included for the same reason and was missing
+    "other" (XAUT, SLVON) is included for the same reason and was missing
     it: run_backtest() already routes "other" through crypto_tracking_end()
     for its outer, provisional window, but simulate_alert() only applies
     the real six-hour maturity gate and re-scoping when this function says
@@ -1596,14 +1597,18 @@ def is_xstock_symbol(symbol: str) -> bool:
     return is_xstock(str(symbol).upper())
 
 
+# PAXG stays for old records; XAUT replaced it on the watchlist and was
+# graded as crypto until 2026-10-09 because this set was never updated.
+OTHER_DISPLAY_SYMBOLS = {"PAXG", "XAUT", "SLVON"}
+
+
 def market_class(symbol: str) -> str:
     text = str(symbol).strip().upper()
     if text.endswith(".NS"):
         return MARKET_NSE
     if is_xstock_symbol(text):
         return MARKET_XSTOCK
-    normalized = display_symbol(text)
-    if normalized in {"PAXG", "SLVON"}:
+    if text in OTHER_WATCHLIST or display_symbol(text) in OTHER_DISPLAY_SYMBOLS:
         return MARKET_OTHER
     return MARKET_CRYPTO
 

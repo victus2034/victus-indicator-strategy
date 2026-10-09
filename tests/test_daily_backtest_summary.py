@@ -1672,6 +1672,20 @@ class DeltaVenueTests(unittest.TestCase):
         self.assertEqual(failures, {})
 
 
+class MarketClassTests(unittest.TestCase):
+    def test_every_watchlist_symbol_lands_in_its_market(self):
+        # XAUT replaced PAXG on the watchlist but was graded as crypto until
+        # 2026-10-09: market_class still named PAXG.
+        import config
+        for symbol in config.OTHER_WATCHLIST:
+            self.assertEqual(summary.market_class(symbol), summary.MARKET_OTHER, symbol)
+        for symbol in config.XSTOCK_WATCHLIST:
+            self.assertEqual(summary.market_class(symbol), summary.MARKET_XSTOCK, symbol)
+        for symbol in config.CRYPTO_WATCHLIST:
+            self.assertEqual(summary.market_class(symbol), summary.MARKET_CRYPTO, symbol)
+        self.assertEqual(summary.market_class("RELIANCE.NS"), summary.MARKET_NSE)
+
+
 class OutcomeLabelTests(unittest.TestCase):
     def test_the_internal_ambiguous_name_never_reaches_a_report(self):
         # A dry run caught this leaking as data_quality_ambiguous into
