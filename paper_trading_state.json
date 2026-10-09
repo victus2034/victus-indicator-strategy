@@ -60063,6 +60063,33 @@
       "target_half": 377.8630952380952,
       "timeframe": "30m",
       "trade_id": "TSLAXUSD|30m|short|379.762|383.56"
+    },
+    {
+      "alert_time": "2026-10-09T18:32:27.335296+05:30",
+      "cost_r": 0.08259999999999913,
+      "date": "2026-10-09",
+      "entry": 281.43849206349205,
+      "entry_time": "2026-10-09T19:00:00+05:30",
+      "exit_price": 275.80972222222215,
+      "exit_time": "2026-10-09T19:05:00+05:30",
+      "final_result": "+2R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "xstock",
+      "net_realized_r": 1.9174000000000009,
+      "outcome": "+2R",
+      "rating": 9,
+      "realized_r": 2.0,
+      "risk": 2.81438492063495,
+      "side": "short",
+      "stop": 284.252876984127,
+      "stream": "live",
+      "symbol": "MRVL/USDT:USDT",
+      "target_1": 278.6241071428571,
+      "target_2": 275.80972222222215,
+      "target_half": 280.0312996031746,
+      "timeframe": "30m",
+      "trade_id": "MRVL/USDT:USDT|30m|short|281.438|284.253"
     }
   ],
   "handled": {
@@ -61804,6 +61831,7 @@
     "TSLAXUSD|4h|long|356.65|354.587": "filled",
     "TSLAXUSD|4h|short|372.917|376.646": "filled",
     "TSLAXUSD|4h|short|374.1|375.225": "filled",
+    "TSLAXUSD|4h|short|384.276|388.119": "filled",
     "TSLAXUSD|4h|short|385.65|387.075": "filled",
     "UB/USDT|30m|long|0.11776|0.116847": "filled",
     "UB/USDT|30m|long|0.12036|0.119285": "filled",
@@ -62574,23 +62602,23 @@
       "target_half": 724.6324404761904,
       "timeframe": "30m"
     },
-    "MRVL/USDT:USDT|30m|short|281.438|284.253": {
-      "alert_time": "2026-10-09T18:32:27.335296+05:30",
-      "entry": 281.43849206349205,
-      "entry_time": "2026-10-09T19:00:00+05:30",
+    "TSLAXUSD|4h|short|384.276|388.119": {
+      "alert_time": "2026-10-09T19:00:52.868727+05:30",
+      "entry": 384.2757936507937,
+      "entry_time": "2026-10-09T19:05:00+05:30",
       "geometry": "wick",
       "half_r_hit": false,
       "market": "xstock",
-      "rating": 9,
-      "risk": 2.81438492063495,
+      "rating": 8,
+      "risk": 3.842757936507951,
       "side": "short",
-      "stop": 284.252876984127,
+      "stop": 388.1185515873016,
       "stream": "live",
-      "symbol": "MRVL/USDT:USDT",
-      "target_1": 278.6241071428571,
-      "target_2": 275.80972222222215,
-      "target_half": 280.0312996031746,
-      "timeframe": "30m"
+      "symbol": "TSLAXUSD",
+      "target_1": 380.4330357142857,
+      "target_2": 376.59027777777777,
+      "target_half": 382.3544146825397,
+      "timeframe": "4h"
     }
   }
 }
