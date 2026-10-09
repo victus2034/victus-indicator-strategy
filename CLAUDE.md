@@ -285,5 +285,11 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   watch; once entry confirm moved to fib/trendline only nothing read them. Old `_watch` /
   `_silent_ready|` state keys are dropped on load. The old files may remain on the state branch.
 - **XAUT is "other", not crypto, in the reports (2026-10-09).** `market_class` still named PAXG.
+- **CoinSwitch is gone (2026-10-09, lakky: no longer trades there).** Its fetch, signing, 1m top-up,
+  fine price and deep-history splice are removed, with the `COINSWITCH_*` secrets in the workflows
+  (they can be deleted from GitHub too). The candle chain is Bitunix, Delta, then the ccxt fallbacks.
+- **Status posts once per dispatch (2026-10-09, lakky).** The scan loop runs every ~90s; started /
+  finished went out on every pass. Now only the first pass posts (`scanner.first_pass_this_loop`,
+  shared by NSE); a later pass posts only when most symbols failed or, on NSE, an alert failed to send.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.
