@@ -281,6 +281,10 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   against the last *closed* 4H close. Now `bitunix_data.klines` never asks past now, the zone scan
   builds the forming candle from 1m (`bitunix_data.forming_candle`), and fib/trendline crypto alerts
   use `bitunix_data.last_price`. `tests/test_bitunix_source.py`'s fake serves the API's real shape.
+  **A page's endTime must sit on a candle open (2026-10-09).** There it is exclusive and correct; off
+  an open Bitunix drops a candle and gives the next one its open (`research/bitunix_page_probe.py`).
+  Paging by "oldest - 1ms" lost one candle per 200 (UNI 30m: 7 in 1500, a demand zone that did not
+  rebuild). `klines` now pages on candle opens; the test fake refuses any other endTime.
 - **Watch rows are gone (2026-10-09).** `crypto_watch_records*.jsonl` fed entry confirm's zone
   watch; once entry confirm moved to fib/trendline only nothing read them. Old `_watch` /
   `_silent_ready|` state keys are dropped on load. The old files may remain on the state branch.
