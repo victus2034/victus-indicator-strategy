@@ -6,18 +6,18 @@ borrows their watchlists, symbol names, price formatting, alert window and
 Discord sender.
 
 - Fib alerts (DISCORD_FIB_WEBHOOK_URL): price is within FIB_TL_MAX_DISTANCE_PCT
-  (0.75%) of Zone 1 or Zone 2 of the live fib, down to inside it, as indicator
-  v12.3 draws it (fib_engine.py). Once per zone per fib - a new top or base is a
-  new fib and can alert again.
+  (0.75%) of the live fib's deeper (strong) zone, down to its near edge
+  (FIB_ALERT_ZONES; fib_engine.py). Stop = the S/R zone rule. Once per zone per
+  fib - a new top or base is a new fib and can alert again.
 - Trendline alerts (DISCORD_TRENDLINE_WEBHOOK_URL): price is within the same
-  0.75% of a live trendline (indicator v11.0, trendlines.py), or a candle closes
-  through one. A touch re-arms once price has left the band and a full candle
-  has passed.
+  0.75% of a live trendline (indicator v12.6 anchors, trendlines.py), or a
+  candle closes through one. A touch re-arms once price has left the band and a
+  full candle has passed.
 
-Crypto (Delta) scans on every pass, inside the 08:00-01:00 IST alert window.
-NSE (Yahoo, the zone scanner's 200 stocks) scans during the session only,
-every NSE_MIN_INTERVAL_SECONDS. Both post to the same two channels, the market
-named on each alert.
+Crypto and xStocks (Bitunix; XAUT and SLVON on Delta) scan on every pass, inside
+the 08:00-01:00 IST alert window. NSE (Yahoo, the zone scanner's 200 stocks)
+scans during the session only, every NSE_MIN_INTERVAL_SECONDS. Each market can
+have its own pair of channels (DISCORD_{FIB,TRENDLINE}_{CRYPTO,NSE}_WEBHOOK_URL).
 
 Levels come from CLOSED candles, like the chart's confirmed swings; the candle
 still forming only supplies the current price. Every fib and trendline-touch
