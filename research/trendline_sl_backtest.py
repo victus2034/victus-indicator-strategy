@@ -14,6 +14,8 @@ Stops tested (support = buy; resistance mirrors it):
   live     TRENDLINE_SL_PCT beyond the line (1D 1.5%) - today's alert
   touch    TOUCH_BUFFER_PCT beyond the low of the last candle that touched the line
   nearest  beyond the closest swing low under entry (2 bars each side, last 20 closed candles)
+  touch/nearest skip anything closer than MIN_GAP_ATR x ATR(14) to entry, and fall back
+  to each other, then to live, when there is none
   hybrid   touch, but nearest when touch risk is more than HYBRID_MAX_ATR x ATR(14)
            (Lakky's AVAX rule; "too far" is not stated, so 1 ATR is the default here)
 Exits tested:
@@ -57,6 +59,7 @@ OUT = Path(__file__).resolve().parent / "out" / "trendline_sl"
 TOUCH_BUFFER_PCT = 0.1
 HYBRID_MAX_ATR = 1.0
 NEAR_LOOKBACK, PIVOT_SIDE = 20, 2
+MIN_GAP_ATR = 0.5     # no stop closer than half an ATR(14) - a touch from yesterday is not a stop
 TP1_R = 1.5
 TRAIL_MAX_BARS = 60
 STOPS = ("live", "touch", "nearest", "hybrid")
@@ -73,32 +76,42 @@ def atr14(highs, lows, closes):
     return out
 
 
+def nearest_stop(long, entry, i, highs, lows, gap):
+    """Just beyond the closest swing low (high) under (over) entry, at least `gap` away.
+
+    Swings: PIVOT_SIDE bars each side, in the last NEAR_LOOKBACK closed candles."""
+    buf = TOUCH_BUFFER_PCT / 100
+    near = None
+    for j in range(i - 1 - PIVOT_SIDE, max(i - 1 - NEAR_LOOKBACK, PIVOT_SIDE) - 1, -1):
+        side = range(j - PIVOT_SIDE, j + PIVOT_SIDE + 1)
+        if long and lows[j] <= entry - gap and all(lows[j] <= lows[k] for k in side):
+            c = lows[j] * (1 - buf)
+            near = c if near is None else max(near, c)
+        if not long and highs[j] >= entry + gap and all(highs[j] >= highs[k] for k in side):
+            c = highs[j] * (1 + buf)
+            near = c if near is None else min(near, c)
+    return near
+
+
 def stop_prices(line, i, entry, highs, lows, atr, tf):
     """Every stop for an alert on bar i (bars up to i-1 closed)."""
     long = line.kind == SUPPORT
     buf = TOUCH_BUFFER_PCT / 100
     out = {"live": trades.trendline_plan(long, entry, tf)["sl"]}
+    a = atr[i - 1] or 0
+    gap = MIN_GAP_ATR * a
     touch = None
     for j in range(i - 1, line.x2 - 1, -1):
         level = line.price_at(j)
-        if (lows[j] <= level * (1 + BAND)) if long else (highs[j] >= level * (1 - BAND)):
-            touch = lows[j] * (1 - buf) if long else highs[j] * (1 + buf)
-            break
-    if touch is not None and ((touch < entry) if long else (touch > entry)):
-        out["touch"] = touch
-    near = None
-    for j in range(i - 1 - PIVOT_SIDE, max(i - 1 - NEAR_LOOKBACK, PIVOT_SIDE) - 1, -1):
-        side = range(j - PIVOT_SIDE, j + PIVOT_SIDE + 1)
-        if long and lows[j] < entry and all(lows[j] <= lows[k] for k in side):
-            cand = lows[j] * (1 - buf)
-            near = cand if near is None else max(near, cand)
-        if not long and highs[j] > entry and all(highs[j] >= highs[k] for k in side):
-            cand = highs[j] * (1 + buf)
-            near = cand if near is None else min(near, cand)
-    out["nearest"] = near if near is not None else out.get("touch", out["live"])
-    out.setdefault("touch", out["nearest"])
-    a = atr[i - 1]
-    far = a is not None and abs(entry - out["touch"]) > HYBRID_MAX_ATR * a
+        # a real touch: the wick reached the line (the second swing always does)
+        if (lows[j] <= level * 1.0001) if long else (highs[j] >= level * 0.9999):
+            if (lows[j] <= entry - gap) if long else (highs[j] >= entry + gap):
+                touch = lows[j] * (1 - buf) if long else highs[j] * (1 + buf)
+                break
+    near = nearest_stop(long, entry, i, highs, lows, gap)
+    out["touch"] = touch if touch is not None else (near if near is not None else out["live"])
+    out["nearest"] = near if near is not None else out["touch"]
+    far = a > 0 and abs(entry - out["touch"]) > HYBRID_MAX_ATR * a
     out["hybrid"] = out["nearest"] if far else out["touch"]
     return out
 
@@ -311,10 +324,10 @@ def main() -> None:
 
 
 def trace(got):
-    """Lakky's two charts: every AVAX 1D alert since Oct 1 with each stop."""
+    """Lakky's two charts: every AVAX 1D alert since Sep 1 with each stop."""
     lines = ["# AVAX 1D trendline alerts (chart check)", ""]
     for t in got:
-        if t["symbol"].startswith("AVAX") and t["tf"] == "1d" and t["alert_ts"] >= pd.Timestamp("2026-10-01", tz="UTC").timestamp():
+        if t["symbol"].startswith("AVAX") and t["tf"] == "1d" and t["alert_ts"] >= pd.Timestamp("2026-09-01", tz="UTC").timestamp():
             when = pd.Timestamp(t["alert_ts"], unit="s", tz="UTC")
             stops = ", ".join(f"{k} {v:.4f} ({t[f'risk_{k}']:.2f}%)" for k, v in t["stops"].items())
             lines.append(f"- {when:%Y-%m-%d %H:%M} {'BUY' if t['long'] else 'SELL'} entry {t['entry']:.4f}: {stops}")

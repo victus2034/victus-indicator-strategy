@@ -36,27 +36,13 @@ import fib_trendline_trades as trades  # noqa: E402
 import scanner  # noqa: E402
 from fib_trendline_data import CRYPTO, IST, NSE, TF_SECONDS, candle_is_closed  # noqa: E402
 from fib_trendline_scanner import fib_zones  # noqa: E402
-from trendline_sl_backtest import NEAR_LOOKBACK, PIVOT_SIDE, TOUCH_BUFFER_PCT, crypto_load, simulate  # noqa: E402
+from trendline_sl_backtest import MIN_GAP_ATR, atr14, crypto_load, nearest_stop, simulate  # noqa: E402
 from trendlines import SUPPORT, build_trendlines  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "fib_sl"
 BAND = config.FIB_TL_MAX_DISTANCE_PCT / 100
 PLANS = [("L1", "sr"), ("L1", "nearest"), ("L2", "sr"), ("L2", "nearest")]
 EXITS = ("2R+BE", "1.5R", "1.5R+trail", "target")
-
-
-def nearest_stop(long, entry, i, highs, lows):
-    buf = TOUCH_BUFFER_PCT / 100
-    near = None
-    for j in range(i - 1 - PIVOT_SIDE, max(i - 1 - NEAR_LOOKBACK, PIVOT_SIDE) - 1, -1):
-        side = range(j - PIVOT_SIDE, j + PIVOT_SIDE + 1)
-        if long and lows[j] < entry and all(lows[j] <= lows[k] for k in side):
-            c = lows[j] * (1 - buf)
-            near = c if near is None else max(near, c)
-        if not long and highs[j] > entry and all(highs[j] >= highs[k] for k in side):
-            c = highs[j] * (1 + buf)
-            near = c if near is None else min(near, c)
-    return near
 
 
 def replay(market, symbol, tf, base, evalc, now, since):
@@ -72,6 +58,7 @@ def replay(market, symbol, tf, base, evalc, now, since):
     eval_ts = [c[0] for c in evalc]
     eval_seconds = TF_SECONDS[trades.EVAL_RESOLUTION[market][tf]]
     held = (lambda ts: fbt.crypto_held(ts, eval_seconds)) if market == CRYPTO else (lambda ts: False)
+    atr = atr14(highs, lows, closes)
     lines = build_trendlines(highs, lows, closes, config.TRENDLINE_SWING_LENGTH, config.TRENDLINES_KEEP, history=True)
 
     def bar_slice(i):
@@ -115,7 +102,7 @@ def replay(market, symbol, tf, base, evalc, now, since):
                      "confluence": conf, "top": top}
                 for lv, st in PLANS:
                     entry = entries[lv]
-                    sl = zone["sl"] if st == "sr" else nearest_stop(long, entry, i, highs, lows)
+                    sl = zone["sl"] if st == "sr" else nearest_stop(long, entry, i, highs, lows, MIN_GAP_ATR * (atr[i - 1] or 0))
                     if sl is None or ((sl >= entry) if long else (sl <= entry)):
                         sl = zone["sl"]
                     t[f"risk_{lv}|{st}"] = abs(entry - sl) / entry * 100
