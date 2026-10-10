@@ -819,6 +819,28 @@ class PartialDigestTests(unittest.TestCase):
         self.assertEqual(result, state)
 
 
+class MarketChannelTests(unittest.TestCase):
+    SHARED = "https://discord.com/api/webhooks/1/shared"
+    NSE = "https://discord.com/api/webhooks/2/nse"
+
+    def test_nse_uses_its_own_webhook_when_set(self):
+        env = {entry_confirm.WEBHOOK_ENV: self.SHARED, "DISCORD_ENTRY_CONFIRM_NSE_WEBHOOK_URL": self.NSE}
+        with patch.dict("os.environ", env, clear=True):
+            self.assertEqual(entry_confirm.webhook_for("nse"), self.NSE)
+            self.assertEqual(entry_confirm.webhook_for("crypto"), self.SHARED)
+
+    def test_unset_market_webhook_falls_back_to_the_shared_one(self):
+        with patch.dict("os.environ", {entry_confirm.WEBHOOK_ENV: self.SHARED}, clear=True):
+            self.assertEqual(entry_confirm.webhook_for("nse"), self.SHARED)
+            self.assertEqual(entry_confirm.webhook_for("crypto"), self.SHARED)
+
+    def test_digest_header_names_the_market(self):
+        now = pd.Timestamp("2026-08-23 11:00", tz=entry_confirm.IST)
+        pings = [(entry_confirm.STAGE_ENTRY, "`TCS` BUY · a")]
+        self.assertTrue(entry_confirm.build_digest(pings, now, "nse")[0].startswith("__Entry watch · NSE · 11:00 IST__"))
+        self.assertTrue(entry_confirm.build_digest(pings, now, "crypto")[0].startswith("__Entry watch · Crypto · 11:00 IST__"))
+
+
 class SendPingRetryTests(unittest.TestCase):
     def test_a_rate_limited_post_is_retried(self):
         limited = unittest.mock.Mock(status_code=429)
