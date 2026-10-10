@@ -259,4 +259,3 @@ Live fib alerts (strong zone) replayed; entry, stop and exit change. Net R after
 | nse      | 1w   | fib+TL | L2      | nearest | 1.5R       |        3 |        1 |        0 |    -1   |        -1.029 |            1.61 |
 | nse      | 1w   | fib+TL | L2      | nearest | 1.5R+trail |        3 |        1 |        0 |    -1   |        -1.029 |            1.61 |
 | nse      | 1w   | fib+TL | L2      | nearest | target     |        3 |        1 |        0 |    -1   |        -1.029 |            1.61 |
-
