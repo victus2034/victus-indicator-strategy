@@ -186,6 +186,13 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   the market's previous awake pass (`__last_scan__` in the state, `BREAK_GRACE_SECONDS` = 1h of
   catch-up). PFIZER's 1M break on September's close posted on Oct 5 while the other 1M breaks went
   out on Oct 1; a break first seen sessions later is now dropped.
+- **Trendline breaks, v12.7.9 (Lakky, 2026-10-10).** A line is drawn `tl_len` candles after its second
+  swing; the closes in those candles are now checked when it is drawn (DABUR 1D: Oct 6 closed through a line
+  drawn Oct 8). Such a line ends there and never alerts, BROKEN included. ~9-11% of lines; Sep 1 - Oct 10
+  backtest ~3% fewer TL alerts, same R/trade (`research/out/trendline_confirm/`). Pine v12.7.9 does the same.
+- **NSE 1D gap fill (2026-10-10, GLENMARK).** During a session Yahoo's batch 1d download can leave out the
+  previous session's row, so the close that broke a line was never seen and the line alerted again the next
+  day. `fib_trendline_data.fill_daily_gaps` adds missing days from the 1h candles (`research/tl_after_break_audit.py`).
 - Each channel seeds silently per market on its first pass with a webhook, so adding a webhook
   never dumps a backlog. Deleting the state file re-seeds rather than bursting.
 - `python fib_trendline_scanner.py --dry-run [--force-nse]` prints what would alert, sends nothing.
