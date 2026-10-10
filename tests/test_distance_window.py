@@ -9,6 +9,11 @@ import scanner
 
 class DistanceWindowTests(unittest.TestCase):
     def setUp(self):
+        # Range filter alerts are off live (2026-10-10); the logic is still tested.
+        for module in (scanner, nse_scanner):
+            rf = patch.object(module, "ALERT_RANGE_FILTER_SIGNALS", True)
+            rf.start()
+            self.addCleanup(rf.stop)
         self._tmp = TemporaryDirectory()
         tmp_path = Path(self._tmp.name)
         self._crypto_record_patch = patch.object(

@@ -413,7 +413,8 @@ CRYPTO_ALERT_END = datetime_time(1, 0)
 SCAN_SLEEP = 300
 SCAN_WORKERS = 8
 ALERT_COOLDOWN_SECONDS = env_int("VICTUS_ALERT_COOLDOWN_SECONDS", 4 * 60 * 60)
-ALERT_RANGE_FILTER_SIGNALS = True
+# Off since 2026-10-10 (lakky): alerts are S/R zones, fibs and trendlines only.
+ALERT_RANGE_FILTER_SIGNALS = False
 SIGNAL_ALERT_COOLDOWN_SECONDS = env_int("VICTUS_SIGNAL_ALERT_COOLDOWN_SECONDS", 4 * 60 * 60)
 # After a send that failed (Discord down, every retry spent), try again this
 # soon rather than waiting out the full cooldown. The full cooldown after a
