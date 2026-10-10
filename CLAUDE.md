@@ -35,6 +35,9 @@ All in `config.py`, which **is tracked in git**:
   each ping with the venue ("Delta"); dropped 2026-10-08 (lakky) - its crypto prices come
   from Bitunix, so the tag read as the wrong source. Entry confirm watches only fib and
   trendline alerts on 1D/1W/1M, crypto and NSE, since the same day.
+  Since 2026-10-10 (lakky) it posts one digest per market: NSE to `DISCORD_ENTRY_CONFIRM_NSE_WEBHOOK_URL`,
+  crypto (incl. xStocks, XAUT, SLVON) to `DISCORD_ENTRY_CONFIRM_CRYPTO_WEBHOOK_URL`; either unset falls back
+  to `DISCORD_ENTRY_CONFIRM_WEBHOOK_URL`.
   Static on purpose; re-audit against Delta's `/v2/products` when the watchlist changes
 - `EXCHANGE_IDS` — exchange fallback order
 - `MAX_DISTANCE_PCT` — how close price must get before alerting
