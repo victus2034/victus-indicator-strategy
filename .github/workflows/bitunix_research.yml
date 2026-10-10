@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       parts:
-        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm)"
+        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm tl-break-audit)"
         default: "zones-30m zones-4h fib"
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr, xstock, xstock-zones-30m, xstock-zones-4h, xstock-fib, live-audit, uni-trace, bitunix-page, trend-all, tl-confirm]
+        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr, xstock, xstock-zones-30m, xstock-zones-4h, xstock-fib, live-audit, uni-trace, bitunix-page, trend-all, tl-confirm, tl-break-audit]
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
@@ -76,6 +76,9 @@ jobs:
                        git show FETCH_HEAD:daily_backtest_finalized_records.jsonl > /tmp/finalized.jsonl
                        python research/trend_filter_all_backtest.py --state /tmp/finalized.jsonl --since 2026-09-01 ;;
             tl-confirm) python research/trendline_confirm_window.py --symbol DABUR.NS --tf 1d --since 2026-09-01 ;;
+            tl-break-audit) git fetch --depth 1 origin scanner-runtime-state
+                       git show FETCH_HEAD:fib_trendline_alert_records.jsonl > /tmp/tl_records.jsonl
+                       python research/tl_after_break_audit.py --records /tmp/tl_records.jsonl --since 2026-10-01 ;;
             tl-length) python research/trendline_length_backtest.py --lengths 10,15,20 ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
       - name: Commit results to this branch
