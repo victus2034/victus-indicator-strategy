@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       parts:
-        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all fixed-pct)"
+        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all fixed-pct fixed-zones-30m fixed-zones-4h)"
         default: "zones-30m zones-4h fib"
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr, xstock, xstock-zones-30m, xstock-zones-4h, xstock-fib, live-audit, uni-trace, bitunix-page, trend-all, fixed-pct]
+        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr, xstock, xstock-zones-30m, xstock-zones-4h, xstock-fib, live-audit, uni-trace, bitunix-page, trend-all, fixed-pct, fixed-zones-30m, fixed-zones-4h]
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
@@ -78,6 +78,8 @@ jobs:
             fixed-pct) git fetch --depth 1 origin scanner-runtime-state
                        git show FETCH_HEAD:daily_backtest_finalized_records.jsonl > /tmp/finalized.jsonl
                        python research/fixed_pct_backtest.py --state /tmp/finalized.jsonl --since 2026-09-01 ;;
+            fixed-zones-30m) VICTUS_TIMEFRAME=30m python research/fixed_pct_zone_replay.py --tf 30m --since 2026-06-01 ;;
+            fixed-zones-4h)  VICTUS_TIMEFRAME=4h  python research/fixed_pct_zone_replay.py --tf 4h --since 2026-06-01 ;;
             tl-length) python research/trendline_length_backtest.py --lengths 10,15,20 ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
       - name: Commit results to this branch
