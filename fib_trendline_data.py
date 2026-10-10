@@ -196,9 +196,49 @@ def nse_download(symbols, interval, period=None, chunk=50):
     return out
 
 
+def fill_daily_gaps(daily, hourly):
+    """Add the sessions Yahoo's daily rows are missing, built from its 1h candles.
+
+    Lakky, 2026-10-10, GLENMARK 1D: during a session Yahoo's batch 1d download
+    can leave out the previous session's row. The scan then saw no Oct 8
+    candle on Oct 9 - the close that broke the Jun 17 -> Aug 3 support was
+    never checked, the line stayed alive and alerted TL BUY again (DALBHARAT,
+    ITI, JINDALSAW, JSL the same day; research/tl_after_break_audit.py).
+    Rows Yahoo has are kept as they are; only a missing day is added.
+    """
+    if not daily or not hourly:
+        return daily
+    have = {datetime.fromtimestamp(c[0], IST).date() for c in daily}
+    first = datetime.fromtimestamp(daily[0][0], IST).date()
+    days = {}
+    for ts, o, h, l, c in hourly:
+        day = datetime.fromtimestamp(ts, IST).date()
+        if day in have or day < first:
+            continue
+        if day not in days:
+            start = int(datetime(day.year, day.month, day.day, tzinfo=IST).timestamp())
+            days[day] = [start, o, h, l, c]
+        else:
+            bar = days[day]
+            bar[2], bar[3], bar[4] = max(bar[2], h), min(bar[3], l), c
+    if not days:
+        return daily
+    return sorted(daily + list(days.values()), key=lambda c: c[0])
+
+
 def nse_charts(symbols, timeframes):
-    """Live charts for the NSE watchlist: {symbol: {tf: candles}}."""
-    by_tf = {tf: nse_download(symbols, tf) for tf in timeframes}
+    """Live charts for the NSE watchlist: {symbol: {tf: candles}}.
+
+    One 1h download feeds both 4H (resampled) and the 1D gap fill."""
+    hourly = nse_download(symbols, "1h") if {"4h", "1d"} & set(timeframes) else {}
+    by_tf = {}
+    for tf in timeframes:
+        if tf == "4h":
+            by_tf[tf] = {s: _resample_4h(c) for s, c in hourly.items()}
+        elif tf == "1d":
+            by_tf[tf] = {s: fill_daily_gaps(c, hourly.get(s, [])) for s, c in nse_download(symbols, tf).items()}
+        else:
+            by_tf[tf] = nse_download(symbols, tf)
     return {s: {tf: by_tf[tf].get(s, []) for tf in timeframes} for s in symbols}
 
 

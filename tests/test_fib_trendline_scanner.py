@@ -269,6 +269,40 @@ class CandleTests(unittest.TestCase):
         self.assertFalse(ftd.candle_is_closed(ftd.NSE, int(at(0, 0)), "1d", at(14, 0)))
 
 
+class NseDailyGapTests(unittest.TestCase):
+    """GLENMARK 1D (Lakky, 2026-10-10): Yahoo's daily rows left out Oct 8 during the Oct 9 session."""
+
+    @staticmethod
+    def at(d, h=0, m=0):
+        return int(datetime(2026, 10, d, h, m, tzinfo=ftd.IST).timestamp())
+
+    def test_a_missing_session_is_built_from_1h(self):
+        daily = [[self.at(7), 2314.9, 2326.8, 2274.4, 2282.3], [self.at(9), 2207.0, 2293.0, 2203.0, 2258.9]]
+        hourly = [[self.at(7, 15, 15), 2280, 2283, 2279, 2282.3],
+                  [self.at(8, 9, 15), 2280.0, 2284.0, 2250.0, 2255.0],
+                  [self.at(8, 14, 15), 2255.0, 2260.0, 2181.2, 2190.0],
+                  [self.at(8, 15, 15), 2190.0, 2195.0, 2185.0, 2192.2],
+                  [self.at(9, 9, 15), 2207.0, 2260.0, 2203.0, 2258.9]]
+        got = ftd.fill_daily_gaps(daily, hourly)
+        self.assertEqual(got[0], daily[0])
+        self.assertEqual(got[1], [self.at(8), 2280.0, 2284.0, 2181.2, 2192.2])
+        self.assertEqual(got[2], daily[1])
+
+    def test_rows_yahoo_has_are_left_alone(self):
+        daily = [[self.at(8), 1, 2, 0.5, 1.5]]
+        self.assertEqual(ftd.fill_daily_gaps(daily, [[self.at(8, 9, 15), 9, 9, 9, 9]]), daily)
+
+    def test_the_gap_is_what_kept_the_line_alive(self):
+        highs, lows, closes = rising_lows_then_break()
+        closes[50] = 100.0                                  # the line is at 116 by bar 50
+        full = [[i * 86400, c, h, l, c] for i, (h, l, c) in enumerate(zip(highs, lows, closes))]
+        gap = full[:50] + full[51:]
+        alive = lambda candles: [l for l in build_trendlines([c[2] for c in candles], [c[3] for c in candles],
+                                                             [c[4] for c in candles], 10, 6) if l.kind == SUPPORT][0].alive
+        self.assertTrue(alive(gap))
+        self.assertFalse(alive(full))
+
+
 class SimulateTests(unittest.TestCase):
     plan = {"side": "long", "entry": 100.0, "sl": 99.0}
 
