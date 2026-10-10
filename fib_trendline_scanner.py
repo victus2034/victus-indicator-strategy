@@ -232,7 +232,7 @@ def analyse(market, symbol, tf, candles, now, price=None):
                     **info, "key": f"tl|{ident}", "level": level, "distance": distance,
                     "plan": trades.trendline_plan(line.kind == SUPPORT, level, tf),
                 })
-        elif line.broken_at >= len(closed) - 2:
+        elif line.broken_at >= max(len(closed) - 2, line.created):   # never one broken before it was drawn
             result["break"].append({
                 **info, "key": f"tlbreak|{ident}", "level": line.price_at(line.broken_at),
                 "close": closes[line.broken_at], "time": stamp[line.broken_at],

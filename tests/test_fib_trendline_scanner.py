@@ -208,11 +208,25 @@ class TrendlineTests(unittest.TestCase):
         self.assertFalse(line.live_during(51))
         self.assertFalse(line.live_during(45))      # drawn at bar 45's close
 
-    def test_a_close_before_the_line_is_drawn_is_not_checked(self):
+    def test_a_close_before_the_line_is_drawn_ends_it(self):
+        # v12.7.9 (Lakky, DABUR 1D): a close through between the swing (35) and the
+        # confirm bar (45) used to go unchecked, so the line was drawn alive and kept going
         highs, lows, closes = rising_lows_then_break()
-        closes[40] = 90.0             # between swing (35) and confirm (45) - the Pine never looks
+        closes[40] = 90.0
         line = [l for l in build_trendlines(highs, lows, closes, 10, 6) if l.kind == SUPPORT][0]
-        self.assertTrue(line.alive)
+        self.assertEqual(line.broken_at, 40)
+        self.assertFalse(any(line.live_during(b) for b in range(60)))   # never alertable
+        old = [l for l in build_trendlines(highs, lows, closes, 10, 6, check_confirm_window=False)
+               if l.kind == SUPPORT][0]
+        self.assertTrue(old.alive)                                      # the old rule, research only
+
+    def test_no_broken_alert_for_a_line_broken_before_it_was_drawn(self):
+        highs, lows, closes = rising_lows_then_break()
+        closes[44] = 90.0             # the bar before the confirm bar
+        candles = [[i * 86400, c, h, l, c] for i, (h, l, c) in enumerate(zip(highs[:46], lows[:46], closes[:46]))]
+        with mock.patch.object(fts.fib_engine, "run", return_value=([{"d": 1, "O": 0.0, "E": 0.0, "Ot": 0, "Et": 0}] * 46, [])):
+            got = fts.analyse(ftd.NSE, "X.NS", "1d", candles, 10**10, price=130.0)
+        self.assertEqual((got["touch"], got["break"]), ([], []))
 
     def test_falling_swing_highs_make_a_resistance_line(self):
         highs = [100.0] * 60
