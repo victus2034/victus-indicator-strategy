@@ -24,6 +24,19 @@ candles run on Actions through `bitunix_research.yml` (input `parts`, matched wh
 `pandas` resolved to **3.0.5**, a major version above the `>=2.0` in `requirements.txt`.
 Nothing broke, but suspect it first for any dataframe-shaped bug.
 
+## Test twice before "done" (lakky, 2026-10-10)
+
+Never call a change done after one check. Every change gets two:
+
+1. **Run the tests twice**: `python -m pytest -q`, two full runs. Both must pass; a pass
+   then a fail is a flaky test to fix, not to ignore. CI runs it twice too (`tests.yml`).
+2. **Check it a second, different way**: a `--dry-run` of the scanner you changed, a
+   replay on real candles, a number recomputed by hand, or the code broken on purpose to
+   confirm a test fails.
+
+Say in the summary what both checks were. Summaries are short bullets: what changed,
+what was checked, what's next.
+
 ## Configuration
 
 All in `config.py`, which **is tracked in git**:
