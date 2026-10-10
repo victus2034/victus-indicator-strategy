@@ -1,0 +1,127 @@
+# Daily EMA50 trend filter on every alert: 2026-09-01 to now
+
+Filter: buy only while the last closed daily candle is above its EMA, sell only below. Net R after fees. Zones = live scored trades (crypto only before the filter went live, 2026-10-04); fib/trendline = history replay with today's live rules (crypto on Delta candles).
+
+| alert     | market   | tf   | group             |   trades |   wins_% |   net_R |   R_per_trade |
+|:----------|:---------|:-----|:------------------|---------:|---------:|--------:|--------------:|
+| zone      | CRYPTO   | all  | no filter         |      539 |       23 |  -131.3 |        -0.244 |
+| zone      | CRYPTO   | all  | with filter       |      351 |       26 |   -52.1 |        -0.148 |
+| zone      | CRYPTO   | all  | blocked by filter |      188 |       17 |   -79.1 |        -0.421 |
+| zone      | CRYPTO   | 30m  | no filter         |      492 |       24 |  -118.1 |        -0.24  |
+| zone      | CRYPTO   | 30m  | with filter       |      328 |       27 |   -51.3 |        -0.156 |
+| zone      | CRYPTO   | 30m  | blocked by filter |      164 |       18 |   -66.8 |        -0.407 |
+| zone      | CRYPTO   | 4h   | no filter         |       47 |       19 |   -13.1 |        -0.28  |
+| zone      | CRYPTO   | 4h   | with filter       |       23 |       26 |    -0.8 |        -0.035 |
+| zone      | CRYPTO   | 4h   | blocked by filter |       24 |       12 |   -12.3 |        -0.514 |
+| zone      | NSE      | all  | no filter         |     1134 |       15 |  -664   |        -0.586 |
+| zone      | NSE      | all  | with filter       |      373 |       14 |  -258.6 |        -0.693 |
+| zone      | NSE      | all  | blocked by filter |      761 |       15 |  -405.4 |        -0.533 |
+| zone      | NSE      | 30m  | no filter         |      805 |       15 |  -551.2 |        -0.685 |
+| zone      | NSE      | 30m  | with filter       |      342 |       15 |  -247.2 |        -0.723 |
+| zone      | NSE      | 30m  | blocked by filter |      463 |       14 |  -304   |        -0.657 |
+| zone      | NSE      | 4h   | no filter         |      329 |       16 |  -112.8 |        -0.343 |
+| zone      | NSE      | 4h   | with filter       |       31 |       13 |   -11.4 |        -0.368 |
+| zone      | NSE      | 4h   | blocked by filter |      298 |       16 |  -101.4 |        -0.34  |
+| zone      | XSTOCK   | all  | no filter         |      123 |       23 |   -42.4 |        -0.345 |
+| zone      | XSTOCK   | all  | with filter       |       63 |       27 |   -18.5 |        -0.293 |
+| zone      | XSTOCK   | all  | blocked by filter |       60 |       18 |   -24   |        -0.399 |
+| zone      | XSTOCK   | 30m  | no filter         |       93 |       22 |   -36.5 |        -0.392 |
+| zone      | XSTOCK   | 30m  | with filter       |       50 |       22 |   -21.6 |        -0.432 |
+| zone      | XSTOCK   | 30m  | blocked by filter |       43 |       21 |   -14.9 |        -0.346 |
+| zone      | XSTOCK   | 4h   | no filter         |       30 |       27 |    -6   |        -0.199 |
+| zone      | XSTOCK   | 4h   | with filter       |       13 |       46 |     3.1 |         0.24  |
+| zone      | XSTOCK   | 4h   | blocked by filter |       17 |       12 |    -9.1 |        -0.534 |
+| zone      | OTHER    | all  | no filter         |       46 |       24 |   -15.9 |        -0.345 |
+| zone      | OTHER    | all  | with filter       |       18 |       17 |   -11.1 |        -0.615 |
+| zone      | OTHER    | all  | blocked by filter |       28 |       29 |    -4.8 |        -0.172 |
+| zone      | OTHER    | 30m  | no filter         |       36 |       19 |   -13.1 |        -0.363 |
+| zone      | OTHER    | 30m  | with filter       |       16 |       12 |   -10.1 |        -0.632 |
+| zone      | OTHER    | 30m  | blocked by filter |       20 |       25 |    -3   |        -0.148 |
+| zone      | OTHER    | 4h   | no filter         |       10 |       40 |    -2.8 |        -0.282 |
+| zone      | OTHER    | 4h   | with filter       |        2 |       50 |    -1   |        -0.479 |
+| zone      | OTHER    | 4h   | blocked by filter |        8 |       38 |    -1.9 |        -0.232 |
+| fib       | CRYPTO   | all  | no filter         |       38 |       36 |   -11.1 |        -0.325 |
+| fib       | CRYPTO   | all  | with filter       |       31 |       33 |   -10.8 |        -0.399 |
+| fib       | CRYPTO   | all  | blocked by filter |        7 |       50 |    -0.3 |        -0.042 |
+| fib       | CRYPTO   | 4h   | no filter         |       32 |       35 |   -10   |        -0.345 |
+| fib       | CRYPTO   | 4h   | with filter       |       26 |       32 |    -9.7 |        -0.422 |
+| fib       | CRYPTO   | 4h   | blocked by filter |        6 |       50 |    -0.3 |        -0.048 |
+| fib       | CRYPTO   | 1d   | no filter         |        6 |       40 |    -1.1 |        -0.212 |
+| fib       | CRYPTO   | 1d   | with filter       |        5 |       40 |    -1.1 |        -0.264 |
+| fib       | CRYPTO   | 1d   | blocked by filter |        1 |      nan |    -0   |        -0.003 |
+| fib       | NSE      | all  | no filter         |      162 |       37 |   -28.5 |        -0.197 |
+| fib       | NSE      | all  | with filter       |      104 |       40 |   -14.2 |        -0.139 |
+| fib       | NSE      | all  | blocked by filter |       58 |       28 |   -14.3 |        -0.333 |
+| fib       | NSE      | 4h   | no filter         |       87 |       39 |   -14.4 |        -0.172 |
+| fib       | NSE      | 4h   | with filter       |       64 |       40 |    -9.7 |        -0.153 |
+| fib       | NSE      | 4h   | blocked by filter |       23 |       38 |    -4.8 |        -0.227 |
+| fib       | NSE      | 1d   | no filter         |       56 |       41 |    -5.9 |        -0.111 |
+| fib       | NSE      | 1d   | with filter       |       36 |       46 |    -1.5 |        -0.041 |
+| fib       | NSE      | 1d   | blocked by filter |       20 |       27 |    -4.4 |        -0.259 |
+| fib       | NSE      | 1w   | no filter         |       13 |        0 |    -6.2 |        -1.026 |
+| fib       | NSE      | 1w   | with filter       |        3 |        0 |    -2   |        -1.019 |
+| fib       | NSE      | 1w   | blocked by filter |       10 |        0 |    -4.1 |        -1.029 |
+| fib       | NSE      | 1M   | no filter         |        6 |        0 |    -2   |        -1.015 |
+| fib       | NSE      | 1M   | with filter       |        1 |        0 |    -1   |        -1.007 |
+| fib       | NSE      | 1M   | blocked by filter |        5 |        0 |    -1   |        -1.022 |
+| fib       | OTHER    | all  | no filter         |        8 |       80 |     2.1 |         0.259 |
+| fib       | OTHER    | all  | with filter       |        6 |       75 |     0.1 |         0.023 |
+| fib       | OTHER    | all  | blocked by filter |        2 |      100 |     1.9 |         0.964 |
+| fib       | OTHER    | 4h   | no filter         |        7 |       75 |     0.1 |         0.016 |
+| fib       | OTHER    | 4h   | with filter       |        6 |       75 |     0.1 |         0.023 |
+| fib       | OTHER    | 4h   | blocked by filter |        1 |      nan |    -0   |        -0.025 |
+| fib       | OTHER    | 1d   | no filter         |        1 |      100 |     2   |         1.954 |
+| fib       | OTHER    | 1d   | blocked by filter |        1 |      100 |     2   |         1.954 |
+| fib       | XSTOCK   | all  | no filter         |       12 |      100 |     3.8 |         0.342 |
+| fib       | XSTOCK   | all  | with filter       |        8 |      100 |     3.8 |         0.475 |
+| fib       | XSTOCK   | all  | blocked by filter |        4 |      100 |    -0   |        -0.012 |
+| fib       | XSTOCK   | 4h   | no filter         |        8 |      100 |     1.8 |         0.258 |
+| fib       | XSTOCK   | 4h   | with filter       |        6 |      100 |     1.8 |         0.305 |
+| fib       | XSTOCK   | 4h   | blocked by filter |        2 |      100 |    -0   |        -0.022 |
+| fib       | XSTOCK   | 1d   | no filter         |        3 |      100 |     2   |         0.654 |
+| fib       | XSTOCK   | 1d   | with filter       |        2 |      100 |     2   |         0.985 |
+| fib       | XSTOCK   | 1d   | blocked by filter |        1 |      100 |    -0   |        -0.007 |
+| fib       | XSTOCK   | 1w   | no filter         |        1 |      100 |    -0   |        -0.007 |
+| fib       | XSTOCK   | 1w   | blocked by filter |        1 |      100 |    -0   |        -0.007 |
+| trendline | CRYPTO   | all  | no filter         |      444 |       38 |  -135.3 |        -0.305 |
+| trendline | CRYPTO   | all  | with filter       |      211 |       34 |   -80.8 |        -0.383 |
+| trendline | CRYPTO   | all  | blocked by filter |      233 |       41 |   -54.5 |        -0.234 |
+| trendline | CRYPTO   | 4h   | no filter         |      394 |       39 |  -120.7 |        -0.306 |
+| trendline | CRYPTO   | 4h   | with filter       |      201 |       35 |   -79   |        -0.393 |
+| trendline | CRYPTO   | 4h   | blocked by filter |      193 |       43 |   -41.7 |        -0.216 |
+| trendline | CRYPTO   | 1d   | no filter         |       48 |       30 |   -16.6 |        -0.346 |
+| trendline | CRYPTO   | 1d   | with filter       |       10 |       30 |    -1.8 |        -0.178 |
+| trendline | CRYPTO   | 1d   | blocked by filter |       38 |       30 |   -14.8 |        -0.39  |
+| trendline | CRYPTO   | 1w   | no filter         |        2 |      100 |     2   |         0.976 |
+| trendline | CRYPTO   | 1w   | blocked by filter |        2 |      100 |     2   |         0.976 |
+| trendline | NSE      | all  | no filter         |     1623 |       36 |  -505.4 |        -0.317 |
+| trendline | NSE      | all  | with filter       |      586 |       36 |  -177.5 |        -0.307 |
+| trendline | NSE      | all  | blocked by filter |     1037 |       36 |  -327.8 |        -0.322 |
+| trendline | NSE      | 4h   | no filter         |      957 |       33 |  -355   |        -0.375 |
+| trendline | NSE      | 4h   | with filter       |      395 |       34 |  -139.7 |        -0.356 |
+| trendline | NSE      | 4h   | blocked by filter |      562 |       33 |  -215.3 |        -0.389 |
+| trendline | NSE      | 1d   | no filter         |      575 |       41 |  -125.4 |        -0.221 |
+| trendline | NSE      | 1d   | with filter       |      182 |       41 |   -36.4 |        -0.204 |
+| trendline | NSE      | 1d   | blocked by filter |      393 |       41 |   -88.9 |        -0.23  |
+| trendline | NSE      | 1w   | no filter         |       84 |       32 |   -24.7 |        -0.321 |
+| trendline | NSE      | 1w   | with filter       |        9 |       38 |    -1.4 |        -0.177 |
+| trendline | NSE      | 1w   | blocked by filter |       75 |       31 |   -23.3 |        -0.338 |
+| trendline | NSE      | 1M   | no filter         |        7 |       43 |    -0.3 |        -0.041 |
+| trendline | NSE      | 1M   | blocked by filter |        7 |       43 |    -0.3 |        -0.041 |
+| trendline | OTHER    | all  | no filter         |       33 |       62 |     3.5 |         0.114 |
+| trendline | OTHER    | all  | with filter       |       15 |       50 |    -0.1 |        -0.008 |
+| trendline | OTHER    | all  | blocked by filter |       18 |       69 |     3.7 |         0.203 |
+| trendline | OTHER    | 4h   | no filter         |       32 |       64 |     4.6 |         0.155 |
+| trendline | OTHER    | 4h   | with filter       |       15 |       50 |    -0.1 |        -0.008 |
+| trendline | OTHER    | 4h   | blocked by filter |       17 |       73 |     4.7 |         0.279 |
+| trendline | OTHER    | 1d   | no filter         |        1 |        0 |    -1.1 |        -1.088 |
+| trendline | OTHER    | 1d   | blocked by filter |        1 |        0 |    -1.1 |        -1.088 |
+| trendline | XSTOCK   | all  | no filter         |      115 |       40 |   -18.2 |        -0.161 |
+| trendline | XSTOCK   | all  | with filter       |       44 |       28 |   -10.4 |        -0.236 |
+| trendline | XSTOCK   | all  | blocked by filter |       71 |       47 |    -7.9 |        -0.114 |
+| trendline | XSTOCK   | 4h   | no filter         |       95 |       41 |   -12.9 |        -0.138 |
+| trendline | XSTOCK   | 4h   | with filter       |       39 |       29 |    -8   |        -0.204 |
+| trendline | XSTOCK   | 4h   | blocked by filter |       56 |       49 |    -4.9 |        -0.09  |
+| trendline | XSTOCK   | 1d   | no filter         |       20 |       33 |    -5.4 |        -0.269 |
+| trendline | XSTOCK   | 1d   | with filter       |        5 |       20 |    -2.4 |        -0.482 |
+| trendline | XSTOCK   | 1d   | blocked by filter |       15 |       38 |    -3   |        -0.199 |
