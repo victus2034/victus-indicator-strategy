@@ -139,6 +139,13 @@ def simulate(long, entry, sl, exit_rule, market, tf, evalc, k, base_times, base_
             continue
         if seen - fill_at > hold_n:
             return (banked + (0.5 if half else 1.0) * r_of(c)) - cost_r
+        if exit_rule == "target":
+            # everything off at a fixed price (the fib high), or the stop
+            if (l <= sl) if long else (h >= sl):
+                return r_of(slip(sl)) - cost_r
+            if recent_high is not None and ((h >= recent_high) if long else (l <= recent_high)):
+                return r_of(recent_high) - cost_r
+            continue
         if exit_rule == "2R+BE":
             cur = be_stop if moved else sl
             if (l <= cur) if long else (h >= cur):
