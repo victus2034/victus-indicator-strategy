@@ -128,7 +128,8 @@ from config import env_int  # noqa: E402
 MIN_SCAN_INTERVAL_SECONDS = env_int("VICTUS_MIN_SCAN_INTERVAL_SECONDS", 8 * 60)
 SCAN_SLEEP = 300
 ALERT_COOLDOWN_SECONDS = 4 * 60 * 60
-ALERT_RANGE_FILTER_SIGNALS = True
+# Off since 2026-10-10 (lakky): alerts are S/R zones, fibs and trendlines only.
+ALERT_RANGE_FILTER_SIGNALS = False
 SIGNAL_ALERT_COOLDOWN_SECONDS = 4 * 60 * 60
 
 PRINT_SCAN_SUMMARY = True
