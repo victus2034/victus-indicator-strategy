@@ -66,8 +66,11 @@ NEAR_LOOKBACK, PIVOT_SIDE = 20, 2
 MIN_GAP_ATR = 0.5     # no stop closer than half an ATR(14) - a touch from yesterday is not a stop
 TP1_R = 1.5
 TRAIL_MAX_BARS = 60
-STOPS = ("live", "touch", "nearest", "nearest 0.25ATR", "hybrid")
-EXITS = ("2R+BE", "2R no BE", "1.5R", "1.5R+trail", "1.5R+high", "candle close")
+LAKKY_MIN_PCT = 0.75  # his examples (2026-10-11): the stop is never closer than ~0.75% to the line
+STOPS = ("live", "touch", "nearest", "nearest 0.25ATR", "hybrid", "lakky")
+EXITS = ("2R+BE", "2R no BE", "1.5R", "1.5R+trail", "1.5R+high", "candle close",
+         "1R no cap", "2R no cap", "2R+BE no cap")
+NO_CAP_BARS = 10_000
 BAND = config.FIB_TL_MAX_DISTANCE_PCT / 100
 
 
@@ -97,7 +100,28 @@ def nearest_stop(long, entry, i, highs, lows, gap):
     return near
 
 
-def stop_prices(line, i, entry, highs, lows, atr, tf):
+def lakky_stop(long, entry, i, opens, highs, lows, closes):
+    """Lakky's hand stops (13 1D charts, 2026-10-11): walking back from the alert, the most recent
+    candle whose wick is at least LAKKY_MIN_PCT past the entry, and the most recent whose body is;
+    the stop sits on whichever of the two is closer to the entry (BUY: the higher, SELL: the lower)."""
+    gap = entry * LAKKY_MIN_PCT / 100
+    wick = body = None
+    for j in range(i - 1, -1, -1):
+        w = lows[j] if long else highs[j]
+        b = min(opens[j], closes[j]) if long else max(opens[j], closes[j])
+        if wick is None and ((w <= entry - gap) if long else (w >= entry + gap)):
+            wick = w
+        if body is None and ((b <= entry - gap) if long else (b >= entry + gap)):
+            body = b
+        if wick is not None and body is not None:
+            break
+    got = [x for x in (wick, body) if x is not None]
+    if not got:
+        return None
+    return max(got) if long else min(got)
+
+
+def stop_prices(line, i, entry, highs, lows, atr, tf, opens=None, closes=None):
     """Every stop for an alert on bar i (bars up to i-1 closed)."""
     long = line.kind == SUPPORT
     buf = TOUCH_BUFFER_PCT / 100
@@ -120,6 +144,8 @@ def stop_prices(line, i, entry, highs, lows, atr, tf):
     out["nearest 0.25ATR"] = tight if tight is not None else out["nearest"]
     far = a > 0 and abs(entry - out["touch"]) > HYBRID_MAX_ATR * a
     out["hybrid"] = out["nearest"] if far else out["touch"]
+    mine = lakky_stop(long, entry, i, opens, highs, lows, closes) if opens else None
+    out["lakky"] = mine if mine is not None else out["live"]
     return out
 
 
@@ -132,6 +158,11 @@ def simulate(long, entry, sl, exit_rule, market, tf, evalc, k, base_times, base_
     per_bar = trades.EVAL_PER_BAR[market][tf]
     wait_n = config.FIB_TL_ENTRY_WAIT_BARS * per_bar
     hold_n = (TRAIL_MAX_BARS if "+" in exit_rule and exit_rule != "2R+BE" else config.FIB_TL_MAX_HOLD_BARS) * per_bar
+    if exit_rule.endswith("no cap"):
+        # Lakky, 2026-10-11: no 20-candle limit - a 1D trade runs to its stop or target
+        hold_n, exit_rule = NO_CAP_BARS, exit_rule[:-len(" no cap")]
+        if exit_rule == "2R":
+            exit_rule = "2R no BE"
     cost_r = trades.COST_PCT[market] / (risk / entry * 100)
     plan = {"side": "long" if long else "short", "entry": entry, "sl": sl}
     be_stop = trades.break_even_stop(plan, market)
@@ -167,6 +198,13 @@ def simulate(long, entry, sl, exit_rule, market, tf, evalc, k, base_times, base_
                 continue
             if recent_high is not None and ((h >= recent_high) if long else (l <= recent_high)):
                 return r_of(recent_high) - cost_r
+            continue
+        if exit_rule == "1R":
+            # Lakky's TSLA / BLESS / SNDK: the trade that reached 1R is a win - take it there
+            if (l <= sl) if long else (h >= sl):
+                return r_of(slip(sl)) - cost_r
+            if (h >= entry + sign * risk) if long else (l <= entry - sign * risk):
+                return 1.0 - cost_r
             continue
         if exit_rule == "2R no BE":
             # Lakky, 2026-10-11: the live 2R target with the breakeven stop removed
@@ -211,6 +249,7 @@ def replay(market, symbol, tf, base, evalc, now, since):
     if n <= fbt.MIN_BARS or not evalc:
         return []
     times = [c[0] for c in base]
+    opens = [c[1] for c in base]
     highs = [c[2] for c in base]
     lows = [c[3] for c in base]
     closes = [c[4] for c in base]
@@ -246,7 +285,7 @@ def replay(market, symbol, tf, base, evalc, now, since):
                     last_alert = ts
                     if ts >= since:
                         long = line.kind == SUPPORT
-                        stops = stop_prices(line, i, level, highs, lows, atr, tf)
+                        stops = stop_prices(line, i, level, highs, lows, atr, tf, opens, closes)
                         window = range(max(0, i - 10), i)
                         recent = max(highs[j] for j in window) if long else min(lows[j] for j in window)
                         t = {"market": market, "symbol": symbol, "tf": tf, "alert_ts": ts, "entry": level,
@@ -409,7 +448,7 @@ def examples(now, since):
                 out.append(f"alert {pd.Timestamp(t['alert_ts'], unit='s', tz='UTC').tz_convert(IST):%m-%d %H:%M} entry {t['entry']:.6g}; "
                            f"line {stamp(ln.x1)} {ln.y1:.6g} -> {stamp(ln.x2)} {ln.y2:.6g}, drawn {stamp(ln.created)}; "
                            f"stops {', '.join(f'{k} {v:.6g}' for k, v in t['stops'].items())}; "
-                           f"touch|2R no BE {t['touch|2R no BE']}")
+                           "results " + ", ".join(f"{e} {t[f'lakky|{e}']:+.2f}" if t[f"lakky|{e}"] is not None else f"{e} no fill" for e in ("2R+BE", "1R no cap", "2R no cap")))
                 out.append("| date | open | high | low | close | line | low-line % | high-line % |")
                 out.append("|---|---|---|---|---|---|---|---|")
                 for j in range(max(0, i - 30), min(len(daily), i + 6)):
