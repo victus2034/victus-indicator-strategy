@@ -10,7 +10,9 @@ Two halves, like the zone parity tests:
   Lakky drew by hand are the lines we draw - 1D Aug 19 58.039 -> Sep 15 75.132,
   4h Aug 19 58.10 -> Sep 15 75.132 over the lower Sep 11 / Sep 13 swings.
 - pine_6b() below is a bar-by-bar transcription of Shiva_Indicator_v12.6.pine
-  section 6b, written from the Pine and not from trendlines.py. Both must draw
+  section 6b (v12.7.9 since 2026-10-10: f_tlAdd checks the closes between the
+  second swing and the bar the line is drawn on), written from the Pine and not
+  from trendlines.py. Both must draw
   the same lines on real and generated candles.
 """
 import csv
@@ -63,6 +65,13 @@ def pine_6b(highs, lows, closes, tl_len=10, tl_keep=6):
         rec = [kind, x1, y1, x2, y2, True, None]
         tl.append(rec)
         drawn.append(rec)
+        # v12.7.9: the closes since the second swing, before the line was drawn
+        for k in range(x2 + 1, bar_index - 1 + 1):
+            lv = y1 + (y2 - y1) * (k - x1) / (x2 - x1)
+            if (closes[k] < lv) if kind == 0 else (closes[k] > lv):
+                rec[5] = False
+                rec[6] = k
+                break
         cnt = 0
         for i in range(len(tl) - 1, -1, -1):
             if tl[i][0] == kind:

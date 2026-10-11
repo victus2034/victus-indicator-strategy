@@ -65,6 +65,13 @@ CRYPTO_WATCHLIST_SET = {str(symbol).upper() for symbol in WATCHLIST}
 
 IST = ZoneInfo("Asia/Kolkata")
 WEBHOOK_ENV = "DISCORD_ENTRY_CONFIRM_WEBHOOK_URL"
+# Each market can post to its own channel; unset, it falls back to the shared
+# WEBHOOK_ENV, so nothing is lost before the new channel exists.
+MARKET_WEBHOOK_ENVS = {
+    "crypto": "DISCORD_ENTRY_CONFIRM_CRYPTO_WEBHOOK_URL",
+    "nse": "DISCORD_ENTRY_CONFIRM_NSE_WEBHOOK_URL",
+}
+MARKET_LABELS = {"crypto": "Crypto", "nse": "NSE"}
 STATE_PATH = Path(__file__).with_name("entry_confirm_state.json")
 ALERT_RECORDS = {
     "nse": {
@@ -587,7 +594,7 @@ def format_line(stage: int, price: float, record: dict, note: str = "") -> str:
     return f"{head} · {levels} · {stop_text} · {progress * 100:.0f}% risk used{note_text}"
 
 
-def build_digest(pings: list[tuple[int, str]], now: pd.Timestamp) -> list[str]:
+def build_digest(pings: list[tuple[int, str]], now: pd.Timestamp, market: str = "") -> list[str]:
     """Group a run's pings into as few messages as Discord allows."""
     if not pings:
         return []
@@ -599,7 +606,8 @@ def build_digest(pings: list[tuple[int, str]], now: pd.Timestamp) -> list[str]:
             heading = f"**{STAGE_HEADINGS[stage]}**"
             sections.append(heading + "\n" + "\n".join(lines))
 
-    header = f"__Entry watch · {now:%H:%M} IST__"
+    label = MARKET_LABELS.get(market, "")
+    header = f"__Entry watch · {label + ' · ' if label else ''}{now:%H:%M} IST__"
     messages, current = [], header
     for section in sections:
         candidate = current + "\n\n" + section
@@ -635,10 +643,20 @@ def display_symbol(symbol: str) -> str:
         return text
 
 
-def send_ping(message: str) -> bool:
-    webhook = os.getenv(WEBHOOK_ENV, "").strip()
+def webhook_for(market: str = "") -> str:
+    """The market's own entry-confirm webhook, else the shared one."""
+    own = MARKET_WEBHOOK_ENVS.get(market)
+    if own:
+        url = os.getenv(own, "").strip()
+        if url:
+            return url
+    return os.getenv(WEBHOOK_ENV, "").strip()
+
+
+def send_ping(message: str, market: str = "") -> bool:
+    webhook = webhook_for(market)
     if not webhook:
-        print(f"{WEBHOOK_ENV} is not configured; skipping send.")
+        print(f"No entry-confirm webhook configured for {market or 'this run'}; skipping send.")
         return False
     for attempt in range(3):
         try:
@@ -923,7 +941,7 @@ def main() -> None:
     # repeat scanner deliveries cannot keep saying GET READY. The zone is
     # still marked, so its ENTRY NOW - which names a specific level and is
     # worth having per zone - still fires when price arrives.
-    pings: list[tuple[int, str]] = []
+    pings: dict[str, list[tuple[int, str]]] = {market: [] for market in MARKET_LABELS}
     changes: list[tuple[list[str], dict]] = []
     for record in watched:
         price_info = prices.get(record["symbol"])
@@ -931,35 +949,37 @@ def main() -> None:
             continue
         before = {k: state.get(k, _MISSING) for k in record_state_keys(record)}
         record_pings, _ = resolve_pings(record, price_info, state, now)
-        pings.extend(record_pings)
+        pings.setdefault(record["_market"], []).extend(record_pings)
         if record_pings:
             changes.append(([line for _, line in record_pings], before))
 
     active_keys = {watch_key(record) for record in watched}
-    messages = build_digest(pings, now)
-    if not messages:
+    # One digest per market, each to its own channel. A market whose post
+    # fails stops there; the other market still goes out.
+    digests = {market: build_digest(lines, now, market) for market, lines in pings.items()}
+    if not any(digests.values()):
         print("Nothing new to report.")
     delivered: list[str] = []
-    for message in messages:
-        if args.dry_run:
-            print(message + "\n")
-            continue
-        if not send_ping(message):
-            # Only what landed may be marked sent. Records whose lines are in
-            # the undelivered parts go back to their earlier stage, so the
-            # next run reports them - and the parts that did land are not
-            # repeated, as they were when nothing at all was saved.
-            print("digest part not delivered; its stages left unmarked for the next run.")
-            break
-        delivered.append(message)
-        # Saved after every part, so a run cancelled mid-digest cannot
-        # re-send the parts already posted.
-        save_state(prune_state(undo_undelivered(state, changes, delivered), active_keys))
+    for market, messages in digests.items():
+        for message in messages:
+            if args.dry_run:
+                print(message + "\n")
+                continue
+            if not send_ping(message, market):
+                # Only what landed may be marked sent. Records whose lines are in
+                # the undelivered parts go back to their earlier stage, so the
+                # next run reports them - and the parts that did land are not
+                # repeated, as they were when nothing at all was saved.
+                print(f"{market} digest part not delivered; its stages left unmarked for the next run.")
+                break
+            delivered.append(message)
+            # Saved after every part, so a run cancelled mid-digest cannot
+            # re-send the parts already posted.
+            save_state(prune_state(undo_undelivered(state, changes, delivered), active_keys))
 
     if args.dry_run:
         return
     save_state(prune_state(undo_undelivered(state, changes, delivered), active_keys))
-
 
 if __name__ == "__main__":
     main()

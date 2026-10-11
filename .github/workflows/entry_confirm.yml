@@ -100,6 +100,9 @@ jobs:
       - name: Send entry confirmation pings
         env:
           DISCORD_ENTRY_CONFIRM_WEBHOOK_URL: ${{ secrets.DISCORD_ENTRY_CONFIRM_WEBHOOK_URL }}
+          # Per-market channels; each falls back to the shared one when unset.
+          DISCORD_ENTRY_CONFIRM_CRYPTO_WEBHOOK_URL: ${{ secrets.DISCORD_ENTRY_CONFIRM_CRYPTO_WEBHOOK_URL }}
+          DISCORD_ENTRY_CONFIRM_NSE_WEBHOOK_URL: ${{ secrets.DISCORD_ENTRY_CONFIRM_NSE_WEBHOOK_URL }}
           # Crypto pings take their price from the same venue chain as
           # the scan, so the level watched is the one on the chart.
           # Without this the price every entry is judged against is

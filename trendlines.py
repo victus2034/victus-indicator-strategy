@@ -18,9 +18,13 @@ Lines extend right and stop at the bar that closes through them. Only the
 newest `keep` lines per side are kept, and only the last 30 swings per side
 are remembered - both as in the Pine.
 
-A line is drawn on the bar its second swing CONFIRMS (swing bar + length), and
-from then on the Pine checks each bar's close against it. Closes between the
-swing bar and that confirm bar are never checked, here or on the chart.
+A line is drawn on the bar its second swing CONFIRMS (swing bar + length).
+v12.7.9 (Lakky, 2026-10-10, DABUR 1D): the closes between the swing bar and
+that confirm bar are checked too, when the line is drawn. Until then they never
+were, so a line a candle had already closed through was drawn alive and kept
+extending (DABUR: the Oct 6 close above a resistance confirmed on Oct 7). A
+line broken before it was drawn ends at that candle and never alerts, BROKEN
+included. check_confirm_window=False is the old rule, kept for research.
 
 Swings use ta.pivothigh/ta.pivotlow's rule as tests/pine_v7_reference.py
 transcribes it: strictly beyond every one of `length` bars on each side.
@@ -139,7 +143,8 @@ def _rest_on(values, x0, nx, ny, lower, bar):
     return best[1], values[best[1]]
 
 
-def build_trendlines(highs, lows, closes, length=10, keep=6, history=False, anchor="last_lower_unique"):
+def build_trendlines(highs, lows, closes, length=10, keep=6, history=False, anchor="last_lower_unique",
+                     check_confirm_window=True):
     """Replay every bar as the Pine does and return the lines it would hold.
 
     history=True returns every line ever drawn instead, trimmed ones included,
@@ -159,7 +164,14 @@ def build_trendlines(highs, lows, closes, length=10, keep=6, history=False, anch
     everything = []
     pl_x, pl_y, ph_x, ph_y = [], [], [], []
 
+    def through(line, bar):
+        y = line.price_at(bar)
+        return (closes[bar] < y) if line.kind == SUPPORT else (closes[bar] > y)
+
     def add(line):
+        if check_confirm_window:
+            # v12.7.9: the closes the line was not yet drawn for
+            line.broken_at = next((b for b in range(line.x2 + 1, line.created) if through(line, b)), None)
         if anchor == "last_lower_unique":
             # v12.6: a new line replaces an older one from the same candle
             for k in range(len(lines) - 1, -1, -1):
@@ -199,9 +211,7 @@ def build_trendlines(highs, lows, closes, length=10, keep=6, history=False, anch
                     ph_y.pop(0)
 
         for line in lines:
-            if line.alive and bar > line.x2:
-                y = line.price_at(bar)
-                if (closes[bar] < y) if line.kind == SUPPORT else (closes[bar] > y):
-                    line.broken_at = bar
+            if line.alive and bar > line.x2 and through(line, bar):
+                line.broken_at = bar
 
     return everything if history else lines
