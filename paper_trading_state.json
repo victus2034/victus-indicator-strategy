@@ -60279,6 +60279,33 @@
       "target_half": 109.56375,
       "timeframe": "30m",
       "trade_id": "SOLUSD|30m|long|109.47|109.282"
+    },
+    {
+      "alert_time": "2026-10-11T17:17:12.262635+05:30",
+      "cost_r": 0.12133911549942546,
+      "date": "2026-10-11",
+      "entry": 1599.37,
+      "entry_time": "2026-10-11T17:20:00+05:30",
+      "exit_price": 1611.06262875,
+      "exit_time": "2026-10-11T17:35:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "net_realized_r": -1.1952889432835807,
+      "outcome": "SL",
+      "rating": 5,
+      "realized_r": -1.0739498277841553,
+      "risk": 10.887500000000045,
+      "side": "short",
+      "stop": 1610.2575,
+      "stream": "live",
+      "symbol": "SNDKBUSD",
+      "target_1": 1588.4824999999998,
+      "target_2": 1577.5949999999998,
+      "target_half": 1593.92625,
+      "timeframe": "30m",
+      "trade_id": "SNDKBUSD|30m|short|1599.37|1610.26"
     }
   ],
   "handled": {
@@ -62785,24 +62812,6 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
-      "timeframe": "30m"
-    },
-    "SNDKBUSD|30m|short|1599.37|1610.26": {
-      "alert_time": "2026-10-11T17:17:12.262635+05:30",
-      "entry": 1599.37,
-      "entry_time": "2026-10-11T17:20:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "xstock",
-      "rating": 5,
-      "risk": 10.887500000000045,
-      "side": "short",
-      "stop": 1610.2575,
-      "stream": "live",
-      "symbol": "SNDKBUSD",
-      "target_1": 1588.4824999999998,
-      "target_2": 1577.5949999999998,
-      "target_half": 1593.92625,
       "timeframe": "30m"
     }
   }
