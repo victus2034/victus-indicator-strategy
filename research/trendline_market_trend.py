@@ -23,7 +23,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 OUT = Path(__file__).resolve().parent / "out" / "trendline_sl" / "long"
-RULES = (("live", "2R+BE", None), ("touch", "1R no cap", 5.0), ("touch", "1.5R no cap", 5.0))
+RULES = (("live", "2R+BE", None), ("touch", "1R no cap", 5.0), ("touch", "1.5R no cap", 5.0),
+         ("lakky", "1R no cap", 5.0), ("lakky", "2R+BE", 5.0))
 
 
 def regimes(daily):
