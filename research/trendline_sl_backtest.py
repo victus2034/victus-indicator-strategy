@@ -23,6 +23,9 @@ Exits tested:
   1.5R     everything off at 1.5R
   1.5R+trail  half off at 1.5R, the rest trails below the previous candle of the
               alert's timeframe (Lakky's HUSDT rule)
+  candle close  everything off at the close of the candle that came to the line
+              (LINK 1D, 2026-10-11 correction: a trendline trade, SL under the closest
+              candle low, target the day candle's close); 1.5R if it closed through
   1.5R+high   half off at 1.5R, the rest at the highest high of the last 10
               candles before the alert, or trailed if that is under 1.5R (AVAX rule)
 
@@ -62,8 +65,8 @@ NEAR_LOOKBACK, PIVOT_SIDE = 20, 2
 MIN_GAP_ATR = 0.5     # no stop closer than half an ATR(14) - a touch from yesterday is not a stop
 TP1_R = 1.5
 TRAIL_MAX_BARS = 60
-STOPS = ("live", "touch", "nearest", "hybrid")
-EXITS = ("2R+BE", "1.5R", "1.5R+trail", "1.5R+high")
+STOPS = ("live", "touch", "nearest", "nearest 0.25ATR", "hybrid")
+EXITS = ("2R+BE", "1.5R", "1.5R+trail", "1.5R+high", "candle close")
 BAND = config.FIB_TL_MAX_DISTANCE_PCT / 100
 
 
@@ -111,12 +114,15 @@ def stop_prices(line, i, entry, highs, lows, atr, tf):
     near = nearest_stop(long, entry, i, highs, lows, gap)
     out["touch"] = touch if touch is not None else (near if near is not None else out["live"])
     out["nearest"] = near if near is not None else out["touch"]
+    # LINK 1D (Lakky, 2026-10-11): 11.924 under the Sep 19 low sits ~0.2 ATR under the 12.078 entry
+    tight = nearest_stop(long, entry, i, highs, lows, 0.25 * a)
+    out["nearest 0.25ATR"] = tight if tight is not None else out["nearest"]
     far = a > 0 and abs(entry - out["touch"]) > HYBRID_MAX_ATR * a
     out["hybrid"] = out["nearest"] if far else out["touch"]
     return out
 
 
-def simulate(long, entry, sl, exit_rule, market, tf, evalc, k, base_times, base_lows, base_highs, recent_high):
+def simulate(long, entry, sl, exit_rule, market, tf, evalc, k, base_times, base_lows, base_highs, recent_high, active_from=None):
     """One trade on evaluation candles after index k. Returns net R or None (no fill)."""
     risk = abs(entry - sl)
     if risk <= 0:
@@ -153,9 +159,11 @@ def simulate(long, entry, sl, exit_rule, market, tf, evalc, k, base_times, base_
         if seen - fill_at > hold_n:
             return (banked + (0.5 if half else 1.0) * r_of(c)) - cost_r
         if exit_rule == "target":
-            # everything off at a fixed price (the fib high), or the stop
+            # everything off at a fixed price (the fib high / the touching candle's close), or the stop
             if (l <= sl) if long else (h >= sl):
                 return r_of(slip(sl)) - cost_r
+            if active_from is not None and ts < active_from:
+                continue
             if recent_high is not None and ((h >= recent_high) if long else (l <= recent_high)):
                 return r_of(recent_high) - cost_r
             continue
@@ -234,10 +242,18 @@ def replay(market, symbol, tf, base, evalc, now, since):
                         window = range(max(0, i - 10), i)
                         recent = max(highs[j] for j in window) if long else min(lows[j] for j in window)
                         t = {"market": market, "symbol": symbol, "tf": tf, "alert_ts": ts, "entry": level,
-                             "long": long, "stops": stops}
+                             "long": long, "stops": stops, "candle_close": closes[i]}
                         for s in STOPS:
                             t[f"risk_{s}"] = abs(level - stops[s]) / level * 100
                             for e in EXITS:
+                                if e == "candle close":
+                                    # LINK 1D (Lakky, 2026-10-11): target = close of the day candle that
+                                    # came down to the line, known once it closes; through the line -> 1.5R
+                                    good = (closes[i] - level) * (1 if long else -1) > 0
+                                    t[f"{s}|{e}"] = simulate(long, level, stops[s], "target" if good else "1.5R",
+                                                             market, tf, evalc, k, times, lows, highs,
+                                                             closes[i], times[i] + TF_SECONDS[tf])
+                                    continue
                                 t[f"{s}|{e}"] = simulate(long, level, stops[s], e, market, tf, evalc, k,
                                                          times, lows, highs, recent)
                         out.append(t)
@@ -324,14 +340,15 @@ def main() -> None:
 
 
 def trace(got):
-    """Lakky's two charts: every AVAX 1D alert since Sep 1 with each stop."""
-    lines = ["# AVAX 1D trendline alerts (chart check)", ""]
+    """Lakky's charts: every AVAX and LINK 1D alert since Sep 1 with each stop and the candle-close target."""
+    lines = ["# AVAX / LINK 1D trendline alerts (chart check)", ""]
     for t in got:
-        if t["symbol"].startswith("AVAX") and t["tf"] == "1d" and t["alert_ts"] >= pd.Timestamp("2026-09-01", tz="UTC").timestamp():
+        if t["symbol"].startswith(("AVAX", "LINK")) and t["tf"] == "1d" and t["alert_ts"] >= pd.Timestamp("2026-09-01", tz="UTC").timestamp():
             when = pd.Timestamp(t["alert_ts"], unit="s", tz="UTC")
             stops = ", ".join(f"{k} {v:.4f} ({t[f'risk_{k}']:.2f}%)" for k, v in t["stops"].items())
-            lines.append(f"- {when:%Y-%m-%d %H:%M} {'BUY' if t['long'] else 'SELL'} entry {t['entry']:.4f}: {stops}")
-    (OUT / "AVAX_TRACE.md").write_text("\n".join(lines) + "\n")
+            lines.append(f"- {t['symbol']} {when:%Y-%m-%d %H:%M} {'BUY' if t['long'] else 'SELL'} entry {t['entry']:.4f}, "
+                         f"candle close {t['candle_close']:.4f}: {stops}")
+    (OUT / "CHART_TRACE.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines))
 
 
