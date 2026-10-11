@@ -250,7 +250,8 @@ def replay(market, symbol, tf, base, evalc, now, since):
                         window = range(max(0, i - 10), i)
                         recent = max(highs[j] for j in window) if long else min(lows[j] for j in window)
                         t = {"market": market, "symbol": symbol, "tf": tf, "alert_ts": ts, "entry": level,
-                             "long": long, "stops": stops, "candle_close": closes[i]}
+                             "long": long, "stops": stops, "candle_close": closes[i],
+                             "line": line, "bar": i}
                         for s in STOPS:
                             t[f"risk_{s}"] = abs(level - stops[s]) / level * 100
                             for e in EXITS:
@@ -314,10 +315,14 @@ def table(got):
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--since", default="2026-09-01")
+    parser.add_argument("--examples", action="store_true", help="trace Lakky's checked 1D examples only")
     args = parser.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     since = pd.Timestamp(args.since, tz=IST).timestamp()
     now = int(time.time())
+    if args.examples:
+        examples(now, since)
+        return
     got = []
 
     def one(symbol):
@@ -333,7 +338,7 @@ def main() -> None:
     for symbol, (base, evals) in fbt.nse_data(nse_scanner.load_watchlist()).items():
         got += run_symbol(NSE, symbol, base, evals, now, since)
 
-    pd.DataFrame([{k: v for k, v in t.items() if k != "stops"} for t in got]).to_csv(OUT / "trades.csv", index=False)
+    pd.DataFrame([{k: v for k, v in t.items() if k not in ("stops", "line", "bar")} for t in got]).to_csv(OUT / "trades.csv", index=False)
     df = table(got)
     df.to_csv(OUT / "summary.csv", index=False)
     best = df[df["tf"] == "all"].sort_values(["market", "R_per_trade"], ascending=[True, False])
@@ -358,6 +363,64 @@ def trace(got):
                          f"candle close {t['candle_close']:.4f}: {stops}")
     (OUT / "CHART_TRACE.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines))
+
+
+# Lakky's hand-checked 1D examples (2026-10-11): symbol, alert date (IST), side, his SL
+EXAMPLES = [
+    ("TRUMP/USDT", "2026-09-30", "BUY", None), ("MRVL/USDT:USDT", "2026-09-14", "BUY", 208.73),
+    ("NVDAXUSD", "2026-09-13", "BUY", 208.94), ("BLESSUSD", "2026-10-08", "BUY", None),
+    ("DOGEUSD", "2026-10-08", "BUY", 0.08185), ("HYPEUSD", "2026-10-07", "BUY", 87.71),
+    ("BLESSUSD", "2026-10-07", "BUY", 0.008142), ("TRUMP/USDT", "2026-10-02", "BUY", 2.019),
+    ("ZORAUSD", "2026-09-28", "BUY", 0.008037), ("SNDKBUSD", "2026-10-08", "BUY", 1541.95),
+    ("XRPUSD", "2026-09-25", "SELL", None), ("AVAXUSD", "2026-09-07", "SELL", None),
+    ("TSLAXUSD", "2026-10-05", "SELL", 386.44), ("DOGEUSD", "2026-09-21", "SELL", 0.09120),
+    ("BCHUSD", "2026-09-21", "SELL", None), ("BCHUSD", "2026-09-22", "SELL", None),
+    ("LTCUSD", "2026-09-19", "SELL", 59.56), ("AAVEUSD", "2026-09-18", "SELL", None),
+]
+
+
+def examples(now, since):
+    out = ["# Lakky's 1D examples: candles before each alert", ""]
+    by_symbol = defaultdict(list)
+    for ex in EXAMPLES:
+        by_symbol[ex[0]].append(ex)
+    for symbol, exs in by_symbol.items():
+        try:
+            base, evals = crypto_load(symbol, now)
+        except Exception as error:  # noqa: BLE001
+            out.append(f"## {symbol}: load failed {error}")
+            continue
+        got = replay(CRYPTO, symbol, "1d", base["1d"], evals["4h"], now, since)
+        daily = base["1d"]
+        if daily and not candle_is_closed(CRYPTO, daily[-1][0], "1d", now):
+            daily = daily[:-1]
+        for _sym, day, side, his_sl in exs:
+            hits = [t for t in got if pd.Timestamp(t["alert_ts"], unit="s", tz="UTC").tz_convert(IST).strftime("%Y-%m-%d") == day
+                    and (t["long"] == (side == "BUY"))]
+            out.append(f"## {symbol} {day} {side} (Lakky SL {his_sl})")
+            if not hits:
+                near = [pd.Timestamp(t["alert_ts"], unit="s", tz="UTC").tz_convert(IST).strftime("%m-%d %H:%M") +
+                        (" BUY" if t["long"] else " SELL") for t in got]
+                out += [f"no alert that day in replay; alerts: {', '.join(near[-15:])}", ""]
+                continue
+            for t in hits:
+                ln, i = t["line"], t["bar"]
+                stamp = lambda x: pd.Timestamp(daily[x][0], unit="ms" if daily[x][0] > 1e11 else "s", tz="UTC").strftime("%m-%d")  # noqa: E731
+                out.append(f"alert {pd.Timestamp(t['alert_ts'], unit='s', tz='UTC').tz_convert(IST):%m-%d %H:%M} entry {t['entry']:.6g}; "
+                           f"line {stamp(ln.x1)} {ln.y1:.6g} -> {stamp(ln.x2)} {ln.y2:.6g}, drawn {stamp(ln.created)}; "
+                           f"stops {', '.join(f'{k} {v:.6g}' for k, v in t['stops'].items())}; "
+                           f"touch|2R no BE {t['touch|2R no BE']}")
+                out.append("| date | open | high | low | close | line | low-line % | high-line % |")
+                out.append("|---|---|---|---|---|---|---|---|")
+                for j in range(max(0, i - 30), min(len(daily), i + 6)):
+                    _ts, o, h, l, c = daily[j][:5]
+                    y = ln.price_at(j)
+                    mark = " <- alert bar" if j == i else ""
+                    out.append(f"| {stamp(j)}{mark} | {o:.6g} | {h:.6g} | {l:.6g} | {c:.6g} | {y:.6g} | "
+                               f"{(l - y) / y * 100:+.2f} | {(h - y) / y * 100:+.2f} |")
+                out.append("")
+    (OUT / "EXAMPLES_TRACE.md").write_text("\n".join(out) + "\n")
+    print("\n".join(out))
 
 
 if __name__ == "__main__":
