@@ -280,7 +280,7 @@ alert 10-08 09:30 entry 0.0849193; line 08-19 0.06983 -> 09-16 0.07828, drawn 09
 | 10-10 | 0.08533 | 0.08668 | 0.08526 | 0.08573 | 0.0855229 | -0.31 | +1.35 |
 
 ## DOGEUSD 2026-09-21 SELL (Lakky SL 0.0912)
-alert 09-21 13:30 entry 0.095664; line 05-14 0.11857 -> 08-22 0.10095, drawn 09-01; stops live 0.097099, touch 0.101051, nearest 0.101051, nearest 0.25ATR 0.101051, hybrid 0.101051, lakky 0.10095; results 2R+BE -1.02, 1R no cap +0.99, 2R no cap -1.02
+alert 09-21 13:30 entry 0.095664; line 05-14 0.11857 -> 08-22 0.10095, drawn 09-01; stops live 0.097099, touch 0.101051, nearest 0.101051, nearest 0.25ATR 0.101051, hybrid 0.101051, lakky 0.10095; results 2R+BE -1.02, 1R no cap -1.02, 2R no cap -1.02
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 08-22 | 0.09158 | 0.10095 | 0.08287 | 0.09188 | 0.10095 | -17.91 | +0.00 |
@@ -441,7 +441,7 @@ alert 09-28 05:30 entry 0.00834393; line 08-19 0.004658 -> 09-15 0.007146, drawn
 | 10-03 | 0.007747 | 0.007799 | 0.007623 | 0.00774 | 0.00880467 | -13.42 | -11.42 |
 
 ## SNDKBUSD 2026-10-08 BUY (Lakky SL 1541.95)
-alert 10-08 21:30 entry 1596.08; line 08-24 1420.01 -> 09-16 1510, drawn 09-26; stops live 1572.14, touch 1508.49, nearest 1508.49, nearest 0.25ATR 1508.49, hybrid 1508.49, lakky 1540.78; results 2R+BE -0.15, 1R no cap -0.15, 2R no cap -0.15
+alert 10-08 21:30 entry 1596.08; line 08-24 1420.01 -> 09-16 1510, drawn 09-26; stops live 1572.14, touch 1508.49, nearest 1508.49, nearest 0.25ATR 1508.49, hybrid 1508.49, lakky 1540.78; results 2R+BE -0.01, 1R no cap -0.01, 2R no cap -0.01
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 09-08 | 1782.57 | 1821.39 | 1731.43 | 1742.8 | 1478.7 | +17.09 | +23.18 |
