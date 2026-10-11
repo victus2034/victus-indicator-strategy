@@ -1,487 +1,541 @@
-market,tf,stop,exit,alerts,filled,wins_%,net_R,R_per_trade,median_risk_%
-crypto,all,live,2R+BE,2407,1826,16,-598.2,-0.328,1.0
-crypto,all,live,2R no BE,2407,1826,25,-652.9,-0.358,1.0
-crypto,all,live,1.5R,2407,1826,30,-640.8,-0.351,1.0
-crypto,all,live,1.5R+trail,2407,1826,30,-637.5,-0.349,1.0
-crypto,all,live,1.5R+high,2407,1826,30,-650.8,-0.356,1.0
-crypto,all,live,candle close,2407,1826,36,-620.2,-0.34,1.0
-crypto,all,live,1R no cap,2407,1826,45,-358.8,-0.196,1.0
-crypto,all,live,2R no cap,2407,1826,25,-648.9,-0.355,1.0
-crypto,all,live,2R+BE no cap,2407,1826,16,-598.4,-0.328,1.0
-crypto,all,touch,2R+BE,2407,1826,20,-376.3,-0.206,2.01
-crypto,all,touch,2R no BE,2407,1826,31,-413.4,-0.226,2.01
-crypto,all,touch,1.5R,2407,1826,35,-420.0,-0.23,2.01
-crypto,all,touch,1.5R+trail,2407,1826,33,-419.5,-0.23,2.01
-crypto,all,touch,1.5R+high,2407,1826,33,-441.5,-0.242,2.01
-crypto,all,touch,candle close,2407,1826,45,-416.3,-0.228,2.01
-crypto,all,touch,1R no cap,2407,1826,60,265.1,0.145,2.01
-crypto,all,touch,2R no cap,2407,1826,28,-455.1,-0.249,2.01
-crypto,all,touch,2R+BE no cap,2407,1826,16,-385.2,-0.211,2.01
-crypto,all,nearest,2R+BE,2407,1826,19,-374.1,-0.205,1.72
-crypto,all,nearest,2R no BE,2407,1826,31,-436.6,-0.239,1.72
-crypto,all,nearest,1.5R,2407,1826,35,-435.0,-0.238,1.72
-crypto,all,nearest,1.5R+trail,2407,1826,33,-428.3,-0.235,1.72
-crypto,all,nearest,1.5R+high,2407,1826,33,-454.8,-0.249,1.72
-crypto,all,nearest,candle close,2407,1826,45,-421.1,-0.231,1.72
-crypto,all,nearest,1R no cap,2407,1826,59,244.4,0.134,1.72
-crypto,all,nearest,2R no cap,2407,1826,28,-445.8,-0.244,1.72
-crypto,all,nearest,2R+BE no cap,2407,1826,16,-382.0,-0.209,1.72
-crypto,all,nearest 0.25ATR,2R+BE,2407,1826,19,-408.5,-0.224,1.5
-crypto,all,nearest 0.25ATR,2R no BE,2407,1826,30,-492.0,-0.269,1.5
-crypto,all,nearest 0.25ATR,1.5R,2407,1826,34,-469.6,-0.257,1.5
-crypto,all,nearest 0.25ATR,1.5R+trail,2407,1826,33,-476.8,-0.261,1.5
-crypto,all,nearest 0.25ATR,1.5R+high,2407,1826,33,-501.6,-0.275,1.5
-crypto,all,nearest 0.25ATR,candle close,2407,1826,44,-486.3,-0.266,1.5
-crypto,all,nearest 0.25ATR,1R no cap,2407,1826,57,151.7,0.083,1.5
-crypto,all,nearest 0.25ATR,2R no cap,2407,1826,27,-506.2,-0.277,1.5
-crypto,all,nearest 0.25ATR,2R+BE no cap,2407,1826,16,-421.7,-0.231,1.5
-crypto,all,hybrid,2R+BE,2407,1826,20,-353.1,-0.193,1.71
-crypto,all,hybrid,2R no BE,2407,1826,31,-428.2,-0.234,1.71
-crypto,all,hybrid,1.5R,2407,1826,35,-433.9,-0.238,1.71
-crypto,all,hybrid,1.5R+trail,2407,1826,33,-422.5,-0.231,1.71
-crypto,all,hybrid,1.5R+high,2407,1826,33,-454.5,-0.249,1.71
-crypto,all,hybrid,candle close,2407,1826,45,-421.6,-0.231,1.71
-crypto,all,hybrid,1R no cap,2407,1826,59,231.5,0.127,1.71
-crypto,all,hybrid,2R no cap,2407,1826,28,-440.5,-0.241,1.71
-crypto,all,hybrid,2R+BE no cap,2407,1826,17,-359.7,-0.197,1.71
-crypto,all,lakky,2R+BE,2407,1826,16,-515.0,-0.282,1.03
-crypto,all,lakky,2R no BE,2407,1826,27,-559.4,-0.306,1.03
-crypto,all,lakky,1.5R,2407,1826,32,-545.4,-0.299,1.03
-crypto,all,lakky,1.5R+trail,2407,1826,32,-570.8,-0.313,1.03
-crypto,all,lakky,1.5R+high,2407,1826,32,-581.6,-0.318,1.03
-crypto,all,lakky,candle close,2407,1826,39,-599.7,-0.328,1.03
-crypto,all,lakky,1R no cap,2407,1826,48,-245.6,-0.135,1.03
-crypto,all,lakky,2R no cap,2407,1826,27,-548.0,-0.3,1.03
-crypto,all,lakky,2R+BE no cap,2407,1826,16,-511.6,-0.28,1.03
-crypto,4h,live,2R+BE,2109,1559,17,-476.3,-0.306,1.0
-crypto,4h,live,2R no BE,2109,1559,26,-512.5,-0.329,1.0
-crypto,4h,live,1.5R,2109,1559,32,-508.8,-0.326,1.0
-crypto,4h,live,1.5R+trail,2109,1559,32,-502.8,-0.323,1.0
-crypto,4h,live,1.5R+high,2109,1559,32,-520.4,-0.334,1.0
-crypto,4h,live,candle close,2109,1559,38,-506.3,-0.325,1.0
-crypto,4h,live,1R no cap,2109,1559,48,-242.5,-0.156,1.0
-crypto,4h,live,2R no cap,2109,1559,26,-508.5,-0.326,1.0
-crypto,4h,live,2R+BE no cap,2109,1559,17,-476.5,-0.306,1.0
-crypto,4h,touch,2R+BE,2109,1559,20,-286.4,-0.184,1.84
-crypto,4h,touch,2R no BE,2109,1559,33,-308.7,-0.198,1.84
-crypto,4h,touch,1.5R,2109,1559,36,-311.3,-0.2,1.84
-crypto,4h,touch,1.5R+trail,2109,1559,35,-303.6,-0.195,1.84
-crypto,4h,touch,1.5R+high,2109,1559,35,-321.2,-0.206,1.84
-crypto,4h,touch,candle close,2109,1559,47,-318.9,-0.205,1.84
-crypto,4h,touch,1R no cap,2109,1559,61,252.2,0.162,1.84
-crypto,4h,touch,2R no cap,2109,1559,29,-337.6,-0.217,1.84
-crypto,4h,touch,2R+BE no cap,2109,1559,16,-292.1,-0.187,1.84
-crypto,4h,nearest,2R+BE,2109,1559,20,-279.7,-0.179,1.59
-crypto,4h,nearest,2R no BE,2109,1559,32,-326.5,-0.209,1.59
-crypto,4h,nearest,1.5R,2109,1559,36,-329.1,-0.211,1.59
-crypto,4h,nearest,1.5R+trail,2109,1559,35,-310.4,-0.199,1.59
-crypto,4h,nearest,1.5R+high,2109,1559,35,-336.3,-0.216,1.59
-crypto,4h,nearest,candle close,2109,1559,47,-318.1,-0.204,1.59
-crypto,4h,nearest,1R no cap,2109,1559,60,232.5,0.149,1.59
-crypto,4h,nearest,2R no cap,2109,1559,29,-321.9,-0.206,1.59
-crypto,4h,nearest,2R+BE no cap,2109,1559,16,-278.8,-0.179,1.59
-crypto,4h,nearest 0.25ATR,2R+BE,2109,1559,19,-319.0,-0.205,1.33
-crypto,4h,nearest 0.25ATR,2R no BE,2109,1559,31,-382.9,-0.246,1.33
-crypto,4h,nearest 0.25ATR,1.5R,2109,1559,35,-367.8,-0.236,1.33
-crypto,4h,nearest 0.25ATR,1.5R+trail,2109,1559,34,-366.0,-0.235,1.33
-crypto,4h,nearest 0.25ATR,1.5R+high,2109,1559,34,-390.8,-0.251,1.33
-crypto,4h,nearest 0.25ATR,candle close,2109,1559,45,-379.2,-0.243,1.33
-crypto,4h,nearest 0.25ATR,1R no cap,2109,1559,59,152.8,0.098,1.33
-crypto,4h,nearest 0.25ATR,2R no cap,2109,1559,28,-386.4,-0.248,1.33
-crypto,4h,nearest 0.25ATR,2R+BE no cap,2109,1559,16,-324.1,-0.208,1.33
-crypto,4h,hybrid,2R+BE,2109,1559,20,-264.6,-0.17,1.57
-crypto,4h,hybrid,2R no BE,2109,1559,32,-322.9,-0.207,1.57
-crypto,4h,hybrid,1.5R,2109,1559,36,-326.8,-0.21,1.57
-crypto,4h,hybrid,1.5R+trail,2109,1559,35,-309.5,-0.199,1.57
-crypto,4h,hybrid,1.5R+high,2109,1559,35,-335.6,-0.215,1.57
-crypto,4h,hybrid,candle close,2109,1559,47,-320.1,-0.205,1.57
-crypto,4h,hybrid,1R no cap,2109,1559,60,223.8,0.144,1.57
-crypto,4h,hybrid,2R no cap,2109,1559,29,-322.6,-0.207,1.57
-crypto,4h,hybrid,2R+BE no cap,2109,1559,17,-263.4,-0.169,1.57
-crypto,4h,lakky,2R+BE,2109,1559,16,-415.2,-0.266,1.01
-crypto,4h,lakky,2R no BE,2109,1559,28,-447.7,-0.287,1.01
-crypto,4h,lakky,1.5R,2109,1559,33,-424.0,-0.272,1.01
-crypto,4h,lakky,1.5R+trail,2109,1559,33,-443.5,-0.284,1.01
-crypto,4h,lakky,1.5R+high,2109,1559,33,-458.7,-0.294,1.01
-crypto,4h,lakky,candle close,2109,1559,41,-472.9,-0.303,1.01
-crypto,4h,lakky,1R no cap,2109,1559,50,-144.2,-0.092,1.01
-crypto,4h,lakky,2R no cap,2109,1559,28,-436.4,-0.28,1.01
-crypto,4h,lakky,2R+BE no cap,2109,1559,16,-411.8,-0.264,1.01
-crypto,1d,live,2R+BE,274,243,14,-115.8,-0.477,1.5
-crypto,1d,live,2R no BE,274,243,18,-130.3,-0.536,1.5
-crypto,1d,live,1.5R,274,243,22,-127.0,-0.522,1.5
-crypto,1d,live,1.5R+trail,274,243,22,-131.7,-0.542,1.5
-crypto,1d,live,1.5R+high,274,243,22,-127.4,-0.524,1.5
-crypto,1d,live,candle close,274,243,25,-110.7,-0.456,1.5
-crypto,1d,live,1R no cap,274,243,32,-107.2,-0.441,1.5
-crypto,1d,live,2R no cap,274,243,18,-130.3,-0.536,1.5
-crypto,1d,live,2R+BE no cap,274,243,14,-115.8,-0.477,1.5
-crypto,1d,touch,2R+BE,274,243,16,-85.1,-0.35,4.34
-crypto,1d,touch,2R no BE,274,243,21,-98.0,-0.403,4.34
-crypto,1d,touch,1.5R,274,243,24,-103.4,-0.426,4.34
-crypto,1d,touch,1.5R+trail,274,243,21,-111.0,-0.457,4.34
-crypto,1d,touch,1.5R+high,274,243,21,-115.4,-0.475,4.34
-crypto,1d,touch,candle close,274,243,35,-90.6,-0.373,4.34
-crypto,1d,touch,1R no cap,274,243,52,8.3,0.034,4.34
-crypto,1d,touch,2R no cap,274,243,19,-110.7,-0.456,4.34
-crypto,1d,touch,2R+BE no cap,274,243,14,-88.5,-0.364,4.34
-crypto,1d,nearest,2R+BE,274,243,16,-89.7,-0.369,4.15
-crypto,1d,nearest,2R no BE,274,243,21,-103.4,-0.425,4.15
-crypto,1d,nearest,1.5R,274,243,25,-100.7,-0.414,4.15
-crypto,1d,nearest,1.5R+trail,274,243,22,-113.1,-0.465,4.15
-crypto,1d,nearest,1.5R+high,274,243,22,-113.6,-0.467,4.15
-crypto,1d,nearest,candle close,274,243,35,-96.3,-0.396,4.15
-crypto,1d,nearest,1R no cap,274,243,52,7.2,0.03,4.15
-crypto,1d,nearest,2R no cap,274,243,18,-117.1,-0.482,4.15
-crypto,1d,nearest,2R+BE no cap,274,243,13,-98.5,-0.406,4.15
-crypto,1d,nearest 0.25ATR,2R+BE,274,243,16,-86.9,-0.358,3.5
-crypto,1d,nearest 0.25ATR,2R no BE,274,243,21,-103.5,-0.426,3.5
-crypto,1d,nearest 0.25ATR,1.5R,274,243,26,-94.1,-0.387,3.5
-crypto,1d,nearest 0.25ATR,1.5R+trail,274,243,24,-104.4,-0.43,3.5
-crypto,1d,nearest 0.25ATR,1.5R+high,274,243,24,-104.5,-0.43,3.5
-crypto,1d,nearest 0.25ATR,candle close,274,243,34,-102.9,-0.423,3.5
-crypto,1d,nearest 0.25ATR,1R no cap,274,243,50,-4.6,-0.019,3.5
-crypto,1d,nearest 0.25ATR,2R no cap,274,243,19,-114.1,-0.47,3.5
-crypto,1d,nearest 0.25ATR,2R+BE no cap,274,243,13,-95.0,-0.391,3.5
-crypto,1d,hybrid,2R+BE,274,243,16,-83.9,-0.345,3.87
-crypto,1d,hybrid,2R no BE,274,243,22,-98.6,-0.406,3.87
-crypto,1d,hybrid,1.5R,274,243,25,-101.9,-0.419,3.87
-crypto,1d,hybrid,1.5R+trail,274,243,22,-108.1,-0.445,3.87
-crypto,1d,hybrid,1.5R+high,274,243,22,-114.1,-0.469,3.87
-crypto,1d,hybrid,candle close,274,243,35,-94.8,-0.39,3.87
-crypto,1d,hybrid,1R no cap,274,243,51,3.2,0.013,3.87
-crypto,1d,hybrid,2R no cap,274,243,19,-111.2,-0.458,3.87
-crypto,1d,hybrid,2R+BE no cap,274,243,14,-91.6,-0.377,3.87
-crypto,1d,lakky,2R+BE,274,243,17,-91.6,-0.377,1.39
-crypto,1d,lakky,2R no BE,274,243,22,-100.3,-0.413,1.39
-crypto,1d,lakky,1.5R,274,243,25,-110.6,-0.455,1.39
-crypto,1d,lakky,1.5R+trail,274,243,25,-115.5,-0.475,1.39
-crypto,1d,lakky,1.5R+high,274,243,25,-111.0,-0.457,1.39
-crypto,1d,lakky,candle close,274,243,26,-116.3,-0.479,1.39
-crypto,1d,lakky,1R no cap,274,243,35,-94.4,-0.389,1.39
-crypto,1d,lakky,2R no cap,274,243,22,-100.3,-0.413,1.39
-crypto,1d,lakky,2R+BE no cap,274,243,17,-91.6,-0.377,1.39
-crypto,1w,live,2R+BE,24,24,21,-6.0,-0.251,2.5
-crypto,1w,live,2R no BE,24,24,21,-10.2,-0.424,2.5
-crypto,1w,live,1.5R,24,24,33,-5.1,-0.213,2.5
-crypto,1w,live,1.5R+trail,24,24,33,-3.0,-0.126,2.5
-crypto,1w,live,1.5R+high,24,24,33,-3.0,-0.126,2.5
-crypto,1w,live,candle close,24,24,33,-3.2,-0.134,2.5
-crypto,1w,live,1R no cap,24,24,33,-9.1,-0.38,2.5
-crypto,1w,live,2R no cap,24,24,21,-10.2,-0.424,2.5
-crypto,1w,live,2R+BE no cap,24,24,21,-6.0,-0.251,2.5
-crypto,1w,touch,2R+BE,24,24,33,-4.7,-0.196,20.43
-crypto,1w,touch,2R no BE,24,24,33,-6.8,-0.283,20.43
-crypto,1w,touch,1.5R,24,24,38,-5.3,-0.219,20.43
-crypto,1w,touch,1.5R+trail,24,24,38,-4.9,-0.205,20.43
-crypto,1w,touch,1.5R+high,24,24,38,-4.9,-0.205,20.43
-crypto,1w,touch,candle close,24,24,25,-6.8,-0.284,20.43
-crypto,1w,touch,1R no cap,24,24,62,4.6,0.192,20.43
-crypto,1w,touch,2R no cap,24,24,33,-6.8,-0.283,20.43
-crypto,1w,touch,2R+BE no cap,24,24,33,-4.7,-0.196,20.43
-crypto,1w,nearest,2R+BE,24,24,38,-4.6,-0.193,13.68
-crypto,1w,nearest,2R no BE,24,24,38,-6.7,-0.28,13.68
-crypto,1w,nearest,1.5R,24,24,42,-5.2,-0.217,13.68
-crypto,1w,nearest,1.5R+trail,24,24,42,-4.9,-0.202,13.68
-crypto,1w,nearest,1.5R+high,24,24,42,-4.9,-0.202,13.68
-crypto,1w,nearest,candle close,24,24,29,-6.7,-0.278,13.68
-crypto,1w,nearest,1R no cap,24,24,62,4.6,0.192,13.68
-crypto,1w,nearest,2R no cap,24,24,38,-6.7,-0.28,13.68
-crypto,1w,nearest,2R+BE no cap,24,24,38,-4.6,-0.193,13.68
-crypto,1w,nearest 0.25ATR,2R+BE,24,24,33,-2.6,-0.108,9.26
-crypto,1w,nearest 0.25ATR,2R no BE,24,24,33,-5.7,-0.236,9.26
-crypto,1w,nearest 0.25ATR,1.5R,24,24,33,-7.7,-0.32,9.26
-crypto,1w,nearest 0.25ATR,1.5R+trail,24,24,33,-6.4,-0.265,9.26
-crypto,1w,nearest 0.25ATR,1.5R+high,24,24,33,-6.4,-0.265,9.26
-crypto,1w,nearest 0.25ATR,candle close,24,24,38,-4.2,-0.175,9.26
-crypto,1w,nearest 0.25ATR,1R no cap,24,24,58,3.6,0.149,9.26
-crypto,1w,nearest 0.25ATR,2R no cap,24,24,33,-5.7,-0.236,9.26
-crypto,1w,nearest 0.25ATR,2R+BE no cap,24,24,33,-2.6,-0.108,9.26
-crypto,1w,hybrid,2R+BE,24,24,38,-4.6,-0.194,13.68
-crypto,1w,hybrid,2R no BE,24,24,38,-6.7,-0.28,13.68
-crypto,1w,hybrid,1.5R,24,24,42,-5.2,-0.217,13.68
-crypto,1w,hybrid,1.5R+trail,24,24,42,-4.9,-0.202,13.68
-crypto,1w,hybrid,1.5R+high,24,24,42,-4.9,-0.202,13.68
-crypto,1w,hybrid,candle close,24,24,29,-6.7,-0.279,13.68
-crypto,1w,hybrid,1R no cap,24,24,62,4.6,0.192,13.68
-crypto,1w,hybrid,2R no cap,24,24,38,-6.7,-0.28,13.68
-crypto,1w,hybrid,2R+BE no cap,24,24,38,-4.6,-0.194,13.68
-crypto,1w,lakky,2R+BE,24,24,21,-8.2,-0.342,3.76
-crypto,1w,lakky,2R no BE,24,24,21,-11.3,-0.471,3.76
-crypto,1w,lakky,1.5R,24,24,25,-10.8,-0.45,3.76
-crypto,1w,lakky,1.5R+trail,24,24,25,-11.8,-0.493,3.76
-crypto,1w,lakky,1.5R+high,24,24,25,-11.8,-0.493,3.76
-crypto,1w,lakky,candle close,24,24,29,-10.5,-0.437,3.76
-crypto,1w,lakky,1R no cap,24,24,38,-7.0,-0.293,3.76
-crypto,1w,lakky,2R no cap,24,24,21,-11.3,-0.471,3.76
-crypto,1w,lakky,2R+BE no cap,24,24,21,-8.2,-0.342,3.76
-nse,all,live,2R+BE,6044,4735,16,-1283.7,-0.271,1.0
-nse,all,live,2R no BE,6044,4735,28,-1334.2,-0.282,1.0
-nse,all,live,1.5R,6044,4735,33,-1393.8,-0.294,1.0
-nse,all,live,1.5R+trail,6044,4735,33,-1223.1,-0.258,1.0
-nse,all,live,1.5R+high,6044,4735,33,-1273.0,-0.269,1.0
-nse,all,live,candle close,6044,4735,39,-1572.5,-0.332,1.0
-nse,all,live,1R no cap,6044,4735,49,-640.9,-0.135,1.0
-nse,all,live,2R no cap,6044,4735,28,-1339.3,-0.283,1.0
-nse,all,live,2R+BE no cap,6044,4735,16,-1283.7,-0.271,1.0
-nse,all,touch,2R+BE,6044,4735,20,-839.9,-0.177,2.1
-nse,all,touch,2R no BE,6044,4735,32,-913.6,-0.193,2.1
-nse,all,touch,1.5R,6044,4735,36,-896.5,-0.189,2.1
-nse,all,touch,1.5R+trail,6044,4735,36,-834.6,-0.176,2.1
-nse,all,touch,1.5R+high,6044,4735,36,-856.7,-0.181,2.1
-nse,all,touch,candle close,6044,4735,46,-1001.9,-0.212,2.1
-nse,all,touch,1R no cap,6044,4735,58,551.1,0.116,2.1
-nse,all,touch,2R no cap,6044,4735,31,-912.6,-0.193,2.1
-nse,all,touch,2R+BE no cap,6044,4735,18,-803.2,-0.17,2.1
-nse,all,nearest,2R+BE,6044,4735,19,-882.2,-0.186,1.88
-nse,all,nearest,2R no BE,6044,4735,32,-916.5,-0.194,1.88
-nse,all,nearest,1.5R,6044,4735,36,-908.4,-0.192,1.88
-nse,all,nearest,1.5R+trail,6044,4735,35,-872.3,-0.184,1.88
-nse,all,nearest,1.5R+high,6044,4735,35,-902.3,-0.191,1.88
-nse,all,nearest,candle close,6044,4735,46,-1048.0,-0.221,1.88
-nse,all,nearest,1R no cap,6044,4735,57,455.7,0.096,1.88
-nse,all,nearest,2R no cap,6044,4735,30,-964.9,-0.204,1.88
-nse,all,nearest,2R+BE no cap,6044,4735,18,-865.1,-0.183,1.88
-nse,all,nearest 0.25ATR,2R+BE,6044,4735,19,-968.4,-0.205,1.51
-nse,all,nearest 0.25ATR,2R no BE,6044,4735,31,-1000.8,-0.211,1.51
-nse,all,nearest 0.25ATR,1.5R,6044,4735,36,-1028.6,-0.217,1.51
-nse,all,nearest 0.25ATR,1.5R+trail,6044,4735,35,-899.0,-0.19,1.51
-nse,all,nearest 0.25ATR,1.5R+high,6044,4735,35,-972.3,-0.205,1.51
-nse,all,nearest 0.25ATR,candle close,6044,4735,44,-1168.6,-0.247,1.51
-nse,all,nearest 0.25ATR,1R no cap,6044,4735,55,174.4,0.037,1.51
-nse,all,nearest 0.25ATR,2R no cap,6044,4735,30,-1034.3,-0.218,1.51
-nse,all,nearest 0.25ATR,2R+BE no cap,6044,4735,18,-947.6,-0.2,1.51
-nse,all,hybrid,2R+BE,6044,4735,19,-889.9,-0.188,1.85
-nse,all,hybrid,2R no BE,6044,4735,32,-928.3,-0.196,1.85
-nse,all,hybrid,1.5R,6044,4735,36,-913.2,-0.193,1.85
-nse,all,hybrid,1.5R+trail,6044,4735,35,-871.5,-0.184,1.85
-nse,all,hybrid,1.5R+high,6044,4735,35,-902.5,-0.191,1.85
-nse,all,hybrid,candle close,6044,4735,46,-1051.2,-0.222,1.85
-nse,all,hybrid,1R no cap,6044,4735,57,432.5,0.091,1.85
-nse,all,hybrid,2R no cap,6044,4735,30,-976.6,-0.206,1.85
-nse,all,hybrid,2R+BE no cap,6044,4735,18,-872.8,-0.184,1.85
-nse,all,lakky,2R+BE,6044,4735,16,-1345.8,-0.284,1.06
-nse,all,lakky,2R no BE,6044,4735,27,-1481.2,-0.313,1.06
-nse,all,lakky,1.5R,6044,4735,33,-1483.8,-0.313,1.06
-nse,all,lakky,1.5R+trail,6044,4735,32,-1268.1,-0.268,1.06
-nse,all,lakky,1.5R+high,6044,4735,32,-1336.6,-0.282,1.06
-nse,all,lakky,candle close,6044,4735,39,-1644.5,-0.347,1.06
-nse,all,lakky,1R no cap,6044,4735,47,-788.5,-0.167,1.06
-nse,all,lakky,2R no cap,6044,4735,27,-1504.7,-0.318,1.06
-nse,all,lakky,2R+BE no cap,6044,4735,16,-1347.7,-0.285,1.06
-nse,4h,live,2R+BE,3751,2867,17,-870.6,-0.304,1.0
-nse,4h,live,2R no BE,3751,2867,27,-910.5,-0.318,1.0
-nse,4h,live,1.5R,3751,2867,32,-963.6,-0.336,1.0
-nse,4h,live,1.5R+trail,3751,2867,32,-809.4,-0.282,1.0
-nse,4h,live,1.5R+high,3751,2867,32,-860.5,-0.3,1.0
-nse,4h,live,candle close,3751,2867,38,-1034.5,-0.361,1.0
-nse,4h,live,1R no cap,3751,2867,46,-605.0,-0.211,1.0
-nse,4h,live,2R no cap,3751,2867,27,-912.0,-0.318,1.0
-nse,4h,live,2R+BE no cap,3751,2867,17,-870.6,-0.304,1.0
-nse,4h,touch,2R+BE,3751,2867,20,-563.9,-0.197,1.67
-nse,4h,touch,2R no BE,3751,2867,32,-585.7,-0.204,1.67
-nse,4h,touch,1.5R,3751,2867,37,-581.5,-0.203,1.67
-nse,4h,touch,1.5R+trail,3751,2867,35,-539.2,-0.188,1.67
-nse,4h,touch,1.5R+high,3751,2867,35,-564.6,-0.197,1.67
-nse,4h,touch,candle close,3751,2867,46,-672.1,-0.234,1.67
-nse,4h,touch,1R no cap,3751,2867,57,237.1,0.083,1.67
-nse,4h,touch,2R no cap,3751,2867,30,-610.9,-0.213,1.67
-nse,4h,touch,2R+BE no cap,3751,2867,18,-549.8,-0.192,1.67
-nse,4h,nearest,2R+BE,3751,2867,19,-609.1,-0.212,1.53
-nse,4h,nearest,2R no BE,3751,2867,32,-609.6,-0.213,1.53
-nse,4h,nearest,1.5R,3751,2867,36,-603.7,-0.211,1.53
-nse,4h,nearest,1.5R+trail,3751,2867,35,-567.7,-0.198,1.53
-nse,4h,nearest,1.5R+high,3751,2867,35,-597.5,-0.208,1.53
-nse,4h,nearest,candle close,3751,2867,46,-698.0,-0.243,1.53
-nse,4h,nearest,1R no cap,3751,2867,56,147.9,0.052,1.53
-nse,4h,nearest,2R no cap,3751,2867,30,-662.2,-0.231,1.53
-nse,4h,nearest,2R+BE no cap,3751,2867,17,-606.0,-0.211,1.53
-nse,4h,nearest 0.25ATR,2R+BE,3751,2867,19,-687.4,-0.24,1.24
-nse,4h,nearest 0.25ATR,2R no BE,3751,2867,31,-715.3,-0.249,1.24
-nse,4h,nearest 0.25ATR,1.5R,3751,2867,35,-719.8,-0.251,1.24
-nse,4h,nearest 0.25ATR,1.5R+trail,3751,2867,34,-610.9,-0.213,1.24
-nse,4h,nearest 0.25ATR,1.5R+high,3751,2867,34,-671.7,-0.234,1.24
-nse,4h,nearest 0.25ATR,candle close,3751,2867,43,-787.7,-0.275,1.24
-nse,4h,nearest 0.25ATR,1R no cap,3751,2867,54,-47.3,-0.016,1.24
-nse,4h,nearest 0.25ATR,2R no cap,3751,2867,29,-749.4,-0.261,1.24
-nse,4h,nearest 0.25ATR,2R+BE no cap,3751,2867,17,-677.3,-0.236,1.24
-nse,4h,hybrid,2R+BE,3751,2867,19,-610.7,-0.213,1.5
-nse,4h,hybrid,2R no BE,3751,2867,32,-619.3,-0.216,1.5
-nse,4h,hybrid,1.5R,3751,2867,36,-606.3,-0.211,1.5
-nse,4h,hybrid,1.5R+trail,3751,2867,35,-568.3,-0.198,1.5
-nse,4h,hybrid,1.5R+high,3751,2867,35,-599.1,-0.209,1.5
-nse,4h,hybrid,candle close,3751,2867,45,-705.9,-0.246,1.5
-nse,4h,hybrid,1R no cap,3751,2867,56,132.0,0.046,1.5
-nse,4h,hybrid,2R no cap,3751,2867,30,-671.4,-0.234,1.5
-nse,4h,hybrid,2R+BE no cap,3751,2867,17,-607.6,-0.212,1.5
-nse,4h,lakky,2R+BE,3751,2867,16,-805.6,-0.281,1.03
-nse,4h,lakky,2R no BE,3751,2867,28,-852.4,-0.297,1.03
-nse,4h,lakky,1.5R,3751,2867,33,-878.6,-0.306,1.03
-nse,4h,lakky,1.5R+trail,3751,2867,33,-726.9,-0.254,1.03
-nse,4h,lakky,1.5R+high,3751,2867,33,-786.7,-0.274,1.03
-nse,4h,lakky,candle close,3751,2867,41,-950.7,-0.332,1.03
-nse,4h,lakky,1R no cap,3751,2867,48,-468.7,-0.163,1.03
-nse,4h,lakky,2R no cap,3751,2867,28,-879.8,-0.307,1.03
-nse,4h,lakky,2R+BE no cap,3751,2867,16,-806.9,-0.281,1.03
-nse,1d,live,2R+BE,2022,1635,16,-367.3,-0.225,1.5
-nse,1d,live,2R no BE,2022,1635,29,-390.3,-0.239,1.5
-nse,1d,live,1.5R,2022,1635,34,-383.5,-0.235,1.5
-nse,1d,live,1.5R+trail,2022,1635,34,-370.4,-0.227,1.5
-nse,1d,live,1.5R+high,2022,1635,34,-370.6,-0.227,1.5
-nse,1d,live,candle close,2022,1635,41,-481.2,-0.294,1.5
-nse,1d,live,1R no cap,2022,1635,54,2.9,0.002,1.5
-nse,1d,live,2R no cap,2022,1635,29,-393.9,-0.241,1.5
-nse,1d,live,2R+BE no cap,2022,1635,16,-367.3,-0.225,1.5
-nse,1d,touch,2R+BE,2022,1635,20,-256.6,-0.157,2.59
-nse,1d,touch,2R no BE,2022,1635,31,-330.8,-0.202,2.59
-nse,1d,touch,1.5R,2022,1635,35,-313.9,-0.192,2.59
-nse,1d,touch,1.5R+trail,2022,1635,35,-295.9,-0.181,2.59
-nse,1d,touch,1.5R+high,2022,1635,35,-293.5,-0.18,2.59
-nse,1d,touch,candle close,2022,1635,46,-316.4,-0.194,2.59
-nse,1d,touch,1R no cap,2022,1635,60,285.4,0.175,2.59
-nse,1d,touch,2R no cap,2022,1635,30,-304.5,-0.186,2.59
-nse,1d,touch,2R+BE no cap,2022,1635,18,-234.0,-0.143,2.59
-nse,1d,nearest,2R+BE,2022,1635,19,-249.8,-0.153,2.39
-nse,1d,nearest,2R no BE,2022,1635,31,-306.3,-0.187,2.39
-nse,1d,nearest,1.5R,2022,1635,35,-302.6,-0.185,2.39
-nse,1d,nearest,1.5R+trail,2022,1635,35,-303.7,-0.186,2.39
-nse,1d,nearest,1.5R+high,2022,1635,35,-305.6,-0.187,2.39
-nse,1d,nearest,candle close,2022,1635,46,-334.4,-0.205,2.39
-nse,1d,nearest,1R no cap,2022,1635,60,275.0,0.168,2.39
-nse,1d,nearest,2R no cap,2022,1635,30,-302.1,-0.185,2.39
-nse,1d,nearest,2R+BE no cap,2022,1635,18,-235.8,-0.144,2.39
-nse,1d,nearest 0.25ATR,2R+BE,2022,1635,19,-260.0,-0.159,1.9
-nse,1d,nearest 0.25ATR,2R no BE,2022,1635,31,-290.0,-0.177,1.9
-nse,1d,nearest 0.25ATR,1.5R,2022,1635,35,-312.0,-0.191,1.9
-nse,1d,nearest 0.25ATR,1.5R+trail,2022,1635,35,-290.6,-0.178,1.9
-nse,1d,nearest 0.25ATR,1.5R+high,2022,1635,35,-303.8,-0.186,1.9
-nse,1d,nearest 0.25ATR,candle close,2022,1635,45,-360.5,-0.22,1.9
-nse,1d,nearest 0.25ATR,1R no cap,2022,1635,58,194.7,0.119,1.9
-nse,1d,nearest 0.25ATR,2R no cap,2022,1635,31,-289.4,-0.177,1.9
-nse,1d,nearest 0.25ATR,2R+BE no cap,2022,1635,18,-249.4,-0.153,1.9
-nse,1d,hybrid,2R+BE,2022,1635,19,-255.1,-0.156,2.33
-nse,1d,hybrid,2R no BE,2022,1635,31,-307.6,-0.188,2.33
-nse,1d,hybrid,1.5R,2022,1635,35,-303.3,-0.185,2.33
-nse,1d,hybrid,1.5R+trail,2022,1635,35,-301.1,-0.184,2.33
-nse,1d,hybrid,1.5R+high,2022,1635,35,-302.7,-0.185,2.33
-nse,1d,hybrid,candle close,2022,1635,46,-329.9,-0.202,2.33
-nse,1d,hybrid,1R no cap,2022,1635,60,273.7,0.167,2.33
-nse,1d,hybrid,2R no cap,2022,1635,30,-303.8,-0.186,2.33
-nse,1d,hybrid,2R+BE no cap,2022,1635,18,-241.1,-0.147,2.33
-nse,1d,lakky,2R+BE,2022,1635,16,-459.6,-0.281,1.08
-nse,1d,lakky,2R no BE,2022,1635,27,-530.9,-0.325,1.08
-nse,1d,lakky,1.5R,2022,1635,32,-509.4,-0.312,1.08
-nse,1d,lakky,1.5R+trail,2022,1635,33,-449.6,-0.275,1.08
-nse,1d,lakky,1.5R+high,2022,1635,33,-459.2,-0.281,1.08
-nse,1d,lakky,candle close,2022,1635,36,-603.1,-0.369,1.08
-nse,1d,lakky,1R no cap,2022,1635,49,-227.6,-0.139,1.08
-nse,1d,lakky,2R no cap,2022,1635,27,-527.0,-0.322,1.08
-nse,1d,lakky,2R+BE no cap,2022,1635,16,-460.3,-0.282,1.08
-nse,1w,live,2R+BE,249,213,20,-45.0,-0.211,2.5
-nse,1w,live,2R no BE,249,213,31,-31.6,-0.148,2.5
-nse,1w,live,1.5R,249,213,35,-44.3,-0.208,2.5
-nse,1w,live,1.5R+trail,249,213,35,-40.0,-0.188,2.5
-nse,1w,live,1.5R+high,249,213,35,-38.6,-0.181,2.5
-nse,1w,live,candle close,249,213,38,-54.0,-0.254,2.5
-nse,1w,live,1R no cap,249,213,44,-36.9,-0.173,2.5
-nse,1w,live,2R no cap,249,213,31,-31.6,-0.148,2.5
-nse,1w,live,2R+BE no cap,249,213,20,-45.0,-0.211,2.5
-nse,1w,touch,2R+BE,249,213,22,-15.5,-0.073,4.82
-nse,1w,touch,2R no BE,249,213,38,9.2,0.043,4.82
-nse,1w,touch,1.5R,249,213,41,2.8,0.013,4.82
-nse,1w,touch,1.5R+trail,249,213,41,5.4,0.025,4.82
-nse,1w,touch,1.5R+high,249,213,41,6.2,0.029,4.82
-nse,1w,touch,candle close,249,213,47,-9.1,-0.043,4.82
-nse,1w,touch,1R no cap,249,213,53,28.2,0.133,4.82
-nse,1w,touch,2R no cap,249,213,38,9.2,0.043,4.82
-nse,1w,touch,2R+BE no cap,249,213,22,-15.5,-0.073,4.82
-nse,1w,nearest,2R+BE,249,213,21,-21.1,-0.099,4.82
-nse,1w,nearest,2R no BE,249,213,38,3.7,0.017,4.82
-nse,1w,nearest,1.5R,249,213,41,0.2,0.001,4.82
-nse,1w,nearest,1.5R+trail,249,213,41,3.1,0.015,4.82
-nse,1w,nearest,1.5R+high,249,213,41,4.8,0.023,4.82
-nse,1w,nearest,candle close,249,213,46,-12.7,-0.059,4.82
-nse,1w,nearest,1R no cap,249,213,54,31.6,0.148,4.82
-nse,1w,nearest,2R no cap,249,213,38,3.7,0.017,4.82
-nse,1w,nearest,2R+BE no cap,249,213,21,-21.1,-0.099,4.82
-nse,1w,nearest 0.25ATR,2R+BE,249,213,21,-22.5,-0.106,3.83
-nse,1w,nearest 0.25ATR,2R no BE,249,213,38,6.0,0.028,3.83
-nse,1w,nearest 0.25ATR,1.5R,249,213,42,3.7,0.017,3.83
-nse,1w,nearest 0.25ATR,1.5R+trail,249,213,42,5.1,0.024,3.83
-nse,1w,nearest 0.25ATR,1.5R+high,249,213,42,5.8,0.027,3.83
-nse,1w,nearest 0.25ATR,candle close,249,213,46,-19.2,-0.09,3.83
-nse,1w,nearest 0.25ATR,1R no cap,249,213,54,25.0,0.117,3.83
-nse,1w,nearest 0.25ATR,2R no cap,249,213,38,6.0,0.028,3.83
-nse,1w,nearest 0.25ATR,2R+BE no cap,249,213,21,-22.5,-0.106,3.83
-nse,1w,hybrid,2R+BE,249,213,21,-21.9,-0.103,4.53
-nse,1w,hybrid,2R no BE,249,213,38,2.9,0.014,4.53
-nse,1w,hybrid,1.5R,249,213,41,-1.4,-0.007,4.53
-nse,1w,hybrid,1.5R+trail,249,213,41,1.9,0.009,4.53
-nse,1w,hybrid,1.5R+high,249,213,41,3.3,0.016,4.53
-nse,1w,hybrid,candle close,249,213,47,-12.5,-0.059,4.53
-nse,1w,hybrid,1R no cap,249,213,53,25.5,0.12,4.53
-nse,1w,hybrid,2R no cap,249,213,38,2.9,0.014,4.53
-nse,1w,hybrid,2R+BE no cap,249,213,21,-21.9,-0.103,4.53
-nse,1w,lakky,2R+BE,249,213,17,-80.6,-0.378,1.44
-nse,1w,lakky,2R no BE,249,213,23,-98.8,-0.464,1.44
-nse,1w,lakky,1.5R,249,213,27,-94.2,-0.442,1.44
-nse,1w,lakky,1.5R+trail,249,213,27,-87.4,-0.41,1.44
-nse,1w,lakky,1.5R+high,249,213,27,-86.4,-0.406,1.44
-nse,1w,lakky,candle close,249,213,29,-83.4,-0.391,1.44
-nse,1w,lakky,1R no cap,249,213,34,-89.6,-0.421,1.44
-nse,1w,lakky,2R no cap,249,213,23,-98.8,-0.464,1.44
-nse,1w,lakky,2R+BE no cap,249,213,17,-80.6,-0.378,1.44
-nse,1M,live,2R+BE,22,20,25,-0.7,-0.036,3.0
-nse,1M,live,2R no BE,22,20,30,-1.9,-0.094,3.0
-nse,1M,live,1.5R,22,20,35,-2.4,-0.118,3.0
-nse,1M,live,1.5R+trail,22,20,35,-3.3,-0.167,3.0
-nse,1M,live,1.5R+high,22,20,35,-3.3,-0.167,3.0
-nse,1M,live,candle close,22,20,35,-2.8,-0.142,3.0
-nse,1M,live,1R no cap,22,20,45,-1.8,-0.091,3.0
-nse,1M,live,2R no cap,22,20,30,-1.9,-0.094,3.0
-nse,1M,live,2R+BE no cap,22,20,25,-0.7,-0.036,3.0
-nse,1M,touch,2R+BE,22,20,40,-3.8,-0.192,20.83
-nse,1M,touch,2R no BE,22,20,40,-6.4,-0.319,20.83
-nse,1M,touch,1.5R,22,20,45,-3.9,-0.193,20.83
-nse,1M,touch,1.5R+trail,22,20,45,-4.8,-0.242,20.83
-nse,1M,touch,1.5R+high,22,20,45,-4.8,-0.242,20.83
-nse,1M,touch,candle close,22,20,40,-4.4,-0.22,20.83
-nse,1M,touch,1R no cap,22,20,55,0.4,0.018,20.83
-nse,1M,touch,2R no cap,22,20,40,-6.4,-0.319,20.83
-nse,1M,touch,2R+BE no cap,22,20,40,-3.8,-0.192,20.83
-nse,1M,nearest,2R+BE,22,20,35,-2.2,-0.112,18.47
-nse,1M,nearest,2R no BE,22,20,40,-4.3,-0.215,18.47
-nse,1M,nearest,1.5R,22,20,45,-2.3,-0.114,18.47
-nse,1M,nearest,1.5R+trail,22,20,45,-4.0,-0.199,18.47
-nse,1M,nearest,1.5R+high,22,20,45,-4.0,-0.199,18.47
-nse,1M,nearest,candle close,22,20,40,-3.0,-0.149,18.47
-nse,1M,nearest,1R no cap,22,20,55,1.3,0.063,18.47
-nse,1M,nearest,2R no cap,22,20,40,-4.3,-0.215,18.47
-nse,1M,nearest,2R+BE no cap,22,20,35,-2.2,-0.112,18.47
-nse,1M,nearest 0.25ATR,2R+BE,22,20,35,1.5,0.075,12.75
-nse,1M,nearest 0.25ATR,2R no BE,22,20,40,-1.6,-0.079,12.75
-nse,1M,nearest 0.25ATR,1.5R,22,20,45,-0.6,-0.028,12.75
-nse,1M,nearest 0.25ATR,1.5R+trail,22,20,45,-2.6,-0.131,12.75
-nse,1M,nearest 0.25ATR,1.5R+high,22,20,45,-2.6,-0.131,12.75
-nse,1M,nearest 0.25ATR,candle close,22,20,40,-1.3,-0.067,12.75
-nse,1M,nearest 0.25ATR,1R no cap,22,20,55,2.0,0.099,12.75
-nse,1M,nearest 0.25ATR,2R no cap,22,20,40,-1.6,-0.079,12.75
-nse,1M,nearest 0.25ATR,2R+BE no cap,22,20,35,1.5,0.075,12.75
-nse,1M,hybrid,2R+BE,22,20,35,-2.2,-0.112,18.47
-nse,1M,hybrid,2R no BE,22,20,40,-4.3,-0.214,18.47
-nse,1M,hybrid,1.5R,22,20,45,-2.3,-0.114,18.47
-nse,1M,hybrid,1.5R+trail,22,20,45,-4.0,-0.199,18.47
-nse,1M,hybrid,1.5R+high,22,20,45,-4.0,-0.199,18.47
-nse,1M,hybrid,candle close,22,20,40,-3.0,-0.149,18.47
-nse,1M,hybrid,1R no cap,22,20,55,1.3,0.063,18.47
-nse,1M,hybrid,2R no cap,22,20,40,-4.3,-0.214,18.47
-nse,1M,hybrid,2R+BE no cap,22,20,35,-2.2,-0.112,18.47
-nse,1M,lakky,2R+BE,22,20,35,-0.0,-0.001,2.57
-nse,1M,lakky,2R no BE,22,20,40,0.9,0.046,2.57
-nse,1M,lakky,1.5R,22,20,40,-1.7,-0.084,2.57
-nse,1M,lakky,1.5R+trail,22,20,40,-4.3,-0.213,2.57
-nse,1M,lakky,1.5R+high,22,20,40,-4.3,-0.213,2.57
-nse,1M,lakky,candle close,22,20,35,-7.3,-0.367,2.57
-nse,1M,lakky,1R no cap,22,20,45,-2.6,-0.132,2.57
-nse,1M,lakky,2R no cap,22,20,40,0.9,0.046,2.57
-nse,1M,lakky,2R+BE no cap,22,20,35,-0.0,-0.001,2.57
+market,tf,stop,exit,alerts,filled,wins_%,net_R,R_per_trade,net_%,%_per_trade,median_risk_%
+crypto,all,live,2R+BE,2407,1826,16,-598.3,-0.328,-665.2,-0.364,1.0
+crypto,all,live,2R no BE,2407,1826,25,-653.3,-0.358,-733.7,-0.402,1.0
+crypto,all,live,1.5R,2407,1826,30,-641.2,-0.351,-712.4,-0.39,1.0
+crypto,all,live,1.5R+trail,2407,1826,30,-637.9,-0.349,-708.2,-0.388,1.0
+crypto,all,live,1.5R+high,2407,1826,30,-651.2,-0.357,-719.4,-0.394,1.0
+crypto,all,live,candle close,2407,1826,36,-620.3,-0.34,-680.5,-0.373,1.0
+crypto,all,live,1R no cap,2407,1826,45,-358.8,-0.196,-426.1,-0.233,1.0
+crypto,all,live,1.5R no cap,2407,1826,30,-639.4,-0.35,-710.5,-0.389,1.0
+crypto,all,live,2R no cap,2407,1826,25,-649.3,-0.356,-729.7,-0.4,1.0
+crypto,all,live,2R+BE no cap,2407,1826,16,-598.4,-0.328,-665.4,-0.364,1.0
+crypto,all,touch,2R+BE,2407,1826,20,-376.3,-0.206,-1399.0,-0.766,2.01
+crypto,all,touch,2R no BE,2407,1826,31,-413.5,-0.226,-1394.1,-0.763,2.01
+crypto,all,touch,1.5R,2407,1826,35,-420.1,-0.23,-1535.2,-0.841,2.01
+crypto,all,touch,1.5R+trail,2407,1826,33,-419.5,-0.23,-1613.9,-0.884,2.01
+crypto,all,touch,1.5R+high,2407,1826,33,-441.5,-0.242,-1663.3,-0.911,2.01
+crypto,all,touch,candle close,2407,1826,45,-416.3,-0.228,-1623.5,-0.889,2.01
+crypto,all,touch,1R no cap,2407,1826,60,265.2,0.145,5869.7,3.215,2.01
+crypto,all,touch,1.5R no cap,2407,1826,32,-474.2,-0.26,-2301.0,-1.26,2.01
+crypto,all,touch,2R no cap,2407,1826,28,-455.1,-0.249,-2050.5,-1.123,2.01
+crypto,all,touch,2R+BE no cap,2407,1826,16,-385.1,-0.211,-1671.2,-0.915,2.01
+crypto,all,nearest,2R+BE,2407,1826,19,-374.1,-0.205,-953.7,-0.522,1.72
+crypto,all,nearest,2R no BE,2407,1826,31,-436.6,-0.239,-1021.2,-0.559,1.72
+crypto,all,nearest,1.5R,2407,1826,35,-435.0,-0.238,-1159.5,-0.635,1.72
+crypto,all,nearest,1.5R+trail,2407,1826,33,-428.3,-0.235,-1364.0,-0.747,1.72
+crypto,all,nearest,1.5R+high,2407,1826,33,-454.8,-0.249,-1459.0,-0.799,1.72
+crypto,all,nearest,candle close,2407,1826,45,-421.0,-0.231,-1304.7,-0.715,1.72
+crypto,all,nearest,1R no cap,2407,1826,59,244.5,0.134,4385.4,2.402,1.72
+crypto,all,nearest,1.5R no cap,2407,1826,33,-454.6,-0.249,-1597.2,-0.875,1.72
+crypto,all,nearest,2R no cap,2407,1826,28,-445.8,-0.244,-1381.8,-0.757,1.72
+crypto,all,nearest,2R+BE no cap,2407,1826,16,-382.0,-0.209,-1316.2,-0.721,1.72
+crypto,all,nearest 0.25ATR,2R+BE,2407,1826,19,-408.6,-0.224,-959.7,-0.526,1.5
+crypto,all,nearest 0.25ATR,2R no BE,2407,1826,30,-492.0,-0.269,-1073.5,-0.588,1.5
+crypto,all,nearest 0.25ATR,1.5R,2407,1826,34,-469.6,-0.257,-1131.4,-0.62,1.5
+crypto,all,nearest 0.25ATR,1.5R+trail,2407,1826,33,-476.8,-0.261,-1460.9,-0.8,1.5
+crypto,all,nearest 0.25ATR,1.5R+high,2407,1826,33,-501.6,-0.275,-1496.2,-0.819,1.5
+crypto,all,nearest 0.25ATR,candle close,2407,1826,44,-486.3,-0.266,-1239.5,-0.679,1.5
+crypto,all,nearest 0.25ATR,1R no cap,2407,1826,58,151.8,0.083,3726.6,2.041,1.5
+crypto,all,nearest 0.25ATR,1.5R no cap,2407,1826,32,-489.9,-0.268,-1581.1,-0.866,1.5
+crypto,all,nearest 0.25ATR,2R no cap,2407,1826,27,-506.2,-0.277,-1466.6,-0.803,1.5
+crypto,all,nearest 0.25ATR,2R+BE no cap,2407,1826,16,-421.7,-0.231,-1359.4,-0.744,1.5
+crypto,all,hybrid,2R+BE,2407,1826,20,-353.2,-0.193,-886.4,-0.485,1.71
+crypto,all,hybrid,2R no BE,2407,1826,31,-428.2,-0.235,-1021.9,-0.56,1.71
+crypto,all,hybrid,1.5R,2407,1826,35,-434.0,-0.238,-1169.0,-0.64,1.71
+crypto,all,hybrid,1.5R+trail,2407,1826,33,-422.5,-0.231,-1324.8,-0.725,1.71
+crypto,all,hybrid,1.5R+high,2407,1826,33,-454.5,-0.249,-1454.5,-0.797,1.71
+crypto,all,hybrid,candle close,2407,1826,45,-421.5,-0.231,-1296.5,-0.71,1.71
+crypto,all,hybrid,1R no cap,2407,1826,59,231.7,0.127,4224.4,2.313,1.71
+crypto,all,hybrid,1.5R no cap,2407,1826,33,-455.4,-0.249,-1580.4,-0.865,1.71
+crypto,all,hybrid,2R no cap,2407,1826,28,-440.5,-0.241,-1368.6,-0.75,1.71
+crypto,all,hybrid,2R+BE no cap,2407,1826,17,-359.7,-0.197,-1195.5,-0.655,1.71
+crypto,all,lakky,2R+BE,2407,1826,16,-515.0,-0.282,-774.8,-0.424,1.03
+crypto,all,lakky,2R no BE,2407,1826,27,-559.6,-0.306,-888.5,-0.487,1.03
+crypto,all,lakky,1.5R,2407,1826,32,-545.6,-0.299,-847.0,-0.464,1.03
+crypto,all,lakky,1.5R+trail,2407,1826,32,-571.0,-0.313,-862.4,-0.472,1.03
+crypto,all,lakky,1.5R+high,2407,1826,32,-581.8,-0.319,-879.5,-0.482,1.03
+crypto,all,lakky,candle close,2407,1826,39,-599.8,-0.328,-890.4,-0.488,1.03
+crypto,all,lakky,1R no cap,2407,1826,48,-245.8,-0.135,-75.7,-0.041,1.03
+crypto,all,lakky,1.5R no cap,2407,1826,32,-540.9,-0.296,-851.8,-0.466,1.03
+crypto,all,lakky,2R no cap,2407,1826,27,-548.2,-0.3,-876.9,-0.48,1.03
+crypto,all,lakky,2R+BE no cap,2407,1826,16,-511.6,-0.28,-778.6,-0.426,1.03
+crypto,4h,live,2R+BE,2109,1559,17,-476.4,-0.306,-476.4,-0.306,1.0
+crypto,4h,live,2R no BE,2109,1559,26,-512.8,-0.329,-512.8,-0.329,1.0
+crypto,4h,live,1.5R,2109,1559,32,-509.2,-0.327,-509.2,-0.327,1.0
+crypto,4h,live,1.5R+trail,2109,1559,32,-503.2,-0.323,-503.2,-0.323,1.0
+crypto,4h,live,1.5R+high,2109,1559,32,-520.8,-0.334,-520.8,-0.334,1.0
+crypto,4h,live,candle close,2109,1559,38,-506.3,-0.325,-506.3,-0.325,1.0
+crypto,4h,live,1R no cap,2109,1559,48,-242.5,-0.156,-242.5,-0.156,1.0
+crypto,4h,live,1.5R no cap,2109,1559,32,-507.3,-0.325,-507.3,-0.325,1.0
+crypto,4h,live,2R no cap,2109,1559,26,-508.8,-0.326,-508.8,-0.326,1.0
+crypto,4h,live,2R+BE no cap,2109,1559,17,-476.6,-0.306,-476.6,-0.306,1.0
+crypto,4h,touch,2R+BE,2109,1559,21,-286.5,-0.184,-775.8,-0.498,1.84
+crypto,4h,touch,2R no BE,2109,1559,33,-308.7,-0.198,-808.4,-0.519,1.84
+crypto,4h,touch,1.5R,2109,1559,36,-311.4,-0.2,-892.6,-0.573,1.84
+crypto,4h,touch,1.5R+trail,2109,1559,35,-303.5,-0.195,-780.6,-0.501,1.84
+crypto,4h,touch,1.5R+high,2109,1559,35,-321.1,-0.206,-804.9,-0.516,1.84
+crypto,4h,touch,candle close,2109,1559,47,-318.9,-0.205,-880.6,-0.565,1.84
+crypto,4h,touch,1R no cap,2109,1559,61,252.3,0.162,3043.4,1.952,1.84
+crypto,4h,touch,1.5R no cap,2109,1559,34,-353.9,-0.227,-1458.3,-0.935,1.84
+crypto,4h,touch,2R no cap,2109,1559,29,-337.6,-0.217,-1250.1,-0.802,1.84
+crypto,4h,touch,2R+BE no cap,2109,1559,16,-291.9,-0.187,-976.1,-0.626,1.84
+crypto,4h,nearest,2R+BE,2109,1559,20,-279.8,-0.179,-577.6,-0.37,1.59
+crypto,4h,nearest,2R no BE,2109,1559,32,-326.5,-0.209,-692.2,-0.444,1.59
+crypto,4h,nearest,1.5R,2109,1559,36,-329.2,-0.211,-782.3,-0.502,1.59
+crypto,4h,nearest,1.5R+trail,2109,1559,35,-310.4,-0.199,-722.9,-0.464,1.59
+crypto,4h,nearest,1.5R+high,2109,1559,35,-336.3,-0.216,-808.7,-0.519,1.59
+crypto,4h,nearest,candle close,2109,1559,47,-318.1,-0.204,-741.8,-0.476,1.59
+crypto,4h,nearest,1R no cap,2109,1559,60,232.7,0.149,2356.9,1.512,1.59
+crypto,4h,nearest,1.5R no cap,2109,1559,34,-336.1,-0.216,-949.3,-0.609,1.59
+crypto,4h,nearest,2R no cap,2109,1559,29,-321.9,-0.207,-776.8,-0.498,1.59
+crypto,4h,nearest,2R+BE no cap,2109,1559,17,-278.8,-0.179,-744.5,-0.478,1.59
+crypto,4h,nearest 0.25ATR,2R+BE,2109,1559,19,-319.1,-0.205,-565.6,-0.363,1.33
+crypto,4h,nearest 0.25ATR,2R no BE,2109,1559,31,-382.9,-0.246,-713.8,-0.458,1.33
+crypto,4h,nearest 0.25ATR,1.5R,2109,1559,35,-367.8,-0.236,-726.8,-0.466,1.33
+crypto,4h,nearest 0.25ATR,1.5R+trail,2109,1559,34,-366.0,-0.235,-813.1,-0.522,1.33
+crypto,4h,nearest 0.25ATR,1.5R+high,2109,1559,34,-390.8,-0.251,-841.7,-0.54,1.33
+crypto,4h,nearest 0.25ATR,candle close,2109,1559,46,-379.2,-0.243,-717.6,-0.46,1.33
+crypto,4h,nearest 0.25ATR,1R no cap,2109,1559,59,152.9,0.098,2030.7,1.303,1.33
+crypto,4h,nearest 0.25ATR,1.5R no cap,2109,1559,34,-378.6,-0.243,-929.9,-0.597,1.33
+crypto,4h,nearest 0.25ATR,2R no cap,2109,1559,28,-386.4,-0.248,-855.1,-0.548,1.33
+crypto,4h,nearest 0.25ATR,2R+BE no cap,2109,1559,16,-324.1,-0.208,-772.9,-0.496,1.33
+crypto,4h,hybrid,2R+BE,2109,1559,20,-264.6,-0.17,-558.3,-0.358,1.57
+crypto,4h,hybrid,2R no BE,2109,1559,32,-322.9,-0.207,-715.3,-0.459,1.57
+crypto,4h,hybrid,1.5R,2109,1559,36,-326.8,-0.21,-798.5,-0.512,1.57
+crypto,4h,hybrid,1.5R+trail,2109,1559,35,-309.5,-0.198,-757.8,-0.486,1.57
+crypto,4h,hybrid,1.5R+high,2109,1559,35,-335.6,-0.215,-842.3,-0.54,1.57
+crypto,4h,hybrid,candle close,2109,1559,47,-320.0,-0.205,-767.6,-0.492,1.57
+crypto,4h,hybrid,1R no cap,2109,1559,60,223.9,0.144,2314.4,1.485,1.57
+crypto,4h,hybrid,1.5R no cap,2109,1559,34,-336.8,-0.216,-991.1,-0.636,1.57
+crypto,4h,hybrid,2R no cap,2109,1559,29,-322.6,-0.207,-837.9,-0.537,1.57
+crypto,4h,hybrid,2R+BE no cap,2109,1559,17,-263.4,-0.169,-723.9,-0.464,1.57
+crypto,4h,lakky,2R+BE,2109,1559,16,-415.2,-0.266,-592.8,-0.38,1.01
+crypto,4h,lakky,2R no BE,2109,1559,28,-447.9,-0.287,-708.5,-0.454,1.01
+crypto,4h,lakky,1.5R,2109,1559,33,-424.2,-0.272,-649.5,-0.417,1.01
+crypto,4h,lakky,1.5R+trail,2109,1559,33,-443.7,-0.285,-670.6,-0.43,1.01
+crypto,4h,lakky,1.5R+high,2109,1559,33,-459.0,-0.294,-695.4,-0.446,1.01
+crypto,4h,lakky,candle close,2109,1559,41,-472.9,-0.303,-684.9,-0.439,1.01
+crypto,4h,lakky,1R no cap,2109,1559,50,-144.4,-0.093,24.4,0.016,1.01
+crypto,4h,lakky,1.5R no cap,2109,1559,33,-419.5,-0.269,-654.3,-0.42,1.01
+crypto,4h,lakky,2R no cap,2109,1559,28,-436.5,-0.28,-697.0,-0.447,1.01
+crypto,4h,lakky,2R+BE no cap,2109,1559,16,-411.8,-0.264,-596.6,-0.383,1.01
+crypto,1d,live,2R+BE,274,243,14,-115.8,-0.477,-173.8,-0.715,1.5
+crypto,1d,live,2R no BE,274,243,18,-130.3,-0.536,-195.4,-0.804,1.5
+crypto,1d,live,1.5R,274,243,22,-127.0,-0.522,-190.4,-0.784,1.5
+crypto,1d,live,1.5R+trail,274,243,22,-131.7,-0.542,-197.5,-0.813,1.5
+crypto,1d,live,1.5R+high,274,243,22,-127.4,-0.524,-191.0,-0.786,1.5
+crypto,1d,live,candle close,274,243,25,-110.7,-0.456,-166.1,-0.684,1.5
+crypto,1d,live,1R no cap,274,243,32,-107.2,-0.441,-160.8,-0.662,1.5
+crypto,1d,live,1.5R no cap,274,243,22,-127.0,-0.522,-190.4,-0.784,1.5
+crypto,1d,live,2R no cap,274,243,18,-130.3,-0.536,-195.4,-0.804,1.5
+crypto,1d,live,2R+BE no cap,274,243,14,-115.8,-0.477,-173.8,-0.715,1.5
+crypto,1d,touch,2R+BE,274,243,16,-85.2,-0.35,-612.2,-2.519,4.34
+crypto,1d,touch,2R no BE,274,243,21,-98.0,-0.403,-569.6,-2.344,4.34
+crypto,1d,touch,1.5R,274,243,24,-103.4,-0.426,-626.4,-2.578,4.34
+crypto,1d,touch,1.5R+trail,274,243,21,-111.0,-0.457,-819.3,-3.372,4.34
+crypto,1d,touch,1.5R+high,274,243,21,-115.4,-0.475,-844.4,-3.475,4.34
+crypto,1d,touch,candle close,274,243,35,-90.6,-0.373,-544.9,-2.243,4.34
+crypto,1d,touch,1R no cap,274,243,52,8.3,0.034,1640.7,6.752,4.34
+crypto,1d,touch,1.5R no cap,274,243,21,-115.0,-0.473,-826.4,-3.401,4.34
+crypto,1d,touch,2R no cap,274,243,19,-110.8,-0.456,-784.3,-3.228,4.34
+crypto,1d,touch,2R+BE no cap,274,243,14,-88.5,-0.364,-684.2,-2.815,4.34
+crypto,1d,nearest,2R+BE,274,243,16,-89.7,-0.369,-545.9,-2.246,4.15
+crypto,1d,nearest,2R no BE,274,243,21,-103.4,-0.425,-493.5,-2.031,4.15
+crypto,1d,nearest,1.5R,274,243,25,-100.7,-0.414,-541.6,-2.229,4.15
+crypto,1d,nearest,1.5R+trail,274,243,22,-113.1,-0.465,-807.8,-3.324,4.15
+crypto,1d,nearest,1.5R+high,274,243,22,-113.6,-0.467,-817.0,-3.362,4.15
+crypto,1d,nearest,candle close,274,243,35,-96.3,-0.396,-535.9,-2.205,4.15
+crypto,1d,nearest,1R no cap,274,243,52,7.2,0.03,1236.4,5.088,4.15
+crypto,1d,nearest,1.5R no cap,274,243,22,-113.3,-0.466,-812.4,-3.343,4.15
+crypto,1d,nearest,2R no cap,274,243,18,-117.1,-0.482,-769.6,-3.167,4.15
+crypto,1d,nearest,2R+BE no cap,274,243,13,-98.6,-0.406,-741.4,-3.051,4.15
+crypto,1d,nearest 0.25ATR,2R+BE,274,243,16,-86.9,-0.358,-445.9,-1.835,3.5
+crypto,1d,nearest 0.25ATR,2R no BE,274,243,21,-103.5,-0.426,-399.7,-1.645,3.5
+crypto,1d,nearest 0.25ATR,1.5R,274,243,26,-94.1,-0.387,-430.5,-1.772,3.5
+crypto,1d,nearest 0.25ATR,1.5R+trail,274,243,24,-104.4,-0.43,-679.2,-2.795,3.5
+crypto,1d,nearest 0.25ATR,1.5R+high,274,243,24,-104.5,-0.43,-686.0,-2.823,3.5
+crypto,1d,nearest 0.25ATR,candle close,274,243,34,-102.9,-0.423,-488.2,-2.009,3.5
+crypto,1d,nearest 0.25ATR,1R no cap,274,243,50,-4.6,-0.019,1045.6,4.303,3.5
+crypto,1d,nearest 0.25ATR,1.5R no cap,274,243,24,-103.7,-0.427,-677.0,-2.786,3.5
+crypto,1d,nearest 0.25ATR,2R no cap,274,243,19,-114.1,-0.47,-651.5,-2.681,3.5
+crypto,1d,nearest 0.25ATR,2R+BE no cap,274,243,13,-95.0,-0.391,-638.3,-2.627,3.5
+crypto,1d,hybrid,2R+BE,274,243,16,-83.9,-0.345,-512.2,-2.108,3.87
+crypto,1d,hybrid,2R no BE,274,243,22,-98.6,-0.406,-485.6,-1.998,3.87
+crypto,1d,hybrid,1.5R,274,243,25,-101.9,-0.419,-549.2,-2.26,3.87
+crypto,1d,hybrid,1.5R+trail,274,243,22,-108.1,-0.445,-747.9,-3.078,3.87
+crypto,1d,hybrid,1.5R+high,274,243,22,-114.1,-0.469,-793.2,-3.264,3.87
+crypto,1d,hybrid,candle close,274,243,35,-94.8,-0.39,-516.2,-2.124,3.87
+crypto,1d,hybrid,1R no cap,274,243,51,3.1,0.013,1132.1,4.659,3.87
+crypto,1d,hybrid,1.5R no cap,274,243,22,-113.4,-0.467,-768.0,-3.16,3.87
+crypto,1d,hybrid,2R no cap,274,243,19,-111.2,-0.458,-709.6,-2.92,3.87
+crypto,1d,hybrid,2R+BE no cap,274,243,14,-91.6,-0.377,-655.7,-2.698,3.87
+crypto,1d,lakky,2R+BE,274,243,17,-91.6,-0.377,-175.4,-0.722,1.39
+crypto,1d,lakky,2R no BE,274,243,22,-100.3,-0.413,-164.8,-0.678,1.39
+crypto,1d,lakky,1.5R,274,243,25,-110.6,-0.455,-183.3,-0.754,1.39
+crypto,1d,lakky,1.5R+trail,274,243,25,-115.5,-0.475,-178.6,-0.735,1.39
+crypto,1d,lakky,1.5R+high,274,243,25,-111.0,-0.457,-170.9,-0.703,1.39
+crypto,1d,lakky,candle close,274,243,26,-116.3,-0.479,-194.3,-0.8,1.39
+crypto,1d,lakky,1R no cap,274,243,35,-94.4,-0.389,-134.0,-0.551,1.39
+crypto,1d,lakky,1.5R no cap,274,243,25,-110.6,-0.455,-183.3,-0.754,1.39
+crypto,1d,lakky,2R no cap,274,243,22,-100.3,-0.413,-164.8,-0.678,1.39
+crypto,1d,lakky,2R+BE no cap,274,243,17,-91.6,-0.377,-175.4,-0.722,1.39
+crypto,1w,live,2R+BE,24,24,21,-6.0,-0.251,-15.1,-0.627,2.5
+crypto,1w,live,2R no BE,24,24,21,-10.2,-0.424,-25.4,-1.059,2.5
+crypto,1w,live,1.5R,24,24,33,-5.1,-0.213,-12.8,-0.532,2.5
+crypto,1w,live,1.5R+trail,24,24,33,-3.0,-0.126,-7.5,-0.314,2.5
+crypto,1w,live,1.5R+high,24,24,33,-3.0,-0.126,-7.5,-0.314,2.5
+crypto,1w,live,candle close,24,24,33,-3.2,-0.134,-8.0,-0.335,2.5
+crypto,1w,live,1R no cap,24,24,33,-9.1,-0.38,-22.8,-0.949,2.5
+crypto,1w,live,1.5R no cap,24,24,33,-5.1,-0.213,-12.8,-0.532,2.5
+crypto,1w,live,2R no cap,24,24,21,-10.2,-0.424,-25.4,-1.059,2.5
+crypto,1w,live,2R+BE no cap,24,24,21,-6.0,-0.251,-15.1,-0.627,2.5
+crypto,1w,touch,2R+BE,24,24,33,-4.7,-0.196,-10.9,-0.455,20.43
+crypto,1w,touch,2R no BE,24,24,33,-6.8,-0.283,-16.1,-0.671,20.43
+crypto,1w,touch,1.5R,24,24,38,-5.3,-0.219,-16.3,-0.677,20.43
+crypto,1w,touch,1.5R+trail,24,24,38,-4.9,-0.205,-14.0,-0.582,20.43
+crypto,1w,touch,1.5R+high,24,24,38,-4.9,-0.205,-14.0,-0.582,20.43
+crypto,1w,touch,candle close,24,24,25,-6.8,-0.284,-198.0,-8.248,20.43
+crypto,1w,touch,1R no cap,24,24,62,4.6,0.192,1185.6,49.401,20.43
+crypto,1w,touch,1.5R no cap,24,24,38,-5.3,-0.219,-16.3,-0.677,20.43
+crypto,1w,touch,2R no cap,24,24,33,-6.8,-0.283,-16.1,-0.671,20.43
+crypto,1w,touch,2R+BE no cap,24,24,33,-4.7,-0.196,-10.9,-0.455,20.43
+crypto,1w,nearest,2R+BE,24,24,38,-4.6,-0.193,169.7,7.073,13.68
+crypto,1w,nearest,2R no BE,24,24,38,-6.7,-0.28,164.6,6.857,13.68
+crypto,1w,nearest,1.5R,24,24,42,-5.2,-0.217,164.4,6.851,13.68
+crypto,1w,nearest,1.5R+trail,24,24,42,-4.9,-0.202,166.7,6.946,13.68
+crypto,1w,nearest,1.5R+high,24,24,42,-4.9,-0.202,166.7,6.946,13.68
+crypto,1w,nearest,candle close,24,24,29,-6.7,-0.278,-27.0,-1.126,13.68
+crypto,1w,nearest,1R no cap,24,24,62,4.6,0.192,792.1,33.006,13.68
+crypto,1w,nearest,1.5R no cap,24,24,42,-5.2,-0.217,164.4,6.851,13.68
+crypto,1w,nearest,2R no cap,24,24,38,-6.7,-0.28,164.6,6.857,13.68
+crypto,1w,nearest,2R+BE no cap,24,24,38,-4.6,-0.193,169.7,7.073,13.68
+crypto,1w,nearest 0.25ATR,2R+BE,24,24,33,-2.6,-0.108,51.8,2.157,9.26
+crypto,1w,nearest 0.25ATR,2R no BE,24,24,33,-5.7,-0.236,40.0,1.668,9.26
+crypto,1w,nearest 0.25ATR,1.5R,24,24,33,-7.7,-0.32,25.9,1.078,9.26
+crypto,1w,nearest 0.25ATR,1.5R+trail,24,24,33,-6.4,-0.265,31.4,1.309,9.26
+crypto,1w,nearest 0.25ATR,1.5R+high,24,24,33,-6.4,-0.265,31.4,1.309,9.26
+crypto,1w,nearest 0.25ATR,candle close,24,24,38,-4.2,-0.175,-33.7,-1.404,9.26
+crypto,1w,nearest 0.25ATR,1R no cap,24,24,58,3.6,0.149,650.3,27.095,9.26
+crypto,1w,nearest 0.25ATR,1.5R no cap,24,24,33,-7.7,-0.32,25.9,1.078,9.26
+crypto,1w,nearest 0.25ATR,2R no cap,24,24,33,-5.7,-0.236,40.0,1.668,9.26
+crypto,1w,nearest 0.25ATR,2R+BE no cap,24,24,33,-2.6,-0.108,51.8,2.157,9.26
+crypto,1w,hybrid,2R+BE,24,24,38,-4.6,-0.194,184.0,7.668,13.68
+crypto,1w,hybrid,2R no BE,24,24,38,-6.7,-0.28,178.9,7.452,13.68
+crypto,1w,hybrid,1.5R,24,24,42,-5.2,-0.217,178.7,7.446,13.68
+crypto,1w,hybrid,1.5R+trail,24,24,42,-4.9,-0.202,181.0,7.542,13.68
+crypto,1w,hybrid,1.5R+high,24,24,42,-4.9,-0.202,181.0,7.542,13.68
+crypto,1w,hybrid,candle close,24,24,29,-6.7,-0.279,-12.7,-0.53,13.68
+crypto,1w,hybrid,1R no cap,24,24,62,4.6,0.192,777.9,32.411,13.68
+crypto,1w,hybrid,1.5R no cap,24,24,42,-5.2,-0.217,178.7,7.446,13.68
+crypto,1w,hybrid,2R no cap,24,24,38,-6.7,-0.28,178.9,7.452,13.68
+crypto,1w,hybrid,2R+BE no cap,24,24,38,-4.6,-0.194,184.0,7.668,13.68
+crypto,1w,lakky,2R+BE,24,24,21,-8.2,-0.342,-6.6,-0.276,3.76
+crypto,1w,lakky,2R no BE,24,24,21,-11.3,-0.471,-15.2,-0.632,3.76
+crypto,1w,lakky,1.5R,24,24,25,-10.8,-0.45,-14.2,-0.59,3.76
+crypto,1w,lakky,1.5R+trail,24,24,25,-11.8,-0.493,-13.3,-0.553,3.76
+crypto,1w,lakky,1.5R+high,24,24,25,-11.8,-0.493,-13.3,-0.553,3.76
+crypto,1w,lakky,candle close,24,24,29,-10.5,-0.437,-11.1,-0.464,3.76
+crypto,1w,lakky,1R no cap,24,24,38,-7.0,-0.293,33.8,1.41,3.76
+crypto,1w,lakky,1.5R no cap,24,24,25,-10.8,-0.45,-14.2,-0.59,3.76
+crypto,1w,lakky,2R no cap,24,24,21,-11.3,-0.471,-15.2,-0.632,3.76
+crypto,1w,lakky,2R+BE no cap,24,24,21,-8.2,-0.342,-6.6,-0.276,3.76
+nse,all,live,2R+BE,6044,4735,16,-1283.7,-0.271,-1536.3,-0.324,1.0
+nse,all,live,2R no BE,6044,4735,28,-1334.2,-0.282,-1580.5,-0.334,1.0
+nse,all,live,1.5R,6044,4735,33,-1393.8,-0.294,-1656.7,-0.35,1.0
+nse,all,live,1.5R+trail,6044,4735,33,-1223.1,-0.258,-1475.0,-0.312,1.0
+nse,all,live,1.5R+high,6044,4735,33,-1273.0,-0.269,-1523.0,-0.322,1.0
+nse,all,live,candle close,6044,4735,39,-1572.5,-0.332,-1899.9,-0.401,1.0
+nse,all,live,1R no cap,6044,4735,49,-640.9,-0.135,-698.4,-0.147,1.0
+nse,all,live,1.5R no cap,6044,4735,33,-1393.8,-0.294,-1656.7,-0.35,1.0
+nse,all,live,2R no cap,6044,4735,28,-1339.3,-0.283,-1587.4,-0.335,1.0
+nse,all,live,2R+BE no cap,6044,4735,16,-1283.7,-0.271,-1536.3,-0.324,1.0
+nse,all,touch,2R+BE,6044,4735,20,-839.9,-0.177,-1121.3,-0.237,2.1
+nse,all,touch,2R no BE,6044,4735,32,-913.6,-0.193,-1387.7,-0.293,2.1
+nse,all,touch,1.5R,6044,4735,36,-896.5,-0.189,-1463.4,-0.309,2.1
+nse,all,touch,1.5R+trail,6044,4735,36,-834.6,-0.176,-1138.0,-0.24,2.1
+nse,all,touch,1.5R+high,6044,4735,36,-856.7,-0.181,-1175.8,-0.248,2.1
+nse,all,touch,candle close,6044,4735,46,-1001.9,-0.212,-1845.4,-0.39,2.1
+nse,all,touch,1R no cap,6044,4735,58,551.1,0.116,5878.2,1.241,2.1
+nse,all,touch,1.5R no cap,6044,4735,36,-882.3,-0.186,-1105.6,-0.233,2.1
+nse,all,touch,2R no cap,6044,4735,31,-912.6,-0.193,-963.8,-0.204,2.1
+nse,all,touch,2R+BE no cap,6044,4735,18,-803.2,-0.17,-697.1,-0.147,2.1
+nse,all,nearest,2R+BE,6044,4735,19,-882.2,-0.186,-1303.7,-0.275,1.88
+nse,all,nearest,2R no BE,6044,4735,32,-916.5,-0.194,-1451.3,-0.307,1.88
+nse,all,nearest,1.5R,6044,4735,36,-908.4,-0.192,-1523.3,-0.322,1.88
+nse,all,nearest,1.5R+trail,6044,4735,35,-872.3,-0.184,-1580.9,-0.334,1.88
+nse,all,nearest,1.5R+high,6044,4735,35,-902.3,-0.191,-1631.0,-0.344,1.88
+nse,all,nearest,candle close,6044,4735,46,-1048.0,-0.221,-1900.8,-0.401,1.88
+nse,all,nearest,1R no cap,6044,4735,57,455.7,0.096,4448.0,0.939,1.88
+nse,all,nearest,1.5R no cap,6044,4735,35,-930.9,-0.197,-1553.3,-0.328,1.88
+nse,all,nearest,2R no cap,6044,4735,30,-964.9,-0.204,-1482.9,-0.313,1.88
+nse,all,nearest,2R+BE no cap,6044,4735,18,-865.1,-0.183,-1101.9,-0.233,1.88
+nse,all,nearest 0.25ATR,2R+BE,6044,4735,19,-968.4,-0.205,-1331.5,-0.281,1.51
+nse,all,nearest 0.25ATR,2R no BE,6044,4735,31,-1000.8,-0.211,-1384.7,-0.292,1.51
+nse,all,nearest 0.25ATR,1.5R,6044,4735,36,-1028.6,-0.217,-1504.1,-0.318,1.51
+nse,all,nearest 0.25ATR,1.5R+trail,6044,4735,35,-899.0,-0.19,-1421.5,-0.3,1.51
+nse,all,nearest 0.25ATR,1.5R+high,6044,4735,35,-972.3,-0.205,-1508.1,-0.318,1.51
+nse,all,nearest 0.25ATR,candle close,6044,4735,44,-1168.6,-0.247,-1766.5,-0.373,1.51
+nse,all,nearest 0.25ATR,1R no cap,6044,4735,55,174.4,0.037,3521.8,0.744,1.51
+nse,all,nearest 0.25ATR,1.5R no cap,6044,4735,35,-1038.5,-0.219,-1451.1,-0.306,1.51
+nse,all,nearest 0.25ATR,2R no cap,6044,4735,30,-1034.3,-0.218,-1334.2,-0.282,1.51
+nse,all,nearest 0.25ATR,2R+BE no cap,6044,4735,18,-947.6,-0.2,-1108.7,-0.234,1.51
+nse,all,hybrid,2R+BE,6044,4735,19,-889.9,-0.188,-1300.8,-0.275,1.85
+nse,all,hybrid,2R no BE,6044,4735,32,-928.3,-0.196,-1430.4,-0.302,1.85
+nse,all,hybrid,1.5R,6044,4735,36,-913.2,-0.193,-1508.9,-0.319,1.85
+nse,all,hybrid,1.5R+trail,6044,4735,35,-871.5,-0.184,-1531.3,-0.323,1.85
+nse,all,hybrid,1.5R+high,6044,4735,35,-902.5,-0.191,-1589.5,-0.336,1.85
+nse,all,hybrid,candle close,6044,4735,46,-1051.2,-0.222,-1869.9,-0.395,1.85
+nse,all,hybrid,1R no cap,6044,4735,57,432.5,0.091,4287.7,0.906,1.85
+nse,all,hybrid,1.5R no cap,6044,4735,35,-932.1,-0.197,-1516.7,-0.32,1.85
+nse,all,hybrid,2R no cap,6044,4735,30,-976.6,-0.206,-1451.7,-0.307,1.85
+nse,all,hybrid,2R+BE no cap,6044,4735,18,-872.8,-0.184,-1099.0,-0.232,1.85
+nse,all,lakky,2R+BE,6044,4735,16,-1345.8,-0.284,-1639.5,-0.346,1.06
+nse,all,lakky,2R no BE,6044,4735,27,-1481.2,-0.313,-1831.0,-0.387,1.06
+nse,all,lakky,1.5R,6044,4735,33,-1483.8,-0.313,-1765.0,-0.373,1.06
+nse,all,lakky,1.5R+trail,6044,4735,32,-1268.1,-0.268,-1574.0,-0.332,1.06
+nse,all,lakky,1.5R+high,6044,4735,32,-1336.6,-0.282,-1652.5,-0.349,1.06
+nse,all,lakky,candle close,6044,4735,39,-1644.5,-0.347,-1896.5,-0.401,1.06
+nse,all,lakky,1R no cap,6044,4735,47,-788.5,-0.167,-582.9,-0.123,1.06
+nse,all,lakky,1.5R no cap,6044,4735,32,-1492.8,-0.315,-1800.6,-0.38,1.06
+nse,all,lakky,2R no cap,6044,4735,27,-1504.7,-0.318,-1896.0,-0.4,1.06
+nse,all,lakky,2R+BE no cap,6044,4735,16,-1347.7,-0.285,-1648.0,-0.348,1.06
+nse,4h,live,2R+BE,3751,2867,17,-870.6,-0.304,-870.6,-0.304,1.0
+nse,4h,live,2R no BE,3751,2867,27,-910.5,-0.318,-910.5,-0.318,1.0
+nse,4h,live,1.5R,3751,2867,32,-963.6,-0.336,-963.6,-0.336,1.0
+nse,4h,live,1.5R+trail,3751,2867,32,-809.4,-0.282,-809.4,-0.282,1.0
+nse,4h,live,1.5R+high,3751,2867,32,-860.5,-0.3,-860.5,-0.3,1.0
+nse,4h,live,candle close,3751,2867,38,-1034.5,-0.361,-1034.5,-0.361,1.0
+nse,4h,live,1R no cap,3751,2867,46,-605.0,-0.211,-605.0,-0.211,1.0
+nse,4h,live,1.5R no cap,3751,2867,32,-963.6,-0.336,-963.6,-0.336,1.0
+nse,4h,live,2R no cap,3751,2867,27,-912.0,-0.318,-912.0,-0.318,1.0
+nse,4h,live,2R+BE no cap,3751,2867,17,-870.6,-0.304,-870.6,-0.304,1.0
+nse,4h,touch,2R+BE,3751,2867,20,-563.9,-0.197,-689.9,-0.241,1.67
+nse,4h,touch,2R no BE,3751,2867,32,-585.7,-0.204,-760.9,-0.265,1.67
+nse,4h,touch,1.5R,3751,2867,37,-581.5,-0.203,-789.5,-0.275,1.67
+nse,4h,touch,1.5R+trail,3751,2867,35,-539.2,-0.188,-920.5,-0.321,1.67
+nse,4h,touch,1.5R+high,3751,2867,35,-564.6,-0.197,-962.1,-0.336,1.67
+nse,4h,touch,candle close,3751,2867,46,-672.1,-0.234,-1082.5,-0.378,1.67
+nse,4h,touch,1R no cap,3751,2867,57,237.1,0.083,2492.9,0.87,1.67
+nse,4h,touch,1.5R no cap,3751,2867,36,-590.0,-0.206,-905.6,-0.316,1.67
+nse,4h,touch,2R no cap,3751,2867,30,-610.9,-0.213,-922.6,-0.322,1.67
+nse,4h,touch,2R+BE no cap,3751,2867,18,-549.8,-0.192,-703.4,-0.245,1.67
+nse,4h,nearest,2R+BE,3751,2867,19,-609.1,-0.212,-797.4,-0.278,1.53
+nse,4h,nearest,2R no BE,3751,2867,32,-609.6,-0.213,-800.6,-0.279,1.53
+nse,4h,nearest,1.5R,3751,2867,36,-603.7,-0.211,-819.3,-0.286,1.53
+nse,4h,nearest,1.5R+trail,3751,2867,35,-567.7,-0.198,-1039.7,-0.363,1.53
+nse,4h,nearest,1.5R+high,3751,2867,35,-597.5,-0.208,-1089.8,-0.38,1.53
+nse,4h,nearest,candle close,3751,2867,46,-698.0,-0.243,-1087.5,-0.379,1.53
+nse,4h,nearest,1R no cap,3751,2867,56,147.9,0.052,1884.0,0.657,1.53
+nse,4h,nearest,1.5R no cap,3751,2867,35,-631.4,-0.22,-1045.3,-0.365,1.53
+nse,4h,nearest,2R no cap,3751,2867,30,-662.2,-0.231,-1104.8,-0.385,1.53
+nse,4h,nearest,2R+BE no cap,3751,2867,17,-606.0,-0.211,-849.6,-0.296,1.53
+nse,4h,nearest 0.25ATR,2R+BE,3751,2867,19,-687.4,-0.24,-768.3,-0.268,1.24
+nse,4h,nearest 0.25ATR,2R no BE,3751,2867,31,-715.3,-0.249,-763.9,-0.266,1.24
+nse,4h,nearest 0.25ATR,1.5R,3751,2867,35,-719.8,-0.251,-809.5,-0.282,1.24
+nse,4h,nearest 0.25ATR,1.5R+trail,3751,2867,34,-610.9,-0.213,-845.4,-0.295,1.24
+nse,4h,nearest 0.25ATR,1.5R+high,3751,2867,34,-671.7,-0.234,-915.0,-0.319,1.24
+nse,4h,nearest 0.25ATR,candle close,3751,2867,43,-787.7,-0.275,-997.4,-0.348,1.24
+nse,4h,nearest 0.25ATR,1R no cap,3751,2867,54,-47.3,-0.016,1576.6,0.55,1.24
+nse,4h,nearest 0.25ATR,1.5R no cap,3751,2867,35,-731.6,-0.255,-881.4,-0.307,1.24
+nse,4h,nearest 0.25ATR,2R no cap,3751,2867,29,-749.4,-0.261,-909.3,-0.317,1.24
+nse,4h,nearest 0.25ATR,2R+BE no cap,3751,2867,17,-677.3,-0.236,-722.5,-0.252,1.24
+nse,4h,hybrid,2R+BE,3751,2867,19,-610.7,-0.213,-792.2,-0.276,1.5
+nse,4h,hybrid,2R no BE,3751,2867,32,-619.3,-0.216,-798.8,-0.279,1.5
+nse,4h,hybrid,1.5R,3751,2867,36,-606.3,-0.211,-813.2,-0.284,1.5
+nse,4h,hybrid,1.5R+trail,3751,2867,35,-568.3,-0.198,-1023.9,-0.357,1.5
+nse,4h,hybrid,1.5R+high,3751,2867,35,-599.1,-0.209,-1075.1,-0.375,1.5
+nse,4h,hybrid,candle close,3751,2867,45,-705.9,-0.246,-1083.6,-0.378,1.5
+nse,4h,hybrid,1R no cap,3751,2867,56,132.0,0.046,1826.2,0.637,1.5
+nse,4h,hybrid,1.5R no cap,3751,2867,35,-632.0,-0.22,-1028.7,-0.359,1.5
+nse,4h,hybrid,2R no cap,3751,2867,30,-671.4,-0.234,-1095.6,-0.382,1.5
+nse,4h,hybrid,2R+BE no cap,3751,2867,17,-607.6,-0.212,-844.3,-0.295,1.5
+nse,4h,lakky,2R+BE,3751,2867,16,-805.6,-0.281,-913.6,-0.319,1.03
+nse,4h,lakky,2R no BE,3751,2867,28,-852.4,-0.297,-961.0,-0.335,1.03
+nse,4h,lakky,1.5R,3751,2867,33,-878.6,-0.306,-950.2,-0.331,1.03
+nse,4h,lakky,1.5R+trail,3751,2867,33,-726.9,-0.254,-845.1,-0.295,1.03
+nse,4h,lakky,1.5R+high,3751,2867,33,-786.7,-0.274,-912.5,-0.318,1.03
+nse,4h,lakky,candle close,3751,2867,41,-950.7,-0.332,-1043.1,-0.364,1.03
+nse,4h,lakky,1R no cap,3751,2867,48,-468.7,-0.163,-329.5,-0.115,1.03
+nse,4h,lakky,1.5R no cap,3751,2867,33,-891.5,-0.311,-1017.1,-0.355,1.03
+nse,4h,lakky,2R no cap,3751,2867,28,-879.8,-0.307,-1059.8,-0.37,1.03
+nse,4h,lakky,2R+BE no cap,3751,2867,16,-806.9,-0.281,-915.4,-0.319,1.03
+nse,1d,live,2R+BE,2022,1635,16,-367.3,-0.225,-551.0,-0.337,1.5
+nse,1d,live,2R no BE,2022,1635,29,-390.3,-0.239,-585.4,-0.358,1.5
+nse,1d,live,1.5R,2022,1635,34,-383.5,-0.235,-575.3,-0.352,1.5
+nse,1d,live,1.5R+trail,2022,1635,34,-370.4,-0.227,-555.5,-0.34,1.5
+nse,1d,live,1.5R+high,2022,1635,34,-370.6,-0.227,-555.9,-0.34,1.5
+nse,1d,live,candle close,2022,1635,41,-481.2,-0.294,-721.8,-0.441,1.5
+nse,1d,live,1R no cap,2022,1635,54,2.9,0.002,4.3,0.003,1.5
+nse,1d,live,1.5R no cap,2022,1635,34,-383.5,-0.235,-575.3,-0.352,1.5
+nse,1d,live,2R no cap,2022,1635,29,-393.9,-0.241,-590.9,-0.361,1.5
+nse,1d,live,2R+BE no cap,2022,1635,16,-367.3,-0.225,-551.0,-0.337,1.5
+nse,1d,touch,2R+BE,2022,1635,20,-256.6,-0.157,-323.5,-0.198,2.59
+nse,1d,touch,2R no BE,2022,1635,31,-330.8,-0.202,-611.5,-0.374,2.59
+nse,1d,touch,1.5R,2022,1635,35,-313.9,-0.192,-649.9,-0.397,2.59
+nse,1d,touch,1.5R+trail,2022,1635,35,-295.9,-0.181,-183.1,-0.112,2.59
+nse,1d,touch,1.5R+high,2022,1635,35,-293.5,-0.18,-183.1,-0.112,2.59
+nse,1d,touch,candle close,2022,1635,46,-316.4,-0.194,-608.2,-0.372,2.59
+nse,1d,touch,1R no cap,2022,1635,60,285.4,0.175,2764.8,1.691,2.59
+nse,1d,touch,1.5R no cap,2022,1635,35,-291.3,-0.178,-175.9,-0.108,2.59
+nse,1d,touch,2R no cap,2022,1635,30,-304.5,-0.186,-25.9,-0.016,2.59
+nse,1d,touch,2R+BE no cap,2022,1635,18,-234.0,-0.143,114.2,0.07,2.59
+nse,1d,nearest,2R+BE,2022,1635,19,-249.8,-0.153,-405.2,-0.248,2.39
+nse,1d,nearest,2R no BE,2022,1635,31,-306.3,-0.187,-647.7,-0.396,2.39
+nse,1d,nearest,1.5R,2022,1635,35,-302.6,-0.185,-720.0,-0.44,2.39
+nse,1d,nearest,1.5R+trail,2022,1635,35,-303.7,-0.186,-539.9,-0.33,2.39
+nse,1d,nearest,1.5R+high,2022,1635,35,-305.6,-0.187,-551.0,-0.337,2.39
+nse,1d,nearest,candle close,2022,1635,46,-334.4,-0.205,-679.7,-0.416,2.39
+nse,1d,nearest,1R no cap,2022,1635,60,275.0,0.168,2045.3,1.251,2.39
+nse,1d,nearest,1.5R no cap,2022,1635,35,-297.4,-0.182,-524.0,-0.32,2.39
+nse,1d,nearest,2R no cap,2022,1635,30,-302.1,-0.185,-375.1,-0.229,2.39
+nse,1d,nearest,2R+BE no cap,2022,1635,18,-235.8,-0.144,-151.2,-0.092,2.39
+nse,1d,nearest 0.25ATR,2R+BE,2022,1635,19,-260.0,-0.159,-486.2,-0.297,1.9
+nse,1d,nearest 0.25ATR,2R no BE,2022,1635,31,-290.0,-0.177,-659.7,-0.403,1.9
+nse,1d,nearest 0.25ATR,1.5R,2022,1635,35,-312.0,-0.191,-749.5,-0.458,1.9
+nse,1d,nearest 0.25ATR,1.5R+trail,2022,1635,35,-290.6,-0.178,-609.0,-0.373,1.9
+nse,1d,nearest 0.25ATR,1.5R+high,2022,1635,35,-303.8,-0.186,-633.0,-0.387,1.9
+nse,1d,nearest 0.25ATR,candle close,2022,1635,45,-360.5,-0.22,-663.6,-0.406,1.9
+nse,1d,nearest 0.25ATR,1R no cap,2022,1635,58,194.7,0.119,1550.8,0.949,1.9
+nse,1d,nearest 0.25ATR,1.5R no cap,2022,1635,35,-310.0,-0.19,-624.6,-0.382,1.9
+nse,1d,nearest 0.25ATR,2R no cap,2022,1635,31,-289.4,-0.177,-463.8,-0.284,1.9
+nse,1d,nearest 0.25ATR,2R+BE no cap,2022,1635,18,-249.4,-0.153,-309.2,-0.189,1.9
+nse,1d,hybrid,2R+BE,2022,1635,19,-255.1,-0.156,-387.6,-0.237,2.33
+nse,1d,hybrid,2R no BE,2022,1635,31,-307.6,-0.188,-613.4,-0.375,2.33
+nse,1d,hybrid,1.5R,2022,1635,35,-303.3,-0.185,-690.1,-0.422,2.33
+nse,1d,hybrid,1.5R+trail,2022,1635,35,-301.1,-0.184,-490.0,-0.3,2.33
+nse,1d,hybrid,1.5R+high,2022,1635,35,-302.7,-0.185,-502.9,-0.308,2.33
+nse,1d,hybrid,candle close,2022,1635,46,-329.9,-0.202,-651.2,-0.398,2.33
+nse,1d,hybrid,1R no cap,2022,1635,60,273.7,0.167,2010.2,1.229,2.33
+nse,1d,hybrid,1.5R no cap,2022,1635,35,-296.5,-0.181,-482.4,-0.295,2.33
+nse,1d,hybrid,2R no cap,2022,1635,30,-303.8,-0.186,-337.8,-0.207,2.33
+nse,1d,hybrid,2R+BE no cap,2022,1635,18,-241.1,-0.147,-133.6,-0.082,2.33
+nse,1d,lakky,2R+BE,2022,1635,16,-459.6,-0.281,-597.4,-0.365,1.08
+nse,1d,lakky,2R no BE,2022,1635,27,-530.9,-0.325,-717.5,-0.439,1.08
+nse,1d,lakky,1.5R,2022,1635,32,-509.4,-0.312,-673.1,-0.412,1.08
+nse,1d,lakky,1.5R+trail,2022,1635,33,-449.6,-0.275,-590.9,-0.361,1.08
+nse,1d,lakky,1.5R+high,2022,1635,33,-459.2,-0.281,-603.1,-0.369,1.08
+nse,1d,lakky,candle close,2022,1635,36,-603.1,-0.369,-696.6,-0.426,1.08
+nse,1d,lakky,1R no cap,2022,1635,49,-227.6,-0.139,-144.8,-0.089,1.08
+nse,1d,lakky,1.5R no cap,2022,1635,33,-505.4,-0.309,-641.8,-0.393,1.08
+nse,1d,lakky,2R no cap,2022,1635,27,-527.0,-0.322,-683.8,-0.418,1.08
+nse,1d,lakky,2R+BE no cap,2022,1635,16,-460.3,-0.282,-604.1,-0.369,1.08
+nse,1w,live,2R+BE,249,213,20,-45.0,-0.211,-112.5,-0.528,2.5
+nse,1w,live,2R no BE,249,213,31,-31.6,-0.148,-79.0,-0.371,2.5
+nse,1w,live,1.5R,249,213,35,-44.3,-0.208,-110.7,-0.52,2.5
+nse,1w,live,1.5R+trail,249,213,35,-40.0,-0.188,-100.0,-0.469,2.5
+nse,1w,live,1.5R+high,249,213,35,-38.6,-0.181,-96.5,-0.453,2.5
+nse,1w,live,candle close,249,213,38,-54.0,-0.254,-135.1,-0.634,2.5
+nse,1w,live,1R no cap,249,213,44,-36.9,-0.173,-92.2,-0.433,2.5
+nse,1w,live,1.5R no cap,249,213,35,-44.3,-0.208,-110.7,-0.52,2.5
+nse,1w,live,2R no cap,249,213,31,-31.6,-0.148,-79.0,-0.371,2.5
+nse,1w,live,2R+BE no cap,249,213,20,-45.0,-0.211,-112.5,-0.528,2.5
+nse,1w,touch,2R+BE,249,213,22,-15.5,-0.073,-82.9,-0.389,4.82
+nse,1w,touch,2R no BE,249,213,38,9.2,0.043,28.0,0.132,4.82
+nse,1w,touch,1.5R,249,213,41,2.8,0.013,11.6,0.055,4.82
+nse,1w,touch,1.5R+trail,249,213,41,5.4,0.025,4.3,0.02,4.82
+nse,1w,touch,1.5R+high,249,213,41,6.2,0.029,8.0,0.038,4.82
+nse,1w,touch,candle close,249,213,47,-9.1,-0.043,-129.7,-0.609,4.82
+nse,1w,touch,1R no cap,249,213,53,28.2,0.133,611.6,2.872,4.82
+nse,1w,touch,1.5R no cap,249,213,41,2.8,0.013,11.6,0.055,4.82
+nse,1w,touch,2R no cap,249,213,38,9.2,0.043,28.0,0.132,4.82
+nse,1w,touch,2R+BE no cap,249,213,22,-15.5,-0.073,-82.9,-0.389,4.82
+nse,1w,nearest,2R+BE,249,213,21,-21.1,-0.099,-87.3,-0.41,4.82
+nse,1w,nearest,2R no BE,249,213,38,3.7,0.017,23.0,0.108,4.82
+nse,1w,nearest,1.5R,249,213,41,0.2,0.001,38.8,0.182,4.82
+nse,1w,nearest,1.5R+trail,249,213,41,3.1,0.015,30.9,0.145,4.82
+nse,1w,nearest,1.5R+high,249,213,41,4.8,0.023,42.1,0.198,4.82
+nse,1w,nearest,candle close,249,213,46,-12.7,-0.059,-121.5,-0.57,4.82
+nse,1w,nearest,1R no cap,249,213,54,31.6,0.148,509.4,2.392,4.82
+nse,1w,nearest,1.5R no cap,249,213,41,0.2,0.001,38.8,0.182,4.82
+nse,1w,nearest,2R no cap,249,213,38,3.7,0.017,23.0,0.108,4.82
+nse,1w,nearest,2R+BE no cap,249,213,21,-21.1,-0.099,-87.3,-0.41,4.82
+nse,1w,nearest 0.25ATR,2R+BE,249,213,21,-22.5,-0.106,-78.0,-0.366,3.83
+nse,1w,nearest 0.25ATR,2R no BE,249,213,38,6.0,0.028,56.2,0.264,3.83
+nse,1w,nearest 0.25ATR,1.5R,249,213,42,3.7,0.017,75.8,0.356,3.83
+nse,1w,nearest 0.25ATR,1.5R+trail,249,213,42,5.1,0.024,65.7,0.308,3.83
+nse,1w,nearest 0.25ATR,1.5R+high,249,213,42,5.8,0.027,72.6,0.341,3.83
+nse,1w,nearest 0.25ATR,candle close,249,213,46,-19.2,-0.09,-96.6,-0.454,3.83
+nse,1w,nearest 0.25ATR,1R no cap,249,213,54,25.0,0.117,389.9,1.831,3.83
+nse,1w,nearest 0.25ATR,1.5R no cap,249,213,42,3.7,0.017,75.8,0.356,3.83
+nse,1w,nearest 0.25ATR,2R no cap,249,213,38,6.0,0.028,56.2,0.264,3.83
+nse,1w,nearest 0.25ATR,2R+BE no cap,249,213,21,-22.5,-0.106,-78.0,-0.366,3.83
+nse,1w,hybrid,2R+BE,249,213,21,-21.9,-0.103,-105.3,-0.494,4.53
+nse,1w,hybrid,2R no BE,249,213,38,2.9,0.014,9.7,0.046,4.53
+nse,1w,hybrid,1.5R,249,213,41,-1.4,-0.007,19.3,0.091,4.53
+nse,1w,hybrid,1.5R+trail,249,213,41,1.9,0.009,16.7,0.079,4.53
+nse,1w,hybrid,1.5R+high,249,213,41,3.3,0.016,22.7,0.106,4.53
+nse,1w,hybrid,candle close,249,213,47,-12.5,-0.059,-121.0,-0.568,4.53
+nse,1w,hybrid,1R no cap,249,213,53,25.5,0.12,443.9,2.084,4.53
+nse,1w,hybrid,1.5R no cap,249,213,41,-1.4,-0.007,19.3,0.091,4.53
+nse,1w,hybrid,2R no cap,249,213,38,2.9,0.014,9.7,0.046,4.53
+nse,1w,hybrid,2R+BE no cap,249,213,21,-21.9,-0.103,-105.3,-0.494,4.53
+nse,1w,lakky,2R+BE,249,213,17,-80.6,-0.378,-140.3,-0.659,1.44
+nse,1w,lakky,2R no BE,249,213,23,-98.8,-0.464,-169.9,-0.798,1.44
+nse,1w,lakky,1.5R,249,213,27,-94.2,-0.442,-152.4,-0.716,1.44
+nse,1w,lakky,1.5R+trail,249,213,27,-87.4,-0.41,-138.9,-0.652,1.44
+nse,1w,lakky,1.5R+high,249,213,27,-86.4,-0.406,-137.9,-0.647,1.44
+nse,1w,lakky,candle close,249,213,29,-83.4,-0.391,-154.0,-0.723,1.44
+nse,1w,lakky,1R no cap,249,213,34,-89.6,-0.421,-116.7,-0.548,1.44
+nse,1w,lakky,1.5R no cap,249,213,27,-94.2,-0.442,-152.4,-0.716,1.44
+nse,1w,lakky,2R no cap,249,213,23,-98.8,-0.464,-169.9,-0.798,1.44
+nse,1w,lakky,2R+BE no cap,249,213,17,-80.6,-0.378,-140.3,-0.659,1.44
+nse,1M,live,2R+BE,22,20,25,-0.7,-0.036,-2.2,-0.109,3.0
+nse,1M,live,2R no BE,22,20,30,-1.9,-0.094,-5.6,-0.281,3.0
+nse,1M,live,1.5R,22,20,35,-2.4,-0.118,-7.1,-0.353,3.0
+nse,1M,live,1.5R+trail,22,20,35,-3.3,-0.167,-10.0,-0.502,3.0
+nse,1M,live,1.5R+high,22,20,35,-3.3,-0.167,-10.0,-0.502,3.0
+nse,1M,live,candle close,22,20,35,-2.8,-0.142,-8.5,-0.427,3.0
+nse,1M,live,1R no cap,22,20,45,-1.8,-0.091,-5.5,-0.273,3.0
+nse,1M,live,1.5R no cap,22,20,35,-2.4,-0.118,-7.1,-0.353,3.0
+nse,1M,live,2R no cap,22,20,30,-1.9,-0.094,-5.6,-0.281,3.0
+nse,1M,live,2R+BE no cap,22,20,25,-0.7,-0.036,-2.2,-0.109,3.0
+nse,1M,touch,2R+BE,22,20,40,-3.8,-0.192,-25.0,-1.249,20.83
+nse,1M,touch,2R no BE,22,20,40,-6.4,-0.319,-43.3,-2.164,20.83
+nse,1M,touch,1.5R,22,20,45,-3.9,-0.193,-35.7,-1.786,20.83
+nse,1M,touch,1.5R+trail,22,20,45,-4.8,-0.242,-38.7,-1.934,20.83
+nse,1M,touch,1.5R+high,22,20,45,-4.8,-0.242,-38.7,-1.934,20.83
+nse,1M,touch,candle close,22,20,40,-4.4,-0.22,-25.0,-1.25,20.83
+nse,1M,touch,1R no cap,22,20,55,0.4,0.018,8.9,0.445,20.83
+nse,1M,touch,1.5R no cap,22,20,45,-3.9,-0.193,-35.7,-1.786,20.83
+nse,1M,touch,2R no cap,22,20,40,-6.4,-0.319,-43.3,-2.164,20.83
+nse,1M,touch,2R+BE no cap,22,20,40,-3.8,-0.192,-25.0,-1.249,20.83
+nse,1M,nearest,2R+BE,22,20,35,-2.2,-0.112,-13.8,-0.689,18.47
+nse,1M,nearest,2R no BE,22,20,40,-4.3,-0.215,-26.0,-1.3,18.47
+nse,1M,nearest,1.5R,22,20,45,-2.3,-0.114,-22.8,-1.142,18.47
+nse,1M,nearest,1.5R+trail,22,20,45,-4.0,-0.199,-32.2,-1.609,18.47
+nse,1M,nearest,1.5R+high,22,20,45,-4.0,-0.199,-32.2,-1.609,18.47
+nse,1M,nearest,candle close,22,20,40,-3.0,-0.149,-12.1,-0.606,18.47
+nse,1M,nearest,1R no cap,22,20,55,1.3,0.063,9.3,0.465,18.47
+nse,1M,nearest,1.5R no cap,22,20,45,-2.3,-0.114,-22.8,-1.142,18.47
+nse,1M,nearest,2R no cap,22,20,40,-4.3,-0.215,-26.0,-1.3,18.47
+nse,1M,nearest,2R+BE no cap,22,20,35,-2.2,-0.112,-13.8,-0.689,18.47
+nse,1M,nearest 0.25ATR,2R+BE,22,20,35,1.5,0.075,1.0,0.049,12.75
+nse,1M,nearest 0.25ATR,2R no BE,22,20,40,-1.6,-0.079,-17.3,-0.866,12.75
+nse,1M,nearest 0.25ATR,1.5R,22,20,45,-0.6,-0.028,-20.9,-1.047,12.75
+nse,1M,nearest 0.25ATR,1.5R+trail,22,20,45,-2.6,-0.131,-32.7,-1.634,12.75
+nse,1M,nearest 0.25ATR,1.5R+high,22,20,45,-2.6,-0.131,-32.7,-1.634,12.75
+nse,1M,nearest 0.25ATR,candle close,22,20,40,-1.3,-0.067,-8.8,-0.44,12.75
+nse,1M,nearest 0.25ATR,1R no cap,22,20,55,2.0,0.099,4.4,0.222,12.75
+nse,1M,nearest 0.25ATR,1.5R no cap,22,20,45,-0.6,-0.028,-20.9,-1.047,12.75
+nse,1M,nearest 0.25ATR,2R no cap,22,20,40,-1.6,-0.079,-17.3,-0.866,12.75
+nse,1M,nearest 0.25ATR,2R+BE no cap,22,20,35,1.5,0.075,1.0,0.049,12.75
+nse,1M,hybrid,2R+BE,22,20,35,-2.2,-0.112,-15.8,-0.789,18.47
+nse,1M,hybrid,2R no BE,22,20,40,-4.3,-0.214,-28.0,-1.399,18.47
+nse,1M,hybrid,1.5R,22,20,45,-2.3,-0.114,-24.8,-1.242,18.47
+nse,1M,hybrid,1.5R+trail,22,20,45,-4.0,-0.199,-34.2,-1.709,18.47
+nse,1M,hybrid,1.5R+high,22,20,45,-4.0,-0.199,-34.2,-1.709,18.47
+nse,1M,hybrid,candle close,22,20,40,-3.0,-0.149,-14.1,-0.706,18.47
+nse,1M,hybrid,1R no cap,22,20,55,1.3,0.063,7.3,0.365,18.47
+nse,1M,hybrid,1.5R no cap,22,20,45,-2.3,-0.114,-24.8,-1.242,18.47
+nse,1M,hybrid,2R no cap,22,20,40,-4.3,-0.214,-28.0,-1.399,18.47
+nse,1M,hybrid,2R+BE no cap,22,20,35,-2.2,-0.112,-15.8,-0.789,18.47
+nse,1M,lakky,2R+BE,22,20,35,-0.0,-0.001,11.8,0.588,2.57
+nse,1M,lakky,2R no BE,22,20,40,0.9,0.046,17.4,0.872,2.57
+nse,1M,lakky,1.5R,22,20,40,-1.7,-0.084,10.6,0.531,2.57
+nse,1M,lakky,1.5R+trail,22,20,40,-4.3,-0.213,0.9,0.047,2.57
+nse,1M,lakky,1.5R+high,22,20,40,-4.3,-0.213,0.9,0.047,2.57
+nse,1M,lakky,candle close,22,20,35,-7.3,-0.367,-2.8,-0.141,2.57
+nse,1M,lakky,1R no cap,22,20,45,-2.6,-0.132,8.2,0.408,2.57
+nse,1M,lakky,1.5R no cap,22,20,40,-1.7,-0.084,10.6,0.531,2.57
+nse,1M,lakky,2R no cap,22,20,40,0.9,0.046,17.4,0.872,2.57
+nse,1M,lakky,2R+BE no cap,22,20,35,-0.0,-0.001,11.8,0.588,2.57
