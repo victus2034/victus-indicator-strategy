@@ -6,8 +6,12 @@ Rules (Shiva, 2026-09-29):
 - Fib: entry at the zone's near edge (Shiva's EX 2/278 ETH trades, 2723.94 /
   2672.86); SL FIB_SL_HEIGHT_PCT of the box's height beyond its far edge, the
   S/R zone rule (Lakky, 2026-10-08). It was the inner fib's 0.55 line before.
-- Trendline: entry at the line's price when the alert fired, SL
-  TRENDLINE_SL_PCT[tf] % beyond it. Support is a buy, resistance a sell.
+- Trendline (Lakky, 2026-10-11): entry at the line's price when the alert
+  fired, SL on the most recent candle whose wick or body is at least
+  TRENDLINE_STOP_MIN_PCT past it, the closer of the two (TRENDLINE_SL_PCT[tf] %
+  beyond it when there is none). One target at 1R, no breakeven, no hold limit
+  - a plan with "target_r": 1. Support is a buy, resistance a sell. Older
+  records carry the fixed stop and no target_r, and keep the rules below.
 - A limit entry: it fills only if price trades to it within ENTRY_WAIT_BARS
   candles of the alert's timeframe (trading candles, EVAL_PER_BAR), and only from the evaluation candle after
   the alert (inside the alert's own candle there is no telling which came first).
@@ -24,7 +28,7 @@ Rules (Shiva, 2026-09-29):
 """
 from collections import defaultdict
 
-from config import FIB_TL_ENTRY_WAIT_BARS, FIB_TL_MAX_HOLD_BARS, TRENDLINE_SL_PCT
+from config import FIB_TL_ENTRY_WAIT_BARS, FIB_TL_MAX_HOLD_BARS, TRENDLINE_SL_PCT, TRENDLINE_STOP_MIN_PCT
 from daily_backtest_summary import (
     BREAK_EVEN_ENABLED,
     BREAK_EVEN_OFFSET_PCT,
@@ -58,11 +62,43 @@ def fib_plan(d, zone):
     return {"side": "long" if d == 1 else "short", "entry": zone["entry"], "sl": zone["sl"]}
 
 
-def trendline_plan(kind_is_support, level, tf):
-    pct = TRENDLINE_SL_PCT.get(tf, 1.0) / 100
-    if kind_is_support:
-        return {"side": "long", "entry": level, "sl": level * (1 - pct)}
-    return {"side": "short", "entry": level, "sl": level * (1 + pct)}
+def candle_stop(long, entry, bar, opens, highs, lows, closes):
+    """Lakky's stop, read off his 1D charts (2026-10-11): walking back from `bar`
+    (candles before it are closed), the most recent candle whose wick is at least
+    TRENDLINE_STOP_MIN_PCT past the entry and the most recent whose body is; the
+    stop sits on the closer one (buy: the higher, sell: the lower). None if none."""
+    gap = entry * TRENDLINE_STOP_MIN_PCT / 100
+    wick = body = None
+    for j in range(min(bar, len(lows)) - 1, -1, -1):
+        w = lows[j] if long else highs[j]
+        b = min(opens[j], closes[j]) if long else max(opens[j], closes[j])
+        if wick is None and ((w <= entry - gap) if long else (w >= entry + gap)):
+            wick = w
+        if body is None and ((b <= entry - gap) if long else (b >= entry + gap)):
+            body = b
+        if wick is not None and body is not None:
+            break
+    got = [x for x in (wick, body) if x is not None]
+    if not got:
+        return None
+    return max(got) if long else min(got)
+
+
+def trendline_plan(kind_is_support, level, tf, bar=None, opens=None, highs=None, lows=None, closes=None):
+    """Entry at the line, Lakky's candle stop when candles are given, one 1R target."""
+    sl = None
+    if bar is not None and opens:
+        sl = candle_stop(kind_is_support, level, bar, opens, highs, lows, closes)
+    if sl is None:
+        pct = TRENDLINE_SL_PCT.get(tf, 1.0) / 100
+        sl = level * (1 - pct) if kind_is_support else level * (1 + pct)
+    return {"side": "long" if kind_is_support else "short", "entry": level, "sl": sl, "target_r": 1}
+
+
+def target_price(plan):
+    """The single target of a 1R plan."""
+    risk = abs(plan["entry"] - plan["sl"])
+    return plan["entry"] + risk if plan["side"] == "long" else plan["entry"] - risk
 
 
 def break_even_stop(plan, market):
@@ -99,6 +135,8 @@ def simulate(plan, market, tf, alert_ts, candles):
     nor 1R in time) | open (data ran out first) | no fill.
     sl / be say which stop finally closed the trade, also after 1R.
     """
+    if plan.get("target_r") == 1:
+        return simulate_1r(plan, market, tf, alert_ts, candles)
     side, entry, sl = plan["side"], plan["entry"], plan["sl"]
     risk = abs(entry - sl)
     long = side == "long"
@@ -161,6 +199,46 @@ def simulate(plan, market, tf, alert_ts, candles):
     return res
 
 
+def simulate_1r(plan, market, tf, alert_ts, candles):
+    """A trendline trade, Lakky's way: the stop or 1R, whichever trades first, held
+    as long as it takes - no breakeven, no timeout. The same entry wait and the same
+    "a candle touching both is the stop" as simulate, and the same result dict;
+    outcome is SL, 1R, open or no fill."""
+    entry, sl = plan["entry"], plan["sl"]
+    long = plan["side"] == "long"
+    t1 = target_price(plan)
+    wait_n = FIB_TL_ENTRY_WAIT_BARS * EVAL_PER_BAR[market][tf]
+    res = dict(outcome="open", filled=False, fill_ts=None, half=False, r1=False, r2=False, sl=False,
+               be=False, ambiguous=False, resolved=False, end_ts=None)
+    if abs(entry - sl) <= 0:
+        res.update(outcome="no fill", resolved=True)
+        return res
+    seen = 0
+    for ts, _o, h, l, _c in candles:
+        if ts <= alert_ts:
+            continue
+        seen += 1
+        if not res["filled"]:
+            if seen > wait_n:
+                res.update(outcome="no fill", resolved=True, end_ts=ts)
+                return res
+            if (l <= entry) if long else (h >= entry):
+                res.update(filled=True, fill_ts=ts)
+                if (l <= sl) if long else (h >= sl):
+                    res.update(outcome="SL", sl=True, resolved=True, end_ts=ts)
+                    return res
+            continue
+        hit_stop = (l <= sl) if long else (h >= sl)
+        hit1 = (h >= t1) if long else (l <= t1)
+        if hit_stop:
+            res.update(outcome="SL", sl=True, ambiguous=hit1, resolved=True, end_ts=ts)
+            return res
+        if hit1:
+            res.update(outcome="1R", half=True, r1=True, resolved=True, end_ts=ts)
+            return res
+    return res
+
+
 def already_stopped(plan, price):
     """True when price was already through the stop as the alert went out - not
     a trade anyone could take. The scanner no longer sends these
@@ -175,12 +253,13 @@ def risk_pct(plan):
 
 
 def booked_r(plan, market, result):
-    """Net R after costs (out at 1R, held for 2R) - None where that booking is undecided."""
+    """Net R after costs (out at 1R, held for 2R) - None where that booking is undecided.
+    A 1R plan has one booking; both come back the same."""
     cost_r = COST_PCT[market] / risk_pct(plan)
     # Stops pay the slip, like the zone trades; it used to be a flat -1.
     closed_r = stop_r(plan) if result["sl"] else break_even_r(plan, market) if result.get("be") else None
     at1 = 1 if result["r1"] else closed_r
-    at2 = 2 if result["r2"] else closed_r
+    at2 = at1 if plan.get("target_r") == 1 else 2 if result["r2"] else closed_r
     return (None if at1 is None else at1 - cost_r, None if at2 is None else at2 - cost_r)
 
 

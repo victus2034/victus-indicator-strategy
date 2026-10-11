@@ -496,6 +496,11 @@ FIB_TL_MAX_DISTANCE_PCT = env_float("VICTUS_FIB_TL_MAX_DISTANCE_PCT", 0.75)
 # 2026-09-29). Fib: entry at the zone's near edge (his EX 2 ETH trades), SL
 # FIB_SL_HEIGHT_PCT beyond the far edge (since 2026-10-08). Trendline: entry at the line, SL this % on the far side of it.
 TRENDLINE_SL_PCT = {"30m": 0.5, "4h": 1.0, "1d": 1.5, "1w": 2.5, "1M": 3.0}
+# Trendline trades, Lakky's way (2026-10-11, from his hand-marked charts): the
+# stop sits on the most recent candle whose wick, or body, is at least this % past
+# the entry - whichever of the two is closer; TRENDLINE_SL_PCT only when there is
+# none. One target at 1R, no breakeven, no hold limit.
+TRENDLINE_STOP_MIN_PCT = 0.75
 # An alert that has not filled within ENTRY_WAIT_BARS candles of its own
 # timeframe is "no fill"; a filled trade still open after MAX_HOLD_BARS is
 # "timeout". Counted in trading candles, not clock time - an NSE 30m trade's
