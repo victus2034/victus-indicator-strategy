@@ -69,7 +69,7 @@ TRAIL_MAX_BARS = 60
 LAKKY_MIN_PCT = 0.75  # his examples (2026-10-11): the stop is never closer than ~0.75% to the line
 STOPS = ("live", "touch", "nearest", "nearest 0.25ATR", "hybrid", "lakky")
 EXITS = ("2R+BE", "2R no BE", "1.5R", "1.5R+trail", "1.5R+high", "candle close",
-         "1R no cap", "2R no cap", "2R+BE no cap")
+         "1R no cap", "1.5R no cap", "2R no cap", "2R+BE no cap")
 NO_CAP_BARS = 10_000
 BAND = config.FIB_TL_MAX_DISTANCE_PCT / 100
 
