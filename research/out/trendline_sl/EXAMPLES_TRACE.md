@@ -1,7 +1,7 @@
 # Lakky's 1D examples: candles before each alert
 
 ## TRUMP/USDT 2026-09-30 BUY (Lakky SL None)
-alert 09-30 21:30 entry 2.02441; line 08-18 1.372 -> 09-16 1.812, drawn 09-26; stops live 1.99405, touch 1.92707, nearest 1.91009, nearest 0.25ATR 1.91009, hybrid 1.92707; touch|2R no BE 1.9828218839855314
+alert 09-30 21:30 entry 2.02441; line 08-18 1.372 -> 09-16 1.812, drawn 09-26; stops live 1.99405, touch 1.92707, nearest 1.91009, nearest 0.25ATR 1.91009, hybrid 1.92707, lakky 2.008; results 2R+BE +1.90, 1R no cap +0.90, 2R no cap +1.90
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 08-31 | 2.339 | 2.467 | 2.312 | 2.423 | 1.56924 | +47.33 | +57.21 |
@@ -42,7 +42,7 @@ alert 09-30 21:30 entry 2.02441; line 08-18 1.372 -> 09-16 1.812, drawn 09-26; s
 | 10-05 | 2.064 | 2.09 | 2.017 | 2.057 | 2.10028 | -3.96 | -0.49 |
 
 ## TRUMP/USDT 2026-10-02 BUY (Lakky SL 2.019)
-alert 10-02 21:30 entry 2.05476; line 08-18 1.372 -> 09-16 1.812, drawn 09-26; stops live 2.02394, touch 1.92707, nearest 1.92707, nearest 0.25ATR 1.92707, hybrid 1.92707; touch|2R no BE -1.0208380899128553
+alert 10-02 21:30 entry 2.05476; line 08-18 1.372 -> 09-16 1.812, drawn 09-26; stops live 2.02394, touch 1.92707, nearest 1.92707, nearest 0.25ATR 1.92707, hybrid 1.92707, lakky 2.025; results 2R+BE -1.09, 1R no cap -1.09, 2R no cap -1.09
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 09-02 | 2.27 | 2.311 | 2.146 | 2.214 | 1.59959 | +34.16 | +44.47 |
@@ -83,7 +83,7 @@ alert 10-02 21:30 entry 2.05476; line 08-18 1.372 -> 09-16 1.812, drawn 09-26; s
 | 10-07 | 2.008 | 2.012 | 1.764 | 1.878 | 2.13062 | -17.21 | -5.57 |
 
 ## MRVL/USDT:USDT 2026-09-14 BUY (Lakky SL 208.73)
-alert 09-14 13:30 entry 217.369; line 07-29 158.08 -> 09-01 200.97, drawn 09-11; stops live 214.109, touch 201.289, nearest 200.769, nearest 0.25ATR 200.769, hybrid 200.769; touch|2R no BE 1.9888345704890504
+alert 09-14 13:30 entry 217.369; line 07-29 158.08 -> 09-01 200.97, drawn 09-11; stops live 214.109, touch 201.289, nearest 200.769, nearest 0.25ATR 200.769, hybrid 200.769, lakky 208.8; results 2R+BE +1.98, 1R no cap +0.98, 2R no cap +1.98
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 08-15 | 221.8 | 222.67 | 219.03 | 221.94 | 179.525 | +22.01 | +24.03 |
@@ -124,7 +124,7 @@ alert 09-14 13:30 entry 217.369; line 07-29 158.08 -> 09-01 200.97, drawn 09-11;
 | 09-19 | 243.39 | 243.98 | 240.5 | 241.96 | 223.676 | +7.52 | +9.08 |
 
 ## NVDAXUSD 2026-09-13 BUY (Lakky SL 208.94)
-alert 09-13 13:30 entry 213.679; line 07-29 188.97 -> 08-26 204.01, drawn 09-05; stops live 210.473, touch 203.806, nearest 203.806, nearest 0.25ATR 203.806, hybrid 203.806; touch|2R no BE 1.9821223556091205
+alert 09-13 13:30 entry 213.679; line 07-29 188.97 -> 08-26 204.01, drawn 09-05; stops live 210.473, touch 203.806, nearest 203.806, nearest 0.25ATR 203.806, hybrid 203.806, lakky 208.96; results 2R+BE -0.02, 1R no cap +0.96, 2R no cap +1.96
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 08-14 | 225.72 | 227.58 | 224.62 | 224.84 | 197.564 | +13.69 | +15.19 |
@@ -165,7 +165,7 @@ alert 09-13 13:30 entry 213.679; line 07-29 188.97 -> 08-26 204.01, drawn 09-05;
 | 09-18 | 219.51 | 222.83 | 218.48 | 222.64 | 216.364 | +0.98 | +2.99 |
 
 ## BLESSUSD 2026-10-08 BUY (Lakky SL None)
-alert 10-08 17:30 entry 0.00760785; line 08-20 0.006694 -> 09-09 0.007067, drawn 09-19; stops live 0.00749373, touch 0.00705993, nearest 0.00705993, nearest 0.25ATR 0.00705993, hybrid 0.00705993; touch|2R no BE 0.802796620473539
+alert 10-08 17:30 entry 0.00760785; line 08-20 0.006694 -> 09-09 0.007067, drawn 09-19; stops live 0.00749373, touch 0.00705993, nearest 0.00705993, nearest 0.25ATR 0.00705993, hybrid 0.00705993, lakky 0.007521; results 2R+BE -1.12, 1R no cap -1.12, 2R no cap -1.12
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 09-08 | 0.009666 | 0.009684 | 0.008951 | 0.00923 | 0.00704835 | +26.99 | +37.39 |
@@ -203,7 +203,7 @@ alert 10-08 17:30 entry 0.00760785; line 08-20 0.006694 -> 09-09 0.007067, drawn
 | 10-10 | 0.008091 | 0.008215 | 0.008031 | 0.008094 | 0.00764515 | +5.05 | +7.45 |
 
 ## BLESSUSD 2026-10-07 BUY (Lakky SL 0.008142)
-alert 10-07 05:30 entry 0.008227; line 09-09 0.007067 -> 09-23 0.007647, drawn 10-03; stops live 0.00810359, touch 0.00763935, nearest 0.00763935, nearest 0.25ATR 0.00763935, hybrid 0.00763935; touch|2R no BE -1.018063869125512
+alert 10-07 05:30 entry 0.008227; line 09-09 0.007067 -> 09-23 0.007647, drawn 10-03; stops live 0.00810359, touch 0.00763935, nearest 0.00763935, nearest 0.25ATR 0.00763935, hybrid 0.00763935, lakky 0.008142; results 2R+BE +1.92, 1R no cap +0.92, 2R no cap +1.92
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 09-07 | 0.009738 | 0.009944 | 0.009158 | 0.009666 | 0.00698414 | +31.13 | +42.38 |
@@ -242,7 +242,7 @@ alert 10-07 05:30 entry 0.008227; line 09-09 0.007067 -> 09-23 0.007647, drawn 1
 | 10-10 | 0.008091 | 0.008215 | 0.008031 | 0.008094 | 0.00835129 | -3.84 | -1.63 |
 
 ## DOGEUSD 2026-10-08 BUY (Lakky SL 0.08185)
-alert 10-08 09:30 entry 0.0849193; line 08-19 0.06983 -> 09-16 0.07828, drawn 09-26; stops live 0.0836455, touch 0.0782017, nearest 0.0782017, nearest 0.25ATR 0.0782017, hybrid 0.0782017; touch|2R no BE 0.02539178073860133
+alert 10-08 09:30 entry 0.0849193; line 08-19 0.06983 -> 09-16 0.07828, drawn 09-26; stops live 0.0836455, touch 0.0782017, nearest 0.0782017, nearest 0.25ATR 0.0782017, hybrid 0.0782017, lakky 0.08169; results 2R+BE -1.03, 1R no cap -1.03, 2R no cap -1.03
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 09-08 | 0.09047 | 0.09164 | 0.08797 | 0.09001 | 0.0758657 | +15.95 | +20.79 |
@@ -280,7 +280,7 @@ alert 10-08 09:30 entry 0.0849193; line 08-19 0.06983 -> 09-16 0.07828, drawn 09
 | 10-10 | 0.08533 | 0.08668 | 0.08526 | 0.08573 | 0.0855229 | -0.31 | +1.35 |
 
 ## DOGEUSD 2026-09-21 SELL (Lakky SL 0.0912)
-alert 09-21 13:30 entry 0.095664; line 05-14 0.11857 -> 08-22 0.10095, drawn 09-01; stops live 0.097099, touch 0.101051, nearest 0.101051, nearest 0.25ATR 0.101051, hybrid 0.101051; touch|2R no BE -1.024047733689749
+alert 09-21 13:30 entry 0.095664; line 05-14 0.11857 -> 08-22 0.10095, drawn 09-01; stops live 0.097099, touch 0.101051, nearest 0.101051, nearest 0.25ATR 0.101051, hybrid 0.101051, lakky 0.10095; results 2R+BE -1.02, 1R no cap +0.99, 2R no cap -1.02
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 08-22 | 0.09158 | 0.10095 | 0.08287 | 0.09188 | 0.10095 | -17.91 | +0.00 |
@@ -320,7 +320,7 @@ alert 09-21 13:30 entry 0.095664; line 05-14 0.11857 -> 08-22 0.10095, drawn 09-
 | 09-25 | 0.09573 | 0.0998 | 0.09452 | 0.09894 | 0.0949592 | -0.46 | +5.10 |
 | 09-26 | 0.09894 | 0.09967 | 0.09524 | 0.09668 | 0.094783 | +0.48 | +5.16 |
 
-alert 09-21 05:30 entry 0.0884571; line 08-22 0.10095 -> 09-05 0.09512, drawn 09-15; stops live 0.089784, touch 0.0913913, nearest 0.0952151, nearest 0.25ATR 0.0952151, hybrid 0.0913913; touch|2R no BE -1.0404754224868653
+alert 09-21 05:30 entry 0.0884571; line 08-22 0.10095 -> 09-05 0.09512, drawn 09-15; stops live 0.089784, touch 0.0913913, nearest 0.0952151, nearest 0.25ATR 0.0952151, hybrid 0.0913913, lakky 0.09001; results 2R+BE -1.08, 1R no cap -1.08, 2R no cap -1.08
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 08-22 | 0.09158 | 0.10095 | 0.08287 | 0.09188 | 0.10095 | -17.91 | +0.00 |
@@ -361,7 +361,7 @@ alert 09-21 05:30 entry 0.0884571; line 08-22 0.10095 -> 09-05 0.09512, drawn 09
 | 09-26 | 0.09894 | 0.09967 | 0.09524 | 0.09668 | 0.086375 | +10.26 | +15.39 |
 
 ## HYPEUSD 2026-10-07 BUY (Lakky SL 87.71)
-alert 10-07 05:30 entry 89.0596; line 08-19 58.039 -> 09-15 75.132, drawn 09-25; stops live 87.7237, touch 84.4325, nearest 84.4325, nearest 0.25ATR 84.4325, hybrid 84.4325; touch|2R no BE -1.0250217909310864
+alert 10-07 05:30 entry 89.0596; line 08-19 58.039 -> 09-15 75.132, drawn 09-25; stops live 87.7237, touch 84.4325, nearest 84.4325, nearest 0.25ATR 84.4325, hybrid 84.4325, lakky 87.726; results 2R+BE -1.09, 1R no cap -1.09, 2R no cap -1.09
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 09-07 | 87.976 | 88.359 | 84.48 | 85.175 | 70.0674 | +20.57 | +26.11 |
@@ -400,7 +400,7 @@ alert 10-07 05:30 entry 89.0596; line 08-19 58.039 -> 09-15 75.132, drawn 09-25;
 | 10-10 | 84.17 | 86.76 | 83.704 | 85.451 | 90.9589 | -7.98 | -4.62 |
 
 ## ZORAUSD 2026-09-28 BUY (Lakky SL 0.008037)
-alert 09-28 05:30 entry 0.00834393; line 08-19 0.004658 -> 09-15 0.007146, drawn 09-25; stops live 0.00821877, touch 0.00718081, nearest 0.00764635, nearest 0.25ATR 0.00764635, hybrid 0.00764635; touch|2R no BE -1.0090124351374004
+alert 09-28 05:30 entry 0.00834393; line 08-19 0.004658 -> 09-15 0.007146, drawn 09-25; stops live 0.00821877, touch 0.00718081, nearest 0.00764635, nearest 0.25ATR 0.00764635, hybrid 0.00764635, lakky 0.008172; results 2R+BE -1.06, 1R no cap -1.06, 2R no cap -1.06
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 08-29 | 0.006074 | 0.00622 | 0.005923 | 0.0061 | 0.00557948 | +6.16 | +11.48 |
@@ -441,7 +441,7 @@ alert 09-28 05:30 entry 0.00834393; line 08-19 0.004658 -> 09-15 0.007146, drawn
 | 10-03 | 0.007747 | 0.007799 | 0.007623 | 0.00774 | 0.00880467 | -13.42 | -11.42 |
 
 ## SNDKBUSD 2026-10-08 BUY (Lakky SL 1541.95)
-alert 10-08 21:30 entry 1596.08; line 08-24 1420.01 -> 09-16 1510, drawn 09-26; stops live 1572.14, touch 1508.49, nearest 1508.49, nearest 0.25ATR 1508.49, hybrid 1508.49; touch|2R no BE -0.0951706758864451
+alert 10-08 21:30 entry 1596.08; line 08-24 1420.01 -> 09-16 1510, drawn 09-26; stops live 1572.14, touch 1508.49, nearest 1508.49, nearest 0.25ATR 1508.49, hybrid 1508.49, lakky 1540.78; results 2R+BE -0.15, 1R no cap -0.15, 2R no cap -0.15
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 09-08 | 1782.57 | 1821.39 | 1731.43 | 1742.8 | 1478.7 | +17.09 | +23.18 |
@@ -479,7 +479,7 @@ alert 10-08 21:30 entry 1596.08; line 08-24 1420.01 -> 09-16 1510, drawn 09-26; 
 | 10-10 | 1583.28 | 1608.08 | 1583.1 | 1598.11 | 1603.9 | -1.30 | +0.26 |
 
 ## XRPUSD 2026-09-25 SELL (Lakky SL None)
-alert 09-25 13:30 entry 1.59324; line 01-06 2.4159 -> 08-22 1.7, drawn 09-01; stops live 1.61714, touch 1.65966, nearest 1.65966, nearest 0.25ATR 1.65966, hybrid 1.65966; touch|2R no BE 1.9801849227452255
+alert 09-25 13:30 entry 1.59324; line 01-06 2.4159 -> 08-22 1.7, drawn 09-01; stops live 1.61714, touch 1.65966, nearest 1.65966, nearest 0.25ATR 1.65966, hybrid 1.65966, lakky 1.6189; results 2R+BE -1.08, 1R no cap -1.08, 2R no cap -1.08
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 08-26 | 1.4335 | 1.4502 | 1.3571 | 1.4217 | 1.68744 | -19.58 | -14.06 |
@@ -520,7 +520,7 @@ alert 09-25 13:30 entry 1.59324; line 01-06 2.4159 -> 08-22 1.7, drawn 09-01; st
 | 09-30 | 1.4899 | 1.544 | 1.484 | 1.4891 | 1.57754 | -5.93 | -2.13 |
 
 ## AVAXUSD 2026-09-07 SELL (Lakky SL None)
-alert 09-07 05:30 entry 7.99646; line 05-10 10.483 -> 08-22 8.328, drawn 09-01; stops live 8.11641, touch 8.33633, nearest 8.33633, nearest 0.25ATR 8.33633, hybrid 8.33633; touch|2R no BE 1.980565669231173
+alert 09-07 05:30 entry 7.99646; line 05-10 10.483 -> 08-22 8.328, drawn 09-01; stops live 8.11641, touch 8.33633, nearest 8.33633, nearest 0.25ATR 8.33633, hybrid 8.33633, lakky 8.175; results 2R+BE -1.06, 1R no cap -1.06, 2R no cap -1.06
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 08-08 | 6.429 | 6.591 | 6.415 | 6.476 | 8.6181 | -25.56 | -23.52 |
@@ -561,7 +561,7 @@ alert 09-07 05:30 entry 7.99646; line 05-10 10.483 -> 08-22 8.328, drawn 09-01; 
 | 09-12 | 7.459 | 7.489 | 7.356 | 7.395 | 7.89286 | -6.80 | -5.12 |
 
 ## TSLAXUSD 2026-10-05 SELL (Lakky SL 386.44)
-alert 10-05 17:30 entry 379.54; line 07-02 437.73 -> 09-23 386.89, drawn 10-03; stops live 385.233, touch 387.117, nearest 387.277, nearest 0.25ATR 387.277, hybrid 387.117; touch|2R no BE -1.066919887409829
+alert 10-05 17:30 entry 379.54; line 07-02 437.73 -> 09-23 386.89, drawn 10-03; stops live 385.233, touch 387.117, nearest 387.277, nearest 0.25ATR 387.277, hybrid 387.117, lakky 384.5; results 2R+BE +1.94, 1R no cap +0.94, 2R no cap +1.94
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 09-05 | 353.11 | 357.3 | 353.06 | 356.54 | 397.916 | -11.27 | -10.21 |
@@ -602,7 +602,7 @@ alert 10-05 17:30 entry 379.54; line 07-02 437.73 -> 09-23 386.89, drawn 10-03; 
 | 10-10 | 383.24 | 383.52 | 382.41 | 382.5 | 376.477 | +1.58 | +1.87 |
 
 ## BCHUSD 2026-09-21 SELL (Lakky SL None)
-alert 09-21 05:30 entry 255.414; line 05-06 488.89 -> 08-22 306.17, drawn 09-01; stops live 259.246, touch 266.156, nearest 266.156, nearest 0.25ATR 261.711, hybrid 266.156; touch|2R no BE -1.0320301652446762
+alert 09-21 05:30 entry 255.414; line 05-06 488.89 -> 08-22 306.17, drawn 09-01; stops live 259.246, touch 266.156, nearest 266.156, nearest 0.25ATR 261.711, hybrid 266.156, lakky 257.99; results 2R+BE -1.13, 1R no cap -1.13, 2R no cap -1.13
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 08-22 | 288.68 | 306.17 | 262.97 | 276.68 | 306.17 | -14.11 | +0.00 |
@@ -643,7 +643,7 @@ alert 09-21 05:30 entry 255.414; line 05-06 488.89 -> 08-22 306.17, drawn 09-01;
 | 09-26 | 343.07 | 344.22 | 332.16 | 335.87 | 246.955 | +34.50 | +39.39 |
 
 ## BCHUSD 2026-09-22 SELL (Lakky SL None)
-alert 09-22 17:30 entry 305.143; line 02-22 585.39 -> 05-06 488.89, drawn 05-16; stops live 309.721, touch 489.379, nearest 489.379, nearest 0.25ATR 489.379, hybrid 489.379; touch|2R no BE 0.14911014086078372
+alert 09-22 17:30 entry 305.143; line 02-22 585.39 -> 05-06 488.89, drawn 05-16; stops live 309.721, touch 489.379, nearest 489.379, nearest 0.25ATR 489.379, hybrid 489.379, lakky 307.62; results 2R+BE -1.16, 1R no cap -1.16, 2R no cap -1.16
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 08-23 | 276.68 | 280.32 | 263.8 | 274.28 | 344.801 | -23.49 | -18.70 |
@@ -684,7 +684,7 @@ alert 09-22 17:30 entry 305.143; line 02-22 585.39 -> 05-06 488.89, drawn 05-16;
 | 09-27 | 335.87 | 347.58 | 327.38 | 332.29 | 298.534 | +9.66 | +16.43 |
 
 ## LTCUSD 2026-09-19 SELL (Lakky SL 59.56)
-alert 09-19 05:30 entry 58.1569; line 01-06 84.89 -> 09-07 59.41, drawn 09-17; stops live 59.0292, touch 59.4694, nearest 59.4694, nearest 0.25ATR 59.4694, hybrid 59.4694; touch|2R no BE -1.0592539622359682
+alert 09-19 05:30 entry 58.1569; line 01-06 84.89 -> 09-07 59.41, drawn 09-17; stops live 59.0292, touch 59.4694, nearest 59.4694, nearest 0.25ATR 59.4694, hybrid 59.4694, lakky 59.41; results 2R+BE -0.02, 1R no cap +0.96, 2R no cap -1.06
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 08-20 | 46.77 | 48.55 | 46.47 | 47.79 | 61.2897 | -24.18 | -20.79 |
@@ -725,7 +725,7 @@ alert 09-19 05:30 entry 58.1569; line 01-06 84.89 -> 09-07 59.41, drawn 09-17; s
 | 09-24 | 61.81 | 74.85 | 61.64 | 71.92 | 57.6348 | +6.95 | +29.87 |
 
 ## AAVEUSD 2026-09-18 SELL (Lakky SL None)
-alert 09-18 17:30 entry 141.182; line 01-14 180.21 -> 08-23 145.29, drawn 09-02; stops live 143.299, touch 145.435, nearest 145.435, nearest 0.25ATR 145.435, hybrid 145.435; touch|2R no BE -1.0445122033032008
+alert 09-18 17:30 entry 141.182; line 01-14 180.21 -> 08-23 145.29, drawn 09-02; stops live 143.299, touch 145.435, nearest 145.435, nearest 0.25ATR 145.435, hybrid 145.435, lakky 144.65; results 2R+BE -1.05, 1R no cap -1.05, 2R no cap -1.05
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 08-19 | 87.47 | 97.48 | 86.94 | 95.3 | 145.922 | -40.42 | -33.20 |
@@ -765,7 +765,7 @@ alert 09-18 17:30 entry 141.182; line 01-14 180.21 -> 08-23 145.29, drawn 09-02;
 | 09-22 | 145.8 | 148.98 | 139.64 | 147.98 | 140.55 | -0.65 | +6.00 |
 | 09-23 | 147.98 | 155.21 | 137.25 | 138.88 | 140.392 | -2.24 | +10.55 |
 
-alert 09-18 05:30 entry 135.614; line 08-23 145.29 -> 09-06 140.08, drawn 09-16; stops live 137.649, touch 140.22, nearest 140.22, nearest 0.25ATR 140.22, hybrid 140.22; touch|2R no BE -1.0395431121543806
+alert 09-18 05:30 entry 135.614; line 08-23 145.29 -> 09-06 140.08, drawn 09-16; stops live 137.649, touch 140.22, nearest 140.22, nearest 0.25ATR 140.22, hybrid 140.22, lakky 136.79; results 2R+BE -1.15, 1R no cap -1.15, 2R no cap -1.15
 | date | open | high | low | close | line | low-line % | high-line % |
 |---|---|---|---|---|---|---|---|
 | 08-19 | 87.47 | 97.48 | 86.94 | 95.3 | 146.779 | -40.77 | -33.59 |
