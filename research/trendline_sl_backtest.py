@@ -20,6 +20,7 @@ Stops tested (support = buy; resistance mirrors it):
            (Lakky's AVAX rule; "too far" is not stated, so 1 ATR is the default here)
 Exits tested:
   2R+BE    live: BE at +0.5R, 1R and 2R targets, booked held for 2R
+  2R no BE the same 2R target, stop never moves (Lakky, 2026-10-11)
   1.5R     everything off at 1.5R
   1.5R+trail  half off at 1.5R, the rest trails below the previous candle of the
               alert's timeframe (Lakky's HUSDT rule)
@@ -66,7 +67,7 @@ MIN_GAP_ATR = 0.5     # no stop closer than half an ATR(14) - a touch from yeste
 TP1_R = 1.5
 TRAIL_MAX_BARS = 60
 STOPS = ("live", "touch", "nearest", "nearest 0.25ATR", "hybrid")
-EXITS = ("2R+BE", "1.5R", "1.5R+trail", "1.5R+high", "candle close")
+EXITS = ("2R+BE", "2R no BE", "1.5R", "1.5R+trail", "1.5R+high", "candle close")
 BAND = config.FIB_TL_MAX_DISTANCE_PCT / 100
 
 
@@ -166,6 +167,13 @@ def simulate(long, entry, sl, exit_rule, market, tf, evalc, k, base_times, base_
                 continue
             if recent_high is not None and ((h >= recent_high) if long else (l <= recent_high)):
                 return r_of(recent_high) - cost_r
+            continue
+        if exit_rule == "2R no BE":
+            # Lakky, 2026-10-11: the live 2R target with the breakeven stop removed
+            if (l <= sl) if long else (h >= sl):
+                return r_of(slip(sl)) - cost_r
+            if (h >= tp2) if long else (l <= tp2):
+                return 2.0 - cost_r
             continue
         if exit_rule == "2R+BE":
             cur = be_stop if moved else sl
