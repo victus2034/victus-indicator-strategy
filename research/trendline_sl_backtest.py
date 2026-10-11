@@ -354,8 +354,11 @@ def table(got):
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--since", default="2026-09-01")
+    parser.add_argument("--out", default="", help="subfolder of out/trendline_sl (long runs keep the Sep 1 tables)")
     parser.add_argument("--examples", action="store_true", help="trace Lakky's checked 1D examples only")
     args = parser.parse_args()
+    global OUT
+    OUT = OUT / args.out if args.out else OUT
     OUT.mkdir(parents=True, exist_ok=True)
     since = pd.Timestamp(args.since, tz=IST).timestamp()
     now = int(time.time())
