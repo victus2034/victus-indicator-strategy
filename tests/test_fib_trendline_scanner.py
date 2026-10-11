@@ -156,7 +156,7 @@ class AlertTextTests(unittest.TestCase):
              "plan": ftt.trendline_plan(True, 100.0, "1d")}
         text = fts.format_touch_alert(ftd.CRYPTO, "BTCUSD", "1d", 101.2, t)
         self.assertIn("· **1D Crypto**", text)
-        self.assertIn("SL 98.50 (1.50%)", text)
+        self.assertIn("SL 98.50 (1.50%) · TP 101.50 (1R)", text)
         self.assertIn("BTC · SUP TL · BUY", text)
 
     def test_prices_read_like_a_chart(self):

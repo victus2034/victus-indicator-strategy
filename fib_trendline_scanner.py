@@ -196,6 +196,7 @@ def analyse(market, symbol, tf, candles, now, price=None):
         return result
 
     times = [c[0] for c in closed]
+    opens = [c[1] for c in closed]
     highs = [c[2] for c in closed]
     lows = [c[3] for c in closed]
     closes = [c[4] for c in closed]
@@ -230,7 +231,8 @@ def analyse(market, symbol, tf, candles, now, price=None):
             if in_band(distance):
                 result["touch"].append({
                     **info, "key": f"tl|{ident}", "level": level, "distance": distance,
-                    "plan": trades.trendline_plan(line.kind == SUPPORT, level, tf),
+                    "plan": trades.trendline_plan(line.kind == SUPPORT, level, tf,
+                                                  now_bar, opens, highs, lows, closes),
                 })
         elif line.broken_at >= max(len(closed) - 2, line.created):   # never one broken before it was drawn
             result["break"].append({
@@ -302,7 +304,8 @@ def format_touch_alert(market, symbol, tf, price, t):
     return (
         f"{_header(market, tf, f'{display(market, symbol)} · {name} TL · {side}', side)}\n"
         f"Price {price_text(price)} · {where}\n"
-        f"Entry {price_text(t['level'])} · SL {price_text(t['plan']['sl'])} ({trades.risk_pct(t['plan']):.2f}%)\n"
+        f"Entry {price_text(t['level'])} · SL {price_text(t['plan']['sl'])} ({trades.risk_pct(t['plan']):.2f}%)"
+        f" · TP {price_text(trades.target_price(t['plan']))} (1R)\n"
         f"{_line(t)}"
     )
 

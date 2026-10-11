@@ -152,6 +152,12 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   **Breakeven (2026-10-03, Lakky):** the zone trades' rule - at +0.5R the stop moves past entry by
   `BREAK_EVEN_OFFSET_PCT` (NSE) / `CRYPTO_BREAK_EVEN_OFFSET_PCT` (crypto) from the next candle, imported
   from `daily_backtest_summary` so the two cannot drift. Exits there are `BE`: in net R, not in win rate.
+- **Trendline trades, Lakky's way (2026-10-11, live).** SL = the most recent closed candle whose wick, or body,
+  is at least `TRENDLINE_STOP_MIN_PCT` (0.75%) past the entry - the closer of the two (`trades.candle_stop`,
+  matches 9 of 11 of his hand-marked 1D charts); `TRENDLINE_SL_PCT` only when none. One target at 1R, no
+  breakeven, no hold limit (plan `"target_r": 1`, `trades.simulate_1r`); the alert prints `TP x (1R)`.
+  Backtested Jun 1 - Oct 11 at ~-0.33R a trade, like the fixed stop - his call to run it and refine it.
+  Old records (no `target_r`) keep the BE/2R rules above. Fibs are unchanged.
 - Crypto and xStocks: Bitunix (`CRYPTO_CANDLE_SOURCE`), XAUT/SLVON: Delta. `1M` is built from
   daily candles by calendar month. **No Delta fallback here (2026-10-09):** Delta's history starts
   Dec 2023 and Bitunix's years earlier, so the same chart on Delta is a different fib under a new key -

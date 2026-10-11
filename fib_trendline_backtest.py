@@ -154,6 +154,7 @@ def replay(market, symbol, tf, base, evalc, now):
     if n <= MIN_BARS or not evalc:
         return []
     times = [c[0] for c in base]
+    opens = [c[1] for c in base]
     highs = [c[2] for c in base]
     lows = [c[3] for c in base]
     closes = [c[4] for c in base]
@@ -168,7 +169,8 @@ def replay(market, symbol, tf, base, evalc, now):
 
     def trade(kind, plan, k, extra):
         ts = evalc[k][0]
-        after = evalc[k + 1:k + 1 + horizon]
+        # a 1R plan has no hold limit (Lakky's trendline trades): it runs to the data's end
+        after = evalc[k + 1:] if plan.get("target_r") == 1 else evalc[k + 1:k + 1 + horizon]
         return {"market": market, "symbol": symbol, "tf": tf, "kind": kind, "alert_ts": ts,
                 "plan": plan, "result": trades.simulate(plan, market, tf, ts, after), **extra}
 
@@ -236,7 +238,7 @@ def replay(market, symbol, tf, base, evalc, now):
                     in_band = False
                     continue
                 if not in_band and (last_alert is None or ts - last_alert >= TF_SECONDS[tf]):
-                    plan = trades.trendline_plan(line.kind == SUPPORT, level, tf)
+                    plan = trades.trendline_plan(line.kind == SUPPORT, level, tf, i, opens, highs, lows, closes)
                     out.append(trade("trendline", plan, k, {
                         "line": line.kind, "swing_gap": line.x2 - line.x1, "age": i - line.created,
                         "quiet": clock.quiet(i), "max_streak": clock.max_streak}))
@@ -252,7 +254,8 @@ BASELINE_SAMPLES = 100
 def baseline(market, symbol, tf, evalc):
     """No-edge control: limit orders at random levels, scored exactly like the alerts.
 
-    A level half the band away on a random side, SL TRENDLINE_SL_PCT beyond it.
+    A level half the band away on a random side, SL TRENDLINE_SL_PCT beyond it,
+    one 1R target and no hold limit, as the trendline trades.
     Under these rules a level with no edge does not win 50% at 1R: a limit only
     fills when price is moving against it, and a candle touching both SL and
     target is scored as the SL. This row is the number an alert has to beat.
@@ -270,8 +273,7 @@ def baseline(market, symbol, tf, evalc):
         level = price * (1 - BAND / 2) if support else price * (1 + BAND / 2)
         plan = trades.trendline_plan(support, level, tf)
         out.append({"market": market, "symbol": symbol, "tf": tf, "kind": "random", "alert_ts": evalc[k][0],
-                    "plan": plan, "result": trades.simulate(plan, market, tf, evalc[k][0],
-                                                            evalc[k + 1:k + 1 + horizon])})
+                    "plan": plan, "result": trades.simulate(plan, market, tf, evalc[k][0], evalc[k + 1:])})
     return out
 
 
