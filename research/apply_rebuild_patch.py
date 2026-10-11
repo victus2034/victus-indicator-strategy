@@ -27,7 +27,8 @@ def backup(path: Path) -> None:
 
 def write_atomic(path: Path, text: str) -> None:
     tmp = path.with_suffix(path.suffix + ".tmp")
-    tmp.write_text(text, encoding="utf-8")
+    with tmp.open("w", encoding="utf-8", newline="\n") as fh:   # LF on Windows too
+        fh.write(text)
     os.replace(tmp, path)
 
 
