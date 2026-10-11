@@ -65,17 +65,19 @@ def main():
     nifty = regimes(nifty_daily())
     parts.append(label(t[t.market == "nse"], nifty, 6 * 3600 + 15 * 60))
     t = pd.concat(parts)
+    # Lakky, 2026-10-11: trendline results always as two sides, 4H and 1D and above
+    t["tfs"] = t.tf.map(lambda tf: "4H" if tf == "4h" else "1D+")
     rows = []
     for stop, exit_rule, cap in RULES:
         col = f"{stop}|{exit_rule}"
-        for (market, regime, long), g in t.groupby(["market", "regime", "long"]):
+        for (market, tfs, regime, long), g in t.groupby(["market", "tfs", "regime", "long"]):
             if cap:
                 g = g[g[f"risk_{stop}"] <= cap]
             r = g[col].dropna()
             if r.empty:
                 continue
             pct = (g[col] * g[f"risk_{stop}"]).dropna()
-            rows.append({"rule": f"{stop} SL, {exit_rule}", "market": market, "market trend": regime,
+            rows.append({"rule": f"{stop} SL, {exit_rule}", "market": market, "tf": tfs, "market trend": regime,
                          "side": "BUY" if long else "SELL", "trades": len(r),
                          "wins_%": round(100 * (r > 0.05).mean()), "R_per_trade": round(r.mean(), 3),
                          "%_per_trade": round(pct.mean(), 3), "net_R": round(r.sum(), 1)})
@@ -87,7 +89,7 @@ def main():
             "Touch rules count stops up to 5% only.", "",
             df.to_markdown(index=False), "",
             "## Days per trend", "",
-            t.groupby(["market", "regime"]).size().rename("alerts").to_frame().to_markdown(), ""]
+            t.groupby(["market", "tfs", "regime"]).size().rename("alerts").to_frame().to_markdown(), ""]
     (OUT / "MARKET_TREND.md").write_text("\n".join(text))
     print("\n".join(text))
 
