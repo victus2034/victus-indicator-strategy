@@ -1,0 +1,499 @@
+# Trendline stop + exit backtest: 2026-06-01 to now
+
+Live trendline alerts replayed; only the stop and the exit change. Net R after Delta fees, stops slipped, timeouts closed at market. Crypto on Bitunix candles.
+
+## All timeframes, best first
+
+| market   | tf   | stop            | exit         |   alerts |   filled |   wins_% |   net_R |   R_per_trade |   median_risk_% |
+|:---------|:-----|:----------------|:-------------|---------:|---------:|---------:|--------:|--------------:|----------------:|
+| crypto   | all  | touch           | 1R no cap    |     2407 |     1826 |       60 |   265.1 |         0.145 |            2.01 |
+| crypto   | all  | nearest         | 1R no cap    |     2407 |     1826 |       59 |   244.4 |         0.134 |            1.72 |
+| crypto   | all  | hybrid          | 1R no cap    |     2407 |     1826 |       59 |   231.5 |         0.127 |            1.71 |
+| crypto   | all  | nearest 0.25ATR | 1R no cap    |     2407 |     1826 |       57 |   151.7 |         0.083 |            1.5  |
+| crypto   | all  | lakky           | 1R no cap    |     2407 |     1826 |       48 |  -245.6 |        -0.135 |            1.03 |
+| crypto   | all  | hybrid          | 2R+BE        |     2407 |     1826 |       20 |  -353.1 |        -0.193 |            1.71 |
+| crypto   | all  | live            | 1R no cap    |     2407 |     1826 |       45 |  -358.8 |        -0.196 |            1    |
+| crypto   | all  | hybrid          | 2R+BE no cap |     2407 |     1826 |       17 |  -359.7 |        -0.197 |            1.71 |
+| crypto   | all  | nearest         | 2R+BE        |     2407 |     1826 |       19 |  -374.1 |        -0.205 |            1.72 |
+| crypto   | all  | touch           | 2R+BE        |     2407 |     1826 |       20 |  -376.3 |        -0.206 |            2.01 |
+| crypto   | all  | nearest         | 2R+BE no cap |     2407 |     1826 |       16 |  -382   |        -0.209 |            1.72 |
+| crypto   | all  | touch           | 2R+BE no cap |     2407 |     1826 |       16 |  -385.2 |        -0.211 |            2.01 |
+| crypto   | all  | nearest 0.25ATR | 2R+BE        |     2407 |     1826 |       19 |  -408.5 |        -0.224 |            1.5  |
+| crypto   | all  | touch           | 2R no BE     |     2407 |     1826 |       31 |  -413.4 |        -0.226 |            2.01 |
+| crypto   | all  | touch           | candle close |     2407 |     1826 |       45 |  -416.3 |        -0.228 |            2.01 |
+| crypto   | all  | touch           | 1.5R         |     2407 |     1826 |       35 |  -420   |        -0.23  |            2.01 |
+| crypto   | all  | touch           | 1.5R+trail   |     2407 |     1826 |       33 |  -419.5 |        -0.23  |            2.01 |
+| crypto   | all  | nearest         | candle close |     2407 |     1826 |       45 |  -421.1 |        -0.231 |            1.72 |
+| crypto   | all  | nearest 0.25ATR | 2R+BE no cap |     2407 |     1826 |       16 |  -421.7 |        -0.231 |            1.5  |
+| crypto   | all  | hybrid          | 1.5R+trail   |     2407 |     1826 |       33 |  -422.5 |        -0.231 |            1.71 |
+| crypto   | all  | hybrid          | candle close |     2407 |     1826 |       45 |  -421.6 |        -0.231 |            1.71 |
+| crypto   | all  | hybrid          | 2R no BE     |     2407 |     1826 |       31 |  -428.2 |        -0.234 |            1.71 |
+| crypto   | all  | nearest         | 1.5R+trail   |     2407 |     1826 |       33 |  -428.3 |        -0.235 |            1.72 |
+| crypto   | all  | nearest         | 1.5R         |     2407 |     1826 |       35 |  -435   |        -0.238 |            1.72 |
+| crypto   | all  | hybrid          | 1.5R         |     2407 |     1826 |       35 |  -433.9 |        -0.238 |            1.71 |
+| crypto   | all  | nearest         | 2R no BE     |     2407 |     1826 |       31 |  -436.6 |        -0.239 |            1.72 |
+| crypto   | all  | hybrid          | 2R no cap    |     2407 |     1826 |       28 |  -440.5 |        -0.241 |            1.71 |
+| crypto   | all  | touch           | 1.5R+high    |     2407 |     1826 |       33 |  -441.5 |        -0.242 |            2.01 |
+| crypto   | all  | nearest         | 2R no cap    |     2407 |     1826 |       28 |  -445.8 |        -0.244 |            1.72 |
+| crypto   | all  | touch           | 2R no cap    |     2407 |     1826 |       28 |  -455.1 |        -0.249 |            2.01 |
+| crypto   | all  | nearest         | 1.5R+high    |     2407 |     1826 |       33 |  -454.8 |        -0.249 |            1.72 |
+| crypto   | all  | hybrid          | 1.5R+high    |     2407 |     1826 |       33 |  -454.5 |        -0.249 |            1.71 |
+| crypto   | all  | nearest 0.25ATR | 1.5R         |     2407 |     1826 |       34 |  -469.6 |        -0.257 |            1.5  |
+| crypto   | all  | nearest 0.25ATR | 1.5R+trail   |     2407 |     1826 |       33 |  -476.8 |        -0.261 |            1.5  |
+| crypto   | all  | nearest 0.25ATR | candle close |     2407 |     1826 |       44 |  -486.3 |        -0.266 |            1.5  |
+| crypto   | all  | nearest 0.25ATR | 2R no BE     |     2407 |     1826 |       30 |  -492   |        -0.269 |            1.5  |
+| crypto   | all  | nearest 0.25ATR | 1.5R+high    |     2407 |     1826 |       33 |  -501.6 |        -0.275 |            1.5  |
+| crypto   | all  | nearest 0.25ATR | 2R no cap    |     2407 |     1826 |       27 |  -506.2 |        -0.277 |            1.5  |
+| crypto   | all  | lakky           | 2R+BE no cap |     2407 |     1826 |       16 |  -511.6 |        -0.28  |            1.03 |
+| crypto   | all  | lakky           | 2R+BE        |     2407 |     1826 |       16 |  -515   |        -0.282 |            1.03 |
+| crypto   | all  | lakky           | 1.5R         |     2407 |     1826 |       32 |  -545.4 |        -0.299 |            1.03 |
+| crypto   | all  | lakky           | 2R no cap    |     2407 |     1826 |       27 |  -548   |        -0.3   |            1.03 |
+| crypto   | all  | lakky           | 2R no BE     |     2407 |     1826 |       27 |  -559.4 |        -0.306 |            1.03 |
+| crypto   | all  | lakky           | 1.5R+trail   |     2407 |     1826 |       32 |  -570.8 |        -0.313 |            1.03 |
+| crypto   | all  | lakky           | 1.5R+high    |     2407 |     1826 |       32 |  -581.6 |        -0.318 |            1.03 |
+| crypto   | all  | live            | 2R+BE        |     2407 |     1826 |       16 |  -598.2 |        -0.328 |            1    |
+| crypto   | all  | live            | 2R+BE no cap |     2407 |     1826 |       16 |  -598.4 |        -0.328 |            1    |
+| crypto   | all  | lakky           | candle close |     2407 |     1826 |       39 |  -599.7 |        -0.328 |            1.03 |
+| crypto   | all  | live            | candle close |     2407 |     1826 |       36 |  -620.2 |        -0.34  |            1    |
+| crypto   | all  | live            | 1.5R+trail   |     2407 |     1826 |       30 |  -637.5 |        -0.349 |            1    |
+| crypto   | all  | live            | 1.5R         |     2407 |     1826 |       30 |  -640.8 |        -0.351 |            1    |
+| crypto   | all  | live            | 2R no cap    |     2407 |     1826 |       25 |  -648.9 |        -0.355 |            1    |
+| crypto   | all  | live            | 1.5R+high    |     2407 |     1826 |       30 |  -650.8 |        -0.356 |            1    |
+| crypto   | all  | live            | 2R no BE     |     2407 |     1826 |       25 |  -652.9 |        -0.358 |            1    |
+| nse      | all  | touch           | 1R no cap    |     6044 |     4735 |       58 |   551.1 |         0.116 |            2.1  |
+| nse      | all  | nearest         | 1R no cap    |     6044 |     4735 |       57 |   455.7 |         0.096 |            1.88 |
+| nse      | all  | hybrid          | 1R no cap    |     6044 |     4735 |       57 |   432.5 |         0.091 |            1.85 |
+| nse      | all  | nearest 0.25ATR | 1R no cap    |     6044 |     4735 |       55 |   174.4 |         0.037 |            1.51 |
+| nse      | all  | live            | 1R no cap    |     6044 |     4735 |       49 |  -640.9 |        -0.135 |            1    |
+| nse      | all  | lakky           | 1R no cap    |     6044 |     4735 |       47 |  -788.5 |        -0.167 |            1.06 |
+| nse      | all  | touch           | 2R+BE no cap |     6044 |     4735 |       18 |  -803.2 |        -0.17  |            2.1  |
+| nse      | all  | touch           | 1.5R+trail   |     6044 |     4735 |       36 |  -834.6 |        -0.176 |            2.1  |
+| nse      | all  | touch           | 2R+BE        |     6044 |     4735 |       20 |  -839.9 |        -0.177 |            2.1  |
+| nse      | all  | touch           | 1.5R+high    |     6044 |     4735 |       36 |  -856.7 |        -0.181 |            2.1  |
+| nse      | all  | nearest         | 2R+BE no cap |     6044 |     4735 |       18 |  -865.1 |        -0.183 |            1.88 |
+| nse      | all  | nearest         | 1.5R+trail   |     6044 |     4735 |       35 |  -872.3 |        -0.184 |            1.88 |
+| nse      | all  | hybrid          | 1.5R+trail   |     6044 |     4735 |       35 |  -871.5 |        -0.184 |            1.85 |
+| nse      | all  | hybrid          | 2R+BE no cap |     6044 |     4735 |       18 |  -872.8 |        -0.184 |            1.85 |
+| nse      | all  | nearest         | 2R+BE        |     6044 |     4735 |       19 |  -882.2 |        -0.186 |            1.88 |
+| nse      | all  | hybrid          | 2R+BE        |     6044 |     4735 |       19 |  -889.9 |        -0.188 |            1.85 |
+| nse      | all  | touch           | 1.5R         |     6044 |     4735 |       36 |  -896.5 |        -0.189 |            2.1  |
+| nse      | all  | nearest 0.25ATR | 1.5R+trail   |     6044 |     4735 |       35 |  -899   |        -0.19  |            1.51 |
+| nse      | all  | nearest         | 1.5R+high    |     6044 |     4735 |       35 |  -902.3 |        -0.191 |            1.88 |
+| nse      | all  | hybrid          | 1.5R+high    |     6044 |     4735 |       35 |  -902.5 |        -0.191 |            1.85 |
+| nse      | all  | nearest         | 1.5R         |     6044 |     4735 |       36 |  -908.4 |        -0.192 |            1.88 |
+| nse      | all  | touch           | 2R no BE     |     6044 |     4735 |       32 |  -913.6 |        -0.193 |            2.1  |
+| nse      | all  | touch           | 2R no cap    |     6044 |     4735 |       31 |  -912.6 |        -0.193 |            2.1  |
+| nse      | all  | hybrid          | 1.5R         |     6044 |     4735 |       36 |  -913.2 |        -0.193 |            1.85 |
+| nse      | all  | nearest         | 2R no BE     |     6044 |     4735 |       32 |  -916.5 |        -0.194 |            1.88 |
+| nse      | all  | hybrid          | 2R no BE     |     6044 |     4735 |       32 |  -928.3 |        -0.196 |            1.85 |
+| nse      | all  | nearest 0.25ATR | 2R+BE no cap |     6044 |     4735 |       18 |  -947.6 |        -0.2   |            1.51 |
+| nse      | all  | nearest         | 2R no cap    |     6044 |     4735 |       30 |  -964.9 |        -0.204 |            1.88 |
+| nse      | all  | nearest 0.25ATR | 2R+BE        |     6044 |     4735 |       19 |  -968.4 |        -0.205 |            1.51 |
+| nse      | all  | nearest 0.25ATR | 1.5R+high    |     6044 |     4735 |       35 |  -972.3 |        -0.205 |            1.51 |
+| nse      | all  | hybrid          | 2R no cap    |     6044 |     4735 |       30 |  -976.6 |        -0.206 |            1.85 |
+| nse      | all  | nearest 0.25ATR | 2R no BE     |     6044 |     4735 |       31 | -1000.8 |        -0.211 |            1.51 |
+| nse      | all  | touch           | candle close |     6044 |     4735 |       46 | -1001.9 |        -0.212 |            2.1  |
+| nse      | all  | nearest 0.25ATR | 1.5R         |     6044 |     4735 |       36 | -1028.6 |        -0.217 |            1.51 |
+| nse      | all  | nearest 0.25ATR | 2R no cap    |     6044 |     4735 |       30 | -1034.3 |        -0.218 |            1.51 |
+| nse      | all  | nearest         | candle close |     6044 |     4735 |       46 | -1048   |        -0.221 |            1.88 |
+| nse      | all  | hybrid          | candle close |     6044 |     4735 |       46 | -1051.2 |        -0.222 |            1.85 |
+| nse      | all  | nearest 0.25ATR | candle close |     6044 |     4735 |       44 | -1168.6 |        -0.247 |            1.51 |
+| nse      | all  | live            | 1.5R+trail   |     6044 |     4735 |       33 | -1223.1 |        -0.258 |            1    |
+| nse      | all  | lakky           | 1.5R+trail   |     6044 |     4735 |       32 | -1268.1 |        -0.268 |            1.06 |
+| nse      | all  | live            | 1.5R+high    |     6044 |     4735 |       33 | -1273   |        -0.269 |            1    |
+| nse      | all  | live            | 2R+BE        |     6044 |     4735 |       16 | -1283.7 |        -0.271 |            1    |
+| nse      | all  | live            | 2R+BE no cap |     6044 |     4735 |       16 | -1283.7 |        -0.271 |            1    |
+| nse      | all  | live            | 2R no BE     |     6044 |     4735 |       28 | -1334.2 |        -0.282 |            1    |
+| nse      | all  | lakky           | 1.5R+high    |     6044 |     4735 |       32 | -1336.6 |        -0.282 |            1.06 |
+| nse      | all  | live            | 2R no cap    |     6044 |     4735 |       28 | -1339.3 |        -0.283 |            1    |
+| nse      | all  | lakky           | 2R+BE        |     6044 |     4735 |       16 | -1345.8 |        -0.284 |            1.06 |
+| nse      | all  | lakky           | 2R+BE no cap |     6044 |     4735 |       16 | -1347.7 |        -0.285 |            1.06 |
+| nse      | all  | live            | 1.5R         |     6044 |     4735 |       33 | -1393.8 |        -0.294 |            1    |
+| nse      | all  | lakky           | 2R no BE     |     6044 |     4735 |       27 | -1481.2 |        -0.313 |            1.06 |
+| nse      | all  | lakky           | 1.5R         |     6044 |     4735 |       33 | -1483.8 |        -0.313 |            1.06 |
+| nse      | all  | lakky           | 2R no cap    |     6044 |     4735 |       27 | -1504.7 |        -0.318 |            1.06 |
+| nse      | all  | live            | candle close |     6044 |     4735 |       39 | -1572.5 |        -0.332 |            1    |
+| nse      | all  | lakky           | candle close |     6044 |     4735 |       39 | -1644.5 |        -0.347 |            1.06 |
+
+## By timeframe
+
+| market   | tf   | stop            | exit         |   alerts |   filled |   wins_% |   net_R |   R_per_trade |   median_risk_% |
+|:---------|:-----|:----------------|:-------------|---------:|---------:|---------:|--------:|--------------:|----------------:|
+| crypto   | 4h   | live            | 2R+BE        |     2109 |     1559 |       17 |  -476.3 |        -0.306 |            1    |
+| crypto   | 4h   | live            | 2R no BE     |     2109 |     1559 |       26 |  -512.5 |        -0.329 |            1    |
+| crypto   | 4h   | live            | 1.5R         |     2109 |     1559 |       32 |  -508.8 |        -0.326 |            1    |
+| crypto   | 4h   | live            | 1.5R+trail   |     2109 |     1559 |       32 |  -502.8 |        -0.323 |            1    |
+| crypto   | 4h   | live            | 1.5R+high    |     2109 |     1559 |       32 |  -520.4 |        -0.334 |            1    |
+| crypto   | 4h   | live            | candle close |     2109 |     1559 |       38 |  -506.3 |        -0.325 |            1    |
+| crypto   | 4h   | live            | 1R no cap    |     2109 |     1559 |       48 |  -242.5 |        -0.156 |            1    |
+| crypto   | 4h   | live            | 2R no cap    |     2109 |     1559 |       26 |  -508.5 |        -0.326 |            1    |
+| crypto   | 4h   | live            | 2R+BE no cap |     2109 |     1559 |       17 |  -476.5 |        -0.306 |            1    |
+| crypto   | 4h   | touch           | 2R+BE        |     2109 |     1559 |       20 |  -286.4 |        -0.184 |            1.84 |
+| crypto   | 4h   | touch           | 2R no BE     |     2109 |     1559 |       33 |  -308.7 |        -0.198 |            1.84 |
+| crypto   | 4h   | touch           | 1.5R         |     2109 |     1559 |       36 |  -311.3 |        -0.2   |            1.84 |
+| crypto   | 4h   | touch           | 1.5R+trail   |     2109 |     1559 |       35 |  -303.6 |        -0.195 |            1.84 |
+| crypto   | 4h   | touch           | 1.5R+high    |     2109 |     1559 |       35 |  -321.2 |        -0.206 |            1.84 |
+| crypto   | 4h   | touch           | candle close |     2109 |     1559 |       47 |  -318.9 |        -0.205 |            1.84 |
+| crypto   | 4h   | touch           | 1R no cap    |     2109 |     1559 |       61 |   252.2 |         0.162 |            1.84 |
+| crypto   | 4h   | touch           | 2R no cap    |     2109 |     1559 |       29 |  -337.6 |        -0.217 |            1.84 |
+| crypto   | 4h   | touch           | 2R+BE no cap |     2109 |     1559 |       16 |  -292.1 |        -0.187 |            1.84 |
+| crypto   | 4h   | nearest         | 2R+BE        |     2109 |     1559 |       20 |  -279.7 |        -0.179 |            1.59 |
+| crypto   | 4h   | nearest         | 2R no BE     |     2109 |     1559 |       32 |  -326.5 |        -0.209 |            1.59 |
+| crypto   | 4h   | nearest         | 1.5R         |     2109 |     1559 |       36 |  -329.1 |        -0.211 |            1.59 |
+| crypto   | 4h   | nearest         | 1.5R+trail   |     2109 |     1559 |       35 |  -310.4 |        -0.199 |            1.59 |
+| crypto   | 4h   | nearest         | 1.5R+high    |     2109 |     1559 |       35 |  -336.3 |        -0.216 |            1.59 |
+| crypto   | 4h   | nearest         | candle close |     2109 |     1559 |       47 |  -318.1 |        -0.204 |            1.59 |
+| crypto   | 4h   | nearest         | 1R no cap    |     2109 |     1559 |       60 |   232.5 |         0.149 |            1.59 |
+| crypto   | 4h   | nearest         | 2R no cap    |     2109 |     1559 |       29 |  -321.9 |        -0.206 |            1.59 |
+| crypto   | 4h   | nearest         | 2R+BE no cap |     2109 |     1559 |       16 |  -278.8 |        -0.179 |            1.59 |
+| crypto   | 4h   | nearest 0.25ATR | 2R+BE        |     2109 |     1559 |       19 |  -319   |        -0.205 |            1.33 |
+| crypto   | 4h   | nearest 0.25ATR | 2R no BE     |     2109 |     1559 |       31 |  -382.9 |        -0.246 |            1.33 |
+| crypto   | 4h   | nearest 0.25ATR | 1.5R         |     2109 |     1559 |       35 |  -367.8 |        -0.236 |            1.33 |
+| crypto   | 4h   | nearest 0.25ATR | 1.5R+trail   |     2109 |     1559 |       34 |  -366   |        -0.235 |            1.33 |
+| crypto   | 4h   | nearest 0.25ATR | 1.5R+high    |     2109 |     1559 |       34 |  -390.8 |        -0.251 |            1.33 |
+| crypto   | 4h   | nearest 0.25ATR | candle close |     2109 |     1559 |       45 |  -379.2 |        -0.243 |            1.33 |
+| crypto   | 4h   | nearest 0.25ATR | 1R no cap    |     2109 |     1559 |       59 |   152.8 |         0.098 |            1.33 |
+| crypto   | 4h   | nearest 0.25ATR | 2R no cap    |     2109 |     1559 |       28 |  -386.4 |        -0.248 |            1.33 |
+| crypto   | 4h   | nearest 0.25ATR | 2R+BE no cap |     2109 |     1559 |       16 |  -324.1 |        -0.208 |            1.33 |
+| crypto   | 4h   | hybrid          | 2R+BE        |     2109 |     1559 |       20 |  -264.6 |        -0.17  |            1.57 |
+| crypto   | 4h   | hybrid          | 2R no BE     |     2109 |     1559 |       32 |  -322.9 |        -0.207 |            1.57 |
+| crypto   | 4h   | hybrid          | 1.5R         |     2109 |     1559 |       36 |  -326.8 |        -0.21  |            1.57 |
+| crypto   | 4h   | hybrid          | 1.5R+trail   |     2109 |     1559 |       35 |  -309.5 |        -0.199 |            1.57 |
+| crypto   | 4h   | hybrid          | 1.5R+high    |     2109 |     1559 |       35 |  -335.6 |        -0.215 |            1.57 |
+| crypto   | 4h   | hybrid          | candle close |     2109 |     1559 |       47 |  -320.1 |        -0.205 |            1.57 |
+| crypto   | 4h   | hybrid          | 1R no cap    |     2109 |     1559 |       60 |   223.8 |         0.144 |            1.57 |
+| crypto   | 4h   | hybrid          | 2R no cap    |     2109 |     1559 |       29 |  -322.6 |        -0.207 |            1.57 |
+| crypto   | 4h   | hybrid          | 2R+BE no cap |     2109 |     1559 |       17 |  -263.4 |        -0.169 |            1.57 |
+| crypto   | 4h   | lakky           | 2R+BE        |     2109 |     1559 |       16 |  -415.2 |        -0.266 |            1.01 |
+| crypto   | 4h   | lakky           | 2R no BE     |     2109 |     1559 |       28 |  -447.7 |        -0.287 |            1.01 |
+| crypto   | 4h   | lakky           | 1.5R         |     2109 |     1559 |       33 |  -424   |        -0.272 |            1.01 |
+| crypto   | 4h   | lakky           | 1.5R+trail   |     2109 |     1559 |       33 |  -443.5 |        -0.284 |            1.01 |
+| crypto   | 4h   | lakky           | 1.5R+high    |     2109 |     1559 |       33 |  -458.7 |        -0.294 |            1.01 |
+| crypto   | 4h   | lakky           | candle close |     2109 |     1559 |       41 |  -472.9 |        -0.303 |            1.01 |
+| crypto   | 4h   | lakky           | 1R no cap    |     2109 |     1559 |       50 |  -144.2 |        -0.092 |            1.01 |
+| crypto   | 4h   | lakky           | 2R no cap    |     2109 |     1559 |       28 |  -436.4 |        -0.28  |            1.01 |
+| crypto   | 4h   | lakky           | 2R+BE no cap |     2109 |     1559 |       16 |  -411.8 |        -0.264 |            1.01 |
+| crypto   | 1d   | live            | 2R+BE        |      274 |      243 |       14 |  -115.8 |        -0.477 |            1.5  |
+| crypto   | 1d   | live            | 2R no BE     |      274 |      243 |       18 |  -130.3 |        -0.536 |            1.5  |
+| crypto   | 1d   | live            | 1.5R         |      274 |      243 |       22 |  -127   |        -0.522 |            1.5  |
+| crypto   | 1d   | live            | 1.5R+trail   |      274 |      243 |       22 |  -131.7 |        -0.542 |            1.5  |
+| crypto   | 1d   | live            | 1.5R+high    |      274 |      243 |       22 |  -127.4 |        -0.524 |            1.5  |
+| crypto   | 1d   | live            | candle close |      274 |      243 |       25 |  -110.7 |        -0.456 |            1.5  |
+| crypto   | 1d   | live            | 1R no cap    |      274 |      243 |       32 |  -107.2 |        -0.441 |            1.5  |
+| crypto   | 1d   | live            | 2R no cap    |      274 |      243 |       18 |  -130.3 |        -0.536 |            1.5  |
+| crypto   | 1d   | live            | 2R+BE no cap |      274 |      243 |       14 |  -115.8 |        -0.477 |            1.5  |
+| crypto   | 1d   | touch           | 2R+BE        |      274 |      243 |       16 |   -85.1 |        -0.35  |            4.34 |
+| crypto   | 1d   | touch           | 2R no BE     |      274 |      243 |       21 |   -98   |        -0.403 |            4.34 |
+| crypto   | 1d   | touch           | 1.5R         |      274 |      243 |       24 |  -103.4 |        -0.426 |            4.34 |
+| crypto   | 1d   | touch           | 1.5R+trail   |      274 |      243 |       21 |  -111   |        -0.457 |            4.34 |
+| crypto   | 1d   | touch           | 1.5R+high    |      274 |      243 |       21 |  -115.4 |        -0.475 |            4.34 |
+| crypto   | 1d   | touch           | candle close |      274 |      243 |       35 |   -90.6 |        -0.373 |            4.34 |
+| crypto   | 1d   | touch           | 1R no cap    |      274 |      243 |       52 |     8.3 |         0.034 |            4.34 |
+| crypto   | 1d   | touch           | 2R no cap    |      274 |      243 |       19 |  -110.7 |        -0.456 |            4.34 |
+| crypto   | 1d   | touch           | 2R+BE no cap |      274 |      243 |       14 |   -88.5 |        -0.364 |            4.34 |
+| crypto   | 1d   | nearest         | 2R+BE        |      274 |      243 |       16 |   -89.7 |        -0.369 |            4.15 |
+| crypto   | 1d   | nearest         | 2R no BE     |      274 |      243 |       21 |  -103.4 |        -0.425 |            4.15 |
+| crypto   | 1d   | nearest         | 1.5R         |      274 |      243 |       25 |  -100.7 |        -0.414 |            4.15 |
+| crypto   | 1d   | nearest         | 1.5R+trail   |      274 |      243 |       22 |  -113.1 |        -0.465 |            4.15 |
+| crypto   | 1d   | nearest         | 1.5R+high    |      274 |      243 |       22 |  -113.6 |        -0.467 |            4.15 |
+| crypto   | 1d   | nearest         | candle close |      274 |      243 |       35 |   -96.3 |        -0.396 |            4.15 |
+| crypto   | 1d   | nearest         | 1R no cap    |      274 |      243 |       52 |     7.2 |         0.03  |            4.15 |
+| crypto   | 1d   | nearest         | 2R no cap    |      274 |      243 |       18 |  -117.1 |        -0.482 |            4.15 |
+| crypto   | 1d   | nearest         | 2R+BE no cap |      274 |      243 |       13 |   -98.5 |        -0.406 |            4.15 |
+| crypto   | 1d   | nearest 0.25ATR | 2R+BE        |      274 |      243 |       16 |   -86.9 |        -0.358 |            3.5  |
+| crypto   | 1d   | nearest 0.25ATR | 2R no BE     |      274 |      243 |       21 |  -103.5 |        -0.426 |            3.5  |
+| crypto   | 1d   | nearest 0.25ATR | 1.5R         |      274 |      243 |       26 |   -94.1 |        -0.387 |            3.5  |
+| crypto   | 1d   | nearest 0.25ATR | 1.5R+trail   |      274 |      243 |       24 |  -104.4 |        -0.43  |            3.5  |
+| crypto   | 1d   | nearest 0.25ATR | 1.5R+high    |      274 |      243 |       24 |  -104.5 |        -0.43  |            3.5  |
+| crypto   | 1d   | nearest 0.25ATR | candle close |      274 |      243 |       34 |  -102.9 |        -0.423 |            3.5  |
+| crypto   | 1d   | nearest 0.25ATR | 1R no cap    |      274 |      243 |       50 |    -4.6 |        -0.019 |            3.5  |
+| crypto   | 1d   | nearest 0.25ATR | 2R no cap    |      274 |      243 |       19 |  -114.1 |        -0.47  |            3.5  |
+| crypto   | 1d   | nearest 0.25ATR | 2R+BE no cap |      274 |      243 |       13 |   -95   |        -0.391 |            3.5  |
+| crypto   | 1d   | hybrid          | 2R+BE        |      274 |      243 |       16 |   -83.9 |        -0.345 |            3.87 |
+| crypto   | 1d   | hybrid          | 2R no BE     |      274 |      243 |       22 |   -98.6 |        -0.406 |            3.87 |
+| crypto   | 1d   | hybrid          | 1.5R         |      274 |      243 |       25 |  -101.9 |        -0.419 |            3.87 |
+| crypto   | 1d   | hybrid          | 1.5R+trail   |      274 |      243 |       22 |  -108.1 |        -0.445 |            3.87 |
+| crypto   | 1d   | hybrid          | 1.5R+high    |      274 |      243 |       22 |  -114.1 |        -0.469 |            3.87 |
+| crypto   | 1d   | hybrid          | candle close |      274 |      243 |       35 |   -94.8 |        -0.39  |            3.87 |
+| crypto   | 1d   | hybrid          | 1R no cap    |      274 |      243 |       51 |     3.2 |         0.013 |            3.87 |
+| crypto   | 1d   | hybrid          | 2R no cap    |      274 |      243 |       19 |  -111.2 |        -0.458 |            3.87 |
+| crypto   | 1d   | hybrid          | 2R+BE no cap |      274 |      243 |       14 |   -91.6 |        -0.377 |            3.87 |
+| crypto   | 1d   | lakky           | 2R+BE        |      274 |      243 |       17 |   -91.6 |        -0.377 |            1.39 |
+| crypto   | 1d   | lakky           | 2R no BE     |      274 |      243 |       22 |  -100.3 |        -0.413 |            1.39 |
+| crypto   | 1d   | lakky           | 1.5R         |      274 |      243 |       25 |  -110.6 |        -0.455 |            1.39 |
+| crypto   | 1d   | lakky           | 1.5R+trail   |      274 |      243 |       25 |  -115.5 |        -0.475 |            1.39 |
+| crypto   | 1d   | lakky           | 1.5R+high    |      274 |      243 |       25 |  -111   |        -0.457 |            1.39 |
+| crypto   | 1d   | lakky           | candle close |      274 |      243 |       26 |  -116.3 |        -0.479 |            1.39 |
+| crypto   | 1d   | lakky           | 1R no cap    |      274 |      243 |       35 |   -94.4 |        -0.389 |            1.39 |
+| crypto   | 1d   | lakky           | 2R no cap    |      274 |      243 |       22 |  -100.3 |        -0.413 |            1.39 |
+| crypto   | 1d   | lakky           | 2R+BE no cap |      274 |      243 |       17 |   -91.6 |        -0.377 |            1.39 |
+| crypto   | 1w   | live            | 2R+BE        |       24 |       24 |       21 |    -6   |        -0.251 |            2.5  |
+| crypto   | 1w   | live            | 2R no BE     |       24 |       24 |       21 |   -10.2 |        -0.424 |            2.5  |
+| crypto   | 1w   | live            | 1.5R         |       24 |       24 |       33 |    -5.1 |        -0.213 |            2.5  |
+| crypto   | 1w   | live            | 1.5R+trail   |       24 |       24 |       33 |    -3   |        -0.126 |            2.5  |
+| crypto   | 1w   | live            | 1.5R+high    |       24 |       24 |       33 |    -3   |        -0.126 |            2.5  |
+| crypto   | 1w   | live            | candle close |       24 |       24 |       33 |    -3.2 |        -0.134 |            2.5  |
+| crypto   | 1w   | live            | 1R no cap    |       24 |       24 |       33 |    -9.1 |        -0.38  |            2.5  |
+| crypto   | 1w   | live            | 2R no cap    |       24 |       24 |       21 |   -10.2 |        -0.424 |            2.5  |
+| crypto   | 1w   | live            | 2R+BE no cap |       24 |       24 |       21 |    -6   |        -0.251 |            2.5  |
+| crypto   | 1w   | touch           | 2R+BE        |       24 |       24 |       33 |    -4.7 |        -0.196 |           20.43 |
+| crypto   | 1w   | touch           | 2R no BE     |       24 |       24 |       33 |    -6.8 |        -0.283 |           20.43 |
+| crypto   | 1w   | touch           | 1.5R         |       24 |       24 |       38 |    -5.3 |        -0.219 |           20.43 |
+| crypto   | 1w   | touch           | 1.5R+trail   |       24 |       24 |       38 |    -4.9 |        -0.205 |           20.43 |
+| crypto   | 1w   | touch           | 1.5R+high    |       24 |       24 |       38 |    -4.9 |        -0.205 |           20.43 |
+| crypto   | 1w   | touch           | candle close |       24 |       24 |       25 |    -6.8 |        -0.284 |           20.43 |
+| crypto   | 1w   | touch           | 1R no cap    |       24 |       24 |       62 |     4.6 |         0.192 |           20.43 |
+| crypto   | 1w   | touch           | 2R no cap    |       24 |       24 |       33 |    -6.8 |        -0.283 |           20.43 |
+| crypto   | 1w   | touch           | 2R+BE no cap |       24 |       24 |       33 |    -4.7 |        -0.196 |           20.43 |
+| crypto   | 1w   | nearest         | 2R+BE        |       24 |       24 |       38 |    -4.6 |        -0.193 |           13.68 |
+| crypto   | 1w   | nearest         | 2R no BE     |       24 |       24 |       38 |    -6.7 |        -0.28  |           13.68 |
+| crypto   | 1w   | nearest         | 1.5R         |       24 |       24 |       42 |    -5.2 |        -0.217 |           13.68 |
+| crypto   | 1w   | nearest         | 1.5R+trail   |       24 |       24 |       42 |    -4.9 |        -0.202 |           13.68 |
+| crypto   | 1w   | nearest         | 1.5R+high    |       24 |       24 |       42 |    -4.9 |        -0.202 |           13.68 |
+| crypto   | 1w   | nearest         | candle close |       24 |       24 |       29 |    -6.7 |        -0.278 |           13.68 |
+| crypto   | 1w   | nearest         | 1R no cap    |       24 |       24 |       62 |     4.6 |         0.192 |           13.68 |
+| crypto   | 1w   | nearest         | 2R no cap    |       24 |       24 |       38 |    -6.7 |        -0.28  |           13.68 |
+| crypto   | 1w   | nearest         | 2R+BE no cap |       24 |       24 |       38 |    -4.6 |        -0.193 |           13.68 |
+| crypto   | 1w   | nearest 0.25ATR | 2R+BE        |       24 |       24 |       33 |    -2.6 |        -0.108 |            9.26 |
+| crypto   | 1w   | nearest 0.25ATR | 2R no BE     |       24 |       24 |       33 |    -5.7 |        -0.236 |            9.26 |
+| crypto   | 1w   | nearest 0.25ATR | 1.5R         |       24 |       24 |       33 |    -7.7 |        -0.32  |            9.26 |
+| crypto   | 1w   | nearest 0.25ATR | 1.5R+trail   |       24 |       24 |       33 |    -6.4 |        -0.265 |            9.26 |
+| crypto   | 1w   | nearest 0.25ATR | 1.5R+high    |       24 |       24 |       33 |    -6.4 |        -0.265 |            9.26 |
+| crypto   | 1w   | nearest 0.25ATR | candle close |       24 |       24 |       38 |    -4.2 |        -0.175 |            9.26 |
+| crypto   | 1w   | nearest 0.25ATR | 1R no cap    |       24 |       24 |       58 |     3.6 |         0.149 |            9.26 |
+| crypto   | 1w   | nearest 0.25ATR | 2R no cap    |       24 |       24 |       33 |    -5.7 |        -0.236 |            9.26 |
+| crypto   | 1w   | nearest 0.25ATR | 2R+BE no cap |       24 |       24 |       33 |    -2.6 |        -0.108 |            9.26 |
+| crypto   | 1w   | hybrid          | 2R+BE        |       24 |       24 |       38 |    -4.6 |        -0.194 |           13.68 |
+| crypto   | 1w   | hybrid          | 2R no BE     |       24 |       24 |       38 |    -6.7 |        -0.28  |           13.68 |
+| crypto   | 1w   | hybrid          | 1.5R         |       24 |       24 |       42 |    -5.2 |        -0.217 |           13.68 |
+| crypto   | 1w   | hybrid          | 1.5R+trail   |       24 |       24 |       42 |    -4.9 |        -0.202 |           13.68 |
+| crypto   | 1w   | hybrid          | 1.5R+high    |       24 |       24 |       42 |    -4.9 |        -0.202 |           13.68 |
+| crypto   | 1w   | hybrid          | candle close |       24 |       24 |       29 |    -6.7 |        -0.279 |           13.68 |
+| crypto   | 1w   | hybrid          | 1R no cap    |       24 |       24 |       62 |     4.6 |         0.192 |           13.68 |
+| crypto   | 1w   | hybrid          | 2R no cap    |       24 |       24 |       38 |    -6.7 |        -0.28  |           13.68 |
+| crypto   | 1w   | hybrid          | 2R+BE no cap |       24 |       24 |       38 |    -4.6 |        -0.194 |           13.68 |
+| crypto   | 1w   | lakky           | 2R+BE        |       24 |       24 |       21 |    -8.2 |        -0.342 |            3.76 |
+| crypto   | 1w   | lakky           | 2R no BE     |       24 |       24 |       21 |   -11.3 |        -0.471 |            3.76 |
+| crypto   | 1w   | lakky           | 1.5R         |       24 |       24 |       25 |   -10.8 |        -0.45  |            3.76 |
+| crypto   | 1w   | lakky           | 1.5R+trail   |       24 |       24 |       25 |   -11.8 |        -0.493 |            3.76 |
+| crypto   | 1w   | lakky           | 1.5R+high    |       24 |       24 |       25 |   -11.8 |        -0.493 |            3.76 |
+| crypto   | 1w   | lakky           | candle close |       24 |       24 |       29 |   -10.5 |        -0.437 |            3.76 |
+| crypto   | 1w   | lakky           | 1R no cap    |       24 |       24 |       38 |    -7   |        -0.293 |            3.76 |
+| crypto   | 1w   | lakky           | 2R no cap    |       24 |       24 |       21 |   -11.3 |        -0.471 |            3.76 |
+| crypto   | 1w   | lakky           | 2R+BE no cap |       24 |       24 |       21 |    -8.2 |        -0.342 |            3.76 |
+| nse      | 4h   | live            | 2R+BE        |     3751 |     2867 |       17 |  -870.6 |        -0.304 |            1    |
+| nse      | 4h   | live            | 2R no BE     |     3751 |     2867 |       27 |  -910.5 |        -0.318 |            1    |
+| nse      | 4h   | live            | 1.5R         |     3751 |     2867 |       32 |  -963.6 |        -0.336 |            1    |
+| nse      | 4h   | live            | 1.5R+trail   |     3751 |     2867 |       32 |  -809.4 |        -0.282 |            1    |
+| nse      | 4h   | live            | 1.5R+high    |     3751 |     2867 |       32 |  -860.5 |        -0.3   |            1    |
+| nse      | 4h   | live            | candle close |     3751 |     2867 |       38 | -1034.5 |        -0.361 |            1    |
+| nse      | 4h   | live            | 1R no cap    |     3751 |     2867 |       46 |  -605   |        -0.211 |            1    |
+| nse      | 4h   | live            | 2R no cap    |     3751 |     2867 |       27 |  -912   |        -0.318 |            1    |
+| nse      | 4h   | live            | 2R+BE no cap |     3751 |     2867 |       17 |  -870.6 |        -0.304 |            1    |
+| nse      | 4h   | touch           | 2R+BE        |     3751 |     2867 |       20 |  -563.9 |        -0.197 |            1.67 |
+| nse      | 4h   | touch           | 2R no BE     |     3751 |     2867 |       32 |  -585.7 |        -0.204 |            1.67 |
+| nse      | 4h   | touch           | 1.5R         |     3751 |     2867 |       37 |  -581.5 |        -0.203 |            1.67 |
+| nse      | 4h   | touch           | 1.5R+trail   |     3751 |     2867 |       35 |  -539.2 |        -0.188 |            1.67 |
+| nse      | 4h   | touch           | 1.5R+high    |     3751 |     2867 |       35 |  -564.6 |        -0.197 |            1.67 |
+| nse      | 4h   | touch           | candle close |     3751 |     2867 |       46 |  -672.1 |        -0.234 |            1.67 |
+| nse      | 4h   | touch           | 1R no cap    |     3751 |     2867 |       57 |   237.1 |         0.083 |            1.67 |
+| nse      | 4h   | touch           | 2R no cap    |     3751 |     2867 |       30 |  -610.9 |        -0.213 |            1.67 |
+| nse      | 4h   | touch           | 2R+BE no cap |     3751 |     2867 |       18 |  -549.8 |        -0.192 |            1.67 |
+| nse      | 4h   | nearest         | 2R+BE        |     3751 |     2867 |       19 |  -609.1 |        -0.212 |            1.53 |
+| nse      | 4h   | nearest         | 2R no BE     |     3751 |     2867 |       32 |  -609.6 |        -0.213 |            1.53 |
+| nse      | 4h   | nearest         | 1.5R         |     3751 |     2867 |       36 |  -603.7 |        -0.211 |            1.53 |
+| nse      | 4h   | nearest         | 1.5R+trail   |     3751 |     2867 |       35 |  -567.7 |        -0.198 |            1.53 |
+| nse      | 4h   | nearest         | 1.5R+high    |     3751 |     2867 |       35 |  -597.5 |        -0.208 |            1.53 |
+| nse      | 4h   | nearest         | candle close |     3751 |     2867 |       46 |  -698   |        -0.243 |            1.53 |
+| nse      | 4h   | nearest         | 1R no cap    |     3751 |     2867 |       56 |   147.9 |         0.052 |            1.53 |
+| nse      | 4h   | nearest         | 2R no cap    |     3751 |     2867 |       30 |  -662.2 |        -0.231 |            1.53 |
+| nse      | 4h   | nearest         | 2R+BE no cap |     3751 |     2867 |       17 |  -606   |        -0.211 |            1.53 |
+| nse      | 4h   | nearest 0.25ATR | 2R+BE        |     3751 |     2867 |       19 |  -687.4 |        -0.24  |            1.24 |
+| nse      | 4h   | nearest 0.25ATR | 2R no BE     |     3751 |     2867 |       31 |  -715.3 |        -0.249 |            1.24 |
+| nse      | 4h   | nearest 0.25ATR | 1.5R         |     3751 |     2867 |       35 |  -719.8 |        -0.251 |            1.24 |
+| nse      | 4h   | nearest 0.25ATR | 1.5R+trail   |     3751 |     2867 |       34 |  -610.9 |        -0.213 |            1.24 |
+| nse      | 4h   | nearest 0.25ATR | 1.5R+high    |     3751 |     2867 |       34 |  -671.7 |        -0.234 |            1.24 |
+| nse      | 4h   | nearest 0.25ATR | candle close |     3751 |     2867 |       43 |  -787.7 |        -0.275 |            1.24 |
+| nse      | 4h   | nearest 0.25ATR | 1R no cap    |     3751 |     2867 |       54 |   -47.3 |        -0.016 |            1.24 |
+| nse      | 4h   | nearest 0.25ATR | 2R no cap    |     3751 |     2867 |       29 |  -749.4 |        -0.261 |            1.24 |
+| nse      | 4h   | nearest 0.25ATR | 2R+BE no cap |     3751 |     2867 |       17 |  -677.3 |        -0.236 |            1.24 |
+| nse      | 4h   | hybrid          | 2R+BE        |     3751 |     2867 |       19 |  -610.7 |        -0.213 |            1.5  |
+| nse      | 4h   | hybrid          | 2R no BE     |     3751 |     2867 |       32 |  -619.3 |        -0.216 |            1.5  |
+| nse      | 4h   | hybrid          | 1.5R         |     3751 |     2867 |       36 |  -606.3 |        -0.211 |            1.5  |
+| nse      | 4h   | hybrid          | 1.5R+trail   |     3751 |     2867 |       35 |  -568.3 |        -0.198 |            1.5  |
+| nse      | 4h   | hybrid          | 1.5R+high    |     3751 |     2867 |       35 |  -599.1 |        -0.209 |            1.5  |
+| nse      | 4h   | hybrid          | candle close |     3751 |     2867 |       45 |  -705.9 |        -0.246 |            1.5  |
+| nse      | 4h   | hybrid          | 1R no cap    |     3751 |     2867 |       56 |   132   |         0.046 |            1.5  |
+| nse      | 4h   | hybrid          | 2R no cap    |     3751 |     2867 |       30 |  -671.4 |        -0.234 |            1.5  |
+| nse      | 4h   | hybrid          | 2R+BE no cap |     3751 |     2867 |       17 |  -607.6 |        -0.212 |            1.5  |
+| nse      | 4h   | lakky           | 2R+BE        |     3751 |     2867 |       16 |  -805.6 |        -0.281 |            1.03 |
+| nse      | 4h   | lakky           | 2R no BE     |     3751 |     2867 |       28 |  -852.4 |        -0.297 |            1.03 |
+| nse      | 4h   | lakky           | 1.5R         |     3751 |     2867 |       33 |  -878.6 |        -0.306 |            1.03 |
+| nse      | 4h   | lakky           | 1.5R+trail   |     3751 |     2867 |       33 |  -726.9 |        -0.254 |            1.03 |
+| nse      | 4h   | lakky           | 1.5R+high    |     3751 |     2867 |       33 |  -786.7 |        -0.274 |            1.03 |
+| nse      | 4h   | lakky           | candle close |     3751 |     2867 |       41 |  -950.7 |        -0.332 |            1.03 |
+| nse      | 4h   | lakky           | 1R no cap    |     3751 |     2867 |       48 |  -468.7 |        -0.163 |            1.03 |
+| nse      | 4h   | lakky           | 2R no cap    |     3751 |     2867 |       28 |  -879.8 |        -0.307 |            1.03 |
+| nse      | 4h   | lakky           | 2R+BE no cap |     3751 |     2867 |       16 |  -806.9 |        -0.281 |            1.03 |
+| nse      | 1d   | live            | 2R+BE        |     2022 |     1635 |       16 |  -367.3 |        -0.225 |            1.5  |
+| nse      | 1d   | live            | 2R no BE     |     2022 |     1635 |       29 |  -390.3 |        -0.239 |            1.5  |
+| nse      | 1d   | live            | 1.5R         |     2022 |     1635 |       34 |  -383.5 |        -0.235 |            1.5  |
+| nse      | 1d   | live            | 1.5R+trail   |     2022 |     1635 |       34 |  -370.4 |        -0.227 |            1.5  |
+| nse      | 1d   | live            | 1.5R+high    |     2022 |     1635 |       34 |  -370.6 |        -0.227 |            1.5  |
+| nse      | 1d   | live            | candle close |     2022 |     1635 |       41 |  -481.2 |        -0.294 |            1.5  |
+| nse      | 1d   | live            | 1R no cap    |     2022 |     1635 |       54 |     2.9 |         0.002 |            1.5  |
+| nse      | 1d   | live            | 2R no cap    |     2022 |     1635 |       29 |  -393.9 |        -0.241 |            1.5  |
+| nse      | 1d   | live            | 2R+BE no cap |     2022 |     1635 |       16 |  -367.3 |        -0.225 |            1.5  |
+| nse      | 1d   | touch           | 2R+BE        |     2022 |     1635 |       20 |  -256.6 |        -0.157 |            2.59 |
+| nse      | 1d   | touch           | 2R no BE     |     2022 |     1635 |       31 |  -330.8 |        -0.202 |            2.59 |
+| nse      | 1d   | touch           | 1.5R         |     2022 |     1635 |       35 |  -313.9 |        -0.192 |            2.59 |
+| nse      | 1d   | touch           | 1.5R+trail   |     2022 |     1635 |       35 |  -295.9 |        -0.181 |            2.59 |
+| nse      | 1d   | touch           | 1.5R+high    |     2022 |     1635 |       35 |  -293.5 |        -0.18  |            2.59 |
+| nse      | 1d   | touch           | candle close |     2022 |     1635 |       46 |  -316.4 |        -0.194 |            2.59 |
+| nse      | 1d   | touch           | 1R no cap    |     2022 |     1635 |       60 |   285.4 |         0.175 |            2.59 |
+| nse      | 1d   | touch           | 2R no cap    |     2022 |     1635 |       30 |  -304.5 |        -0.186 |            2.59 |
+| nse      | 1d   | touch           | 2R+BE no cap |     2022 |     1635 |       18 |  -234   |        -0.143 |            2.59 |
+| nse      | 1d   | nearest         | 2R+BE        |     2022 |     1635 |       19 |  -249.8 |        -0.153 |            2.39 |
+| nse      | 1d   | nearest         | 2R no BE     |     2022 |     1635 |       31 |  -306.3 |        -0.187 |            2.39 |
+| nse      | 1d   | nearest         | 1.5R         |     2022 |     1635 |       35 |  -302.6 |        -0.185 |            2.39 |
+| nse      | 1d   | nearest         | 1.5R+trail   |     2022 |     1635 |       35 |  -303.7 |        -0.186 |            2.39 |
+| nse      | 1d   | nearest         | 1.5R+high    |     2022 |     1635 |       35 |  -305.6 |        -0.187 |            2.39 |
+| nse      | 1d   | nearest         | candle close |     2022 |     1635 |       46 |  -334.4 |        -0.205 |            2.39 |
+| nse      | 1d   | nearest         | 1R no cap    |     2022 |     1635 |       60 |   275   |         0.168 |            2.39 |
+| nse      | 1d   | nearest         | 2R no cap    |     2022 |     1635 |       30 |  -302.1 |        -0.185 |            2.39 |
+| nse      | 1d   | nearest         | 2R+BE no cap |     2022 |     1635 |       18 |  -235.8 |        -0.144 |            2.39 |
+| nse      | 1d   | nearest 0.25ATR | 2R+BE        |     2022 |     1635 |       19 |  -260   |        -0.159 |            1.9  |
+| nse      | 1d   | nearest 0.25ATR | 2R no BE     |     2022 |     1635 |       31 |  -290   |        -0.177 |            1.9  |
+| nse      | 1d   | nearest 0.25ATR | 1.5R         |     2022 |     1635 |       35 |  -312   |        -0.191 |            1.9  |
+| nse      | 1d   | nearest 0.25ATR | 1.5R+trail   |     2022 |     1635 |       35 |  -290.6 |        -0.178 |            1.9  |
+| nse      | 1d   | nearest 0.25ATR | 1.5R+high    |     2022 |     1635 |       35 |  -303.8 |        -0.186 |            1.9  |
+| nse      | 1d   | nearest 0.25ATR | candle close |     2022 |     1635 |       45 |  -360.5 |        -0.22  |            1.9  |
+| nse      | 1d   | nearest 0.25ATR | 1R no cap    |     2022 |     1635 |       58 |   194.7 |         0.119 |            1.9  |
+| nse      | 1d   | nearest 0.25ATR | 2R no cap    |     2022 |     1635 |       31 |  -289.4 |        -0.177 |            1.9  |
+| nse      | 1d   | nearest 0.25ATR | 2R+BE no cap |     2022 |     1635 |       18 |  -249.4 |        -0.153 |            1.9  |
+| nse      | 1d   | hybrid          | 2R+BE        |     2022 |     1635 |       19 |  -255.1 |        -0.156 |            2.33 |
+| nse      | 1d   | hybrid          | 2R no BE     |     2022 |     1635 |       31 |  -307.6 |        -0.188 |            2.33 |
+| nse      | 1d   | hybrid          | 1.5R         |     2022 |     1635 |       35 |  -303.3 |        -0.185 |            2.33 |
+| nse      | 1d   | hybrid          | 1.5R+trail   |     2022 |     1635 |       35 |  -301.1 |        -0.184 |            2.33 |
+| nse      | 1d   | hybrid          | 1.5R+high    |     2022 |     1635 |       35 |  -302.7 |        -0.185 |            2.33 |
+| nse      | 1d   | hybrid          | candle close |     2022 |     1635 |       46 |  -329.9 |        -0.202 |            2.33 |
+| nse      | 1d   | hybrid          | 1R no cap    |     2022 |     1635 |       60 |   273.7 |         0.167 |            2.33 |
+| nse      | 1d   | hybrid          | 2R no cap    |     2022 |     1635 |       30 |  -303.8 |        -0.186 |            2.33 |
+| nse      | 1d   | hybrid          | 2R+BE no cap |     2022 |     1635 |       18 |  -241.1 |        -0.147 |            2.33 |
+| nse      | 1d   | lakky           | 2R+BE        |     2022 |     1635 |       16 |  -459.6 |        -0.281 |            1.08 |
+| nse      | 1d   | lakky           | 2R no BE     |     2022 |     1635 |       27 |  -530.9 |        -0.325 |            1.08 |
+| nse      | 1d   | lakky           | 1.5R         |     2022 |     1635 |       32 |  -509.4 |        -0.312 |            1.08 |
+| nse      | 1d   | lakky           | 1.5R+trail   |     2022 |     1635 |       33 |  -449.6 |        -0.275 |            1.08 |
+| nse      | 1d   | lakky           | 1.5R+high    |     2022 |     1635 |       33 |  -459.2 |        -0.281 |            1.08 |
+| nse      | 1d   | lakky           | candle close |     2022 |     1635 |       36 |  -603.1 |        -0.369 |            1.08 |
+| nse      | 1d   | lakky           | 1R no cap    |     2022 |     1635 |       49 |  -227.6 |        -0.139 |            1.08 |
+| nse      | 1d   | lakky           | 2R no cap    |     2022 |     1635 |       27 |  -527   |        -0.322 |            1.08 |
+| nse      | 1d   | lakky           | 2R+BE no cap |     2022 |     1635 |       16 |  -460.3 |        -0.282 |            1.08 |
+| nse      | 1w   | live            | 2R+BE        |      249 |      213 |       20 |   -45   |        -0.211 |            2.5  |
+| nse      | 1w   | live            | 2R no BE     |      249 |      213 |       31 |   -31.6 |        -0.148 |            2.5  |
+| nse      | 1w   | live            | 1.5R         |      249 |      213 |       35 |   -44.3 |        -0.208 |            2.5  |
+| nse      | 1w   | live            | 1.5R+trail   |      249 |      213 |       35 |   -40   |        -0.188 |            2.5  |
+| nse      | 1w   | live            | 1.5R+high    |      249 |      213 |       35 |   -38.6 |        -0.181 |            2.5  |
+| nse      | 1w   | live            | candle close |      249 |      213 |       38 |   -54   |        -0.254 |            2.5  |
+| nse      | 1w   | live            | 1R no cap    |      249 |      213 |       44 |   -36.9 |        -0.173 |            2.5  |
+| nse      | 1w   | live            | 2R no cap    |      249 |      213 |       31 |   -31.6 |        -0.148 |            2.5  |
+| nse      | 1w   | live            | 2R+BE no cap |      249 |      213 |       20 |   -45   |        -0.211 |            2.5  |
+| nse      | 1w   | touch           | 2R+BE        |      249 |      213 |       22 |   -15.5 |        -0.073 |            4.82 |
+| nse      | 1w   | touch           | 2R no BE     |      249 |      213 |       38 |     9.2 |         0.043 |            4.82 |
+| nse      | 1w   | touch           | 1.5R         |      249 |      213 |       41 |     2.8 |         0.013 |            4.82 |
+| nse      | 1w   | touch           | 1.5R+trail   |      249 |      213 |       41 |     5.4 |         0.025 |            4.82 |
+| nse      | 1w   | touch           | 1.5R+high    |      249 |      213 |       41 |     6.2 |         0.029 |            4.82 |
+| nse      | 1w   | touch           | candle close |      249 |      213 |       47 |    -9.1 |        -0.043 |            4.82 |
+| nse      | 1w   | touch           | 1R no cap    |      249 |      213 |       53 |    28.2 |         0.133 |            4.82 |
+| nse      | 1w   | touch           | 2R no cap    |      249 |      213 |       38 |     9.2 |         0.043 |            4.82 |
+| nse      | 1w   | touch           | 2R+BE no cap |      249 |      213 |       22 |   -15.5 |        -0.073 |            4.82 |
+| nse      | 1w   | nearest         | 2R+BE        |      249 |      213 |       21 |   -21.1 |        -0.099 |            4.82 |
+| nse      | 1w   | nearest         | 2R no BE     |      249 |      213 |       38 |     3.7 |         0.017 |            4.82 |
+| nse      | 1w   | nearest         | 1.5R         |      249 |      213 |       41 |     0.2 |         0.001 |            4.82 |
+| nse      | 1w   | nearest         | 1.5R+trail   |      249 |      213 |       41 |     3.1 |         0.015 |            4.82 |
+| nse      | 1w   | nearest         | 1.5R+high    |      249 |      213 |       41 |     4.8 |         0.023 |            4.82 |
+| nse      | 1w   | nearest         | candle close |      249 |      213 |       46 |   -12.7 |        -0.059 |            4.82 |
+| nse      | 1w   | nearest         | 1R no cap    |      249 |      213 |       54 |    31.6 |         0.148 |            4.82 |
+| nse      | 1w   | nearest         | 2R no cap    |      249 |      213 |       38 |     3.7 |         0.017 |            4.82 |
+| nse      | 1w   | nearest         | 2R+BE no cap |      249 |      213 |       21 |   -21.1 |        -0.099 |            4.82 |
+| nse      | 1w   | nearest 0.25ATR | 2R+BE        |      249 |      213 |       21 |   -22.5 |        -0.106 |            3.83 |
+| nse      | 1w   | nearest 0.25ATR | 2R no BE     |      249 |      213 |       38 |     6   |         0.028 |            3.83 |
+| nse      | 1w   | nearest 0.25ATR | 1.5R         |      249 |      213 |       42 |     3.7 |         0.017 |            3.83 |
+| nse      | 1w   | nearest 0.25ATR | 1.5R+trail   |      249 |      213 |       42 |     5.1 |         0.024 |            3.83 |
+| nse      | 1w   | nearest 0.25ATR | 1.5R+high    |      249 |      213 |       42 |     5.8 |         0.027 |            3.83 |
+| nse      | 1w   | nearest 0.25ATR | candle close |      249 |      213 |       46 |   -19.2 |        -0.09  |            3.83 |
+| nse      | 1w   | nearest 0.25ATR | 1R no cap    |      249 |      213 |       54 |    25   |         0.117 |            3.83 |
+| nse      | 1w   | nearest 0.25ATR | 2R no cap    |      249 |      213 |       38 |     6   |         0.028 |            3.83 |
+| nse      | 1w   | nearest 0.25ATR | 2R+BE no cap |      249 |      213 |       21 |   -22.5 |        -0.106 |            3.83 |
+| nse      | 1w   | hybrid          | 2R+BE        |      249 |      213 |       21 |   -21.9 |        -0.103 |            4.53 |
+| nse      | 1w   | hybrid          | 2R no BE     |      249 |      213 |       38 |     2.9 |         0.014 |            4.53 |
+| nse      | 1w   | hybrid          | 1.5R         |      249 |      213 |       41 |    -1.4 |        -0.007 |            4.53 |
+| nse      | 1w   | hybrid          | 1.5R+trail   |      249 |      213 |       41 |     1.9 |         0.009 |            4.53 |
+| nse      | 1w   | hybrid          | 1.5R+high    |      249 |      213 |       41 |     3.3 |         0.016 |            4.53 |
+| nse      | 1w   | hybrid          | candle close |      249 |      213 |       47 |   -12.5 |        -0.059 |            4.53 |
+| nse      | 1w   | hybrid          | 1R no cap    |      249 |      213 |       53 |    25.5 |         0.12  |            4.53 |
+| nse      | 1w   | hybrid          | 2R no cap    |      249 |      213 |       38 |     2.9 |         0.014 |            4.53 |
+| nse      | 1w   | hybrid          | 2R+BE no cap |      249 |      213 |       21 |   -21.9 |        -0.103 |            4.53 |
+| nse      | 1w   | lakky           | 2R+BE        |      249 |      213 |       17 |   -80.6 |        -0.378 |            1.44 |
+| nse      | 1w   | lakky           | 2R no BE     |      249 |      213 |       23 |   -98.8 |        -0.464 |            1.44 |
+| nse      | 1w   | lakky           | 1.5R         |      249 |      213 |       27 |   -94.2 |        -0.442 |            1.44 |
+| nse      | 1w   | lakky           | 1.5R+trail   |      249 |      213 |       27 |   -87.4 |        -0.41  |            1.44 |
+| nse      | 1w   | lakky           | 1.5R+high    |      249 |      213 |       27 |   -86.4 |        -0.406 |            1.44 |
+| nse      | 1w   | lakky           | candle close |      249 |      213 |       29 |   -83.4 |        -0.391 |            1.44 |
+| nse      | 1w   | lakky           | 1R no cap    |      249 |      213 |       34 |   -89.6 |        -0.421 |            1.44 |
+| nse      | 1w   | lakky           | 2R no cap    |      249 |      213 |       23 |   -98.8 |        -0.464 |            1.44 |
+| nse      | 1w   | lakky           | 2R+BE no cap |      249 |      213 |       17 |   -80.6 |        -0.378 |            1.44 |
+| nse      | 1M   | live            | 2R+BE        |       22 |       20 |       25 |    -0.7 |        -0.036 |            3    |
+| nse      | 1M   | live            | 2R no BE     |       22 |       20 |       30 |    -1.9 |        -0.094 |            3    |
+| nse      | 1M   | live            | 1.5R         |       22 |       20 |       35 |    -2.4 |        -0.118 |            3    |
+| nse      | 1M   | live            | 1.5R+trail   |       22 |       20 |       35 |    -3.3 |        -0.167 |            3    |
+| nse      | 1M   | live            | 1.5R+high    |       22 |       20 |       35 |    -3.3 |        -0.167 |            3    |
+| nse      | 1M   | live            | candle close |       22 |       20 |       35 |    -2.8 |        -0.142 |            3    |
+| nse      | 1M   | live            | 1R no cap    |       22 |       20 |       45 |    -1.8 |        -0.091 |            3    |
+| nse      | 1M   | live            | 2R no cap    |       22 |       20 |       30 |    -1.9 |        -0.094 |            3    |
+| nse      | 1M   | live            | 2R+BE no cap |       22 |       20 |       25 |    -0.7 |        -0.036 |            3    |
+| nse      | 1M   | touch           | 2R+BE        |       22 |       20 |       40 |    -3.8 |        -0.192 |           20.83 |
+| nse      | 1M   | touch           | 2R no BE     |       22 |       20 |       40 |    -6.4 |        -0.319 |           20.83 |
+| nse      | 1M   | touch           | 1.5R         |       22 |       20 |       45 |    -3.9 |        -0.193 |           20.83 |
+| nse      | 1M   | touch           | 1.5R+trail   |       22 |       20 |       45 |    -4.8 |        -0.242 |           20.83 |
+| nse      | 1M   | touch           | 1.5R+high    |       22 |       20 |       45 |    -4.8 |        -0.242 |           20.83 |
+| nse      | 1M   | touch           | candle close |       22 |       20 |       40 |    -4.4 |        -0.22  |           20.83 |
+| nse      | 1M   | touch           | 1R no cap    |       22 |       20 |       55 |     0.4 |         0.018 |           20.83 |
+| nse      | 1M   | touch           | 2R no cap    |       22 |       20 |       40 |    -6.4 |        -0.319 |           20.83 |
+| nse      | 1M   | touch           | 2R+BE no cap |       22 |       20 |       40 |    -3.8 |        -0.192 |           20.83 |
+| nse      | 1M   | nearest         | 2R+BE        |       22 |       20 |       35 |    -2.2 |        -0.112 |           18.47 |
+| nse      | 1M   | nearest         | 2R no BE     |       22 |       20 |       40 |    -4.3 |        -0.215 |           18.47 |
+| nse      | 1M   | nearest         | 1.5R         |       22 |       20 |       45 |    -2.3 |        -0.114 |           18.47 |
+| nse      | 1M   | nearest         | 1.5R+trail   |       22 |       20 |       45 |    -4   |        -0.199 |           18.47 |
+| nse      | 1M   | nearest         | 1.5R+high    |       22 |       20 |       45 |    -4   |        -0.199 |           18.47 |
+| nse      | 1M   | nearest         | candle close |       22 |       20 |       40 |    -3   |        -0.149 |           18.47 |
+| nse      | 1M   | nearest         | 1R no cap    |       22 |       20 |       55 |     1.3 |         0.063 |           18.47 |
+| nse      | 1M   | nearest         | 2R no cap    |       22 |       20 |       40 |    -4.3 |        -0.215 |           18.47 |
+| nse      | 1M   | nearest         | 2R+BE no cap |       22 |       20 |       35 |    -2.2 |        -0.112 |           18.47 |
+| nse      | 1M   | nearest 0.25ATR | 2R+BE        |       22 |       20 |       35 |     1.5 |         0.075 |           12.75 |
+| nse      | 1M   | nearest 0.25ATR | 2R no BE     |       22 |       20 |       40 |    -1.6 |        -0.079 |           12.75 |
+| nse      | 1M   | nearest 0.25ATR | 1.5R         |       22 |       20 |       45 |    -0.6 |        -0.028 |           12.75 |
+| nse      | 1M   | nearest 0.25ATR | 1.5R+trail   |       22 |       20 |       45 |    -2.6 |        -0.131 |           12.75 |
+| nse      | 1M   | nearest 0.25ATR | 1.5R+high    |       22 |       20 |       45 |    -2.6 |        -0.131 |           12.75 |
+| nse      | 1M   | nearest 0.25ATR | candle close |       22 |       20 |       40 |    -1.3 |        -0.067 |           12.75 |
+| nse      | 1M   | nearest 0.25ATR | 1R no cap    |       22 |       20 |       55 |     2   |         0.099 |           12.75 |
+| nse      | 1M   | nearest 0.25ATR | 2R no cap    |       22 |       20 |       40 |    -1.6 |        -0.079 |           12.75 |
+| nse      | 1M   | nearest 0.25ATR | 2R+BE no cap |       22 |       20 |       35 |     1.5 |         0.075 |           12.75 |
+| nse      | 1M   | hybrid          | 2R+BE        |       22 |       20 |       35 |    -2.2 |        -0.112 |           18.47 |
+| nse      | 1M   | hybrid          | 2R no BE     |       22 |       20 |       40 |    -4.3 |        -0.214 |           18.47 |
+| nse      | 1M   | hybrid          | 1.5R         |       22 |       20 |       45 |    -2.3 |        -0.114 |           18.47 |
+| nse      | 1M   | hybrid          | 1.5R+trail   |       22 |       20 |       45 |    -4   |        -0.199 |           18.47 |
+| nse      | 1M   | hybrid          | 1.5R+high    |       22 |       20 |       45 |    -4   |        -0.199 |           18.47 |
+| nse      | 1M   | hybrid          | candle close |       22 |       20 |       40 |    -3   |        -0.149 |           18.47 |
+| nse      | 1M   | hybrid          | 1R no cap    |       22 |       20 |       55 |     1.3 |         0.063 |           18.47 |
+| nse      | 1M   | hybrid          | 2R no cap    |       22 |       20 |       40 |    -4.3 |        -0.214 |           18.47 |
+| nse      | 1M   | hybrid          | 2R+BE no cap |       22 |       20 |       35 |    -2.2 |        -0.112 |           18.47 |
+| nse      | 1M   | lakky           | 2R+BE        |       22 |       20 |       35 |    -0   |        -0.001 |            2.57 |
+| nse      | 1M   | lakky           | 2R no BE     |       22 |       20 |       40 |     0.9 |         0.046 |            2.57 |
+| nse      | 1M   | lakky           | 1.5R         |       22 |       20 |       40 |    -1.7 |        -0.084 |            2.57 |
+| nse      | 1M   | lakky           | 1.5R+trail   |       22 |       20 |       40 |    -4.3 |        -0.213 |            2.57 |
+| nse      | 1M   | lakky           | 1.5R+high    |       22 |       20 |       40 |    -4.3 |        -0.213 |            2.57 |
+| nse      | 1M   | lakky           | candle close |       22 |       20 |       35 |    -7.3 |        -0.367 |            2.57 |
+| nse      | 1M   | lakky           | 1R no cap    |       22 |       20 |       45 |    -2.6 |        -0.132 |            2.57 |
+| nse      | 1M   | lakky           | 2R no cap    |       22 |       20 |       40 |     0.9 |         0.046 |            2.57 |
+| nse      | 1M   | lakky           | 2R+BE no cap |       22 |       20 |       35 |    -0   |        -0.001 |            2.57 |
