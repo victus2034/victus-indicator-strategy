@@ -203,7 +203,7 @@ def simulate(long, entry, sl, exit_rule, market, tf, evalc, k, base_times, base_
             # Lakky's TSLA / BLESS / SNDK: the trade that reached 1R is a win - take it there
             if (l <= sl) if long else (h >= sl):
                 return r_of(slip(sl)) - cost_r
-            if (h >= entry + sign * risk) if long else (l <= entry - sign * risk):
+            if (h >= entry + risk) if long else (l <= entry - risk):
                 return 1.0 - cost_r
             continue
         if exit_rule == "2R no BE":
