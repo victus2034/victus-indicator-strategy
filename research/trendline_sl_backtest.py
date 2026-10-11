@@ -344,9 +344,13 @@ def table(got):
                 net = [t[f"{s}|{e}"] for t in items if t[f"{s}|{e}"] is not None]
                 if not net:
                     continue
+                # Lakky, 2026-10-11: R hides the stop size - a 1R loss on a 4% stop is 4% of the
+                # position. Each trade's result in % of entry = its net R x its risk %.
+                pct = [t[f"{s}|{e}"] * t[f"risk_{s}"] for t in items if t[f"{s}|{e}"] is not None]
                 rows.append({"market": market, "tf": tf, "stop": s, "exit": e, "alerts": len(items),
                              "filled": len(net), "wins_%": round(100 * sum(1 for x in net if x > 0.05) / len(net)),
                              "net_R": round(sum(net), 1), "R_per_trade": round(sum(net) / len(net), 3),
+                             "net_%": round(sum(pct), 1), "%_per_trade": round(sum(pct) / len(pct), 3),
                              "median_risk_%": round(risks[len(risks) // 2], 2)})
     return pd.DataFrame(rows)
 
