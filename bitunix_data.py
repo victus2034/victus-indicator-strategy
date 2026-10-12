@@ -98,6 +98,10 @@ def _request(pair, interval, start_ms, end_ms, limit, attempts=3):
     raise last_error
 
 
+# Times a short page is asked again before it is taken as the listing reached.
+SHORT_PAGE_RECHECKS = 2
+
+
 def klines(pair, interval, start, end):
     """Every candle opening in [start, end) (epoch seconds), oldest first.
 
@@ -119,6 +123,19 @@ def klines(pair, interval, start, end):
     start_ms = int(start) * 1000
     while cursor > start_ms or (not step and cursor == start_ms):
         rows = _request(pair, interval, start_ms, cursor, MAX_BARS_PER_REQUEST)
+        for _ in range(SHORT_PAGE_RECHECKS):
+            if len(rows) >= MAX_BARS_PER_REQUEST or (
+                    rows and min(int(row["time"]) for row in rows) < start_ms + (step or 1) * 1000):
+                break           # full, or short only because it reached start
+            # A short page is read as the listing reached, so a page that comes
+            # back short by mistake cuts the history there - and a fib, run from
+            # the first candle, ends on another base: BNB 1M alerted 838.05 off
+            # a history starting mid-2024 on 2026-10-12 instead of the chart's
+            # 719.15 from 2022 (research/bnb_fib_start_trace.py). Ask again.
+            again = _request(pair, interval, start_ms, cursor, MAX_BARS_PER_REQUEST)
+            if len(again) <= len(rows):
+                break
+            rows = again
         for row in rows:
             ts = int(row["time"]) // 1000
             if start <= ts < end:

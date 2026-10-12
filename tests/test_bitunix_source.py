@@ -106,6 +106,30 @@ class OnTests(unittest.TestCase):
         self.assertEqual([r[0] for r in rows], fake.series[1:])
         self.assertTrue(all(c[3] % 1_800_000 == 0 for c in fake.calls))
 
+    def test_a_page_that_comes_back_short_by_mistake_is_asked_again(self):
+        # BNB 1M, 2026-10-12: one short page mid-history read as the listing
+        # reached, the history started mid-2024 and the fib took a 2024 base.
+        fake = FakeBitunix(1_000_800, 1_000_800 + 999 * 1800, 1800)
+        hiccups = {"left": 1}
+
+        def flaky(pair, interval, start_ms, end_ms, limit, attempts=3):
+            rows = fake(pair, interval, start_ms, end_ms, limit)
+            if len(fake.calls) == 3 and hiccups["left"]:
+                hiccups["left"] -= 1
+                return rows[:40]
+            return rows
+
+        with patch.object(bitunix_data, "_request", flaky):
+            rows = bitunix_data.klines("BTCUSDT", "30m", 0, 1_000_800 + 1000 * 1800)
+        self.assertEqual([r[0] for r in rows], fake.series)
+
+    def test_the_real_listing_end_costs_one_extra_request(self):
+        fake = FakeBitunix(1_000_800, 1_000_800 + 449 * 1800, 1800)
+        with patch.object(bitunix_data, "_request", fake):
+            rows = bitunix_data.klines("BTCUSDT", "30m", 0, 1_000_800 + 450 * 1800)
+        self.assertEqual(len(rows), 450)
+        self.assertEqual(len(fake.calls), 4)
+
     def test_scanner_takes_bitunix_first(self):
         with patch.object(scanner, "fetch_bitunix_ohlcv", return_value=[[1, 1, 1, 1, 1, 1]]), \
              patch.object(scanner, "require_fresh_ohlcv", side_effect=lambda o, n: o), \

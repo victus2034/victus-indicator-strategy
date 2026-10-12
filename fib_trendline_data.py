@@ -97,12 +97,10 @@ def monthly_from_daily(daily, tz=timezone.utc):
     return [m for _, m in months]
 
 
-# Where every 4H/1D/1W/1M chart starts: a fixed date, before any watchlist
-# listing, so each chart runs from its own first candle. Until 2026-10-12 this
-# was "2000 days ago", which slid a day per day once Bitunix (history back past
-# 2021) replaced Delta (Dec 2023): the first, partial month changed every day and
-# with it the fib - BNB 1M flipped between a Jun 2022 base (the chart's, entry
-# 719.15, touched Oct 8) and an Aug 2024 one (entry 838.05, re-alerted Oct 12).
+# Where every 4H/1D/1W/1M chart starts: a fixed date before any listing, so each
+# chart runs from its own first candle. It was "2000 days ago", which slides once
+# a symbol's history is longer than that (Bitunix's starts 2022-04-17, ~1640 days
+# on 2026-10-12): the first partial month would change daily, and the fib with it.
 HISTORY_START = 1483228800             # 2017-01-01 UTC
 
 
