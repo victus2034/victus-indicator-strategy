@@ -62403,6 +62403,7 @@
     "XAUTUSD|4h|short|4199.15|4240.21": "filled",
     "XRPUSD|30m|long|1.3173|1.30668": "filled",
     "XRPUSD|30m|long|1.3516|1.34397": "filled",
+    "XRPUSD|30m|long|1.401|1.39475": "filled",
     "XRPUSD|30m|long|1.4103|1.40805": "filled",
     "XRPUSD|30m|long|1.4907|1.4862": "filled",
     "XRPUSD|30m|long|1.4915|1.48525": "filled",
@@ -63086,6 +63087,24 @@
       "target_1": 4187.0225,
       "target_2": 4194.685,
       "target_half": 4183.19125,
+      "timeframe": "30m"
+    },
+    "XRPUSD|30m|long|1.401|1.39475": {
+      "alert_time": "2026-10-12T15:02:28.838118+05:30",
+      "entry": 1.401,
+      "entry_time": "2026-10-12T15:15:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "rating": 9,
+      "risk": 0.006250000000000089,
+      "side": "long",
+      "stop": 1.39475,
+      "stream": "live",
+      "symbol": "XRPUSD",
+      "target_1": 1.4072500000000001,
+      "target_2": 1.4135000000000002,
+      "target_half": 1.404125,
       "timeframe": "30m"
     }
   }
