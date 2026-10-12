@@ -173,6 +173,8 @@ def in_band(distance):
 
 # ----------------------------------------------------------------- analysis
 
+TF_ORDER = ["30m", "4h", "1d", "1w", "1M"]
+
 def current_price(charts):
     """The close of the freshest candle across a symbol's timeframes.
 
@@ -184,8 +186,47 @@ def current_price(charts):
     return max(last, key=lambda c: c[0])[4] if last else None
 
 
-def analyse(market, symbol, tf, candles, now, price=None):
-    """Everything alertable on one chart right now. Pure - no state, no sends."""
+def current_candle_range(market, charts, tf, now):
+    """(low, high) traded so far in tf's candle still forming, or None.
+
+    Bitunix never returns a forming candle, so the range is read off the finer
+    timeframes too: the days of this month for a 1M candle, the 4H candles of
+    today for a 1D one.
+    """
+    candles = charts.get(tf) or []
+    if not candles:
+        return None
+    last = candles[-1][0]
+    opened = candle_close_ts(market, last, tf) if candle_is_closed(market, last, tf, now) else last
+    rows = [c for c in candles if c[0] >= opened]
+    for finer in TF_ORDER[:TF_ORDER.index(tf)]:
+        rows += [c for c in charts.get(finer) or [] if c[0] >= opened]
+    if not rows:
+        return None
+    return min(c[3] for c in rows), max(c[2] for c in rows)
+
+
+def entry_already_touched(d, zone, price, forming):
+    """True once price has reached a fib zone's entry in the candle still forming.
+
+    Lakky (2026-10-12, BNB 1M): October's candle had traded through 838.05 (low
+    716.91 on Oct 8) when that entry was alerted at 751.92, 16% of risk away on
+    the wrong side. An entry the current candle already reached is a trade
+    already on, not one to get ready for; the next candle can alert it again.
+    """
+    entry = zone["entry"]
+    if (price < entry) if d == 1 else (price > entry):
+        return True
+    if forming is None:
+        return False
+    low, high = forming
+    return low < entry if d == 1 else high > entry
+
+
+def analyse(market, symbol, tf, candles, now, price=None, forming=None):
+    """Everything alertable on one chart right now. Pure - no state, no sends.
+
+    forming: (low, high) of tf's candle so far (current_candle_range)."""
     result = {"fib": [], "touch": [], "break": [], "bars": 0, "price": None}
     if len(candles) < 2:
         return result
@@ -211,7 +252,7 @@ def analyse(market, symbol, tf, candles, now, price=None):
             if zone["zone"] not in FIB_ALERT_ZONES:
                 continue
             distance = fib_distance(d, zone, price)
-            if in_band(distance):
+            if in_band(distance) and not entry_already_touched(d, zone, price, forming):
                 result["fib"].append({
                     **zone, "key": f"fib|{symbol}|{tf}|{d}|{times[live['Ot']]}|{top}|{zone['zone']}",
                     "d": d, "base": base, "top": top, "distance": distance,
@@ -439,7 +480,9 @@ def scan_crypto(timeframes, now):
                     price = bitunix_data.last_price(pair)
                 except Exception as error:     # noqa: BLE001 - keep the candle close
                     print(f"{symbol} Bitunix live price unavailable: {str(error)[:80]}")
-            return symbol, {tf: analyse(CRYPTO, symbol, tf, charts[tf], now, price) for tf in timeframes}, None
+            return symbol, {tf: analyse(CRYPTO, symbol, tf, charts[tf], now, price,
+                                        current_candle_range(CRYPTO, charts, tf, now))
+                            for tf in timeframes}, None
         except Exception as error:     # noqa: BLE001 - one bad symbol must not stop the pass
             return symbol, None, str(error)
 
@@ -471,7 +514,8 @@ def scan_nse(timeframes, now):
     for symbol in symbols:
         try:
             price = current_price(charts[symbol])
-            results.append((symbol, {tf: analyse(NSE, symbol, tf, charts[symbol][tf], now, price)
+            results.append((symbol, {tf: analyse(NSE, symbol, tf, charts[symbol][tf], now, price,
+                                                 current_candle_range(NSE, charts[symbol], tf, now))
                                      for tf in timeframes}, None))
         except Exception as error:     # noqa: BLE001
             results.append((symbol, None, str(error)))

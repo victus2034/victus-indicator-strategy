@@ -97,7 +97,11 @@ def monthly_from_daily(daily, tz=timezone.utc):
     return [m for _, m in months]
 
 
-ALL_HISTORY_DAYS = 2000                # further back than Delta India exists (Dec 2023)
+# Where every 4H/1D/1W/1M chart starts: a fixed date before any listing, so each
+# chart runs from its own first candle. It was "2000 days ago", which slides once
+# a symbol's history is longer than that (Bitunix's starts 2022-04-17, ~1640 days
+# on 2026-10-12): the first partial month would change daily, and the fib with it.
+HISTORY_START = 1483228800             # 2017-01-01 UTC
 
 
 def bitunix_candles(contract, resolution, start, end):
@@ -117,7 +121,7 @@ def crypto_charts(contract, timeframes, now, intraday_bars=1500, source="delta")
     history is what matches it - and a start fixed at the listing never slides.
     30m (off by default) keeps a window: its full history is ~12 requests a symbol.
     """
-    since = now - ALL_HISTORY_DAYS * 86400
+    since = HISTORY_START
     fetch = bitunix_candles if source == "bitunix" else delta_candles
     out, daily = {}, None
     for tf in timeframes:

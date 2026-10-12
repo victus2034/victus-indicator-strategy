@@ -337,11 +337,29 @@ def load_fib_tl_alerts(
             "_stop": stop,
             "_delivered": delivered,
             "_market": market,
+            "_alert_price": row.get("price"),
         }
         key = str(row.get("key") or watch_key(record))
         if key not in newest or delivered >= newest[key]["_delivered"]:
             newest[key] = record
-    return list(newest.values())
+    return [record for record in newest.values() if not past_entry_when_sent(record)]
+
+
+def past_entry_when_sent(record: dict) -> bool:
+    """True when price was already through the entry as the alert went out.
+
+    A fib alerts from inside its zone (0% away), so a long can be sent with
+    price already under its entry. Nothing is left to get ready for, and
+    watching it backfilled "GET READY · moved fast, already at entry" next to
+    a LATE for an entry the alert itself had already passed (BNB 1M, entry
+    838.05 sent at 751.92 on 2026-10-12, lakky). The fib alert is the only
+    message such a level gets.
+    """
+    try:
+        price = float(record.get("_alert_price"))
+    except (TypeError, ValueError):
+        return False
+    return risk_progress(price, record["_entry"], record["_stop"], record["side"]) > 0
 
 
 # rating_allowed() (dropped 17 Sep 2026) used to gate this on
@@ -580,7 +598,12 @@ def format_line(stage: int, price: float, record: dict, note: str = "") -> str:
 
     kind = FIB_TL_KIND_LABEL.get(record.get("kind"))
     if kind:
-        head = f"`{symbol}` {side} · {TF_LABEL.get(record.get('timeframe'), record.get('timeframe'))} {kind}"
+        # Timeframe, kind and level in bold (lakky, 2026-10-12). A fib's four
+        # edges are L1-L4 from the one price reaches first: L1/L2 the weaker
+        # box, L3/L4 the stronger. The bot enters at the stronger box's near
+        # edge, L3.
+        level = " L3" if record.get("kind") == "fib" else ""
+        head = f"`{symbol}` {side} · **{TF_LABEL.get(record.get('timeframe'), record.get('timeframe'))} {kind}{level}**"
     else:
         head = f"`{symbol}` {side}{score_text}"
     levels = f"{price:.{places}f} → {entry:.{places}f}"
@@ -799,7 +822,16 @@ def resolve_pings(
         ready_seen = ready_recently(state, record, now) or level_ready_recently(
             state, record, now
         )
-        if last_stage == 0 and stage in (STAGE_ENTRY, STAGE_LATE) and not ready_seen:
+        if last_stage == 0 and stage == STAGE_LATE:
+            # First seen with most of the risk already gone: the trade is on
+            # and nearly stopped, nothing to act on (lakky, 2026-10-12, BNB 1M
+            # "64% risk used" next to a GET READY 10% away).
+            entry_state["stage"] = stage
+            state[key] = entry_state
+            return pings, entry_state
+        live_gap_pct = abs(price - entry) / entry * 100.0
+        if (last_stage == 0 and stage == STAGE_ENTRY and not ready_seen
+                and live_gap_pct <= APPROACH_THRESHOLD_PCT):
             # entry_confirm polls every few minutes; a fast mover (crypto
             # especially) can cross the whole GET READY -> ENTRY gap
             # between two polls and never get caught mid-approach - the

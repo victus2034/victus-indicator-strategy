@@ -55,6 +55,9 @@ REPORT_MD = HERE / "reports" / "FIB_TRENDLINE_BACKTEST.md"
 TRADES_CSV = HERE / "reports" / "fib_trendline_backtest_trades.csv"
 BAND = FIB_TL_MAX_DISTANCE_PCT / 100
 ALERT_ZONES = FIB_ALERT_ZONES      # research overrides it to replay both zones
+# The live rule since 2026-10-12: no fib alert once the candle forming has reached
+# the entry (fib_trendline_scanner.entry_already_touched). Research turns it off.
+SKIP_TOUCHED_ENTRY = True
 
 
 # ----------------------------------------------------------------- data (cached per day)
@@ -194,16 +197,23 @@ def replay(market, symbol, tf, base, evalc, now):
                 continue
             lo_band = zone["low"] if d == 1 else zone["low"] * (1 - BAND)
             hi_band = zone["high"] * (1 + BAND) if d == 1 else zone["high"]
+            entry = zone["entry"]
             for k in range(e0, e1):
                 ts, _o, h, l, _c = evalc[k]
                 if (l <= base_px) if d == 1 else (h >= base_px):
                     break                    # the fib died inside this bar
+                if SKIP_TOUCHED_ENTRY and ((_o < entry) if d == 1 else (_o > entry)):
+                    break                    # this candle already reached the entry (entry_already_touched)
                 if held(ts) or l > hi_band or h < lo_band:
+                    if SKIP_TOUCHED_ENTRY and ((l < entry) if d == 1 else (h > entry)):
+                        break
                     continue
                 if trades.already_stopped(trades.fib_plan(d, zone), _c):
                     # The live scanner sends nothing once price is through
                     # the stop (fib_trendline_scanner.fib_distance); this
                     # candle closed there, so it is not an alert either.
+                    if SKIP_TOUCHED_ENTRY:
+                        break
                     continue
                 fired.add(key)
                 clock = TouchClock(s["Et"])

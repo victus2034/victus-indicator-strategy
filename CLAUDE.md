@@ -163,6 +163,27 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   Dec 2023 and Bitunix's years earlier, so the same chart on Delta is a different fib under a new key -
   BNB 1M re-alerted on 2026-10-09 with a 2024 base and the entry above price. A pass with Bitunix
   down skips the symbol. `SEED_VERSION` v7 (xStocks moved to Bitunix) re-seeds silently.
+  **A short Bitunix page is asked again (2026-10-12, lakky, BNB 1M).** `klines` took any short page
+  as the listing reached; one that came back short by mistake cut the history mid-2024, and BNB 1M's
+  fib took an Aug 2024 base (entry 838.05, sent with price already inside the zone) instead of the
+  chart's Jun 2022 one (719.15, touched Oct 8). Now a short page that did not reach `start` is re-asked
+  (`SHORT_PAGE_RECHECKS`). Bitunix history starts 2022-04-17; full history gives 719.15 on every one of
+  12 fetches (`research/bnb_fib_start_trace.py`, part `bnb-fib`). Charts also start on a fixed
+  `HISTORY_START` (2017-01-01), not "2000 days ago", which would slide once history passes 2000 days.
+  Entry confirm skips any alert sent with price already past its entry
+  (`entry_confirm.past_entry_when_sent`) - the fib alert is that level's only message.
+  **No fib alert once this candle reached the entry (2026-10-12, lakky).** A fib zone alerts only
+  while the candle forming on its own timeframe has not yet traded to the entry and price is not past
+  it (`fib_trendline_scanner.entry_already_touched`; the range comes from finer charts,
+  `current_candle_range`, since Bitunix has no forming candle). Inside the zone no longer alerts at
+  0.00%. The replay does the same (`fib_trendline_backtest.SKIP_TOUCHED_ENTRY`;
+  `research/fib_entry_touched_backtest.py`, part `fib-entry`). Entry confirm: a record first seen at
+  LATE sends nothing, and the "moved fast" GET READY backfill only goes out within
+  `APPROACH_THRESHOLD_PCT` of entry (it printed "10.21% away" for BNB).
+  Entry confirm lines (lakky, 2026-10-12): `` `BNB` BUY · **1M FIB L3** · 724.10 → 719.15 · ... ``,
+  trendlines `**1D TL**`. Fib levels L1-L4 (lakky, BNB 1D chart): the four box edges in the order
+  price reaches them - L1/L2 the weaker box, L3/L4 the stronger; L4 is the one he likes most. The bot's
+  fib entry (strong box near edge) is L3. This replaces the Oct 8 L1/L2 names.
 - NSE: the zone scanner's 200 stocks (`nse_scanner.load_watchlist`), scanned only in the session
   and at most every 8 minutes - that pass takes ~3 minutes (Yahoo, 5 intervals).
 - **Audit, 2026-09-29** (fixed, each with a test): the fib engine is a state machine whose end

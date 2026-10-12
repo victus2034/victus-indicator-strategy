@@ -573,17 +573,22 @@ class ResolvePingsTests(unittest.TestCase):
 
         self.assertEqual([stage for stage, _ in pings], [entry_confirm.STAGE_ENTRY])
 
-    def test_reaching_late_from_unseen_also_backfills_get_ready(self):
+    def test_late_from_unseen_sends_nothing(self):
+        # lakky, 2026-10-12 (BNB 1M): first seen with 64% of the risk used, it
+        # came out as LATE plus a GET READY 10% away. The trade is already on.
         record = watched(entry=100.0, stop=98.0, side="long")
         now = pd.Timestamp("2026-09-17 13:46", tz=entry_confirm.IST)
+        state = {}
+        pings, _ = entry_confirm.resolve_pings(record, price_info(99.0), state, now)
+        self.assertEqual(pings, [])
+        again, _ = entry_confirm.resolve_pings(record, price_info(99.5), state, now)
+        self.assertEqual(again, [])
 
-        # Past NEAR_SL_FRACTION of the entry-to-stop distance: LATE.
-        pings, _ = entry_confirm.resolve_pings(record, price_info(99.0), {}, now)
-
-        self.assertEqual(
-            [stage for stage, _ in pings],
-            [entry_confirm.STAGE_READY, entry_confirm.STAGE_LATE],
-        )
+    def test_no_get_ready_backfill_when_price_is_already_far_from_entry(self):
+        record = watched(entry=100.0, stop=90.0, side="long")
+        now = pd.Timestamp("2026-09-17 13:46", tz=entry_confirm.IST)
+        pings, _ = entry_confirm.resolve_pings(record, price_info(98.0), {}, now)
+        self.assertEqual([stage for stage, _ in pings], [entry_confirm.STAGE_ENTRY])
 
     def test_a_stage_reached_between_polls_is_still_caught(self):
         # The BEAT case: entry_confirm's poll landed after price had already
@@ -749,7 +754,7 @@ class FibTrendlineSourceTests(unittest.TestCase):
     def test_only_the_newest_alert_on_a_line_is_watched(self):
         old = self._row(kind="trendline", key="tl|BTCUSD|1d|0|1|2",
                         sent_ts=int((self.NOW - pd.Timedelta(days=2)).timestamp()))
-        new = self._row(kind="trendline", key="tl|BTCUSD|1d|0|1|2",
+        new = self._row(kind="trendline", key="tl|BTCUSD|1d|0|1|2", price=103.5,
                         plan={"side": "long", "entry": 103.0, "sl": 101.0})
         [record] = self._load([old, new])
         self.assertEqual(record["_entry"], 103.0)
@@ -765,9 +770,28 @@ class FibTrendlineSourceTests(unittest.TestCase):
         self.assertEqual(self._load([self._row(symbol="NOTACOINUSD")]), [])
 
     def test_the_ping_names_the_timeframe_and_kind(self):
-        [record] = self._load([self._row(kind="trendline", plan={"side": "short", "entry": 100.0, "sl": 101.0})])
+        [record] = self._load([self._row(kind="trendline", price=99.5,
+                                         plan={"side": "short", "entry": 100.0, "sl": 101.0})])
         line = entry_confirm.format_line(entry_confirm.STAGE_ENTRY, 100.2, record)
-        self.assertTrue(line.startswith("`BTC` SELL · 1D TL · "), line)
+        self.assertTrue(line.startswith("`BTC` SELL · **1D TL** · "), line)
+        [fib] = self._load([self._row(price=100.5)])
+        fib_line = entry_confirm.format_line(entry_confirm.STAGE_READY, 100.5, fib)
+        self.assertTrue(fib_line.startswith("`BTC` BUY · **1D FIB L3** · 100.5"), fib_line)
+
+    def test_a_fib_sent_with_price_already_through_its_entry_is_not_watched(self):
+        # BNB 1M, 2026-10-12: entry 838.05 sent with price at 751.92, inside the
+        # zone. It used to come back as GET READY "moved fast" plus LATE.
+        bnb = self._row(symbol="BNBUSD", tf="1M", price=751.92,
+                        plan={"side": "long", "entry": 838.0485, "sl": 703.94})
+        short = self._row(key="s", price=101.0, plan={"side": "short", "entry": 100.0, "sl": 102.0})
+        self.assertEqual(self._load([bnb], tf="1M"), [])
+        self.assertEqual(self._load([short]), [])
+
+    def test_an_alert_sent_at_or_before_its_entry_is_still_watched(self):
+        at_entry = self._row(key="a", price=100.0)
+        approaching = self._row(key="b", price=100.5)
+        no_price = self._row(key="c", price=None)
+        self.assertEqual(len(self._load([at_entry, approaching, no_price])), 3)
 
 
 if __name__ == "__main__":

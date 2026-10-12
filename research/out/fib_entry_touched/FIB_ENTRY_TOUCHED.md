@@ -1,0 +1,18 @@
+# Fib alerts: no alert once this candle reached the entry (2026-09-01 to now)
+
+Live fib rules (deeper zone, S/R stop, 2R + BE), net after fees. R and % per trade and in total (% = R x the trade's stop distance). Crypto replayed on Delta candles.
+
+| market   | tf   | rule                                   |   alerts |   trades |   win_% |   R_total |   R_per_trade |   %_total |   %_per_trade |
+|:---------|:-----|:---------------------------------------|---------:|---------:|--------:|----------:|--------------:|----------:|--------------:|
+| crypto   | 4H   | old: alert inside the zone too         |       59 |       46 |      45 |      -5.2 |        -0.113 |     -77.2 |        -1.678 |
+| crypto   | 4H   | new: entry not yet reached this candle |       57 |       44 |      52 |      -0.1 |        -0.003 |      25.3 |         0.576 |
+| crypto   | 1D+  | old: alert inside the zone too         |       13 |       11 |      67 |       4.8 |         0.437 |     -29.7 |        -2.7   |
+| crypto   | 1D+  | new: entry not yet reached this candle |       12 |       10 |      88 |       8.8 |         0.882 |      70   |         6.998 |
+| crypto   | all  | old: alert inside the zone too         |       72 |       57 |      50 |      -0.4 |        -0.006 |    -106.9 |        -1.875 |
+| crypto   | all  | new: entry not yet reached this candle |       69 |       54 |      59 |       8.7 |         0.161 |      95.3 |         1.765 |
+| nse      | 4H   | old: alert inside the zone too         |      115 |       85 |      40 |     -14.4 |        -0.17  |     -44.2 |        -0.52  |
+| nse      | 4H   | new: entry not yet reached this candle |      115 |       84 |      40 |     -12.3 |        -0.146 |     -39.9 |        -0.475 |
+| nse      | 1D+  | old: alert inside the zone too         |       90 |       62 |      33 |     -15.1 |        -0.244 |    -115.4 |        -1.861 |
+| nse      | 1D+  | new: entry not yet reached this candle |       89 |       60 |      33 |     -14   |        -0.234 |    -114.1 |        -1.902 |
+| nse      | all  | old: alert inside the zone too         |      205 |      147 |      37 |     -29.6 |        -0.201 |    -159.6 |        -1.086 |
+| nse      | all  | new: entry not yet reached this candle |      204 |      144 |      37 |     -26.3 |        -0.183 |    -154.1 |        -1.07  |
