@@ -184,6 +184,9 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   trendlines `**1D TL**`. Fib levels L1-L4 (lakky, BNB 1D chart): the four box edges in the order
   price reaches them - L1/L2 the weaker box, L3/L4 the stronger; L4 is the one he likes most. The bot's
   fib entry (strong box near edge) is L3. This replaces the Oct 8 L1/L2 names.
+  Fib channel alerts (lakky, 2026-10-12) are three lines - `**BNB · FIB L3 · BUY** · **1M Crypto**`,
+  `Price .. · x% away`, `Entry .. (L3) · SL .. (x%)`; the zone edges are left off (he checks the chart)
+  and kept in the record: `base`, `top`, `levels` {L1..L4} (`fib_trendline_scanner.fib_levels`).
 - NSE: the zone scanner's 200 stocks (`nse_scanner.load_watchlist`), scanned only in the session
   and at most every 8 minutes - that pass takes ~3 minutes (Yahoo, 5 intervals).
 - **Audit, 2026-09-29** (fixed, each with a test): the fib engine is a state machine whose end

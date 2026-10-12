@@ -326,15 +326,23 @@ def zone_name(d, number):
 # Short on purpose (lakky, 2026-10-08): side, timeframe, entry, stop and stop %
 # up front, prices at five figures. Nothing parses this text - records carry the plan.
 
+def fib_levels(d, base, top):
+    """Lakky's L1-L4 (2026-10-12): a fib's four box edges in the order price reaches
+    them - L1/L2 the weaker box, L3/L4 the stronger, L4 the strongest. The bot
+    enters at L3, the stronger box's near edge."""
+    u66, u55, d55, d66 = fib_engine.levels(base, top)
+    edges = (u66, u55, d55, d66) if d == 1 else (d66, d55, u55, u66)
+    return {f"L{n}": price for n, price in enumerate(edges, start=1)}
+
+
 def format_fib_alert(market, symbol, tf, price, z):
-    side = "LONG" if z["d"] == 1 else "SHORT"
-    name = zone_name(z["d"], z["zone"])
-    where = "inside zone" if z["distance"] <= 0 else f"{z['distance']:.2f}% away"
+    """Three lines (lakky, 2026-10-12): the zone edges stay in the record
+    (fib_levels), off the message - the chart shows them."""
+    side = "BUY" if z["d"] == 1 else "SELL"
     return (
-        f"{_header(market, tf, f'{display(market, symbol)} · FIB {name} ZONE · {side}', side)}\n"
-        f"Price {price_text(price)} · {where}\n"
-        f"Zone {price_text(z['low'])} – {price_text(z['high'])}\n"
-        f"Entry {price_text(z['entry'])} · SL {price_text(z['sl'])} ({trades.risk_pct(z['plan']):.2f}%)"
+        f"{_header(market, tf, f'{display(market, symbol)} · FIB L3 · {side}', side)}\n"
+        f"Price {price_text(price)} · {z['distance']:.2f}% away\n"
+        f"Entry {price_text(z['entry'])} (L3) · SL {price_text(z['sl'])} ({trades.risk_pct(z['plan']):.2f}%)"
     )
 
 
@@ -408,7 +416,8 @@ def plan_alerts(state, market, symbol, tf, analysis, now, last_scan=None):
     base = {"market": market, "symbol": symbol, "tf": tf, "price": price}
     for z in analysis["fib"]:
         if z["key"] not in state:
-            record = {**base, "kind": "fib", "plan": z["plan"], "zone": z["zone"]}
+            record = {**base, "kind": "fib", "plan": z["plan"], "zone": z["zone"],
+                      "base": z["base"], "top": z["top"], "levels": fib_levels(z["d"], z["base"], z["top"])}
             planned.append(("fib", z["key"], format_fib_alert(market, symbol, tf, price, z), record))
         else:
             state[z["key"]]["seen"] = now   # still true: keep it from being pruned
