@@ -60684,6 +60684,33 @@
       "target_half": 85.98775,
       "timeframe": "30m",
       "trade_id": "HYPEUSD|30m|long|85.779|85.3615"
+    },
+    {
+      "alert_time": "2026-10-12T18:07:09.712390+05:30",
+      "cost_r": 0.39903700869565767,
+      "date": "2026-10-12",
+      "entry": 1.3889,
+      "entry_time": "2026-10-12T18:10:00+05:30",
+      "exit_price": 1.3895007457781499,
+      "exit_time": "2026-10-12T18:20:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": -0.19008195542614667,
+      "outcome": "BE",
+      "rating": 5,
+      "realized_r": 0.208955053269511,
+      "risk": 0.002874999999999961,
+      "side": "long",
+      "stop": 1.386025,
+      "stream": "live",
+      "symbol": "XRPUSD",
+      "target_1": 1.391775,
+      "target_2": 1.39465,
+      "target_half": 1.3903375,
+      "timeframe": "30m",
+      "trade_id": "XRPUSD|30m|long|1.3889|1.38603"
     }
   ],
   "handled": {
@@ -62305,6 +62332,7 @@
     "SOLUSD|30m|long|101.15|100.462": "filled",
     "SOLUSD|30m|long|102.95|102.675": "filled",
     "SOLUSD|30m|long|109.47|109.282": "filled",
+    "SOLUSD|30m|long|110.31|109.785": "filled",
     "SOLUSD|30m|long|113.01|112.285": "filled",
     "SOLUSD|30m|long|113.396|112.901": "filled",
     "SOLUSD|30m|long|115.847|115.537": "filled",
@@ -63250,6 +63278,24 @@
       "target_half": 229.33374999999998,
       "timeframe": "30m"
     },
+    "SOLUSD|30m|long|110.31|109.785": {
+      "alert_time": "2026-10-12T18:17:18.930166+05:30",
+      "entry": 110.31,
+      "entry_time": "2026-10-12T18:20:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 8,
+      "risk": 0.5250000000000057,
+      "side": "long",
+      "stop": 109.785,
+      "stream": "live",
+      "symbol": "SOLUSD",
+      "target_1": 110.83500000000001,
+      "target_2": 111.36000000000001,
+      "target_half": 110.5725,
+      "timeframe": "30m"
+    },
     "UNIUSD|30m|long|7.495|7.45875": {
       "alert_time": "2026-10-12T18:07:10.373003+05:30",
       "entry": 7.495,
@@ -63266,24 +63312,6 @@
       "target_1": 7.53125,
       "target_2": 7.5675,
       "target_half": 7.5131250000000005,
-      "timeframe": "30m"
-    },
-    "XRPUSD|30m|long|1.3889|1.38603": {
-      "alert_time": "2026-10-12T18:07:09.712390+05:30",
-      "entry": 1.3889,
-      "entry_time": "2026-10-12T18:10:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": true,
-      "market": "crypto",
-      "rating": 5,
-      "risk": 0.002874999999999961,
-      "side": "long",
-      "stop": 1.386025,
-      "stream": "live",
-      "symbol": "XRPUSD",
-      "target_1": 1.391775,
-      "target_2": 1.39465,
-      "target_half": 1.3903375,
       "timeframe": "30m"
     }
   }
