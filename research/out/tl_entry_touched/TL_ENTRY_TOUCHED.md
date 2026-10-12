@@ -1,0 +1,14 @@
+# Trendline alerts: no alert once this candle reached the line (2026-09-01 to now)
+
+Live TL rules (lakky candle stop, TP 1R, no BE, no hold limit), net after fees. R and % per trade and in total (% = R x the trade's stop distance). Crypto replayed on Delta candles.
+
+| market   | tf   | rule                                            |   alerts |   trades |   win_% |   R_total |   R_per_trade |   %_total |   %_per_trade |
+|:---------|:-----|:------------------------------------------------|---------:|---------:|--------:|----------:|--------------:|----------:|--------------:|
+| crypto   | 4H   | live: alert even after this candle hit the line |      678 |      496 |      40 |    -156.5 |        -0.315 |    -177.6 |        -0.358 |
+| crypto   | 4H   | new: line not yet reached this candle           |      615 |      443 |      39 |    -148.3 |        -0.335 |    -171.9 |        -0.388 |
+| crypto   | 1D+  | live: alert even after this candle hit the line |       83 |       72 |      29 |     -36.9 |        -0.512 |     -28.5 |        -0.396 |
+| crypto   | 1D+  | new: line not yet reached this candle           |       72 |       65 |      28 |     -35.2 |        -0.541 |     -30.5 |        -0.469 |
+| nse      | 4H   | live: alert even after this candle hit the line |     1193 |      927 |      36 |    -384.4 |        -0.415 |    -427.5 |        -0.461 |
+| nse      | 4H   | new: line not yet reached this candle           |     1109 |      853 |      36 |    -346.3 |        -0.406 |    -392   |        -0.46  |
+| nse      | 1D+  | live: alert even after this candle hit the line |      775 |      644 |      39 |    -224.3 |        -0.348 |    -283.1 |        -0.44  |
+| nse      | 1D+  | new: line not yet reached this candle           |      642 |      524 |      39 |    -177.6 |        -0.339 |    -212.6 |        -0.406 |
