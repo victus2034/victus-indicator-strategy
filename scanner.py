@@ -1434,40 +1434,22 @@ def alert_title(title, side, tag):
 
 
 def format_alert(result, zone_type, zone, distance_pct):
+    """Three lines (lakky, 2026-10-12): no rating and no zone edges on Discord -
+    the record keeps both (record_delivered_zone_alert)."""
     symbol = alert_symbol(result["symbol"])
     price = result["price"]
     side = "SELL" if zone_type == "supply" else "BUY"
-    score = result.get(f"{zone_type}_score")
-    rating = result.get(f"{zone_type}_rating")
-    score_text = ""
-    # Same priority record_delivered_zone_alert() uses to pick the "score"
-    # field it persists: prefer the validated rating (ML crypto model or
-    # xstock hybrid), fall back to the transparent rule-based score. These
-    # used to disagree - a BNB alert once showed "9/10" here (the rule-based
-    # score) while the record it wrote down scored it 4 (the ML rating) -
-    # so entry_confirm's MIN_CRYPTO_ZONE_SCORE gate silently dropped a zone
-    # the Discord message had just called a 9. What the user reads here and
-    # what decides whether entry_confirm ever sees the zone must be the same
-    # number.
-    if rating and rating.get("score") is not None:
-        score_text = f" | {rating['score']}/10"
-    elif score is not None:
-        score_text = f" | {score}/10"
-    elif rating and rating.get("rating"):
-        score_text = f" | {rating['rating']}"
+    entry = planned_entry_price(zone_type, zone)
     stop = planned_stop_price(zone_type, zone)
     stop_distance = planned_stop_distance_pct(zone_type, zone)
     # One width for every number in the message, chosen from the entry and
     # widened only if two levels would otherwise print the same.
-    places = level_places(
-        (zone["bottom"], zone["top"], stop), short_places(planned_entry_price(zone_type, zone))
-    )
+    places = level_places((zone["bottom"], zone["top"], stop), short_places(entry))
     return (
-        # Plain "SYMBOL | SIDE | ... | 8/10": the journal's alert import reads that line.
-        f"**{symbol} | {side} | {TF_LABEL.get(TIMEFRAME, TIMEFRAME)}{score_text}**\n"
+        # Plain "SYMBOL | SIDE | ...": the journal's alert import reads that line.
+        f"**{symbol} | {side} | {TF_LABEL.get(TIMEFRAME, TIMEFRAME)}**\n"
         f"Price {price_text(price, places)} · {distance_pct:.2f}% away\n"
-        f"Zone {price_text(zone['bottom'], places)} – {price_text(zone['top'], places)}\n"
-        f"SL {price_text(stop, places)} ({stop_distance:.2f}%)"
+        f"Entry {price_text(entry, places)} · SL {price_text(stop, places)} ({stop_distance:.2f}%)"
     )
 
 
