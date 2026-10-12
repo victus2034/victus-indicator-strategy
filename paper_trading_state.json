@@ -60441,6 +60441,33 @@
       "target_half": 55.31125,
       "timeframe": "30m",
       "trade_id": "SLVONUSD|30m|short|55.38|55.5175"
+    },
+    {
+      "alert_time": "2026-10-12T09:32:01.881818+05:30",
+      "cost_r": 0.37307115999999996,
+      "date": "2026-10-12",
+      "entry": 1580.81,
+      "entry_time": "2026-10-12T09:35:00+05:30",
+      "exit_price": 1581.493753282135,
+      "exit_time": "2026-10-12T09:40:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "xstock",
+      "net_realized_r": -0.17771307938998343,
+      "outcome": "BE",
+      "rating": 7,
+      "realized_r": 0.19535808061001653,
+      "risk": 3.5,
+      "side": "long",
+      "stop": 1577.31,
+      "stream": "live",
+      "symbol": "SNDKBUSD",
+      "target_1": 1584.31,
+      "target_2": 1587.81,
+      "target_half": 1582.56,
+      "timeframe": "30m",
+      "trade_id": "SNDKBUSD|30m|long|1580.81|1577.31"
     }
   ],
   "handled": {
@@ -62955,24 +62982,6 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
-      "timeframe": "30m"
-    },
-    "SNDKBUSD|30m|long|1580.81|1577.31": {
-      "alert_time": "2026-10-12T09:32:01.881818+05:30",
-      "entry": 1580.81,
-      "entry_time": "2026-10-12T09:35:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "xstock",
-      "rating": 7,
-      "risk": 3.5,
-      "side": "long",
-      "stop": 1577.31,
-      "stream": "live",
-      "symbol": "SNDKBUSD",
-      "target_1": 1584.31,
-      "target_2": 1587.81,
-      "target_half": 1582.56,
       "timeframe": "30m"
     }
   }
