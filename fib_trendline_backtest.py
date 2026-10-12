@@ -58,6 +58,9 @@ ALERT_ZONES = FIB_ALERT_ZONES      # research overrides it to replay both zones
 # The live rule since 2026-10-12: no fib alert once the candle forming has reached
 # the entry (fib_trendline_scanner.entry_already_touched). Research turns it off.
 SKIP_TOUCHED_ENTRY = True
+# The same rule for trendline touches, live since 2026-10-12 (lakky): no alert once the
+# candle forming has reached the line (fib_trendline_scanner.line_already_touched).
+TL_SKIP_TOUCHED_ENTRY = True
 
 
 # ----------------------------------------------------------------- data (cached per day)
@@ -240,11 +243,18 @@ def replay(market, symbol, tf, base, evalc, now):
             # the approach side only, as the live in_band: never through the line
             lo_band, hi_band = (level, level * (1 + BAND)) if line.kind == SUPPORT else (level * (1 - BAND), level)
             e0, e1 = bar_slice(i)
+            touched = False                                # this candle has reached the line
             for k in range(e0, e1):
                 ts, _o, h, l, _c = evalc[k]
+                if TL_SKIP_TOUCHED_ENTRY and (touched or ((_o <= level) if line.kind == SUPPORT else (_o >= level))):
+                    touched = True                         # skipped; never re-arms the band, so it only removes alerts
+                    continue
+                crossed = (l <= level) if line.kind == SUPPORT else (h >= level)
                 if held(ts):
+                    touched = touched or crossed
                     continue
                 if l > hi_band or h < lo_band:
+                    touched = touched or crossed
                     in_band = False
                     continue
                 if not in_band and (last_alert is None or ts - last_alert >= TF_SECONDS[tf]):
@@ -254,6 +264,7 @@ def replay(market, symbol, tf, base, evalc, now):
                         "quiet": clock.quiet(i), "max_streak": clock.max_streak}))
                     last_alert = ts
                 in_band = True
+                touched = touched or crossed
             clock.feed(i, lows[i] <= level <= highs[i])
     return out
 

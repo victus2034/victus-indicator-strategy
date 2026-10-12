@@ -508,6 +508,21 @@ class OnceOnlyTests(unittest.TestCase):
         self.assertEqual(len(self.plan(state, self.analysis(touch=[self.touch()]), 20001)), 1)
 
 
+    def test_a_touch_whose_candle_already_reached_the_line_does_not_alert(self):
+        # lakky 2026-10-12: the fib rule on trendlines too - and it never re-arms the band
+        self.assertTrue(fts.line_already_touched(SUPPORT, 100.0, (99.8, 101.0)))
+        self.assertFalse(fts.line_already_touched(SUPPORT, 100.0, (100.1, 101.0)))
+        self.assertTrue(fts.line_already_touched(RESISTANCE, 100.0, (99.0, 100.2)))
+        self.assertFalse(fts.line_already_touched(SUPPORT, 100.0, None))
+        state = {}
+        self.assertEqual(self.plan(state, self.analysis(touch=[{**self.touch(), "touched": True}]), 0), [])
+        self.assertEqual(state, {})
+        (_, key, _, _), = self.plan(state, self.analysis(touch=[self.touch()]), 100)
+        fts.mark_sent(state, key, 100)
+        self.plan(state, self.analysis(touch=[{**self.touch(), "touched": True}]), 30000)
+        self.assertTrue(state[key]["in_band"])                            # still consumed
+        self.assertEqual(self.plan(state, self.analysis(touch=[self.touch()]), 60000), [])
+
 class LateBreakTests(unittest.TestCase):
     """A BROKEN alert goes out on the first passes after the breaking candle closes, never days later."""
 

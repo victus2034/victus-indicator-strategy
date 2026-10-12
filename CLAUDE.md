@@ -180,6 +180,10 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   `research/fib_entry_touched_backtest.py`, part `fib-entry`). Entry confirm: a record first seen at
   LATE sends nothing, and the "moved fast" GET READY backfill only goes out within
   `APPROACH_THRESHOLD_PCT` of entry (it printed "10.21% away" for BNB).
+  **Same rule on trendlines (2026-10-12, lakky: "apply for both")**, crypto and NSE: a touch whose forming
+  candle already reached the line does not alert and does not re-arm the band (`line_already_touched`,
+  replay `TL_SKIP_TOUCHED_ENTRY`). Sep 1 - Oct 12 (`research/tl_entry_touched_backtest.py`, part `tl-entry`):
+  crypto 4H -0.315 -> -0.335 R/trade, 1D+ -0.512 -> -0.541; NSE 4H -0.415 -> -0.406, 1D+ -0.348 -> -0.339; ~10% fewer alerts.
   Entry confirm lines (lakky, 2026-10-12): `` `BNB` BUY · **1M FIB L3** · 724.10 → 719.15 · ... ``,
   trendlines `**1D TL**`. Fib levels L1-L4 (lakky, BNB 1D chart): the four box edges in the order
   price reaches them - L1/L2 the weaker box, L3/L4 the stronger; L4 is the one he likes most. The bot's
