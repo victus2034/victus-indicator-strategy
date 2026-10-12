@@ -62091,6 +62091,7 @@
     "LTCUSD|30m|long|53.76|53.4225": "filled",
     "LTCUSD|30m|long|56.83|56.6675": "filled",
     "LTCUSD|30m|long|63.45|63.375": "stop_too_tight",
+    "LTCUSD|30m|long|64.14|63.8275": "filled",
     "LTCUSD|30m|long|67.42|67.02": "filled",
     "LTCUSD|30m|long|71.75|71.6375": "stop_too_tight",
     "LTCUSD|30m|short|54.17|54.2575": "filled",
@@ -63240,6 +63241,24 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
+      "timeframe": "30m"
+    },
+    "LTCUSD|30m|long|64.14|63.8275": {
+      "alert_time": "2026-10-12T18:42:15.262818+05:30",
+      "entry": 64.14,
+      "entry_time": "2026-10-12T18:45:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 8,
+      "risk": 0.3125,
+      "side": "long",
+      "stop": 63.8275,
+      "stream": "live",
+      "symbol": "LTCUSD",
+      "target_1": 64.4525,
+      "target_2": 64.765,
+      "target_half": 64.29625,
       "timeframe": "30m"
     },
     "METAXUSD|30m|short|728.909|736.198": {
