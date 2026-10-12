@@ -337,11 +337,29 @@ def load_fib_tl_alerts(
             "_stop": stop,
             "_delivered": delivered,
             "_market": market,
+            "_alert_price": row.get("price"),
         }
         key = str(row.get("key") or watch_key(record))
         if key not in newest or delivered >= newest[key]["_delivered"]:
             newest[key] = record
-    return list(newest.values())
+    return [record for record in newest.values() if not past_entry_when_sent(record)]
+
+
+def past_entry_when_sent(record: dict) -> bool:
+    """True when price was already through the entry as the alert went out.
+
+    A fib alerts from inside its zone (0% away), so a long can be sent with
+    price already under its entry. Nothing is left to get ready for, and
+    watching it backfilled "GET READY · moved fast, already at entry" next to
+    a LATE for an entry the alert itself had already passed (BNB 1M, entry
+    838.05 sent at 751.92 on 2026-10-12, lakky). The fib alert is the only
+    message such a level gets.
+    """
+    try:
+        price = float(record.get("_alert_price"))
+    except (TypeError, ValueError):
+        return False
+    return risk_progress(price, record["_entry"], record["_stop"], record["side"]) > 0
 
 
 # rating_allowed() (dropped 17 Sep 2026) used to gate this on

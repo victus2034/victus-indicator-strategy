@@ -75,7 +75,9 @@ RETRY_BACKOFF_SECONDS = 30 * 60   # a failed Discord send is not retried sooner 
 # v6 (2026-10-08): deeper fib zone only, stop beyond the box - a zone price sits
 # in below the old (inner) stop alerts now.
 # v7 (2026-10-09): xStocks drawn from Bitunix - their fibs and lines get new keys.
-SEED_VERSION = "v7"
+# v8 (2026-10-12): charts start on a fixed date (HISTORY_START) - long-history
+# Bitunix fibs return to the chart's base, a new key.
+SEED_VERSION = "v8"
 # Bitunix candles draw different fibs and lines, each a new key: turning the
 # source on re-seeds silently rather than posting every level already in range.
 if bitunix_data.CRYPTO_CANDLE_SOURCE == "bitunix":

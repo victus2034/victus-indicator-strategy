@@ -163,6 +163,13 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   Dec 2023 and Bitunix's years earlier, so the same chart on Delta is a different fib under a new key -
   BNB 1M re-alerted on 2026-10-09 with a 2024 base and the entry above price. A pass with Bitunix
   down skips the symbol. `SEED_VERSION` v7 (xStocks moved to Bitunix) re-seeds silently.
+  **Charts start on a fixed date (2026-10-12, lakky, BNB 1M).** 4H-1M load from `HISTORY_START`
+  (2017-01-01), not "2000 days ago": on Bitunix's longer history that start slid a day per day,
+  the first partial month changed, and BNB 1M's fib flipped from the chart's Jun 2022 base (entry
+  719.15, touched Oct 8) to an Aug 2024 one (838.05, re-alerted Oct 12 with price inside the zone).
+  `research/fib_history_start_probe.py` (part `fib-start`). `SEED_VERSION` v8 re-seeds silently.
+  Entry confirm also skips any alert sent with price already past its entry
+  (`entry_confirm.past_entry_when_sent`) - the fib alert is that level's only message.
 - NSE: the zone scanner's 200 stocks (`nse_scanner.load_watchlist`), scanned only in the session
   and at most every 8 minutes - that pass takes ~3 minutes (Yahoo, 5 intervals).
 - **Audit, 2026-09-29** (fixed, each with a test): the fib engine is a state machine whose end

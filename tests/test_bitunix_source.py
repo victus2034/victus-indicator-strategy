@@ -238,6 +238,16 @@ class OnTests(unittest.TestCase):
         self.assertEqual(b.call_count, 2)
         d.assert_not_called()
 
+    def test_fib_charts_start_on_a_fixed_date_not_a_sliding_window(self):
+        # "2000 days ago" moved the first month every day and flipped BNB 1M's
+        # fib (Jun 2022 base on Oct 8, Aug 2024 on Oct 12). Two passes days apart
+        # must ask for the same start.
+        with patch.object(fib_trendline_data, "bitunix_candles", return_value=[]) as b:
+            for now in (1_791_478_694, 1_791_776_631):
+                fib_trendline_data.crypto_charts("BNBUSD", ["4h", "1d", "1w", "1M"], now, source="bitunix")
+        starts = {call.args[2] for call in b.call_args_list}
+        self.assertEqual(starts, {fib_trendline_data.HISTORY_START})
+
 
 if __name__ == "__main__":
     unittest.main()

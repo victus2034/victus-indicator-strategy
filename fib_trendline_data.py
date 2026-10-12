@@ -97,7 +97,13 @@ def monthly_from_daily(daily, tz=timezone.utc):
     return [m for _, m in months]
 
 
-ALL_HISTORY_DAYS = 2000                # further back than Delta India exists (Dec 2023)
+# Where every 4H/1D/1W/1M chart starts: a fixed date, before any watchlist
+# listing, so each chart runs from its own first candle. Until 2026-10-12 this
+# was "2000 days ago", which slid a day per day once Bitunix (history back past
+# 2021) replaced Delta (Dec 2023): the first, partial month changed every day and
+# with it the fib - BNB 1M flipped between a Jun 2022 base (the chart's, entry
+# 719.15, touched Oct 8) and an Aug 2024 one (entry 838.05, re-alerted Oct 12).
+HISTORY_START = 1483228800             # 2017-01-01 UTC
 
 
 def bitunix_candles(contract, resolution, start, end):
@@ -117,7 +123,7 @@ def crypto_charts(contract, timeframes, now, intraday_bars=1500, source="delta")
     history is what matches it - and a start fixed at the listing never slides.
     30m (off by default) keeps a window: its full history is ~12 requests a symbol.
     """
-    since = now - ALL_HISTORY_DAYS * 86400
+    since = HISTORY_START
     fetch = bitunix_candles if source == "bitunix" else delta_candles
     out, daily = {}, None
     for tf in timeframes:
