@@ -58,9 +58,9 @@ ALERT_ZONES = FIB_ALERT_ZONES      # research overrides it to replay both zones
 # The live rule since 2026-10-12: no fib alert once the candle forming has reached
 # the entry (fib_trendline_scanner.entry_already_touched). Research turns it off.
 SKIP_TOUCHED_ENTRY = True
-# Research only (2026-10-12, lakky): the same rule for trendline touches - no alert once
-# the candle forming has reached the line. Off: live trendlines do not have it.
-TL_SKIP_TOUCHED_ENTRY = False
+# The same rule for trendline touches, live since 2026-10-12 (lakky): no alert once the
+# candle forming has reached the line (fib_trendline_scanner.line_already_touched).
+TL_SKIP_TOUCHED_ENTRY = True
 
 
 # ----------------------------------------------------------------- data (cached per day)

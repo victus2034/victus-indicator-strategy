@@ -223,6 +223,19 @@ def entry_already_touched(d, zone, price, forming):
     return low < entry if d == 1 else high > entry
 
 
+def line_already_touched(kind, level, forming):
+    """True once the candle still forming has traded to a trendline (lakky, 2026-10-12).
+
+    The fib rule (entry_already_touched) on trendlines, for crypto and NSE. Such a
+    touch neither alerts nor re-arms: it stays "in band", so it only removes alerts
+    (research/tl_entry_touched_backtest.py, fib_trendline_backtest.TL_SKIP_TOUCHED_ENTRY).
+    """
+    if forming is None:
+        return False
+    low, high = forming
+    return low <= level if kind == SUPPORT else high >= level
+
+
 def analyse(market, symbol, tf, candles, now, price=None, forming=None):
     """Everything alertable on one chart right now. Pure - no state, no sends.
 
@@ -272,6 +285,7 @@ def analyse(market, symbol, tf, candles, now, price=None, forming=None):
             if in_band(distance):
                 result["touch"].append({
                     **info, "key": f"tl|{ident}", "level": level, "distance": distance,
+                    "touched": line_already_touched(line.kind, level, forming),
                     "plan": trades.trendline_plan(line.kind == SUPPORT, level, tf,
                                                   now_bar, opens, highs, lows, closes),
                 })
@@ -425,6 +439,10 @@ def plan_alerts(state, market, symbol, tf, analysis, now, last_scan=None):
             entry["in_band"] = False     # left the band: the next touch may alert
     for t in analysis["touch"]:
         entry = state.get(t["key"])
+        if t.get("touched"):
+            if isinstance(entry, dict):
+                entry["seen"] = now      # this candle already reached the line: no alert, band unchanged
+            continue
         if entry is None or (not entry.get("in_band") and now - entry.get("sent", 0) >= TF_SECONDS[tf]):
             record = {**base, "kind": "trendline", "plan": t["plan"], "line": t["kind"],
                       "from": list(t["from"]), "to": list(t["to"])}
