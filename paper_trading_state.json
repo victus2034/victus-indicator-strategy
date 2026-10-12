@@ -60630,6 +60630,33 @@
       "target_half": 136.89625,
       "timeframe": "30m",
       "trade_id": "SOXLBUSD|30m|long|136.24|134.928"
+    },
+    {
+      "alert_time": "2026-10-12T13:17:17.145041+05:30",
+      "cost_r": 0.45052546296898355,
+      "date": "2026-10-12",
+      "entry": 4179.36,
+      "entry_time": "2026-10-12T13:40:00+05:30",
+      "exit_price": 4169.611651249999,
+      "exit_time": "2026-10-12T17:20:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "other",
+      "net_realized_r": -1.7227406342577103,
+      "outcome": "SL",
+      "rating": 7,
+      "realized_r": -1.2722151712887269,
+      "risk": 7.662500000000364,
+      "side": "long",
+      "stop": 4171.697499999999,
+      "stream": "live",
+      "symbol": "XAUTUSD",
+      "target_1": 4187.0225,
+      "target_2": 4194.685,
+      "target_half": 4183.19125,
+      "timeframe": "30m",
+      "trade_id": "XAUTUSD|30m|long|4179.36|4171.7"
     }
   ],
   "handled": {
@@ -63160,7 +63187,7 @@
       "entry": 85.779,
       "entry_time": "2026-10-12T17:15:00+05:30",
       "geometry": "wick",
-      "half_r_hit": false,
+      "half_r_hit": true,
       "market": "crypto",
       "rating": 7,
       "risk": 0.417500000000004,
@@ -63171,24 +63198,6 @@
       "target_1": 86.1965,
       "target_2": 86.614,
       "target_half": 85.98775,
-      "timeframe": "30m"
-    },
-    "XAUTUSD|30m|long|4179.36|4171.7": {
-      "alert_time": "2026-10-12T13:17:17.145041+05:30",
-      "entry": 4179.36,
-      "entry_time": "2026-10-12T13:40:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": true,
-      "market": "other",
-      "rating": 7,
-      "risk": 7.662500000000364,
-      "side": "long",
-      "stop": 4171.697499999999,
-      "stream": "live",
-      "symbol": "XAUTUSD",
-      "target_1": 4187.0225,
-      "target_2": 4194.685,
-      "target_half": 4183.19125,
       "timeframe": "30m"
     }
   }
