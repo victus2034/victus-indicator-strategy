@@ -1,19 +1,28 @@
 {
   "_noise_control": {
-    "GODREJCP.NS|30m|long|854.35|855.3": 1791783692.1111681,
-    "POLICYBZR.NS|30m|short|1041|1047": 1791783692.328172,
-    "PPLPHARMA.NS|30m|long|193.9|194.76": 1791783693.2780619,
     "PNBHOUSING.NS|30m|short|1201.88|1211.5": 1791784131.820156,
     "PFOCUS.NS|30m|short|284.7|286.3": 1791784405.2507203,
     "IPCALAB.NS|30m|long|1885.1|1900.18": 1791784584.855513,
-    "HUDCO.NS|30m|short|164.39|165.67": 1791785468.7889006
+    "HUDCO.NS|30m|short|164.39|165.67": 1791785468.7889006,
+    "GODREJCP.NS|30m|long|854.35|855.3": 1791785738.2099614,
+    "PETRONET.NS|30m|long|288|288.5": 1791785738.4283142
   },
   "__last_scan_started__": {
-    "30m": 1791785455.4130793
+    "30m": 1791785725.2963302
   },
   "HUDCO.NS|supply|164.3900|165.6700": {
     "in_zone": true,
     "last_alert_at": 1791785468.7889006,
     "last_attempt_at": 1791785468.7889006
+  },
+  "GODREJCP.NS|demand|854.3500|855.3000": {
+    "in_zone": true,
+    "last_alert_at": 1791785738.2099614,
+    "last_attempt_at": 1791785738.2099614
+  },
+  "PETRONET.NS|demand|288.0000|288.5000": {
+    "in_zone": true,
+    "last_alert_at": 1791785738.4283142,
+    "last_attempt_at": 1791785738.4283142
   }
 }
