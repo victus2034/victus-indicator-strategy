@@ -68,8 +68,8 @@
     "stopped_out": true
   },
   "AUBANK.NS|1w|long|971.183|960": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "AUBANK.NS|1w|long|972.253|929.291": {
@@ -144,11 +144,6 @@
   "BNBUSD|1M|long|838.048|703.941": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
-  },
-  "BRIGADE.NS|1d|long|562.73|552.1": {
-    "reached_entry": false,
-    "stage": 1,
     "stopped_out": false
   },
   "BTCUSD|1d|long|80520.7|78806.2": {
@@ -441,6 +436,7 @@
   },
   "NAVINFLUOR.NS|1d|short|8537.98|8663.72": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "NETWEB.NS|1d|long|4879.1|4645.62": {
@@ -928,6 +924,7 @@
   "_level_ready|MRVL/USDT:USDT|4h|short|258.433|261.017": 1790014567.180453,
   "_level_ready|MSFT/USDT:USDT|30m|long|497.07|495.733": 1789542964.512681,
   "_level_ready|NAM-INDIA.NS|1w|long|1043.92|1017.83": 1791517599.357562,
+  "_level_ready|NAVINFLUOR.NS|1d|short|8537.98|8663.72": 1791786392.529459,
   "_level_ready|NETWEB.NS|1d|long|4879.1|4645.62": 1791776795.761218,
   "_level_ready|NETWEB.NS|1d|long|4879.1|4795.05": 1791517599.357562,
   "_level_ready|NH.NS|1w|long|1732.89|1689.57": 1791517599.357562,
@@ -1367,6 +1364,7 @@
   "_ready|MSFT/USDT:USDT|30m": 1789542964.512681,
   "_ready|MSFT/USDT:USDT|4h": 1789376756.136711,
   "_ready|NAM-INDIA.NS|1w": 1791517599.357562,
+  "_ready|NAVINFLUOR.NS|1d": 1791786392.529459,
   "_ready|NETWEB.NS|1d": 1791776795.761218,
   "_ready|NH.NS|1w": 1791776795.761218,
   "_ready|NMDC.NS|1M": 1791776795.761218,
