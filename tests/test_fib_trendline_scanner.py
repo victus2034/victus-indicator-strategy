@@ -182,7 +182,10 @@ class AlertTextTests(unittest.TestCase):
         text = fts.format_touch_alert(ftd.CRYPTO, "BTCUSD", "1d", 101.2, t)
         self.assertIn("· **1D Crypto**", text)
         self.assertIn("SL 98.50 (1.50%) · TP 101.50 (1R)", text)
-        self.assertIn("BTC · SUP TL · BUY", text)
+        self.assertIn("**BTC · S TL · BUY**", text)
+        self.assertIn("Price 101.20 · 1.20% away", text)
+        self.assertEqual(len(text.splitlines()), 3)                      # line points stay in the record
+        self.assertNotIn("Line ", text)
 
     def test_prices_read_like_a_chart(self):
         cases = {1967.699951: "1967.70", 54.86: "54.86", 0.08709: "0.08709",
@@ -213,7 +216,10 @@ class AlertTextTests(unittest.TestCase):
     def test_broken_line_wording(self):
         b = {"kind": RESISTANCE, "level": 100.0, "close": 101.0, "time": "2026-10-08 09:15",
              "from": (90, "2026-07-08 13:15"), "to": (95, "2026-08-03 00:00")}
-        self.assertIn("ETH · RES TL BROKEN", fts.format_break_alert(ftd.CRYPTO, "ETHUSD", "4h", b))
+        text = fts.format_break_alert(ftd.CRYPTO, "ETHUSD", "4h", b)
+        self.assertIn("**ETH · R TL BROKEN**", text)
+        self.assertEqual(text.splitlines()[1], "Close 101.00 above line 100.00")
+        self.assertEqual(len(text.splitlines()), 2)
 
 
 def rising_lows_then_break():
@@ -487,6 +493,9 @@ class OnceOnlyTests(unittest.TestCase):
     def test_alerts_carry_a_record_to_score(self):
         (_, _, _, record), = self.plan({}, self.analysis(fib=[self.fib()]), 0)
         self.assertEqual((record["kind"], record["tf"], record["plan"]["sl"]), ("fib", "4h", 100.7))
+        t = self.touch()
+        (_, _, _, record), = self.plan({}, self.analysis(touch=[t]), 0)
+        self.assertEqual((record["from"], record["to"]), (list(t["from"]), list(t["to"])))   # off Discord, kept here
 
     def test_a_touch_rearms_only_after_leaving_the_band_and_a_candle(self):
         state = {}
