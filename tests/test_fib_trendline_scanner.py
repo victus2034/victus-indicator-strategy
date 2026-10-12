@@ -165,14 +165,18 @@ class AlertTextTests(unittest.TestCase):
         z["plan"] = ftt.fib_plan(1, z)
         text = fts.format_fib_alert(ftd.NSE, "RELIANCE.NS", "4h", 100.0, z)
         self.assertIn("· **4H NSE**", text)
-        self.assertIn("RELIANCE · FIB LOWER ZONE · LONG", text)      # zone 2 of an up move
-        self.assertIn(f"Zone {fts.price_text(z['low'])} – {fts.price_text(z['high'])}", text)
-        self.assertIn(f"Entry {fts.price_text(z['high'])} · SL", text)                # a long buys the top
+        self.assertIn("RELIANCE · FIB L3 · BUY", text)
+        self.assertNotIn("Zone", text)                                   # edges stay in the record
+        self.assertEqual(len(text.splitlines()), 3)
+        self.assertIn(f"Entry {fts.price_text(z['high'])} · SL", text)           # a long buys the top
         short = {**zones_by_number(-1, 110, 90)[1], "d": -1, "base": 110, "top": 90, "distance": 0.5}
         short["plan"] = ftt.fib_plan(-1, short)
         self.assertIn(f"Entry {fts.price_text(short['low'])} · SL",
                       fts.format_fib_alert(ftd.CRYPTO, "BTCUSD", "1d", 95.0, short))   # a short sells the bottom
         self.assertIn("0.80% away", text)
+        self.assertNotIn("(L3) ·", text)                                 # the title already names it
+        tp = z["plan"]["entry"] + (z["plan"]["entry"] - z["plan"]["sl"])
+        self.assertIn(f"· TP {fts.price_text(tp)} (1R)", text)
         t = {"kind": SUPPORT, "level": 100.0, "distance": 1.2, "from": (90, "2026-08-06 00:00"), "to": (95, "2026-09-16 00:00"),
              "plan": ftt.trendline_plan(True, 100.0, "1d")}
         text = fts.format_touch_alert(ftd.CRYPTO, "BTCUSD", "1d", 101.2, t)
@@ -187,6 +191,16 @@ class AlertTextTests(unittest.TestCase):
             self.assertEqual(fts.price_text(value), text)
         self.assertEqual(fts.stamp_text("2026-08-10 00:00"), "10 Aug")
         self.assertEqual(fts.stamp_text("2026-07-08 13:15"), "8 Jul 13:15")
+
+    def test_fib_levels_run_l1_to_l4_in_the_order_price_reaches_them(self):
+        # lakky's BNB 1D chart: 717.73 / 687.66 weaker, 660.33 / 630.26 stronger
+        buy = fts.fib_levels(1, 545.0, 815.0)
+        self.assertEqual([round(buy[k], 2) for k in ("L1", "L2", "L3", "L4")], [723.2, 693.5, 666.5, 636.8])
+        z = zones_by_number(1, 545.0, 815.0)[2]
+        self.assertAlmostEqual(buy["L3"], z["entry"])                     # the bot's entry is L3
+        sell = fts.fib_levels(-1, 12.286, 2.314)                          # UNI 1W, Oct 7
+        self.assertEqual([round(sell[k], 3) for k in ("L1", "L2", "L3", "L4")], [5.704, 6.801, 7.799, 8.896])
+        self.assertAlmostEqual(sell["L3"], zones_by_number(-1, 12.286, 2.314)[2]["entry"])
 
     def test_zone_names_follow_the_chart(self):
         self.assertEqual([fts.zone_name(1, 1), fts.zone_name(1, 2)], ["UPPER", "LOWER"])
