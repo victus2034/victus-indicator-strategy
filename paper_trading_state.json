@@ -62357,6 +62357,7 @@
     "MRVL/USDT:USDT|30m|long|250.5|248.3": "filled",
     "MRVL/USDT:USDT|30m|long|251.91|251.822": "stop_too_tight",
     "MRVL/USDT:USDT|30m|long|256.94|256.477": "stop_too_tight",
+    "MRVL/USDT:USDT|30m|long|263.511|260.897": "filled",
     "MRVL/USDT:USDT|30m|long|272.013|271.997": "stop_too_tight",
     "MRVL/USDT:USDT|30m|long|278.58|276.368": "filled",
     "MRVL/USDT:USDT|30m|short|223.67|224.245": "filled",
@@ -63442,7 +63443,7 @@
       "entry": 10.801,
       "entry_time": "2026-10-12T19:55:00+05:30",
       "geometry": "wick",
-      "half_r_hit": false,
+      "half_r_hit": true,
       "market": "crypto",
       "rating": 7,
       "risk": 0.08499999999999908,
@@ -63453,6 +63454,24 @@
       "target_1": 10.886,
       "target_2": 10.970999999999998,
       "target_half": 10.843499999999999,
+      "timeframe": "30m"
+    },
+    "MRVL/USDT:USDT|30m|long|263.511|260.897": {
+      "alert_time": "2026-10-12T19:56:47.084519+05:30",
+      "entry": 263.51136,
+      "entry_time": "2026-10-12T20:00:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "rating": 7,
+      "risk": 2.6142000000000394,
+      "side": "long",
+      "stop": 260.89716,
+      "stream": "live",
+      "symbol": "MRVL/USDT:USDT",
+      "target_1": 266.12556000000006,
+      "target_2": 268.7397600000001,
+      "target_half": 264.8184600000001,
       "timeframe": "30m"
     }
   }
