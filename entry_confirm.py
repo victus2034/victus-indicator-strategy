@@ -598,7 +598,10 @@ def format_line(stage: int, price: float, record: dict, note: str = "") -> str:
 
     kind = FIB_TL_KIND_LABEL.get(record.get("kind"))
     if kind:
-        head = f"`{symbol}` {side} · {TF_LABEL.get(record.get('timeframe'), record.get('timeframe'))} {kind}"
+        # Bold timeframe; a fib names the level it enters at, always the strong
+        # zone's near edge, L1 (lakky, 2026-10-12).
+        level = " L1" if record.get("kind") == "fib" else ""
+        head = f"`{symbol}` {side} · **{TF_LABEL.get(record.get('timeframe'), record.get('timeframe'))}** {kind}{level}"
     else:
         head = f"`{symbol}` {side}{score_text}"
     levels = f"{price:.{places}f} → {entry:.{places}f}"
