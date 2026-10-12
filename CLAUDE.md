@@ -172,6 +172,14 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   `HISTORY_START` (2017-01-01), not "2000 days ago", which would slide once history passes 2000 days.
   Entry confirm skips any alert sent with price already past its entry
   (`entry_confirm.past_entry_when_sent`) - the fib alert is that level's only message.
+  **No fib alert once this candle reached the entry (2026-10-12, lakky).** A fib zone alerts only
+  while the candle forming on its own timeframe has not yet traded to the entry and price is not past
+  it (`fib_trendline_scanner.entry_already_touched`; the range comes from finer charts,
+  `current_candle_range`, since Bitunix has no forming candle). Inside the zone no longer alerts at
+  0.00%. The replay does the same (`fib_trendline_backtest.SKIP_TOUCHED_ENTRY`;
+  `research/fib_entry_touched_backtest.py`, part `fib-entry`). Entry confirm: a record first seen at
+  LATE sends nothing, and the "moved fast" GET READY backfill only goes out within
+  `APPROACH_THRESHOLD_PCT` of entry (it printed "10.21% away" for BNB).
 - NSE: the zone scanner's 200 stocks (`nse_scanner.load_watchlist`), scanned only in the session
   and at most every 8 minutes - that pass takes ~3 minutes (Yahoo, 5 intervals).
 - **Audit, 2026-09-29** (fixed, each with a test): the fib engine is a state machine whose end

@@ -205,7 +205,7 @@ class OnTests(unittest.TestCase):
         charts = {"4h": [[0, 1, 2, 0.5, 1.5]]}
         seen = {}
 
-        def analyse(market, symbol, tf, candles, now, price=None):
+        def analyse(market, symbol, tf, candles, now, price=None, forming=None):
             seen[symbol] = price
             return {}
 

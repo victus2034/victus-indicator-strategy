@@ -573,17 +573,22 @@ class ResolvePingsTests(unittest.TestCase):
 
         self.assertEqual([stage for stage, _ in pings], [entry_confirm.STAGE_ENTRY])
 
-    def test_reaching_late_from_unseen_also_backfills_get_ready(self):
+    def test_late_from_unseen_sends_nothing(self):
+        # lakky, 2026-10-12 (BNB 1M): first seen with 64% of the risk used, it
+        # came out as LATE plus a GET READY 10% away. The trade is already on.
         record = watched(entry=100.0, stop=98.0, side="long")
         now = pd.Timestamp("2026-09-17 13:46", tz=entry_confirm.IST)
+        state = {}
+        pings, _ = entry_confirm.resolve_pings(record, price_info(99.0), state, now)
+        self.assertEqual(pings, [])
+        again, _ = entry_confirm.resolve_pings(record, price_info(99.5), state, now)
+        self.assertEqual(again, [])
 
-        # Past NEAR_SL_FRACTION of the entry-to-stop distance: LATE.
-        pings, _ = entry_confirm.resolve_pings(record, price_info(99.0), {}, now)
-
-        self.assertEqual(
-            [stage for stage, _ in pings],
-            [entry_confirm.STAGE_READY, entry_confirm.STAGE_LATE],
-        )
+    def test_no_get_ready_backfill_when_price_is_already_far_from_entry(self):
+        record = watched(entry=100.0, stop=90.0, side="long")
+        now = pd.Timestamp("2026-09-17 13:46", tz=entry_confirm.IST)
+        pings, _ = entry_confirm.resolve_pings(record, price_info(98.0), {}, now)
+        self.assertEqual([stage for stage, _ in pings], [entry_confirm.STAGE_ENTRY])
 
     def test_a_stage_reached_between_polls_is_still_caught(self):
         # The BEAT case: entry_confirm's poll landed after price had already

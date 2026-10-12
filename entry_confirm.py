@@ -817,7 +817,16 @@ def resolve_pings(
         ready_seen = ready_recently(state, record, now) or level_ready_recently(
             state, record, now
         )
-        if last_stage == 0 and stage in (STAGE_ENTRY, STAGE_LATE) and not ready_seen:
+        if last_stage == 0 and stage == STAGE_LATE:
+            # First seen with most of the risk already gone: the trade is on
+            # and nearly stopped, nothing to act on (lakky, 2026-10-12, BNB 1M
+            # "64% risk used" next to a GET READY 10% away).
+            entry_state["stage"] = stage
+            state[key] = entry_state
+            return pings, entry_state
+        live_gap_pct = abs(price - entry) / entry * 100.0
+        if (last_stage == 0 and stage == STAGE_ENTRY and not ready_seen
+                and live_gap_pct <= APPROACH_THRESHOLD_PCT):
             # entry_confirm polls every few minutes; a fast mover (crypto
             # especially) can cross the whole GET READY -> ENTRY gap
             # between two polls and never get caught mid-approach - the

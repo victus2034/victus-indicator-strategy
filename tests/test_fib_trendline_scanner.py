@@ -112,6 +112,27 @@ class DistanceBandTests(unittest.TestCase):
         self.assertEqual(fts.fib_distance(-1, short, 104.0), 0.0)
         self.assertIsNone(fts.fib_distance(-1, short, 106.0))
 
+    def test_no_fib_alert_once_the_forming_candle_reached_the_entry(self):
+        # BNB 1M, 2026-10-12: October had traded down to 716.91 on Oct 8; entry
+        # 838.05 was alerted at 751.92, already inside the zone.
+        bnb = {"entry": 838.05}
+        self.assertTrue(fts.entry_already_touched(1, bnb, 751.92, (716.91, 810.67)))
+        self.assertTrue(fts.entry_already_touched(1, bnb, 842.0, (716.91, 850.0)))   # back above, same candle
+        self.assertFalse(fts.entry_already_touched(1, bnb, 842.0, (839.0, 850.0)))   # approaching
+        self.assertFalse(fts.entry_already_touched(1, bnb, 842.0, None))
+        short = {"entry": 100.0}
+        self.assertTrue(fts.entry_already_touched(-1, short, 99.5, (95.0, 100.4)))
+        self.assertFalse(fts.entry_already_touched(-1, short, 99.5, (95.0, 99.8)))
+
+    def test_the_forming_candle_range_comes_from_finer_charts(self):
+        day = 86400
+        oct1 = 1_790_812_800                    # 2026-10-01 UTC
+        charts = {"1M": [[oct1 - 30 * day, 1, 2, 0.5, 1.5], [oct1, 760, 811, 760, 752]],
+                  "1d": [[oct1 - day, 1, 1, 1, 1], [oct1 + 7 * day, 776, 777, 716.91, 735]]}
+        self.assertEqual(fts.current_candle_range(ftd.CRYPTO, charts, "1M", oct1 + 11 * day), (716.91, 811))
+        # Bitunix: the newest daily candle is closed, so today's candle has nothing yet
+        self.assertIsNone(fts.current_candle_range(ftd.CRYPTO, {"1d": charts["1d"]}, "1d", oct1 + 9 * day))
+
     def test_short_fib_distance_is_up_to_the_zone_bottom(self):
         self.assertAlmostEqual(fts.fib_distance(-1, self.zone, 99.0), 1.0)
         self.assertIsNone(fts.fib_distance(-1, self.zone, 111.0))
