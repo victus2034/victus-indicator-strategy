@@ -168,12 +168,15 @@ class AlertTextTests(unittest.TestCase):
         self.assertIn("RELIANCE · FIB L3 · BUY", text)
         self.assertNotIn("Zone", text)                                   # edges stay in the record
         self.assertEqual(len(text.splitlines()), 3)
-        self.assertIn(f"Entry {fts.price_text(z['high'])} (L3) · SL", text)           # a long buys the top
+        self.assertIn(f"Entry {fts.price_text(z['high'])} · SL", text)           # a long buys the top
         short = {**zones_by_number(-1, 110, 90)[1], "d": -1, "base": 110, "top": 90, "distance": 0.5}
         short["plan"] = ftt.fib_plan(-1, short)
-        self.assertIn(f"Entry {fts.price_text(short['low'])} (L3) · SL",
+        self.assertIn(f"Entry {fts.price_text(short['low'])} · SL",
                       fts.format_fib_alert(ftd.CRYPTO, "BTCUSD", "1d", 95.0, short))   # a short sells the bottom
         self.assertIn("0.80% away", text)
+        self.assertNotIn("(L3) ·", text)                                 # the title already names it
+        tp = z["plan"]["entry"] + (z["plan"]["entry"] - z["plan"]["sl"])
+        self.assertIn(f"· TP {fts.price_text(tp)} (1R)", text)
         t = {"kind": SUPPORT, "level": 100.0, "distance": 1.2, "from": (90, "2026-08-06 00:00"), "to": (95, "2026-09-16 00:00"),
              "plan": ftt.trendline_plan(True, 100.0, "1d")}
         text = fts.format_touch_alert(ftd.CRYPTO, "BTCUSD", "1d", 101.2, t)

@@ -342,7 +342,8 @@ def format_fib_alert(market, symbol, tf, price, z):
     return (
         f"{_header(market, tf, f'{display(market, symbol)} · FIB L3 · {side}', side)}\n"
         f"Price {price_text(price)} · {z['distance']:.2f}% away\n"
-        f"Entry {price_text(z['entry'])} (L3) · SL {price_text(z['sl'])} ({trades.risk_pct(z['plan']):.2f}%)"
+        f"Entry {price_text(z['entry'])} · SL {price_text(z['sl'])} ({trades.risk_pct(z['plan']):.2f}%)"
+        f" · TP {price_text(trades.target_price(z['plan']))} (1R)"
     )
 
 
