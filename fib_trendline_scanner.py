@@ -308,11 +308,6 @@ def _header(market, tf, title, side=None):
     return scanner.alert_title(title, side, f"{TF_LABEL[tf]} {MARKET_LABEL[market]}")
 
 
-def _line(t):
-    return (f"Line {price_text(t['from'][0])} ({stamp_text(t['from'][1])}) → "
-            f"{price_text(t['to'][0])} ({stamp_text(t['to'][1])})")
-
-
 def zone_name(d, number):
     """Shiva reads the chart as upper and lower zone, not 1 and 2 (2026-09-29).
 
@@ -348,25 +343,22 @@ def format_fib_alert(market, symbol, tf, price, z):
 
 
 def format_touch_alert(market, symbol, tf, price, t):
-    support = t["kind"] == SUPPORT
-    name, side = ("SUP", "BUY") if support else ("RES", "SELL")
-    where = f"{t['distance']:.2f}% {'above' if support else 'below'} line"
+    """Three lines (lakky, 2026-10-12): the line's two points stay in the record."""
+    name, side = ("S", "BUY") if t["kind"] == SUPPORT else ("R", "SELL")
     return (
         f"{_header(market, tf, f'{display(market, symbol)} · {name} TL · {side}', side)}\n"
-        f"Price {price_text(price)} · {where}\n"
+        f"Price {price_text(price)} · {t['distance']:.2f}% away\n"
         f"Entry {price_text(t['level'])} · SL {price_text(t['plan']['sl'])} ({trades.risk_pct(t['plan']):.2f}%)"
-        f" · TP {price_text(trades.target_price(t['plan']))} (1R)\n"
-        f"{_line(t)}"
+        f" · TP {price_text(trades.target_price(t['plan']))} (1R)"
     )
 
 
 def format_break_alert(market, symbol, tf, b):
-    name = "SUP" if b["kind"] == SUPPORT else "RES"
+    name = "S" if b["kind"] == SUPPORT else "R"
     side = "below" if b["kind"] == SUPPORT else "above"
     return (
         f"{_header(market, tf, f'{display(market, symbol)} · {name} TL BROKEN')}\n"
-        f"Close {price_text(b['close'])} {side} line {price_text(b['level'])} ({stamp_text(b['time'])} IST)\n"
-        f"{_line(b)}"
+        f"Close {price_text(b['close'])} {side} line {price_text(b['level'])}"
     )
 
 
@@ -434,7 +426,8 @@ def plan_alerts(state, market, symbol, tf, analysis, now, last_scan=None):
     for t in analysis["touch"]:
         entry = state.get(t["key"])
         if entry is None or (not entry.get("in_band") and now - entry.get("sent", 0) >= TF_SECONDS[tf]):
-            record = {**base, "kind": "trendline", "plan": t["plan"], "line": t["kind"]}
+            record = {**base, "kind": "trendline", "plan": t["plan"], "line": t["kind"],
+                      "from": list(t["from"]), "to": list(t["to"])}
             planned.append(("trendline", t["key"], format_touch_alert(market, symbol, tf, price, t), record))
         else:
             entry["in_band"] = True

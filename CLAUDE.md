@@ -187,6 +187,9 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   Fib channel alerts (lakky, 2026-10-12) are three lines - `**BNB · FIB L3 · BUY** · **1M Crypto**`,
   `Price .. · x% away`, `Entry .. · SL .. (x%) · TP .. (1R)` (display only; fib trades still score 2R + BE); the zone edges are left off (he checks the chart)
   and kept in the record: `base`, `top`, `levels` {L1..L4} (`fib_trendline_scanner.fib_levels`).
+  Trendline alerts (lakky, 2026-10-12): touch = `**RIVER · S TL · BUY** · **1D Crypto**`, `Price .. · x% away`,
+  `Entry .. · SL .. (x%) · TP .. (1R)`; broken = `**TSLA · R TL BROKEN** · **4H Crypto**`, `Close .. above line ..`.
+  The line's two points are off Discord and kept in the touch record (`from`, `to`).
 - NSE: the zone scanner's 200 stocks (`nse_scanner.load_watchlist`), scanned only in the session
   and at most every 8 minutes - that pass takes ~3 minutes (Yahoo, 5 intervals).
 - **Audit, 2026-09-29** (fixed, each with a test): the fib engine is a state machine whose end
