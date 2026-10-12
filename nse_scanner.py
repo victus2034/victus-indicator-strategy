@@ -681,22 +681,17 @@ def stop_is_too_tight(stop_distance_pct):
 
 
 def format_alert(result, zone_type, zone, distance_pct):
+    """Crypto's three lines (lakky, 2026-10-12): no rating, no zone edges."""
     side = "SELL" if zone_type == "supply" else "BUY"
-    score = result.get(f"{zone_type}_score")
-    score_text = ""
-    if score is not None:
-        score_text = f" | {score}/10"
-    elif SHOW_ZONE_RATINGS and TIMEFRAME == "30m":
-        score_text = f" | {zone_rating(zone, distance_pct)}/10"
+    entry = planned_entry_price(zone_type, zone)
     stop = planned_stop_price(zone_type, zone)
     stop_distance = planned_stop_distance_pct(zone_type, zone)
     tf = zone_engine.TF_LABEL.get(TIMEFRAME, TIMEFRAME)
     lines = [
-        # Plain "SYMBOL | SIDE | ... | 8/10": the journal's alert import reads that line.
-        f"**{display_symbol(result['symbol'])} | {side} | {tf}{score_text}**\n"
+        # Plain "SYMBOL | SIDE | ...": the journal's alert import reads that line.
+        f"**{display_symbol(result['symbol'])} | {side} | {tf}**\n"
         f"Price {result['price']:.2f} · {distance_pct:.2f}% away\n"
-        f"Zone {zone['bottom']:.2f} – {zone['top']:.2f}\n"
-        f"SL {stop:.2f} ({stop_distance:.2f}%)"
+        f"Entry {entry:.2f} · SL {stop:.2f} ({stop_distance:.2f}%)"
     ]
     if stop_is_too_tight(stop_distance):
         lines.append(

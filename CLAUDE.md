@@ -300,11 +300,12 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   state right after each delivered alert; entry_confirm saves after each digest part and rolls
   back only the records whose lines did not land. The crypto range-filter *signal* runs on
   closed candles (`scanner.confirmed_candles`), like NSE; zones still use the forming candle.
-- **Zone alert text (2026-10-08, lakky).** `**BTC | BUY | 4H | 5/10**`, then `Price` / `Zone` / `SL`
-  lines; prices at most 3 decimals from 1 up, 2 from 1000 up (`scanner.price_text` / `short_places`,
-  widened only if two levels would print the same; under 1 keeps `price_decimals`). The journal's
-  "Import Alert Signals" parses pasted alerts (`parseSignals`): keep "SYMBOL | SIDE" first, the score
-  last and each level line starting with its name - `JournalImportCompat` in `tests/test_alert_format.py`.
+- **Zone alert text (2026-10-12, lakky).** `**BTC | BUY | 4H**`, `Price .. · x% away`, `Entry .. · SL .. (x%)`
+  (crypto and NSE, 30m and 4H; NSE may add its stop warning / sector lines). No rating and no zone edges on
+  Discord - the record keeps both. Prices at most 3 decimals from 1 up, 2 from 1000 up (`scanner.price_text` /
+  `short_places`, widened only if two levels would print the same; under 1 keeps `price_decimals`). The journal's
+  pasted "Import Alert Signals" (`parseSignals`) still reads "SYMBOL | SIDE" and Price, but not the joint
+  Entry/SL line (journal change, not done here); its record import is unaffected - `JournalImportCompat`.
 - **Approach side only (2026-10-02, Lakky).** Distance to the entry is measured both ways, so price
   already through the entry used to alert as "0.15% away" (19-37% of alerts). `scanner.price_past_entry`
   now blocks those for crypto and NSE; the band is still consumed, so a bounce back out does not fire.
