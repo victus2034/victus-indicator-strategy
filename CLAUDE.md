@@ -180,8 +180,10 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   `research/fib_entry_touched_backtest.py`, part `fib-entry`). Entry confirm: a record first seen at
   LATE sends nothing, and the "moved fast" GET READY backfill only goes out within
   `APPROACH_THRESHOLD_PCT` of entry (it printed "10.21% away" for BNB).
-  Entry confirm lines (lakky, 2026-10-12): bold timeframe, a fib names its level -
-  `` `BNB` BUY · **1M** FIB L1 · 724.10 → 719.15 · ... ``; trendlines `**1D** TL`.
+  Entry confirm lines (lakky, 2026-10-12): `` `BNB` BUY · **1M FIB L3** · 724.10 → 719.15 · ... ``,
+  trendlines `**1D TL**`. Fib levels L1-L4 (lakky, BNB 1D chart): the four box edges in the order
+  price reaches them - L1/L2 the weaker box, L3/L4 the stronger; L4 is the one he likes most. The bot's
+  fib entry (strong box near edge) is L3. This replaces the Oct 8 L1/L2 names.
 - NSE: the zone scanner's 200 stocks (`nse_scanner.load_watchlist`), scanned only in the session
   and at most every 8 minutes - that pass takes ~3 minutes (Yahoo, 5 intervals).
 - **Audit, 2026-09-29** (fixed, each with a test): the fib engine is a state machine whose end
