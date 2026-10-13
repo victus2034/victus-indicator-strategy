@@ -1,7 +1,10 @@
 """Research only: DOGE 1D fib on lakky's chart (2026-10-13) vs the bot.
 
 Saves the Bitunix daily candles so the fib engine can be replayed offline, and
-prints the engine's event log and the live fib."""
+prints the engine's event log and the live fib.
+
+    python research/doge_fib_trace.py [PAIR ...]   # default DOGEUSDT; MAGIC 4H round: MAGICUSDT
+"""
 import csv
 import sys
 import time
@@ -16,13 +19,14 @@ from fib_trendline_data import HISTORY_START  # noqa: E402
 from fib_trendline_scanner import FIB_SWING_LENGTH  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "doge_fib"
+PAIRS = sys.argv[1:] or ["DOGEUSDT"]
 
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     now = int(time.time())
-    for pair, tf in (("DOGEUSDT", "1d"), ("DOGEUSDT", "4h")):
-        start = HISTORY_START if tf == "1d" else now - 400 * 86400
+    for pair, tf in ((p, tf) for p in PAIRS for tf in ("1d", "4h")):
+        start = HISTORY_START if tf == "1d" or pair != "DOGEUSDT" else now - 400 * 86400
         rows = bitunix_data.klines(pair, tf, start, now)
         with open(OUT / f"{pair}_{tf}.csv", "w", newline="") as f:
             w = csv.writer(f)
@@ -35,7 +39,7 @@ def main():
         print(f"== {pair} {tf}: {len(rows)} candles {stamp[0]} -> {stamp[-1]}")
         print("live:", {k: live[k] for k in ("d", "O", "E", "P")}, "O at", stamp[live["Ot"]], "E at", stamp[live["Et"]])
         print("levels:", [round(x, 5) for x in fib_engine.levels(live["O"], live["E"])])
-        for t, msg in log[-25:]:
+        for t, msg in log[-40:]:
             print(" ", t, msg)
 
 
