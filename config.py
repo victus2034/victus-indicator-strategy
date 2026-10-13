@@ -45,7 +45,6 @@ CRYPTO_WATCHLIST = [
     "ZECUSD",
     "DOGEUSD",
     "AAVEUSD",
-    "BEAT/USDT",
     "UNIUSD",
     "LINKUSD",
     "AVAXUSD",
@@ -53,16 +52,8 @@ CRYPTO_WATCHLIST = [
     "BNBUSD",
     "TRUMP/USDT",
     "BCHUSD",
-    # Added in the 2026-09-01 cut on seven-day Delta volume: TAC $87.8M,
-    # ZORA $28.0M, BLESS $21.1M, H $12.5M, VELVET $12.0M, RIVER $6.8M.
-    # RIVER had been removed once for thin volume - a removal is only ever
-    # as good as its last measurement.
-    "TACUSD",
-    "ZORAUSD",
-    "BLESSUSD",
-    "HUSD",
-    "VELVETUSD",
-    "RIVERUSD",
+    # TAC, ZORA, BLESS, H, VELVET, RIVER (added in the 2026-09-01 cut) and
+    # BEAT removed 2026-10-13 (lakky): 2-20M USDT a day on CoinDCX.
     # Added 2026-10-13 (lakky): every CoinDCX USDT future with 24h volume of
     # 100M USDT or more that Bitunix lists and was not already here
     # (research/coindcx_volume_probe.py, part coindcx; research/out/coindcx/).
@@ -142,9 +133,8 @@ WATCHLIST = CRYPTO_WATCHLIST + OTHER_WATCHLIST + XSTOCK_WATCHLIST
 # it against /v2/products when the watchlist is next reviewed.
 DELTA_LISTED_SYMBOLS = {
     "BTCUSD", "ETHUSD", "SOLUSD", "XRPUSD", "HYPEUSD", "AKE/USDT",
-    "ZECUSD", "DOGEUSD", "AAVEUSD", "BEAT/USDT", "UNIUSD", "LINKUSD",
-    "AVAXUSD", "LTCUSD", "BNBUSD", "TRUMP/USDT", "BCHUSD", "TACUSD",
-    "ZORAUSD", "BLESSUSD", "HUSD", "VELVETUSD", "RIVERUSD", "SLVONUSD",
+    "ZECUSD", "DOGEUSD", "AAVEUSD", "UNIUSD", "LINKUSD",
+    "AVAXUSD", "LTCUSD", "BNBUSD", "TRUMP/USDT", "BCHUSD", "SLVONUSD",
     "XAUTUSD", "TSLAXUSD", "METAXUSD", "SOXLBUSD", "SNDKBUSD",
     "MRVL/USDT:USDT", "NVDAXUSD",
     # 2026-10-13 CoinDCX 100M+ additions that Delta lists too (/v2/products).

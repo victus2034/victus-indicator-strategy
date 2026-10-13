@@ -54,7 +54,6 @@ class DefaultTests(unittest.TestCase):
     def test_every_crypto_symbol_maps_to_a_bitunix_pair(self):
         pairs = {s: bitunix_data.bitunix_pair(scanner.delta_contract(s)) for s in config.CRYPTO_WATCHLIST}
         self.assertEqual(pairs["BTCUSD"], "BTCUSDT")
-        self.assertEqual(pairs["HUSD"], "HUSDT")
         self.assertEqual(pairs["TRUMP/USDT"], "TRUMPUSDT")
         self.assertEqual(pairs["1000PEPEUSD"], "1000PEPEUSDT")
         self.assertEqual(pairs["SUSD"], "SUSDT")

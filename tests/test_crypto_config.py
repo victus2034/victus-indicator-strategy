@@ -17,7 +17,7 @@ class CryptoConfigTests(unittest.TestCase):
         with patch.dict(os.environ, {}, clear=True):
             import config
 
-            self.assertEqual(len(config.CRYPTO_WATCHLIST), 50)
+            self.assertEqual(len(config.CRYPTO_WATCHLIST), 43)
             self.assertLessEqual(len(config.CRYPTO_WATCHLIST), 100)
             self.assertEqual(
                 config.WATCHLIST,

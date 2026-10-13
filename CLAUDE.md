@@ -41,11 +41,12 @@ what was checked, what's next.
 
 All in `config.py`, which **is tracked in git**:
 
-- `WATCHLIST` — the 58 symbols scanned: 50 crypto, 6 xStocks, XAUT + SLVON (64 on
+- `WATCHLIST` — the 51 symbols scanned: 43 crypto, 6 xStocks, XAUT + SLVON (64 on
   2026-09-01, cut on Delta volume and again when CoinSwitch was dropped; 27 crypto added
   2026-10-13 (lakky): every CoinDCX USDT future with 24h volume >= 100M USDT that Bitunix
-  lists, commodities left out - `research/coindcx_volume_probe.py`, part `coindcx`)
-- `DELTA_LISTED_SYMBOLS` — the 52 watchlist symbols Delta India lists. `WATCHLIST` equals it
+  lists, commodities left out - `research/coindcx_volume_probe.py`, part `coindcx`; same day
+  TAC, ZORA, BLESS, H, VELVET, RIVER and BEAT dropped: 2-20M a day on CoinDCX)
+- `DELTA_LISTED_SYMBOLS` — the 45 watchlist symbols Delta India lists. `WATCHLIST` equals it
   plus `NOT_DELTA_LISTED_CRYPTO` (W, OGN, DOS, MAGIC, BAT, CT: CoinDCX + Bitunix only; their
   daily backtest grades on the ccxt fallback venues). `entry_confirm.py` used to tag
   each ping with the venue ("Delta"); dropped 2026-10-08 (lakky) - its crypto prices come
