@@ -35,17 +35,27 @@ OUT = Path(__file__).resolve().parent / "out" / "fib_kill"
 LIVE_RUN = fib_engine.run
 
 
-def variant(rule):
+def variant(rule, gate=20):
     """The live engine (fib dies past its stop) with the stop kill changed:
-    'old' = no stop kill (dies only past its top/base), 'aged' = the stop kills
-    only once the extreme has stood N candles (a confirmed swing; MAGIC 4H round,
-    2026-10-13: the Oct 12 wick passed the stop 6 candles after the Oct 11 low)."""
+    'old'   = no stop kill (dies only past its top/base);
+    'fresh' = a fib that was itself born from a stop kill cannot be stop-killed
+              until it makes a new low/high (MAGIC 4H, 2026-10-13: the Oct 11 SELL
+              fib flipped back on the Oct 12 wick, 6 candles after it was born);
+    'gate'  = no stop kill within `gate` candles of the last flip."""
     if rule == "stop":
         return LIVE_RUN
     s = inspect.getsource(fib_engine)
+    s = s.replace("    reset = False\n", "    reset = False\n    fresh, F = False, -10**9\n", 1)
     for old in ("l[i] < E - KILL * (E - O)", "h[i] > E + KILL * (O - E)"):
         assert s.count("or " + old + ":") == 1
-        s = s.replace("or " + old + ":", ("or False" if rule == "old" else f"or (i - Et >= N and {old})") + ":", 1)
+        cond = {"old": "False", "fresh": f"(not fresh and {old})", "gate": f"(i - F >= {gate} and {old})"}[rule]
+        s = s.replace("or " + old + ":", "or " + cond + ":", 1)
+    for flip in ("-1, no, not_, l[i], i, None, False, None", "1, no, not_, h[i], i, None, False, None"):
+        assert flip in s
+        s = s.replace(flip, flip + "\n                fresh, F = past_stop, i", 1)
+    for ext in ("E, Et, P, reset, rb = h[i], i, None, False, None", "E, Et, P, reset, rb = l[i], i, None, False, None"):
+        assert ext in s
+        s = s.replace(ext, ext + "\n                fresh = False", 1)
     ns = {}
     exec(compile(s, "fib_engine_variant", "exec"), ns)
     return ns["run"]
@@ -62,7 +72,8 @@ def main() -> None:
     runs = {}
     for label, rule in (("old: dies only past its top/base", "old"),
                         ("live: dies past the stop", "stop"),
-                        ("past the stop, once the low/high stood 10 candles", "aged")):
+                        ("stop, but a fresh flip only dies past its top/base", "fresh"),
+                        ("stop, but no flip-back within 20 candles", "gate")):
         fib_engine.run = variant(rule)
         runs[label] = [t for t in replay_all(now) if t["alert_ts"] >= since]
     fib_engine.run = LIVE_RUN
