@@ -2,23 +2,29 @@
 
 Live fib rules otherwise (deeper zone, S/R stop, 2R + BE, entry not reached this candle), net after fees. R and % per trade and in total (% = R x the trade's stop distance).
 
-| market   | tf   | rule                                              |   alerts |   trades |   win_% |   R_total |   R_per_trade |   %_total |   %_per_trade |
-|:---------|:-----|:--------------------------------------------------|---------:|---------:|--------:|----------:|--------------:|----------:|--------------:|
-| crypto   | 4H   | old: dies only past its top/base                  |       98 |       76 |      52 |       1   |         0.013 |      48.9 |         0.644 |
-| crypto   | 4H   | live: dies past the stop                          |      205 |      154 |      48 |     -18.1 |        -0.118 |     -44.1 |        -0.286 |
-| crypto   | 4H   | past the stop, once the low/high stood 10 candles |      174 |      127 |      47 |     -13   |        -0.102 |     -38.6 |        -0.304 |
-| crypto   | 1D+  | old: dies only past its top/base                  |       26 |       21 |      77 |       8.8 |         0.417 |      53.2 |         2.532 |
-| crypto   | 1D+  | live: dies past the stop                          |       53 |       45 |      61 |       9.3 |         0.207 |      36.6 |         0.813 |
-| crypto   | 1D+  | past the stop, once the low/high stood 10 candles |       46 |       37 |      68 |      11.5 |         0.312 |      58.8 |         1.59  |
-| crypto   | all  | old: dies only past its top/base                  |      124 |       97 |      57 |       9.7 |         0.1   |     102.1 |         1.053 |
-| crypto   | all  | live: dies past the stop                          |      258 |      199 |      51 |      -8.8 |        -0.044 |      -7.5 |        -0.038 |
-| crypto   | all  | past the stop, once the low/high stood 10 candles |      220 |      164 |      52 |      -1.4 |        -0.009 |      20.2 |         0.123 |
-| nse      | 4H   | old: dies only past its top/base                  |      119 |       87 |      42 |     -13.5 |        -0.155 |     -41   |        -0.471 |
-| nse      | 4H   | live: dies past the stop                          |      341 |      244 |      42 |     -48.6 |        -0.199 |     -86.8 |        -0.356 |
-| nse      | 4H   | past the stop, once the low/high stood 10 candles |      289 |      208 |      45 |     -29.6 |        -0.142 |     -69.7 |        -0.335 |
-| nse      | 1D+  | old: dies only past its top/base                  |       91 |       60 |      36 |     -14   |        -0.234 |    -114.1 |        -1.902 |
-| nse      | 1D+  | live: dies past the stop                          |      215 |      150 |      47 |      -9.5 |        -0.063 |    -106.1 |        -0.707 |
-| nse      | 1D+  | past the stop, once the low/high stood 10 candles |      171 |      118 |      41 |     -14.3 |        -0.121 |    -109.7 |        -0.93  |
-| nse      | all  | old: dies only past its top/base                  |      210 |      147 |      39 |     -27.5 |        -0.187 |    -155.1 |        -1.055 |
-| nse      | all  | live: dies past the stop                          |      556 |      394 |      44 |     -58.1 |        -0.147 |    -192.9 |        -0.49  |
-| nse      | all  | past the stop, once the low/high stood 10 candles |      460 |      326 |      44 |     -43.9 |        -0.135 |    -179.4 |        -0.55  |
+| market   | tf   | rule                                               |   alerts |   trades |   win_% |   R_total |   R_per_trade |   %_total |   %_per_trade |
+|:---------|:-----|:---------------------------------------------------|---------:|---------:|--------:|----------:|--------------:|----------:|--------------:|
+| crypto   | 4H   | old: dies only past its top/base                   |       98 |       76 |      52 |       1   |         0.013 |      48.9 |         0.644 |
+| crypto   | 4H   | live: dies past the stop                           |      205 |      154 |      48 |     -18.1 |        -0.118 |     -44.1 |        -0.286 |
+| crypto   | 4H   | stop, but a fresh flip only dies past its top/base |      193 |      142 |      50 |     -15.6 |        -0.11  |     -43.6 |        -0.307 |
+| crypto   | 4H   | stop, but no flip-back within 20 candles           |      178 |      129 |      48 |     -14.1 |        -0.109 |     -35.6 |        -0.276 |
+| crypto   | 1D+  | old: dies only past its top/base                   |       26 |       21 |      77 |       8.8 |         0.417 |      53.2 |         2.532 |
+| crypto   | 1D+  | live: dies past the stop                           |       53 |       45 |      61 |       9.3 |         0.207 |      36.6 |         0.813 |
+| crypto   | 1D+  | stop, but a fresh flip only dies past its top/base |       50 |       42 |      66 |      13.4 |         0.319 |      55.7 |         1.326 |
+| crypto   | 1D+  | stop, but no flip-back within 20 candles           |       46 |       40 |      67 |      14.4 |         0.361 |      74.1 |         1.853 |
+| crypto   | all  | old: dies only past its top/base                   |      124 |       97 |      57 |       9.7 |         0.1   |     102.1 |         1.053 |
+| crypto   | all  | live: dies past the stop                           |      258 |      199 |      51 |      -8.8 |        -0.044 |      -7.5 |        -0.038 |
+| crypto   | all  | stop, but a fresh flip only dies past its top/base |      243 |      184 |      53 |      -2.2 |        -0.012 |      12.1 |         0.066 |
+| crypto   | all  | stop, but no flip-back within 20 candles           |      224 |      169 |      52 |       0.3 |         0.002 |      38.5 |         0.228 |
+| nse      | 4H   | old: dies only past its top/base                   |      119 |       87 |      42 |     -13.5 |        -0.155 |     -41   |        -0.471 |
+| nse      | 4H   | live: dies past the stop                           |      341 |      244 |      42 |     -48.6 |        -0.199 |     -86.8 |        -0.356 |
+| nse      | 4H   | stop, but a fresh flip only dies past its top/base |      299 |      212 |      42 |     -36.6 |        -0.173 |     -77.8 |        -0.367 |
+| nse      | 4H   | stop, but no flip-back within 20 candles           |      282 |      201 |      42 |     -34.3 |        -0.171 |     -77.9 |        -0.388 |
+| nse      | 1D+  | old: dies only past its top/base                   |       91 |       60 |      36 |     -14   |        -0.234 |    -114.1 |        -1.902 |
+| nse      | 1D+  | live: dies past the stop                           |      215 |      150 |      47 |      -9.5 |        -0.063 |    -106.1 |        -0.707 |
+| nse      | 1D+  | stop, but a fresh flip only dies past its top/base |      187 |      131 |      46 |     -10.9 |        -0.083 |    -122.9 |        -0.938 |
+| nse      | 1D+  | stop, but no flip-back within 20 candles           |      182 |      130 |      42 |     -18.9 |        -0.145 |    -131   |        -1.007 |
+| nse      | all  | old: dies only past its top/base                   |      210 |      147 |      39 |     -27.5 |        -0.187 |    -155.1 |        -1.055 |
+| nse      | all  | live: dies past the stop                           |      556 |      394 |      44 |     -58.1 |        -0.147 |    -192.9 |        -0.49  |
+| nse      | all  | stop, but a fresh flip only dies past its top/base |      486 |      343 |      44 |     -47.5 |        -0.138 |    -200.7 |        -0.585 |
+| nse      | all  | stop, but no flip-back within 20 candles           |      464 |      331 |      42 |     -53.2 |        -0.161 |    -208.9 |        -0.631 |
