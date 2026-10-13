@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       parts:
-        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm tl-break-audit tl-sl fib-sl tl-ex tl-sl-long tl-mkt-trend fib-start bitunix-depth bnb-fib fib-touched fib-entry tl-entry doge-fib)"
+        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm tl-break-audit tl-sl fib-sl tl-ex tl-sl-long tl-mkt-trend fib-start bitunix-depth bnb-fib fib-touched fib-entry tl-entry doge-fib fib-kill)"
         default: "zones-30m zones-4h fib"
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr, xstock, xstock-zones-30m, xstock-zones-4h, xstock-fib, live-audit, uni-trace, bitunix-page, trend-all, tl-confirm, tl-break-audit, tl-sl, fib-sl, tl-ex, tl-sl-long, tl-mkt-trend, fib-start, bitunix-depth, bnb-fib, fib-touched, fib-entry, tl-entry, doge-fib]
+        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr, xstock, xstock-zones-30m, xstock-zones-4h, xstock-fib, live-audit, uni-trace, bitunix-page, trend-all, tl-confirm, tl-break-audit, tl-sl, fib-sl, tl-ex, tl-sl-long, tl-mkt-trend, fib-start, bitunix-depth, bnb-fib, fib-touched, fib-entry, tl-entry, doge-fib, fib-kill]
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
@@ -91,6 +91,7 @@ jobs:
             fib-entry) PYTHONPATH=research python research/fib_entry_touched_backtest.py --since 2026-09-01 ;;
             tl-entry) PYTHONPATH=research python research/tl_entry_touched_backtest.py --since 2026-09-01 ;;
             doge-fib) python research/doge_fib_trace.py ;;
+            fib-kill) PYTHONPATH=research python research/fib_kill_backtest.py --since 2026-09-01 ;;
             tl-length) python research/trendline_length_backtest.py --lengths 10,15,20 ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
       - name: Commit results to this branch
