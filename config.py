@@ -45,7 +45,6 @@ CRYPTO_WATCHLIST = [
     "ZECUSD",
     "DOGEUSD",
     "AAVEUSD",
-    "BEAT/USDT",
     "UNIUSD",
     "LINKUSD",
     "AVAXUSD",
@@ -53,17 +52,45 @@ CRYPTO_WATCHLIST = [
     "BNBUSD",
     "TRUMP/USDT",
     "BCHUSD",
-    # Added in the 2026-09-01 cut on seven-day Delta volume: TAC $87.8M,
-    # ZORA $28.0M, BLESS $21.1M, H $12.5M, VELVET $12.0M, RIVER $6.8M.
-    # RIVER had been removed once for thin volume - a removal is only ever
-    # as good as its last measurement.
-    "TACUSD",
-    "ZORAUSD",
-    "BLESSUSD",
-    "HUSD",
-    "VELVETUSD",
-    "RIVERUSD",
+    # TAC, ZORA, BLESS, H, VELVET, RIVER (added in the 2026-09-01 cut) and
+    # BEAT removed 2026-10-13 (lakky): 2-20M USDT a day on CoinDCX.
+    # Added 2026-10-13 (lakky): every CoinDCX USDT future with 24h volume of
+    # 100M USDT or more that Bitunix lists and was not already here
+    # (research/coindcx_volume_probe.py, part coindcx; research/out/coindcx/).
+    # Commodities (XAU, XAG, CL, BZ, NATGAS) and coins Bitunix does not list
+    # (NFP, HFT, FUN, PUMP) were left out. The last six are not on Delta:
+    # their daily backtest grades on the ccxt fallback venues.
+    "NEARUSD",
+    "STRKUSD",
+    "GTCUSD",
+    "RSRUSD",
+    "SUIUSD",
+    "ENAUSD",
+    "WLDUSD",
+    "FILUSD",
+    "1000PEPEUSD",
+    "ADAUSD",
+    "BTWUSD",
+    "TAOUSD",
+    "ONDOUSD",
+    "TIAUSD",
+    "ZROUSD",
+    "QNTUSD",
+    "INJUSD",
+    "ARBUSD",
+    "SUSD",
+    "APTUSD",
+    "CAPUSD",
+    "WUSD",
+    "OGNUSD",
+    "DOSUSD",
+    "MAGICUSD",
+    "BATUSD",
+    "CTUSD",
 ]
+
+# CoinDCX-only additions (2026-10-13): Bitunix lists them, Delta does not.
+NOT_DELTA_LISTED_CRYPTO = {"WUSD", "OGNUSD", "DOSUSD", "MAGICUSD", "BATUSD", "CTUSD"}
 
 # Non-crypto contracts, kept apart from the crypto list.
 # XAUT replaced PAXG here: both are gold, and XAUT traded $3.0B over seven days
@@ -106,11 +133,14 @@ WATCHLIST = CRYPTO_WATCHLIST + OTHER_WATCHLIST + XSTOCK_WATCHLIST
 # it against /v2/products when the watchlist is next reviewed.
 DELTA_LISTED_SYMBOLS = {
     "BTCUSD", "ETHUSD", "SOLUSD", "XRPUSD", "HYPEUSD", "AKE/USDT",
-    "ZECUSD", "DOGEUSD", "AAVEUSD", "BEAT/USDT", "UNIUSD", "LINKUSD",
-    "AVAXUSD", "LTCUSD", "BNBUSD", "TRUMP/USDT", "BCHUSD", "TACUSD",
-    "ZORAUSD", "BLESSUSD", "HUSD", "VELVETUSD", "RIVERUSD", "SLVONUSD",
+    "ZECUSD", "DOGEUSD", "AAVEUSD", "UNIUSD", "LINKUSD",
+    "AVAXUSD", "LTCUSD", "BNBUSD", "TRUMP/USDT", "BCHUSD", "SLVONUSD",
     "XAUTUSD", "TSLAXUSD", "METAXUSD", "SOXLBUSD", "SNDKBUSD",
     "MRVL/USDT:USDT", "NVDAXUSD",
+    # 2026-10-13 CoinDCX 100M+ additions that Delta lists too (/v2/products).
+    "NEARUSD", "STRKUSD", "GTCUSD", "RSRUSD", "SUIUSD", "ENAUSD", "WLDUSD",
+    "FILUSD", "1000PEPEUSD", "ADAUSD", "BTWUSD", "TAOUSD", "ONDOUSD", "TIAUSD",
+    "ZROUSD", "QNTUSD", "INJUSD", "ARBUSD", "SUSD", "APTUSD", "CAPUSD",
 }
 
 DELTA_API_BASE_URL = "https://api.india.delta.exchange"
@@ -134,7 +164,8 @@ BITUNIX_API_BASE_URL = "https://fapi.bitunix.com"
 # Bitunix allows 10 requests a second per IP; stay a little under it.
 BITUNIX_MIN_REQUEST_GAP_SECONDS = env_float("VICTUS_BITUNIX_MIN_REQUEST_GAP_SECONDS", 0.12)
 # Every crypto watchlist symbol, checked against Bitunix's trading_pairs on
-# 2026-10-05 (all 23 listed as <base>USDT). Re-check when CRYPTO_WATCHLIST changes.
+# 2026-10-05 (all 23 listed as <base>USDT); the 27 CoinDCX additions all OPEN on
+# 2026-10-13. Re-check when CRYPTO_WATCHLIST changes.
 # The xStocks are not "<Delta name>T" on Bitunix but the stock's own ticker,
 # so each has its pair here. All six listed and OPEN on 2026-10-09
 # (research/xstock_bitunix_probe.py, research/out/xstock/).
