@@ -100,6 +100,16 @@ def main():
     lines.append("")
     lines.append(f"{len(vols)} CoinDCX USDT futures, {len(rows)} at >= {args.min/1e6:.0f}M; "
                  f"{len(bx)} Bitunix pairs; {len(dl)} Delta perps.")
+    # Every scanned symbol: is it on CoinDCX too (any volume)? Gold/silver
+    # tokens are also checked against CoinDCX's spot-metal futures.
+    lines += ["", "## Current watchlist on CoinDCX", "",
+              "| Symbol | CoinDCX | 24h vol (M USDT) |", "|---|---|---|"]
+    near = {"XAUT": ["XAUT", "XAU", "PAXG"], "SLVON": ["SLVON", "SLV", "XAG"]}
+    for base, sym in sorted(watched.items(), key=lambda kv: kv[1] not in config.CRYPTO_WATCHLIST):
+        hits = [c for c in near.get(base, [base, "1000" + base]) if c in vols]
+        cell = ", ".join(hits) or "-"
+        vcell = ", ".join(f"{vols[c] / 1e6:.1f}" for c in hits) or "-"
+        lines.append(f"| {sym} | {cell} | {vcell} |")
     text = "\n".join(lines)
     (OUT / "COINDCX_100M.md").write_text(text + "\n")
     print(text)
