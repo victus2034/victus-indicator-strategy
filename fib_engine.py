@@ -31,12 +31,14 @@ Up move (d = +1): O = base (low), E = top (running high),
              highest swing high CONFIRMED after the lowest low since the top
              (where the final drop started - v12.3, XAUUSD 4318.68), or E if
              there is none.
-  low  < L4: v12.7.10 (lakky, DOGE 1D 2026-10-13) - price traded past the far
-             edge of the strong box (0.66 of the range down from the top) before
-             taking out the base: the fib is dead too, and the down move starts
-             at the top E itself. DOGE 1D ran 0.06762 -> 0.1059 through both sell
-             boxes of the May fib (top 0.11857); the chart's fib is 0.06762 ->
-             0.1059, not the May one.
+  low  < stop: v12.7.10 (lakky, DOGE 1D 2026-10-13) - price traded past the
+             strong box's stop (25% of the box height beyond its far edge L4,
+             0.6875 of the range down from the top) before taking out the base:
+             the fib is dead too, and the down move starts at the top E itself.
+             DOGE 1D ran 0.06762 -> 0.1059 through both sell boxes of the May fib
+             (top 0.11857); the chart's fib is 0.06762 -> 0.1059, not the May one.
+             v12.7.11: the stop, not L4 - the Oct 13 wick to 0.07994 went under
+             L4 (0.08064) but not the stop (0.07959), and the fib held.
 Down move (d = -1) is the exact mirror.
 """
 import csv
@@ -50,6 +52,7 @@ def load(path):
 
 ZONE1 = 0.66     # v12.3: a pullback that reached Zone 1 (0.34 of the range) is a new base
 RESTART = 0.88   # v12.1: 0.80 - 0.95 all give the same result on every example
+KILL = ZONE1 + 0.25 * (ZONE1 - 0.55)   # v12.7.11: the strong box's stop, 25% of its height past L4
 
 
 def run(ist, h, l, N=10, restart=RESTART):
@@ -108,12 +111,12 @@ def run(ist, h, l, N=10, restart=RESTART):
                     log.append((ist[i], 'top %g crossed, base %g -> %g (%s)' % (E, O, P, ist[Pt])))
                     O, Ot = P, Pt
                 E, Et, P, reset, rb = h[i], i, None, False, None
-            elif l[i] < O or l[i] < E - ZONE1 * (E - O):
+            elif l[i] < O or l[i] < E - KILL * (E - O):
                 ended = True
-                past_l4 = l[i] >= O
+                past_stop = l[i] >= O
                 log.append((ist[i], '%s %g broken, up fib dead, down from %g (%s)'
-                            % ('L4' if past_l4 else 'base', E - ZONE1 * (E - O) if past_l4 else O, E, ist[Et])))
-                no, not_ = (SQ, None) if SQ is not None and not past_l4 else (E, Et)
+                            % ('stop' if past_stop else 'base', E - KILL * (E - O) if past_stop else O, E, ist[Et])))
+                no, not_ = (SQ, None) if SQ is not None and not past_stop else (E, Et)
                 if not_ is None:
                     not_ = max(k for k in range(SEb + 1, i) if h[k] == SQ)
                     log.append((ist[i], '  down fib starts at last lower high %g (%s), not %g' % (SQ, ist[not_], E)))
@@ -136,12 +139,12 @@ def run(ist, h, l, N=10, restart=RESTART):
                     log.append((ist[i], 'bottom %g crossed, top %g -> %g (%s)' % (E, O, P, ist[Pt])))
                     O, Ot = P, Pt
                 E, Et, P, reset, rb = l[i], i, None, False, None
-            elif h[i] > O or h[i] > E + ZONE1 * (O - E):
+            elif h[i] > O or h[i] > E + KILL * (O - E):
                 ended = True
-                past_l4 = h[i] <= O
+                past_stop = h[i] <= O
                 log.append((ist[i], '%s %g broken, down fib dead, up from %g (%s)'
-                            % ('L4' if past_l4 else 'top', E + ZONE1 * (O - E) if past_l4 else O, E, ist[Et])))
-                no, not_ = (SQ, None) if SQ is not None and not past_l4 else (E, Et)
+                            % ('stop' if past_stop else 'top', E + KILL * (O - E) if past_stop else O, E, ist[Et])))
+                no, not_ = (SQ, None) if SQ is not None and not past_stop else (E, Et)
                 if not_ is None:
                     not_ = max(k for k in range(SEb + 1, i) if l[k] == SQ)
                     log.append((ist[i], '  up fib starts at last higher low %g (%s), not %g' % (SQ, ist[not_], E)))
