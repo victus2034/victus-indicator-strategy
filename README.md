@@ -16,9 +16,11 @@ Everything runs on GitHub Actions. There is no server.
 
 ## Watchlist
 
-`config.py` holds it. 31 symbols, exactly the ones Delta India lists (`DELTA_LISTED_SYMBOLS`):
+`config.py` holds it. 58 symbols. Since 2026-10-13 crypto also covers every CoinDCX USDT future
+with 24h volume of 100M+ that Bitunix lists; all but six (`NOT_DELTA_LISTED_CRYPTO`) are on Delta
+(`DELTA_LISTED_SYMBOLS`):
 
-- `CRYPTO_WATCHLIST`: 23 coins (BTC, ETH, SOL, ...)
+- `CRYPTO_WATCHLIST`: 50 coins (BTC, ETH, SOL, ...)
 - `XSTOCK_WATCHLIST`: 6 tokenised stocks (TSLA, META, SOXL, SNDK, MRVL, NVDA)
 - `OTHER_WATCHLIST`: XAUT (gold) and SLVON (silver)
 

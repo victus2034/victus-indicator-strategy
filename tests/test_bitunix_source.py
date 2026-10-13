@@ -56,6 +56,8 @@ class DefaultTests(unittest.TestCase):
         self.assertEqual(pairs["BTCUSD"], "BTCUSDT")
         self.assertEqual(pairs["HUSD"], "HUSDT")
         self.assertEqual(pairs["TRUMP/USDT"], "TRUMPUSDT")
+        self.assertEqual(pairs["1000PEPEUSD"], "1000PEPEUSDT")
+        self.assertEqual(pairs["SUSD"], "SUSDT")
         self.assertTrue(all(p.endswith("USDT") for p in pairs.values()))
 
 

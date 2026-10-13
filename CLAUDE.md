@@ -41,10 +41,13 @@ what was checked, what's next.
 
 All in `config.py`, which **is tracked in git**:
 
-- `WATCHLIST` — the 31 symbols scanned: 23 crypto, 6 xStocks, XAUT + SLVON (64 on
-  2026-09-01, cut on Delta volume and again when CoinSwitch was dropped)
-- `DELTA_LISTED_SYMBOLS` — the 31 symbols Delta India lists. Since 2026-09-16 `WATCHLIST`
-  (crypto, other, and xStock combined) equals it exactly. `entry_confirm.py` used to tag
+- `WATCHLIST` — the 58 symbols scanned: 50 crypto, 6 xStocks, XAUT + SLVON (64 on
+  2026-09-01, cut on Delta volume and again when CoinSwitch was dropped; 27 crypto added
+  2026-10-13 (lakky): every CoinDCX USDT future with 24h volume >= 100M USDT that Bitunix
+  lists, commodities left out - `research/coindcx_volume_probe.py`, part `coindcx`)
+- `DELTA_LISTED_SYMBOLS` — the 52 watchlist symbols Delta India lists. `WATCHLIST` equals it
+  plus `NOT_DELTA_LISTED_CRYPTO` (W, OGN, DOS, MAGIC, BAT, CT: CoinDCX + Bitunix only; their
+  daily backtest grades on the ccxt fallback venues). `entry_confirm.py` used to tag
   each ping with the venue ("Delta"); dropped 2026-10-08 (lakky) - its crypto prices come
   from Bitunix, so the tag read as the wrong source. Entry confirm watches only fib and
   trendline alerts on 1D/1W/1M, crypto and NSE, since the same day.

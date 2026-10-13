@@ -17,7 +17,7 @@ class CryptoConfigTests(unittest.TestCase):
         with patch.dict(os.environ, {}, clear=True):
             import config
 
-            self.assertEqual(len(config.CRYPTO_WATCHLIST), 23)
+            self.assertEqual(len(config.CRYPTO_WATCHLIST), 50)
             self.assertLessEqual(len(config.CRYPTO_WATCHLIST), 100)
             self.assertEqual(
                 config.WATCHLIST,
@@ -69,7 +69,12 @@ class CryptoConfigTests(unittest.TestCase):
         with patch.dict(os.environ, {}, clear=True):
             import config
 
-            self.assertTrue(set(config.CRYPTO_WATCHLIST) <= config.DELTA_LISTED_SYMBOLS)
+            # 2026-10-13: the CoinDCX 100M+ additions Delta does not list are
+            # the only exception, and they are named.
+            self.assertEqual(
+                set(config.CRYPTO_WATCHLIST) - config.DELTA_LISTED_SYMBOLS,
+                config.NOT_DELTA_LISTED_CRYPTO,
+            )
 
     def test_every_watchlist_symbol_is_delta_listed(self):
         # 2026-09-16: the xStock cut extended the same rule to the whole
@@ -78,7 +83,10 @@ class CryptoConfigTests(unittest.TestCase):
         with patch.dict(os.environ, {}, clear=True):
             import config
 
-            self.assertEqual(set(config.WATCHLIST), config.DELTA_LISTED_SYMBOLS)
+            self.assertEqual(
+                set(config.WATCHLIST) - config.NOT_DELTA_LISTED_CRYPTO,
+                config.DELTA_LISTED_SYMBOLS,
+            )
 
     def test_thin_volume_symbols_are_removed(self):
         # Measured over 96 30m candles: all ten traded under
