@@ -1,5 +1,7 @@
 """Research only: when an old fib dies (lakky, 2026-10-13, DOGE 1D).
 
+Second round (same day): the Oct 13 1D wick dipped just under L4 (0.08064) of the\nAug-Sep BUY fib and killed it, though the trade's stop (0.07959) held.
+
 Live, a fib dies only once price takes out its origin (the top of a down fib).
 DOGE 1D ran 0.06762 -> 0.1059 straight through both sell boxes of the May fib
 (top 0.11857) and the bot kept that SELL fib; lakky's chart draws the BUY fib
@@ -33,20 +35,19 @@ OUT = Path(__file__).resolve().parent / "out" / "fib_kill"
 LIVE_RUN = fib_engine.run
 
 
-def variant(kill_at_l4, base_at_extreme):
-    if not kill_at_l4:
+KILL_AT = {"L4": None, "stop": 0.66 + 0.25 * 0.11, "old": 0}
+
+
+def variant(rule):
+    """The live engine (fib dies past L4) with the kill line moved: 'stop' = 25% of
+    the box height past L4 (where the fib trade is stopped), 'old' = no L4 kill."""
+    if rule == "L4":
         return LIVE_RUN
     s = inspect.getsource(fib_engine)
-    for old, new in (("            elif l[i] < O:\n                ended = True",
-                      "            elif l[i] < O or l[i] < E - .66 * (E - O):\n                ended = True"),
-                     ("            elif h[i] > O:\n                ended = True",
-                      "            elif h[i] > O or h[i] > E + .66 * (O - E):\n                ended = True")):
+    for old in ("l[i] < E - ZONE1 * (E - O)", "h[i] > E + ZONE1 * (O - E)"):
         assert old in s
-        s = s.replace(old, new)
-    if base_at_extreme:
-        old = "no, not_ = (SQ, None) if SQ is not None else (E, Et)"
-        assert s.count(old) == 2
-        s = s.replace(old, "no, not_ = (E, Et)").replace("if SQ is not None:\n                    not_", "if False:\n                    not_")
+        s = s.replace(old, "False" if rule == "old" else old.replace("ZONE1", str(KILL_AT[rule])))
+    s = s.replace("past_l4 = l[i] >= O", "past_l4 = l[i] >= O").replace("past_l4 = h[i] <= O", "past_l4 = h[i] <= O")
     ns = {}
     exec(compile(s, "fib_engine_variant", "exec"), ns)
     return ns["run"]
@@ -61,10 +62,10 @@ def main() -> None:
     since = pd.Timestamp(args.since, tz=IST).timestamp()
     now = time.time()
     runs = {}
-    for label, kill, ext in (("live: dies only past its top/base", False, False),
-                             ("past L4, new fib from the low/high", True, True),
-                             ("past L4, new fib from last higher low", True, False)):
-        fib_engine.run = variant(kill, ext)
+    for label, rule in (("old: dies only past its top/base", "old"),
+                        ("live: dies past L4", "L4"),
+                        ("dies past the stop (L4 + 25% box)", "stop")):
+        fib_engine.run = variant(rule)
         runs[label] = [t for t in replay_all(now) if t["alert_ts"] >= since]
     fib_engine.run = LIVE_RUN
     rows = []

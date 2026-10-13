@@ -31,28 +31,36 @@ class FibEngineIsTheIndicatorsTests(unittest.TestCase):
         self.assertEqual([round(v, 2) for v in fib_engine.levels(94.89, 110.55)], [105.23, 103.50, 101.94, 100.21])
 
 
-class FibDiesPastL4Tests(unittest.TestCase):
-    """v12.7.10 (lakky, DOGE 1D 2026-10-13): a fib is dead once price trades past
-    its strong box's far edge (L4), and the new fib starts at the old extreme."""
+class FibDiesPastItsStopTests(unittest.TestCase):
+    """v12.7.10-11 (lakky, DOGE 1D 2026-10-13): a fib is dead once price trades past
+    its strong box's stop (25% of the box height past L4), and the new fib starts
+    at the old extreme."""
 
-    def test_doge_1d_is_the_up_fib_on_lakkys_chart(self):
+    def doge(self, extra=None):
         path = pathlib.Path(__file__).resolve().parent / "fixtures" / "doge_usdt_1d_bitunix_300.csv"
-        rows = [line.split(",") for line in path.read_text().splitlines()[1:]]
+        rows = [line.split(",") for line in path.read_text().splitlines()[1:]] + ([extra] if extra else [])
         stamp = [datetime.fromtimestamp(int(r[0]), timezone.utc).strftime("%Y-%m-%d") for r in rows]
         snaps, _ = fib_engine.run(stamp, [float(r[2]) for r in rows], [float(r[3]) for r in rows])
         live = snaps[-1]
+        return live["d"], live["O"], stamp[live["Ot"]], live["E"], stamp[live["Et"]]
+
+    def test_doge_1d_is_the_up_fib_on_lakkys_chart(self):
         # it was the May SELL fib 0.11857 -> 0.06762, though price ran to 0.1059 through both sell boxes
-        self.assertEqual((live["d"], live["O"], stamp[live["Ot"]], live["E"], stamp[live["Et"]]),
-                         (1, 0.06762, "2026-08-01", 0.1059, "2026-09-22"))
-        self.assertEqual([round(v, 5) for v in fib_engine.levels(live["O"], live["E"])],
+        self.assertEqual(self.doge(), (1, 0.06762, "2026-08-01", 0.1059, "2026-09-22"))
+        self.assertEqual([round(v, 5) for v in fib_engine.levels(0.06762, 0.1059)],
                          [0.09288, 0.08867, 0.08485, 0.08064])
 
-    def test_an_up_fib_dies_past_l4_and_the_down_move_starts_at_its_top(self):
-        # base 100 (bar 0), top 200 (bar 5): L4 = 200 - 0.66 * 100 = 134
-        h = [101, 120, 140, 160, 180, 200, 190, 170, 150, 140, 136, 135]
-        l = [100, 110, 130, 150, 170, 190, 180, 160, 145, 137, 135, 133]
+    def test_doge_1d_holds_through_a_wick_under_l4_above_the_stop(self):
+        # Oct 13: low 0.07994, under L4 0.08064, above the stop 0.07959 - v12.7.10 killed the fib here
+        oct13 = ["1791849600", "0.08497", "0.08544", "0.07994", "0.08492"]
+        self.assertEqual(self.doge(oct13), (1, 0.06762, "2026-08-01", 0.1059, "2026-09-22"))
+
+    def test_an_up_fib_dies_past_its_stop_and_the_down_move_starts_at_its_top(self):
+        # base 100 (bar 0), top 200 (bar 5): L4 = 134, stop = 200 - 0.6875 * 100 = 131.25
+        h = [101, 120, 140, 160, 180, 200, 190, 170, 150, 140, 136, 135, 134]
+        l = [100, 110, 130, 150, 170, 190, 180, 160, 145, 137, 135, 132, 131]
         snaps, _ = fib_engine.run([str(i) for i in range(len(h))], h, l, N=2)
-        self.assertEqual([(s["d"], s["O"], s["E"]) for s in snaps[-2:]], [(1, 100, 200), (-1, 200, 133)])
+        self.assertEqual([(s["d"], s["O"], s["E"]) for s in snaps[-2:]], [(1, 100, 200), (-1, 200, 131)])
         self.assertTrue(snaps[-1]["ended"])
 
 
