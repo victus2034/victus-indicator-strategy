@@ -237,7 +237,12 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   0.6875 of the range), not L4: the Oct 13 wick to 0.07994 went under L4 (0.08064), not the stop (0.07959),
   and the BUY fib must hold. Sep 1 - Oct 13 R / % per trade: crypto old +0.19R / +1.82%, L4 -0.00R / +0.10%,
   stop +0.07R / +0.25%; NSE -0.19R / -1.07%, -0.17R / -0.44%, -0.14R / -0.48%.
-  Backtest: `research/fib_kill_backtest.py`, part `fib-kill`. `SEED_VERSION` v9 re-seeds silently.
+  **v12.7.12 (lakky, MAGIC 4H, same day): no flip back on a wick.** A fib born from a stop kill is not
+  stop-killed itself until it makes a new low/high (`fresh` in `fib_engine.run`); only its origin kills it.
+  MAGIC's SELL fib 0.16358 -> 0.09225 (Oct 11) flipped back on the Oct 12 wick to 0.14649, 6 candles later
+  (`tests/fixtures/magic_usdt_4h_bitunix_400.csv`). Sep 1 - Oct 13 R / % per trade: crypto -0.04R / -0.04% ->
+  -0.01R / +0.07%, NSE -0.15R / -0.49% -> -0.14R / -0.59%; a 20-candle no-flip-back gate was the other option.
+  Backtest: `research/fib_kill_backtest.py`, part `fib-kill`. `SEED_VERSION` v10 re-seeds silently.
   `fib_engine.py` is changed here first: copy it back into `fib_reference.py`.
 - **Deeper fib zone only (Lakky, 2026-10-08, Notion 20).** Each fib has two boxes; only Zone 2, the
   deeper one, alerts - the lower box for a buy, the upper for a sell (`FIB_ALERT_ZONES`, crypto and NSE;

@@ -35,19 +35,27 @@ OUT = Path(__file__).resolve().parent / "out" / "fib_kill"
 LIVE_RUN = fib_engine.run
 
 
-KILL_AT = {"L4": None, "stop": 0.66 + 0.25 * 0.11, "old": 0}
-
-
-def variant(rule):
-    """The live engine (fib dies past L4) with the kill line moved: 'stop' = 25% of
-    the box height past L4 (where the fib trade is stopped), 'old' = no L4 kill."""
-    if rule == "L4":
+def variant(rule, gate=20):
+    """The live engine (fib dies past its stop) with the stop kill changed:
+    'old'   = no stop kill (dies only past its top/base);
+    'fresh' = a fib that was itself born from a stop kill cannot be stop-killed
+              until it makes a new low/high (MAGIC 4H, 2026-10-13: the Oct 11 SELL
+              fib flipped back on the Oct 12 wick, 6 candles after it was born);
+    'gate'  = no stop kill within `gate` candles of the last flip."""
+    if rule == "stop":
         return LIVE_RUN
     s = inspect.getsource(fib_engine)
-    for old in ("l[i] < E - ZONE1 * (E - O)", "h[i] > E + ZONE1 * (O - E)"):
-        assert old in s
-        s = s.replace(old, "False" if rule == "old" else old.replace("ZONE1", str(KILL_AT[rule])))
-    s = s.replace("past_l4 = l[i] >= O", "past_l4 = l[i] >= O").replace("past_l4 = h[i] <= O", "past_l4 = h[i] <= O")
+    s = s.replace("    reset = False\n", "    reset = False\n    fresh, F = False, -10**9\n", 1)
+    for old in ("l[i] < E - KILL * (E - O)", "h[i] > E + KILL * (O - E)"):
+        assert s.count("or " + old + ":") == 1
+        cond = {"old": "False", "fresh": f"(not fresh and {old})", "gate": f"(i - F >= {gate} and {old})"}[rule]
+        s = s.replace("or " + old + ":", "or " + cond + ":", 1)
+    for flip in ("-1, no, not_, l[i], i, None, False, None", "1, no, not_, h[i], i, None, False, None"):
+        assert flip in s
+        s = s.replace(flip, flip + "\n                fresh, F = past_stop, i", 1)
+    for ext in ("E, Et, P, reset, rb = h[i], i, None, False, None", "E, Et, P, reset, rb = l[i], i, None, False, None"):
+        assert ext in s
+        s = s.replace(ext, ext + "\n                fresh = False", 1)
     ns = {}
     exec(compile(s, "fib_engine_variant", "exec"), ns)
     return ns["run"]
@@ -63,8 +71,9 @@ def main() -> None:
     now = time.time()
     runs = {}
     for label, rule in (("old: dies only past its top/base", "old"),
-                        ("live: dies past L4", "L4"),
-                        ("dies past the stop (L4 + 25% box)", "stop")):
+                        ("live: dies past the stop", "stop"),
+                        ("stop, but a fresh flip only dies past its top/base", "fresh"),
+                        ("stop, but no flip-back within 20 candles", "gate")):
         fib_engine.run = variant(rule)
         runs[label] = [t for t in replay_all(now) if t["alert_ts"] >= since]
     fib_engine.run = LIVE_RUN

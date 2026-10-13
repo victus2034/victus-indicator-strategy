@@ -39,6 +39,10 @@ Up move (d = +1): O = base (low), E = top (running high),
              (top 0.11857); the chart's fib is 0.06762 -> 0.1059, not the May one.
              v12.7.11: the stop, not L4 - the Oct 13 wick to 0.07994 went under
              L4 (0.08064) but not the stop (0.07959), and the fib held.
+             v12.7.12 (lakky, MAGIC 4H 2026-10-13): a fib born from a stop kill
+             is not stop-killed itself until it makes a new extreme - only its
+             origin kills it. MAGIC's SELL fib 0.16358 -> 0.09225 (Oct 11) was
+             flipped back by the Oct 12 wick to 0.14649, 6 candles later.
 Down move (d = -1) is the exact mirror.
 """
 import csv
@@ -62,6 +66,7 @@ def run(ist, h, l, N=10, restart=RESTART):
     O, Ot, E, Et = l[0], 0, h[0], 0
     P = Pt = None
     reset = False
+    fresh = False                      # v12.7.12: born from a stop kill, no new low/high yet
     rb = None                          # bar of the swing that restarted the pullback leg
     SE, SEb, SQ = None, None, None     # v12.3: counter-extreme since E, and the swing after it
     snaps = [dict(ist=ist[0], d=d, O=O, Ot=0, E=E, Et=0, P=None, Pt=None, ended=False)]
@@ -111,7 +116,8 @@ def run(ist, h, l, N=10, restart=RESTART):
                     log.append((ist[i], 'top %g crossed, base %g -> %g (%s)' % (E, O, P, ist[Pt])))
                     O, Ot = P, Pt
                 E, Et, P, reset, rb = h[i], i, None, False, None
-            elif l[i] < O or l[i] < E - KILL * (E - O):
+                fresh = False
+            elif l[i] < O or (not fresh and l[i] < E - KILL * (E - O)):
                 ended = True
                 past_stop = l[i] >= O
                 log.append((ist[i], '%s %g broken, up fib dead, down from %g (%s)'
@@ -121,6 +127,7 @@ def run(ist, h, l, N=10, restart=RESTART):
                     not_ = max(k for k in range(SEb + 1, i) if h[k] == SQ)
                     log.append((ist[i], '  down fib starts at last lower high %g (%s), not %g' % (SQ, ist[not_], E)))
                 d, O, Ot, E, Et, P, reset, rb = -1, no, not_, l[i], i, None, False, None
+                fresh = past_stop
             elif P is not None and l[i] < P:
                 P = None
         else:
@@ -139,7 +146,8 @@ def run(ist, h, l, N=10, restart=RESTART):
                     log.append((ist[i], 'bottom %g crossed, top %g -> %g (%s)' % (E, O, P, ist[Pt])))
                     O, Ot = P, Pt
                 E, Et, P, reset, rb = l[i], i, None, False, None
-            elif h[i] > O or h[i] > E + KILL * (O - E):
+                fresh = False
+            elif h[i] > O or (not fresh and h[i] > E + KILL * (O - E)):
                 ended = True
                 past_stop = h[i] <= O
                 log.append((ist[i], '%s %g broken, down fib dead, up from %g (%s)'
@@ -149,6 +157,7 @@ def run(ist, h, l, N=10, restart=RESTART):
                     not_ = max(k for k in range(SEb + 1, i) if l[k] == SQ)
                     log.append((ist[i], '  up fib starts at last higher low %g (%s), not %g' % (SQ, ist[not_], E)))
                 d, O, Ot, E, Et, P, reset, rb = 1, no, not_, h[i], i, None, False, None
+                fresh = past_stop
             elif P is not None and h[i] > P:
                 P = None
         if Et == i:                    # new top/bottom (or flip): counter-extreme starts over
