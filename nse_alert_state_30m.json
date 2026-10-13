@@ -1,15 +1,16 @@
 {
   "_noise_control": {
-    "PATANJALI.NS|30m|short|363|364.5": 1791863724.2892838,
     "GICRE.NS|30m|short|320.75|321.45": 1791863817.683916,
     "GESHIP.NS|30m|long|1466|1469.8": 1791864403.4407823,
     "ELGIEQUIP.NS|30m|long|568.5|572.85": 1791864584.1881745,
     "MAHABANK.NS|30m|short|84.05|84.13": 1791864853.5707626,
     "CAMS.NS|30m|short|703.3|705.45": 1791864942.7051635,
-    "SBICARD.NS|30m|short|569.4|570.95": 1791865386.5386436
+    "SBICARD.NS|30m|short|569.4|570.95": 1791865386.5386436,
+    "PERSISTENT.NS|30m|short|5898|5910": 1791865565.605531,
+    "COFORGE.NS|30m|short|1890.16|1890.3": 1791865565.919892
   },
   "__last_scan_started__": {
-    "30m": 1791865374.4662411
+    "30m": 1791865554.4768808
   },
   "ELGIEQUIP.NS|demand|568.5000|572.8500": {
     "in_zone": true,
@@ -25,5 +26,15 @@
     "in_zone": true,
     "last_alert_at": 1791865386.5386436,
     "last_attempt_at": 1791865386.5386436
+  },
+  "PERSISTENT.NS|supply|5898.0000|5910.0000": {
+    "in_zone": true,
+    "last_alert_at": 1791865565.605531,
+    "last_attempt_at": 1791865565.605531
+  },
+  "COFORGE.NS|supply|1890.1641|1890.3000": {
+    "in_zone": true,
+    "last_alert_at": 1791865565.919892,
+    "last_attempt_at": 1791865565.919892
   }
 }
