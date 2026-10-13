@@ -2,23 +2,23 @@
 
 Live fib rules otherwise (deeper zone, S/R stop, 2R + BE, entry not reached this candle), net after fees. R and % per trade and in total (% = R x the trade's stop distance).
 
-| market   | tf   | rule                              |   alerts |   trades |   win_% |   R_total |   R_per_trade |   %_total |   %_per_trade |
-|:---------|:-----|:----------------------------------|---------:|---------:|--------:|----------:|--------------:|----------:|--------------:|
-| crypto   | 4H   | old: dies only past its top/base  |       59 |       45 |      53 |       1.8 |         0.04  |      30.2 |         0.671 |
-| crypto   | 4H   | live: dies past L4                |      129 |       91 |      50 |      -7.6 |        -0.084 |     -28.3 |        -0.311 |
-| crypto   | 4H   | dies past the stop (L4 + 25% box) |      111 |       79 |      53 |      -2.6 |        -0.033 |     -20.5 |        -0.259 |
-| crypto   | 1D+  | old: dies only past its top/base  |       13 |       10 |      88 |       8.8 |         0.882 |      70   |         6.998 |
-| crypto   | 1D+  | live: dies past L4                |       28 |       22 |      69 |       7.3 |         0.333 |      39.6 |         1.801 |
-| crypto   | 1D+  | dies past the stop (L4 + 25% box) |       22 |       18 |      82 |       9.7 |         0.538 |      44.2 |         2.455 |
-| crypto   | all  | old: dies only past its top/base  |       72 |       55 |      61 |      10.6 |         0.193 |     100.2 |         1.822 |
-| crypto   | all  | live: dies past L4                |      157 |      113 |      53 |      -0.3 |        -0.003 |      11.4 |         0.101 |
-| crypto   | all  | dies past the stop (L4 + 25% box) |      133 |       97 |      58 |       7.1 |         0.073 |      23.7 |         0.245 |
-| nse      | 4H   | old: dies only past its top/base  |      117 |       85 |      41 |     -13.5 |        -0.159 |     -41   |        -0.483 |
-| nse      | 4H   | live: dies past L4                |      418 |      303 |      43 |     -62.5 |        -0.206 |     -98   |        -0.324 |
-| nse      | 4H   | dies past the stop (L4 + 25% box) |      342 |      245 |      42 |     -46.7 |        -0.191 |     -83.4 |        -0.34  |
-| nse      | 1D+  | old: dies only past its top/base  |       91 |       60 |      36 |     -14   |        -0.234 |    -114.1 |        -1.902 |
-| nse      | 1D+  | live: dies past L4                |      252 |      186 |      45 |     -21.9 |        -0.118 |    -118.2 |        -0.636 |
-| nse      | 1D+  | dies past the stop (L4 + 25% box) |      215 |      150 |      47 |      -9.5 |        -0.063 |    -106.1 |        -0.707 |
-| nse      | all  | old: dies only past its top/base  |      208 |      145 |      39 |     -27.5 |        -0.19  |    -155.2 |        -1.07  |
-| nse      | all  | live: dies past L4                |      670 |      489 |      44 |     -84.4 |        -0.173 |    -216.3 |        -0.442 |
-| nse      | all  | dies past the stop (L4 + 25% box) |      557 |      395 |      44 |     -56.2 |        -0.142 |    -189.5 |        -0.48  |
+| market   | tf   | rule                                              |   alerts |   trades |   win_% |   R_total |   R_per_trade |   %_total |   %_per_trade |
+|:---------|:-----|:--------------------------------------------------|---------:|---------:|--------:|----------:|--------------:|----------:|--------------:|
+| crypto   | 4H   | old: dies only past its top/base                  |       98 |       76 |      52 |       1   |         0.013 |      48.9 |         0.644 |
+| crypto   | 4H   | live: dies past the stop                          |      205 |      154 |      48 |     -18.1 |        -0.118 |     -44.1 |        -0.286 |
+| crypto   | 4H   | past the stop, once the low/high stood 10 candles |      174 |      127 |      47 |     -13   |        -0.102 |     -38.6 |        -0.304 |
+| crypto   | 1D+  | old: dies only past its top/base                  |       26 |       21 |      77 |       8.8 |         0.417 |      53.2 |         2.532 |
+| crypto   | 1D+  | live: dies past the stop                          |       53 |       45 |      61 |       9.3 |         0.207 |      36.6 |         0.813 |
+| crypto   | 1D+  | past the stop, once the low/high stood 10 candles |       46 |       37 |      68 |      11.5 |         0.312 |      58.8 |         1.59  |
+| crypto   | all  | old: dies only past its top/base                  |      124 |       97 |      57 |       9.7 |         0.1   |     102.1 |         1.053 |
+| crypto   | all  | live: dies past the stop                          |      258 |      199 |      51 |      -8.8 |        -0.044 |      -7.5 |        -0.038 |
+| crypto   | all  | past the stop, once the low/high stood 10 candles |      220 |      164 |      52 |      -1.4 |        -0.009 |      20.2 |         0.123 |
+| nse      | 4H   | old: dies only past its top/base                  |      119 |       87 |      42 |     -13.5 |        -0.155 |     -41   |        -0.471 |
+| nse      | 4H   | live: dies past the stop                          |      341 |      244 |      42 |     -48.6 |        -0.199 |     -86.8 |        -0.356 |
+| nse      | 4H   | past the stop, once the low/high stood 10 candles |      289 |      208 |      45 |     -29.6 |        -0.142 |     -69.7 |        -0.335 |
+| nse      | 1D+  | old: dies only past its top/base                  |       91 |       60 |      36 |     -14   |        -0.234 |    -114.1 |        -1.902 |
+| nse      | 1D+  | live: dies past the stop                          |      215 |      150 |      47 |      -9.5 |        -0.063 |    -106.1 |        -0.707 |
+| nse      | 1D+  | past the stop, once the low/high stood 10 candles |      171 |      118 |      41 |     -14.3 |        -0.121 |    -109.7 |        -0.93  |
+| nse      | all  | old: dies only past its top/base                  |      210 |      147 |      39 |     -27.5 |        -0.187 |    -155.1 |        -1.055 |
+| nse      | all  | live: dies past the stop                          |      556 |      394 |      44 |     -58.1 |        -0.147 |    -192.9 |        -0.49  |
+| nse      | all  | past the stop, once the low/high stood 10 candles |      460 |      326 |      44 |     -43.9 |        -0.135 |    -179.4 |        -0.55  |
