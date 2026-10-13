@@ -78,7 +78,8 @@ RETRY_BACKOFF_SECONDS = 30 * 60   # a failed Discord send is not retried sooner 
 # v8 (2026-10-13): a fib dies once price trades past L4 (fib_engine, v12.7.10) -
 # many live fibs get a new base/top.
 # v9 (2026-10-13): past the strong box's stop, not L4 (v12.7.11).
-SEED_VERSION = "v9"
+# v10 (2026-10-13): a fib just born from a stop kill is not stop-killed (v12.7.12).
+SEED_VERSION = "v10"
 # Bitunix candles draw different fibs and lines, each a new key: turning the
 # source on re-seeds silently rather than posting every level already in range.
 if bitunix_data.CRYPTO_CANDLE_SOURCE == "bitunix":
