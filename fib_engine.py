@@ -31,6 +31,12 @@ Up move (d = +1): O = base (low), E = top (running high),
              highest swing high CONFIRMED after the lowest low since the top
              (where the final drop started - v12.3, XAUUSD 4318.68), or E if
              there is none.
+  low  < L4: v12.7.10 (lakky, DOGE 1D 2026-10-13) - price traded past the far
+             edge of the strong box (0.66 of the range down from the top) before
+             taking out the base: the fib is dead too, and the down move starts
+             at the top E itself. DOGE 1D ran 0.06762 -> 0.1059 through both sell
+             boxes of the May fib (top 0.11857); the chart's fib is 0.06762 ->
+             0.1059, not the May one.
 Down move (d = -1) is the exact mirror.
 """
 import csv
@@ -102,11 +108,13 @@ def run(ist, h, l, N=10, restart=RESTART):
                     log.append((ist[i], 'top %g crossed, base %g -> %g (%s)' % (E, O, P, ist[Pt])))
                     O, Ot = P, Pt
                 E, Et, P, reset, rb = h[i], i, None, False, None
-            elif l[i] < O:
+            elif l[i] < O or l[i] < E - ZONE1 * (E - O):
                 ended = True
-                log.append((ist[i], 'base %g broken, up fib dead, down from %g (%s)' % (O, E, ist[Et])))
-                no, not_ = (SQ, None) if SQ is not None else (E, Et)
-                if SQ is not None:
+                past_l4 = l[i] >= O
+                log.append((ist[i], '%s %g broken, up fib dead, down from %g (%s)'
+                            % ('L4' if past_l4 else 'base', E - ZONE1 * (E - O) if past_l4 else O, E, ist[Et])))
+                no, not_ = (SQ, None) if SQ is not None and not past_l4 else (E, Et)
+                if not_ is None:
                     not_ = max(k for k in range(SEb + 1, i) if h[k] == SQ)
                     log.append((ist[i], '  down fib starts at last lower high %g (%s), not %g' % (SQ, ist[not_], E)))
                 d, O, Ot, E, Et, P, reset, rb = -1, no, not_, l[i], i, None, False, None
@@ -128,11 +136,13 @@ def run(ist, h, l, N=10, restart=RESTART):
                     log.append((ist[i], 'bottom %g crossed, top %g -> %g (%s)' % (E, O, P, ist[Pt])))
                     O, Ot = P, Pt
                 E, Et, P, reset, rb = l[i], i, None, False, None
-            elif h[i] > O:
+            elif h[i] > O or h[i] > E + ZONE1 * (O - E):
                 ended = True
-                log.append((ist[i], 'top %g broken, down fib dead, up from %g (%s)' % (O, E, ist[Et])))
-                no, not_ = (SQ, None) if SQ is not None else (E, Et)
-                if SQ is not None:
+                past_l4 = h[i] <= O
+                log.append((ist[i], '%s %g broken, down fib dead, up from %g (%s)'
+                            % ('L4' if past_l4 else 'top', E + ZONE1 * (O - E) if past_l4 else O, E, ist[Et])))
+                no, not_ = (SQ, None) if SQ is not None and not past_l4 else (E, Et)
+                if not_ is None:
                     not_ = max(k for k in range(SEb + 1, i) if l[k] == SQ)
                     log.append((ist[i], '  up fib starts at last higher low %g (%s), not %g' % (SQ, ist[not_], E)))
                 d, O, Ot, E, Et, P, reset, rb = 1, no, not_, h[i], i, None, False, None

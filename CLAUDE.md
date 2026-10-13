@@ -224,6 +224,13 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   through a line, 0% twins on the chart (`research/out/trendline_anchor/`). `tests/test_trendline_anchor.py`
   holds the HYPE 1D and 4h lines (Bitunix fixtures) and a transcription of the Pine v12.6 6b loop -
   change both sides together. `SEED_VERSION` v5 re-seeds silently.
+- **A fib dies past L4 (lakky, 2026-10-13, DOGE 1D) - v12.7.10.** Besides price taking out its base/top,
+  a fib is dead once price trades past its strong box's far edge (L4, 0.66 of the range from the extreme);
+  the new fib starts at the old extreme itself (not the last higher low / lower high). DOGE 1D ran
+  0.06762 -> 0.1059 through both sell boxes of the May fib (top 0.11857) and the bot kept that SELL fib;
+  now it is the BUY fib 0.06762 -> 0.1059 lakky drew (`tests/fixtures/doge_usdt_1d_bitunix_300.csv`).
+  Backtest: `research/fib_kill_backtest.py`, part `fib-kill`. `SEED_VERSION` v8 re-seeds silently.
+  `fib_engine.py` is changed here first: copy it back into `fib_reference.py`.
 - **Deeper fib zone only (Lakky, 2026-10-08, Notion 20).** Each fib has two boxes; only Zone 2, the
   deeper one, alerts - the lower box for a buy, the upper for a sell (`FIB_ALERT_ZONES`, crypto and NSE;
   the history backtest replays the same rule). Sep 1 - Oct 8 (`research/fib_zone_preference.py`): crypto
