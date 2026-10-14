@@ -61897,6 +61897,7 @@
     "0fa20e4b07303318": "filled",
     "0fa65dc7bb4c7448": "filled",
     "0fcbdc77793f511d": "filled",
+    "1000PEPEUSD|30m|long|0.0040534|0.00401615": "filled",
     "103c026525e763f8": "filled",
     "10498d3586f2a44b": "filled",
     "106b21b05f85340a": "filled",
@@ -62780,6 +62781,7 @@
     "AVAXUSD|30m|short|8.04|8.06": "filled",
     "AVAXUSD|30m|short|8.144|8.219": "filled",
     "AVAXUSD|4h|long|10.5155|10.4111": "filled",
+    "AVAXUSD|4h|long|9.83405|9.73649": "filled",
     "AVAXUSD|4h|short|11.7024|11.8194": "filled",
     "AVAXUSD|4h|short|8.118|8.368": "filled",
     "AVAXUSD|4h|short|8.132|8.3845": "filled",
@@ -64311,6 +64313,24 @@
     "ffb4661b7d04cd46": "filled"
   },
   "open": {
+    "1000PEPEUSD|30m|long|0.0040534|0.00401615": {
+      "alert_time": "2026-10-14T19:42:35.347986+05:30",
+      "entry": 0.0040534,
+      "entry_time": "2026-10-14T19:45:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 10,
+      "risk": 3.7250000000000824e-05,
+      "side": "long",
+      "stop": 0.00401615,
+      "stream": "live",
+      "symbol": "1000PEPEUSD",
+      "target_1": 0.004090650000000001,
+      "target_2": 0.004127900000000002,
+      "target_half": 0.004072025000000001,
+      "timeframe": "30m"
+    },
     "27e4d32d014fe354": {
       "alert_time": "2026-09-16T13:51:33.319458+05:30",
       "entry": 497.07,
@@ -64364,6 +64384,24 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
+    },
+    "AVAXUSD|4h|long|9.83405|9.73649": {
+      "alert_time": "2026-10-14T19:42:47.088138+05:30",
+      "entry": 9.834048000000001,
+      "entry_time": "2026-10-14T19:45:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 7,
+      "risk": 0.09756000000000142,
+      "side": "long",
+      "stop": 9.736488,
+      "stream": "live",
+      "symbol": "AVAXUSD",
+      "target_1": 9.931608000000002,
+      "target_2": 10.029168000000004,
+      "target_half": 9.882828000000002,
+      "timeframe": "4h"
     },
     "TSLAXUSD|30m|long|368.24|364.715": {
       "alert_time": "2026-10-14T19:12:47.188142+05:30",
