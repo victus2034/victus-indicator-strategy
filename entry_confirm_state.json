@@ -225,6 +225,10 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "EXIDEIND.NS|1w|long|381.23|352.437": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "FINCABLES.NS|1d|long|1435.04|1408.1": {
     "reached_entry": false,
     "stopped_out": false
@@ -427,6 +431,12 @@
   },
   "LTTS.NS|1d|short|3604.29|3652.7": {
     "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
+  "LTTS.NS|1d|short|3613.3|3652.7": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "M&MFIN.NS|1M|long|316.683|292.104": {
@@ -479,8 +489,8 @@
     "stopped_out": true
   },
   "NLCINDIA.NS|1d|short|256.9|260": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "NLCINDIA.NS|1w|long|249.846|246.5": {
@@ -933,6 +943,7 @@
   "_level_ready|LTCUSD|4h|long|66.1349|65.4788": 1791390702.133739,
   "_level_ready|LTCUSD|4h|short|54.9|55.4": 1789701967.437765,
   "_level_ready|LTCUSD|4h|short|60.754|61.3615": 1789990565.578549,
+  "_level_ready|LTTS.NS|1d|short|3604.29|3652.7": 1791968802.699425,
   "_level_ready|LTTS.NS|1w|long|3197.89|3117.95": 1791518192.370228,
   "_level_ready|M&MFIN.NS|1M|long|316.683|292.104": 1791776795.761218,
   "_level_ready|M&MFIN.NS|1M|long|316.683|307.835": 1791517599.357562,
@@ -1429,6 +1440,7 @@
   "_ready|LTCUSD|1d": 1791945705.675274,
   "_ready|LTCUSD|30m": 1790794287.095202,
   "_ready|LTCUSD|4h": 1791390702.133739,
+  "_ready|LTTS.NS|1d": 1791968802.699425,
   "_ready|LTTS.NS|1w": 1791518192.370228,
   "_ready|M&MFIN.NS|1M": 1791776795.761218,
   "_ready|MAHABANK.NS|1d": 1791865000.44859,
