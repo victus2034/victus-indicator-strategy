@@ -174,11 +174,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "CGCL.NS|1d|long|244.804|242.52": {
-    "reached_entry": true,
-    "stage": 2,
-    "stopped_out": false
-  },
   "CHALET.NS|1M|long|835.627|774.034": {
     "reached_entry": true,
     "stage": 2,
@@ -251,7 +246,7 @@
   },
   "FORCEMOT.NS|1d|short|17230|17388": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "FSL.NS|1d|short|299.037|312.134": {
@@ -309,11 +304,6 @@
   "HBLENGINE.NS|1M|long|727.65|629.062": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
-  },
-  "HBLENGINE.NS|1d|long|730.9|694.875": {
-    "reached_entry": true,
-    "stage": 3,
     "stopped_out": false
   },
   "HBLENGINE.NS|1w|long|727.65|629.062": {
@@ -409,10 +399,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "JYOTICNC.NS|1d|long|1033.99|1026": {
-    "reached_entry": true,
-    "stopped_out": true
-  },
   "KIMS.NS|1w|long|702.79|663.987": {
     "reached_entry": true,
     "stage": 2,
@@ -428,6 +414,10 @@
     "stopped_out": true
   },
   "LICHSGFIN.NS|1M|long|496.861|485.45": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "LICHSGFIN.NS|1d|long|527.728|514.809": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -480,6 +470,7 @@
   },
   "MOTILALOFS.NS|1d|short|1050|1062.3": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "MPHASIS.NS|1d|short|2428.25|2461.1": {
@@ -1050,6 +1041,7 @@
   "_level_ready|METAXUSD|30m|short|746.25|746.75": 1791210992.756858,
   "_level_ready|METAXUSD|30m|short|746.85|747.725": 1791267698.622435,
   "_level_ready|METAXUSD|4h|long|725.95|722.263": 1791380798.231245,
+  "_level_ready|MOTILALOFS.NS|1d|short|1050|1062.3": 1792037796.781654,
   "_level_ready|MPHASIS.NS|1d|short|2339.95|2438.93": 1791517599.357562,
   "_level_ready|MPHASIS.NS|1d|short|2428.25|2461.1": 1791863502.097245,
   "_level_ready|MPHASIS.NS|1d|short|2443.9|2482": 1791865303.128486,
@@ -1546,6 +1538,7 @@
   "_ready|METAXUSD|30m": 1791431198.043723,
   "_ready|METAXUSD|4h": 1791380798.231245,
   "_ready|MNT/USDT|30m": 1789480563.544585,
+  "_ready|MOTILALOFS.NS|1d": 1792037796.781654,
   "_ready|MPHASIS.NS|1d": 1791865303.128486,
   "_ready|MRF.NS|1M": 1791517599.357562,
   "_ready|MRF.NS|1w": 1791517599.357562,
