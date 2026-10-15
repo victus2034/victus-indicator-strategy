@@ -3,7 +3,6 @@
     "M&MFIN.NS|30m|long|315|317.52": 1792037827.5053968,
     "FINCABLES.NS|30m|long|1412.6|1423.2": 1792038114.2460048,
     "PAGEIND.NS|30m|long|36330|36380": 1792038287.3825915,
-    "NMDC.NS|30m|long|70.12|70.48": 1792037559.2981899,
     "BHARTIHEXA.NS|30m|short|1616.82|1616.9": 1792037648.769596,
     "KEI.NS|30m|short|4717.4|4728": 1792037737.7085135,
     "AEGISVOPAK.NS|30m|long|274.1|276.25": 1792037737.861751,
@@ -14,10 +13,12 @@
     "HSCL.NS|30m|short|665.05|669.1": 1792038647.0741606,
     "ANTHEM.NS|30m|long|830.6|835.35": 1792039006.6634274,
     "NAUKRI.NS|30m|short|1242.46|1252.4": 1792039309.6567023,
-    "GODREJPROP.NS|30m|short|1618.5|1620": 1792039309.870771
+    "GODREJPROP.NS|30m|short|1618.5|1620": 1792039309.870771,
+    "GICRE.NS|30m|short|322.1|322.5": 1792039396.071143,
+    "NAVINFLUOR.NS|30m|long|8312|8320": 1792039396.3394933
   },
   "__last_scan_started__": {
-    "30m": 1792039290.458182
+    "30m": 1792039380.4690962
   },
   "PAGEIND.NS|demand|36330.0000|36380.0000": {
     "in_zone": true,
@@ -29,11 +30,6 @@
     "last_alert_at": 1792037648.769596,
     "last_attempt_at": 1792037648.769596
   },
-  "FINCABLES.NS|demand|1412.6000|1423.2000": {
-    "in_zone": true,
-    "last_alert_at": 1792038114.2460048,
-    "last_attempt_at": 1792038114.2460048
-  },
   "PETRONET.NS|supply|293.5000|295.4500": {
     "in_zone": true,
     "last_alert_at": 1792038377.0706923,
@@ -44,14 +40,19 @@
     "last_alert_at": 1792039006.6634274,
     "last_attempt_at": 1792039006.6634274
   },
-  "NAUKRI.NS|supply|1242.4603|1252.4000": {
-    "in_zone": true,
-    "last_alert_at": 1792039309.6567023,
-    "last_attempt_at": 1792039309.6567023
-  },
   "GODREJPROP.NS|supply|1618.5000|1620.0000": {
     "in_zone": true,
     "last_alert_at": 1792039309.870771,
     "last_attempt_at": 1792039309.870771
+  },
+  "GICRE.NS|supply|322.1000|322.5000": {
+    "in_zone": true,
+    "last_alert_at": 1792039396.071143,
+    "last_attempt_at": 1792039396.071143
+  },
+  "NAVINFLUOR.NS|demand|8312.0000|8320.0000": {
+    "in_zone": true,
+    "last_alert_at": 1792039396.3394933,
+    "last_attempt_at": 1792039396.3394933
   }
 }
