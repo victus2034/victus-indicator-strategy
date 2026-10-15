@@ -1,6 +1,5 @@
 {
   "_noise_control": {
-    "M&MFIN.NS|30m|long|315|317.52": 1792037827.5053968,
     "FINCABLES.NS|30m|long|1412.6|1423.2": 1792038114.2460048,
     "PAGEIND.NS|30m|long|36330|36380": 1792038287.3825915,
     "FEDERALBNK.NS|30m|short|335.15|335.4": 1792038113.352986,
@@ -14,10 +13,11 @@
     "GICRE.NS|30m|short|322.1|322.5": 1792039396.071143,
     "NAVINFLUOR.NS|30m|long|8312|8320": 1792039396.3394933,
     "KIMS.NS|30m|long|685.35|690.55": 1792039484.5209217,
-    "PINELABS.NS|30m|short|170.55|171.19": 1792039574.2514257
+    "PINELABS.NS|30m|short|170.55|171.19": 1792039574.2514257,
+    "NETWEB.NS|30m|long|4752|4790.02": 1792039753.9241438
   },
   "__last_scan_started__": {
-    "30m": 1792039559.75211
+    "30m": 1792039739.797249
   },
   "PAGEIND.NS|demand|36330.0000|36380.0000": {
     "in_zone": true,
@@ -28,11 +28,6 @@
     "in_zone": true,
     "last_alert_at": 1792038377.0706923,
     "last_attempt_at": 1792038377.0706923
-  },
-  "ANTHEM.NS|demand|830.6000|835.3500": {
-    "in_zone": true,
-    "last_alert_at": 1792039006.6634274,
-    "last_attempt_at": 1792039006.6634274
   },
   "GODREJPROP.NS|supply|1618.5000|1620.0000": {
     "in_zone": true,
@@ -49,14 +44,14 @@
     "last_alert_at": 1792039396.3394933,
     "last_attempt_at": 1792039396.3394933
   },
-  "KIMS.NS|demand|685.3500|690.5500": {
-    "in_zone": true,
-    "last_alert_at": 1792039484.5209217,
-    "last_attempt_at": 1792039484.5209217
-  },
   "PINELABS.NS|supply|170.5500|171.1900": {
     "in_zone": true,
     "last_alert_at": 1792039574.2514257,
     "last_attempt_at": 1792039574.2514257
+  },
+  "NETWEB.NS|demand|4752.0000|4790.0160": {
+    "in_zone": true,
+    "last_alert_at": 1792039753.9241438,
+    "last_attempt_at": 1792039753.9241438
   }
 }
