@@ -1,13 +1,13 @@
 {
   "_noise_control": {
-    "AARTIIND.NS|30m|short|502.15|504.8": 1792044127.600206,
     "NEULANDLAB.NS|30m|long|19825|19890": 1792044213.615659,
     "AIAENG.NS|30m|long|3663.1|3692.4": 1792044753.962838,
     "PAGEIND.NS|30m|long|36065|36175": 1792045852.6022024,
-    "NUVAMA.NS|30m|long|1712.9|1725.8": 1792045852.7879539
+    "NUVAMA.NS|30m|long|1712.9|1725.8": 1792045852.7879539,
+    "HSCL.NS|30m|short|665.05|669.1": 1792045943.386558
   },
   "__last_scan_started__": {
-    "30m": 1792045839.895309
+    "30m": 1792045929.816072
   },
   "NEULANDLAB.NS|demand|19825.0000|19890.0000": {
     "in_zone": true,
@@ -28,5 +28,10 @@
     "in_zone": true,
     "last_alert_at": 1792045852.7879539,
     "last_attempt_at": 1792045852.7879539
+  },
+  "HSCL.NS|supply|665.0500|669.1000": {
+    "in_zone": true,
+    "last_alert_at": 1792045943.386558,
+    "last_attempt_at": 1792045943.386558
   }
 }
