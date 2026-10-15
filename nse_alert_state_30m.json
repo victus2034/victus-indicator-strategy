@@ -1,14 +1,16 @@
 {
   "_noise_control": {
-    "NUVAMA.NS|30m|long|1712.9|1725.8": 1792049558.2536473,
     "FLUOROCHEM.NS|30m|long|4501.8|4509.7": 1792050091.6553247,
     "JSWINFRA.NS|30m|long|331.55|333.2": 1792050173.0100799,
     "NAUKRI.NS|30m|short|1242.46|1252.4": 1792050443.514421,
     "JYOTICNC.NS|30m|long|979.05|980": 1792050623.2809436,
-    "APARINDS.NS|30m|long|16969|17104.8": 1792051329.1302495
+    "APARINDS.NS|30m|long|16969|17104.8": 1792051329.1302495,
+    "NUVAMA.NS|30m|long|1712.9|1725.8": 1792051683.8623393,
+    "AARTIIND.NS|30m|short|502.15|504.8": 1792051684.0438976,
+    "CAMS.NS|30m|short|708.4|710": 1792051684.221411
   },
   "__last_scan_started__": {
-    "30m": 1792051313.7158253
+    "30m": 1792051671.8232443
   },
   "FLUOROCHEM.NS|demand|4501.7998|4509.7002": {
     "in_zone": true,
@@ -24,5 +26,20 @@
     "in_zone": true,
     "last_alert_at": 1792051329.1302495,
     "last_attempt_at": 1792051329.1302495
+  },
+  "NUVAMA.NS|demand|1712.9000|1725.8000": {
+    "in_zone": true,
+    "last_alert_at": 1792051683.8623393,
+    "last_attempt_at": 1792051683.8623393
+  },
+  "AARTIIND.NS|supply|502.1500|504.8000": {
+    "in_zone": true,
+    "last_alert_at": 1792051684.0438976,
+    "last_attempt_at": 1792051684.0438976
+  },
+  "CAMS.NS|supply|708.4000|710.0000": {
+    "in_zone": true,
+    "last_alert_at": 1792051684.221411,
+    "last_attempt_at": 1792051684.221411
   }
 }
