@@ -105,8 +105,8 @@
     "stopped_out": false
   },
   "BANKINDIA.NS|1w|long|129.79|117.647": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "BEML.NS|1M|short|1991.44|2188": {
@@ -119,7 +119,7 @@
   },
   "BEML.NS|1d|long|1963.82|1942": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "BEML.NS|1w|short|2037.95|2253.69": {
@@ -396,8 +396,8 @@
     "stopped_out": true
   },
   "JSWINFRA.NS|1d|long|339.53|330.538": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "JUBLFOOD.NS|1M|long|454.928|339.159": {
@@ -463,6 +463,7 @@
   },
   "M&MFIN.NS|1M|long|316.683|292.104": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "MAHABANK.NS|1d|short|84.14|84.88": {
@@ -546,7 +547,8 @@
     "stopped_out": true
   },
   "OBEROIRLTY.NS|1d|long|1679.01|1660": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "OGNUSD|1d|long|0.031879|0.0264587": {
@@ -609,6 +611,11 @@
   },
   "RVNL.NS|1d|long|190.605|186": {
     "reached_entry": false,
+    "stopped_out": false
+  },
+  "SOXLBUSD|1d|long|103.197|101.31": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "TAOUSD|1d|long|270.832|253.277": {
@@ -1021,7 +1028,7 @@
   "_level_ready|LTCUSD|4h|short|60.754|61.3615": 1789990565.578549,
   "_level_ready|LTTS.NS|1d|short|3604.29|3652.7": 1792036000.300237,
   "_level_ready|LTTS.NS|1w|long|3197.89|3117.95": 1791518192.370228,
-  "_level_ready|M&MFIN.NS|1M|long|316.683|292.104": 1791970600.36728,
+  "_level_ready|M&MFIN.NS|1M|long|316.683|292.104": 1792037507.522088,
   "_level_ready|M&MFIN.NS|1M|long|316.683|307.835": 1791517599.357562,
   "_level_ready|MAHABANK.NS|1d|long|84.435|81.9187": 1791776795.761218,
   "_level_ready|MAHABANK.NS|1d|short|84.42|85.6863": 1791520595.664992,
@@ -1108,6 +1115,7 @@
   "_level_ready|NVDAXUSD|4h|short|235.813|238.172": 1790944300.723606,
   "_level_ready|NVDAXUSD|4h|short|236.5|238.125": 1791207110.609027,
   "_level_ready|NVDAXUSD|4h|short|239.286|241.679": 1791254797.771908,
+  "_level_ready|OBEROIRLTY.NS|1d|long|1679.01|1660": 1792037507.522088,
   "_level_ready|OBEROIRLTY.NS|1d|long|1679.69|1654.49": 1791517890.620179,
   "_level_ready|OGNUSD|1d|long|0.031879|0.0264587": 1791981396.099046,
   "_level_ready|OLAELEC.NS|1d|long|34.31|32.9834": 1791518192.370228,
@@ -1204,6 +1212,7 @@
   "_level_ready|SOLUSD|30m|short|122.314|123.112": 1790495162.943965,
   "_level_ready|SOLUSD|4h|short|104.973|106.023": 1789704356.64535,
   "_level_ready|SOLUSD|4h|short|109.911|110.816": 1789742770.728918,
+  "_level_ready|SOXLBUSD|1d|long|103.197|101.31": 1792037507.522088,
   "_level_ready|SOXLBUSD|30m|long|135.7|135.638": 1790243474.552715,
   "_level_ready|SOXLBUSD|30m|long|140.8|139.8": 1790233878.323554,
   "_level_ready|SOXLBUSD|30m|long|144.55|143.238": 1790864786.632968,
@@ -1531,7 +1540,7 @@
   "_ready|LTCUSD|4h": 1791390702.133739,
   "_ready|LTTS.NS|1d": 1792036000.300237,
   "_ready|LTTS.NS|1w": 1791518192.370228,
-  "_ready|M&MFIN.NS|1M": 1791970600.36728,
+  "_ready|M&MFIN.NS|1M": 1792037507.522088,
   "_ready|MAHABANK.NS|1d": 1791865000.44859,
   "_ready|MANAPPURAM.NS|1w": 1791517599.357562,
   "_ready|METAXUSD|30m": 1791431198.043723,
@@ -1556,7 +1565,7 @@
   "_ready|NVDAXUSD|30m": 1791438390.353918,
   "_ready|NVDAXUSD|4h": 1791254797.771908,
   "_ready|O/USDT|30m": 1789481164.028485,
-  "_ready|OBEROIRLTY.NS|1d": 1791517890.620179,
+  "_ready|OBEROIRLTY.NS|1d": 1792037507.522088,
   "_ready|OGNUSD|1d": 1791981396.099046,
   "_ready|OLAELEC.NS|1d": 1791518192.370228,
   "_ready|ONDOUSD|1d": 1792033314.358934,
@@ -1588,6 +1597,7 @@
   "_ready|SOLUSD|30m": 1791267397.97437,
   "_ready|SOLUSD|4h": 1789742770.728918,
   "_ready|SOON/USDT|30m": 1789447859.694797,
+  "_ready|SOXLBUSD|1d": 1792037507.522088,
   "_ready|SOXLBUSD|30m": 1791448595.362661,
   "_ready|SOXLBUSD|4h": 1790948798.588421,
   "_ready|STORJ/USDT|30m": 1788930963.585849,
