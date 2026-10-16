@@ -195,6 +195,24 @@ class DistanceBandTests(unittest.TestCase):
         # Bitunix: the newest daily candle is closed, so today's candle has nothing yet
         self.assertIsNone(fts.current_candle_range(ftd.CRYPTO, {"1d": charts["1d"]}, "1d", oct1 + 9 * day))
 
+    def test_the_forming_4h_candle_counts_too(self):
+        # QNT 1D, 2026-10-16: Bitunix serves closed candles only, so a 1D range
+        # missed the 4H candle forming now and a 4H chart had no range at all.
+        h4 = 14400
+        day0 = 1_792_108_800                    # 2026-10-16 00:00 UTC
+        now = day0 + 15 * 3600 + 50 * 60        # 21:20 IST
+        charts = {"1d": [[day0 - 86400, 1, 2, 0.5, 1.5]],
+                  "4h": [[day0 + i * h4, 0, 212.92, 202.45 + i, 0] for i in range(3)]}
+        live = [day0 + 3 * h4, 202.0, 203.4, 200.30, 201.1]
+        self.assertEqual(fts.current_candle_range(ftd.CRYPTO, charts, "1d", now), (202.45, 212.92))
+        self.assertEqual(fts.current_candle_range(ftd.CRYPTO, charts, "1d", now, live), (200.30, 212.92))
+        self.assertTrue(fts.entry_already_touched(
+            1, {"entry": 200.436}, 201.1, fts.current_candle_range(ftd.CRYPTO, charts, "1d", now, live)))
+        self.assertIsNone(fts.current_candle_range(ftd.CRYPTO, charts, "4h", now))
+        self.assertEqual(fts.current_candle_range(ftd.CRYPTO, charts, "4h", now, live), (200.30, 203.4))
+        stale = [day0 + 2 * h4, 0, 999, 1, 0]   # an older candle never widens this one
+        self.assertIsNone(fts.current_candle_range(ftd.CRYPTO, charts, "4h", now, stale))
+
     def test_short_fib_distance_is_up_to_the_zone_bottom(self):
         self.assertAlmostEqual(fts.fib_distance(-1, self.zone, 99.0), 1.0)
         self.assertIsNone(fts.fib_distance(-1, self.zone, 111.0))

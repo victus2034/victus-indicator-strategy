@@ -188,6 +188,9 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   `research/fib_entry_touched_backtest.py`, part `fib-entry`). Entry confirm: a record first seen at
   LATE sends nothing, and the "moved fast" GET READY backfill only goes out within
   `APPROACH_THRESHOLD_PCT` of entry (it printed "10.21% away" for BNB).
+  **The forming 4H candle counts (2026-10-16, lakky, QNT 1D).** Bitunix serves closed candles only, so that
+  range missed the 4H candle forming now - a 4H chart had no range at all, a 1D one up to 4 hours. `scan_crypto`
+  now adds `bitunix_data.forming_candle(pair, "4h")` (`current_candle_range(..., live)`). The replay already used full candles.
   **Same rule on trendlines (2026-10-12, lakky: "apply for both")**, crypto and NSE: a touch whose forming
   candle already reached the line does not alert and does not re-arm the band (`line_already_touched`,
   replay `TL_SKIP_TOUCHED_ENTRY`). Sep 1 - Oct 12 (`research/tl_entry_touched_backtest.py`, part `tl-entry`):
