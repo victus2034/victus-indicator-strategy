@@ -64061,6 +64061,7 @@
     "METAXUSD|30m|short|728.909|736.198": "filled",
     "METAXUSD|30m|short|731.6|738.1": "filled",
     "METAXUSD|30m|short|738.6|742.85": "filled",
+    "METAXUSD|30m|short|742.34|745.315": "filled",
     "METAXUSD|30m|short|746.25|746.75": "stop_too_tight",
     "METAXUSD|30m|short|746.85|747.725": "stop_too_tight",
     "METAXUSD|30m|short|770.35|772.513": "filled",
@@ -65205,6 +65206,24 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
+      "timeframe": "30m"
+    },
+    "METAXUSD|30m|short|742.34|745.315": {
+      "alert_time": "2026-10-16T16:17:41.594455+05:30",
+      "entry": 742.34,
+      "entry_time": "2026-10-16T16:20:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "rating": 6,
+      "risk": 2.9750000000000227,
+      "side": "short",
+      "stop": 745.315,
+      "stream": "live",
+      "symbol": "METAXUSD",
+      "target_1": 739.365,
+      "target_2": 736.39,
+      "target_half": 740.8525,
       "timeframe": "30m"
     }
   }
