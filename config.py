@@ -36,61 +36,42 @@ def env_flag(name, default=False):
 # Every symbol not listed on Delta India came out on 2026-09-15, when Shiva
 # stopped trading anywhere else; what is left is DELTA_LISTED_SYMBOLS's crypto half.
 CRYPTO_WATCHLIST = [
+    # 2026-10-16 (lakky): kept only coins averaging >= 100M USDT a day over
+    # BOTH the last 7 and the last 30 days on CoinDCX or Delta, with a Bitunix
+    # perp (research/volume_7d_30d_probe.py, part volume; research/out/volume/).
+    # Removed 19: BCH, AKE, ARB, LTC, TRUMP, INJ, APT, MAGIC, GTC, ZRO, TIA,
+    # OGN, W, S, BAT, CAP, RSR, CT, DOS. Added RLC. Delta alone passes only
+    # BTC, ETH and SOL; CoinDCX decides the rest.
     "BTCUSD",
     "ETHUSD",
+    "ZECUSD",
     "SOLUSD",
     "XRPUSD",
-    "HYPEUSD",
-    "AKE/USDT",
-    "ZECUSD",
-    "DOGEUSD",
-    "AAVEUSD",
-    "UNIUSD",
-    "LINKUSD",
-    "AVAXUSD",
-    "LTCUSD",
-    "BNBUSD",
-    "TRUMP/USDT",
-    "BCHUSD",
-    # TAC, ZORA, BLESS, H, VELVET, RIVER (added in the 2026-09-01 cut) and
-    # BEAT removed 2026-10-13 (lakky): 2-20M USDT a day on CoinDCX.
-    # Added 2026-10-13 (lakky): every CoinDCX USDT future with 24h volume of
-    # 100M USDT or more that Bitunix lists and was not already here
-    # (research/coindcx_volume_probe.py, part coindcx; research/out/coindcx/).
-    # Commodities (XAU, XAG, CL, BZ, NATGAS) and coins Bitunix does not list
-    # (NFP, HFT, FUN, PUMP) were left out. The last six are not on Delta:
-    # their daily backtest grades on the ccxt fallback venues.
     "NEARUSD",
-    "STRKUSD",
-    "GTCUSD",
-    "RSRUSD",
-    "SUIUSD",
-    "ENAUSD",
-    "WLDUSD",
-    "FILUSD",
-    "1000PEPEUSD",
-    "ADAUSD",
-    "BTWUSD",
-    "TAOUSD",
-    "ONDOUSD",
-    "TIAUSD",
-    "ZROUSD",
+    "HYPEUSD",
+    "DOGEUSD",
     "QNTUSD",
-    "INJUSD",
-    "ARBUSD",
-    "SUSD",
-    "APTUSD",
-    "CAPUSD",
-    "WUSD",
-    "OGNUSD",
-    "DOSUSD",
-    "MAGICUSD",
-    "BATUSD",
-    "CTUSD",
+    "SUIUSD",
+    "UNIUSD",
+    "BNBUSD",
+    "ENAUSD",
+    "1000PEPEUSD",
+    "WLDUSD",
+    "ADAUSD",
+    "AVAXUSD",
+    "LINKUSD",
+    "ONDOUSD",
+    "TAOUSD",
+    "STRKUSD",
+    "BTWUSD",
+    "FILUSD",
+    "AAVEUSD",
+    "RLCUSD",
 ]
 
-# CoinDCX-only additions (2026-10-13): Bitunix lists them, Delta does not.
-NOT_DELTA_LISTED_CRYPTO = {"WUSD", "OGNUSD", "DOSUSD", "MAGICUSD", "BATUSD", "CTUSD"}
+# Crypto Bitunix lists but Delta does not. The 2026-10-13 six (W, OGN, DOS,
+# MAGIC, BAT, CT) all left in the 2026-10-16 volume cut, so it is empty.
+NOT_DELTA_LISTED_CRYPTO: set[str] = set()
 
 # Non-crypto contracts, kept apart from the crypto list.
 # XAUT replaced PAXG here: both are gold, and XAUT traded $3.0B over seven days
@@ -125,22 +106,24 @@ XSTOCK_WATCHLIST = [
 WATCHLIST = CRYPTO_WATCHLIST + OTHER_WATCHLIST + XSTOCK_WATCHLIST
 
 # Which venue each scanned symbol is actually traded on, so an alert can say
-# where to go and place it. Delta India lists these 31.
+# where to go and place it. Delta India lists all 33.
 #
 # This is a static list on purpose. Delta's listings drift, but a live lookup
 # on every run would make an alert depend on a third API being up, and the
 # venue of a symbol is not something that should change mid-session. Re-audit
 # it against /v2/products when the watchlist is next reviewed.
 DELTA_LISTED_SYMBOLS = {
-    "BTCUSD", "ETHUSD", "SOLUSD", "XRPUSD", "HYPEUSD", "AKE/USDT",
+    "BTCUSD", "ETHUSD", "SOLUSD", "XRPUSD", "HYPEUSD",
     "ZECUSD", "DOGEUSD", "AAVEUSD", "UNIUSD", "LINKUSD",
-    "AVAXUSD", "LTCUSD", "BNBUSD", "TRUMP/USDT", "BCHUSD", "SLVONUSD",
+    "AVAXUSD", "BNBUSD", "SLVONUSD",
     "XAUTUSD", "TSLAXUSD", "METAXUSD", "SOXLBUSD", "SNDKBUSD",
     "MRVL/USDT:USDT", "NVDAXUSD",
     # 2026-10-13 CoinDCX 100M+ additions that Delta lists too (/v2/products).
-    "NEARUSD", "STRKUSD", "GTCUSD", "RSRUSD", "SUIUSD", "ENAUSD", "WLDUSD",
-    "FILUSD", "1000PEPEUSD", "ADAUSD", "BTWUSD", "TAOUSD", "ONDOUSD", "TIAUSD",
-    "ZROUSD", "QNTUSD", "INJUSD", "ARBUSD", "SUSD", "APTUSD", "CAPUSD",
+    "NEARUSD", "STRKUSD", "SUIUSD", "ENAUSD", "WLDUSD",
+    "FILUSD", "1000PEPEUSD", "ADAUSD", "BTWUSD", "TAOUSD", "ONDOUSD",
+    "QNTUSD",
+    # 2026-10-16 volume cut addition; Delta lists RLCUSD (live perp).
+    "RLCUSD",
 }
 
 DELTA_API_BASE_URL = "https://api.india.delta.exchange"
@@ -165,7 +148,7 @@ BITUNIX_API_BASE_URL = "https://fapi.bitunix.com"
 BITUNIX_MIN_REQUEST_GAP_SECONDS = env_float("VICTUS_BITUNIX_MIN_REQUEST_GAP_SECONDS", 0.12)
 # Every crypto watchlist symbol, checked against Bitunix's trading_pairs on
 # 2026-10-05 (all 23 listed as <base>USDT); the 27 CoinDCX additions all OPEN on
-# 2026-10-13. Re-check when CRYPTO_WATCHLIST changes.
+# 2026-10-13; RLC listed on 2026-10-16. Re-check when CRYPTO_WATCHLIST changes.
 # The xStocks are not "<Delta name>T" on Bitunix but the stock's own ticker,
 # so each has its pair here. All six listed and OPEN on 2026-10-09
 # (research/xstock_bitunix_probe.py, research/out/xstock/).

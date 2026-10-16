@@ -16,11 +16,11 @@ Everything runs on GitHub Actions. There is no server.
 
 ## Watchlist
 
-`config.py` holds it. 51 symbols. Since 2026-10-13 crypto also covers every CoinDCX USDT future
-with 24h volume of 100M+ that Bitunix lists; all but six (`NOT_DELTA_LISTED_CRYPTO`) are on Delta
-(`DELTA_LISTED_SYMBOLS`):
+`config.py` holds it. 33 symbols. Since 2026-10-16 crypto is every coin averaging 100M+ USDT a day
+over both the last 7 and the last 30 days on CoinDCX or Delta that Bitunix lists
+(`research/volume_7d_30d_probe.py`, part `volume`); all are on Delta (`DELTA_LISTED_SYMBOLS`):
 
-- `CRYPTO_WATCHLIST`: 43 coins (BTC, ETH, SOL, ...)
+- `CRYPTO_WATCHLIST`: 25 coins (BTC, ETH, SOL, ...)
 - `XSTOCK_WATCHLIST`: 6 tokenised stocks (TSLA, META, SOXL, SNDK, MRVL, NVDA)
 - `OTHER_WATCHLIST`: XAUT (gold) and SLVON (silver)
 
