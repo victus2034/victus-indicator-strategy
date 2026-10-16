@@ -48,8 +48,11 @@ jobs:
           DISCORD_FIB_NSE_WEBHOOK_URL: ${{ secrets.DISCORD_FIB_NSE_WEBHOOK_URL }}
           DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL: ${{ secrets.DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL }}
           DISCORD_TRENDLINE_NSE_WEBHOOK_URL: ${{ secrets.DISCORD_TRENDLINE_NSE_WEBHOOK_URL }}
+          # 1D / 1W / 1M S/R zones post in the old 30m zone channels (lakky, 2026-10-16).
+          DISCORD_30M_WEBHOOK_URL: ${{ secrets.DISCORD_30M_WEBHOOK_URL }}
+          DISCORD_NSE_30M_WEBHOOK_URL: ${{ secrets.DISCORD_NSE_30M_WEBHOOK_URL }}
         run: |
-          for name in DISCORD_FIB_CRYPTO_WEBHOOK_URL DISCORD_FIB_NSE_WEBHOOK_URL DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL DISCORD_TRENDLINE_NSE_WEBHOOK_URL; do
+          for name in DISCORD_FIB_CRYPTO_WEBHOOK_URL DISCORD_FIB_NSE_WEBHOOK_URL DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL DISCORD_TRENDLINE_NSE_WEBHOOK_URL DISCORD_30M_WEBHOOK_URL DISCORD_NSE_30M_WEBHOOK_URL; do
             if [ -z "${!name}" ]; then
               echo "::warning::$name is not configured - that market falls back to the shared webhook, or is held."
             else
@@ -65,6 +68,9 @@ jobs:
           DISCORD_FIB_NSE_WEBHOOK_URL: ${{ secrets.DISCORD_FIB_NSE_WEBHOOK_URL }}
           DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL: ${{ secrets.DISCORD_TRENDLINE_CRYPTO_WEBHOOK_URL }}
           DISCORD_TRENDLINE_NSE_WEBHOOK_URL: ${{ secrets.DISCORD_TRENDLINE_NSE_WEBHOOK_URL }}
+          # 1D / 1W / 1M S/R zones post in the old 30m zone channels (lakky, 2026-10-16).
+          DISCORD_30M_WEBHOOK_URL: ${{ secrets.DISCORD_30M_WEBHOOK_URL }}
+          DISCORD_NSE_30M_WEBHOOK_URL: ${{ secrets.DISCORD_NSE_30M_WEBHOOK_URL }}
           DISCORD_STATUS_WEBHOOK_URL: ${{ secrets.DISCORD_STATUS_WEBHOOK_URL }}
           # The once-a-day score of the live fib/trendline alerts goes to the
           # existing daily-backtest channel (fib_trendline_daily_report.py).

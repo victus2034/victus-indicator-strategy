@@ -194,7 +194,7 @@ def build_card(kind, title, report_day, joined):
         (f"{TF_LABEL[tf]} {market.upper()}", [(r, x) for r, x in items if r["market"] == market and r["tf"] == tf])
         for market in (CRYPTO, NSE) for tf in TF_LABEL
     ])
-    sides = (("long", "BUY"), ("short", "SELL")) if kind == "fib" else \
+    sides = (("long", "BUY"), ("short", "SELL")) if kind in ("fib", "zone") else \
         (("long", "BUY (support)"), ("short", "SELL (resistance)"))
     lines += _block("SIDE", [(name, [(r, x) for r, x in items if r["plan"]["side"] == side]) for side, name in sides])
     if kind == "fib":
@@ -224,7 +224,8 @@ def build_card(kind, title, report_day, joined):
 def build_report(report_day, records, results):
     """The cards to post, fib first; a kind with no alerts yet has none."""
     joined = [(r, results[r["id"]]) for r in records if r["id"] in results]
-    cards = [build_card(kind, title, report_day, joined) for kind, title in (("fib", "FIB"), ("trendline", "TRENDLINE"))]
+    cards = [build_card(kind, title, report_day, joined) for kind, title in (("fib", "FIB"), ("trendline", "TRENDLINE"),
+                                                                            ("zone", "S/R ZONE 1D+"))]
     return [card for card in cards if card]
 
 
