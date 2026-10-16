@@ -380,6 +380,13 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   (`VICTUS_ZONE_ALERT_TIMEFRAMES`, default `4h`): a zone scanner on an unlisted timeframe exits before loading
   state and ends the scan loop. Keep `scan_30m.yml` dispatched - `fib_trendline_scan.yml` runs off its
   `workflow_run`. Live Sep 1 - Oct 16: crypto 30m -0.28R / -0.13% a trade (326), NSE 30m -0.50R / -0.21% (512).
+- **S/R zones on 1D / 1W / 1M (2026-10-16, lakky), in the old 30m channels.** `fib_trendline_scanner.zone_candidates`
+  runs the zone engine on the fib/TL charts (`ZONE_HTF_TIMEFRAMES`, Bitunix / Yahoo, `ZONE_BASE_EXTRA` 1): nearest
+  zone per side, too young, over-touched, stop too wide, approach side, 0.20% band, re-arm past band x
+  `REARM_FACTOR` and the 4h cooldown, crypto daily trend; a forming-candle wick through the far edge kills it.
+  Posts to `DISCORD_30M_WEBHOOK_URL` / `DISCORD_NSE_30M_WEBHOOK_URL` as `**HYPE | BUY | 1D**`, recorded as
+  kind `zone` and scored in the daily report like fibs (2R + BE, wait 5 / hold 20). Seeds silently on first pass.
+  Backtest: `research/zone_htf_backtest.py`, part `zone-htf`. Entry confirm does not watch them.
 - **Range filter alerts are off (2026-10-10, lakky).** Alerts are S/R zones, fibs and trendlines
   (incl. TL BROKEN) only. `ALERT_RANGE_FILTER_SIGNALS` is False in `config.py` and `nse_config.py`; the
   range filter is still computed but never posts. Pine v12.7.8 drops its RF marker too.

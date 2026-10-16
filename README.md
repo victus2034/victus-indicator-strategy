@@ -8,7 +8,7 @@ Three kinds of alert, each with its own channels and state:
 
 | Alert | Timeframes | Markets | Code |
 |---|---|---|---|
-| Supply / demand zones | 4H (30m built, off - `ZONE_ALERT_TIMEFRAMES`) | crypto, xStocks, gold/silver, NSE | `scanner.py`, `nse_scanner.py` |
+| Supply / demand zones | 4H; 1D, 1W, 1M in the old 30m channels (`fib_trendline_scanner.py`, `ZONE_HTF_TIMEFRAMES`); 30m built, off | crypto, xStocks, gold/silver, NSE | `scanner.py`, `nse_scanner.py` |
 | Fib zones and trendlines | 4H, 1D, 1W, 1M (30m built, off) | crypto, xStocks, gold/silver, NSE | `fib_trendline_scanner.py` |
 | Entry confirm | 1D, 1W, 1M fib + trendline alerts | crypto, NSE | `entry_confirm.py` |
 

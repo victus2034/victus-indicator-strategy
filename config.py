@@ -456,6 +456,15 @@ ZONE_ALERT_TIMEFRAMES = [
 
 def zone_timeframe_enabled(timeframe):
     return str(timeframe).strip() in ZONE_ALERT_TIMEFRAMES
+
+
+# S/R zones on 1D / 1W / 1M (lakky, 2026-10-16: "add 1d, 1w and 1month ... in the 30m
+# crypto and nse channels"). Scanned by fib_trendline_scanner.py on the same charts
+# as fibs and trendlines, posted to the old 30m zone channels (DISCORD_30M_WEBHOOK_URL,
+# DISCORD_NSE_30M_WEBHOOK_URL). Empty turns them off.
+ZONE_HTF_TIMEFRAMES = [
+    tf.strip() for tf in os.getenv("VICTUS_ZONE_HTF_TIMEFRAMES", "1d,1w,1M").split(",") if tf.strip()
+]
 SIGNAL_ALERT_COOLDOWN_SECONDS = env_int("VICTUS_SIGNAL_ALERT_COOLDOWN_SECONDS", 4 * 60 * 60)
 # After a send that failed (Discord down, every retry spent), try again this
 # soon rather than waiting out the full cooldown. The full cooldown after a
