@@ -376,6 +376,10 @@ significant figures (`price_text`); nothing parses the text - records carry the 
 - **Status posts once per dispatch (2026-10-09, lakky).** The scan loop runs every ~90s; started /
   finished went out on every pass. Now only the first pass posts (`scanner.first_pass_this_loop`,
   shared by NSE); a later pass posts only when most symbols failed or, on NSE, an alert failed to send.
+- **30m zone alerts are off (2026-10-16, lakky: "remove 30m for now"), crypto and NSE.** `ZONE_ALERT_TIMEFRAMES`
+  (`VICTUS_ZONE_ALERT_TIMEFRAMES`, default `4h`): a zone scanner on an unlisted timeframe exits before loading
+  state and ends the scan loop. Keep `scan_30m.yml` dispatched - `fib_trendline_scan.yml` runs off its
+  `workflow_run`. Live Sep 1 - Oct 16: crypto 30m -0.28R / -0.13% a trade (326), NSE 30m -0.50R / -0.21% (512).
 - **Range filter alerts are off (2026-10-10, lakky).** Alerts are S/R zones, fibs and trendlines
   (incl. TL BROKEN) only. `ALERT_RANGE_FILTER_SIGNALS` is False in `config.py` and `nse_config.py`; the
   range filter is still computed but never posts. Pine v12.7.8 drops its RF marker too.
