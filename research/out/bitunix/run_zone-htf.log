@@ -1,0 +1,66 @@
+crypto ETHUSD: 5 alerts (55s)
+crypto SOLUSD: 5 alerts (56s)
+crypto BTCUSD: 5 alerts (56s)
+crypto XRPUSD: 1 alerts (56s)
+crypto AKE/USDT: 1 alerts (101s)
+crypto HYPEUSD: 3 alerts (101s)
+crypto ZECUSD: 1 alerts (105s)
+crypto DOGEUSD: 3 alerts (105s)
+crypto AAVEUSD: 3 alerts (144s)
+crypto UNIUSD: 0 alerts (151s)
+crypto AVAXUSD: 2 alerts (155s)
+crypto LINKUSD: 2 alerts (155s)
+crypto LTCUSD: 2 alerts (181s)
+crypto TRUMP/USDT: 1 alerts (197s)
+crypto BNBUSD: 6 alerts (197s)
+crypto BCHUSD: 3 alerts (201s)
+crypto NEARUSD: 1 alerts (212s)
+crypto GTCUSD: 2 alerts (238s)
+crypto STRKUSD: 2 alerts (239s)
+crypto RSRUSD: 1 alerts (243s)
+crypto SUIUSD: 1 alerts (246s)
+crypto ENAUSD: 0 alerts (279s)
+crypto WLDUSD: 3 alerts (282s)
+crypto FILUSD: 2 alerts (287s)
+crypto 1000PEPEUSD: 2 alerts (287s)
+crypto BTWUSD: 0 alerts (293s)
+crypto ADAUSD: 0 alerts (317s)
+crypto TAOUSD: 4 alerts (330s)
+crypto ONDOUSD: 1 alerts (332s)
+crypto TIAUSD: 0 alerts (336s)
+crypto ZROUSD: 0 alerts (348s)
+crypto QNTUSD: 1 alerts (372s)
+crypto INJUSD: 2 alerts (376s)
+crypto ARBUSD: 0 alerts (378s)
+crypto SUSD: 5 alerts (382s)
+crypto CAPUSD: 0 alerts (386s)
+crypto DOSUSD: 5 alerts (397s)
+crypto APTUSD: 0 alerts (411s)
+crypto WUSD: 1 alerts (419s)
+crypto OGNUSD: 1 alerts (422s)
+crypto SLVONUSD: no Bitunix chart
+crypto XAUTUSD: no Bitunix chart
+crypto CTUSD: 0 alerts (423s)
+crypto MAGICUSD: 2 alerts (431s)
+crypto METAXUSD: 10 alerts (453s)
+crypto BATUSD: 0 alerts (454s)
+crypto TSLAXUSD: 10 alerts (454s)
+crypto SOXLBUSD: 10 alerts (455s)
+crypto MRVL/USDT:USDT: 9 alerts (475s)
+crypto SNDKBUSD: 8 alerts (478s)
+crypto NVDAXUSD: 22 alerts (479s)
+NSE done (1046s)
+# S/R zone alerts on 4H, 1D, 1W, 1M (2026-09-01 to now)
+
+Live zone engine and alert filters on each timeframe. Every row scored like fib alerts (entry within 5 candles, hold 20, 1R/2R, +0.5R breakeven), net after fees; % = R x the trade's stop distance. Crypto on Bitunix, NSE on Yahoo.
+
+| market   | tf             | rule                 |   alerts |   trades |   win_% |   R_total |   R_per_trade |   %_total |   %_per_trade |
+|:---------|:---------------|:---------------------|---------:|---------:|--------:|----------:|--------------:|----------:|--------------:|
+| crypto   | 4h             | zones 4h             |      138 |      112 |      43 |     -34.2 |        -0.305 |     -20.1 |        -0.18  |
+| crypto   | 1d             | zones 1d             |       10 |       10 |       0 |     -11.6 |        -1.161 |     -10.1 |        -1.009 |
+| crypto   | 1D+ (1D/1W/1M) | zones 1D+ (1D/1W/1M) |       10 |       10 |       0 |     -11.6 |        -1.161 |     -10.1 |        -1.009 |
+| nse      | 4h             | zones 4h             |      416 |      340 |      41 |    -106.6 |        -0.313 |     -55.1 |        -0.162 |
+| nse      | 1d             | zones 1d             |      199 |      168 |      30 |     -80.3 |        -0.478 |     -56.7 |        -0.338 |
+| nse      | 1w             | zones 1w             |       28 |       24 |      27 |      -9   |        -0.377 |      -5.2 |        -0.218 |
+| nse      | 1D+ (1D/1W/1M) | zones 1D+ (1D/1W/1M) |      227 |      192 |      29 |     -89.3 |        -0.465 |     -62   |        -0.323 |
+

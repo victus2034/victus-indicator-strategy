@@ -19,6 +19,12 @@ the 08:00-01:00 IST alert window. NSE (Yahoo, the zone scanner's 200 stocks)
 scans during the session only, every NSE_MIN_INTERVAL_SECONDS. Each market can
 have its own pair of channels (DISCORD_{FIB,TRENDLINE}_{CRYPTO,NSE}_WEBHOOK_URL).
 
+- S/R zone alerts on 1D / 1W / 1M (ZONE_HTF_TIMEFRAMES, lakky 2026-10-16): the zone
+  scanner's engine and rules (nearest zone per side, too young, over-touched, stop
+  too wide, approach side, MAX_DISTANCE_PCT band, 4h cooldown, crypto daily trend)
+  on these charts, posted to the old 30m zone channels (DISCORD_30M_WEBHOOK_URL,
+  DISCORD_NSE_30M_WEBHOOK_URL) and scored like fib alerts.
+
 Levels come from CLOSED candles, like the chart's confirmed swings; the candle
 still forming only supplies the current price. Every fib and trendline-touch
 alert that is sent is also written to RECORDS_FILE with its entry and SL, which
@@ -54,6 +60,7 @@ from config import (
     SCAN_WORKERS,
     TRENDLINE_SWING_LENGTH,
     TRENDLINES_KEEP,
+    ZONE_HTF_TIMEFRAMES,
 )
 from fib_trendline_data import (
     CRYPTO, IST, NSE, TF_LABEL, TF_SECONDS, candle_close_ts, candle_is_closed, crypto_charts, nse_charts,
@@ -98,6 +105,9 @@ MIN_BARS = 2 * max(FIB_SWING_LENGTH, TRENDLINE_SWING_LENGTH) + 2
 MARKET_LABEL = {CRYPTO: "Crypto", NSE: "NSE"}
 
 FIB_ENV, TL_ENV = "DISCORD_FIB_WEBHOOK_URL", "DISCORD_TRENDLINE_WEBHOOK_URL"
+# 1D+ zones post where the 30m zone alerts did (those are off since 2026-10-16).
+ZONE_ENV = {CRYPTO: "DISCORD_30M_WEBHOOK_URL", NSE: "DISCORD_NSE_30M_WEBHOOK_URL"}
+CHANNELS = ("fib", "trendline", "zone")
 
 
 def webhook_env(channel, market):
@@ -106,10 +116,14 @@ def webhook_env(channel, market):
     FIB_ENV / TL_ENV stay as the shared fallback, so a market with no channel of
     its own yet keeps posting where it did.
     """
+    if channel == "zone":
+        return ZONE_ENV[market]
     return f"DISCORD_{'FIB' if channel == 'fib' else 'TRENDLINE'}_{market.upper()}_WEBHOOK_URL"
 
 
 def webhook_url(channel, market):
+    if channel == "zone":
+        return scanner.get_env_or_config(ZONE_ENV[market], "")
     shared = scanner.get_env_or_config(
         FIB_ENV if channel == "fib" else TL_ENV,
         DISCORD_FIB_WEBHOOK_URL if channel == "fib" else DISCORD_TRENDLINE_WEBHOOK_URL,
@@ -245,11 +259,56 @@ def line_already_touched(kind, level, forming):
     return low <= level if kind == SUPPORT else high >= level
 
 
-def analyse(market, symbol, tf, candles, now, price=None, forming=None):
+def zone_candidates(symbol, tf, closed, price, forming, trend=None):
+    """1D+ S/R zones price is near now, the zone scanner's rules on this chart.
+
+    [{key, zone_type, zone, entry, distance, alert, plan}]: listed while price is
+    within the re-arm band (MAX_DISTANCE_PCT x REARM_FACTOR) on the approach side,
+    alert=True inside MAX_DISTANCE_PCT. Zones are built from closed candles; one
+    the forming candle has already wicked through its far edge is dead.
+    research/zone_htf_backtest.py replays the same rules.
+    """
+    import pandas as pd
+
+    df = pd.DataFrame([list(c[:5]) + [0.0] for c in closed[-scanner.OHLCV_LIMIT:]],
+                      columns=["time", "open", "high", "low", "close", "volume"])
+    df["time"] = df["time"] * 1000
+    # auto_base_extra is 1 for 4h and every larger timeframe. This process scans no
+    # 30m zones, so it is set rather than swapped (the symbols run in threads).
+    scanner.ZONE_BASE_EXTRA = 1
+    supply, demand = scanner.build_zones(df)
+    band = scanner.MAX_DISTANCE_PCT
+    out = []
+    for zone_type, zones in (("supply", supply), ("demand", demand)):
+        zone, _ = scanner.nearest_active_zone(price, zones, zone_type, len(df))
+        if zone is None or scanner.stop_too_wide(zone_type, zone):
+            continue
+        if forming is not None and (forming[0] <= zone["bottom"] if zone_type == "demand" else forming[1] >= zone["top"]):
+            continue
+        if scanner.price_past_entry(zone_type, zone, price):
+            continue
+        if scanner.trend_filter_applies(symbol) and scanner.against_daily_trend(zone_type, trend):
+            continue
+        entry = scanner.planned_entry_price(zone_type, zone)
+        distance = abs(price - entry) / entry * 100
+        if distance > band * scanner.REARM_FACTOR:
+            continue
+        side = "long" if zone_type == "demand" else "short"
+        out.append({
+            "key": f"zone|{symbol}|{tf}|{zone_type}|{zone['bottom']:.10g}|{zone['top']:.10g}",
+            "zone_type": zone_type, "zone": zone, "entry": entry, "distance": distance,
+            "alert": distance <= band,
+            "plan": {"side": side, "entry": entry, "sl": scanner.planned_stop_price(zone_type, zone)},
+        })
+    return out
+
+
+def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=None):
     """Everything alertable on one chart right now. Pure - no state, no sends.
 
-    forming: (low, high) of tf's candle so far (current_candle_range)."""
-    result = {"fib": [], "touch": [], "break": [], "bars": 0, "price": None}
+    forming: (low, high) of tf's candle so far (current_candle_range).
+    trend: crypto daily EMA trend for the zone filter (scanner.daily_trend's sign)."""
+    result = {"fib": [], "touch": [], "break": [], "zone": [], "bars": 0, "price": None}
     if len(candles) < 2:
         return result
     closed = candles if candle_is_closed(market, candles[-1][0], tf, now) else candles[:-1]
@@ -280,6 +339,9 @@ def analyse(market, symbol, tf, candles, now, price=None, forming=None):
                     "d": d, "base": base, "top": top, "distance": distance,
                     "plan": trades.fib_plan(d, zone),
                 })
+
+    if tf in ZONE_HTF_TIMEFRAMES:
+        result["zone"] = zone_candidates(symbol, tf, closed, price, forming, trend)
 
     lines = build_trendlines(highs, lows, closes, TRENDLINE_SWING_LENGTH, TRENDLINES_KEEP)
     now_bar = len(closed)               # the forming candle
@@ -376,6 +438,19 @@ def format_touch_alert(market, symbol, tf, price, t):
     )
 
 
+def format_zone_alert(market, symbol, tf, price, z):
+    """The zone scanner's three lines (scanner.format_alert), with 1D / 1W / 1M."""
+    side = "SELL" if z["zone_type"] == "supply" else "BUY"
+    zone, entry, stop = z["zone"], z["entry"], z["plan"]["sl"]
+    places = scanner.level_places((zone["bottom"], zone["top"], stop), scanner.short_places(entry))
+    return (
+        f"**{display(market, symbol)} | {side} | {TF_LABEL[tf]}**\n"
+        f"Price {scanner.price_text(price, places)} · {z['distance']:.2f}% away\n"
+        f"Entry {scanner.price_text(entry, places)} · SL {scanner.price_text(stop, places)}"
+        f" ({trades.risk_pct(z['plan']):.2f}%)"
+    )
+
+
 def format_break_alert(market, symbol, tf, b):
     name = "S" if b["kind"] == SUPPORT else "R"
     side = "below" if b["kind"] == SUPPORT else "above"
@@ -459,11 +534,29 @@ def plan_alerts(state, market, symbol, tf, analysis, now, last_scan=None):
         else:
             entry["in_band"] = True
             entry["seen"] = now
+
+    # Zones: the zone scanner's re-arm - a zone alerts again only once price has left
+    # MAX_DISTANCE_PCT x REARM_FACTOR and the 4h cooldown (ALERT_COOLDOWN_SECONDS) has passed.
+    near = {z["key"] for z in analysis.get("zone", [])}
+    prefix = f"zone|{symbol}|{tf}|"
+    for key, entry in state.items():
+        if key.startswith(prefix) and key not in near and isinstance(entry, dict):
+            entry["in_band"] = False
+    for z in analysis.get("zone", []):
+        entry = state.get(z["key"])
+        if z["alert"] and (entry is None or (not entry.get("in_band")
+                                             and now - entry.get("sent", 0) >= scanner.ALERT_COOLDOWN_SECONDS)):
+            record = {**base, "kind": "zone", "plan": z["plan"], "zone_type": z["zone_type"],
+                      "zone_bottom": z["zone"]["bottom"], "zone_top": z["zone"]["top"]}
+            planned.append(("zone", z["key"], format_zone_alert(market, symbol, tf, price, z), record))
+        elif isinstance(entry, dict):
+            entry["in_band"] = True
+            entry["seen"] = now
     return planned
 
 
 def mark_sent(state, key, now):
-    state[key] = {"sent": now, "seen": now, "in_band": key.startswith("tl|")}
+    state[key] = {"sent": now, "seen": now, "in_band": key.startswith(("tl|", "zone|"))}
 
 
 def append_record(record, key, now):
@@ -517,8 +610,11 @@ def scan_crypto(timeframes, now):
                     live = bitunix_data.forming_candle(pair, "4h", now)
                 except Exception as error:     # noqa: BLE001 - closed candles only
                     print(f"{symbol} Bitunix forming 4h unavailable: {str(error)[:80]}")
+            trend = None
+            if scanner.trend_filter_applies(symbol) and charts.get("1d"):
+                trend = scanner._trend_from_daily([(c[0], c[4]) for c in charts["1d"]], now)
             return symbol, {tf: analyse(CRYPTO, symbol, tf, charts[tf], now, price,
-                                        current_candle_range(CRYPTO, charts, tf, now, live))
+                                        current_candle_range(CRYPTO, charts, tf, now, live), trend)
                             for tf in timeframes}, None
         except Exception as error:     # noqa: BLE001 - one bad symbol must not stop the pass
             return symbol, None, str(error)
@@ -584,7 +680,7 @@ def run_once(dry_run=False, force_nse=False):
     for key in [k for k, t in attempts.items() if now - t > STATE_RETENTION_SECONDS]:
         del attempts[key]
     configured = {(channel, market): bool(webhook_url(channel, market))
-                  for channel in ("fib", "trendline") for market in (CRYPTO, NSE)}
+                  for channel in CHANNELS for market in (CRYPTO, NSE)}
     awake = {CRYPTO: scanner.in_alert_window(), NSE: True}   # NSE only scans in session
     last_scans = state.get(LAST_SCAN_KEY)
     if not isinstance(last_scans, dict):
@@ -594,7 +690,7 @@ def run_once(dry_run=False, force_nse=False):
     seeding = {
         (channel, market)
         for market, results in markets.items() if results
-        for channel in ("fib", "trendline")
+        for channel in CHANNELS
         if configured[(channel, market)] and f"{channel}:{market}:{SEED_VERSION}" not in seeded
     }
     counts = {}
@@ -644,7 +740,7 @@ def run_once(dry_run=False, force_nse=False):
 
     for market, results in markets.items():
         ok = sum(1 for _, a, _ in results if a is not None)
-        sent = ", ".join(f"{c} {counts.get((c, market), 0)}" for c in ("fib", "trendline"))
+        sent = ", ".join(f"{c} {counts.get((c, market), 0)}" for c in CHANNELS)
         print(f"{MARKET_LABEL[market]}: {ok}/{len(results)} symbols, timeframes {', '.join(timeframes)}; {sent}"
               + (f" (seeded, not sent: {', '.join(sorted(c for c, m in seeding if m == market))})"
                  if any(m == market for _, m in seeding) else ""))
@@ -661,9 +757,10 @@ def run_once(dry_run=False, force_nse=False):
     for channel, market in sorted(seeding):
         seeded[f"{channel}:{market}:{SEED_VERSION}"] = now
         scanner.send_status_message(
-            f"{channel.capitalize()} alerts ({MARKET_LABEL[market]}, 0-{FIB_TL_MAX_DISTANCE_PCT:g}% band) started. "
+            f"{'1D+ zone' if channel == 'zone' else channel.capitalize()} alerts ({MARKET_LABEL[market]}, 0-"
+            f"{scanner.MAX_DISTANCE_PCT if channel == 'zone' else FIB_TL_MAX_DISTANCE_PCT:g}% band) started. "
             f"Seeded silently: {counts.get((channel, market), 0)} "
-            f"{'fib zones' if channel == 'fib' else 'trendlines'} price was already within range. "
+            f"{ {'fib': 'fib zones', 'trendline': 'trendlines', 'zone': 'S/R zones'}[channel]} price was already within range. "
             "Only new ones will alert from here."
         )
     # Saved before anything that can raise: the alerts above are already in
