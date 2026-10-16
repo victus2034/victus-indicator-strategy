@@ -63673,6 +63673,7 @@
     "CAP/USDT|30m|short|0.0472|0.047575": "filled",
     "CAP/USDT|30m|short|0.04796|0.0483725": "filled",
     "CAP/USDT|4h|short|0.0503274|0.0508307": "filled",
+    "CAPUSD|30m|long|0.07273|0.072105": "filled",
     "CAPUSD|30m|long|0.0811138|0.0803091": "filled",
     "CL/USDT|30m|long|92.06|91.9225": "filled",
     "CL/USDT|30m|long|96.94|96.59": "filled",
@@ -65120,6 +65121,24 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
+      "timeframe": "30m"
+    },
+    "CAPUSD|30m|long|0.07273|0.072105": {
+      "alert_time": "2026-10-16T11:52:19.618061+05:30",
+      "entry": 0.07273,
+      "entry_time": "2026-10-16T11:55:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "rating": 7,
+      "risk": 0.0006250000000000006,
+      "side": "long",
+      "stop": 0.072105,
+      "stream": "live",
+      "symbol": "CAPUSD",
+      "target_1": 0.073355,
+      "target_2": 0.07398,
+      "target_half": 0.07304250000000001,
       "timeframe": "30m"
     }
   }
