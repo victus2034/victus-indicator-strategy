@@ -41,14 +41,18 @@ what was checked, what's next.
 
 All in `config.py`, which **is tracked in git**:
 
-- `WATCHLIST` — the 51 symbols scanned: 43 crypto, 6 xStocks, XAUT + SLVON (64 on
+- `WATCHLIST` — the 33 symbols scanned: 25 crypto, 6 xStocks, XAUT + SLVON (64 on
   2026-09-01, cut on Delta volume and again when CoinSwitch was dropped; 27 crypto added
   2026-10-13 (lakky): every CoinDCX USDT future with 24h volume >= 100M USDT that Bitunix
   lists, commodities left out - `research/coindcx_volume_probe.py`, part `coindcx`; same day
-  TAC, ZORA, BLESS, H, VELVET, RIVER and BEAT dropped: 2-20M a day on CoinDCX)
-- `DELTA_LISTED_SYMBOLS` — the 45 watchlist symbols Delta India lists. `WATCHLIST` equals it
-  plus `NOT_DELTA_LISTED_CRYPTO` (W, OGN, DOS, MAGIC, BAT, CT: CoinDCX + Bitunix only; their
-  daily backtest grades on the ccxt fallback venues). `entry_confirm.py` used to tag
+  TAC, ZORA, BLESS, H, VELVET, RIVER and BEAT dropped: 2-20M a day on CoinDCX. **2026-10-16
+  (lakky): crypto = average >= 100M USDT a day over BOTH the last 7 and 30 days on CoinDCX or
+  Delta, with a Bitunix perp** - `research/volume_7d_30d_probe.py`, part `volume`; 19 removed
+  (BCH, AKE, ARB, LTC, TRUMP, INJ, APT, MAGIC, GTC, ZRO, TIA, OGN, W, S, BAT, CAP, RSR, CT, DOS),
+  RLC added. A one-day 24h snapshot misleads: MAGIC/W/BAT spiked to 100M+ for a week on a ~40M month)
+- `DELTA_LISTED_SYMBOLS` — the 33 watchlist symbols Delta India lists. `WATCHLIST` equals it
+  plus `NOT_DELTA_LISTED_CRYPTO` (empty since 2026-10-16; such coins grade their daily backtest
+  on the ccxt fallback venues). `entry_confirm.py` used to tag
   each ping with the venue ("Delta"); dropped 2026-10-08 (lakky) - its crypto prices come
   from Bitunix, so the tag read as the wrong source. Entry confirm watches only fib and
   trendline alerts on 1D/1W/1M, crypto and NSE, since the same day.
