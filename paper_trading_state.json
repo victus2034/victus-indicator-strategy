@@ -62547,6 +62547,33 @@
       "target_half": 0.07304250000000001,
       "timeframe": "30m",
       "trade_id": "CAPUSD|30m|long|0.07273|0.072105"
+    },
+    {
+      "alert_time": "2026-10-16T12:07:37.444334+05:30",
+      "cost_r": 0.1728404999999986,
+      "date": "2026-10-16",
+      "entry": 12.555,
+      "entry_time": "2026-10-16T12:15:00+05:30",
+      "exit_price": 12.5495578280925,
+      "exit_time": "2026-10-16T12:35:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": -0.08213763487499631,
+      "outcome": "BE",
+      "rating": 6,
+      "realized_r": 0.09070286512500228,
+      "risk": 0.0600000000000005,
+      "side": "short",
+      "stop": 12.615,
+      "stream": "live",
+      "symbol": "LINKUSD",
+      "target_1": 12.495,
+      "target_2": 12.434999999999999,
+      "target_half": 12.524999999999999,
+      "timeframe": "30m",
+      "trade_id": "LINKUSD|30m|short|12.555|12.615"
     }
   ],
   "handled": {
@@ -65150,24 +65177,6 @@
       "target_1": 498.40749999999997,
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
-      "timeframe": "30m"
-    },
-    "LINKUSD|30m|short|12.555|12.615": {
-      "alert_time": "2026-10-16T12:07:37.444334+05:30",
-      "entry": 12.555,
-      "entry_time": "2026-10-16T12:15:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 6,
-      "risk": 0.0600000000000005,
-      "side": "short",
-      "stop": 12.615,
-      "stream": "live",
-      "symbol": "LINKUSD",
-      "target_1": 12.495,
-      "target_2": 12.434999999999999,
-      "target_half": 12.524999999999999,
       "timeframe": "30m"
     }
   }
