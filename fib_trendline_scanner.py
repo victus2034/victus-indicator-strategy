@@ -190,12 +190,15 @@ def current_price(charts):
     return max(last, key=lambda c: c[0])[4] if last else None
 
 
-def current_candle_range(market, charts, tf, now):
+def current_candle_range(market, charts, tf, now, live=None):
     """(low, high) traded so far in tf's candle still forming, or None.
 
     Bitunix never returns a forming candle, so the range is read off the finer
     timeframes too: the days of this month for a 1M candle, the 4H candles of
-    today for a 1D one.
+    today for a 1D one. Those are closed candles only, so `live` - the 4H candle
+    forming now (bitunix_data.forming_candle) - adds the last few hours. Without
+    it a 4H chart had no range at all and a 1D one missed up to 4 hours (lakky,
+    2026-10-16, QNT 1D).
     """
     candles = charts.get(tf) or []
     if not candles:
@@ -205,6 +208,8 @@ def current_candle_range(market, charts, tf, now):
     rows = [c for c in candles if c[0] >= opened]
     for finer in TF_ORDER[:TF_ORDER.index(tf)]:
         rows += [c for c in charts.get(finer) or [] if c[0] >= opened]
+    if live and live[0] >= opened:
+        rows.append(live)
     if not rows:
         return None
     return min(c[3] for c in rows), max(c[2] for c in rows)
@@ -498,6 +503,7 @@ def scan_crypto(timeframes, now):
             # xStocks' own pairs (TSLAUSDT for TSLAXUSD) reach the API as is.
             charts = crypto_charts(pair or contract, timeframes, now, source=source)
             price = current_price(charts)
+            live = None
             if source == "bitunix":
                 # Bitunix candles stop at the last closed one, so their newest
                 # close is up to a 4H candle old; the distance needs the price now.
@@ -505,8 +511,14 @@ def scan_crypto(timeframes, now):
                     price = bitunix_data.last_price(pair)
                 except Exception as error:     # noqa: BLE001 - keep the candle close
                     print(f"{symbol} Bitunix live price unavailable: {str(error)[:80]}")
+                # ...and the forming 4H candle, so "this candle already reached the
+                # entry" sees the last few hours too (current_candle_range).
+                try:
+                    live = bitunix_data.forming_candle(pair, "4h", now)
+                except Exception as error:     # noqa: BLE001 - closed candles only
+                    print(f"{symbol} Bitunix forming 4h unavailable: {str(error)[:80]}")
             return symbol, {tf: analyse(CRYPTO, symbol, tf, charts[tf], now, price,
-                                        current_candle_range(CRYPTO, charts, tf, now))
+                                        current_candle_range(CRYPTO, charts, tf, now, live))
                             for tf in timeframes}, None
         except Exception as error:     # noqa: BLE001 - one bad symbol must not stop the pass
             return symbol, None, str(error)

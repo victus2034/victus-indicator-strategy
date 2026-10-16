@@ -213,6 +213,7 @@ class OnTests(unittest.TestCase):
         with patch.object(fts.scanner, "active_watchlist", return_value=["BTCUSD"]), \
              patch.object(fts, "crypto_charts", return_value=charts), \
              patch.object(fts, "analyse", analyse), \
+             patch.object(bitunix_data, "forming_candle", return_value=None), \
              patch.object(bitunix_data, "last_price", return_value=123.0) as live:
             fts.scan_crypto(["4h"], 10_000_000)
             live.assert_called_once_with("BTCUSDT")
@@ -227,10 +228,39 @@ class OnTests(unittest.TestCase):
         with patch.object(fts.scanner, "active_watchlist", return_value=["TSLAXUSD"]), \
              patch.object(fts, "crypto_charts", return_value=charts) as fetch, \
              patch.object(fts, "analyse", return_value={}), \
+             patch.object(bitunix_data, "forming_candle", return_value=None) as forming, \
              patch.object(bitunix_data, "last_price", return_value=123.0) as live:
             fts.scan_crypto(["4h"], 10_000_000)
         self.assertEqual(fetch.call_args.args[0], "TSLAUSDT")
+        forming.assert_called_once_with("TSLAUSDT", "4h", 10_000_000)
         live.assert_called_once_with("TSLAUSDT")
+
+    def test_fib_trendline_range_includes_the_forming_4h(self):
+        # QNT 1D, 2026-10-16: the touched-entry check never saw the last 4 hours.
+        import fib_trendline_scanner as fts
+        now = 10_000_000
+        opened = now // 14400 * 14400
+        charts = {"4h": [[opened - 14400, 1, 2, 0.5, 1.5]]}
+        seen = {}
+
+        def analyse(market, symbol, tf, candles, now, price=None, forming=None):
+            seen[tf] = forming
+            return {}
+
+        with patch.object(fts.scanner, "active_watchlist", return_value=["BTCUSD"]), \
+             patch.object(fts, "crypto_charts", return_value=charts), \
+             patch.object(fts, "analyse", analyse), \
+             patch.object(bitunix_data, "last_price", return_value=1.2), \
+             patch.object(bitunix_data, "forming_candle", return_value=[opened, 1.5, 1.9, 0.7, 1.2, 9]):
+            fts.scan_crypto(["4h"], now)
+        self.assertEqual(seen["4h"], (0.7, 1.9))
+        with patch.object(fts.scanner, "active_watchlist", return_value=["BTCUSD"]), \
+             patch.object(fts, "crypto_charts", return_value=charts), \
+             patch.object(fts, "analyse", analyse), \
+             patch.object(bitunix_data, "last_price", return_value=1.2), \
+             patch.object(bitunix_data, "forming_candle", side_effect=RuntimeError("down")):
+            fts.scan_crypto(["4h"], now)
+        self.assertIsNone(seen["4h"])            # closed candles only, as before
 
     def test_fib_trendline_skips_a_symbol_when_bitunix_is_down(self):
         # Delta's shorter history draws different fibs (new keys, re-alerts).
