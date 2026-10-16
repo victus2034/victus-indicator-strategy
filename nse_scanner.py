@@ -12,6 +12,8 @@ import pandas as pd
 import requests
 import yfinance as yf
 
+import config
+
 from nse_config import (
     ALERT_COOLDOWN_SECONDS,
     ALERT_SCAN_START,
@@ -1112,6 +1114,10 @@ def parse_args(argv=None):
 
 def main():
     args = parse_args()
+    if not config.zone_timeframe_enabled(TIMEFRAME):
+        print(f"NSE {TIMEFRAME} zone alerts are off (ZONE_ALERT_TIMEFRAMES = {config.ZONE_ALERT_TIMEFRAMES}).")
+        stop_scan_loop()
+        return
     state = load_state()
 
     if args.once:

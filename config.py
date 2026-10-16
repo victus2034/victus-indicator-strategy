@@ -446,6 +446,16 @@ SCAN_WORKERS = 8
 ALERT_COOLDOWN_SECONDS = env_int("VICTUS_ALERT_COOLDOWN_SECONDS", 4 * 60 * 60)
 # Off since 2026-10-10 (lakky): alerts are S/R zones, fibs and trendlines only.
 ALERT_RANGE_FILTER_SIGNALS = False
+# S/R zone timeframes that scan and alert, crypto and NSE (lakky, 2026-10-16:
+# "remove 30m for now"). A scanner whose timeframe is not listed exits at once and
+# posts nothing; its workflow can stay dispatched. Add "30m" back to turn it on.
+ZONE_ALERT_TIMEFRAMES = [
+    tf.strip() for tf in os.getenv("VICTUS_ZONE_ALERT_TIMEFRAMES", "4h").split(",") if tf.strip()
+]
+
+
+def zone_timeframe_enabled(timeframe):
+    return str(timeframe).strip() in ZONE_ALERT_TIMEFRAMES
 SIGNAL_ALERT_COOLDOWN_SECONDS = env_int("VICTUS_SIGNAL_ALERT_COOLDOWN_SECONDS", 4 * 60 * 60)
 # After a send that failed (Discord down, every retry spent), try again this
 # soon rather than waiting out the full cooldown. The full cooldown after a

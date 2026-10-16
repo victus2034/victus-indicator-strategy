@@ -17,6 +17,7 @@ import pandas as pd
 import requests
 
 import bitunix_data
+import config
 from config import (
     ALERT_COOLDOWN_SECONDS,
     ALERT_RANGE_FILTER_SIGNALS,
@@ -1998,6 +1999,12 @@ def parse_args(argv=None):
 
 def main():
     args = parse_args()
+    if not config.zone_timeframe_enabled(TIMEFRAME):
+        print(f"{TIMEFRAME} zone alerts are off (ZONE_ALERT_TIMEFRAMES = {config.ZONE_ALERT_TIMEFRAMES}).")
+        stop_file = os.getenv("SCAN_LOOP_STOP_FILE", "").strip()
+        if stop_file:
+            Path(stop_file).touch()
+        return
     state = load_state()
 
     if args.once:
