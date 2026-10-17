@@ -1,0 +1,31 @@
+alert,tf,rule,trades,R_total,R_per_trade,%_total,%_per_trade
+S/R zone,4H,now,554,-195.9,-0.354,-144.4,-0.261
+S/R zone,4H,skip new trades in window,553,-194.8,-0.352,-143.3,-0.259
+S/R zone,4H,close open trades 15m before,554,-195.7,-0.353,-144.7,-0.261
+S/R zone,4H,both,553,-194.6,-0.352,-143.6,-0.26
+S/R zone,1D+,now,4,-5.6,-1.407,-2.5,-0.629
+S/R zone,1D+,skip new trades in window,4,-5.6,-1.407,-2.5,-0.629
+S/R zone,1D+,close open trades 15m before,4,-5.6,-1.407,-2.5,-0.629
+S/R zone,1D+,both,4,-5.6,-1.407,-2.5,-0.629
+fib,4H,now,1080,-155.1,-0.144,-336.2,-0.311
+fib,4H,skip new trades in window,1079,-156.9,-0.145,-337.0,-0.312
+fib,4H,close open trades 15m before,1084,-153.4,-0.142,-327.8,-0.302
+fib,4H,both,1083,-155.3,-0.143,-328.7,-0.303
+fib,1D+,now,243,-4.4,-0.018,-34.3,-0.141
+fib,1D+,skip new trades in window,241,-4.4,-0.018,-34.2,-0.142
+fib,1D+,close open trades 15m before,249,-15.2,-0.061,-105.5,-0.424
+fib,1D+,both,247,-15.2,-0.061,-105.5,-0.427
+TL,4H,now,4729,-1603.9,-0.339,-1834.5,-0.388
+TL,4H,skip new trades in window,4706,-1592.2,-0.338,-1823.5,-0.387
+TL,4H,close open trades 15m before,4729,-1587.2,-0.336,-1875.0,-0.396
+TL,4H,both,4706,-1575.4,-0.335,-1863.9,-0.396
+TL,1D+,now,924,-403.5,-0.437,-594.5,-0.643
+TL,1D+,skip new trades in window,922,-405.4,-0.44,-597.7,-0.648
+TL,1D+,close open trades 15m before,924,-401.4,-0.434,-620.2,-0.671
+TL,1D+,both,922,-403.3,-0.437,-623.4,-0.676
+ALL,all,now,7534,-2368.4,-0.314,-2946.4,-0.391
+ALL,all,skip new trades in window,7505,-2359.3,-0.314,-2938.3,-0.392
+ALL,all,close open trades 15m before,7544,-2358.5,-0.313,-3075.7,-0.408
+ALL,all,both,7515,-2349.4,-0.313,-3067.6,-0.408
+ALL,all,"closed trades, as they ended",208,19.2,0.092,254.0,1.221
+ALL,all,"closed trades, closed 15m before",218,29.1,0.133,124.7,0.572
