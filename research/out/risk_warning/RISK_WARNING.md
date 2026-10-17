@@ -1,39 +1,59 @@
 # Risk warnings on crypto alerts (2026-09-01 to now)
 
-Warnings: coin moved >= 4% either way in the 24h before the alert; alert against BTC's daily EMA50 trend. Nothing filtered - each group scored the live way, net after fees. Zones on Bitunix (scored like fibs), fib/TL on Delta.
+Warnings: coin moved >= 4% either way in the 24h before the alert; alert against the market's daily EMA50 trend - BTC alone, 2 of BTC/ETH/SOL, or all 3. Nothing filtered - each group scored the live way, net after fees. Zones on Bitunix (scored like fibs), fib/TL on Delta.
 
-| alert    | tf   | rule          |   alerts |   trades |   win_% |   R_total |   R_per_trade |   %_total |   %_per_trade |
-|:---------|:-----|:--------------|---------:|---------:|--------:|----------:|--------------:|----------:|--------------:|
-| S/R zone | 4H   | all alerts    |       56 |       39 |      52 |      -6.6 |        -0.17  |      -2   |        -0.05  |
-| S/R zone | 4H   | no warning    |       40 |       27 |      48 |     -13.4 |        -0.495 |      -6.6 |        -0.246 |
-| S/R zone | 4H   | 4%+ move      |       15 |       11 |      60 |       6.8 |         0.617 |       4.7 |         0.429 |
-| S/R zone | 4H   | BTC against   |        3 |        3 |      50 |       0.7 |         0.232 |       0.2 |         0.059 |
-| S/R zone | 4H   | both warnings |        2 |        2 |      50 |       0.7 |         0.37  |       0.2 |         0.107 |
-| S/R zone | 4H   | any warning   |       16 |       12 |      60 |       6.7 |         0.562 |       4.7 |         0.39  |
-| fib      | 4H   | all alerts    |      126 |       98 |      52 |     -10.4 |        -0.106 |     -29.5 |        -0.301 |
-| fib      | 4H   | no warning    |       35 |       29 |      55 |       0.9 |         0.032 |      12.6 |         0.434 |
-| fib      | 4H   | 4%+ move      |       56 |       44 |      47 |     -10.3 |        -0.234 |     -36.9 |        -0.84  |
-| fib      | 4H   | BTC against   |       62 |       45 |      58 |      -2.5 |        -0.056 |     -15.7 |        -0.349 |
-| fib      | 4H   | both warnings |       27 |       20 |      59 |      -1.5 |        -0.076 |     -10.6 |        -0.528 |
-| fib      | 4H   | any warning   |       91 |       69 |      51 |     -11.3 |        -0.164 |     -42.1 |        -0.61  |
-| fib      | 1D+  | all alerts    |       26 |       20 |      67 |       8.7 |         0.436 |      40.5 |         2.025 |
-| fib      | 1D+  | no warning    |       12 |        9 |      86 |      10.9 |         1.206 |      59.8 |         6.642 |
-| fib      | 1D+  | 4%+ move      |       12 |       10 |      43 |      -2.1 |        -0.214 |     -19.2 |        -1.924 |
-| fib      | 1D+  | BTC against   |        7 |        6 |      25 |      -3.1 |        -0.515 |     -19.7 |        -3.289 |
-| fib      | 1D+  | both warnings |        5 |        5 |       0 |      -3.1 |        -0.617 |     -19.7 |        -3.938 |
-| fib      | 1D+  | any warning   |       14 |       11 |      50 |      -2.1 |        -0.195 |     -19.3 |        -1.752 |
-| TL       | 4H   | all alerts    |      495 |      388 |      34 |    -164.7 |        -0.424 |    -206.3 |        -0.532 |
-| TL       | 4H   | no warning    |      200 |      160 |      36 |     -61   |        -0.381 |     -60.7 |        -0.379 |
-| TL       | 4H   | 4%+ move      |      129 |      100 |      29 |     -51.8 |        -0.518 |     -69.3 |        -0.693 |
-| TL       | 4H   | BTC against   |      241 |      186 |      33 |     -83.2 |        -0.447 |    -129.1 |        -0.694 |
-| TL       | 4H   | both warnings |       75 |       58 |      28 |     -31.4 |        -0.541 |     -52.6 |        -0.908 |
-| TL       | 4H   | any warning   |      295 |      228 |      32 |    -103.7 |        -0.455 |    -145.7 |        -0.639 |
-| TL       | 1D+  | all alerts    |       85 |       77 |      25 |     -45.8 |        -0.594 |     -58.1 |        -0.755 |
-| TL       | 1D+  | no warning    |       17 |       14 |      21 |      -9.2 |        -0.66  |      -9.9 |        -0.706 |
-| TL       | 1D+  | 4%+ move      |       37 |       35 |      29 |     -17.9 |        -0.51  |     -18.5 |        -0.53  |
-| TL       | 1D+  | BTC against   |       66 |       62 |      24 |     -37.5 |        -0.604 |     -49.4 |        -0.797 |
-| TL       | 1D+  | both warnings |       35 |       34 |      26 |     -18.8 |        -0.553 |     -19.7 |        -0.58  |
-| TL       | 1D+  | any warning   |       68 |       63 |      25 |     -36.5 |        -0.58  |     -48.3 |        -0.766 |
+| alert    | tf   | rule                       |   alerts |   trades |   win_% |   R_total |   R_per_trade |   %_total |   %_per_trade |
+|:---------|:-----|:---------------------------|---------:|---------:|--------:|----------:|--------------:|----------:|--------------:|
+| S/R zone | 4H   | all alerts                 |       56 |       39 |      52 |      -6.6 |        -0.17  |      -2   |        -0.05  |
+| S/R zone | 4H   | 4%+ move                   |       15 |       11 |      60 |       6.8 |         0.617 |       4.7 |         0.429 |
+| S/R zone | 4H   | BTC against                |        3 |        3 |      50 |       0.7 |         0.232 |       0.2 |         0.059 |
+| S/R zone | 4H   | BTC with                   |       53 |       36 |      52 |      -7.3 |        -0.203 |      -2.1 |        -0.059 |
+| S/R zone | 4H   | 2 of 3 against             |        9 |        6 |      80 |       4.5 |         0.744 |       3.5 |         0.58  |
+| S/R zone | 4H   | 2 of 3 with                |       47 |       33 |      46 |     -11.1 |        -0.336 |      -5.4 |        -0.165 |
+| S/R zone | 4H   | all 3 against              |        3 |        3 |      50 |       0.7 |         0.232 |       0.2 |         0.059 |
+| S/R zone | 4H   | not all 3 against          |       53 |       36 |      52 |      -7.3 |        -0.203 |      -2.1 |        -0.059 |
+| S/R zone | 4H   | no warning (move, 2 of 3)  |       39 |       26 |      45 |     -13.3 |        -0.512 |      -6.6 |        -0.253 |
+| S/R zone | 4H   | any warning (move, 2 of 3) |       17 |       13 |      64 |       6.7 |         0.516 |       4.6 |         0.357 |
+| fib      | 4H   | all alerts                 |      126 |       98 |      52 |     -10.4 |        -0.106 |     -29.5 |        -0.301 |
+| fib      | 4H   | 4%+ move                   |       56 |       44 |      47 |     -10.3 |        -0.234 |     -36.9 |        -0.84  |
+| fib      | 4H   | BTC against                |       62 |       45 |      58 |      -2.5 |        -0.056 |     -15.7 |        -0.349 |
+| fib      | 4H   | BTC with                   |       64 |       53 |      46 |      -7.9 |        -0.148 |     -13.8 |        -0.261 |
+| fib      | 4H   | 2 of 3 against             |       54 |       39 |      52 |      -6.3 |        -0.162 |     -26.7 |        -0.685 |
+| fib      | 4H   | 2 of 3 with                |       72 |       59 |      52 |      -4   |        -0.068 |      -2.8 |        -0.047 |
+| fib      | 4H   | all 3 against              |       46 |       33 |      56 |      -2.2 |        -0.066 |     -11.2 |        -0.34  |
+| fib      | 4H   | not all 3 against          |       80 |       65 |      50 |      -8.2 |        -0.126 |     -18.3 |        -0.281 |
+| fib      | 4H   | no warning (move, 2 of 3)  |       40 |       33 |      56 |       1.8 |         0.054 |      12.6 |         0.383 |
+| fib      | 4H   | any warning (move, 2 of 3) |       86 |       65 |      50 |     -12.2 |        -0.187 |     -42.1 |        -0.648 |
+| fib      | 1D+  | all alerts                 |       26 |       20 |      67 |       8.7 |         0.436 |      40.5 |         2.025 |
+| fib      | 1D+  | 4%+ move                   |       12 |       10 |      43 |      -2.1 |        -0.214 |     -19.2 |        -1.924 |
+| fib      | 1D+  | BTC against                |        7 |        6 |      25 |      -3.1 |        -0.515 |     -19.7 |        -3.289 |
+| fib      | 1D+  | BTC with                   |       19 |       14 |      82 |      11.8 |         0.843 |      60.2 |         4.302 |
+| fib      | 1D+  | 2 of 3 against             |       10 |        6 |      25 |      -3.1 |        -0.515 |     -19.7 |        -3.289 |
+| fib      | 1D+  | 2 of 3 with                |       16 |       14 |      82 |      11.8 |         0.843 |      60.2 |         4.302 |
+| fib      | 1D+  | all 3 against              |        7 |        6 |      25 |      -3.1 |        -0.515 |     -19.7 |        -3.289 |
+| fib      | 1D+  | not all 3 against          |       19 |       14 |      82 |      11.8 |         0.843 |      60.2 |         4.302 |
+| fib      | 1D+  | no warning (move, 2 of 3)  |       11 |        9 |      86 |      10.9 |         1.206 |      59.8 |         6.642 |
+| fib      | 1D+  | any warning (move, 2 of 3) |       15 |       11 |      50 |      -2.1 |        -0.195 |     -19.3 |        -1.752 |
+| TL       | 4H   | all alerts                 |      495 |      388 |      34 |    -164.7 |        -0.424 |    -206.3 |        -0.532 |
+| TL       | 4H   | 4%+ move                   |      129 |      100 |      29 |     -51.8 |        -0.518 |     -69.3 |        -0.693 |
+| TL       | 4H   | BTC against                |      241 |      186 |      33 |     -83.2 |        -0.447 |    -129.1 |        -0.694 |
+| TL       | 4H   | BTC with                   |      254 |      202 |      35 |     -81.5 |        -0.403 |     -77.3 |        -0.383 |
+| TL       | 4H   | 2 of 3 against             |      260 |      209 |      31 |    -100.8 |        -0.482 |    -146.8 |        -0.702 |
+| TL       | 4H   | 2 of 3 with                |      235 |      179 |      37 |     -63.9 |        -0.357 |     -59.6 |        -0.333 |
+| TL       | 4H   | all 3 against              |      219 |      176 |      31 |     -86.3 |        -0.491 |    -132.6 |        -0.753 |
+| TL       | 4H   | not all 3 against          |      276 |      212 |      37 |     -78.4 |        -0.37  |     -73.8 |        -0.348 |
+| TL       | 4H   | no warning (move, 2 of 3)  |      191 |      145 |      39 |     -48.4 |        -0.334 |     -49.1 |        -0.339 |
+| TL       | 4H   | any warning (move, 2 of 3) |      304 |      243 |      31 |    -116.3 |        -0.479 |    -157.2 |        -0.647 |
+| TL       | 1D+  | all alerts                 |       85 |       77 |      25 |     -45.8 |        -0.594 |     -58.1 |        -0.755 |
+| TL       | 1D+  | 4%+ move                   |       37 |       35 |      29 |     -17.9 |        -0.51  |     -18.5 |        -0.53  |
+| TL       | 1D+  | BTC against                |       66 |       62 |      24 |     -37.5 |        -0.604 |     -49.4 |        -0.797 |
+| TL       | 1D+  | BTC with                   |       19 |       15 |      27 |      -8.3 |        -0.554 |      -8.7 |        -0.58  |
+| TL       | 1D+  | 2 of 3 against             |       72 |       67 |      25 |     -39   |        -0.582 |     -51.2 |        -0.764 |
+| TL       | 1D+  | 2 of 3 with                |       13 |       10 |      20 |      -6.8 |        -0.677 |      -6.9 |        -0.694 |
+| TL       | 1D+  | all 3 against              |       66 |       62 |      24 |     -37.5 |        -0.604 |     -49.4 |        -0.797 |
+| TL       | 1D+  | not all 3 against          |       19 |       15 |      27 |      -8.3 |        -0.554 |      -8.7 |        -0.58  |
+| TL       | 1D+  | no warning (move, 2 of 3)  |       12 |       10 |      20 |      -6.8 |        -0.677 |      -6.9 |        -0.694 |
+| TL       | 1D+  | any warning (move, 2 of 3) |       73 |       67 |      25 |     -39   |        -0.582 |     -51.2 |        -0.764 |
 
 ## Move size and direction (all crypto alerts)
 
