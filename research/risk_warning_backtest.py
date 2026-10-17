@@ -64,20 +64,27 @@ def btc_trend(daily, ts):
     return 1 if closes[-1] > ema else -1
 
 
-def tag(t, hourly, btc_daily):
+MARKET = ("BTCUSD", "ETHUSD", "SOLUSD")      # lakky, 2026-10-17: judge the market on all three
+
+
+def tag(t, hourly, market_daily):
     mv = move_24h(hourly, t["alert_ts"]) if hourly else None
-    trend = btc_trend(btc_daily, t["alert_ts"])
     side = t["plan"]["side"]
+    against = [tr is not None and (tr < 0 if side == "long" else tr > 0)
+               for tr in (btc_trend(market_daily.get(s) or [], t["alert_ts"]) for s in MARKET)]
     t["move_24h"] = mv
     t["big_move"] = mv is not None and abs(mv) >= MOVE_PCT
-    t["btc_against"] = trend is not None and (trend < 0 if side == "long" else trend > 0)
+    t["btc_against"] = against[0]
+    t["mkt_against_2"] = sum(against) >= 2       # 2 of BTC/ETH/SOL against the trade
+    t["mkt_against_3"] = sum(against) == 3       # all three against
     return t
 
 
 def collect(since, now, limit):
     scanner.ZONE_BASE_EXTRA = 1
     fbt.TIMEFRAMES = list(config.FIB_TL_TIMEFRAMES)
-    btc_daily = fbt._cached("rw_btc_1d", lambda: bitunix_candles("BTCUSD", "1d", now - 500 * 86400, now))
+    market_daily = {s: fbt._cached(f"rw_{s}_1d", lambda s=s: bitunix_candles(s, "1d", now - 500 * 86400, now))
+                    for s in MARKET}
     symbols = list(config.CRYPTO_WATCHLIST)[: limit or None]
 
     def one(symbol):
@@ -103,7 +110,7 @@ def collect(since, now, limit):
                         if t["kind"] in ("fib", "trendline")]
         except Exception as error:  # noqa: BLE001
             print(f"{symbol} fib/TL failed: {error}")
-        out = [tag(t, hourly, btc_daily) for t in out if t["alert_ts"] >= since]
+        out = [tag(t, hourly, market_daily) for t in out if t["alert_ts"] >= since]
         print(f"{symbol}: {len(out)} alerts")
         return out
 
@@ -116,11 +123,15 @@ def collect(since, now, limit):
 
 SPLITS = (
     ("all alerts", lambda t: True),
-    ("no warning", lambda t: not t["big_move"] and not t["btc_against"]),
     ("4%+ move", lambda t: t["big_move"]),
     ("BTC against", lambda t: t["btc_against"]),
-    ("both warnings", lambda t: t["big_move"] and t["btc_against"]),
-    ("any warning", lambda t: t["big_move"] or t["btc_against"]),
+    ("BTC with", lambda t: not t["btc_against"]),
+    ("2 of 3 against", lambda t: t["mkt_against_2"]),
+    ("2 of 3 with", lambda t: not t["mkt_against_2"]),
+    ("all 3 against", lambda t: t["mkt_against_3"]),
+    ("not all 3 against", lambda t: not t["mkt_against_3"]),
+    ("no warning (move, 2 of 3)", lambda t: not t["big_move"] and not t["mkt_against_2"]),
+    ("any warning (move, 2 of 3)", lambda t: t["big_move"] or t["mkt_against_2"]),
 )
 
 
@@ -168,13 +179,14 @@ def main() -> None:
     df, sens = table(got), sensitivity(got)
     df.to_csv(OUT / "summary.csv", index=False)
     sens.to_csv(OUT / "sensitivity.csv", index=False)
-    pd.DataFrame([{**{k: t[k] for k in ("symbol", "tf", "kind", "alert_ts", "move_24h", "big_move", "btc_against")},
+    pd.DataFrame([{**{k: t[k] for k in ("symbol", "tf", "kind", "alert_ts", "move_24h", "big_move", "btc_against",
+                                          "mkt_against_2", "mkt_against_3")},
                    "side": t["plan"]["side"], "entry": t["plan"]["entry"], "outcome": t["result"]["outcome"],
                    "net_r": (trades.booked_r(t["plan"], t["market"], t["result"])[1] if t["result"]["filled"]
                              else None)} for t in got]).to_csv(OUT / "trades.csv", index=False)
     text = [f"# Risk warnings on crypto alerts ({args.since} to now)", "",
             f"Warnings: coin moved >= {MOVE_PCT:g}% either way in the 24h before the alert; alert against "
-            f"BTC's daily EMA{config.CRYPTO_TREND_EMA} trend. Nothing filtered - each group scored the live way, "
+            f"the market's daily EMA{config.CRYPTO_TREND_EMA} trend - BTC alone, 2 of BTC/ETH/SOL, or all 3. Nothing filtered - each group scored the live way, "
             "net after fees. Zones on Bitunix (scored like fibs), fib/TL on Delta.", "",
             df.to_markdown(index=False), "", "## Move size and direction (all crypto alerts)", "",
             sens.to_markdown(index=False), ""]
