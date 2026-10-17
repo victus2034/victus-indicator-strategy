@@ -43,17 +43,23 @@ OUT = Path(__file__).resolve().parent / "out" / "news_window"
 WINDOW_MIN = 15
 GROUPS = (("4H", ("4h",)), ("1D+", ("1d", "1w", "1M")))
 
-# Official calendars: BLS (bls.gov/schedule/2026/09_sched_list.htm, 10_sched_list.htm)
-# and the Fed (federalreserve.gov, Sep 15-16 2026 meeting). UTC; US daylight time
-# (EDT = UTC-4) until Nov 1 2026. CPI/PPI 8:30 ET, FOMC statement 2:00 PM ET.
-EVENTS = [
-    ("PPI", "2026-09-10 12:30"),
-    ("CPI", "2026-09-11 12:30"),
-    ("FOMC", "2026-09-16 18:00"),
-    ("CPI", "2026-10-14 12:30"),
-    ("PPI", "2026-10-15 12:30"),
-]
-EVENT_TS = [(name, int(pd.Timestamp(at, tz="UTC").timestamp())) for name, at in EVENTS]
+# Official calendars, New York time: BLS schedules (bls.gov/schedule/2025/home.htm,
+# 2026/home.htm; Oct 2025 CPI was never published, Sep 2025 PPI moved to Nov 25 by the
+# shutdown) and the Fed's FOMC meeting dates. CPI/PPI 8:30 AM ET, FOMC statement 2:00 PM ET.
+CPI_DATES = ["2025-01-15", "2025-02-12", "2025-03-12", "2025-04-10", "2025-05-13", "2025-06-11",
+             "2025-07-15", "2025-08-12", "2025-09-11", "2025-10-24", "2025-12-18",
+             "2026-01-13", "2026-02-13", "2026-03-11", "2026-04-10", "2026-05-12", "2026-06-10",
+             "2026-07-14", "2026-08-12", "2026-09-11", "2026-10-14"]
+PPI_DATES = ["2025-01-14", "2025-02-13", "2025-03-13", "2025-04-11", "2025-05-15", "2025-06-12",
+             "2025-07-16", "2025-08-14", "2025-09-10", "2025-11-25",
+             "2026-01-14", "2026-01-30", "2026-02-27", "2026-03-18", "2026-04-14", "2026-05-13",
+             "2026-06-11", "2026-07-15", "2026-08-13", "2026-09-10", "2026-10-15"]
+FOMC_DATES = ["2025-01-29", "2025-03-19", "2025-05-07", "2025-06-18", "2025-07-30", "2025-09-17",
+              "2025-10-29", "2025-12-10",
+              "2026-01-28", "2026-03-18", "2026-04-29", "2026-06-17", "2026-07-29", "2026-09-16"]
+EVENTS = sorted([("CPI", f"{d} 08:30") for d in CPI_DATES] + [("PPI", f"{d} 08:30") for d in PPI_DATES]
+                + [("FOMC", f"{d} 14:00") for d in FOMC_DATES], key=lambda e: e[1])
+EVENT_TS = [(name, int(pd.Timestamp(at, tz="America/New_York").timestamp())) for name, at in EVENTS]
 
 
 def window_of(ts):
@@ -101,10 +107,13 @@ def collect(since, now, limit):
     def one(symbol):
         out = []
         fine = []
-        for name, ev in EVENT_TS:      # 5m around each release, wide enough for a daily fill candle
+        for name, ev in EVENT_TS:      # 5m for the release's UTC day: every fill candle (1h/4h/1d) holding it
+            if ev < since - 86400 or ev > now:
+                continue
+            day = ev - ev % 86400
             try:
-                fine += fbt._cached(f"nw_{symbol}_5m_{ev}",
-                                    lambda ev=ev: bitunix_candles(symbol, "5m", ev - 86400 - 3600, ev + 86400 + 3600))
+                fine += fbt._cached(f"nw_{symbol}_5m_{day}",
+                                    lambda day=day: bitunix_candles(symbol, "5m", day, min(day + 86400 - 1, now)))
             except Exception as error:  # noqa: BLE001
                 print(f"{symbol} 5m {name} failed: {error}")
         fine.sort()
@@ -153,6 +162,14 @@ def table(got):
                         ("skip news window", lambda t: not t["news"]),
                         ("only the skipped", lambda t: bool(t["news"]))):
         rows.append({"alert": "ALL", "tf": "all", **row(label, [t for t in items if keep(t)])})
+    for kind in ("CPI", "PPI", "FOMC"):
+        pick = [t for t in items if t["news"] and t["news"][0] == kind]
+        if pick:
+            rows.append({"alert": "ALL", "tf": "all", **row(f"skipped at {kind}", pick)})
+    for year in (2025, 2026):
+        pick = [t for t in items if t["news"] and pd.Timestamp(t["news"][1], unit="s").year == year]
+        if pick:
+            rows.append({"alert": "ALL", "tf": "all", **row(f"skipped in {year}", pick)})
     return pd.DataFrame(rows)
 
 
@@ -160,7 +177,10 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--since", default="2026-09-01")
     parser.add_argument("--limit", type=int, default=0, help="first N coins (smoke test)")
+    parser.add_argument("--out", default="news_window")
     args = parser.parse_args()
+    global OUT
+    OUT = OUT.parent / args.out
     OUT.mkdir(parents=True, exist_ok=True)
     since = int(pd.Timestamp(args.since, tz=IST).timestamp())
     now = int(time.time())
@@ -170,8 +190,8 @@ def main() -> None:
     skipped = [t for t in got if t["news"]]
     detail = pd.DataFrame([{
         "event": t["news"][0], "symbol": t["symbol"], "kind": t["kind"], "tf": t["tf"], "side": t["plan"]["side"],
-        "alert_utc": pd.Timestamp(t["alert_ts"], unit="s", tz="UTC").strftime("%m-%d %H:%M"),
-        "fill_utc": pd.Timestamp(t["fill_5m"], unit="s", tz="UTC").strftime("%m-%d %H:%M"),
+        "alert_utc": pd.Timestamp(t["alert_ts"], unit="s", tz="UTC").strftime("%Y-%m-%d %H:%M"),
+        "fill_utc": pd.Timestamp(t["fill_5m"], unit="s", tz="UTC").strftime("%Y-%m-%d %H:%M"),
         "fill_on_5m": t["fill_exact"], "entry": t["plan"]["entry"], "outcome": t["result"]["outcome"],
         "net_r": trades.booked_r(t["plan"], t["market"], t["result"])[1],
         "risk_%": round(trades.risk_pct(t["plan"]), 3)} for t in skipped])
@@ -179,8 +199,8 @@ def main() -> None:
     events = pd.DataFrame([{"event": n, "utc": pd.Timestamp(e, unit="s", tz="UTC").strftime("%Y-%m-%d %H:%M"),
                             "ist": pd.Timestamp(e, unit="s", tz=IST).strftime("%Y-%m-%d %H:%M"),
                             "trades filled in window": sum(1 for t in skipped if t["news"][1] == e)}
-                           for n, e in EVENT_TS])
-    text = [f"# No trades +-{WINDOW_MIN} min around US CPI / PPI / FOMC, crypto ({args.since} to now)", "",
+                           for n, e in EVENT_TS if since <= e <= now])
+    text = [f"# No trades +-{WINDOW_MIN} min around US CPI / PPI / FOMC, crypto ({args.since} to now, {sum(1 for _, e in EVENT_TS if since <= e <= now)} releases)", "",
             "A trade is skipped when its entry fills within the window (fill time on Bitunix 5m). "
             "Trades open at the release are kept. Scored the live way, net after fees. "
             "Zones on Bitunix (scored like fibs), fib/TL on Delta.", "",
