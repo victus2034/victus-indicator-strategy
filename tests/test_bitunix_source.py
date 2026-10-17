@@ -206,13 +206,14 @@ class OnTests(unittest.TestCase):
         charts = {"4h": [[0, 1, 2, 0.5, 1.5]]}
         seen = {}
 
-        def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=None):
+        def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=None, swept=None):
             seen[symbol] = price
             return {}
 
         with patch.object(fts.scanner, "active_watchlist", return_value=["BTCUSD"]), \
              patch.object(fts, "crypto_charts", return_value=charts), \
              patch.object(fts, "analyse", analyse), \
+             patch.object(bitunix_data, "klines", return_value=[]), \
              patch.object(bitunix_data, "forming_candle", return_value=None), \
              patch.object(bitunix_data, "last_price", return_value=123.0) as live:
             fts.scan_crypto(["4h"], 10_000_000)
@@ -228,6 +229,7 @@ class OnTests(unittest.TestCase):
         with patch.object(fts.scanner, "active_watchlist", return_value=["TSLAXUSD"]), \
              patch.object(fts, "crypto_charts", return_value=charts) as fetch, \
              patch.object(fts, "analyse", return_value={}), \
+             patch.object(bitunix_data, "klines", return_value=[]), \
              patch.object(bitunix_data, "forming_candle", return_value=None) as forming, \
              patch.object(bitunix_data, "last_price", return_value=123.0) as live:
             fts.scan_crypto(["4h"], 10_000_000)
@@ -243,7 +245,7 @@ class OnTests(unittest.TestCase):
         charts = {"4h": [[opened - 14400, 1, 2, 0.5, 1.5]]}
         seen = {}
 
-        def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=None):
+        def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=None, swept=None):
             seen[tf] = forming
             return {}
 
@@ -251,6 +253,7 @@ class OnTests(unittest.TestCase):
              patch.object(fts, "crypto_charts", return_value=charts), \
              patch.object(fts, "analyse", analyse), \
              patch.object(bitunix_data, "last_price", return_value=1.2), \
+             patch.object(bitunix_data, "klines", return_value=[]), \
              patch.object(bitunix_data, "forming_candle", return_value=[opened, 1.5, 1.9, 0.7, 1.2, 9]):
             fts.scan_crypto(["4h"], now)
         self.assertEqual(seen["4h"], (0.7, 1.9))
@@ -258,9 +261,31 @@ class OnTests(unittest.TestCase):
              patch.object(fts, "crypto_charts", return_value=charts), \
              patch.object(fts, "analyse", analyse), \
              patch.object(bitunix_data, "last_price", return_value=1.2), \
+             patch.object(bitunix_data, "klines", return_value=[]), \
              patch.object(bitunix_data, "forming_candle", side_effect=RuntimeError("down")):
             fts.scan_crypto(["4h"], now)
         self.assertIsNone(seen["4h"])            # closed candles only, as before
+
+    def test_fib_trendline_sweeps_the_1m_since_the_last_pass(self):
+        import fib_trendline_scanner as fts
+        now = 10_000_000
+        charts = {"4h": [[now // 14400 * 14400 - 14400, 1, 2, 0.5, 1.5]]}
+        seen = {}
+
+        def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=None, swept=None):
+            seen[tf] = swept
+            return {}
+
+        rows = [[now - 420, 0, 9.0, 0.1, 0, 1], [now - 180, 0, 1.4, 1.1, 0, 1], [now - 60, 0, 1.3, 1.2, 0, 1]]
+        with patch.object(fts.scanner, "active_watchlist", return_value=["BTCUSD"]), \
+             patch.object(fts, "crypto_charts", return_value=charts), \
+             patch.object(fts, "analyse", analyse), \
+             patch.object(bitunix_data, "last_price", return_value=1.25), \
+             patch.object(bitunix_data, "forming_candle", return_value=None), \
+             patch.object(bitunix_data, "klines", return_value=rows) as klines:
+            fts.scan_crypto(["4h"], now, now - 300)
+        self.assertEqual(seen["4h"], (1.1, 1.4))          # the 1m candles after the last pass only
+        self.assertEqual(klines.call_args.args[:3], ("BTCUSDT", "1m", (now - 300) // 60 * 60))
 
     def test_fib_trendline_skips_a_symbol_when_bitunix_is_down(self):
         # Delta's shorter history draws different fibs (new keys, re-alerts).

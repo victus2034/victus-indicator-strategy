@@ -61,6 +61,10 @@ SKIP_TOUCHED_ENTRY = True
 # The same rule for trendline touches, live since 2026-10-12 (lakky): no alert once the
 # candle forming has reached the line (fib_trendline_scanner.line_already_touched).
 TL_SKIP_TOUCHED_ENTRY = True
+# Research hook (research/band_wick_backtest.py): band(market, symbol, start, end, lo, hi)
+# -> the first time price was in [lo, hi] within [start, end) on finer candles, or None.
+# None here = the eval candle's own range decides, as always.
+BAND_PROBE = None
 
 
 # ----------------------------------------------------------------- data (cached per day)
@@ -207,7 +211,13 @@ def replay(market, symbol, tf, base, evalc, now):
                     break                    # the fib died inside this bar
                 if SKIP_TOUCHED_ENTRY and ((_o < entry) if d == 1 else (_o > entry)):
                     break                    # this candle already reached the entry (entry_already_touched)
-                if held(ts) or l > hi_band or h < lo_band:
+                outside = l > hi_band or h < lo_band
+                band_ts = None
+                if not outside and BAND_PROBE is not None:
+                    end = evalc[k + 1][0] if k + 1 < len(evalc) else ts + eval_seconds
+                    band_ts = BAND_PROBE(market, symbol, ts, end, lo_band, hi_band)
+                    outside = band_ts is None
+                if held(ts) or outside:
                     if SKIP_TOUCHED_ENTRY and ((l < entry) if d == 1 else (h > entry)):
                         break
                     continue
@@ -226,7 +236,7 @@ def replay(market, symbol, tf, base, evalc, now):
                             "quiet": clock.quiet(i), "max_streak": clock.max_streak}
                 out.append(trade("fib", trades.fib_plan(d, zone), k,
                                  {"zone": zone["zone"], "fib_id": f"{symbol}|{tf}|{d}|{times[s['Ot']]}|{top}",
-                                  **features}))
+                                  "band_ts": band_ts, **features}))
                 break
 
     for line in build_trendlines(highs, lows, closes, TRENDLINE_SWING_LENGTH, TRENDLINES_KEEP, history=True):
@@ -253,13 +263,20 @@ def replay(market, symbol, tf, base, evalc, now):
                 if held(ts):
                     touched = touched or crossed
                     continue
-                if l > hi_band or h < lo_band:
+                outside = l > hi_band or h < lo_band
+                band_ts = None
+                if not outside and BAND_PROBE is not None:
+                    end = evalc[k + 1][0] if k + 1 < len(evalc) else ts + eval_seconds
+                    band_ts = BAND_PROBE(market, symbol, ts, end, lo_band, hi_band)
+                    outside = band_ts is None
+                if outside:
                     touched = touched or crossed
                     in_band = False
                     continue
                 if not in_band and (last_alert is None or ts - last_alert >= TF_SECONDS[tf]):
                     plan = trades.trendline_plan(line.kind == SUPPORT, level, tf, i, opens, highs, lows, closes)
                     out.append(trade("trendline", plan, k, {
+                        "band_ts": band_ts,
                         "line": line.kind, "swing_gap": line.x2 - line.x1, "age": i - line.created,
                         "quiet": clock.quiet(i), "max_streak": clock.max_streak}))
                     last_alert = ts

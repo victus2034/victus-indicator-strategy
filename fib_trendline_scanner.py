@@ -64,6 +64,7 @@ from config import (
 )
 from fib_trendline_data import (
     CRYPTO, IST, NSE, TF_LABEL, TF_SECONDS, candle_close_ts, candle_is_closed, crypto_charts, nse_charts,
+    nse_download,
 )
 from trendlines import SUPPORT, build_trendlines
 
@@ -92,6 +93,12 @@ SEED_VERSION = "v10"
 if bitunix_data.CRYPTO_CANDLE_SOURCE == "bitunix":
     SEED_VERSION += "-bitunix"
 NSE_LAST_SCAN_KEY = "__nse_last_scan__"
+# Wick into the band (lakky, 2026-10-16, QNT 1D): the band is judged on the range
+# traded since the previous pass, not only the price at this moment - a wick into
+# it between two checks alerts too. Looked back at most this far (a missed pass);
+# without a previous pass, SWEEP_DEFAULT_SECONDS.
+SWEEP_MAX_SECONDS = 30 * 60
+SWEEP_DEFAULT_SECONDS = 10 * 60
 # {market: when that market was last scanned with alerts awake}. A BROKEN alert
 # goes out only on the first scans after the breaking candle closed: once a pass
 # has run after that, a break seen later is old news (Lakky, 2026-10-05 - PFIZER's
@@ -303,10 +310,24 @@ def zone_candidates(symbol, tf, closed, price, forming, trend=None):
     return out
 
 
-def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=None):
+def band_price(long_side, price, swept):
+    """The price that decides the band: the deepest one traded since the last pass.
+
+    A long (fib BUY, support) is approached from above, so it is the swept low; a
+    short the swept high. Without a swept range, the price now. Whether the entry
+    was reached is still entry_already_touched / line_already_touched's call.
+    """
+    if not swept:
+        return price
+    return min(price, swept[0]) if long_side else max(price, swept[1])
+
+
+def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=None, swept=None):
     """Everything alertable on one chart right now. Pure - no state, no sends.
 
     forming: (low, high) of tf's candle so far (current_candle_range).
+    swept: (low, high) traded since the previous pass - the band counts a wick into it
+    (band_price). Messages still show the price now and its distance.
     trend: crypto daily EMA trend for the zone filter (scanner.daily_trend's sign)."""
     result = {"fib": [], "touch": [], "break": [], "zone": [], "bars": 0, "price": None}
     if len(candles) < 2:
@@ -333,7 +354,9 @@ def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=No
             if zone["zone"] not in FIB_ALERT_ZONES:
                 continue
             distance = fib_distance(d, zone, price)
-            if in_band(distance) and not entry_already_touched(d, zone, price, forming):
+            reached = fib_distance(d, zone, band_price(d == 1, price, swept))
+            if (distance is not None and in_band(reached)
+                    and not entry_already_touched(d, zone, price, forming)):
                 result["fib"].append({
                     **zone, "key": f"fib|{symbol}|{tf}|{d}|{times[live['Ot']]}|{top}|{zone['zone']}",
                     "d": d, "base": base, "top": top, "distance": distance,
@@ -353,7 +376,7 @@ def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=No
             if level <= 0:
                 continue
             distance = line_distance(line.kind, level, price)
-            if in_band(distance):
+            if in_band(line_distance(line.kind, level, band_price(line.kind == SUPPORT, price, swept))):
                 result["touch"].append({
                     **info, "key": f"tl|{ident}", "level": level, "distance": distance,
                     "touched": line_already_touched(line.kind, level, forming),
@@ -578,7 +601,22 @@ def send(channel, message, market):
 
 # ----------------------------------------------------------------- markets
 
-def scan_crypto(timeframes, now):
+def swept_since(rows, since, seconds=60):
+    """(low, high) of the `seconds` candles [ts, o, h, l, c, ...] that closed after `since`, or None."""
+    rows = [r for r in rows if r[0] + seconds > since]
+    return (min(r[3] for r in rows), max(r[2] for r in rows)) if rows else None
+
+
+def sweep_start(last_scan, now):
+    """Where this pass's swept range starts: the previous pass, at most SWEEP_MAX_SECONDS back."""
+    if not last_scan:
+        return now - SWEEP_DEFAULT_SECONDS
+    return max(last_scan, now - SWEEP_MAX_SECONDS)
+
+
+def scan_crypto(timeframes, now, since=None):
+    since = now - SWEEP_DEFAULT_SECONDS if since is None else since
+
     def one(symbol):
         contract = scanner.delta_contract(symbol)
         if contract is None:
@@ -596,7 +634,7 @@ def scan_crypto(timeframes, now):
             # xStocks' own pairs (TSLAUSDT for TSLAXUSD) reach the API as is.
             charts = crypto_charts(pair or contract, timeframes, now, source=source)
             price = current_price(charts)
-            live = None
+            live = swept = None
             if source == "bitunix":
                 # Bitunix candles stop at the last closed one, so their newest
                 # close is up to a 4H candle old; the distance needs the price now.
@@ -610,11 +648,17 @@ def scan_crypto(timeframes, now):
                     live = bitunix_data.forming_candle(pair, "4h", now)
                 except Exception as error:     # noqa: BLE001 - closed candles only
                     print(f"{symbol} Bitunix forming 4h unavailable: {str(error)[:80]}")
+                # ...and what traded since the last pass: a wick into the band counts.
+                try:
+                    start = int(since) // 60 * 60
+                    swept = swept_since(bitunix_data.klines(pair, "1m", start, int(now) + 1), since)
+                except Exception as error:     # noqa: BLE001 - the price now decides
+                    print(f"{symbol} Bitunix 1m sweep unavailable: {str(error)[:80]}")
             trend = None
             if scanner.trend_filter_applies(symbol) and charts.get("1d"):
                 trend = scanner._trend_from_daily([(c[0], c[4]) for c in charts["1d"]], now)
             return symbol, {tf: analyse(CRYPTO, symbol, tf, charts[tf], now, price,
-                                        current_candle_range(CRYPTO, charts, tf, now, live), trend)
+                                        current_candle_range(CRYPTO, charts, tf, now, live), trend, swept)
                             for tf in timeframes}, None
         except Exception as error:     # noqa: BLE001 - one bad symbol must not stop the pass
             return symbol, None, str(error)
@@ -631,11 +675,17 @@ def nse_session_open(now):
     return is_open
 
 
-def scan_nse(timeframes, now):
+def scan_nse(timeframes, now, since=None):
     import nse_scanner
 
+    since = now - SWEEP_DEFAULT_SECONDS if since is None else since
     symbols = nse_scanner.load_watchlist()
     charts = nse_charts(symbols, timeframes)
+    try:
+        fine = nse_download(symbols, "5m", period="1d")     # what traded since the last pass
+    except Exception as error:     # noqa: BLE001 - the price now decides
+        print(f"NSE 5m sweep unavailable: {str(error)[:80]}")
+        fine = {}
     today = datetime.fromtimestamp(now, IST).date()
     intraday = next((tf for tf in ("30m", "4h") if tf in timeframes), None)
     fresh = sum(1 for s in symbols if intraday and charts[s].get(intraday)
@@ -647,8 +697,10 @@ def scan_nse(timeframes, now):
     for symbol in symbols:
         try:
             price = current_price(charts[symbol])
+            swept = swept_since(fine.get(symbol, []), since, 300)
             results.append((symbol, {tf: analyse(NSE, symbol, tf, charts[symbol][tf], now, price,
-                                                 current_candle_range(NSE, charts[symbol], tf, now))
+                                                 current_candle_range(NSE, charts[symbol], tf, now),
+                                                 swept=swept)
                                      for tf in timeframes}, None))
         except Exception as error:     # noqa: BLE001
             results.append((symbol, None, str(error)))
@@ -662,10 +714,11 @@ def run_once(dry_run=False, force_nse=False):
     timeframes = [tf for tf in FIB_TL_TIMEFRAMES if tf in TF_LABEL]
     state = load_state()
 
-    markets = {CRYPTO: scan_crypto(timeframes, now)}
+    previous = state.get(LAST_SCAN_KEY) if isinstance(state.get(LAST_SCAN_KEY), dict) else {}
+    markets = {CRYPTO: scan_crypto(timeframes, now, sweep_start(previous.get(CRYPTO), now))}
     nse_due = now - state.get(NSE_LAST_SCAN_KEY, 0) >= NSE_MIN_INTERVAL_SECONDS
     if force_nse or (nse_due and nse_session_open(now)):
-        markets[NSE] = scan_nse(timeframes, now)
+        markets[NSE] = scan_nse(timeframes, now, sweep_start(state.get(NSE_LAST_SCAN_KEY), now))
         if not dry_run:
             state[NSE_LAST_SCAN_KEY] = now
 

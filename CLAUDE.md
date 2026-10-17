@@ -191,6 +191,11 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   **The forming 4H candle counts (2026-10-16, lakky, QNT 1D).** Bitunix serves closed candles only, so that
   range missed the 4H candle forming now - a 4H chart had no range at all, a 1D one up to 4 hours. `scan_crypto`
   now adds `bitunix_data.forming_candle(pair, "4h")` (`current_candle_range(..., live)`). The replay already used full candles.
+  **A wick into the band alerts (2026-10-17, lakky, QNT 1D), fibs and trendlines, crypto and NSE.** The band is
+  judged on the deepest price traded since the previous pass (`band_price`; Bitunix 1m / Yahoo 5m since
+  `__last_scan__`, at most `SWEEP_MAX_SECONDS` back), not only the price at that moment; the message still shows
+  the price now. QNT's 20:50 IST wick to 201.38 alerted only at 21:20. Sep 1 - Oct 16 (`research/band_wick_backtest.py`,
+  part `band-wick`): ~8% more alerts, 1 in 3 earlier (median 15 min); crypto fib 4H -0.15 -> -0.08 R/trade, TL flat to slightly worse.
   **Same rule on trendlines (2026-10-12, lakky: "apply for both")**, crypto and NSE: a touch whose forming
   candle already reached the line does not alert and does not re-arm the band (`line_already_touched`,
   replay `TL_SKIP_TOUCHED_ENTRY`). Sep 1 - Oct 12 (`research/tl_entry_touched_backtest.py`, part `tl-entry`):
