@@ -167,6 +167,23 @@ def sensitivity(got):
     return pd.DataFrame(rows)
 
 
+def thresholds(got, levels=(1.5, 2.0, 4.0)):
+    """lakky (2026-10-17): the move warning at 1.5% / 2% vs 4%, market = 2 of BTC/ETH/SOL. Fib + TL only."""
+    rows = []
+    for kind, name in (("fib", "fib"), ("trendline", "TL")):
+        for group, tfs in GROUPS:
+            items = [t for t in got if t["kind"] == kind and t["tf"] in tfs]
+            for pct in levels:
+                big = lambda t, p=pct: t["move_24h"] is not None and abs(t["move_24h"]) >= p  # noqa: E731
+                for label, keep in ((f"move {pct:g}%+ only", big),
+                                    (f"no warning ({pct:g}% / 2 of 3)", lambda t, b=big: not b(t) and not t["mkt_against_2"]),
+                                    (f"warned ({pct:g}% / 2 of 3)", lambda t, b=big: b(t) or t["mkt_against_2"])):
+                    pick = [t for t in items if keep(t)]
+                    if pick:
+                        rows.append({"alert": name, "tf": group, **row(label, pick)})
+    return pd.DataFrame(rows)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--since", default="2026-09-01")
@@ -176,7 +193,8 @@ def main() -> None:
     since = int(pd.Timestamp(args.since, tz=IST).timestamp())
     now = int(time.time())
     got = collect(since, now, args.limit)
-    df, sens = table(got), sensitivity(got)
+    df, sens, thr = table(got), sensitivity(got), thresholds(got)
+    thr.to_csv(OUT / "thresholds.csv", index=False)
     df.to_csv(OUT / "summary.csv", index=False)
     sens.to_csv(OUT / "sensitivity.csv", index=False)
     pd.DataFrame([{**{k: t[k] for k in ("symbol", "tf", "kind", "alert_ts", "move_24h", "big_move", "btc_against",
@@ -189,7 +207,8 @@ def main() -> None:
             f"the market's daily EMA{config.CRYPTO_TREND_EMA} trend - BTC alone, 2 of BTC/ETH/SOL, or all 3. Nothing filtered - each group scored the live way, "
             "net after fees. Zones on Bitunix (scored like fibs), fib/TL on Delta.", "",
             df.to_markdown(index=False), "", "## Move size and direction (all crypto alerts)", "",
-            sens.to_markdown(index=False), ""]
+            sens.to_markdown(index=False), "", "## Move warning at 1.5% / 2% / 4% (market = 2 of 3)", "",
+            thr.to_markdown(index=False), ""]
     (OUT / "RISK_WARNING.md").write_text("\n".join(text))
     print("\n".join(text))
 
