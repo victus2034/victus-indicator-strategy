@@ -25,17 +25,32 @@ class MoveTests(unittest.TestCase):
         self.assertIsNone(fts.move_24h([], 100.0, NOW))
 
 
+DOWN = {"BTCUSD": -1, "ETHUSD": -1, "SOLUSD": 1}
+UP = {"BTCUSD": 1, "ETHUSD": 1, "SOLUSD": -1}
+
+
 class WarningTests(unittest.TestCase):
     def test_parts(self):
         w = fts.risk_warning
-        self.assertEqual(w(ftd.CRYPTO, "SOLUSD", "long", {"move": -5.24, "btc": -1}),
-                         "⚠️ **SOL -5.2% in 24h · BTC downtrend**")
-        self.assertEqual(w(ftd.CRYPTO, "SOLUSD", "short", {"move": 4.0, "btc": -1}), "⚠️ **SOL +4.0% in 24h**")
-        self.assertEqual(w(ftd.CRYPTO, "SOLUSD", "short", {"move": 1.0, "btc": 1}), "⚠️ **BTC uptrend**")
-        self.assertIsNone(w(ftd.CRYPTO, "SOLUSD", "long", {"move": 3.9, "btc": 1}))
-        self.assertIsNone(w(ftd.CRYPTO, "SOLUSD", "long", {"move": None, "btc": None}))   # unknown never warns
-        self.assertIsNone(w(ftd.NSE, "RELIANCE.NS", "long", {"move": -9.0, "btc": -1}))  # crypto only
+        self.assertEqual(w(ftd.CRYPTO, "SOLUSD", "long", {"move": -5.24, "market": DOWN}),
+                         "⚠️ **Big 24h move · Market down: BTC ↓ ETH ↓ SOL ↑**")
+        self.assertEqual(w(ftd.CRYPTO, "SOLUSD", "short", {"move": 4.0, "market": DOWN}), "⚠️ **Big 24h move**")
+        self.assertEqual(w(ftd.CRYPTO, "SOLUSD", "short", {"move": 1.0, "market": UP}),
+                         "⚠️ **Market up: BTC ↑ ETH ↑ SOL ↓**")
+        self.assertIsNone(w(ftd.CRYPTO, "SOLUSD", "long", {"move": 3.9, "market": UP}))
+        # only 1 of 3 against: no market warning; an unknown trend never counts
+        self.assertIsNone(w(ftd.CRYPTO, "SOLUSD", "long", {"move": 0, "market": {"BTCUSD": -1, "ETHUSD": 1, "SOLUSD": None}}))
+        self.assertEqual(w(ftd.CRYPTO, "SOLUSD", "long", {"move": 0, "market": {"BTCUSD": -1, "ETHUSD": -1, "SOLUSD": None}}),
+                         "⚠️ **Market down: BTC ↓ ETH ↓ SOL -**")
+        self.assertIsNone(w(ftd.CRYPTO, "SOLUSD", "long", {"move": None, "market": {}}))
+        self.assertIsNone(w(ftd.NSE, "RELIANCE.NS", "long", {"move": -9.0, "market": DOWN}))   # crypto only
         self.assertIsNone(w(ftd.CRYPTO, "SOLUSD", "long", None))
+
+    def test_title_carries_the_24h_move(self):
+        self.assertEqual(fts.name_with_move(ftd.CRYPTO, "SOLUSD", {"move": -5.24}), "SOL -5.2%")
+        self.assertEqual(fts.name_with_move(ftd.CRYPTO, "SOLUSD", {"move": 0.31}), "SOL +0.3%")
+        self.assertEqual(fts.name_with_move(ftd.CRYPTO, "SOLUSD", {"move": None}), "SOL")
+        self.assertEqual(fts.name_with_move(ftd.NSE, "RELIANCE.NS", {"move": 2.0}), "RELIANCE")
 
     def test_fib_and_touch_alerts_get_the_line_breaks_do_not(self):
         fib = {"key": "fib|X|4h|1|0|110|2", "d": 1, "zone": 2, "low": 100, "high": 101, "entry": 100.8,
@@ -46,15 +61,17 @@ class WarningTests(unittest.TestCase):
                  "plan": {"side": "long", "entry": 100.0, "sl": 99.0}}
         brk = {"key": "tlb|X|4h|1", "kind": SUPPORT, "close": 98.0, "level": 99.0, "closed_at": None}
         analysis = {"fib": [fib], "touch": [touch], "break": [brk], "price": 100.5,
-                    "risk": {"move": -6.0, "btc": -1}}
+                    "risk": {"move": -6.0, "market": DOWN}}
         planned = fts.plan_alerts({}, ftd.CRYPTO, "SOLUSD", "4h", analysis, 0)
         by = {key.split("|")[0]: (message, record) for _, key, message, record in planned}
-        for kind in ("fib", "tl"):
+        line = "⚠️ **Big 24h move · Market down: BTC ↓ ETH ↓ SOL ↑**"
+        for kind, title in (("fib", "**SOL -6.0% · FIB L3 · BUY**"), ("tl", "**SOL -6.0% · S TL · BUY**")):
             message, record = by[kind]
-            self.assertEqual(message.splitlines()[-1], "⚠️ **SOL -6.0% in 24h · BTC downtrend**")
+            self.assertIn(title, message.splitlines()[0])
+            self.assertEqual(message.splitlines()[-1], line)
             self.assertEqual(len(message.splitlines()), 4)
-            self.assertEqual(record["warning"], "⚠️ **SOL -6.0% in 24h · BTC downtrend**")
-        self.assertNotIn("in 24h", by["tlb"][0])
+            self.assertEqual(record["warning"], line)
+        self.assertNotIn("Market", by["tlb"][0])
 
     def test_no_risk_no_line(self):
         fib = {"key": "fib|X|4h|1|0|110|2", "d": 1, "zone": 2, "low": 100, "high": 101, "entry": 100.8,
@@ -63,6 +80,7 @@ class WarningTests(unittest.TestCase):
         (_, _, message, record), = fts.plan_alerts({}, ftd.CRYPTO, "SOLUSD", "4h",
                                                    {"fib": [fib], "touch": [], "break": [], "price": 100.5}, 0)
         self.assertEqual(len(message.splitlines()), 3)
+        self.assertIn("**SOL · FIB L3 · BUY**", message)
         self.assertNotIn("warning", record)
 
 
