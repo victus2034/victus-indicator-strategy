@@ -652,7 +652,7 @@ class SeedingTests(unittest.TestCase):
         patches = [
             mock.patch.object(fts, "STATE_FILE", tmp / "state.json"),
             mock.patch.object(fts, "RECORDS_FILE", tmp / "records.jsonl"),
-            mock.patch.object(fts, "scan_crypto", lambda tfs, now: [("X", analysis(), None)]),
+            mock.patch.object(fts, "scan_crypto", lambda tfs, now, since=None: [("X", analysis(), None)]),
             mock.patch.object(fts, "nse_session_open", lambda now: False),
             mock.patch.object(fts.scanner, "in_alert_window", lambda: True),
             mock.patch.object(fts.scanner, "send_discord_message",
@@ -904,3 +904,56 @@ class DeltaPagingTests(unittest.TestCase):
             rows = data.delta_candles("NEWUSD", "4h", 0, end)
         self.assertEqual(len(rows), 201)
         self.assertEqual(len(calls), 1)
+
+
+class WickIntoBandTests(unittest.TestCase):
+    """lakky, 2026-10-16 (QNT 1D): a wick into the band between two passes alerts too."""
+
+    def fib(self, price, swept=None, forming=None):
+        snap = {"d": 1, "O": 90.0, "E": 110.0, "Ot": 0, "Et": 20}
+        candles = [[i * 14400, 100.0, 111.0, 89.0, 100.0] for i in range(60)]
+        with mock.patch.object(fts.fib_engine, "run", return_value=([snap] * 60, [])), \
+                mock.patch.object(fts, "build_trendlines", return_value=[]):
+            return fts.analyse(ftd.CRYPTO, "BTCUSD", "4h", candles, 10**10, price=price,
+                               forming=forming, swept=swept)["fib"]
+
+    def test_a_fib_wick_into_the_band_alerts(self):
+        entry = zones_by_number(1, 90.0, 110.0)[2]["entry"]
+        live = entry * 1.012                                   # 1.2% away now
+        self.assertEqual(self.fib(live), [])
+        got = self.fib(live, swept=(entry * 1.004, live))     # wicked to 0.4% since the last pass
+        self.assertEqual(len(got), 1)
+        self.assertAlmostEqual(got[0]["distance"], 1.2)        # the message shows the price now
+        # a wick through the entry is a trade already on: the touched rule still blocks it
+        self.assertEqual(self.fib(live, swept=(entry * 0.999, live), forming=(entry * 0.999, live)), [])
+
+    def test_a_trendline_wick_into_the_band_alerts(self):
+        line = mock.Mock(kind=SUPPORT, alive=True, x1=5, x2=30, y1=95.0, y2=98.0)
+        line.price_at.return_value = 100.0
+        candles = [[i * 86400, 105.0, 106.0, 104.0, 105.0] for i in range(60)]
+
+        def touches(price, swept=None):
+            with mock.patch.object(fts.fib_engine, "run",
+                                   return_value=([{"d": 1, "O": 0.0, "E": 0.0, "Ot": 0, "Et": 0}] * 60, [])), \
+                    mock.patch.object(fts, "build_trendlines", return_value=[line]):
+                return fts.analyse(ftd.CRYPTO, "BTCUSD", "1d", candles, 10**10, price=price, swept=swept)["touch"]
+
+        self.assertEqual(touches(101.5), [])
+        self.assertEqual(len(touches(101.5, swept=(100.5, 101.6))), 1)
+        self.assertEqual(touches(101.5, swept=(99.5, 101.6)), [])     # through the line: not a touch
+
+    def test_band_price_takes_the_approach_side_extreme(self):
+        self.assertEqual(fts.band_price(True, 101.0, (100.2, 101.4)), 100.2)
+        self.assertEqual(fts.band_price(False, 101.0, (100.2, 101.4)), 101.4)
+        self.assertEqual(fts.band_price(True, 101.0, None), 101.0)
+        self.assertEqual(fts.band_price(True, 100.0, (100.2, 101.4)), 100.0)   # the price now is deeper
+
+    def test_the_sweep_starts_at_the_last_pass(self):
+        now = 1_000_000
+        self.assertEqual(fts.sweep_start(now - 300, now), now - 300)
+        self.assertEqual(fts.sweep_start(now - 7200, now), now - fts.SWEEP_MAX_SECONDS)   # a missed night
+        self.assertEqual(fts.sweep_start(None, now), now - fts.SWEEP_DEFAULT_SECONDS)
+        rows = [[now - 600, 0, 5, 1, 0], [now - 240, 0, 3, 2, 0], [now - 60, 0, 4, 2.5, 0]]
+        self.assertEqual(fts.swept_since(rows, now - 300), (2, 4))
+        self.assertIsNone(fts.swept_since(rows, now))
+        self.assertEqual(fts.swept_since(rows, now - 200, 300), (2, 4))
