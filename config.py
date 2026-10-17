@@ -525,6 +525,19 @@ TRENDLINES_KEEP = 6
 # where the entry is. It is a preference, not an edge.
 FIB_TL_MIN_DISTANCE_PCT = env_float("VICTUS_FIB_TL_MIN_DISTANCE_PCT", 0.0)
 FIB_TL_MAX_DISTANCE_PCT = env_float("VICTUS_FIB_TL_MAX_DISTANCE_PCT", 0.75)
+# Risk warning line (lakky, 2026-10-17), crypto fib + trendline touch alerts only:
+# the title shows the coin's 24h % ("SOL -5.2% · FIB L3 · BUY"), and a 4th line
+# "⚠️ **Big 24h move · Market down: BTC ↓ ETH ↓ SOL ↑**" when it moved this % either way
+# and/or the market is against the trade (below). The alert still sends. Sep 1 - Oct 17 (research/risk_warning_backtest.py,
+# part risk-warn): fib 4H unwarned +0.03R vs warned -0.16R, 1D+ +1.21R vs -0.20R;
+# TL 4H -0.38R vs -0.46R. Zones were the other way round, so they get no warning.
+# 2% (lakky, 2026-10-17, "for testing"): at 2% ~85% of fib/TL alerts warn vs ~65% at 4%, and the
+# split is weaker (fib 4H +0.44% vs -0.42% a trade; 4%: +0.38% vs -0.65%). He watches it live.
+RISK_WARN_MOVE_PCT = env_float("VICTUS_RISK_WARN_MOVE_PCT", 2.0)
+# The market is judged on BTC, ETH and SOL (lakky, 2026-10-17): warn when this many of the three
+# are against the trade. Fib 4H against / with: BTC alone -0.35% / -0.26% a trade, 2 of 3 -0.69% / -0.05%.
+RISK_WARN_MARKET_SYMBOLS = ("BTCUSD", "ETHUSD", "SOLUSD")
+RISK_WARN_MARKET_MIN_AGAINST = 2
 # Trade rules the alerts print and the backtests score (Shiva's choice,
 # 2026-09-29). Fib: entry at the zone's near edge (his EX 2 ETH trades), SL
 # FIB_SL_HEIGHT_PCT beyond the far edge (since 2026-10-08). Trendline: entry at the line, SL this % on the far side of it.
