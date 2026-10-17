@@ -146,8 +146,8 @@
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1792122300,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -187,9 +187,9 @@
   "end_ts": null,
   "fill_ts": 1792050300,
   "filled": true,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
   "resolved": false,
   "sl": false
@@ -310,6 +310,19 @@
   "r2": false,
   "resolved": true,
   "sl": true
+ },
+ "fib|AKE/USDT|4h|1|1791849600|0.037534|2@1792139515": {
+  "ambiguous": false,
+  "be": true,
+  "end_ts": 1792173600,
+  "fill_ts": 1792155600,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
  },
  "fib|ALKEM.NS|1w|1|1740335400|5933.5|2@1791963286": {
   "ambiguous": false,
@@ -432,8 +445,8 @@
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1792002600,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -483,14 +496,14 @@
  "fib|APARINDS.NS|4h|-1|1790048700|16969.0|2@1791882240": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792140300,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|APARINDS.NS|4h|1|1789530300|19261.0|2@1790741090": {
@@ -505,6 +518,32 @@
   "r2": false,
   "resolved": true,
   "sl": true
+ },
+ "fib|APTUSD|1d|-1|1791676800|0.7493|2@1792135136": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792137600,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "fib|APTUSD|4h|-1|1791720000|0.7493|2@1792135136": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792137600,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": false,
+  "sl": false
  },
  "fib|ARBUSD|4h|-1|1791705600|0.16935|2@1792077864": {
   "ambiguous": false,
@@ -534,15 +573,15 @@
  },
  "fib|ASAHIINDIA.NS|1d|1|1785263400|995.0|2@1792035966": {
   "ambiguous": false,
-  "be": false,
-  "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
-  "half": false,
-  "outcome": "open",
+  "be": true,
+  "end_ts": 1792133100,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": true,
+  "outcome": "BE",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|ASAHIINDIA.NS|4h|-1|1789443900|920.0499877929688|2@1790741090": {
@@ -604,8 +643,8 @@
   "fill_ts": 1791743400,
   "filled": true,
   "half": true,
-  "outcome": "open",
-  "r1": false,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
   "resolved": false,
   "sl": false
@@ -648,6 +687,19 @@
   "r2": false,
   "resolved": true,
   "sl": true
+ },
+ "fib|AVAXUSD|4h|-1|1791792000|9.336|2@1792142079": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792144800,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": false,
+  "sl": false
  },
  "fib|AVAXUSD|4h|-1|1791792000|9.803|2@1791874988": {
   "ambiguous": false,
@@ -707,6 +759,19 @@
   "end_ts": null,
   "fill_ts": 1791960300,
   "filled": true,
+  "half": true,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "fib|BAJAJHFL.NS|1d|1|1791829800|86.30999755859375|2@1792122103": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792143900,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -725,6 +790,19 @@
   "r1": false,
   "r2": false,
   "resolved": true,
+  "sl": false
+ },
+ "fib|BAJAJHFL.NS|4h|1|1791863100|86.27999877929688|2@1792122103": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792140300,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "fib|BANDHANBNK.NS|4h|1|1788320700|193.0|2@1790839788": {
@@ -751,6 +829,19 @@
   "r1": false,
   "r2": false,
   "resolved": true,
+  "sl": false
+ },
+ "fib|BATUSD|4h|1|1792022400|0.2233|2@1792146507": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "fib|BCHUSD|4h|1|1789488000|366.33|2@1791473615": {
@@ -877,8 +968,8 @@
   "fill_ts": 1791960300,
   "filled": true,
   "half": true,
-  "outcome": "open",
-  "r1": false,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
   "resolved": false,
   "sl": false
@@ -889,9 +980,9 @@
   "end_ts": null,
   "fill_ts": 1791953100,
   "filled": true,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
   "resolved": false,
   "sl": false
@@ -925,14 +1016,14 @@
  "fib|BNBUSD|4h|-1|1791734400|708.46|2@1792076521": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792152000,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|BNBUSD|4h|1|1790697600|810.67|2@1791259177": {
@@ -985,6 +1076,19 @@
   "r1": true,
   "r2": true,
   "resolved": true,
+  "sl": false
+ },
+ "fib|BTWUSD|4h|1|1791072000|2.7537|2@1792153361": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "fib|CAPLIPOINT.NS|1d|1|1789497000|2990.0|2@1790741967": {
@@ -1094,14 +1198,14 @@
  "fib|CASTROLIND.NS|4h|1|1788162300|203.2899932861328|2@1791870223": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792125900,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|CGCL.NS|1d|1|1787250600|287.45001220703125|2@1790741967": {
@@ -1211,14 +1315,14 @@
  "fib|CRISIL.NS|4h|-1|1790581500|4346.0|2@1791877997": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792136700,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|CUB.NS|4h|-1|1788752700|210.6999969482422|2@1791967627": {
@@ -1234,11 +1338,37 @@
   "resolved": false,
   "sl": false
  },
+ "fib|DALBHARAT.NS|1d|-1|1789929000|1580.0|2@1792140243": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792140300,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|DALBHARAT.NS|4h|-1|1791344700|1585.5999755859375|2@1791865420": {
   "ambiguous": false,
   "be": false,
   "end_ts": 1791884700,
   "fill_ts": 1791881100,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
+ },
+ "fib|DALBHARAT.NS|4h|-1|1791949500|1607.800048828125|2@1792130018": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792133100,
+  "fill_ts": 1792133100,
   "filled": true,
   "half": false,
   "outcome": "SL",
@@ -1312,6 +1442,19 @@
   "resolved": true,
   "sl": true
  },
+ "fib|DOSUSD|1d|1|1791763200|0.2513|2@1792119442": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|ELGIEQUIP.NS|4h|-1|1791359100|568.5|2@1791883424": {
   "ambiguous": false,
   "be": false,
@@ -1379,15 +1522,15 @@
  },
  "fib|ETHUSD|4h|-1|1791777600|2314.15|2@1792079831": {
   "ambiguous": false,
-  "be": false,
-  "end_ts": null,
+  "be": true,
+  "end_ts": 1792134000,
   "fill_ts": 1792090800,
   "filled": true,
   "half": true,
-  "outcome": "open",
-  "r1": false,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|ETHUSD|4h|1|1789488000|2806.58|2@1791374700": {
@@ -1471,14 +1614,14 @@
  "fib|FLUOROCHEM.NS|4h|-1|1789011900|4233.0|2@1791882240": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792133100,
   "fill_ts": 1791949500,
   "filled": true,
   "half": true,
-  "outcome": "1R",
+  "outcome": "2R",
   "r1": true,
-  "r2": false,
-  "resolved": false,
+  "r2": true,
+  "resolved": true,
   "sl": false
  },
  "fib|FSL.NS|1d|-1|1785868200|246.64999389648438|2@1791875605": {
@@ -1506,6 +1649,19 @@
   "r2": false,
   "resolved": true,
   "sl": true
+ },
+ "fib|GILLETTE.NS|4h|-1|1788839100|6860.0|2@1792127862": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792136700,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
  },
  "fib|GLAND.NS|4h|1|1787629500|3042.0|2@1790761169": {
   "ambiguous": false,
@@ -1663,6 +1819,19 @@
   "resolved": true,
   "sl": true
  },
+ "fib|GODREJCP.NS|4h|-1|1792035900|842.7999877929688|2@1792139515": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|GODREJIND.NS|1M|1|1772303400|1443.0|2@1790741090": {
   "ambiguous": false,
   "be": false,
@@ -1757,14 +1926,14 @@
  "fib|HBLENGINE.NS|1d|1|1774809000|875.0|2@1791432820": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792129500,
   "fill_ts": 1791438300,
   "filled": true,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
-  "r2": false,
-  "resolved": false,
+  "half": true,
+  "outcome": "2R",
+  "r1": true,
+  "r2": true,
+  "resolved": true,
   "sl": false
  },
  "fib|HBLENGINE.NS|1w|1|1742149800|1122.0|2@1791441205": {
@@ -1783,9 +1952,22 @@
  "fib|HBLENGINE.NS|4h|1|1774856700|874.9000244140625|2@1791432820": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792129500,
   "fill_ts": 1791438300,
   "filled": true,
+  "half": true,
+  "outcome": "2R",
+  "r1": true,
+  "r2": true,
+  "resolved": true,
+  "sl": false
+ },
+ "fib|HEXT.NS|1d|-1|1770057000|400.20001220703125|2@1792132959": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -1913,12 +2095,25 @@
  "fib|ITI.NS|4h|-1|1791258300|236.14999389648438|2@1791882240": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792122300,
   "fill_ts": 1791949500,
   "filled": true,
   "half": true,
-  "outcome": "1R",
+  "outcome": "2R",
   "r1": true,
+  "r2": true,
+  "resolved": true,
+  "sl": false
+ },
+ "fib|JSL.NS|4h|-1|1790135100|700.9000244140625|2@1792125719": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792125900,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
   "r2": false,
   "resolved": false,
   "sl": false
@@ -2066,6 +2261,19 @@
   "resolved": true,
   "sl": false
  },
+ "fib|KPIL.NS|1d|1|1785177000|1490.0|2@1792143128": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792143900,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|KPIL.NS|4h|1|1781163900|1477.5|2@1790841601": {
   "ambiguous": false,
   "be": false,
@@ -2135,8 +2343,8 @@
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1792122300,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -2174,8 +2382,8 @@
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1792122300,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -2195,6 +2403,19 @@
   "r2": false,
   "resolved": true,
   "sl": true
+ },
+ "fib|LINKUSD|4h|-1|1791777600|11.817|2@1792143550": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792170000,
+  "fill_ts": 1792148400,
+  "filled": true,
+  "half": true,
+  "outcome": "2R",
+  "r1": true,
+  "r2": true,
+  "resolved": true,
+  "sl": false
  },
  "fib|LINKUSD|4h|1|1789574400|15.765|2@1791457692": {
   "ambiguous": false,
@@ -2433,27 +2654,27 @@
  "fib|MOTILALOFS.NS|4h|1|1791517500|1065.5|2@1791870223": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792125900,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|MRPL.NS|4h|1|1768189500|212.3000030517578|2@1790756358": {
   "ambiguous": false,
-  "be": false,
-  "end_ts": null,
+  "be": true,
+  "end_ts": 1792122300,
   "fill_ts": 1790757900,
   "filled": true,
   "half": true,
   "outcome": "1R",
   "r1": true,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|MRPL.NS|4h|1|1790826300|184.25999450683594|2@1791877438": {
@@ -2667,14 +2888,14 @@
  "fib|NLCINDIA.NS|4h|-1|1790048700|240.0|2@1791965444": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792122300,
   "fill_ts": 1791967500,
   "filled": true,
   "half": true,
-  "outcome": "1R",
+  "outcome": "2R",
   "r1": true,
-  "r2": false,
-  "resolved": false,
+  "r2": true,
+  "resolved": true,
   "sl": false
  },
  "fib|NMDC.NS|1M|1|1743445800|97.48999786376953|2@1790745574": {
@@ -2716,6 +2937,19 @@
   "resolved": true,
   "sl": true
  },
+ "fib|NTPCGREEN.NS|4h|-1|1791791100|89.51000213623047|2@1792140243": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|NTPCGREEN.NS|4h|1|1789530300|95.95999908447266|2@1790839788": {
   "ambiguous": false,
   "be": true,
@@ -2732,15 +2966,15 @@
  "fib|NTPCGREEN.NS|4h|1|1791431100|94.5999984741211|2@1792035966": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792122300,
   "fill_ts": 1792053900,
   "filled": true,
   "half": false,
-  "outcome": "open",
+  "outcome": "SL",
   "r1": false,
   "r2": false,
-  "resolved": false,
-  "sl": false
+  "resolved": true,
+  "sl": true
  },
  "fib|NUVAMA.NS|4h|-1|1784864700|1579.9000244140625|2@1791184475": {
   "ambiguous": false,
@@ -2872,6 +3106,19 @@
   "resolved": true,
   "sl": true
  },
+ "fib|PERSISTENT.NS|4h|1|1790667900|6077.0|2@1792122103": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|PFOCUS.NS|1d|-1|1776364200|202.5399932861328|2@1790828668": {
   "ambiguous": false,
   "be": false,
@@ -2950,6 +3197,19 @@
   "resolved": true,
   "sl": false
  },
+ "fib|PINELABS.NS|1d|1|1779820200|206.3800048828125|2@1792122103": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|PINELABS.NS|4h|-1|1776829500|135.0|2@1791345579": {
   "ambiguous": false,
   "be": false,
@@ -2965,15 +3225,15 @@
  },
  "fib|PIRAMALFIN.NS|1d|1|1790188200|2174.39990234375|2@1791967627": {
   "ambiguous": false,
-  "be": false,
-  "end_ts": null,
+  "be": true,
+  "end_ts": 1792122300,
   "fill_ts": 1791971100,
   "filled": true,
   "half": true,
-  "outcome": "open",
+  "outcome": "BE",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|PIRAMALFIN.NS|1w|1|1776623400|2326.39990234375|2@1791517992": {
@@ -2982,7 +3242,7 @@
   "end_ts": null,
   "fill_ts": 1791916200,
   "filled": true,
-  "half": false,
+  "half": true,
   "outcome": "open",
   "r1": false,
   "r2": false,
@@ -3047,6 +3307,19 @@
   "end_ts": null,
   "fill_ts": null,
   "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "fib|QNTUSD|1d|1|1789516800|373.62|2@1792165841": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792166400,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -3132,7 +3405,7 @@
   "resolved": true,
   "sl": true
  },
- "fib|RRKABEL.NS|1d|1|1789497000|2806.800048828125|2@1792050183": {
+ "fib|RLCUSD|1d|1|1785283200|1.4879|2@1792177665": {
   "ambiguous": false,
   "be": false,
   "end_ts": null,
@@ -3145,18 +3418,31 @@
   "resolved": false,
   "sl": false
  },
+ "fib|RRKABEL.NS|1d|1|1789497000|2806.800048828125|2@1792050183": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792140300,
+  "fill_ts": 1792129500,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
+ },
  "fib|RRKABEL.NS|4h|1|1789530300|2804.199951171875|2@1792050912": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "end_ts": 1792140300,
+  "fill_ts": 1792129500,
+  "filled": true,
   "half": false,
-  "outcome": "open",
+  "outcome": "SL",
   "r1": false,
   "r2": false,
-  "resolved": false,
-  "sl": false
+  "resolved": true,
+  "sl": true
  },
  "fib|RSRUSD|4h|1|1791475200|0.002587|2@1791972454": {
   "ambiguous": false,
@@ -3182,6 +3468,19 @@
   "r1": true,
   "r2": true,
   "resolved": true,
+  "sl": false
+ },
+ "fib|RVNL.NS|4h|-1|1789717500|186.92999267578125|2@1792131483": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "fib|SLVONUSD|4h|-1|1791187200|53.06|2@1791513200": {
@@ -3262,6 +3561,19 @@
   "resolved": true,
   "sl": false
  },
+ "fib|STRKUSD|1d|1|1789516800|0.12645|2@1792204382": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|STRKUSD|4h|1|1791432000|0.12645|2@1791909677": {
   "ambiguous": false,
   "be": true,
@@ -3273,6 +3585,19 @@
   "r1": false,
   "r2": false,
   "resolved": true,
+  "sl": false
+ },
+ "fib|SUIUSD|4h|-1|1791734400|0.9592|2@1792149136": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "fib|SUIUSD|4h|-1|1791734400|0.9928|2@1791948856": {
@@ -3290,28 +3615,28 @@
  },
  "fib|SUSD|4h|1|1790640000|0.07386|2@1791995235": {
   "ambiguous": false,
-  "be": false,
-  "end_ts": null,
+  "be": true,
+  "end_ts": 1792148400,
   "fill_ts": 1791997200,
   "filled": true,
   "half": true,
   "outcome": "1R",
   "r1": true,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|TAOUSD|1d|1|1789516800|341.05|2@1791983771": {
   "ambiguous": false,
-  "be": false,
-  "end_ts": null,
+  "be": true,
+  "end_ts": 1792180800,
   "fill_ts": 1791993600,
   "filled": true,
   "half": true,
-  "outcome": "open",
-  "r1": false,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|TRUMP/USDT|4h|1|1786636800|3.683|2@1790822346": {
@@ -3329,15 +3654,15 @@
  },
  "fib|TSLAXUSD|1d|-1|1782950400|294.35|2@1790949898": {
   "ambiguous": false,
-  "be": false,
-  "end_ts": null,
+  "be": true,
+  "end_ts": 1792108800,
   "fill_ts": 1790956800,
   "filled": true,
   "half": true,
-  "outcome": "open",
+  "outcome": "BE",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|TSLAXUSD|1w|-1|1778457600|294.35|2@1791212778": {
@@ -3444,6 +3769,19 @@
   "resolved": true,
   "sl": false
  },
+ "fib|WLDUSD|4h|-1|1791734400|0.4619|2@1792139924": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792170000,
+  "fill_ts": 1792141200,
+  "filled": true,
+  "half": true,
+  "outcome": "2R",
+  "r1": true,
+  "r2": true,
+  "resolved": true,
+  "sl": false
+ },
  "fib|XAUTUSD|1d|1|1782777600|4683.24|2@1790751896": {
   "ambiguous": false,
   "be": false,
@@ -3509,6 +3847,32 @@
   "resolved": true,
   "sl": false
  },
+ "fib|XAUTUSD|4h|1|1791993600|4190.63|2@1792156665": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "fib|XAUTUSD|4h|1|1791993600|4194.2|2@1792168469": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|XRPUSD|1d|1|1786665600|1.7|2@1792031978": {
   "ambiguous": false,
   "be": false,
@@ -3563,15 +3927,15 @@
  },
  "fib|ZECUSD|4h|-1|1791777600|1072.41|2@1792084799": {
   "ambiguous": false,
-  "be": false,
-  "end_ts": null,
+  "be": true,
+  "end_ts": 1792126800,
   "fill_ts": 1792087200,
   "filled": true,
-  "half": false,
-  "outcome": "open",
+  "half": true,
+  "outcome": "BE",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|ZECUSD|4h|1|1791460800|1348.57|2@1791918221": {
@@ -3586,6 +3950,19 @@
   "r2": true,
   "resolved": true,
   "sl": false
+ },
+ "fib|ZROUSD|4h|-1|1791792000|1.7976|2@1792120760": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792130400,
+  "fill_ts": 1792123200,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
  },
  "tl|1000PEPEUSD|4h|0|1791475200|1791849600@1792043491": {
   "ambiguous": false,
@@ -3629,14 +4006,14 @@
  "tl|1000PEPEUSD|4h|1|1791187200|1791777600@1792078839": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792152000,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|360ONE.NS|4h|1|1787903100|1790135100@1791359371": {
@@ -3655,15 +4032,15 @@
  "tl|360ONE.NS|4h|1|1787903100|1790135100@1791432232": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792122300,
   "fill_ts": 1791863100,
   "filled": true,
   "half": false,
-  "outcome": "open",
+  "outcome": "SL",
   "r1": false,
   "r2": false,
-  "resolved": false,
-  "sl": false
+  "resolved": true,
+  "sl": true
  },
  "tl|360ONE.NS|4h|1|1787903100|1790135100@1791777819": {
   "ambiguous": false,
@@ -3694,27 +4071,27 @@
  "tl|AADHARHFC.NS|1d|1|1786041000|1788460200@1792044536": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792136700,
   "fill_ts": 1792046700,
   "filled": true,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|AADHARHFC.NS|4h|1|1788493500|1791359100@1792052311": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792122300,
   "fill_ts": 1792053900,
   "filled": true,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|AARTIIND.NS|4h|0|1782791100|1789530300@1791532387": {
@@ -3799,8 +4176,8 @@
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1792122300,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -3811,41 +4188,41 @@
  "tl|ACMESOLAR.NS|1d|0|1785177000|1786991400@1792038119": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792122300,
   "fill_ts": 1792057500,
   "filled": true,
   "half": false,
-  "outcome": "open",
+  "outcome": "SL",
   "r1": false,
   "r2": false,
-  "resolved": false,
-  "sl": false
+  "resolved": true,
+  "sl": true
  },
  "tl|ACMESOLAR.NS|4h|0|1785383100|1787024700@1791868410": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "end_ts": 1792122300,
+  "fill_ts": 1792122300,
+  "filled": true,
   "half": false,
-  "outcome": "open",
+  "outcome": "SL",
   "r1": false,
   "r2": false,
-  "resolved": false,
-  "sl": false
+  "resolved": true,
+  "sl": true
  },
  "tl|ACMESOLAR.NS|4h|0|1785383100|1787024700@1792054426": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792122300,
   "fill_ts": 1792057500,
   "filled": true,
   "half": false,
-  "outcome": "open",
+  "outcome": "SL",
   "r1": false,
   "r2": false,
-  "resolved": false,
-  "sl": false
+  "resolved": true,
+  "sl": true
  },
  "tl|ACMESOLAR.NS|4h|0|1787816700|1789098300@1791519819": {
   "ambiguous": false,
@@ -3912,6 +4289,19 @@
   "resolved": true,
   "sl": true
  },
+ "tl|ADAUSD|1d|0|1785196800|1787011200@1792170794": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|ADAUSD|4h|0|1789574400|1791475200@1791892902": {
   "ambiguous": false,
   "be": false,
@@ -3928,9 +4318,35 @@
  "tl|AEGISLOG.NS|4h|0|1778816700|1779867900@1791882240": {
   "ambiguous": false,
   "be": false,
+  "end_ts": 1792125900,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|AEGISLOG.NS|4h|0|1778816700|1779867900@1792122103": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792122300,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
+ },
+ "tl|AEGISLOG.NS|4h|0|1778816700|1779867900@1792136567": {
+  "ambiguous": false,
+  "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1792140300,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -3943,6 +4359,19 @@
   "be": false,
   "end_ts": null,
   "fill_ts": 1791521100,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|AEGISVOPAK.NS|4h|0|1787802300|1791517500@1792136567": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792143900,
   "filled": true,
   "half": false,
   "outcome": "open",
@@ -4159,11 +4588,11 @@
   "resolved": true,
   "sl": true
  },
- "tl|ALKEM.NS|4h|0|1789098300|1790826300@1791963286": {
+ "tl|ALKEM.NS|1d|0|1754850600|1789065000@1792122103": {
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": 1792053900,
+  "fill_ts": 1792122300,
   "filled": true,
   "half": false,
   "outcome": "open",
@@ -4172,11 +4601,11 @@
   "resolved": false,
   "sl": false
  },
- "tl|ALKEM.NS|4h|0|1789098300|1790826300@1792043097": {
+ "tl|ALKEM.NS|4h|0|1775101500|1789098300@1792122835": {
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": 1792053900,
+  "fill_ts": 1792140300,
   "filled": true,
   "half": false,
   "outcome": "open",
@@ -4184,6 +4613,32 @@
   "r2": false,
   "resolved": false,
   "sl": false
+ },
+ "tl|ALKEM.NS|4h|0|1789098300|1790826300@1791963286": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792122300,
+  "fill_ts": 1792053900,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
+ },
+ "tl|ALKEM.NS|4h|0|1789098300|1790826300@1792043097": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792122300,
+  "fill_ts": 1792053900,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
  },
  "tl|ALKEM.NS|4h|1|1785383100|1789717500@1791346193": {
   "ambiguous": false,
@@ -4202,8 +4657,21 @@
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|AMBER.NS|4h|1|1787888700|1791359100@1792136567": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792136700,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -4276,6 +4744,19 @@
   "resolved": true,
   "sl": true
  },
+ "tl|ANANTRAJ.NS|4h|0|1781163900|1782791100@1792122103": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792129500,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
  "tl|ANANTRAJ.NS|4h|0|1784259900|1790840700@1791792261": {
   "ambiguous": false,
   "be": false,
@@ -4302,6 +4783,19 @@
   "resolved": true,
   "sl": true
  },
+ "tl|ANTHEM.NS|1d|0|1772994600|1784658600@1792128583": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|ANTHEM.NS|4h|0|1773027900|1774251900@1792039500": {
   "ambiguous": false,
   "be": false,
@@ -4314,6 +4808,19 @@
   "r2": false,
   "resolved": true,
   "sl": false
+ },
+ "tl|ANTHEM.NS|4h|0|1773027900|1774251900@1792122103": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792125900,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
  },
  "tl|ANTHEM.NS|4h|0|1784691900|1790826300@1791868410": {
   "ambiguous": false,
@@ -4366,6 +4873,19 @@
   "r2": false,
   "resolved": true,
   "sl": false
+ },
+ "tl|ARBUSD|4h|1|1791230400|1791705600@1792124655": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792134000,
+  "fill_ts": 1792126800,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
  },
  "tl|ASAHIINDIA.NS|1d|0|1782671400|1785263400@1791452030": {
   "ambiguous": false,
@@ -4604,14 +5124,14 @@
  "tl|AUBANK.NS|4h|1|1787629500|1791258300@1792036698": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792122300,
   "fill_ts": 1792039500,
   "filled": true,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|AUBANK.NS|4h|1|1787629500|1791258300@1792055863": {
@@ -5017,6 +5537,19 @@
   "resolved": false,
   "sl": false
  },
+ "tl|BEML.NS|4h|1|1789962300|1791272700@1792135136": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|BERGEPAINT.NS|4h|0|1773632700|1789530300@1790828668": {
   "ambiguous": false,
   "be": false,
@@ -5070,6 +5603,19 @@
   "sl": false
  },
  "tl|BHARTIHEXA.NS|4h|1|1771472700|1785383100@1792056596": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792125900,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|BHARTIHEXA.NS|4h|1|1771472700|1785383100@1792122835": {
   "ambiguous": false,
   "be": false,
   "end_ts": null,
@@ -5267,14 +5813,14 @@
  "tl|BNBUSD|4h|0|1789041600|1789545600@1792072598": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792144800,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|BNBUSD|4h|0|1789545600|1791475200@1792032972": {
@@ -5381,6 +5927,19 @@
   "resolved": true,
   "sl": false
  },
+ "tl|CAMS.NS|1d|1|1785781800|1788114600@1792126421": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|CAMS.NS|1w|0|1684089000|1698604200@1791431610": {
   "ambiguous": false,
   "be": false,
@@ -5460,6 +6019,19 @@
   "sl": true
  },
  "tl|CDSL.NS|4h|1|1788752700|1789962300@1792039500": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|CDSL.NS|4h|1|1788752700|1789962300@1792122103": {
   "ambiguous": false,
   "be": false,
   "end_ts": null,
@@ -5667,6 +6239,19 @@
   "resolved": true,
   "sl": true
  },
+ "tl|CRISIL.NS|4h|1|1788493500|1790581500@1792143128": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792143900,
+  "fill_ts": 1792143900,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
+ },
  "tl|DABUR.NS|1M|0|1222799400|1325356200@1790842775": {
   "ambiguous": false,
   "be": false,
@@ -5683,14 +6268,14 @@
  "tl|DABUR.NS|4h|1|1785210300|1791258300@1791960443": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792122300,
   "fill_ts": 1791971100,
   "filled": true,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|DALBHARAT.NS|1d|0|1741717800|1781116200@1791438799": {
@@ -5698,6 +6283,19 @@
   "be": false,
   "end_ts": 1791780300,
   "fill_ts": 1791441900,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|DALBHARAT.NS|1d|1|1788114600|1789929000@1792140243": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792143900,
+  "fill_ts": 1792140300,
   "filled": true,
   "half": true,
   "outcome": "1R",
@@ -5888,6 +6486,45 @@
   "resolved": true,
   "sl": false
  },
+ "tl|DOGEUSD|4h|1|1791288000|1791777600@1792120760": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792152000,
+  "fill_ts": 1792126800,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|DOGEUSD|4h|1|1791288000|1791777600@1792135854": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792155600,
+  "fill_ts": 1792137600,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|DOGEUSD|4h|1|1791777600|1791964800@1792150107": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|EIHOTEL.NS|1w|0|1655663400|1679855400@1791517992": {
   "ambiguous": true,
   "be": false,
@@ -5917,14 +6554,27 @@
  "tl|ELGIEQUIP.NS|1d|0|1783967400|1785436200@1791517992": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
+  "end_ts": 1792125900,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|ELGIEQUIP.NS|1d|0|1783967400|1785436200@1792122103": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792125900,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
   "sl": false
  },
  "tl|ELGIEQUIP.NS|4h|0|1774237500|1775101500@1791519199": {
@@ -5979,6 +6629,32 @@
   "resolved": true,
   "sl": false
  },
+ "tl|EMCURE.NS|4h|0|1780371900|1781163900@1792122103": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792129500,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|EMCURE.NS|4h|0|1780371900|1781163900@1792138041": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792143900,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|EMCURE.NS|4h|0|1787629500|1788248700@1791438799": {
   "ambiguous": false,
   "be": false,
@@ -6004,6 +6680,19 @@
   "r2": false,
   "resolved": true,
   "sl": false
+ },
+ "tl|ENAUSD|1d|0|1787097600|1789344000@1792121791": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792166400,
+  "fill_ts": 1792166400,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
  },
  "tl|ENAUSD|4h|0|1787097600|1789344000@1791984106": {
   "ambiguous": false,
@@ -6187,6 +6876,19 @@
   "resolved": true,
   "sl": false
  },
+ "tl|ETHUSD|4h|1|1791288000|1791777600@1792137707": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792162800,
+  "fill_ts": 1792148400,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
  "tl|FACT.NS|4h|1|1787629500|1789962300@1791883424": {
   "ambiguous": false,
   "be": false,
@@ -6200,30 +6902,43 @@
   "resolved": true,
   "sl": true
  },
+ "tl|FEDERALBNK.NS|4h|1|1785743100|1787197500@1792122835": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792136700,
+  "fill_ts": 1792136700,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
+ },
  "tl|FEDERALBNK.NS|4h|1|1787197500|1788407100@1792040232": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
+  "end_ts": 1792125900,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|FEDERALBNK.NS|4h|1|1787197500|1788407100@1792055148": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
+  "end_ts": 1792125900,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|FINCABLES.NS|1d|0|1786300200|1788287400@1791435200": {
@@ -6385,15 +7100,15 @@
  "tl|FORTIS.NS|4h|0|1775101500|1790826300@1792046630": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792122300,
   "fill_ts": 1792050300,
   "filled": true,
   "half": false,
-  "outcome": "open",
+  "outcome": "SL",
   "r1": false,
   "r2": false,
-  "resolved": false,
-  "sl": false
+  "resolved": true,
+  "sl": true
  },
  "tl|FSL.NS|4h|1|1785915900|1789443900@1791351573": {
   "ambiguous": false,
@@ -6424,22 +7139,22 @@
  "tl|GABRIEL.NS|1d|0|1774809000|1780857000@1791517992": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792125900,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|GABRIEL.NS|4h|1|1785901500|1790063100@1792050183": {
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1792122300,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -6512,6 +7227,19 @@
   "resolved": true,
   "sl": false
  },
+ "tl|GILLETTE.NS|4h|1|1788839100|1791431100@1792127862": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792136700,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|GLENMARK.NS|1d|0|1781634600|1785695400@1791436987": {
   "ambiguous": false,
   "be": false,
@@ -6554,6 +7282,19 @@
  "tl|GRANULES.NS|4h|0|1779075900|1781682300@1791877438": {
   "ambiguous": false,
   "be": false,
+  "end_ts": 1792133100,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "no fill",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|GRANULES.NS|4h|0|1779075900|1781682300@1792124252": {
+  "ambiguous": false,
+  "be": false,
   "end_ts": null,
   "fill_ts": null,
   "filled": false,
@@ -6582,6 +7323,19 @@
   "be": false,
   "end_ts": 1791743400,
   "fill_ts": 1791484200,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|GTCUSD|4h|0|1790740800|1791043200@1792155353": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792162800,
+  "fill_ts": 1792155600,
   "filled": true,
   "half": true,
   "outcome": "1R",
@@ -6681,6 +7435,19 @@
   "resolved": true,
   "sl": false
  },
+ "tl|HINDCOPPER.NS|4h|0|1774251900|1790840700@1792122835": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|HINDPETRO.NS|1d|0|1740940200|1774204200@1791438799": {
   "ambiguous": false,
   "be": false,
@@ -6697,14 +7464,14 @@
  "tl|HINDPETRO.NS|1d|1|1785868200|1790015400@1792045952": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792122300,
   "fill_ts": 1792046700,
   "filled": true,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|HINDPETRO.NS|1w|0|1740940200|1774204200@1791438799": {
@@ -6721,6 +7488,32 @@
   "sl": true
  },
  "tl|HINDPETRO.NS|4h|1|1787715900|1790048700@1792048770": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|HINDPETRO.NS|4h|1|1787715900|1790048700@1792126421": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|HINDPETRO.NS|4h|1|1787715900|1790048700@1792142408": {
   "ambiguous": false,
   "be": false,
   "end_ts": null,
@@ -6757,6 +7550,19 @@
   "r1": true,
   "r2": false,
   "resolved": true,
+  "sl": false
+ },
+ "tl|HUDCO.NS|1w|0|1740940200|1774809000@1792123543": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "tl|HUSD|1d|0|1787356800|1790121600@1791558517": {
@@ -6879,14 +7685,14 @@
  "tl|IDBI.NS|4h|0|1783496700|1787125500@1791872626": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792129500,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|IDFCFIRSTB.NS|4h|0|1783496700|1790653500@1791445992": {
@@ -6900,6 +7706,19 @@
   "r1": true,
   "r2": false,
   "resolved": true,
+  "sl": false
+ },
+ "tl|IDFCFIRSTB.NS|4h|0|1783496700|1791445500@1792122835": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792125900,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "tl|IGL.NS|4h|1|1788507900|1791359100@1792038835": {
@@ -7045,6 +7864,19 @@
   "resolved": false,
   "sl": false
  },
+ "tl|IPCALAB.NS|1d|0|1781721000|1786300200@1792127136": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792129500,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|IPCALAB.NS|4h|0|1781754300|1786347900@1791879819": {
   "ambiguous": false,
   "be": false,
@@ -7057,6 +7889,19 @@
   "r2": false,
   "resolved": true,
   "sl": false
+ },
+ "tl|IPCALAB.NS|4h|0|1781754300|1786347900@1792123543": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792129500,
+  "fill_ts": 1792125900,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
  },
  "tl|IRCTC.NS|1d|1|1786300200|1789669800@1791433991": {
   "ambiguous": false,
@@ -7162,6 +8007,32 @@
   "resolved": true,
   "sl": true
  },
+ "tl|ITCHOTELS.NS|1d|1|1786300200|1790188200@1792136567": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792136700,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|ITCHOTELS.NS|4h|1|1786333500|1790221500@1792136567": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792136700,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|ITI.NS|1d|0|1746729000|1774809000@1791442396": {
   "ambiguous": false,
   "be": false,
@@ -7200,6 +8071,19 @@
   "r2": false,
   "resolved": true,
   "sl": true
+ },
+ "tl|ITI.NS|4h|1|1787111100|1790739900@1792138761": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
  },
  "tl|JINDALSAW.NS|4h|0|1779421500|1781163900@1791442396": {
   "ambiguous": false,
@@ -7386,14 +8270,14 @@
  "tl|JUBLFOOD.NS|4h|0|1775547900|1781235900@1791872040": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792129500,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|JYOTICNC.NS|1d|0|1786041000|1789497000@1790838604": {
@@ -7516,14 +8400,14 @@
  "tl|KAYNES.NS|4h|0|1782805500|1784864700@1791863629": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792122300,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|KAYNES.NS|4h|0|1784864700|1789530300@1790839788": {
@@ -7591,6 +8475,45 @@
   "resolved": true,
   "sl": true
  },
+ "tl|KIMS.NS|4h|0|1777016700|1791431100@1792122103": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792122300,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
+ },
+ "tl|KIMS.NS|4h|0|1777016700|1791431100@1792136567": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|KIRLOSENG.NS|1d|0|1778783400|1789497000@1792122103": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|KIRLOSENG.NS|4h|0|1789530300|1790567100@1791358774": {
   "ambiguous": false,
   "be": false,
@@ -7628,6 +8551,19 @@
   "r1": true,
   "r2": false,
   "resolved": true,
+  "sl": false
+ },
+ "tl|KPIL.NS|4h|0|1786002300|1790840700@1792135854": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792140300,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "tl|KPIL.NS|4h|1|1782186300|1786506300@1791270562": {
@@ -7682,6 +8618,19 @@
   "resolved": false,
   "sl": false
  },
+ "tl|LALPATHLAB.NS|4h|0|1775101500|1777535100@1792131483": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|LALPATHLAB.NS|4h|0|1788493500|1789530300@1791438799": {
   "ambiguous": true,
   "be": false,
@@ -7707,6 +8656,19 @@
   "r2": false,
   "resolved": true,
   "sl": false
+ },
+ "tl|LALPATHLAB.NS|4h|0|1788493500|1790739900@1792122103": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792140300,
+  "fill_ts": 1792129500,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
  },
  "tl|LICHSGFIN.NS|1M|0|1583001000|1654021800@1791277183": {
   "ambiguous": false,
@@ -7942,6 +8904,19 @@
   "resolved": false,
   "sl": false
  },
+ "tl|LTTS.NS|4h|1|1770709500|1778226300@1792122103": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792122300,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
+ },
  "tl|LTTS.NS|4h|1|1778226300|1786419900@1791968345": {
   "ambiguous": false,
   "be": false,
@@ -7966,6 +8941,19 @@
   "r1": true,
   "r2": false,
   "resolved": true,
+  "sl": false
+ },
+ "tl|M&MFIN.NS|4h|0|1782200700|1791445500@1792132959": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792140300,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "tl|M&MFIN.NS|4h|1|1788839100|1790135100@1791863629": {
@@ -8007,6 +8995,32 @@
   "resolved": false,
   "sl": false
  },
+ "tl|MAGICUSD|4h|1|1791590400|1791763200@1792124252": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|MAGICUSD|4h|1|1791590400|1791763200@1792139175": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|MAHABANK.NS|1d|1|1782671400|1788719400@1791363604": {
   "ambiguous": false,
   "be": false,
@@ -8023,6 +9037,19 @@
  "tl|MAHABANK.NS|1d|1|1782671400|1788719400@1791520398": {
   "ambiguous": false,
   "be": false,
+  "end_ts": 1792125900,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "no fill",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|MAHABANK.NS|1d|1|1782671400|1788719400@1791864794": {
+  "ambiguous": false,
+  "be": false,
   "end_ts": null,
   "fill_ts": null,
   "filled": false,
@@ -8033,7 +9060,7 @@
   "resolved": false,
   "sl": false
  },
- "tl|MAHABANK.NS|1d|1|1782671400|1788719400@1791864794": {
+ "tl|MAHABANK.NS|4h|0|1786074300|1790840700@1792128583": {
   "ambiguous": false,
   "be": false,
   "end_ts": null,
@@ -8062,14 +9089,14 @@
  "tl|MAHABANK.NS|4h|1|1782719100|1788752700@1791864245": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792122300,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|MAHABANK.NS|4h|1|1788752700|1790322300@1791362382": {
@@ -8084,6 +9111,19 @@
   "r2": false,
   "resolved": true,
   "sl": true
+ },
+ "tl|METAXUSD|4h|0|1790654400|1791460800@1792170167": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792173600,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
  },
  "tl|METAXUSD|4h|1|1790323200|1791273600@1791792542": {
   "ambiguous": false,
@@ -8345,7 +9385,7 @@
   "resolved": true,
   "sl": false
  },
- "tl|NAVINFLUOR.NS|4h|0|1785397500|1790826300@1792043097": {
+ "tl|NATIONALUM.NS|4h|1|1788925500|1790149500@1792125719": {
   "ambiguous": false,
   "be": false,
   "end_ts": null,
@@ -8357,6 +9397,58 @@
   "r2": false,
   "resolved": false,
   "sl": false
+ },
+ "tl|NAUKRI.NS|1d|1|1788201000|1790101800@1792125719": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|NAUKRI.NS|4h|1|1788234300|1790135100@1792125719": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|NAVINFLUOR.NS|1d|0|1787596200|1789497000@1792122103": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792136700,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|NAVINFLUOR.NS|4h|0|1785397500|1790826300@1792043097": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792136700,
+  "fill_ts": 1792122300,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
  },
  "tl|NH.NS|1d|0|1743964200|1775068200@1791876240": {
   "ambiguous": false,
@@ -8517,15 +9609,15 @@
  "tl|NVDAXUSD|4h|0|1787774400|1789387200@1792085756": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792155600,
   "fill_ts": 1792087200,
   "filled": true,
   "half": false,
-  "outcome": "open",
+  "outcome": "SL",
   "r1": false,
   "r2": false,
-  "resolved": false,
-  "sl": false
+  "resolved": true,
+  "sl": true
  },
  "tl|NVDAXUSD|4h|0|1789905600|1790251200@1791812054": {
   "ambiguous": false,
@@ -8673,41 +9765,41 @@
  "tl|ONESOURCE.NS|4h|0|1775634300|1790826300@1791538422": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792133100,
   "fill_ts": 1791863100,
   "filled": true,
   "half": false,
-  "outcome": "open",
+  "outcome": "SL",
   "r1": false,
   "r2": false,
-  "resolved": false,
-  "sl": false
+  "resolved": true,
+  "sl": true
  },
  "tl|ONESOURCE.NS|4h|0|1775634300|1790826300@1791777213": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792133100,
   "fill_ts": 1791863100,
   "filled": true,
   "half": false,
-  "outcome": "open",
+  "outcome": "SL",
   "r1": false,
   "r2": false,
-  "resolved": false,
-  "sl": false
+  "resolved": true,
+  "sl": true
  },
  "tl|ONESOURCE.NS|4h|0|1775634300|1790826300@1791877438": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792133100,
   "fill_ts": 1791877500,
   "filled": true,
   "half": false,
-  "outcome": "open",
+  "outcome": "SL",
   "r1": false,
   "r2": false,
-  "resolved": false,
-  "sl": false
+  "resolved": true,
+  "sl": true
  },
  "tl|PERSISTENT.NS|1d|1|1770057000|1787855400@1791777213": {
   "ambiguous": false,
@@ -8774,6 +9866,19 @@
   "resolved": true,
   "sl": false
  },
+ "tl|PINELABS.NS|4h|1|1790048700|1791344700@1792131483": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|PIRAMALFIN.NS|4h|0|1765179900|1776671100@1791526980": {
   "ambiguous": false,
   "be": false,
@@ -8816,14 +9921,14 @@
  "tl|POLYMED.NS|1d|0|1774809000|1780338600@1791517992": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792125900,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|POLYMED.NS|4h|0|1774856700|1780371900@1791517992": {
@@ -8851,6 +9956,19 @@
   "r2": false,
   "resolved": true,
   "sl": true
+ },
+ "tl|POONAWALLA.NS|4h|0|1781163900|1790840700@1792122835": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
  },
  "tl|PPLPHARMA.NS|4h|0|1774251900|1782114300@1791963286": {
   "ambiguous": false,
@@ -8895,8 +10013,8 @@
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1792136700,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -8908,8 +10026,8 @@
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1792136700,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -9037,14 +10155,14 @@
  "tl|RBLBANK.NS|4h|0|1780371900|1784864700@1792055148": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792122300,
   "fill_ts": 1792057500,
   "filled": true,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|RBLBANK.NS|4h|0|1789530300|1790653500@1791433991": {
@@ -9385,6 +10503,19 @@
   "resolved": true,
   "sl": true
  },
+ "tl|SOLUSD|4h|0|1789488000|1791849600@1792171086": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|SOLUSD|4h|0|1789574400|1791475200@1791824325": {
   "ambiguous": false,
   "be": false,
@@ -9409,6 +10540,32 @@
   "r1": true,
   "r2": false,
   "resolved": true,
+  "sl": false
+ },
+ "tl|SOLUSD|4h|1|1791288000|1791777600@1792133351": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792152000,
+  "fill_ts": 1792148400,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|SOLUSD|4h|1|1791288000|1791777600@1792149466": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "tl|SOXLBUSD|1d|0|1788393600|1789344000@1792037064": {
@@ -9502,6 +10659,19 @@
   "resolved": true,
   "sl": false
  },
+ "tl|SUIUSD|4h|1|1791187200|1791734400@1792149136": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|TACUSD|4h|0|1788984000|1790596800@1791394732": {
   "ambiguous": false,
   "be": false,
@@ -9580,6 +10750,19 @@
   "resolved": true,
   "sl": false
  },
+ "tl|TIAUSD|4h|1|1791676800|1791864000@1792131898": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792134000,
+  "fill_ts": 1792134000,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
+ },
  "tl|TRUMP/USDT|4h|0|1787011200|1791475200@1792031978": {
   "ambiguous": false,
   "be": false,
@@ -9596,14 +10779,14 @@
  "tl|TRUMP/USDT|4h|0|1787011200|1791475200@1792048031": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792123200,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|TRUMP/USDT|4h|1|1791158400|1791792000@1791951056": {
@@ -9645,6 +10828,19 @@
   "resolved": true,
   "sl": false
  },
+ "tl|TRUMP/USDT|4h|1|1791158400|1791792000@1792125719": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792144800,
+  "fill_ts": 1792130400,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
  "tl|TSLAXUSD|1d|0|1785283200|1790726400@1792033301": {
   "ambiguous": false,
   "be": false,
@@ -9657,6 +10853,19 @@
   "r2": false,
   "resolved": true,
   "sl": false
+ },
+ "tl|TSLAXUSD|1d|0|1785283200|1790726400@1792162251": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792166400,
+  "fill_ts": 1792166400,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
  },
  "tl|TSLAXUSD|1d|1|1782950400|1790121600@1791209105": {
   "ambiguous": false,
@@ -9801,6 +11010,19 @@
   "resolved": true,
   "sl": false
  },
+ "tl|TSLAXUSD|4h|1|1791547200|1791763200@1792133686": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792144800,
+  "fill_ts": 1792141200,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
  "tl|UNIUSD|4h|0|1789041600|1789560000@1792031978": {
   "ambiguous": false,
   "be": false,
@@ -9843,14 +11065,14 @@
  "tl|UNIUSD|4h|0|1789560000|1791849600@1792062192": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792137600,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|UNIUSD|4h|1|1790121600|1790481600@1790916560": {
@@ -10048,6 +11270,45 @@
   "resolved": true,
   "sl": false
  },
+ "tl|XAUTUSD|4h|1|1790942400|1791763200@1792122835": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792195200,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "no fill",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|XAUTUSD|4h|1|1790942400|1791763200@1792148500": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|XAUTUSD|4h|1|1790942400|1791763200@1792165201": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|XRPUSD|4h|0|1789574400|1790956800@1791302688": {
   "ambiguous": false,
   "be": false,
@@ -10202,6 +11463,19 @@
   "r1": true,
   "r2": false,
   "resolved": true,
+  "sl": false
+ },
+ "tl|XRPUSD|4h|1|1791777600|1791964800@1792139924": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "tl|ZECUSD|4h|0|1788336000|1789344000@1790824742": {
