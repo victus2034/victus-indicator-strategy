@@ -99,6 +99,50 @@ def in_window(t, fine):
     return None
 
 
+def exit_levels(plan, result, market):
+    """Prices that would have closed the trade: its stop (the breakeven stop too once
+    +0.5R traded) and its final target (1R plan: 1R, else 2R)."""
+    entry, sl = plan["entry"], plan["sl"]
+    risk = abs(entry - sl)
+    sign = 1 if plan["side"] == "long" else -1
+    stops = [sl] + ([trades.break_even_stop(plan, market)] if result.get("half") else [])
+    target = entry + sign * risk * (1 if plan.get("target_r") == 1 else 2)
+    return stops, target
+
+
+def close_before_news(t, fine):
+    """lakky (2026-10-17): close any open trade 15 min before a release. Returns
+    (event, net R at the 5m open WINDOW_MIN before it) for the first release the trade
+    was still open at, or None. Net R pays the same round-trip cost as any trade."""
+    r = t["result"]
+    if not r["filled"]:
+        return None
+    filled_at = t.get("fill_5m", r["fill_ts"])
+    plan, long = t["plan"], t["plan"]["side"] == "long"
+    by_ts = {c[0]: c for c in fine}
+    for name, ev in EVENT_TS:
+        at = ev - WINDOW_MIN * 60
+        if filled_at >= at:
+            continue
+        end = r["end_ts"]
+        if end is not None and end + eval_seconds(t["tf"]) <= at:
+            continue                      # closed in an earlier candle
+        if end is not None and end <= at:
+            # the closing candle holds the cut-off: did an exit trade before it, on 5m?
+            stops, target = exit_levels(plan, r, t["market"])
+            hit = any(((l <= max(stops)) or (h >= target)) if long else ((h >= min(stops)) or (l <= target))
+                      for ts, _o, h, l, _c in fine if end <= ts < at)
+            if hit:
+                continue
+        bar = by_ts.get(at)
+        if bar is None:
+            continue
+        risk = abs(plan["entry"] - plan["sl"])
+        gross = (bar[1] - plan["entry"]) / risk * (1 if long else -1)
+        return name, ev, gross - trades.COST_PCT[t["market"]] / trades.risk_pct(plan)
+    return None
+
+
 def collect(since, now, limit):
     scanner.ZONE_BASE_EXTRA = 1
     fbt.TIMEFRAMES = list(config.FIB_TL_TIMEFRAMES)
@@ -136,6 +180,7 @@ def collect(since, now, limit):
         out = [t for t in out if t["alert_ts"] >= since]
         for t in out:
             t["news"] = in_window(t, fine)
+            t["closed"] = None if t["news"] else close_before_news(t, fine)
         print(f"{symbol}: {len(out)} alerts, {sum(1 for t in out if t['news'])} filled in a news window")
         return out
 
@@ -144,6 +189,50 @@ def collect(since, now, limit):
         for res in pool.map(one, symbols):
             got += res
     return got
+
+
+def booked(t, close=False):
+    """(net R, net %) or None, with the close-before-news rule when close=True."""
+    if close and t.get("closed"):
+        net = t["closed"][2]
+    else:
+        if not t["result"]["filled"]:
+            return None
+        net = trades.booked_r(t["plan"], t["market"], t["result"])[1]
+        if net is None:
+            return None
+    return net, net * trades.risk_pct(t["plan"])
+
+
+def row2(label, items, close=False):
+    got = [b for b in (booked(t, close) for t in items) if b is not None]
+    n = len(got)
+    return {"rule": label, "trades": n,
+            "R_total": round(sum(r for r, _ in got), 1),
+            "R_per_trade": round(sum(r for r, _ in got) / n, 3) if n else None,
+            "%_total": round(sum(p for _, p in got), 1),
+            "%_per_trade": round(sum(p for _, p in got) / n, 3) if n else None}
+
+
+RULES = (("now", lambda t: True, False),
+         ("skip new trades in window", lambda t: not t["news"], False),
+         ("close open trades 15m before", lambda t: True, True),
+         ("both", lambda t: not t["news"], True))
+
+
+def table2(got):
+    rows = []
+    for kind, name in (("zone", "S/R zone"), ("fib", "fib"), ("trendline", "TL")):
+        for group, tfs in GROUPS:
+            items = [t for t in got if t["kind"] == kind and t["tf"] in tfs]
+            for label, keep, close in RULES:
+                rows.append({"alert": name, "tf": group, **row2(label, [t for t in items if keep(t)], close)})
+    for label, keep, close in RULES:
+        rows.append({"alert": "ALL", "tf": "all", **row2(label, [t for t in got if keep(t)], close)})
+    closed = [t for t in got if t.get("closed")]
+    rows.append({"alert": "ALL", "tf": "all", **row2("closed trades, as they ended", closed)})
+    rows.append({"alert": "ALL", "tf": "all", **row2("closed trades, closed 15m before", closed, True)})
+    return pd.DataFrame([r for r in rows if r["trades"]])
 
 
 def table(got):
@@ -187,6 +276,8 @@ def main() -> None:
     got = collect(since, now, args.limit)
     df = table(got)
     df.to_csv(OUT / "summary.csv", index=False)
+    rules = table2(got)
+    rules.to_csv(OUT / "rules.csv", index=False)
     skipped = [t for t in got if t["news"]]
     detail = pd.DataFrame([{
         "event": t["news"][0], "symbol": t["symbol"], "kind": t["kind"], "tf": t["tf"], "side": t["plan"]["side"],
@@ -204,7 +295,9 @@ def main() -> None:
             "A trade is skipped when its entry fills within the window (fill time on Bitunix 5m). "
             "Trades open at the release are kept. Scored the live way, net after fees. "
             "Zones on Bitunix (scored like fibs), fib/TL on Delta.", "",
-            events.to_markdown(index=False), "", df.to_markdown(index=False), "",
+            events.to_markdown(index=False), "", "## Rules side by side", "",
+            "close = any trade open at the release's -15m mark is closed at that 5m open (round-trip fee charged).", "",
+            rules.to_markdown(index=False), "", "## Skip rule detail", "", df.to_markdown(index=False), "",
             "## Skipped trades", "", detail.to_markdown(index=False) if len(detail) else "none", ""]
     (OUT / "NEWS_WINDOW.md").write_text("\n".join(text))
     print("\n".join(text))
