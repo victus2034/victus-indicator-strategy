@@ -44,8 +44,16 @@ GROUPS = (("4H", ("4h",)), ("1D+", ("1d", "1w", "1M")))
 MIN_GAP_PCT = 0.75
 BUFFER_PCT = 0.2
 
+# Round 2 (lakky, 2026-10-17, SUI 4H SELL / KPIL 1D BUY / RLC 1D BUY): the stop goes just
+# past the most recent earlier candle whose wick crossed the entry - any distance, no
+# fixed risk. SUI 1.0647 -> 1.0654, KPIL 1356.4 -> 1355.7, RLC 0.7893 -> 0.7875.
+NEAR_BUFFER_PCT = 0.1
+
 RULES = (
     ("live (25% of box)", None),
+    ("nearest wick past entry", ("near", 0.0)),
+    ("nearest wick, min 0.25%", ("near", 0.25)),
+    ("nearest wick, min 0.5%", ("near", 0.5)),
     ("candle SL, no cap", ("cap", None)),
     ("candle SL, cap 3.5%", ("cap", 3.5)),
     ("candle SL, cap 5%", ("cap", 5.0)),
@@ -77,6 +85,17 @@ def candle_level(long, entry, bar, base):
         return None
     level = max(got) if long else min(got)
     return level * (1 - BUFFER_PCT / 100) if long else level * (1 + BUFFER_PCT / 100)
+
+
+def nearest_wick(long, entry, bar, base, min_gap_pct):
+    """Most recent closed candle before `bar` whose wick is past the entry by at least
+    min_gap_pct (0 = any distance), with NEAR_BUFFER_PCT more room; None if none."""
+    gap = entry * min_gap_pct / 100
+    for j in range(min(bar, len(base)) - 1, -1, -1):
+        w = base[j][3] if long else base[j][2]
+        if (w < entry - gap) if long else (w > entry + gap):
+            return w * (1 - NEAR_BUFFER_PCT / 100) if long else w * (1 + NEAR_BUFFER_PCT / 100)
+    return None
 
 
 def new_stop(rule, plan, level):
@@ -113,7 +132,10 @@ def rescore(market, tf, base, evalc, now, t):
         if rule is None:
             out.append({**t, "rule": label})
             continue
-        sl = new_stop(rule, plan, level)
+        if rule[0] == "near":
+            sl = nearest_wick(plan["side"] == "long", plan["entry"], bar, base, rule[1]) if bar > 0 else None
+        else:
+            sl = new_stop(rule, plan, level)
         if sl is None:
             out.append({**t, "rule": label, "skipped": True})
             continue
@@ -197,7 +219,7 @@ def main() -> None:
                   for t in got]).to_csv(OUT / "trades.csv", index=False)
     text = [f"# Fib stop: lakky's candle SL vs live ({args.since} to now)", "",
             f"Candle SL = most recent closed wick/body >= {MIN_GAP_PCT}% past entry (closer one) + "
-            f"{BUFFER_PCT}% buffer. Same alerts, entry and 2R + BE scoring as live; net after fees. "
+            f"{BUFFER_PCT}% buffer. Nearest wick = most recent earlier candle whose wick crossed the entry (by >= the min), + {NEAR_BUFFER_PCT}%. Same alerts, entry and 2R + BE scoring as live; net after fees. "
             "% = R x the trade's stop distance. Crypto on Delta candles, NSE on Yahoo.", "",
             df.to_markdown(index=False), ""]
     (OUT / "FIB_CANDLE_SL.md").write_text("\n".join(text))
