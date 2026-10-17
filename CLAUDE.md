@@ -213,7 +213,7 @@ significant figures (`price_text`); nothing parses the text - records carry the 
 - **Risk warning (lakky, 2026-10-17), crypto fib + trendline touch alerts only.** The title carries the coin's
   24h move (`**SOL -5.2% · FIB L3 · BUY**`, `name_with_move`; Bitunix 1h close 24h ago vs price now, `move_24h`),
   and a 4th line `⚠️ **Big 24h move · Market down: BTC ↓ ETH ↓ SOL ↑**` appears when the move is >=
-  `RISK_WARN_MOVE_PCT` (4%) either way and/or `RISK_WARN_MARKET_MIN_AGAINST` (2) of `RISK_WARN_MARKET_SYMBOLS`
+  `RISK_WARN_MOVE_PCT` (2%, lakky's pick for testing; the backtest liked 4%) either way and/or `RISK_WARN_MARKET_MIN_AGAINST` (2) of `RISK_WARN_MARKET_SYMBOLS`
   (BTC, ETH, SOL) are against the trade on their daily EMA50 (`scanner.daily_trend`, once a pass). The alert still
   sends; the line is kept in the record as `warning`. Zones, TL BROKEN, xStocks/XAUT/SLVON and NSE get neither.
   Sep 1 - Oct 17 (`research/risk_warning_backtest.py`, part `risk-warn`), no warning vs warned per trade: fib 4H

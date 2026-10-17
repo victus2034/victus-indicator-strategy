@@ -34,10 +34,10 @@ class WarningTests(unittest.TestCase):
         w = fts.risk_warning
         self.assertEqual(w(ftd.CRYPTO, "SOLUSD", "long", {"move": -5.24, "market": DOWN}),
                          "⚠️ **Big 24h move · Market down: BTC ↓ ETH ↓ SOL ↑**")
-        self.assertEqual(w(ftd.CRYPTO, "SOLUSD", "short", {"move": 4.0, "market": DOWN}), "⚠️ **Big 24h move**")
+        self.assertEqual(w(ftd.CRYPTO, "SOLUSD", "short", {"move": 2.0, "market": DOWN}), "⚠️ **Big 24h move**")
         self.assertEqual(w(ftd.CRYPTO, "SOLUSD", "short", {"move": 1.0, "market": UP}),
                          "⚠️ **Market up: BTC ↑ ETH ↑ SOL ↓**")
-        self.assertIsNone(w(ftd.CRYPTO, "SOLUSD", "long", {"move": 3.9, "market": UP}))
+        self.assertIsNone(w(ftd.CRYPTO, "SOLUSD", "long", {"move": 1.9, "market": UP}))
         # only 1 of 3 against: no market warning; an unknown trend never counts
         self.assertIsNone(w(ftd.CRYPTO, "SOLUSD", "long", {"move": 0, "market": {"BTCUSD": -1, "ETHUSD": 1, "SOLUSD": None}}))
         self.assertEqual(w(ftd.CRYPTO, "SOLUSD", "long", {"move": 0, "market": {"BTCUSD": -1, "ETHUSD": -1, "SOLUSD": None}}),
