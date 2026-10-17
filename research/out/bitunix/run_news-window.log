@@ -1,0 +1,67 @@
+ZECUSD: 28 alerts, 0 filled in a news window
+ETHUSD: 53 alerts, 0 filled in a news window
+SOLUSD: 27 alerts, 1 filled in a news window
+BTCUSD: 48 alerts, 0 filled in a news window
+XRPUSD: 45 alerts, 0 filled in a news window
+HYPEUSD: 43 alerts, 1 filled in a news window
+DOGEUSD: 38 alerts, 0 filled in a news window
+NEARUSD: 33 alerts, 1 filled in a news window
+QNTUSD: 7 alerts, 0 filled in a news window
+SUIUSD: 30 alerts, 0 filled in a news window
+UNIUSD: 17 alerts, 0 filled in a news window
+BNBUSD: 44 alerts, 0 filled in a news window
+ENAUSD: 29 alerts, 3 filled in a news window
+1000PEPEUSD: 35 alerts, 1 filled in a news window
+WLDUSD: 34 alerts, 0 filled in a news window
+ADAUSD: 39 alerts, 0 filled in a news window
+AVAXUSD: 29 alerts, 0 filled in a news window
+LINKUSD: 34 alerts, 0 filled in a news window
+ONDOUSD: 33 alerts, 0 filled in a news window
+BTWUSD: 2 alerts, 0 filled in a news window
+STRKUSD: 23 alerts, 0 filled in a news window
+TAOUSD: 44 alerts, 0 filled in a news window
+RLCUSD: 3 alerts, 0 filled in a news window
+FILUSD: 47 alerts, 0 filled in a news window
+AAVEUSD: 24 alerts, 0 filled in a news window
+# No trades +-15 min around US CPI / PPI / FOMC, crypto (2026-09-01 to now)
+
+A trade is skipped when its entry fills within the window (fill time on Bitunix 5m). Trades open at the release are kept. Scored the live way, net after fees. Zones on Bitunix (scored like fibs), fib/TL on Delta.
+
+| event   | utc              | ist              |   trades filled in window |
+|:--------|:-----------------|:-----------------|--------------------------:|
+| PPI     | 2026-09-10 12:30 | 2026-09-10 18:00 |                         3 |
+| CPI     | 2026-09-11 12:30 | 2026-09-11 18:00 |                         0 |
+| FOMC    | 2026-09-16 18:00 | 2026-09-16 23:30 |                         2 |
+| CPI     | 2026-10-14 12:30 | 2026-10-14 18:00 |                         2 |
+| PPI     | 2026-10-15 12:30 | 2026-10-15 18:00 |                         0 |
+
+| alert    | tf   | rule               |   alerts |   trades |   win_% |   R_total |   R_per_trade |   %_total |   %_per_trade |
+|:---------|:-----|:-------------------|---------:|---------:|--------:|----------:|--------------:|----------:|--------------:|
+| S/R zone | 4H   | all trades (today) |       56 |       39 |      52 |      -6.6 |        -0.17  |      -2   |        -0.05  |
+| S/R zone | 4H   | skip news window   |       55 |       38 |      53 |      -5.5 |        -0.144 |      -0.8 |        -0.022 |
+| S/R zone | 4H   | only the skipped   |        1 |        1 |       0 |      -1.1 |        -1.133 |      -1.1 |        -1.124 |
+| fib      | 4H   | all trades (today) |      126 |      100 |      52 |      -6.4 |        -0.064 |       5.1 |         0.051 |
+| fib      | 4H   | skip news window   |      126 |      100 |      52 |      -6.4 |        -0.064 |       5.1 |         0.051 |
+| fib      | 1D+  | all trades (today) |       26 |       20 |      67 |       8.7 |         0.436 |      40.5 |         2.025 |
+| fib      | 1D+  | skip news window   |       26 |       20 |      67 |       8.7 |         0.436 |      40.5 |         2.025 |
+| TL       | 4H   | all trades (today) |      496 |      388 |      34 |    -164.7 |        -0.424 |    -206.3 |        -0.532 |
+| TL       | 4H   | skip news window   |      490 |      382 |      35 |    -157.9 |        -0.413 |    -198.2 |        -0.519 |
+| TL       | 4H   | only the skipped   |        6 |        6 |       0 |      -6.8 |        -1.13  |      -8.1 |        -1.353 |
+| TL       | 1D+  | all trades (today) |       85 |       77 |      25 |     -45.8 |        -0.594 |     -58.1 |        -0.755 |
+| TL       | 1D+  | skip news window   |       85 |       77 |      25 |     -45.8 |        -0.594 |     -58.1 |        -0.755 |
+| ALL      | all  | all trades (today) |      789 |      624 |      37 |    -214.8 |        -0.344 |    -220.9 |        -0.354 |
+| ALL      | all  | skip news window   |      782 |      617 |      37 |    -206.9 |        -0.335 |    -211.6 |        -0.343 |
+| ALL      | all  | only the skipped   |        7 |        7 |       0 |      -7.9 |        -1.131 |      -9.2 |        -1.32  |
+
+## Skipped trades
+
+| event   | symbol      | kind      | tf   | side   | alert_utc   | fill_utc    | fill_on_5m   |        entry | outcome   |    net_r |   risk_% |
+|:--------|:------------|:----------|:-----|:-------|:------------|:------------|:-------------|-------------:|:----------|---------:|---------:|
+| PPI     | SOLUSD      | trendline | 4h   | long   | 09-10 07:00 | 09-10 12:35 | True         | 100.256      | SL        | -1.16158 |    0.818 |
+| FOMC    | NEARUSD     | trendline | 4h   | short  | 09-16 16:00 | 09-16 18:05 | True         |   2.52079    | SL        | -1.04811 |    2.785 |
+| PPI     | HYPEUSD     | trendline | 4h   | long   | 09-10 10:00 | 09-10 12:30 | True         |  81.9723     | SL        | -1.14322 |    0.923 |
+| FOMC    | ENAUSD      | trendline | 4h   | short  | 09-16 16:00 | 09-16 18:00 | True         |   0.144002   | SL        | -1.14429 |    0.922 |
+| CPI     | ENAUSD      | trendline | 4h   | long   | 10-14 05:00 | 10-14 12:30 | True         |   0.207883   | SL        | -1.12933 |    1.021 |
+| CPI     | ENAUSD      | trendline | 4h   | long   | 10-14 11:00 | 10-14 12:30 | True         |   0.208303   | SL        | -1.15531 |    0.851 |
+| PPI     | 1000PEPEUSD | zone      | 4h   | long   | 09-10 11:00 | 09-10 12:30 | True         |   0.00338748 | SL        | -1.13316 |    0.992 |
+

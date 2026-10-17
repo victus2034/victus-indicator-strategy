@@ -1,0 +1,16 @@
+alert,tf,rule,alerts,trades,win_%,R_total,R_per_trade,%_total,%_per_trade
+S/R zone,4H,all trades (today),56,39,52,-6.6,-0.17,-2.0,-0.05
+S/R zone,4H,skip news window,55,38,53,-5.5,-0.144,-0.8,-0.022
+S/R zone,4H,only the skipped,1,1,0,-1.1,-1.133,-1.1,-1.124
+fib,4H,all trades (today),126,100,52,-6.4,-0.064,5.1,0.051
+fib,4H,skip news window,126,100,52,-6.4,-0.064,5.1,0.051
+fib,1D+,all trades (today),26,20,67,8.7,0.436,40.5,2.025
+fib,1D+,skip news window,26,20,67,8.7,0.436,40.5,2.025
+TL,4H,all trades (today),496,388,34,-164.7,-0.424,-206.3,-0.532
+TL,4H,skip news window,490,382,35,-157.9,-0.413,-198.2,-0.519
+TL,4H,only the skipped,6,6,0,-6.8,-1.13,-8.1,-1.353
+TL,1D+,all trades (today),85,77,25,-45.8,-0.594,-58.1,-0.755
+TL,1D+,skip news window,85,77,25,-45.8,-0.594,-58.1,-0.755
+ALL,all,all trades (today),789,624,37,-214.8,-0.344,-220.9,-0.354
+ALL,all,skip news window,782,617,37,-206.9,-0.335,-211.6,-0.343
+ALL,all,only the skipped,7,7,0,-7.9,-1.131,-9.2,-1.32
