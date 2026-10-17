@@ -210,6 +210,13 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   Trendline alerts (lakky, 2026-10-12): touch = `**RIVER · S TL · BUY** · **1D Crypto**`, `Price .. · x% away`,
   `Entry .. · SL .. (x%) · TP .. (1R)`; broken = `**TSLA · R TL BROKEN** · **4H Crypto**`, `Close .. above line ..`.
   The line's two points are off Discord and kept in the touch record (`from`, `to`).
+- **Risk warning line (lakky, 2026-10-17), crypto fib + trendline touch alerts only.** A 4th line
+  `⚠️ **SOL -5.2% in 24h · BTC downtrend**` when the coin moved `RISK_WARN_MOVE_PCT` (4%) either way in 24h
+  (Bitunix 1h close 24h ago vs price now, `move_24h`) and/or the alert is against BTC's daily EMA50 (BUY under,
+  SELL over; `scanner.daily_trend("BTCUSD")` once a pass). The alert still sends; kept in the record as `warning`.
+  Zones, TL BROKEN, xStocks/XAUT/SLVON and NSE get none. Sep 1 - Oct 17 (`research/risk_warning_backtest.py`, part
+  `risk-warn`): fib 4H unwarned +0.03R / +0.43% vs warned -0.16R / -0.61%, 1D+ +1.21R vs -0.20R; TL 4H -0.38R vs
+  -0.46R, TL 1D+ no difference; zones the other way round (warned +0.56R on 12), so not warned.
 - NSE: the zone scanner's 200 stocks (`nse_scanner.load_watchlist`), scanned only in the session
   and at most every 8 minutes - that pass takes ~3 minutes (Yahoo, 5 intervals).
 - **Audit, 2026-09-29** (fixed, each with a test): the fib engine is a state machine whose end

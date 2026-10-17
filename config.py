@@ -525,6 +525,14 @@ TRENDLINES_KEEP = 6
 # where the entry is. It is a preference, not an edge.
 FIB_TL_MIN_DISTANCE_PCT = env_float("VICTUS_FIB_TL_MIN_DISTANCE_PCT", 0.0)
 FIB_TL_MAX_DISTANCE_PCT = env_float("VICTUS_FIB_TL_MAX_DISTANCE_PCT", 0.75)
+# Risk warning line (lakky, 2026-10-17), crypto fib + trendline touch alerts only:
+# "⚠️ **SOL -5.2% in 24h · BTC downtrend**" when the coin moved this % either way
+# over 24h, and/or the alert goes against BTC's daily EMA trend (BUY under it, SELL
+# over it). The alert still sends. Sep 1 - Oct 17 (research/risk_warning_backtest.py,
+# part risk-warn): fib 4H unwarned +0.03R vs warned -0.16R, 1D+ +1.21R vs -0.20R;
+# TL 4H -0.38R vs -0.46R. Zones were the other way round, so they get no warning.
+RISK_WARN_MOVE_PCT = env_float("VICTUS_RISK_WARN_MOVE_PCT", 4.0)
+RISK_WARN_MARKET_SYMBOL = "BTCUSD"
 # Trade rules the alerts print and the backtests score (Shiva's choice,
 # 2026-09-29). Fib: entry at the zone's near edge (his EX 2 ETH trades), SL
 # FIB_SL_HEIGHT_PCT beyond the far edge (since 2026-10-08). Trendline: entry at the line, SL this % on the far side of it.

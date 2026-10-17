@@ -49,6 +49,7 @@ import fib_engine
 import fib_trendline_trades as trades
 import scanner
 from config import (
+    CRYPTO_WATCHLIST,
     DISCORD_FIB_WEBHOOK_URL,
     DISCORD_TRENDLINE_WEBHOOK_URL,
     FIB_ALERT_ZONES,
@@ -57,6 +58,8 @@ from config import (
     FIB_TL_MAX_DISTANCE_PCT,
     FIB_TL_MIN_DISTANCE_PCT,
     FIB_TL_TIMEFRAMES,
+    RISK_WARN_MARKET_SYMBOL,
+    RISK_WARN_MOVE_PCT,
     SCAN_WORKERS,
     TRENDLINE_SWING_LENGTH,
     TRENDLINES_KEEP,
@@ -461,6 +464,37 @@ def format_touch_alert(market, symbol, tf, price, t):
     )
 
 
+def move_24h(hourly, price, now):
+    """% move from the close 24 hours ago (1h candles [ts, o, h, l, c]) to price, or None."""
+    if not hourly or not price:
+        return None
+    then = int(now) // 3600 * 3600 - 24 * 3600      # that hour's close = the next hour's open
+    past = [c for c in hourly if c[0] + 3600 <= then]
+    if not past or then - (past[-1][0] + 3600) > 3600:
+        return None
+    return (price / past[-1][4] - 1) * 100
+
+
+def risk_warning(market, symbol, side, risk):
+    """lakky (2026-10-17): one bold line when a crypto alert looks risky, else None.
+
+    risk: {"move": % over 24h or None, "btc": BTC daily trend +1/-1/None}."""
+    if market != CRYPTO or not risk:
+        return None
+    parts = []
+    move = risk.get("move")
+    if move is not None and abs(move) >= RISK_WARN_MOVE_PCT:
+        parts.append(f"{display(market, symbol)} {move:+.1f}% in 24h")
+    btc = risk.get("btc")
+    if btc is not None and (btc < 0 if side == "long" else btc > 0):
+        parts.append("BTC downtrend" if btc < 0 else "BTC uptrend")
+    return f"⚠️ **{' · '.join(parts)}**" if parts else None
+
+
+def with_warning(message, warning):
+    return f"{message}\n{warning}" if warning else message
+
+
 def format_zone_alert(market, symbol, tf, price, z):
     """The zone scanner's three lines (scanner.format_alert), with 1D / 1W / 1M."""
     side = "SELL" if z["zone_type"] == "supply" else "BUY"
@@ -532,7 +566,11 @@ def plan_alerts(state, market, symbol, tf, analysis, now, last_scan=None):
         if z["key"] not in state:
             record = {**base, "kind": "fib", "plan": z["plan"], "zone": z["zone"],
                       "base": z["base"], "top": z["top"], "levels": fib_levels(z["d"], z["base"], z["top"])}
-            planned.append(("fib", z["key"], format_fib_alert(market, symbol, tf, price, z), record))
+            warning = risk_warning(market, symbol, z["plan"]["side"], analysis.get("risk"))
+            if warning:
+                record["warning"] = warning
+            planned.append(("fib", z["key"], with_warning(format_fib_alert(market, symbol, tf, price, z), warning),
+                            record))
         else:
             state[z["key"]]["seen"] = now   # still true: keep it from being pruned
     for b in analysis["break"]:
@@ -553,7 +591,11 @@ def plan_alerts(state, market, symbol, tf, analysis, now, last_scan=None):
         if entry is None or (not entry.get("in_band") and now - entry.get("sent", 0) >= TF_SECONDS[tf]):
             record = {**base, "kind": "trendline", "plan": t["plan"], "line": t["kind"],
                       "from": list(t["from"]), "to": list(t["to"])}
-            planned.append(("trendline", t["key"], format_touch_alert(market, symbol, tf, price, t), record))
+            warning = risk_warning(market, symbol, t["plan"]["side"], analysis.get("risk"))
+            if warning:
+                record["warning"] = warning
+            planned.append(("trendline", t["key"], with_warning(format_touch_alert(market, symbol, tf, price, t),
+                                                                warning), record))
         else:
             entry["in_band"] = True
             entry["seen"] = now
@@ -616,6 +658,11 @@ def sweep_start(last_scan, now):
 
 def scan_crypto(timeframes, now, since=None):
     since = now - SWEEP_DEFAULT_SECONDS if since is None else since
+    try:
+        btc_trend = scanner.daily_trend(RISK_WARN_MARKET_SYMBOL)    # once a pass, for risk_warning
+    except Exception as error:     # noqa: BLE001 - no trend = no BTC warning
+        print(f"BTC daily trend unavailable: {str(error)[:80]}")
+        btc_trend = None
 
     def one(symbol):
         contract = scanner.delta_contract(symbol)
@@ -634,7 +681,7 @@ def scan_crypto(timeframes, now, since=None):
             # xStocks' own pairs (TSLAUSDT for TSLAXUSD) reach the API as is.
             charts = crypto_charts(pair or contract, timeframes, now, source=source)
             price = current_price(charts)
-            live = swept = None
+            live = swept = move = None
             if source == "bitunix":
                 # Bitunix candles stop at the last closed one, so their newest
                 # close is up to a 4H candle old; the distance needs the price now.
@@ -648,6 +695,13 @@ def scan_crypto(timeframes, now, since=None):
                     live = bitunix_data.forming_candle(pair, "4h", now)
                 except Exception as error:     # noqa: BLE001 - closed candles only
                     print(f"{symbol} Bitunix forming 4h unavailable: {str(error)[:80]}")
+                # ...and the 24h move for the warning line.
+                if symbol in CRYPTO_WATCHLIST:
+                    try:
+                        move = move_24h(bitunix_data.klines(pair, "1h", int(now) - 27 * 3600, int(now) + 1),
+                                        price, now)
+                    except Exception as error:     # noqa: BLE001 - no move = no move warning
+                        print(f"{symbol} Bitunix 1h for the 24h move unavailable: {str(error)[:80]}")
                 # ...and what traded since the last pass: a wick into the band counts.
                 try:
                     start = int(since) // 60 * 60
@@ -657,9 +711,14 @@ def scan_crypto(timeframes, now, since=None):
             trend = None
             if scanner.trend_filter_applies(symbol) and charts.get("1d"):
                 trend = scanner._trend_from_daily([(c[0], c[4]) for c in charts["1d"]], now)
-            return symbol, {tf: analyse(CRYPTO, symbol, tf, charts[tf], now, price,
-                                        current_candle_range(CRYPTO, charts, tf, now, live), trend, swept)
-                            for tf in timeframes}, None
+            # The warning line (risk_warning), crypto only; a failed fetch only drops that half of it.
+            risk = {"move": move, "btc": btc_trend} if symbol in CRYPTO_WATCHLIST else None
+            out = {tf: analyse(CRYPTO, symbol, tf, charts[tf], now, price,
+                               current_candle_range(CRYPTO, charts, tf, now, live), trend, swept)
+                   for tf in timeframes}
+            for analysis in out.values():
+                analysis["risk"] = risk
+            return symbol, out, None
         except Exception as error:     # noqa: BLE001 - one bad symbol must not stop the pass
             return symbol, None, str(error)
 
