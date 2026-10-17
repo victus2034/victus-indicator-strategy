@@ -64,6 +64,7 @@ def btc_trend(daily, ts):
     return 1 if closes[-1] > ema else -1
 
 
+BTC_HOURLY = []                              # lakky: "if btc falls 2% crypto falls 4-5%"
 MARKET = ("BTCUSD", "ETHUSD", "SOLUSD")      # lakky, 2026-10-17: judge the market on all three
 
 
@@ -77,12 +78,14 @@ def tag(t, hourly, market_daily):
     t["btc_against"] = against[0]
     t["mkt_against_2"] = sum(against) >= 2       # 2 of BTC/ETH/SOL against the trade
     t["mkt_against_3"] = sum(against) == 3       # all three against
+    t["btc_move"] = move_24h(BTC_HOURLY, t["alert_ts"]) if BTC_HOURLY else None
     return t
 
 
 def collect(since, now, limit):
     scanner.ZONE_BASE_EXTRA = 1
     fbt.TIMEFRAMES = list(config.FIB_TL_TIMEFRAMES)
+    BTC_HOURLY[:] = fbt._cached("rw_BTCUSD_1h", lambda: bitunix_candles("BTCUSD", "1h", since - 3 * 86400, now))
     market_daily = {s: fbt._cached(f"rw_{s}_1d", lambda s=s: bitunix_candles(s, "1d", now - 500 * 86400, now))
                     for s in MARKET}
     symbols = list(config.CRYPTO_WATCHLIST)[: limit or None]
@@ -184,6 +187,36 @@ def thresholds(got, levels=(1.5, 2.0, 4.0)):
     return pd.DataFrame(rows)
 
 
+def btc_rules(got):
+    """lakky (2026-10-17): coin 3%, and BTC's own 24h move (alts move ~2x BTC). Market = 2 of 3 throughout."""
+    def coin(p):
+        return lambda t: t["move_24h"] is not None and abs(t["move_24h"]) >= p
+
+    def btc(p):
+        return lambda t: t["btc_move"] is not None and abs(t["btc_move"]) >= p
+
+    def btc_against(p):          # BTC fell p%+ before a BUY / rose p%+ before a SELL
+        return lambda t: t["btc_move"] is not None and (
+            t["btc_move"] <= -p if t["plan"]["side"] == "long" else t["btc_move"] >= p)
+
+    rules = (("coin 4% (live PR)", coin(4)), ("coin 3%", coin(3)),
+             ("BTC 1.5% either way", btc(1.5)), ("BTC 2% either way", btc(2)),
+             ("BTC 2% against the trade", btc_against(2)),
+             ("coin 4% or BTC 2%", lambda t: coin(4)(t) or btc(2)(t)),
+             ("coin 3% or BTC 2%", lambda t: coin(3)(t) or btc(2)(t)))
+    rows = []
+    for kind, name in (("fib", "fib"), ("trendline", "TL")):
+        for group, tfs in GROUPS:
+            items = [t for t in got if t["kind"] == kind and t["tf"] in tfs]
+            for label, move in rules:
+                for side, keep in (("no warning", lambda t, m=move: not m(t) and not t["mkt_against_2"]),
+                                   ("warned", lambda t, m=move: m(t) or t["mkt_against_2"])):
+                    pick = [t for t in items if keep(t)]
+                    if pick:
+                        rows.append({"alert": name, "tf": group, "move rule": label, **row(side, pick)})
+    return pd.DataFrame(rows)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--since", default="2026-09-01")
@@ -195,6 +228,8 @@ def main() -> None:
     got = collect(since, now, args.limit)
     df, sens, thr = table(got), sensitivity(got), thresholds(got)
     thr.to_csv(OUT / "thresholds.csv", index=False)
+    btc = btc_rules(got)
+    btc.to_csv(OUT / "btc_rules.csv", index=False)
     df.to_csv(OUT / "summary.csv", index=False)
     sens.to_csv(OUT / "sensitivity.csv", index=False)
     pd.DataFrame([{**{k: t[k] for k in ("symbol", "tf", "kind", "alert_ts", "move_24h", "big_move", "btc_against",
@@ -208,7 +243,8 @@ def main() -> None:
             "net after fees. Zones on Bitunix (scored like fibs), fib/TL on Delta.", "",
             df.to_markdown(index=False), "", "## Move size and direction (all crypto alerts)", "",
             sens.to_markdown(index=False), "", "## Move warning at 1.5% / 2% / 4% (market = 2 of 3)", "",
-            thr.to_markdown(index=False), ""]
+            thr.to_markdown(index=False), "", "## Coin 3% and BTC's own 24h move (market = 2 of 3)", "",
+            btc.to_markdown(index=False), ""]
     (OUT / "RISK_WARNING.md").write_text("\n".join(text))
     print("\n".join(text))
 
