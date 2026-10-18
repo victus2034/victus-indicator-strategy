@@ -1,0 +1,94 @@
+From https://github.com/victus2034/victus-indicator-strategy
+ * branch            scanner-runtime-state -> FETCH_HEAD
+ * [new branch]      scanner-runtime-state -> origin/scanner-runtime-state
+stored rows since 2026-10-05: 902
+crypto 30m: 125 alerts, frames 38/38
+xstock 30m: 69 alerts, frames 6/6
+other 30m: 30 alerts, frames 2/2
+crypto 4h: 11 alerts, frames 8/8
+xstock 4h: 11 alerts, frames 5/5
+other 4h: 8 alerts, frames 2/2
+nse 30m: 557 alerts, frames 194/194
+nse 4h: 91 alerts, frames 72/72
+# Daily scores audit - since 2026-10-05
+
+| market | tf | stored trades | stored R | stored trail R | resim trades | resim R | resim trail R | checked | backtest = ref | trail = ref |
+|---|---|---|---|---|---|---|---|---|---|---|
+| CRYPTO | 30m | 83 | -14.78 | -2.26 | 79 | -14.00 | -8.13 | 125 | 76 | 76 |
+| CRYPTO | 4h | 10 | -2.66 | +1.13 | 10 | -2.66 | +1.13 | 11 | 10 | 10 |
+| NSE | 30m | 341 | -136.16 | -135.91 | 343 | -139.28 | -139.03 | 557 | 331 | 331 |
+| NSE | 4h | 72 | -19.60 | -14.79 | 72 | -19.60 | -14.79 | 91 | 71 | 71 |
+| OTHER | 30m | 9 | -1.24 | -1.89 | 9 | -1.24 | -1.89 | 30 | 9 | 9 |
+| OTHER | 4h | 6 | -3.23 | -2.31 | 6 | -3.23 | -2.31 | 8 | 6 | 6 |
+| XSTOCK | 30m | 28 | -9.89 | -10.94 | 28 | -9.89 | -10.94 | 69 | 26 | 26 |
+| XSTOCK | 4h | 10 | -4.83 | -4.32 | 10 | -4.83 | -4.32 | 11 | 10 | 10 |
+
+Stored vs re-graded now: 8 rows differ
+Backtest vs independent reference: 5 disagree
+Trail vs independent reference: 0 disagree
+Paper vs backtest (same trade): {'match': 120, 'paper_only': 39, 'differ': 10}
+No Delta/Yahoo candles: {}
+
+## Stored vs re-graded (first 25)
+
+| market   | tf   | symbol     | alert_time                       | stored                 | resim                  |   stored_net |   resim_net |
+|:---------|:-----|:-----------|:---------------------------------|:-----------------------|:-----------------------|-------------:|------------:|
+| CRYPTO   | 30m  | UNIUSD     | 2026-10-06T09:28:12.269074+05:30 | alert_before_data      | data_quality_ambiguous |  nan         |   nan       |
+| CRYPTO   | 30m  | WUSD       | 2026-10-13T21:27:37.771693+05:30 | SL                     | data_missing           |   -1.14376   |   nan       |
+| CRYPTO   | 30m  | OGNUSD     | 2026-10-14T11:52:50.673273+05:30 | +2R                    | data_missing           |    1.84226   |   nan       |
+| CRYPTO   | 30m  | BATUSD     | 2026-10-14T23:02:49.244554+05:30 | SL                     | data_missing           |   -1.42133   |   nan       |
+| CRYPTO   | 30m  | OGNUSD     | 2026-10-16T08:22:25.330562+05:30 | BE                     | data_missing           |   -0.0525147 |   nan       |
+| CRYPTO   | 30m  | WUSD       | 2026-10-16T18:22:40.209220+05:30 | alert_before_data      | data_missing           |  nan         |   nan       |
+| NSE      | 30m  | COFORGE.NS | 2026-10-08T09:17:48.816982+05:30 | data_quality_ambiguous | SL                     |  nan         |    -1.45722 |
+| NSE      | 30m  | COFORGE.NS | 2026-10-14T09:16:35.959996+05:30 | data_quality_ambiguous | SL                     |  nan         |    -1.6596  |
+
+## Reference (first 25)
+
+| market   | tf   | symbol   | alert_time                       | production   | reference         | production_net   | reference_net   |
+|:---------|:-----|:---------|:---------------------------------|:-------------|:------------------|:-----------------|:----------------|
+| CRYPTO   | 30m  | WUSD     | 2026-10-13T21:27:37.771693+05:30 | data_missing | alert_before_data |                  |                 |
+| CRYPTO   | 30m  | OGNUSD   | 2026-10-14T11:52:50.673273+05:30 | data_missing | alert_before_data |                  |                 |
+| CRYPTO   | 30m  | BATUSD   | 2026-10-14T23:02:49.244554+05:30 | data_missing | alert_before_data |                  |                 |
+| CRYPTO   | 30m  | OGNUSD   | 2026-10-16T08:22:25.330562+05:30 | data_missing | alert_before_data |                  |                 |
+| CRYPTO   | 30m  | WUSD     | 2026-10-16T18:22:40.209220+05:30 | data_missing | alert_before_data |                  |                 |
+
+## Paper (first 25)
+
+| symbol     | alert_time                       | paper                  | backtest          |   paper_net |   backtest_net |
+|:-----------|:---------------------------------|:-----------------------|:------------------|------------:|---------------:|
+| BNBUSD     | 2026-10-05T14:48:06.539863+05:30 | BE                     | missing           |  -0.141643  |    nan         |
+| TSLAXUSD   | 2026-10-05T19:18:08.971600+05:30 | SL                     | missing           |  -1.25632   |    nan         |
+| SOLUSD     | 2026-10-05T20:06:39.478542+05:30 | BE                     | +2R               |  -0.208555  |      1.56218   |
+| XAUTUSD    | 2026-10-05T19:16:03.854074+05:30 | BE                     | zone_cooldown     |  -0.109964  |    nan         |
+| ZECUSD     | 2026-10-05T21:11:55.873064+05:30 | SL                     | BE                |  -1.13316   |     -0.0396614 |
+| TRUMP/USDT | 2026-10-05T21:32:07.986330+05:30 | BE                     | +2R               |  -0.0908795 |      1.80922   |
+| UNIUSD     | 2026-10-06T09:28:12.269074+05:30 | SL                     | alert_before_data |  -1.46922   |    nan         |
+| SOLUSD     | 2026-10-06T14:58:14.511779+05:30 | +2R                    | missing           |   1.5374    |    nan         |
+| BCHUSD     | 2026-10-06T11:38:20.770142+05:30 | +2R                    | missing           |   1.84976   |    nan         |
+| RIVERUSD   | 2026-10-06T17:56:19.057385+05:30 | BE                     | missing           |  -0.0430566 |    nan         |
+| HYPEUSD    | 2026-10-06T21:26:19.175395+05:30 | BE                     | missing           |  -0.095931  |    nan         |
+| TRUMP/USDT | 2026-10-06T22:32:21.559977+05:30 | +2R                    | zone_not_touched  |   1.81111   |    nan         |
+| METAXUSD   | 2026-10-07T15:51:59.555187+05:30 | SL                     | missing           |  -1.50277   |    nan         |
+| XAUTUSD    | 2026-10-07T14:27:06.380945+05:30 | SL                     | missing           |  -1.38597   |    nan         |
+| SLVONUSD   | 2026-10-07T17:56:41.640268+05:30 | SL                     | missing           |  -1.71859   |    nan         |
+| BNBUSD     | 2026-10-07T18:43:23.115068+05:30 | BE                     | missing           |  -0.0396614 |    nan         |
+| LTCUSD     | 2026-10-07T21:56:18.481829+05:30 | Neither                | BE                |  -0.563188  |     -0.0396614 |
+| BTCUSD     | 2026-10-08T08:32:20.962031+05:30 | SL                     | missing           |  -1.17913   |    nan         |
+| METAXUSD   | 2026-10-08T16:01:52.225996+05:30 | SL                     | missing           |  -1.52577   |    nan         |
+| BNBUSD     | 2026-10-08T18:32:42.433946+05:30 | SL                     | missing           |  -1.68074   |    nan         |
+| ETHUSD     | 2026-10-08T21:07:10.412139+05:30 | data_quality_ambiguous | BE                | nan         |     -0.13996   |
+| BTCUSD     | 2026-10-08T22:22:09.594262+05:30 | SL                     | missing           |  -1.27065   |    nan         |
+| XAUTUSD    | 2026-10-09T09:52:06.489561+05:30 | BE                     | missing           |  -0.169614  |    nan         |
+| SLVONUSD   | 2026-10-09T10:32:08.700745+05:30 | BE                     | missing           |  -0.0859962 |    nan         |
+| TSLAXUSD   | 2026-10-09T12:07:00.599261+05:30 | Neither                | missing           |  -0.869434  |    nan         |
+
+## Venue the daily backtest gets (crypto_fetch_ohlcv, 5m)
+
+- WUSD: Delta direct: error Delta returned no candles for WUSD | chain: {'okx': 1} 300 candles from 10-17 22:15
+- OGNUSD: Delta direct: error Delta returned no candles for OGNUSD | chain: {'mexc': 1} 2000 candles from 10-12 00:35
+- GTCUSD: Delta direct: 2500 candles, last 10-18 23:10 | chain: {'delta_india': 1} 2500 candles from 10-10 06:55
+- CAPUSD: Delta direct: 2500 candles, last 10-18 23:10 | chain: {'delta_india': 1} 2500 candles from 10-10 06:55
+- RSRUSD: Delta direct: 2500 candles, last 10-18 23:10 | chain: {'delta_india': 1} 2500 candles from 10-10 06:55
+- LINKUSD: Delta direct: 2500 candles, last 10-18 23:10 | chain: {'delta_india': 1} 2500 candles from 10-10 06:55
+- XRPUSD: Delta direct: 2500 candles, last 10-18 23:10 | chain: {'delta_india': 1} 2500 candles from 10-10 06:55
+- BNBUSD: Delta direct: 2500 candles, last 10-18 23:10 | chain: {'delta_india': 1} 2500 candles from 10-10 06:55
