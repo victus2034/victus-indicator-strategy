@@ -1974,6 +1974,14 @@ class PromoteRepeatTests(unittest.TestCase):
         self.assertTrue(out[1]["filled"])
         self.assertEqual(out[1]["promoted_from"], "first")
 
+    def test_last_repeat_unfilled_does_not_crash(self):
+        rows, repeats, frames = self._setup(fill_first=False)
+        flat = frames["BTCUSDT"].copy()
+        flat["low"] = 100.2
+        out = summary.promote_repeats(rows, repeats, {"BTCUSDT": flat}, "crypto")
+        self.assertEqual(len(out), 2)
+        self.assertEqual(out[1]["outcome"], "zone_not_touched")
+
     def test_reallert_after_a_filled_first_stays_dropped(self):
         rows, repeats, frames = self._setup(fill_first=True)
         self.assertTrue(rows[0]["filled"])

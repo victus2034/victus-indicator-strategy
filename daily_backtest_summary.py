@@ -1880,11 +1880,11 @@ def promote_repeats(
     out = list(rows)
     for anchor_id, candidates in by_anchor.items():
         current_id = anchor_id
-        while True:
+        timeframe = str(candidates[0].get("timeframe"))
+        while candidates:
             outcome, event_time = outcome_of.get(current_id, (None, None))
             if outcome != "zone_not_touched" or event_time is None:
                 break
-            timeframe = str(candidates[0].get("timeframe"))
             window_end = pd.Timestamp(event_time) + ALERT_BAR_DURATION.get(
                 timeframe, ALERT_BAR_DURATION["30m"]
             ) * ENTRY_WAIT_BARS
