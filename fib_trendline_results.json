@@ -522,27 +522,27 @@
  "fib|APTUSD|1d|-1|1791676800|0.7493|2@1792135136": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792238400,
   "fill_ts": 1792137600,
   "filled": true,
   "half": true,
-  "outcome": "1R",
+  "outcome": "2R",
   "r1": true,
-  "r2": false,
-  "resolved": false,
+  "r2": true,
+  "resolved": true,
   "sl": false
  },
  "fib|APTUSD|4h|-1|1791720000|0.7493|2@1792135136": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792242000,
   "fill_ts": 1792137600,
   "filled": true,
   "half": true,
-  "outcome": "1R",
+  "outcome": "2R",
   "r1": true,
-  "r2": false,
-  "resolved": false,
+  "r2": true,
+  "resolved": true,
   "sl": false
  },
  "fib|ARBUSD|4h|-1|1791705600|0.16935|2@1792077864": {
@@ -691,14 +691,14 @@
  "fib|AVAXUSD|4h|-1|1791792000|9.336|2@1792142079": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792242000,
   "fill_ts": 1792144800,
   "filled": true,
   "half": true,
-  "outcome": "1R",
+  "outcome": "2R",
   "r1": true,
-  "r2": false,
-  "resolved": false,
+  "r2": true,
+  "resolved": true,
   "sl": false
  },
  "fib|AVAXUSD|4h|-1|1791792000|9.803|2@1791874988": {
@@ -1081,14 +1081,14 @@
  "fib|BTWUSD|4h|1|1791072000|2.7537|2@1792153361": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792227600,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|CAPLIPOINT.NS|1d|1|1789497000|2990.0|2@1790741967": {
@@ -1598,6 +1598,19 @@
   "resolved": true,
   "sl": false
  },
+ "fib|FILUSD|4h|1|1792065600|1.2228|2@1792241584": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792256400,
+  "fill_ts": 1792249200,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
+ },
  "fib|FLUOROCHEM.NS|4h|-1|1786592700|4233.0|2@1791263682": {
   "ambiguous": false,
   "be": true,
@@ -1916,9 +1929,9 @@
   "end_ts": null,
   "fill_ts": 1791484200,
   "filled": true,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
   "resolved": false,
   "sl": false
@@ -1942,9 +1955,9 @@
   "end_ts": null,
   "fill_ts": 1791484200,
   "filled": true,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
   "resolved": false,
   "sl": false
@@ -2690,6 +2703,19 @@
   "resolved": true,
   "sl": false
  },
+ "fib|MRVL/USDT:USDT|1d|1|1785283200|301.29|2@1792290789": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|MRVL/USDT:USDT|4h|1|1790596800|273.2|2@1790861680": {
   "ambiguous": false,
   "be": false,
@@ -2709,7 +2735,7 @@
   "end_ts": null,
   "fill_ts": 1791397800,
   "filled": true,
-  "half": false,
+  "half": true,
   "outcome": "open",
   "r1": false,
   "r2": false,
@@ -3006,8 +3032,8 @@
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1792195200,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -3082,15 +3108,15 @@
  },
  "fib|ONDOUSD|1d|1|1782259200|0.6084|2@1792032972": {
   "ambiguous": false,
-  "be": false,
-  "end_ts": null,
+  "be": true,
+  "end_ts": 1792267200,
   "fill_ts": 1792036800,
   "filled": true,
   "half": true,
-  "outcome": "open",
+  "outcome": "BE",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|PERSISTENT.NS|4h|-1|1789443900|5162.0|2@1791172444": {
@@ -3305,8 +3331,8 @@
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1792195200,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -3331,8 +3357,8 @@
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1792195200,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -3409,8 +3435,8 @@
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1792238400,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -3565,8 +3591,8 @@
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1792209600,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -3590,14 +3616,14 @@
  "fib|SUIUSD|4h|-1|1791734400|0.9592|2@1792149136": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792224000,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|SUIUSD|4h|-1|1791734400|0.9928|2@1791948856": {
@@ -3850,27 +3876,27 @@
  "fib|XAUTUSD|4h|1|1791993600|4190.63|2@1792156665": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792231200,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|XAUTUSD|4h|1|1791993600|4194.2|2@1792168469": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792242000,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "fib|XRPUSD|1d|1|1786665600|1.7|2@1792031978": {
@@ -3976,6 +4002,32 @@
   "r2": false,
   "resolved": true,
   "sl": false
+ },
+ "tl|1000PEPEUSD|4h|0|1791475200|1791849600@1792250562": {
+  "ambiguous": true,
+  "be": false,
+  "end_ts": 1792270800,
+  "fill_ts": 1792252800,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
+ },
+ "tl|1000PEPEUSD|4h|0|1791849600|1792022400@1792256256": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792270800,
+  "fill_ts": 1792270800,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
  },
  "tl|1000PEPEUSD|4h|1|1791187200|1791777600@1791965140": {
   "ambiguous": false,
@@ -4292,15 +4344,15 @@
  "tl|ADAUSD|1d|0|1785196800|1787011200@1792170794": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "end_ts": 1792267200,
+  "fill_ts": 1792238400,
+  "filled": true,
   "half": false,
-  "outcome": "open",
+  "outcome": "SL",
   "r1": false,
   "r2": false,
-  "resolved": false,
-  "sl": false
+  "resolved": true,
+  "sl": true
  },
  "tl|ADAUSD|4h|0|1789574400|1791475200@1791892902": {
   "ambiguous": false,
@@ -4313,6 +4365,32 @@
   "r1": false,
   "r2": false,
   "resolved": true,
+  "sl": false
+ },
+ "tl|ADAUSD|4h|0|1789574400|1792022400@1792252657": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792270800,
+  "fill_ts": 1792270800,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": true
+ },
+ "tl|ADAUSD|4h|0|1789574400|1792022400@1792290789": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "tl|AEGISLOG.NS|4h|0|1778816700|1779867900@1791882240": {
@@ -5823,6 +5901,19 @@
   "resolved": true,
   "sl": false
  },
+ "tl|BNBUSD|4h|0|1789041600|1789545600@1792253011": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792274400,
+  "fill_ts": 1792270800,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
  "tl|BNBUSD|4h|0|1789545600|1791475200@1792032972": {
   "ambiguous": false,
   "be": false,
@@ -5834,6 +5925,19 @@
   "r1": true,
   "r2": false,
   "resolved": true,
+  "sl": false
+ },
+ "tl|BNBUSD|4h|0|1789545600|1792022400@1792255933": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "tl|BRIGADE.NS|1d|0|1780857000|1782757800@1791181456": {
@@ -6307,14 +6411,14 @@
  "tl|DALBHARAT.NS|1w|0|1741545000|1780857000@1791438799": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792089000,
   "fill_ts": 1791484200,
   "filled": true,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|DALBHARAT.NS|4h|0|1781163900|1790667900@1791431610": {
@@ -6515,14 +6619,14 @@
  "tl|DOGEUSD|4h|1|1791777600|1791964800@1792150107": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792224000,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|EIHOTEL.NS|1w|0|1655663400|1679855400@1791517992": {
@@ -6732,6 +6836,19 @@
   "r2": false,
   "resolved": true,
   "sl": true
+ },
+ "tl|ENAUSD|4h|0|1789488000|1792022400@1792255933": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792260000,
+  "fill_ts": 1792256400,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
  },
  "tl|ENDURANCE.NS|1w|0|1743964200|1774809000@1791870223": {
   "ambiguous": false,
@@ -7616,6 +7733,19 @@
   "r2": false,
   "resolved": true,
   "sl": true
+ },
+ "tl|HYPEUSD|4h|0|1789488000|1792065600@1792256883": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792274400,
+  "fill_ts": 1792270800,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
  },
  "tl|HYPEUSD|4h|1|1790136000|1790481600@1790786982": {
   "ambiguous": false,
@@ -8761,6 +8891,32 @@
   "resolved": true,
   "sl": false
  },
+ "tl|LINKUSD|4h|0|1789574400|1792065600@1792250562": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792260000,
+  "fill_ts": 1792252800,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|LINKUSD|4h|0|1789574400|1792065600@1792290789": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|LINKUSD|4h|0|1789891200|1790164800@1791473280": {
   "ambiguous": false,
   "be": false,
@@ -9450,6 +9606,19 @@
   "resolved": true,
   "sl": true
  },
+ "tl|NEARUSD|4h|1|1791777600|1792080000@1792238883": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|NH.NS|1d|0|1743964200|1775068200@1791876240": {
   "ambiguous": false,
   "be": false,
@@ -9618,6 +9787,32 @@
   "r2": false,
   "resolved": true,
   "sl": true
+ },
+ "tl|NVDAXUSD|4h|0|1789387200|1792065600@1792224201": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792270800,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|NVDAXUSD|4h|0|1789387200|1792065600@1792240086": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792270800,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
  },
  "tl|NVDAXUSD|4h|0|1789905600|1790251200@1791812054": {
   "ambiguous": false,
@@ -10506,14 +10701,14 @@
  "tl|SOLUSD|4h|0|1789488000|1791849600@1792171086": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792245600,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|SOLUSD|4h|0|1789574400|1791475200@1791824325": {
@@ -10556,6 +10751,45 @@
   "sl": false
  },
  "tl|SOLUSD|4h|1|1791288000|1791777600@1792149466": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792224000,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "no fill",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|SOLUSD|4h|1|1791288000|1791777600@1792213993": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792288800,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "no fill",
+  "r1": false,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|SOLUSD|4h|1|1791288000|1791777600@1792232590": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|SOLUSD|4h|1|1791288000|1791777600@1792290789": {
   "ambiguous": false,
   "be": false,
   "end_ts": null,
@@ -10659,17 +10893,30 @@
   "resolved": true,
   "sl": false
  },
+ "tl|SUIUSD|4h|0|1790179200|1792065600@1792256883": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792274400,
+  "fill_ts": 1792270800,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "resolved": true,
+  "sl": false
+ },
  "tl|SUIUSD|4h|1|1791187200|1791734400@1792149136": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792224000,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|TACUSD|4h|0|1788984000|1790596800@1791394732": {
@@ -11286,27 +11533,27 @@
  "tl|XAUTUSD|4h|1|1790942400|1791763200@1792148500": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792224000,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|XAUTUSD|4h|1|1790942400|1791763200@1792165201": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792238400,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|XRPUSD|4h|0|1789574400|1790956800@1791302688": {
@@ -11468,14 +11715,14 @@
  "tl|XRPUSD|4h|1|1791777600|1791964800@1792139924": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792213200,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "resolved": true,
   "sl": false
  },
  "tl|ZECUSD|4h|0|1788336000|1789344000@1790824742": {
