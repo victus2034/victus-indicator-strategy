@@ -17,7 +17,7 @@ import yfinance as yf
 
 import nse_scanner
 import scanner as crypto_scanner
-from config import OTHER_WATCHLIST
+from config import OTHER_WATCHLIST, zone_timeframe_enabled
 from xstock_hybrid_rating import XSTOCK_UNDERLYINGS, is_xstock
 
 
@@ -140,6 +140,9 @@ TARGET_1_R = 1.0
 TARGET_2_R = 2.0
 HALF_R = 0.5
 DATA_QUALITY_AMBIGUOUS = "data_quality_ambiguous"
+# A grade that only says the candles could not be read. It never replaces a
+# stored row; a stored one is retried on the next run.
+DATA_FAILURE_OUTCOMES = {"data_missing", "alert_before_data"}
 # Reaching +0.5R moves the stop to entry rather than closing the trade, so
 # giving it back exits flat. This is a real outcome, distinct from both a
 # full stop and a win.
@@ -186,6 +189,11 @@ def parse_args(argv=None) -> argparse.Namespace:
     parser.add_argument("--records", type=Path, help="Override alert-record JSONL path.")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--force", action="store_true", help="Send even if this report key was already sent.")
+    parser.add_argument(
+        "--regrade",
+        action="store_true",
+        help="Overwrite grades already stored for this day (after a scoring-rule change).",
+    )
     return parser.parse_args(argv)
 
 
@@ -1955,11 +1963,11 @@ def build_summary(
     if data_issues:
         tally.append(f"Data Issues {data_issues}")
 
-    lines = [
-        f"{header} · {date_line}",
-        "",
-        " · ".join(tally),
-    ]
+    lines = [f"{header} · {date_line}"]
+    window = crypto_day_window_line(target_date, market)
+    if window:
+        lines.append(window)
+    lines.extend(["", " · ".join(tally)])
     if counted:
         lines.append(counted)
     totals = f"Win rate {win_rate} · TOTAL {format_r(net_r)}"
@@ -1995,6 +2003,20 @@ def build_summary(
         lines.extend(["", "HOURS (IST)", *hourly_lines])
 
     return "\n".join(lines)
+
+
+def crypto_day_window_line(target_date, market: str) -> str | None:
+    """Which alerts a crypto-style card covers.
+
+    A crypto day runs 04:00 to 04:00 IST and is named by the day it ends, so
+    the "17 OCT" card holds the alerts of 16 Oct. Said on the card, because
+    it read as alerts sent on the 17th (30m was already off by then).
+    """
+    if market not in {"crypto", "xstock", "other"}:
+        return None
+    end = pd.Timestamp(datetime.combine(pd.Timestamp(target_date).date(), CRYPTO_REPORT_BOUNDARY))
+    start = end - pd.Timedelta(days=1)
+    return f"Alerts {start:%d %b %H:%M} - {end:%d %b %H:%M} IST"
 
 
 def best_symbol_lines(filled: pd.DataFrame, best: bool) -> str:
@@ -2423,12 +2445,31 @@ def persist_finalized_records(
     results: pd.DataFrame,
     market: str = "nse",
     path: Path = FINALIZED_RECORDS_PATH,
+    regrade: bool = False,
 ) -> None:
     pending_path = path.with_name(PENDING_RECORDS_PATH.name) if path == FINALIZED_RECORDS_PATH else None
     lifecycle_rows = load_lifecycle_rows(path, pending_path)
+    settled_ids = {
+        str(row["trade_id"])
+        for row in read_jsonl(path)
+        if row.get("trade_id") and row.get("outcome") not in DATA_FAILURE_OUTCOMES
+    }
     for row in results.to_dict("records") if not results.empty else []:
         payload = lifecycle_payload(row, target_date, timeframe, market)
-        lifecycle_rows[payload["trade_id"]] = payload
+        trade_id = payload["trade_id"]
+        existing = lifecycle_rows.get(trade_id)
+        if existing is not None and not regrade:
+            # The run re-grades the latest reported day every morning, and
+            # on a quiet day that is yesterday's. A grade already stored is
+            # kept: re-fetched candles can come from a fallback venue or a
+            # short page, and on 2026-10-18 that turned W's +2R on 16 Oct
+            # into "alert_before_data". A failed fetch never replaces a row,
+            # and a settled row stays as it is unless --regrade asks.
+            if payload.get("outcome") in DATA_FAILURE_OUTCOMES:
+                continue
+            if trade_id in settled_ids:
+                continue
+        lifecycle_rows[trade_id] = payload
     write_lifecycle_rows(lifecycle_rows, path, pending_path)
 
 
@@ -2722,7 +2763,9 @@ def main() -> None:
     if not args.dry_run:
         # Persist before duplicate-report gating so a rerun can still reconcile
         # a pending trade even when the Discord report was already sent.
-        persist_finalized_records(target_date, args.timeframe, results, args.market)
+        persist_finalized_records(
+            target_date, args.timeframe, results, args.market, regrade=args.regrade
+        )
         diagnostics = reconciliation_diagnostics(
             evaluation_records,
             results,
@@ -2739,6 +2782,11 @@ def main() -> None:
                 or nse_alerted_today_on_any_timeframe(args.market)
             ):
                 print(f"{args.market.upper()} was closed today; staying quiet.")
+                return
+            if not zone_timeframe_enabled(args.timeframe):
+                # 30m zone alerts are off (2026-10-16): "no new alerts" every
+                # morning for a timeframe that cannot alert is noise.
+                print(f"{args.timeframe} zone alerts are off; no quiet line.")
                 return
             if quiet_key not in load_sent_reports():
                 send_discord_message(

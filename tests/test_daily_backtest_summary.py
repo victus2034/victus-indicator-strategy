@@ -1885,3 +1885,57 @@ class AmbiguousRerunTests(unittest.TestCase):
             fast, _ = summary.apply_same_day_zone_cooldown(pd.DataFrame(rows), "nse")
             pd.testing.assert_frame_equal(full.reset_index(drop=True), fast.reset_index(drop=True))
         self.assertGreater(ambiguous_seen, 0)
+
+
+class StoredGradeKeptTests(unittest.TestCase):
+    """The morning run re-grades the latest reported day when nothing new came
+    in. On 2026-10-18 that re-fetch fell back off Delta and stored W's +2R of
+    16 Oct as "alert_before_data". A stored grade must survive that."""
+
+    def _graded(self):
+        frame = crypto_frame(rows=[(101.0, 101.2, 100.8, 101.0), (100.0, 101.2, 100.0, 101.0)])
+        return summary.simulate_alert(frame, crypto_alert(), 0, 1)
+
+    def _persist(self, path, row, **kwargs):
+        summary.persist_finalized_records(
+            pd.Timestamp("2026-10-17").date(), "30m", pd.DataFrame([row]), "crypto", path, **kwargs
+        )
+        return json.loads(path.read_text(encoding="utf-8").strip())
+
+    def test_failed_refetch_keeps_the_stored_grade(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "records.jsonl"
+            graded = self._graded()
+            first = self._persist(path, graded)
+            self.assertTrue(first["filled"])
+            failed = summary.unfilled(crypto_alert(), "alert_before_data")
+            failed["trade_id"] = graded["trade_id"]
+            kept = self._persist(path, failed)
+            self.assertEqual(kept["final_result"], first["final_result"])
+            self.assertEqual(kept["net_realized_r"], first["net_realized_r"])
+
+    def test_settled_grade_changes_only_with_regrade(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "records.jsonl"
+            graded = self._graded()
+            self._persist(path, graded)
+            other = summary.unfilled(crypto_alert(), "zone_not_touched")
+            other["trade_id"] = graded["trade_id"]
+            self.assertTrue(self._persist(path, other)["filled"])
+            self.assertFalse(self._persist(path, other, regrade=True)["filled"])
+
+    def test_stored_data_failure_is_retried(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "records.jsonl"
+            graded = self._graded()
+            failed = summary.unfilled(crypto_alert(), "data_missing")
+            failed["trade_id"] = graded["trade_id"]
+            self._persist(path, failed)
+            self.assertTrue(self._persist(path, graded)["filled"])
+
+
+class CryptoDayWindowTests(unittest.TestCase):
+    def test_card_says_which_alerts_it_covers(self):
+        line = summary.crypto_day_window_line(pd.Timestamp("2026-10-17").date(), "crypto")
+        self.assertEqual(line, "Alerts 16 Oct 04:00 - 17 Oct 04:00 IST")
+        self.assertIsNone(summary.crypto_day_window_line(pd.Timestamp("2026-10-17").date(), "nse"))

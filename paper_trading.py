@@ -51,6 +51,9 @@ AMBIGUOUS = backtest.DATA_QUALITY_AMBIGUOUS
 # forever. Fills and level checks are still capped at 15:10 internally, so
 # nothing here lets a trade the user could not have taken into the results.
 SQUARE_OFF_GRACE_END = datetime_time(16, 0)
+# How long past its horizon an open position with no candles is kept before it
+# is dropped as ungradeable.
+STALE_OPEN_GRACE = timedelta(days=1)
 
 
 # "other" is XAUT and SLVON - not crypto, not an xStock, but they still
@@ -62,6 +65,9 @@ MARKETS = [
     ("other", "OTHER"),
 ]
 TIMEFRAMES = ["30m", "4h"]
+# Markets the tick actually trades: entry_confirm.yml runs it with --market
+# crypto, which covers xStock and "other" too. NSE paper is paused.
+PAPER_TRADED_MARKETS = {"crypto", "xstock", "other"}
 
 
 def parse_args(argv=None) -> argparse.Namespace:
@@ -328,6 +334,16 @@ def evaluate_open_positions(
         position = state["open"][trade_id]
         frame = frames.get(position["symbol"])
         if frame is None or frame.empty:
+            # A symbol whose candles no longer come back (MSFT/USDT:USDT left
+            # the watchlist) stayed open forever: three positions from 16 Sep
+            # were still open on 18 Oct. Once its horizon is a day gone it
+            # can never be graded, so it is dropped, not counted.
+            entry_time = pd.Timestamp(position["entry_time"])
+            position_market = position.get("market", market)
+            horizon = horizon_end("nse" if position_market == "nse" else "crypto", entry_time, entry_time)
+            if now - horizon > STALE_OPEN_GRACE:
+                state["open"].pop(trade_id)
+                state["handled"][trade_id] = "data_missing"
             continue
 
         entry_time = pd.Timestamp(position["entry_time"])
@@ -716,6 +732,10 @@ def build_report(
             paper = paper_day_stats(state, market_date, market, frame)
             reference = backtest_day_stats(market_date, frame, market)
             if paper is None and reference is None:
+                continue
+            if paper is None and market not in PAPER_TRADED_MARKETS:
+                # NSE paper is paused, so its row was the backtest alone with
+                # "-" for paper and gap: nothing compared, every morning.
                 continue
             gap = (
                 f"{paper['total_r'] - reference['total_r']:+.2f}R"
