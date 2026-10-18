@@ -1939,3 +1939,59 @@ class CryptoDayWindowTests(unittest.TestCase):
         line = summary.crypto_day_window_line(pd.Timestamp("2026-10-17").date(), "crypto")
         self.assertEqual(line, "Alerts 16 Oct 04:00 - 17 Oct 04:00 IST")
         self.assertIsNone(summary.crypto_day_window_line(pd.Timestamp("2026-10-17").date(), "nse"))
+
+
+class PromoteRepeatTests(unittest.TestCase):
+    """lakky, 2026-10-18: a zone's re-alert counts as a trade when the alert
+    it repeats never filled."""
+
+    def _setup(self, fill_first: bool):
+        # 30 candles of 30m from 10:00. Entry 100: the first alert at 10:00
+        # waits 3 candles; price sits above 100 until 13:00, then dips.
+        rows = []
+        for i in range(30):
+            if i == 1 and fill_first:
+                rows.append((100.5, 100.6, 99.95, 100.3))
+            elif i == 7:
+                rows.append((100.5, 100.6, 99.95, 100.3))
+            else:
+                rows.append((100.5, 100.8, 100.2, 100.5))
+        frame = crypto_frame(rows=rows)
+        first = crypto_alert(trade_id="first", stop_price=99.0, planned_entry=100.0)
+        later_time = pd.Timestamp("2026-08-04 13:05", tz=summary.IST)
+        repeat = crypto_alert(
+            trade_id="again", stop_price=99.0, planned_entry=100.0,
+            event_time=later_time, event_time_ist=later_time, repeat_of="first",
+        )
+        rows_out = summary.simulate_alerts(pd.DataFrame([first]), {"BTCUSDT": frame}, "crypto")
+        return rows_out, pd.DataFrame([repeat]), {"BTCUSDT": frame}
+
+    def test_reallert_after_unfilled_first_is_graded(self):
+        rows, repeats, frames = self._setup(fill_first=False)
+        self.assertEqual(rows[0]["outcome"], "zone_not_touched")
+        out = summary.promote_repeats(rows, repeats, frames, "crypto")
+        self.assertEqual(len(out), 2)
+        self.assertTrue(out[1]["filled"])
+        self.assertEqual(out[1]["promoted_from"], "first")
+
+    def test_reallert_after_a_filled_first_stays_dropped(self):
+        rows, repeats, frames = self._setup(fill_first=True)
+        self.assertTrue(rows[0]["filled"])
+        self.assertEqual(len(summary.promote_repeats(rows, repeats, frames, "crypto")), 1)
+
+    def test_load_records_names_what_a_repeat_repeats(self):
+        record = {
+            "symbol": "TCS.NS", "timeframe": "30m", "side": "long", "alert_price": 100.0,
+            "distance_pct": 0.05, "level": 99.0, "zone_bottom": 99.0, "zone_top": 100.0,
+            "planned_entry": 100.0, "stop_price": 98.9,
+        }
+        rows = [dict(record, delivered_at_utc="2026-08-26T04:00:00+00:00", trade_id="a"),
+                dict(record, delivered_at_utc="2026-08-26T05:00:00+00:00", trade_id="b")]
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "r.jsonl"
+            path.write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
+            kept = summary.load_records(path, "30m")
+            both = summary.load_records(path, "30m", keep_repeats=True)
+        self.assertEqual(list(kept["trade_id"]), ["a"])
+        self.assertTrue(pd.isna(both["repeat_of"].iloc[0]))
+        self.assertEqual(both["repeat_of"].iloc[1], "a")
