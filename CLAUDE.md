@@ -398,9 +398,11 @@ significant figures (`price_text`); nothing parses the text - records carry the 
 - **Status posts once per dispatch (2026-10-09, lakky).** The scan loop runs every ~90s; started /
   finished went out on every pass. Now only the first pass posts (`scanner.first_pass_this_loop`,
   shared by NSE); a later pass posts only when most symbols failed or, on NSE, an alert failed to send.
-- **30m zone alerts are off (2026-10-16, lakky: "remove 30m for now"), crypto and NSE.** `ZONE_ALERT_TIMEFRAMES`
+- **30m zone alerts are off (2026-10-16, lakky: "remove 30m for now"), crypto and NSE; 4H stays on (2026-10-18,
+  lakky: "keep 4h on for fib, trendline and support and resistance").** `ZONE_ALERT_TIMEFRAMES`
   (`VICTUS_ZONE_ALERT_TIMEFRAMES`, default `4h`): a zone scanner on an unlisted timeframe exits before loading
-  state and ends the scan loop. Keep `scan_30m.yml` dispatched - `fib_trendline_scan.yml` runs off its
+  state and ends the scan loop. An off timeframe's daily and weekly zone cards stay quiet once nothing is left to
+  grade; the paper table stays quiet only when every zone timeframe is off. Keep `scan_30m.yml` dispatched - `fib_trendline_scan.yml` runs off its
   `workflow_run`. Live Sep 1 - Oct 16: crypto 30m -0.28R / -0.13% a trade (326), NSE 30m -0.50R / -0.21% (512).
 - **S/R zones on 1D / 1W / 1M (2026-10-16, lakky), in the old 30m channels.** `fib_trendline_scanner.zone_candidates`
   runs the zone engine on the fib/TL charts (`ZONE_HTF_TIMEFRAMES`, Bitunix / Yahoo, `ZONE_BASE_EXTRA` 1): nearest
@@ -409,6 +411,14 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   Posts to `DISCORD_30M_WEBHOOK_URL` / `DISCORD_NSE_30M_WEBHOOK_URL` as `**HYPE | BUY | 1D**`, recorded as
   kind `zone` and scored in the daily report like fibs (2R + BE, wait 5 / hold 20). Seeds silently on first pass.
   Backtest: `research/zone_htf_backtest.py`, part `zone-htf`. Entry confirm does not watch them.
+- **Stored daily grades are kept (2026-10-18, lakky).** The morning run re-grades the latest reported
+  day when no new one exists (with 30m off, that is the same day every morning). A grade already in
+  `daily_backtest_finalized_records.jsonl` is no longer overwritten, and a failed fetch (`data_missing`,
+  `alert_before_data`) never replaces a row: Delta stopped serving W and OGN, the re-fetch fell back to
+  OKX's 300 candles and W's +2R of 16 Oct became `alert_before_data`. `--regrade` overwrites on purpose
+  (after a scoring-rule change). Paper vs backtest: they can pick different deliveries of one zone
+  (backtest keeps the first, drops repeats for 6h; paper fills a later re-alert) - see
+  `research/daily_scores_audit.py`, part `scores-audit`.
 - **Range filter alerts are off (2026-10-10, lakky).** Alerts are S/R zones, fibs and trendlines
   (incl. TL BROKEN) only. `ALERT_RANGE_FILTER_SIGNALS` is False in `config.py` and `nse_config.py`; the
   range filter is still computed but never posts. Pine v12.7.8 drops its RF marker too.

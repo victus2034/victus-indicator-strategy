@@ -1,0 +1,20 @@
+# Re-alert after an unfilled first alert - zones, 2026-09-01 to now
+
+News rule: trades filled within 15 min of US CPI/PPI/FOMC left out (7 in the new set).
+
+| market | tf | old trades | old R | old R/trade | old %/trade | new trades | new R | new R/trade | new %/trade | extra trades | extra R/trade | extra %/trade |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| CRYPTO | 30m | 221 | -63.3 | -0.286 | -0.165% | 236 | -66.0 | -0.280 | -0.160% | 236 | -0.280 | -0.160% |
+| CRYPTO | 4h | 16 | +1.8 | +0.110 | +0.073% | 16 | +1.8 | +0.110 | +0.073% | 0 | +0.000 | +0.000% |
+| NSE | 30m | 521 | -261.6 | -0.502 | -0.215% | 547 | -272.0 | -0.497 | -0.214% | 547 | -0.497 | -0.214% |
+| NSE | 4h | 262 | -79.3 | -0.302 | -0.215% | 262 | -79.3 | -0.302 | -0.215% | 262 | -0.302 | -0.215% |
+| OTHER | 30m | 34 | -9.0 | -0.264 | -0.071% | 41 | -15.5 | -0.378 | -0.101% | 41 | -0.378 | -0.101% |
+| OTHER | 4h | 11 | -1.7 | -0.156 | +0.024% | 11 | -1.7 | -0.156 | +0.024% | 0 | +0.000 | +0.000% |
+| XSTOCK | 30m | 77 | -21.9 | -0.284 | -0.114% | 93 | -27.5 | -0.296 | -0.114% | 93 | -0.296 | -0.114% |
+| XSTOCK | 4h | 25 | +2.4 | +0.094 | +0.037% | 25 | +2.4 | +0.094 | +0.037% | 25 | +0.094 | +0.037% |
+
+ALL: old 1167 trades -432.5R (-0.371R, -0.183% a trade) | new 1231 trades -457.9R (-0.372R, -0.182% a trade) | extra 1204 trades -457.9R
+
+Note: the "extra" columns above are wrong (a NaN flag counted every row; fixed in the script after this run). Extra = new - old:
+crypto 30m +15 trades -2.7R, NSE 30m +26 -10.4R, other 30m +7 -6.5R, xStock 30m +16 -5.6R; 4h none.
+All: +64 trades, -25.4R, -0.40R and about -0.16% a trade.

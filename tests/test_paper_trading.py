@@ -310,6 +310,19 @@ class ReportTests(unittest.TestCase):
         self.assertNotIn("XSTOCK", message)
         self.assertNotIn("4h", message)
 
+    def test_paused_nse_backtest_alone_is_not_a_row(self):
+        state = fresh_state()
+        state["closed"] = [
+            {"date": "2026-08-17", "market": "crypto", "timeframe": "4h",
+             "outcome": "SL", "net_realized_r": -1.0, "symbol": "BTCUSDT"},
+        ]
+        reference = self._stats(3, 1, 2, -1.0)
+        with patch.object(paper_trading, "backtest_day_stats", lambda *a, **k: reference):
+            message = paper_trading.build_report("2026-08-17", "both", state)
+
+        self.assertNotIn("NSE", message)
+        self.assertIn("CRYPTO 4h", message)
+
 
 
 class CommandLineTests(unittest.TestCase):
@@ -559,3 +572,45 @@ class AcrossTicksTests(unittest.TestCase):
         expected = position["entry"] * (1 + backtest.CRYPTO_BREAK_EVEN_OFFSET_PCT / 100.0)
         expected *= 1 - backtest.SL_FILL_SLIPPAGE_PCT / 100.0
         self.assertAlmostEqual(closed[0]["exit_price"], expected)
+
+
+class StaleOpenPositionTests(unittest.TestCase):
+    def _state(self):
+        state = fresh_state()
+        state["open"]["x"] = {
+            "symbol": "MSFT/USDT:USDT", "market": "xstock", "timeframe": "30m", "side": "long",
+            "entry": 100.0, "stop": 99.0, "risk": 1.0, "target_half": 100.5,
+            "target_1": 101.0, "target_2": 102.0, "entry_time": "2026-09-16T13:55:00+05:30",
+            "alert_time": "2026-09-16T13:51:00+05:30",
+        }
+        return state
+
+    def test_position_without_candles_is_dropped_after_its_horizon(self):
+        state = self._state()
+        now = pd.Timestamp("2026-10-18 08:00", tz=paper_trading.IST)
+        closed = paper_trading.evaluate_open_positions(state, {}, now, "crypto")
+        self.assertEqual(closed, [])
+        self.assertEqual(state["open"], {})
+        self.assertEqual(state["handled"]["x"], "data_missing")
+
+    def test_a_missed_tick_inside_the_horizon_keeps_it(self):
+        state = self._state()
+        now = pd.Timestamp("2026-09-16 16:00", tz=paper_trading.IST)
+        paper_trading.evaluate_open_positions(state, {}, now, "crypto")
+        self.assertIn("x", state["open"])
+
+
+def test_empty_report_not_posted_when_zone_alerts_off(monkeypatch):
+    pt = paper_trading
+    import argparse
+    posted = []
+    monkeypatch.setattr(pt.backtest, "ZONE_ALERT_TIMEFRAMES", [])
+    monkeypatch.setattr(pt, "build_report", lambda *a, **k: f"PAPER vs BACKTEST · x\n\n{pt.NOTHING_CLOSED}")
+    monkeypatch.setattr(pt, "load_state", lambda: {})
+    monkeypatch.setattr(pt, "post_report", posted.append)
+    args = argparse.Namespace(date="2026-10-18", timeframe="both", dry_run=False)
+    pt.run_report(args)
+    assert posted == []
+    monkeypatch.setattr(pt, "build_report", lambda *a, **k: "PAPER vs BACKTEST · x\n\ntable")
+    pt.run_report(args)
+    assert len(posted) == 1

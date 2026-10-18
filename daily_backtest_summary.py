@@ -17,7 +17,7 @@ import yfinance as yf
 
 import nse_scanner
 import scanner as crypto_scanner
-from config import OTHER_WATCHLIST
+from config import OTHER_WATCHLIST, ZONE_ALERT_TIMEFRAMES, zone_timeframe_enabled
 from xstock_hybrid_rating import XSTOCK_UNDERLYINGS, is_xstock
 
 
@@ -140,6 +140,9 @@ TARGET_1_R = 1.0
 TARGET_2_R = 2.0
 HALF_R = 0.5
 DATA_QUALITY_AMBIGUOUS = "data_quality_ambiguous"
+# A grade that only says the candles could not be read. It never replaces a
+# stored row; a stored one is retried on the next run.
+DATA_FAILURE_OUTCOMES = {"data_missing", "alert_before_data"}
 # Reaching +0.5R moves the stop to entry rather than closing the trade, so
 # giving it back exits flat. This is a real outcome, distinct from both a
 # full stop and a win.
@@ -186,6 +189,11 @@ def parse_args(argv=None) -> argparse.Namespace:
     parser.add_argument("--records", type=Path, help="Override alert-record JSONL path.")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--force", action="store_true", help="Send even if this report key was already sent.")
+    parser.add_argument(
+        "--regrade",
+        action="store_true",
+        help="Overwrite grades already stored for this day (after a scoring-rule change).",
+    )
     return parser.parse_args(argv)
 
 
@@ -224,7 +232,10 @@ def configure_crypto_data(timeframe: str) -> Path:
     return settings["crypto_records"]
 
 
-def load_records(path: Path, timeframe_filter: str) -> pd.DataFrame:
+def load_records(path: Path, timeframe_filter: str, keep_repeats: bool = False) -> pd.DataFrame:
+    """One row per zone trade. With keep_repeats the dropped repeat deliveries
+    come back too, each with `repeat_of` naming the delivery it repeats, so a
+    re-alert after an unfilled first alert can be graded (promote_repeats)."""
     if not path.exists():
         return pd.DataFrame()
 
@@ -314,6 +325,7 @@ def load_records(path: Path, timeframe_filter: str) -> pd.DataFrame:
     # small hop at a time.
     day = pd.to_datetime(frame["event_time"], utc=True, errors="coerce").dt.tz_convert(IST).dt.date
     keep = []
+    repeat_of: list[str | None] = []
     crypto_anchors: dict[tuple[str, str], list[dict]] = {}
     nse_anchors: dict[tuple[object, str, str], list[dict]] = {}
     for index, row in frame.iterrows():
@@ -337,9 +349,11 @@ def load_records(path: Path, timeframe_filter: str) -> pd.DataFrame:
             if match is not None:
                 match["last_time"] = event_time
                 keep.append(False)
+                repeat_of.append(match["trade_id"])
                 continue
-            anchors.append({"bottom": bottom, "top": top, "last_time": event_time})
+            anchors.append({"bottom": bottom, "top": top, "last_time": event_time, "trade_id": row["trade_id"]})
             keep.append(True)
+            repeat_of.append(None)
             continue
 
         nse_key = (day.iat[index], symbol, side)
@@ -349,8 +363,12 @@ def load_records(path: Path, timeframe_filter: str) -> pd.DataFrame:
             None,
         )
         keep.append(match is None)
+        repeat_of.append(None if match is None else match["trade_id"])
         if match is None:
-            anchors.append({"bottom": bottom, "top": top})
+            anchors.append({"bottom": bottom, "top": top, "trade_id": row["trade_id"]})
+    if keep_repeats:
+        frame["repeat_of"] = repeat_of
+        return frame
     return frame[pd.Series(keep, index=frame.index)].reset_index(drop=True)
 
 
@@ -1820,6 +1838,75 @@ def first_present_value(*values):
     return None
 
 
+def stored_trade_ids(path: Path) -> set[str]:
+    return {str(row["trade_id"]) for row in read_jsonl(path) if row.get("trade_id")}
+
+
+def stored_outcomes(path: Path) -> dict[str, tuple[str, object]]:
+    """trade_id -> (outcome, alert time) for rows already graded."""
+    out = {}
+    for row in read_jsonl(path):
+        if row.get("trade_id") and row.get("alert_time"):
+            out[str(row["trade_id"])] = (row.get("outcome"), pd.Timestamp(row["alert_time"]))
+    return out
+
+
+def promote_repeats(
+    rows: list[dict],
+    repeats: pd.DataFrame,
+    frames: dict[str, pd.DataFrame],
+    market: str,
+    stored_outcomes: dict[str, tuple[str, object]] | None = None,
+) -> list[dict]:
+    """Grade a zone's re-alert when the alert it repeats never filled.
+
+    load_records keeps the first delivery of a zone and drops its repeats
+    (6h crypto, the session NSE). When that first alert's entry window closed
+    untouched, a later re-alert is a trade the user could still take, and
+    paper trading took it: since 10 Oct paper had 93 trades / -18.0R against
+    the backtest's 81 / -11.0R. lakky, 2026-10-18: count them. The first
+    repeat delivered after the unfilled alert's window is graded; if it does
+    not fill either, the next one after its own window is tried.
+    """
+    if repeats is None or repeats.empty:
+        return rows
+    outcome_of: dict[str, tuple[str, object]] = dict(stored_outcomes or {})
+    for row in rows:
+        outcome_of[str(row.get("trade_id"))] = (row.get("outcome"), row.get("event_time_ist"))
+    by_anchor: dict[str, list[dict]] = {}
+    for repeat in repeats.sort_values("event_time").to_dict("records"):
+        by_anchor.setdefault(str(repeat["repeat_of"]), []).append(repeat)
+    graded = {str(row.get("trade_id")) for row in rows}
+    out = list(rows)
+    for anchor_id, candidates in by_anchor.items():
+        current_id = anchor_id
+        timeframe = str(candidates[0].get("timeframe"))
+        while candidates:
+            outcome, event_time = outcome_of.get(current_id, (None, None))
+            if outcome != "zone_not_touched" or event_time is None:
+                break
+            window_end = pd.Timestamp(event_time) + ALERT_BAR_DURATION.get(
+                timeframe, ALERT_BAR_DURATION["30m"]
+            ) * ENTRY_WAIT_BARS
+            nxt = next(
+                (c for c in candidates if pd.Timestamp(c["event_time_ist"]) >= window_end),
+                None,
+            )
+            if nxt is None:
+                break
+            candidates = [c for c in candidates if c is not nxt]
+            trade_id = str(nxt["trade_id"])
+            if trade_id not in graded:
+                graded_rows = simulate_alerts(pd.DataFrame([nxt]), frames, market)
+                for graded_row in graded_rows:
+                    graded_row["promoted_from"] = anchor_id
+                out.extend(graded_rows)
+                graded.add(trade_id)
+                outcome_of[trade_id] = (graded_rows[0].get("outcome"), nxt["event_time_ist"])
+            current_id = trade_id
+    return out
+
+
 def apply_same_day_zone_cooldown(
     results: pd.DataFrame,
     market: str = "nse",
@@ -1955,11 +2042,11 @@ def build_summary(
     if data_issues:
         tally.append(f"Data Issues {data_issues}")
 
-    lines = [
-        f"{header} · {date_line}",
-        "",
-        " · ".join(tally),
-    ]
+    lines = [f"{header} · {date_line}"]
+    window = crypto_day_window_line(target_date, market)
+    if window:
+        lines.append(window)
+    lines.extend(["", " · ".join(tally)])
     if counted:
         lines.append(counted)
     totals = f"Win rate {win_rate} · TOTAL {format_r(net_r)}"
@@ -1995,6 +2082,20 @@ def build_summary(
         lines.extend(["", "HOURS (IST)", *hourly_lines])
 
     return "\n".join(lines)
+
+
+def crypto_day_window_line(target_date, market: str) -> str | None:
+    """Which alerts a crypto-style card covers.
+
+    A crypto day runs 04:00 to 04:00 IST and is named by the day it ends, so
+    the "17 OCT" card holds the alerts of 16 Oct. Said on the card, because
+    it read as alerts sent on the 17th (30m was already off by then).
+    """
+    if market not in {"crypto", "xstock", "other"}:
+        return None
+    end = pd.Timestamp(datetime.combine(pd.Timestamp(target_date).date(), CRYPTO_REPORT_BOUNDARY))
+    start = end - pd.Timedelta(days=1)
+    return f"Alerts {start:%d %b %H:%M} - {end:%d %b %H:%M} IST"
 
 
 def best_symbol_lines(filled: pd.DataFrame, best: bool) -> str:
@@ -2423,12 +2524,31 @@ def persist_finalized_records(
     results: pd.DataFrame,
     market: str = "nse",
     path: Path = FINALIZED_RECORDS_PATH,
+    regrade: bool = False,
 ) -> None:
     pending_path = path.with_name(PENDING_RECORDS_PATH.name) if path == FINALIZED_RECORDS_PATH else None
     lifecycle_rows = load_lifecycle_rows(path, pending_path)
+    settled_ids = {
+        str(row["trade_id"])
+        for row in read_jsonl(path)
+        if row.get("trade_id") and row.get("outcome") not in DATA_FAILURE_OUTCOMES
+    }
     for row in results.to_dict("records") if not results.empty else []:
         payload = lifecycle_payload(row, target_date, timeframe, market)
-        lifecycle_rows[payload["trade_id"]] = payload
+        trade_id = payload["trade_id"]
+        existing = lifecycle_rows.get(trade_id)
+        if existing is not None and not regrade:
+            # The run re-grades the latest reported day every morning, and
+            # on a quiet day that is yesterday's. A grade already stored is
+            # kept: re-fetched candles can come from a fallback venue or a
+            # short page, and on 2026-10-18 that turned W's +2R on 16 Oct
+            # into "alert_before_data". A failed fetch never replaces a row,
+            # and a settled row stays as it is unless --regrade asks.
+            if payload.get("outcome") in DATA_FAILURE_OUTCOMES:
+                continue
+            if trade_id in settled_ids:
+                continue
+        lifecycle_rows[trade_id] = payload
     write_lifecycle_rows(lifecycle_rows, path, pending_path)
 
 
@@ -2629,7 +2749,7 @@ def main() -> None:
         if args.market in {"crypto", "xstock", "other"}
         else configure_nse_data(args.timeframe)
     )
-    records = load_records(args.records or default_records, args.timeframe)
+    records = load_records(args.records or default_records, args.timeframe, keep_repeats=True)
     wanted_market = {
         "nse": MARKET_NSE,
         "crypto": MARKET_CRYPTO,
@@ -2639,6 +2759,10 @@ def main() -> None:
     if not records.empty:
         records = records[records["market_class"] == wanted_market].copy()
     records = assign_report_dates(records, args.market)
+    repeats = records.iloc[0:0]
+    if not records.empty and "repeat_of" in records:
+        repeats = records[records["repeat_of"].notna()].copy()
+        records = records[records["repeat_of"].isna()].copy()
     pending = load_pending_records(
         PENDING_RECORDS_PATH,
         timeframe=args.timeframe,
@@ -2686,6 +2810,33 @@ def main() -> None:
         else:
             frames, data_failures = fetch_frames(sorted(evaluation_records["symbol"].unique()))
         rows = simulate_alerts(evaluation_records, frames, args.market)
+        if not repeats.empty:
+            # Re-alerts of a zone whose earlier alert never filled, from this
+            # report day; the earlier alert may have been graded on a past run.
+            day_repeats = repeats[repeats["report_date"] == target_date]
+            day_repeats = day_repeats[
+                ~day_repeats["trade_id"].astype(str).isin(stored_trade_ids(FINALIZED_RECORDS_PATH))
+            ]
+            if not day_repeats.empty:
+                missing = sorted(set(day_repeats["symbol"]) - set(frames) - set(data_failures))
+                if missing:
+                    extra, extra_failures = (
+                        fetch_crypto_frames(missing)
+                        if args.market in {"crypto", "xstock", "other"}
+                        else fetch_frames(missing)
+                    )
+                    frames.update(extra)
+                    data_failures.update(extra_failures)
+                rows = promote_repeats(
+                    rows, day_repeats, frames, args.market,
+                    stored_outcomes=stored_outcomes(FINALIZED_RECORDS_PATH),
+                )
+                promoted = [str(r["trade_id"]) for r in rows if r.get("promoted_from")]
+                if promoted:
+                    current_day_records = pd.concat(
+                        [current_day_records, day_repeats[day_repeats["trade_id"].astype(str).isin(promoted)]],
+                        ignore_index=True,
+                    )
         ambiguous_rows = pd.DataFrame(
             [row for row in rows if row.get("final_result") == DATA_QUALITY_AMBIGUOUS]
         )
@@ -2722,7 +2873,9 @@ def main() -> None:
     if not args.dry_run:
         # Persist before duplicate-report gating so a rerun can still reconcile
         # a pending trade even when the Discord report was already sent.
-        persist_finalized_records(target_date, args.timeframe, results, args.market)
+        persist_finalized_records(
+            target_date, args.timeframe, results, args.market, regrade=args.regrade
+        )
         diagnostics = reconciliation_diagnostics(
             evaluation_records,
             results,
@@ -2739,6 +2892,11 @@ def main() -> None:
                 or nse_alerted_today_on_any_timeframe(args.market)
             ):
                 print(f"{args.market.upper()} was closed today; staying quiet.")
+                return
+            if not zone_timeframe_enabled(args.timeframe):
+                # 30m zone alerts are off (2026-10-16): "no new alerts" every
+                # morning for a timeframe that cannot alert is noise.
+                print(f"{args.timeframe} zone alerts are off; no quiet line.")
                 return
             if quiet_key not in load_sent_reports():
                 send_discord_message(

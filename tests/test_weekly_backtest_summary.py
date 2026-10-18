@@ -137,3 +137,17 @@ class AmbiguousGraceTests(unittest.TestCase):
     def test_an_ambiguous_trade_no_longer_blocks_after_the_grace(self):
         ready, _ = self._run(date(2026, 8, 7) + pd.Timedelta(days=weekly.AMBIGUOUS_GRACE_DAYS + 1))
         self.assertTrue(ready)
+
+
+def test_no_weekly_post_for_an_off_timeframe_with_no_trades(monkeypatch):
+    import sys
+
+    def boom(*_a, **_k):
+        raise AssertionError("posted a weekly report for an off timeframe")
+
+    monkeypatch.setattr(sys, "argv", ["weekly_backtest_summary.py", "--market", "crypto", "--timeframe", "30m"])
+    monkeypatch.setattr(weekly, "load_finalized_records", lambda: pd.DataFrame())
+    monkeypatch.setattr(weekly.daily, "load_pending_records", lambda *a, **k: pd.DataFrame())
+    monkeypatch.setattr(weekly.daily, "send_discord_message_with_attachment", boom)
+    monkeypatch.setattr(weekly, "weekly_readiness", boom)
+    weekly.main()

@@ -434,6 +434,11 @@ def main() -> None:
             & (pending["report_date"] <= week_end)
         ].copy()
 
+    if frame.empty and pending.empty and not daily.zone_timeframe_enabled(args.timeframe):
+        # 30m/4h zone alerts are off (2026-10-16 / 2026-10-18): no trades, no report.
+        print(f"{market_label} {args.timeframe}: zone alerts off and no trades this week; not posting.")
+        return
+
     ready, diagnostic = weekly_readiness(
         frame, pending, week_start, week_end, market=args.market, timeframe=args.timeframe,
         alert_dates=nse_alert_dates(args.timeframe) if args.market == "nse" else None,
