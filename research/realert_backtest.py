@@ -116,7 +116,7 @@ def main() -> None:
                     s["r"] += net
                     s["pct"] += net * stop_pct
                     s["wins"] += r["final_result"] in {"+1R", "+2R"} or (r["final_result"] == "Neither" and net > 0)
-                    if label == "new" and r.get("promoted_from"):
+                    if label == "new" and isinstance(r.get("promoted_from"), str):
                         s["extra_n"] += 1
                         s["extra_r"] += net
                         s["extra_pct"] += net * stop_pct

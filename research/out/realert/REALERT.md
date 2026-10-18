@@ -14,3 +14,7 @@ News rule: trades filled within 15 min of US CPI/PPI/FOMC left out (7 in the new
 | XSTOCK | 4h | 25 | +2.4 | +0.094 | +0.037% | 25 | +2.4 | +0.094 | +0.037% | 25 | +0.094 | +0.037% |
 
 ALL: old 1167 trades -432.5R (-0.371R, -0.183% a trade) | new 1231 trades -457.9R (-0.372R, -0.182% a trade) | extra 1204 trades -457.9R
+
+Note: the "extra" columns above are wrong (a NaN flag counted every row; fixed in the script after this run). Extra = new - old:
+crypto 30m +15 trades -2.7R, NSE 30m +26 -10.4R, other 30m +7 -6.5R, xStock 30m +16 -5.6R; 4h none.
+All: +64 trades, -25.4R, -0.40R and about -0.16% a trade.
