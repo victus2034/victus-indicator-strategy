@@ -704,6 +704,9 @@ def side_text(stats: dict | None) -> str:
     return f"{stats['entries']} · {rate} · {stats['total_r']:+.2f}R"
 
 
+NOTHING_CLOSED = "Nothing closed on this date."
+
+
 def build_report(
     date_iso: str, timeframe: str, state: dict, dates: dict[str, str] | None = None
 ) -> str:
@@ -745,7 +748,7 @@ def build_report(
             rows.append((f"{label} {frame}{suffix}", side_text(paper), side_text(reference), gap))
 
     if not rows:
-        return f"PAPER vs BACKTEST · {date_line}\n\nNothing closed on this date."
+        return f"PAPER vs BACKTEST · {date_line}\n\n{NOTHING_CLOSED}"
 
     # This table is column-padded with spaces, which only lines up in a monospace
     # font. Posted as plain Discord content it renders in a proportional font, so
@@ -790,6 +793,11 @@ def run_report(args: argparse.Namespace) -> None:
         date_iso = dates["crypto"]
     message = build_report(date_iso, args.timeframe, load_state(), dates)
     print(message)
+    if message.endswith(NOTHING_CLOSED) and not backtest.ZONE_ALERT_TIMEFRAMES:
+        # 30m and 4h zone alerts are off (2026-10-18): an empty table every
+        # morning is noise. A trade still closing after the switch still posts.
+        print("Zone alerts are off and nothing closed; not posting.")
+        return
     if not args.dry_run:
         post_report(message)
 

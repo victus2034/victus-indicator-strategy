@@ -17,7 +17,7 @@ import yfinance as yf
 
 import nse_scanner
 import scanner as crypto_scanner
-from config import OTHER_WATCHLIST, zone_timeframe_enabled
+from config import OTHER_WATCHLIST, ZONE_ALERT_TIMEFRAMES, zone_timeframe_enabled
 from xstock_hybrid_rating import XSTOCK_UNDERLYINGS, is_xstock
 
 

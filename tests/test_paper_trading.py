@@ -598,3 +598,19 @@ class StaleOpenPositionTests(unittest.TestCase):
         now = pd.Timestamp("2026-09-16 16:00", tz=paper_trading.IST)
         paper_trading.evaluate_open_positions(state, {}, now, "crypto")
         self.assertIn("x", state["open"])
+
+
+def test_empty_report_not_posted_when_zone_alerts_off(monkeypatch):
+    pt = paper_trading
+    import argparse
+    posted = []
+    monkeypatch.setattr(pt.backtest, "ZONE_ALERT_TIMEFRAMES", [])
+    monkeypatch.setattr(pt, "build_report", lambda *a, **k: f"PAPER vs BACKTEST · x\n\n{pt.NOTHING_CLOSED}")
+    monkeypatch.setattr(pt, "load_state", lambda: {})
+    monkeypatch.setattr(pt, "post_report", posted.append)
+    args = argparse.Namespace(date="2026-10-18", timeframe="both", dry_run=False)
+    pt.run_report(args)
+    assert posted == []
+    monkeypatch.setattr(pt, "build_report", lambda *a, **k: "PAPER vs BACKTEST · x\n\ntable")
+    pt.run_report(args)
+    assert len(posted) == 1
