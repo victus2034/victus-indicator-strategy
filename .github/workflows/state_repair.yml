@@ -1,0 +1,73 @@
+name: Victus State Repair
+
+# One-off (lakky, 2026-10-18): restores W's +2R of 17 Oct and adds graded zone
+# re-alerts to the stored daily results (research/state_repair.py). Dry run by
+# default; "apply" writes the finalized records to scanner-runtime-state.
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Write the repaired records to scanner-runtime-state"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+permissions:
+  contents: write
+
+# Same group as the daily backtest so the two never write the file at once.
+concurrency:
+  group: victus-daily-backtest-summary
+  cancel-in-progress: false
+
+jobs:
+  state-repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore runtime state
+        id: restore
+        run: |
+          bash .github/scripts/restore_runtime_state.sh \
+            nse_alert_records.jsonl \
+            nse_alert_records_30m.jsonl \
+            crypto_alert_records.jsonl \
+            crypto_alert_records_30m.jsonl \
+            daily_backtest_finalized_records.jsonl \
+            daily_backtest_pending_records.jsonl
+
+      - name: Repair stored grades
+        id: repair
+        env:
+          INPUT_APPLY: ${{ github.event.inputs.apply }}
+        run: |
+          if [ "${INPUT_APPLY:-false}" = "true" ]; then
+            python research/state_repair.py --apply
+          else
+            python research/state_repair.py
+          fi
+          cat state_repair_report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Persist runtime state
+        if: ${{ always() && steps.restore.outcome == 'success' && steps.repair.outcome == 'success' && github.event.inputs.apply == 'true' }}
+        run: |
+          bash .github/scripts/persist_runtime_state.sh \
+            daily_backtest_finalized_records.jsonl \
+            daily_backtest_pending_records.jsonl
