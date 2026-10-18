@@ -26,6 +26,7 @@ import requests
 
 import fib_trendline_trades as trades
 import scanner
+from daily_backtest_summary import money_line
 from fib_trendline_data import CRYPTO, IST, NSE, TF_LABEL, TF_SECONDS, delta_candles, nse_download
 
 RECORDS_FILE = Path(__file__).with_name(os.getenv("VICTUS_FIB_TL_RECORDS_FILE", "fib_trendline_alert_records.jsonl"))
@@ -128,7 +129,7 @@ def tally(items):
     stop). BE is left out of the win rate, as in the zone report.
     """
     t = defaultdict(int)
-    net1 = net2 = 0.0
+    net1 = net2 = pct1 = pct2 = 0.0
     for record, x in items:
         t["alerts"] += 1
         if not x["filled"]:
@@ -139,9 +140,13 @@ def tally(items):
         at1, at2 = trades.booked_r(record["plan"], record["market"], x)
         net1 += at1 or 0.0
         net2 += at2 or 0.0
+        risk = trades.risk_pct(record["plan"])
+        pct1 += (at1 or 0.0) * risk
+        pct2 += (at2 or 0.0) * risk
     wins, decided = t["r1"] + t["r2"], t["r1"] + t["r2"] + t["sl"]
     t["win"] = f"{wins / decided * 100:.1f}%" if decided else "N/A"
     t["net1"], t["net2"] = net1, net2
+    t["pct1"], t["pct2"] = pct1, pct2
     return t
 
 
@@ -177,6 +182,12 @@ def _day_block(day):
     if counted:
         lines.append(counted)
     lines.append(f"Win rate {t['win']} · TOTAL {trades.r(t['net1'])} booking 1R / {trades.r(t['net2'])} booking 2R")
+    if t["entries"]:
+        money1, money2 = money_line(t["pct1"]), money_line(t["pct2"])
+        if money1 == money2:
+            lines.append(money1)
+        else:
+            lines.append(f"{money1} booking 1R / {money2.split(': ', 1)[1]} booking 2R")
     return lines
 
 

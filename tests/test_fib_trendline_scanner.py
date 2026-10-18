@@ -957,3 +957,17 @@ class WickIntoBandTests(unittest.TestCase):
         self.assertEqual(fts.swept_since(rows, now - 300), (2, 4))
         self.assertIsNone(fts.swept_since(rows, now))
         self.assertEqual(fts.swept_since(rows, now - 200, 300), (2, 4))
+
+
+def test_fib_card_money_line_uses_each_trades_stop():
+    """A fib SL on a 2.762% stop at -1.0475R, sized 10,000 x 5x, is -1,447."""
+    import fib_trendline_daily_report as report
+    from unittest import mock
+    record = {"plan": {"entry": 100.0, "sl": 97.238, "side": "long"}, "market": "crypto"}
+    result = {"filled": True, "outcome": "SL"}
+    with mock.patch.object(report.trades, "booked_r", return_value=(-1.0475, -1.0475)):
+        lines = report._day_block([(record, result)])
+    assert lines[-1] == "10,000 at 5x: -1,447 (-14.5%)"
+    with mock.patch.object(report.trades, "booked_r", return_value=(1.0, 1.9)):
+        lines = report._day_block([(record, result)])
+    assert lines[-1] == "10,000 at 5x: +1,381 (+13.8%) booking 1R / +2,624 (+26.2%) booking 2R"

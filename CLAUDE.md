@@ -419,6 +419,10 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   (after a scoring-rule change). Paper vs backtest: they can pick different deliveries of one zone
   (backtest keeps the first, drops repeats for 6h; paper fills a later re-alert) - see
   `research/daily_scores_audit.py`, part `scores-audit`.
+- **Money line on the daily cards (2026-10-18, lakky: "a budget of 10000 ... 5x leverage").** Under TOTAL, zone
+  cards and the fib/TL/1D+ zone cards print `10,000 at 5x: +1,234 (+12.3%)` (`ACCOUNT_BUDGET`, `ACCOUNT_LEVERAGE`
+  in `config.py`; `daily_backtest_summary.money_line`). Every trade is sized at the full budget x leverage, so its
+  money = 50,000 x net R x stop %. Display only. A stop over 20% at 5x would lose more than the budget.
 - **Range filter alerts are off (2026-10-10, lakky).** Alerts are S/R zones, fibs and trendlines
   (incl. TL BROKEN) only. `ALERT_RANGE_FILTER_SIGNALS` is False in `config.py` and `nse_config.py`; the
   range filter is still computed but never posts. Pine v12.7.8 drops its RF marker too.

@@ -2003,3 +2003,23 @@ class PromoteRepeatTests(unittest.TestCase):
         self.assertEqual(list(kept["trade_id"]), ["a"])
         self.assertTrue(pd.isna(both["repeat_of"].iloc[0]))
         self.assertEqual(both["repeat_of"].iloc[1], "a")
+
+
+class MoneyLineTests(unittest.TestCase):
+    """lakky, 2026-10-18: the day's result on a 10,000 budget at 5x, each trade at the full size."""
+
+    def test_money_line_is_budget_times_leverage_times_net_pct(self):
+        # One SL of -1.0475R on a 2.762% stop: -2.893% x 50,000 = -1,447.
+        self.assertEqual(
+            summary.money_line(-1.0475 * 2.762, 10000, 5), "10,000 at 5x: -1,447 (-14.5%)"
+        )
+        self.assertEqual(summary.money_line(0.0, 10000, 5), "10,000 at 5x: +0 (+0.0%)")
+
+    def test_net_pct_sum_skips_trades_without_a_net_r(self):
+        frame = pd.DataFrame([
+            {"net_realized_r": 1.5, "entry_price": 100.0, "stop_price": 99.0},   # +1.5%
+            {"net_realized_r": -1.0, "entry_price": 50.0, "stop_price": 51.0},   # -2.0%
+            {"net_realized_r": None, "entry_price": 10.0, "stop_price": 9.0},
+        ])
+        self.assertAlmostEqual(summary.net_pct_sum(frame), -0.5)
+        self.assertEqual(summary.net_pct_sum(pd.DataFrame()), 0.0)

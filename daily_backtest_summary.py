@@ -17,7 +17,7 @@ import yfinance as yf
 
 import nse_scanner
 import scanner as crypto_scanner
-from config import OTHER_WATCHLIST, ZONE_ALERT_TIMEFRAMES, zone_timeframe_enabled
+from config import ACCOUNT_BUDGET, ACCOUNT_LEVERAGE, OTHER_WATCHLIST, ZONE_ALERT_TIMEFRAMES, zone_timeframe_enabled
 from xstock_hybrid_rating import XSTOCK_UNDERLYINGS, is_xstock
 
 
@@ -2059,6 +2059,8 @@ def build_summary(
         # The shadow score (TRAIL_START_R), shown beside the real total.
         totals += f" · Trail test {format_r(trail_r.sum())}"
     lines.append(totals)
+    if entries:
+        lines.append(money_line(net_pct_sum(finalized)))
     if settled_earlier is not None and not settled_earlier.empty:
         # Trades still open when their own day was reported (a 4h crypto
         # fill waits up to 12h, then runs 6h) settle on a later run. They
@@ -2082,6 +2084,28 @@ def build_summary(
         lines.extend(["", "HOURS (IST)", *hourly_lines])
 
     return "\n".join(lines)
+
+
+
+def money_line(net_pct_sum: float, budget: float = ACCOUNT_BUDGET, leverage: float = ACCOUNT_LEVERAGE) -> str:
+    """'10,000 at 5x: +1,234 (+12.3%)': every trade sized at budget x leverage.
+
+    net_pct_sum is the day's net % moves added up (net R x stop % per trade),
+    so the result is budget x leverage x that sum / 100.
+    """
+    pnl = budget * leverage * net_pct_sum / 100
+    return f"{budget:,.0f} at {leverage:g}x: {pnl:+,.0f} ({pnl / budget * 100:+.1f}%)"
+
+
+def net_pct_sum(frame: pd.DataFrame) -> float:
+    """Sum of net R x stop % over the trades TOTAL counts."""
+    if frame is None or frame.empty:
+        return 0.0
+    net = pd.to_numeric(frame.get("net_realized_r", pd.Series(dtype=float)), errors="coerce")
+    entry = pd.to_numeric(frame.get("entry_price", pd.Series(dtype=float)), errors="coerce")
+    stop = pd.to_numeric(frame.get("stop_price", pd.Series(dtype=float)), errors="coerce")
+    pct = (entry - stop).abs() / entry * 100
+    return float((net * pct).sum())
 
 
 def crypto_day_window_line(target_date, market: str) -> str | None:
