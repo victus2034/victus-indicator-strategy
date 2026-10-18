@@ -409,6 +409,14 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   Posts to `DISCORD_30M_WEBHOOK_URL` / `DISCORD_NSE_30M_WEBHOOK_URL` as `**HYPE | BUY | 1D**`, recorded as
   kind `zone` and scored in the daily report like fibs (2R + BE, wait 5 / hold 20). Seeds silently on first pass.
   Backtest: `research/zone_htf_backtest.py`, part `zone-htf`. Entry confirm does not watch them.
+- **Stored daily grades are kept (2026-10-18, lakky).** The morning run re-grades the latest reported
+  day when no new one exists (with 30m off, that is the same day every morning). A grade already in
+  `daily_backtest_finalized_records.jsonl` is no longer overwritten, and a failed fetch (`data_missing`,
+  `alert_before_data`) never replaces a row: Delta stopped serving W and OGN, the re-fetch fell back to
+  OKX's 300 candles and W's +2R of 16 Oct became `alert_before_data`. `--regrade` overwrites on purpose
+  (after a scoring-rule change). Paper vs backtest: they can pick different deliveries of one zone
+  (backtest keeps the first, drops repeats for 6h; paper fills a later re-alert) - see
+  `research/daily_scores_audit.py`, part `scores-audit`.
 - **Range filter alerts are off (2026-10-10, lakky).** Alerts are S/R zones, fibs and trendlines
   (incl. TL BROKEN) only. `ALERT_RANGE_FILTER_SIGNALS` is False in `config.py` and `nse_config.py`; the
   range filter is still computed but never posts. Pine v12.7.8 drops its RF marker too.
