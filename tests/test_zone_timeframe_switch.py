@@ -1,6 +1,6 @@
-"""30m (2026-10-16) and 4h (2026-10-18) zone alerts are off (lakky): a scanner on a
+"""30m zone alerts are off (lakky, 2026-10-16), 4h stays on (2026-10-18): a scanner on a
 timeframe missing from ZONE_ALERT_TIMEFRAMES exits before it loads state or scans, and
-ends the scan loop. 1D/1W/1M zones run in fib_trendline_scanner instead."""
+ends the scan loop. 1D/1W/1M zones run in fib_trendline_scanner."""
 import sys
 
 import pytest
@@ -10,9 +10,9 @@ import nse_scanner
 import scanner
 
 
-def test_default_is_no_intraday_zones():
-    assert config.ZONE_ALERT_TIMEFRAMES == []
-    assert not config.zone_timeframe_enabled("4h")
+def test_default_is_4h_only():
+    assert config.ZONE_ALERT_TIMEFRAMES == ["4h"]
+    assert config.zone_timeframe_enabled("4h")
     assert not config.zone_timeframe_enabled("30m")
     assert config.ZONE_HTF_TIMEFRAMES  # 1D+ zones still alert
 
@@ -33,8 +33,10 @@ def test_crypto_30m_exits_without_scanning(monkeypatch, tmp_path):
 
 
 @pytest.mark.parametrize("module", [scanner, nse_scanner])
-def test_4h_exits_without_scanning(module, monkeypatch, tmp_path):
+def test_an_unlisted_timeframe_exits_without_scanning(module, monkeypatch, tmp_path):
+    """Covers 4h too, for the day it is switched off."""
     stop = tmp_path / "stop"
+    monkeypatch.setattr(config, "ZONE_ALERT_TIMEFRAMES", [])
     monkeypatch.setenv("SCAN_LOOP_STOP_FILE", str(stop))
     monkeypatch.setattr(module, "TIMEFRAME", "4h")
     monkeypatch.setattr(module, "load_state", _boom)

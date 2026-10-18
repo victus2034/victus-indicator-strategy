@@ -8,7 +8,7 @@ Three kinds of alert, each with its own channels and state:
 
 | Alert | Timeframes | Markets | Code |
 |---|---|---|---|
-| Supply / demand zones | 1D, 1W, 1M in the old 30m channels (`fib_trendline_scanner.py`, `ZONE_HTF_TIMEFRAMES`); 30m and 4H built, off since 2026-10-18 | crypto, xStocks, gold/silver, NSE | `scanner.py`, `nse_scanner.py` |
+| Supply / demand zones | 4H; 1D, 1W, 1M in the old 30m channels (`fib_trendline_scanner.py`, `ZONE_HTF_TIMEFRAMES`); 30m built, off | crypto, xStocks, gold/silver, NSE | `scanner.py`, `nse_scanner.py` |
 | Fib zones and trendlines | 4H, 1D, 1W, 1M (30m built, off) | crypto, xStocks, gold/silver, NSE | `fib_trendline_scanner.py` |
 | Entry confirm | 1D, 1W, 1M fib + trendline alerts | crypto, NSE | `entry_confirm.py` |
 
@@ -56,8 +56,8 @@ Most are dispatched by cron-job.org (GitHub's own cron was too unreliable).
 
 | Workflow | What it does |
 |---|---|
-| `scan.yml`, `scan_30m.yml` | crypto zone scans, 4H and 30m (both off: they exit at once; keep `scan_30m.yml` dispatched - it triggers the fib/trendline scan) |
-| `nse_scan.yml`, `nse_scan_30m.yml` | NSE zone scans, 4H and 30m (both off, exit at once) |
+| `scan.yml`, `scan_30m.yml` | crypto zone scans, 4H and 30m (loops every ~90s inside a run; 30m exits at once while off, but keep it dispatched - it triggers the fib/trendline scan) |
+| `nse_scan.yml`, `nse_scan_30m.yml` | NSE zone scans, market hours only |
 | `fib_trendline_scan.yml` | fib + trendline alerts, runs after each 30m crypto scan |
 | `entry_confirm.yml` | entry-confirmed digest |
 | `daily_backtest_summary.yml`, `weekly_backtest_summary.yml`, `daily_catchup.yml` | scores alerts on real candles, posts the reports; paper trading |

@@ -429,13 +429,13 @@ SCAN_WORKERS = 8
 ALERT_COOLDOWN_SECONDS = env_int("VICTUS_ALERT_COOLDOWN_SECONDS", 4 * 60 * 60)
 # Off since 2026-10-10 (lakky): alerts are S/R zones, fibs and trendlines only.
 ALERT_RANGE_FILTER_SIGNALS = False
-# S/R zone timeframes that scan and alert, crypto and NSE. 30m off since 2026-10-16,
-# 4h off since 2026-10-18 (lakky: "i dont trade on 30m and 4h ... i only trade fib and
-# trendline"). S/R zones now alert on 1D / 1W / 1M only (ZONE_HTF_TIMEFRAMES, below).
+# S/R zone timeframes that scan and alert, crypto and NSE. 30m off since 2026-10-16
+# (lakky: "remove 30m for now"); 4h stays on (lakky, 2026-10-18: "keep 4h on for fib,
+# trendline and support and resistance"). 1D / 1W / 1M zones: ZONE_HTF_TIMEFRAMES, below.
 # A scanner whose timeframe is not listed exits at once and posts nothing; its workflow
-# can stay dispatched. Set VICTUS_ZONE_ALERT_TIMEFRAMES="4h" (or "30m,4h") to turn one on.
+# can stay dispatched. Add "30m" back to turn it on.
 ZONE_ALERT_TIMEFRAMES = [
-    tf.strip() for tf in os.getenv("VICTUS_ZONE_ALERT_TIMEFRAMES", "").split(",") if tf.strip()
+    tf.strip() for tf in os.getenv("VICTUS_ZONE_ALERT_TIMEFRAMES", "4h").split(",") if tf.strip()
 ]
 
 

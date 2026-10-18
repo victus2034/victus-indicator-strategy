@@ -145,7 +145,7 @@ def test_no_weekly_post_for_an_off_timeframe_with_no_trades(monkeypatch):
     def boom(*_a, **_k):
         raise AssertionError("posted a weekly report for an off timeframe")
 
-    monkeypatch.setattr(sys, "argv", ["weekly_backtest_summary.py", "--market", "crypto", "--timeframe", "4h"])
+    monkeypatch.setattr(sys, "argv", ["weekly_backtest_summary.py", "--market", "crypto", "--timeframe", "30m"])
     monkeypatch.setattr(weekly, "load_finalized_records", lambda: pd.DataFrame())
     monkeypatch.setattr(weekly.daily, "load_pending_records", lambda *a, **k: pd.DataFrame())
     monkeypatch.setattr(weekly.daily, "send_discord_message_with_attachment", boom)
