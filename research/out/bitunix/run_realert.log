@@ -1,0 +1,14 @@
+From https://github.com/victus2034/victus-indicator-strategy
+ * branch            scanner-runtime-state -> FETCH_HEAD
+ * [new branch]      scanner-runtime-state -> origin/scanner-runtime-state
+crypto 30m: 336 first, 222 repeats, frames 39/39
+Traceback (most recent call last):
+  File "/home/runner/work/victus-indicator-strategy/victus-indicator-strategy/research/realert_backtest.py", line 157, in <module>
+    main()
+  File "/home/runner/work/victus-indicator-strategy/victus-indicator-strategy/research/realert_backtest.py", line 88, in main
+    rows = dbs.promote_repeats(rows, repeats, frames, market)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/victus-indicator-strategy/victus-indicator-strategy/daily_backtest_summary.py", line 1887, in promote_repeats
+    timeframe = str(candidates[0].get("timeframe"))
+                    ~~~~~~~~~~^^^
+IndexError: list index out of range
