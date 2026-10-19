@@ -592,7 +592,8 @@ def plan_alerts(state, market, symbol, tf, analysis, now, last_scan=None):
     for z in analysis["fib"]:
         if z["key"] not in state:
             record = {**base, "kind": "fib", "plan": z["plan"], "zone": z["zone"],
-                      "base": z["base"], "top": z["top"], "levels": fib_levels(z["d"], z["base"], z["top"])}
+                      "base": z["base"], "top": z["top"], "levels": fib_levels(z["d"], z["base"], z["top"]),
+                      "level": "L3" if z["zone"] == 2 else "L1"}
             warning = risk_warning(market, symbol, z["plan"]["side"], analysis.get("risk"))
             if warning:
                 record["warning"] = warning

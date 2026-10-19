@@ -714,7 +714,8 @@ class DailyReportTests(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         tmp = pathlib.Path(self.tmp.name)
         for p in (mock.patch.object(report, "RECORDS_FILE", tmp / "records.jsonl"),
-                  mock.patch.object(report, "RESULTS_FILE", tmp / "results.json")):
+                  mock.patch.object(report, "RESULTS_FILE", tmp / "results.json"),
+                  mock.patch("fib_level_whatif.LEVEL_RESULTS_FILE", tmp / "levels.json")):
             p.start()
             self.addCleanup(p.stop)
         self.sent_ts = int(datetime(2026, 9, 29, 10, 0, tzinfo=ftd.IST).timestamp())

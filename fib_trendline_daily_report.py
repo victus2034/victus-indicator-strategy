@@ -327,6 +327,14 @@ def run(report_day, now, send=False, already_sent=0, on_sent=None):
         return None
     results = score(records, load_results(), now)
     save_results(results)
+    # L1 / L2 / L4 what-ifs for the journal; never allowed to stop the report.
+    try:
+        import fib_level_whatif
+        levels = fib_level_whatif.score_levels(records, fib_level_whatif.load_level_results(), now, eval_candles)
+        if levels:
+            fib_level_whatif.save_level_results(levels)
+    except Exception as error:     # noqa: BLE001 - retried tomorrow
+        print(f"daily report: fib level what-ifs failed: {error}")
     cards = build_report(report_day, records, results)
     text = "\n\n".join(cards)
     print(text)
