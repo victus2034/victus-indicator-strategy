@@ -428,6 +428,10 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   Now each card adds `CLOSED SINCE LAST CARD (earlier alerts)`: earlier filled alerts closed since the last card,
   by timeframe, each shown once (`reported` in the results file; `fib_trendline_daily_report.CLOSED_SINCE`, nothing
   that closed before 19 Oct 09:00 IST is dumped). The history replay already scored 1W/1M; tables fold them into 1D+.
+- **Fib what-ifs at L1 / L2 / L4 (2026-10-19, lakky).** The bot enters fibs at L3 only; once a day the fib report
+  also scores each fib alert as if it had been sent at L1, L2 and L4 (`fib_level_whatif.py`): same stop as the
+  alert, the level's own 0.75% band moment after the fib's top, then `trades.simulate`. Results go to
+  `fib_level_results.json` (runtime-state branch) for the journal's Fib levels tab only - no Discord, no alert changes.
 - **Range filter alerts are off (2026-10-10, lakky).** Alerts are S/R zones, fibs and trendlines
   (incl. TL BROKEN) only. `ALERT_RANGE_FILTER_SIGNALS` is False in `config.py` and `nse_config.py`; the
   range filter is still computed but never posts. Pine v12.7.8 drops its RF marker too.
