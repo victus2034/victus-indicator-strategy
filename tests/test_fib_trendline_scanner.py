@@ -748,6 +748,25 @@ class DailyReportTests(unittest.TestCase):
         with mock.patch.object(self.report, "eval_candles", side_effect=AssertionError("re-scored")):
             self.report.score(records, results, self.sent_ts + 2 * 86400)
 
+    def test_weekly_trades_on_daily_candles_are_graded_again_on_hourly(self):
+        # BAJAJHFL 1W (7 Oct): the daily candle skipped the rest of the alert's day
+        # and read a day that traded both 1R and the stop as SL. On 1h it is 1R.
+        records = self.report.load_records()
+        records[0].update(tf="1w", plan={"side": "long", "entry": 100.0, "sl": 99.0, "target_r": 1})
+        old = {"a": {"outcome": "SL", "filled": True, "resolved": True, "r1": False, "r2": False,
+                     "sl": True, "be": False, "reported": True}}
+        hourly = [[self.sent_ts + 3600, 0, 100.4, 99.9, 0], [self.sent_ts + 7200, 0, 101.2, 100.1, 0],
+                  [self.sent_ts + 10800, 0, 100.2, 98.5, 0]]
+        asked = []
+        with mock.patch.object(self.report, "eval_candles", lambda *a: asked.append(a[2]) or hourly):
+            results = self.report.score(records, dict(old), self.sent_ts + 86400)
+        self.assertEqual(asked, ["1h"])
+        self.assertEqual(results["a"]["outcome"], "1R")
+        self.assertEqual(results["a"]["eval"], "1h")
+        self.assertTrue(results["a"]["reported"])          # not posted twice
+        with mock.patch.object(self.report, "eval_candles", side_effect=AssertionError("re-scored")):
+            self.report.score(records, results, self.sent_ts + 2 * 86400)
+
     def test_an_alert_sent_already_through_its_stop_is_no_fill_not_a_loss(self):
         records = self.report.load_records()
         records[0]["price"] = 98.5          # long, SL 99.0: already stopped when sent

@@ -74,6 +74,9 @@ def eval_candles(market, symbol, resolution, start, now):
     return nse_download([symbol], resolution).get(symbol, [])
 
 
+REGRADE_TFS = {"1w", "1M"}
+
+
 def score(records, results, now):
     """Simulate every record without a final result; returns the updated results."""
     # A result without "be" was scored before the breakeven rule (2026-10-03);
@@ -87,8 +90,15 @@ def score(records, results, now):
                 outcome="no fill", filled=False, fill_ts=None, half=False, r1=False, r2=False,
                 sl=False, be=False, ambiguous=False, resolved=True, end_ts=None, past_sl=True,
             )
+    def stale(record):
+        # Scored on another resolution than today's (1W/1M were on 1d until
+        # 2026-10-19): graded once more, closed trades included.
+        result = results.get(record["id"], {})
+        return (record["tf"] in REGRADE_TFS and not result.get("past_sl")
+                and result.get("eval") != trades.EVAL_RESOLUTION[record["market"]][record["tf"]])
+
     pending = [r for r in records
-               if not results.get(r["id"], {}).get("resolved") or "be" not in results[r["id"]]]
+               if not results.get(r["id"], {}).get("resolved") or "be" not in results[r["id"]] or stale(r)]
     groups = defaultdict(list)
     for record in pending:
         resolution = trades.EVAL_RESOLUTION[record["market"]][record["tf"]]
@@ -117,7 +127,11 @@ def score(records, results, now):
                 results.setdefault(record["id"], trades.simulate(record["plan"], market, record["tf"], record["sent_ts"], []))
             continue
         for record in rows:
-            results[record["id"]] = trades.simulate(record["plan"], market, record["tf"], record["sent_ts"], candles)
+            result = trades.simulate(record["plan"], market, record["tf"], record["sent_ts"], candles)
+            result["eval"] = resolution
+            if results.get(record["id"], {}).get("reported"):
+                result["reported"] = results[record["id"]]["reported"]
+            results[record["id"]] = result
     return results
 
 

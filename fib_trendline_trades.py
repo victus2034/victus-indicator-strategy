@@ -45,15 +45,19 @@ from fib_trendline_data import CRYPTO, NSE
 # Round trip, % of notional - the same numbers daily_backtest_summary.py uses.
 COST_PCT = {CRYPTO: CRYPTO_ROUND_TRIP_COST_PCT, NSE: ROUND_TRIP_COST_PCT}
 # Candles each alert timeframe is scored on.
+# 1W / 1M moved from 1d to 1h (2026-10-19, lakky: "make sure result is correct"):
+# a daily candle skipped the rest of the alert's own day and could not tell which
+# of stop and target came first, so same-day stops were missed and a day that
+# traded both read SL (research/htf_results_audit.py, part htf-audit).
 EVAL_RESOLUTION = {
-    CRYPTO: {"30m": "5m", "4h": "1h", "1d": "4h", "1w": "1d", "1M": "1d"},
-    NSE: {"30m": "5m", "4h": "1h", "1d": "1h", "1w": "1d", "1M": "1d"},
+    CRYPTO: {"30m": "5m", "4h": "1h", "1d": "4h", "1w": "1h", "1M": "1h"},
+    NSE: {"30m": "5m", "4h": "1h", "1d": "1h", "1w": "1h", "1M": "1h"},
 }
 # Evaluation candles in one candle of the alert's timeframe, in trading time -
 # an NSE session is 6h15m, so its 1D holds 7 hourly candles and its 1W 5 daily.
 EVAL_PER_BAR = {
-    CRYPTO: {"30m": 6, "4h": 4, "1d": 6, "1w": 7, "1M": 30},
-    NSE: {"30m": 6, "4h": 4, "1d": 7, "1w": 5, "1M": 21},
+    CRYPTO: {"30m": 6, "4h": 4, "1d": 6, "1w": 7 * 24, "1M": 30 * 24},
+    NSE: {"30m": 6, "4h": 4, "1d": 7, "1w": 5 * 7, "1M": 21 * 7},
 }
 # Where the stop goes once +0.5R trades, as % past entry - the zone trades' numbers.
 BREAK_EVEN_PCT = {CRYPTO: CRYPTO_BREAK_EVEN_OFFSET_PCT, NSE: BREAK_EVEN_OFFSET_PCT}

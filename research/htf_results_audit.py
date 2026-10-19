@@ -175,7 +175,19 @@ def rebuild(record, chart):
     for item in pool.get(record["kind"], []):
         if item["key"] == record["key"]:
             return item["plan"]
+    WHY[record["id"]] = (f"bars {a['bars']} price {a['price']} last candle {day(candles[-1][0]) if candles else '-'}; "
+                         f"today's {record['kind']}: " + "; ".join(
+                             f"{i['key']} dist {i.get('distance', 0):.2f}" for i in pool.get(record["kind"], [])))
+    if record["kind"] == "fib":
+        closed = candles[:-1] if not fts.candle_is_closed(record["market"], candles[-1][0], record["tf"], t) else candles
+        stamp = [datetime.fromtimestamp(c[0], IST).strftime("%Y-%m-%d %H:%M") for c in closed]
+        snaps, _ = fts.fib_engine.run(stamp, [c[2] for c in closed], [c[3] for c in closed], N=fts.FIB_SWING_LENGTH)
+        live = snaps[-1]
+        WHY[record["id"]] += f" | live fib d {live['d']} base {live['O']} top {live['E']} base candle {stamp[live['Ot']]}"
     return None
+
+
+WHY = {}
 
 
 def same_plan(a, b):
@@ -199,13 +211,14 @@ def main(argv=None):
 
     nse_syms = sorted({r["symbol"] for r in records if r["market"] == NSE})
     nse_tf = {tf: nse_download(nse_syms, tf) for tf in ("1w", "1M", "1d", "1h")} if nse_syms else {}
-    charts, fine, daily = {}, {}, {}
+    charts, fine, daily, hourly = {}, {}, {}, {}
     for r in records:
         key = (r["symbol"], r["tf"])
         if r["market"] == NSE:
             charts[key] = nse_tf[r["tf"]].get(r["symbol"], [])
             fine[r["symbol"]] = nse_tf["1h"].get(r["symbol"], [])
             daily[r["symbol"]] = nse_tf["1d"].get(r["symbol"], [])
+            hourly[r["symbol"]] = fine[r["symbol"]]
             continue
         if key not in charts:
             charts[key] = crypto_chart(r["symbol"], r["tf"], now)
@@ -214,6 +227,7 @@ def main(argv=None):
             start = min(x["sent_ts"] for x in records if x["symbol"] == r["symbol"]) - DAY
             fine[r["symbol"]] = delta_candles(contract, "5m", start, now)
             daily[r["symbol"]] = delta_candles(contract, "1d", start - DAY, now)
+            hourly[r["symbol"]] = delta_candles(contract, "1h", start - 3600, now)
 
     rows, traces = [], []
     for r in sorted(records, key=lambda x: x["sent_ts"]):
@@ -230,7 +244,7 @@ def main(argv=None):
         rule_exit = "1r" if use.get("target_r") == 1 else "2r"
         # Production scorer on its own candles, stored plan and today's.
         prod = trades.simulate(plan, m, tf, r["sent_ts"], daily[r["symbol"]])
-        prod_now = trades.simulate(use, m, tf, r["sent_ts"], daily[r["symbol"]])
+        prod_now = trades.simulate(use, m, tf, r["sent_ts"], hourly[r["symbol"]])   # the fix: 1h
         ref = reference(use, m, tf, r["sent_ts"], fine[r["symbol"]], rule_exit)
         trail = reference(use, m, tf, r["sent_ts"], fine[r["symbol"]], "trail") if r["kind"] == "fib" else None
         row = {
@@ -239,6 +253,7 @@ def main(argv=None):
             "now_entry": use["entry"], "now_sl": use["sl"], "risk_pct": round(trades.risk_pct(use), 3),
             "stored": stored.get("outcome", "none"), "stored_net": stored_net(r, stored),
             "prod_rerun": prod["outcome"], "prod_now": prod_now["outcome"],
+            "prod_now_net": stored_net({"plan": use, "market": m}, prod_now),
             "ref": ref["outcome"], "ref_net": net(ref["gross"], use, m),
             "ref_fill": day(ref["fill_ts"]), "ref_end": day(ref["end_ts"]),
             "trail": trail["outcome"] if trail else "", "trail_net": net(trail["gross"], use, m) if trail else None,
@@ -248,8 +263,8 @@ def main(argv=None):
             row["ref"] == row["prod_now"] or (row["ref"] in ("open", "1R") and row["prod_now"] in ("open", "1R")))
         rows.append(row)
         if not row["match"] or rule != "same":
-            traces.append(f"{m} {r['kind']} {tf} {r['symbol']} sent {row['sent']} rules={rule}\n"
-                          f"  stored plan {plan}\n  today plan {use}\n"
+            traces.append(f"{m} {r['kind']} {tf} {r['symbol']} sent {row['sent']} rules={rule} key {r['key']}\n"
+                          f"  stored plan {plan}\n  today plan {use}\n  why: {WHY.get(r['id'], '-')}\n"
                           f"  stored {row['stored']} | prod re-run {row['prod_rerun']} | prod today-plan {row['prod_now']}"
                           f" | reference {row['ref']} fill {row['ref_fill']} end {row['ref_end']}\n")
     with (OUT / "trades.csv").open("w", newline="") as f:
@@ -283,7 +298,8 @@ def main(argv=None):
           f"Records: {len(rows)}. Rules today vs as sent: " + ", ".join(f"{k} {v}" for k, v in n_rule.items()),
           f"Result checks agree: {sum(x['match'] for x in rows)} / {len(rows)} (diffs in traces.txt)", ""]
     md += table("ref_net", "ref", "Today's rules, independent scorer (crypto 5m, NSE 1h)") + [""]
-    md += table("stored_net", "stored", "As stored (what the cards / journal read)") + [""]
+    md += table("stored_net", "stored", "As stored before the fix (1d candles)") + [""]
+    md += table("prod_now_net", "prod_now", "After the fix: live scorer on 1h (what cards / journal will read)") + [""]
     fib_rows = [x for x in rows if x["kind"] == "fib"]
     if fib_rows:
         rows_backup = rows
