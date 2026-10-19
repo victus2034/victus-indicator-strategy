@@ -8,7 +8,9 @@ card for fib and one for trendline: yesterday's alerts and how they went, broken
 down by timeframe, side, fib zone, stop size and hour. One day only, no running totals.
 
 A 1W or 1M alert can take months to resolve, so it shows as "open" until it does;
-its result is kept in RESULTS_FILE and never re-scored once final.
+its result is kept in RESULTS_FILE and never re-scored once final. An earlier alert
+that closed after its own day's card is shown once, under CLOSED SINCE LAST CARD, on
+the next card posted (lakky, 2026-10-19: 1W / 1M results never reached Discord).
 
     python fib_trendline_daily_report.py                 # score and print, send nothing
     python fib_trendline_daily_report.py --send          # score and post
@@ -26,6 +28,7 @@ import requests
 
 import fib_trendline_trades as trades
 import scanner
+from daily_backtest_summary import money_line
 from fib_trendline_data import CRYPTO, IST, NSE, TF_LABEL, TF_SECONDS, delta_candles, nse_download
 
 RECORDS_FILE = Path(__file__).with_name(os.getenv("VICTUS_FIB_TL_RECORDS_FILE", "fib_trendline_alert_records.jsonl"))
@@ -36,6 +39,9 @@ REPORT_KEY = "__daily_report__"
 REPORT_PROGRESS_KEY = "__daily_report_progress__"
 REPORT_HOUR = 8
 DISCORD_LIMIT = 4000     # an embed description holds 4096
+# Earlier alerts that closed after their own card are shown once, from this day on;
+# ones that closed before it already went out (or never will) and are not dumped.
+CLOSED_SINCE = datetime(2026, 10, 19, 9, tzinfo=IST).timestamp()   # after that day's card
 
 
 def load_records():
@@ -128,7 +134,7 @@ def tally(items):
     stop). BE is left out of the win rate, as in the zone report.
     """
     t = defaultdict(int)
-    net1 = net2 = 0.0
+    net1 = net2 = pct1 = pct2 = 0.0
     for record, x in items:
         t["alerts"] += 1
         if not x["filled"]:
@@ -139,9 +145,13 @@ def tally(items):
         at1, at2 = trades.booked_r(record["plan"], record["market"], x)
         net1 += at1 or 0.0
         net2 += at2 or 0.0
+        risk = trades.risk_pct(record["plan"])
+        pct1 += (at1 or 0.0) * risk
+        pct2 += (at2 or 0.0) * risk
     wins, decided = t["r1"] + t["r2"], t["r1"] + t["r2"] + t["sl"]
     t["win"] = f"{wins / decided * 100:.1f}%" if decided else "N/A"
     t["net1"], t["net2"] = net1, net2
+    t["pct1"], t["pct2"] = pct1, pct2
     return t
 
 
@@ -177,10 +187,32 @@ def _day_block(day):
     if counted:
         lines.append(counted)
     lines.append(f"Win rate {t['win']} · TOTAL {trades.r(t['net1'])} booking 1R / {trades.r(t['net2'])} booking 2R")
+    if t["entries"]:
+        money1, money2 = money_line(t["pct1"]), money_line(t["pct2"])
+        if money1 == money2:
+            lines.append(money1)
+        else:
+            lines.append(f"{money1} booking 1R / {money2.split(': ', 1)[1]} booking 2R")
     return lines
 
 
 STOP_BUCKETS = (("under 0.5%", 0, 0.5), ("0.5 - 1%", 0.5, 1), ("1 - 2%", 1, 2), ("over 2%", 2, float("inf")))
+
+
+def closed_since_last_card(items, report_day):
+    """Alerts sent before the report day that have closed and were never on a card as closed."""
+    return [(r, x) for r, x in items
+            if x.get("resolved") and x.get("filled") and not x.get("reported") and ist_date(r["sent_ts"]) < report_day
+            and (x.get("end_ts") or 0) >= CLOSED_SINCE]
+
+
+def mark_reported(report_day, records, results):
+    """After the cards went out: every closed trade they showed is never shown again."""
+    for r in records:
+        x = results.get(r.get("id"))
+        if x and x.get("resolved") and "sent_ts" in r and ist_date(r["sent_ts"]) <= report_day:
+            if ist_date(r["sent_ts"]) == report_day or (x.get("end_ts") or 0) >= CLOSED_SINCE:
+                x["reported"] = True
 
 
 def build_card(kind, title, report_day, joined):
@@ -217,6 +249,13 @@ def build_card(kind, title, report_day, joined):
         # An hour with no entry is a line saying nothing happened.
         lines += _block(f"HOURS (IST) · {market.upper()}", [
             (f"{hour:02d}:00", hours[hour]) for hour in sorted(hours) if any(x["filled"] for _, x in hours[hour])
+        ])
+    closed = closed_since_last_card([(r, x) for r, x in joined if r["kind"] == kind], report_day)
+    if closed:
+        lines += ["", "CLOSED SINCE LAST CARD (earlier alerts)", f"Closed {len(closed)}", *_day_block(closed)[1:]]
+        lines += _block("BY TIMEFRAME", [
+            (f"{TF_LABEL[tf]} {market.upper()}", [(r, x) for r, x in closed if r["market"] == market and r["tf"] == tf])
+            for market in (CRYPTO, NSE) for tf in TF_LABEL
         ])
     return "\n".join(lines)
 
@@ -278,6 +317,8 @@ def run(report_day, now, send=False, already_sent=0, on_sent=None):
             send_card(card)
             if on_sent:
                 on_sent(index + 1)
+        mark_reported(report_day, records, results)
+        save_results(results)
     return text
 
 

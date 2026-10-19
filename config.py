@@ -429,6 +429,12 @@ SCAN_WORKERS = 8
 ALERT_COOLDOWN_SECONDS = env_int("VICTUS_ALERT_COOLDOWN_SECONDS", 4 * 60 * 60)
 # Off since 2026-10-10 (lakky): alerts are S/R zones, fibs and trendlines only.
 ALERT_RANGE_FILTER_SIGNALS = False
+# Money line on the daily backtest cards (lakky, 2026-10-18: "a budget of 10000 ... with
+# 5x leverage"). Every trade is sized at the full budget x leverage (a 50,000 position),
+# so a trade's money result = BUDGET x LEVERAGE x its net % move (net R x stop %).
+# Display only: it changes no trade, grade or alert.
+ACCOUNT_BUDGET = 10000
+ACCOUNT_LEVERAGE = 5
 # S/R zone timeframes that scan and alert, crypto and NSE. 30m off since 2026-10-16
 # (lakky: "remove 30m for now"); 4h stays on (lakky, 2026-10-18: "keep 4h on for fib,
 # trendline and support and resistance"). 1D / 1W / 1M zones: ZONE_HTF_TIMEFRAMES, below.

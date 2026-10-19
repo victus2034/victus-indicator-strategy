@@ -957,3 +957,46 @@ class WickIntoBandTests(unittest.TestCase):
         self.assertEqual(fts.swept_since(rows, now - 300), (2, 4))
         self.assertIsNone(fts.swept_since(rows, now))
         self.assertEqual(fts.swept_since(rows, now - 200, 300), (2, 4))
+
+
+def test_fib_card_money_line_uses_each_trades_stop():
+    """A fib SL on a 2.762% stop at -1.0475R, sized 10,000 x 5x, is -1,447."""
+    import fib_trendline_daily_report as report
+    from unittest import mock
+    record = {"plan": {"entry": 100.0, "sl": 97.238, "side": "long"}, "market": "crypto"}
+    result = {"filled": True, "outcome": "SL"}
+    with mock.patch.object(report.trades, "booked_r", return_value=(-1.0475, -1.0475)):
+        lines = report._day_block([(record, result)])
+    assert lines[-1] == "10,000 at 5x: -1,447 (-14.5%)"
+    with mock.patch.object(report.trades, "booked_r", return_value=(1.0, 1.9)):
+        lines = report._day_block([(record, result)])
+    assert lines[-1] == "10,000 at 5x: +1,381 (+13.8%) booking 1R / +2,624 (+26.2%) booking 2R"
+
+
+def test_earlier_1w_result_is_shown_once_on_the_next_card():
+    """lakky 2026-10-19: a 1W/1M alert closes days after its own card, so its result never
+    reached Discord. It now shows once under CLOSED SINCE LAST CARD, then never again."""
+    import fib_trendline_daily_report as report
+    from datetime import date, datetime
+    from unittest import mock
+    ts = lambda d: datetime(*d, 12, tzinfo=report.IST).timestamp()  # noqa: E731
+    plan = {"entry": 100.0, "sl": 95.0, "side": "long"}
+    old = {"id": "a", "kind": "fib", "market": "nse", "tf": "1w", "plan": plan, "sent_ts": ts((2026, 10, 8))}
+    before = {"id": "b", "kind": "fib", "market": "nse", "tf": "1M", "plan": plan, "sent_ts": ts((2026, 10, 1))}
+    today = {"id": "c", "kind": "fib", "market": "crypto", "tf": "4h", "plan": plan, "sent_ts": ts((2026, 10, 19))}
+    results = {
+        "a": {"filled": True, "resolved": True, "outcome": "1R", "end_ts": ts((2026, 10, 19)) + 3600},
+        "b": {"filled": True, "resolved": True, "outcome": "SL", "end_ts": ts((2026, 10, 9))},
+        "c": {"filled": True, "resolved": True, "outcome": "SL", "end_ts": ts((2026, 10, 19))},
+    }
+    records = [old, before, today]
+    joined = [(r, results[r["id"]]) for r in records]
+    with mock.patch.object(report.trades, "booked_r", return_value=(1.0, 1.0)):
+        card = report.build_card("fib", "FIB", date(2026, 10, 19), joined)
+        assert "CLOSED SINCE LAST CARD (earlier alerts)\nClosed 1\n" in card
+        assert "1W NSE - Alerts 1" in card
+        assert "1M NSE" not in card          # closed before the fix: not dumped
+        report.mark_reported(date(2026, 10, 19), records, results)
+        assert results["a"]["reported"] and results["c"]["reported"]
+        card = report.build_card("fib", "FIB", date(2026, 10, 20), joined)
+        assert "CLOSED SINCE LAST CARD" not in card
