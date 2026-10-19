@@ -1,0 +1,229 @@
+From https://github.com/victus2034/victus-indicator-strategy
+ * branch            scanner-runtime-state -> FETCH_HEAD
+ * [new branch]      scanner-runtime-state -> origin/scanner-runtime-state
+86 live 1W/1M records
+# 1W / 1M live alerts audit
+
+Records: 86. Rules today vs as sent: not sent today 30, same 56
+Result checks agree: 77 / 86 (diffs in traces.txt)
+
+### Today's rules, independent scorer (crypto 5m, NSE 1h)
+
+| Group | Alerts | Not filled | Open | News | Closed | R/trade | %/trade |
+|---|---|---|---|---|---|---|---|
+| crypto fib 1M | 4 | 0 | 3 | 0 | 1 | -1.01R | -23.37% |
+| crypto fib 1w | 5 | 0 | 1 | 0 | 4 | -0.26R | -4.46% |
+| crypto trendline 1w | 1 | 0 | 0 | 0 | 1 | +0.97R | +2.59% |
+| nse fib 1M | 14 | 0 | 11 | 0 | 3 | -0.34R | -2.35% |
+| nse fib 1w | 29 | 0 | 23 | 0 | 6 | -0.02R | -0.33% |
+| nse trendline 1M | 7 | 0 | 2 | 0 | 5 | +0.11R | +1.14% |
+| nse trendline 1w | 25 | 0 | 7 | 0 | 18 | -0.32R | -0.26% |
+| nse zone 1w | 1 | 0 | 0 | 0 | 1 | -1.16R | -1.15% |
+
+### As stored (what the cards / journal read)
+
+| Group | Alerts | Not filled | Open | News | Closed | R/trade | %/trade |
+|---|---|---|---|---|---|---|---|
+| crypto fib 1M | 4 | 0 | 3 | 0 | 1 | -1.01R | -23.37% |
+| crypto fib 1w | 5 | 0 | 2 | 0 | 3 | -0.34R | -5.93% |
+| crypto trendline 1w | 1 | 0 | 0 | 0 | 1 | -1.05R | -2.81% |
+| nse fib 1M | 14 | 1 | 11 | 0 | 2 | -0.51R | -3.50% |
+| nse fib 1w | 29 | 5 | 22 | 0 | 2 | -0.51R | -3.50% |
+| nse trendline 1M | 7 | 0 | 3 | 0 | 4 | -0.10R | +0.73% |
+| nse trendline 1w | 25 | 2 | 8 | 0 | 15 | -0.43R | -0.33% |
+| nse zone 1w | 1 | 1 | 0 | 0 | 0 | - | - |
+
+### Fibs with the trail exit (draft, not live yet)
+
+| Group | Alerts | Not filled | Open | News | Closed | R/trade | %/trade |
+|---|---|---|---|---|---|---|---|
+| crypto fib 1M | 4 | 0 | 3 | 0 | 1 | -1.01R | -23.37% |
+| crypto fib 1w | 5 | 0 | 1 | 0 | 4 | +0.00R | -2.24% |
+| nse fib 1M | 14 | 0 | 9 | 0 | 5 | +0.19R | +2.97% |
+| nse fib 1w | 29 | 0 | 17 | 0 | 12 | +0.24R | +2.35% |
+
+crypto fib 1w UNIUSD sent 29 Sep 20:53 rules=not sent today
+  stored plan {'entry': 7.7986, 'side': 'short', 'sl': 9.16975}
+  today plan {'entry': 7.7986, 'side': 'short', 'sl': 9.16975}
+  stored SL | prod re-run SL | prod today-plan SL | reference SL fill 29 Sep 20:55 end 30 Sep 18:25
+
+nse fib 1w LICHSGFIN.NS sent 30 Sep 10:19 rules=not sent today
+  stored plan {'entry': 545.3425033569335, 'side': 'long', 'sl': 474.99062919616694}
+  today plan {'entry': 545.3425033569335, 'side': 'long', 'sl': 474.99062919616694}
+  stored open | prod re-run open | prod today-plan open | reference open fill 30 Sep 11:15 end -
+
+nse fib 1w NMDC.NS sent 30 Sep 10:49 rules=not sent today
+  stored plan {'entry': 76.61199836730957, 'side': 'long', 'sl': 71.39249849319458}
+  today plan {'entry': 76.61199836730957, 'side': 'long', 'sl': 71.39249849319458}
+  stored SL | prod re-run SL | prod today-plan SL | reference SL fill 30 Sep 15:15 end 08 Oct 11:15
+
+nse fib 1M GODFRYPHLP.NS sent 30 Sep 14:49 rules=not sent today
+  stored plan {'entry': 1893.529169464111, 'side': 'long', 'sl': 1380.1614618301392}
+  today plan {'entry': 1893.529169464111, 'side': 'long', 'sl': 1380.1614618301392}
+  stored open | prod re-run open | prod today-plan open | reference open fill 01 Oct 09:15 end -
+
+nse fib 1M IKS.NS sent 01 Oct 09:44 rules=not sent today
+  stored plan {'entry': 1760.5100219726564, 'side': 'short', 'sl': 1891.437515258789}
+  today plan {'entry': 1760.5100219726564, 'side': 'short', 'sl': 1891.437515258789}
+  stored BE | prod re-run BE | prod today-plan BE | reference BE fill 01 Oct 14:15 end 08 Oct 09:15
+
+nse fib 1M AFFLE.NS sent 01 Oct 12:28 rules=not sent today
+  stored plan {'entry': 1460.2299560546876, 'side': 'long', 'sl': 1278.8124694824219}
+  today plan {'entry': 1460.2299560546876, 'side': 'long', 'sl': 1278.8124694824219}
+  stored open | prod re-run open | prod today-plan open | reference open fill 01 Oct 13:15 end -
+
+nse fib 1M M&MFIN.NS sent 01 Oct 12:59 rules=not sent today
+  stored plan {'entry': 316.6833122253418, 'side': 'long', 'sl': 292.10414028167725}
+  today plan {'entry': 316.6833122253418, 'side': 'long', 'sl': 292.10414028167725}
+  stored open | prod re-run open | prod today-plan open | reference BE fill 01 Oct 13:15 end 08 Oct 11:15
+
+nse fib 1M NAUKRI.NS sent 01 Oct 13:38 rules=not sent today
+  stored plan {'entry': 1185.5030212402344, 'side': 'long', 'sl': 1025.433769226074}
+  today plan {'entry': 1185.5030212402344, 'side': 'long', 'sl': 1025.433769226074}
+  stored open | prod re-run open | prod today-plan open | reference open fill 01 Oct 14:15 end -
+
+nse fib 1w CHALET.NS sent 05 Oct 15:04 rules=not sent today
+  stored plan {'entry': 835.6274932861328, 'side': 'long', 'sl': 774.034366607666}
+  today plan {'entry': 835.6274932861328, 'side': 'long', 'sl': 774.034366607666}
+  stored open | prod re-run open | prod today-plan open | reference open fill 06 Oct 09:15 end -
+
+nse fib 1M CHALET.NS sent 05 Oct 15:04 rules=not sent today
+  stored plan {'entry': 835.6274932861328, 'side': 'long', 'sl': 774.034366607666}
+  today plan {'entry': 835.6274932861328, 'side': 'long', 'sl': 774.034366607666}
+  stored open | prod re-run open | prod today-plan open | reference open fill 06 Oct 09:15 end -
+
+crypto fib 1w TSLAXUSD sent 05 Oct 20:36 rules=not sent today
+  stored plan {'entry': 381.6275, 'side': 'short', 'sl': 403.579375}
+  today plan {'entry': 381.6275, 'side': 'short', 'sl': 403.579375}
+  stored BE | prod re-run BE | prod today-plan BE | reference BE fill 05 Oct 23:10 end 09 Oct 17:10
+
+nse fib 1w 360ONE.NS sent 06 Oct 12:04 rules=not sent today
+  stored plan {'entry': 1080.625, 'side': 'short', 'sl': 1153.15625}
+  today plan {'entry': 1080.625, 'side': 'short', 'sl': 1153.15625}
+  stored open | prod re-run open | prod today-plan open | reference open fill 14 Oct 10:15 end -
+
+nse fib 1w BEML.NS sent 06 Oct 15:09 rules=not sent today
+  stored plan {'entry': 2037.95, 'side': 'short', 'sl': 2253.6875}
+  today plan {'entry': 2037.95, 'side': 'short', 'sl': 2253.6875}
+  stored open | prod re-run open | prod today-plan open | reference open fill 06 Oct 15:15 end -
+
+crypto fib 1w UNIUSD sent 07 Oct 09:29 rules=not sent today
+  stored plan {'entry': 7.7986, 'side': 'short', 'sl': 9.16975}
+  today plan {'entry': 7.7986, 'side': 'short', 'sl': 9.16975}
+  stored BE | prod re-run BE | prod today-plan BE | reference BE fill 07 Oct 09:30 end 11 Oct 21:50
+
+nse fib 1w GLAXO.NS sent 07 Oct 12:09 rules=not sent today
+  stored plan {'entry': 2638.6149780273436, 'side': 'long', 'sl': 2419.343734741211}
+  today plan {'entry': 2638.6149780273436, 'side': 'long', 'sl': 2419.343734741211}
+  stored open | prod re-run open | prod today-plan open | reference open fill 07 Oct 12:15 end -
+
+nse fib 1M ERIS.NS sent 07 Oct 12:59 rules=not sent today
+  stored plan {'entry': 1162.7149932861328, 'side': 'long', 'sl': 975.893741607666}
+  today plan {'entry': 1162.7149932861328, 'side': 'long', 'sl': 975.893741607666}
+  stored open | prod re-run open | prod today-plan open | reference open fill 07 Oct 13:15 end -
+
+nse trendline 1w BAJAJHFL.NS sent 07 Oct 14:09 rules=same
+  stored plan {'entry': 84.29935332267516, 'side': 'short', 'sl': 85.19999694824219, 'target_r': 1}
+  today plan {'side': 'short', 'entry': 84.29935332267516, 'sl': 85.19999694824219, 'target_r': 1}
+  stored SL | prod re-run SL | prod today-plan SL | reference 1R fill 07 Oct 14:15 end 08 Oct 09:15
+
+crypto trendline 1w AVAXUSD sent 08 Oct 09:53 rules=same
+  stored plan {'entry': 10.810878048780495, 'side': 'short', 'sl': 11.1, 'target_r': 1}
+  today plan {'side': 'short', 'entry': 10.810878048780495, 'sl': 11.1, 'target_r': 1}
+  stored SL | prod re-run SL | prod today-plan SL | reference 1R fill 08 Oct 09:55 end 08 Oct 19:10
+
+nse trendline 1w ITI.NS sent 08 Oct 11:42 rules=same
+  stored plan {'entry': 238.5670623779297, 'side': 'long', 'sl': 236.5, 'target_r': 1}
+  today plan {'side': 'long', 'entry': 238.5670623779297, 'sl': 236.5, 'target_r': 1}
+  stored 1R | prod re-run 1R | prod today-plan 1R | reference SL fill 08 Oct 12:15 end 08 Oct 15:15
+
+nse fib 1w HBLENGINE.NS sent 08 Oct 12:03 rules=not sent today
+  stored plan {'entry': 727.65, 'side': 'long', 'sl': 629.0625}
+  today plan {'entry': 727.65, 'side': 'long', 'sl': 629.0625}
+  stored 1R | prod re-run 1R | prod today-plan 1R | reference 1R fill 08 Oct 12:15 end -
+
+nse fib 1M HBLENGINE.NS sent 08 Oct 12:03 rules=not sent today
+  stored plan {'entry': 727.65, 'side': 'long', 'sl': 629.0625}
+  today plan {'entry': 727.65, 'side': 'long', 'sl': 629.0625}
+  stored 1R | prod re-run 1R | prod today-plan 1R | reference 1R fill 08 Oct 12:15 end -
+
+crypto fib 1M BNBUSD sent 08 Oct 22:28 rules=not sent today
+  stored plan {'entry': 719.1495, 'side': 'long', 'sl': 555.316875}
+  today plan {'entry': 719.1495, 'side': 'long', 'sl': 555.316875}
+  stored open | prod re-run open | prod today-plan open | reference open fill 08 Oct 22:50 end -
+
+nse fib 1w BHARTIHEXA.NS sent 09 Oct 09:23 rules=not sent today
+  stored plan {'entry': 1602.5049560546875, 'side': 'long', 'sl': 1489.9062194824219}
+  today plan {'entry': 1602.5049560546875, 'side': 'long', 'sl': 1489.9062194824219}
+  stored open | prod re-run open | prod today-plan open | reference BE fill 09 Oct 10:15 end 15 Oct 10:15
+
+nse fib 1w PIRAMALFIN.NS sent 09 Oct 09:23 rules=not sent today
+  stored plan {'entry': 1937.9349426269532, 'side': 'long', 'sl': 1840.8187026977537}
+  today plan {'entry': 1937.9349426269532, 'side': 'long', 'sl': 1840.8187026977537}
+  stored open | prod re-run open | prod today-plan open | reference 1R fill 09 Oct 11:15 end 14 Oct 15:15
+
+nse fib 1w KPRMILL.NS sent 09 Oct 09:23 rules=not sent today
+  stored plan {'entry': 1040.575, 'side': 'long', 'sl': 953.46875}
+  today plan {'entry': 1040.575, 'side': 'long', 'sl': 953.46875}
+  stored open | prod re-run open | prod today-plan open | reference 1R fill 09 Oct 10:15 end -
+
+nse fib 1M CARBORUNIV.NS sent 09 Oct 09:23 rules=not sent today
+  stored plan {'entry': 1187.117510986328, 'side': 'long', 'sl': 1023.6093826293945}
+  today plan {'entry': 1187.117510986328, 'side': 'long', 'sl': 1023.6093826293945}
+  stored open | prod re-run open | prod today-plan open | reference open fill 09 Oct 12:15 end -
+
+crypto fib 1M AAVEUSD sent 09 Oct 11:03 rules=not sent today
+  stored plan {'entry': 207.16399999999996, 'side': 'long', 'sl': 158.99499999999995}
+  today plan {'entry': 207.16399999999996, 'side': 'long', 'sl': 158.99499999999995}
+  stored SL | prod re-run SL | prod today-plan SL | reference SL fill 09 Oct 11:05 end 13 Oct 03:15
+
+crypto fib 1M BNBUSD sent 12 Oct 09:13 rules=not sent today
+  stored plan {'side': 'long', 'entry': 838.0485, 'sl': 703.9406250000001}
+  today plan {'side': 'long', 'entry': 838.0485, 'sl': 703.9406250000001}
+  stored open | prod re-run open | prod today-plan open | reference open fill 12 Oct 09:15 end -
+
+nse fib 1w CREDITACC.NS sent 12 Oct 13:34 rules=not sent today
+  stored plan {'side': 'short', 'entry': 1325.3900054931642, 'sl': 1469.1875038146973}
+  today plan {'side': 'short', 'entry': 1325.3900054931642, 'sl': 1469.1875038146973}
+  stored open | prod re-run open | prod today-plan open | reference open fill - end -
+
+nse fib 1w ANTHEM.NS sent 14 Oct 15:04 rules=same
+  stored plan {'side': 'long', 'entry': 842.4974945068359, 'sl': 808.7343711853027}
+  today plan {'side': 'long', 'entry': 842.4974945068359, 'sl': 808.7343711853027}
+  stored open | prod re-run open | prod today-plan open | reference SL fill 15 Oct 09:15 end 19 Oct 13:15
+
+crypto fib 1w NVDAXUSD sent 15 Oct 18:58 rules=same
+  stored plan {'side': 'long', 'entry': 213.54, 'sl': 206.0325}
+  today plan {'side': 'long', 'entry': 213.54, 'sl': 206.0325}
+  stored open | prod re-run open | prod today-plan open | reference BE fill 15 Oct 19:00 end 18 Oct 02:55
+
+nse trendline 1w HUDCO.NS sent 16 Oct 09:35 rules=same
+  stored plan {'side': 'long', 'entry': 159.0749969482422, 'sl': 155.8000030517578, 'target_r': 1}
+  today plan {'side': 'long', 'entry': 159.0749969482422, 'sl': 155.8000030517578, 'target_r': 1}
+  stored open | prod re-run open | prod today-plan open | reference SL fill 19 Oct 10:15 end 19 Oct 14:15
+
+nse fib 1w 360ONE.NS sent 19 Oct 09:24 rules=not sent today
+  stored plan {'side': 'long', 'entry': 1048.632504272461, 'sl': 1005.0656242370605}
+  today plan {'side': 'long', 'entry': 1048.632504272461, 'sl': 1005.0656242370605}
+  stored none | prod re-run open | prod today-plan open | reference open fill 19 Oct 10:15 end -
+
+nse zone 1w HINDCOPPER.NS sent 19 Oct 11:03 rules=same
+  stored plan {'side': 'long', 'entry': 449.2656123046875, 'sl': 444.8086121826172}
+  today plan {'side': 'long', 'entry': 449.2656123046875, 'sl': 444.8086121826172}
+  stored none | prod re-run open | prod today-plan open | reference SL fill 19 Oct 11:15 end 19 Oct 13:15
+
+nse fib 1w EMMVEE.NS sent 19 Oct 11:32 rules=not sent today
+  stored plan {'side': 'long', 'entry': 266.19749450683594, 'sl': 239.85937118530273}
+  today plan {'side': 'long', 'entry': 266.19749450683594, 'sl': 239.85937118530273}
+  stored none | prod re-run open | prod today-plan open | reference open fill - end -
+
+nse fib 1w HINDCOPPER.NS sent 19 Oct 13:13 rules=not sent today
+  stored plan {'side': 'long', 'entry': 443.1234985351562, 'sl': 363.8918762207031}
+  today plan {'side': 'long', 'entry': 443.1234985351562, 'sl': 363.8918762207031}
+  stored none | prod re-run open | prod today-plan open | reference open fill 19 Oct 14:15 end -
+
+nse fib 1M HINDCOPPER.NS sent 19 Oct 13:13 rules=not sent today
+  stored plan {'side': 'long', 'entry': 443.1234985351562, 'sl': 363.8918762207031}
+  today plan {'side': 'long', 'entry': 443.1234985351562, 'sl': 363.8918762207031}
+  stored none | prod re-run open | prod today-plan open | reference open fill 19 Oct 14:15 end -
+
