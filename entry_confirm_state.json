@@ -1,4 +1,8 @@
 {
+  "360ONE.NS|1w|long|1048.63|1005.07": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "360ONE.NS|1w|short|1080.62|1153.16": {
     "reached_entry": false,
     "stopped_out": false
@@ -38,7 +42,7 @@
   "AEGISLOG.NS|1d|long|1348.08|1332.9": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "AEGISLOG.NS|1d|long|1370.34|1342.68": {
     "reached_entry": true,
@@ -218,7 +222,7 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "DALBHARAT.NS|1d|short|1707.17|1746.2": {
+  "DALBHARAT.NS|1d|short|1701.21|1746.2": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -262,6 +266,10 @@
   "FINCABLES.NS|1d|long|1327.12|1284.16": {
     "reached_entry": true,
     "stage": 2,
+    "stopped_out": false
+  },
+  "FLUOROCHEM.NS|1d|long|4331.85|4225.4": {
+    "reached_entry": false,
     "stopped_out": false
   },
   "FORCEMOT.NS|1d|short|17230|17388": {
@@ -326,6 +334,11 @@
     "reached_entry": true,
     "stopped_out": true
   },
+  "HINDCOPPER.NS|1d|long|450.364|445.7": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
   "HINDPETRO.NS|1d|short|347.818|351": {
     "reached_entry": false,
     "stage": 1,
@@ -336,8 +349,8 @@
     "stopped_out": false
   },
   "HSCL.NS|1d|long|633.489|624.2": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "HUDCO.NS|1w|long|159.075|155.8": {
@@ -352,6 +365,11 @@
   },
   "IDBI.NS|1d|long|80.907|80.12": {
     "reached_entry": false,
+    "stopped_out": false
+  },
+  "IDBI.NS|1d|long|82.7582|81.87": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "IFCI.NS|1w|long|68.285|58.4813": {
@@ -377,7 +395,11 @@
     "stage": 2,
     "stopped_out": false
   },
-  "ITI.NS|1w|long|238.567|236.5": {
+  "ITI.NS|1w|long|238.683|236.15": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "JINDALSAW.NS|1d|short|293.27|301.438": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -404,8 +426,8 @@
     "stopped_out": false
   },
   "JUBLFOOD.NS|1w|long|415.108|408.55": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "KALYANKJIL.NS|1d|long|553.904|547.4": {
@@ -578,9 +600,18 @@
     "stage": 2,
     "stopped_out": false
   },
+  "OBEROIRLTY.NS|1w|long|1658.9|1577.11": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "ONDOUSD|1d|long|0.435095|0.391769": {
     "reached_entry": true,
     "stage": 2,
+    "stopped_out": false
+  },
+  "PATANJALI.NS|1d|long|360.283|356.2": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PFOCUS.NS|1d|long|274.657|252.621": {
@@ -977,6 +1008,7 @@
   "_level_ready|HEXT.NS|1d|short|568.993|574.5": 1791949569.774586,
   "_level_ready|HEXT.NS|1d|short|571.063|579.629": 1791519091.189259,
   "_level_ready|HEXT.NS|1w|short|560.169|569.85": 1791868870.844038,
+  "_level_ready|HINDCOPPER.NS|1d|long|450.364|445.7": 1792382520.989817,
   "_level_ready|HINDPETRO.NS|1d|long|330.909|325": 1792036000.300237,
   "_level_ready|HINDPETRO.NS|1d|long|331.458|326.486": 1791517599.357562,
   "_level_ready|HINDPETRO.NS|1d|short|347.818|351": 1792381599.217228,
@@ -1019,6 +1051,7 @@
   "_level_ready|HYPEUSD|30m|short|94.519|94.6352": 1789972562.42741,
   "_level_ready|HYPEUSD|30m|short|95.927|96.147": 1790080005.205343,
   "_level_ready|ICICIPRULI.NS|1d|long|439.153|435.2": 1792381903.352906,
+  "_level_ready|IDBI.NS|1d|long|82.7582|81.87": 1792382520.989817,
   "_level_ready|IFCI.NS|1w|long|68.285|58.4813": 1792038092.080259,
   "_level_ready|IFCI.NS|1w|long|68.285|64.7557": 1791517599.357562,
   "_level_ready|IKS.NS|1M|short|1760.51|1807.64": 1791517599.357562,
@@ -1197,6 +1230,7 @@
   "_level_ready|OGNUSD|1d|long|0.031879|0.0264587": 1791981396.099046,
   "_level_ready|OLAELEC.NS|1d|long|34.31|32.9834": 1791518192.370228,
   "_level_ready|ONDOUSD|1d|long|0.435095|0.391769": 1792033314.358934,
+  "_level_ready|PATANJALI.NS|1d|long|360.283|356.2": 1792382520.989817,
   "_level_ready|PERSISTENT.NS|1d|short|5776.91|5852.5": 1792381599.217228,
   "_level_ready|PETRONET.NS|1d|short|295.686|300.121": 1791520595.664992,
   "_level_ready|PFOCUS.NS|1w|long|271.12|257.161": 1791517599.357562,
@@ -1587,6 +1621,7 @@
   "_ready|HBLENGINE.NS|1w": 1791777105.432083,
   "_ready|HEXT.NS|1d": 1791949569.774586,
   "_ready|HEXT.NS|1w": 1791868870.844038,
+  "_ready|HINDCOPPER.NS|1d": 1792382520.989817,
   "_ready|HINDPETRO.NS|1d": 1792381599.217228,
   "_ready|HINDPETRO.NS|1w": 1792036000.300237,
   "_ready|HOME/USDT|30m": 1789449947.639194,
@@ -1602,6 +1637,7 @@
   "_ready|HYPEUSD|30m": 1791297105.637443,
   "_ready|ICICIPRULI.NS|1d": 1792381903.352906,
   "_ready|ICP/USDT|30m": 1789439750.580446,
+  "_ready|IDBI.NS|1d": 1792382520.989817,
   "_ready|IFCI.NS|1w": 1792038092.080259,
   "_ready|IKS.NS|1M": 1792037205.474648,
   "_ready|IKS.NS|1d": 1791517599.357562,
@@ -1673,6 +1709,7 @@
   "_ready|OGNUSD|1d": 1791981396.099046,
   "_ready|OLAELEC.NS|1d": 1791518192.370228,
   "_ready|ONDOUSD|1d": 1792033314.358934,
+  "_ready|PATANJALI.NS|1d": 1792382520.989817,
   "_ready|PERSISTENT.NS|1d": 1792381599.217228,
   "_ready|PETRONET.NS|1d": 1791520595.664992,
   "_ready|PFOCUS.NS|1w": 1791517599.357562,
