@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       parts:
-        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm tl-break-audit tl-sl fib-sl tl-ex tl-sl-long tl-mkt-trend fib-start bitunix-depth bnb-fib fib-touched fib-entry tl-entry doge-fib fib-kill coindcx magic-fib zone-htf volume qnt-late band-wick risk-warn scores-audit realert trail-fibtl)"
+        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm tl-break-audit tl-sl fib-sl tl-ex tl-sl-long tl-mkt-trend fib-start bitunix-depth bnb-fib fib-touched fib-entry tl-entry doge-fib fib-kill coindcx magic-fib zone-htf volume qnt-late band-wick risk-warn scores-audit realert trail-fibtl fib-levels fib-levels-apply)"
         default: "zones-30m zones-4h fib"
 
 permissions:
@@ -117,4 +117,55 @@ jobs:
           git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
           git add -A research/out
           git commit -m "Bitunix research results (${{ matrix.part }}) [skip ci]" || exit 0
+          for i in 1 2 3 4 5; do git pull --rebase origin ${GITHUB_REF_NAME} && git push origin HEAD:${GITHUB_REF_NAME} && break; sleep $((i*5)); done
+
+  # Fib alerts since Oct 1 get their L1-L4 labels and L1/L2/L4 what-ifs (lakky,
+  # 2026-10-19; research/fib_level_backfill.py). "fib-levels" is a dry run;
+  # "fib-levels-apply" writes the records (backup kept) and fib_level_results.json
+  # to scanner-runtime-state, in the fib/trendline scan's group so the two never
+  # write the records file at once.
+  fib-levels:
+    if: contains(format(' {0} ', inputs.parts), ' fib-levels ') || contains(format(' {0} ', inputs.parts), ' fib-levels-apply ')
+    concurrency:
+      group: victus-fib-trendline
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      APPLY: ${{ contains(format(' {0} ', inputs.parts), ' fib-levels-apply ') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Restore runtime state
+        id: restore
+        run: bash .github/scripts/restore_runtime_state.sh fib_trendline_alert_records.jsonl fib_trendline_results.json fib_level_results.json
+      - name: Label and score
+        id: backfill
+        run: |
+          if [ "$APPLY" = "true" ]; then
+            python research/fib_level_backfill.py --state . --apply
+          else
+            python research/fib_level_backfill.py --state .
+          fi
+          cat research/out/fib_levels/BACKFILL.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Persist runtime state
+        if: ${{ always() && steps.restore.outcome == 'success' && steps.backfill.outcome == 'success' && env.APPLY == 'true' }}
+        run: |
+          bash .github/scripts/persist_runtime_state.sh \
+            fib_trendline_alert_records.jsonl \
+            fib_trendline_alert_records.pre_levels_2026-10-19.jsonl \
+            fib_level_results.json
+      - name: Commit the report to this branch
+        if: always() && steps.backfill.outcome == 'success'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
+          git add research/out/fib_levels
+          git commit -m "Fib level backfill report [skip ci]" || exit 0
           for i in 1 2 3 4 5; do git pull --rebase origin ${GITHUB_REF_NAME} && git push origin HEAD:${GITHUB_REF_NAME} && break; sleep $((i*5)); done

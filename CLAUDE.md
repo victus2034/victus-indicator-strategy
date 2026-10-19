@@ -432,6 +432,11 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   also scores each fib alert as if it had been sent at L1, L2 and L4 (`fib_level_whatif.py`): same stop as the
   alert, the level's own 0.75% band moment after the fib's top, then `trades.simulate`. Results go to
   `fib_level_results.json` (runtime-state branch) for the journal's Fib levels tab only - no Discord, no alert changes.
+  **Backfill (2026-10-19, lakky: "make previous alerts correct, start from Oct").** Fib records saved before
+  Oct 12 had only the plan; `research/fib_level_backfill.py` (part `fib-levels` dry run / `fib-levels-apply` of
+  `bitunix_research.yml`, in the fib scan's concurrency group) adds `base`, `top`, `levels` and `level` to every
+  fib alert since Oct 1 and scores the what-ifs at once; backup `fib_trendline_alert_records.pre_levels_2026-10-19.jsonl`.
+  New fib records carry `level` too (L3; L1 for an old zone-1 alert).
 - **Range filter alerts are off (2026-10-10, lakky).** Alerts are S/R zones, fibs and trendlines
   (incl. TL BROKEN) only. `ALERT_RANGE_FILTER_SIGNALS` is False in `config.py` and `nse_config.py`; the
   range filter is still computed but never posts. Pine v12.7.8 drops its RF marker too.
