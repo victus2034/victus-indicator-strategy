@@ -1,4 +1,4 @@
-"""Research only (lakky, 2026-10-18: "yes do it"): the zone cards' trail test on fibs
+"""Research only (lakky, 2026-10-18: "yes do it"; trail settings 2026-10-19: "so do it"): the zone cards' trail test on fibs
 and trendlines. Live fib / TL alerts since --since are replayed with the live rules
 (fib_trendline_backtest.replay_symbol, Delta candles for crypto, Yahoo for NSE) and
 each filled trade is scored twice:
@@ -53,8 +53,25 @@ def news(ts) -> bool:
     return ts is not None and any(abs(ts - e) <= 15 * 60 for e in EVENTS)
 
 
-def trail_r(plan, market, tf, alert_ts, candles):
-    """Net R of the trailing-stop score, or None when the trade never filled or is still open."""
+# name: (start R, distance R, target R or None). "trail" is the zone cards' rule.
+VARIANTS = {
+    "trail": (0.5, 0.25, None),
+    "t0.5/0.5": (0.5, 0.5, None),
+    "t1/0.5": (1.0, 0.5, None),
+    "t1/1": (1.0, 1.0, None),
+    "t0.5/0.25+2R": (0.5, 0.25, 2.0),
+    "t1/0.5+2R": (1.0, 0.5, 2.0),
+    "t1/1+3R": (1.0, 1.0, 3.0),
+}
+
+
+def trail_r(plan, market, tf, alert_ts, candles, start=None, dist=None, target=None):
+    """Net R of the trailing-stop score, or None when the trade never filled or is still open.
+
+    The stop follows `dist` R behind the best price once `start` R has traded; with a
+    `target` the trade also exits there (a candle touching both counts as the stop)."""
+    start = dbs.TRAIL_START_R if start is None else start
+    dist = dbs.TRAIL_DISTANCE_R if dist is None else dist
     entry, sl = plan["entry"], plan["sl"]
     risk = abs(entry - sl)
     if risk <= 0:
@@ -80,11 +97,13 @@ def trail_r(plan, market, tf, alert_ts, candles):
             continue
         if (l <= active) if sign > 0 else (h >= active):
             return sign * (trades.slipped(active, plan) - entry) / risk - cost_r
+        if target is not None and ((h - entry) if sign > 0 else (entry - l)) / risk >= target:
+            return target - cost_r
         if seen - fill_index >= hold_n:
             return sign * (c - entry) / risk - cost_r
         peak = max(peak, ((h - entry) if sign > 0 else (entry - l)) / risk)
-        if peak >= dbs.TRAIL_START_R:
-            level = entry + sign * (peak - dbs.TRAIL_DISTANCE_R) * risk
+        if peak >= start:
+            level = entry + sign * (peak - dist) * risk
             if sign * (level - active) > 0:
                 active = level
     return None
@@ -99,12 +118,15 @@ def score(market, symbol, base, evals, now, since):
             continue
         live = trades.booked_r(t["plan"], market, t["result"])[1]
         candles = evals.get(trades.EVAL_RESOLUTION[market][t["tf"]], [])
-        trail = trail_r(t["plan"], market, t["tf"], t["alert_ts"], candles)
-        if live is None or trail is None:
+        scores = {name: trail_r(t["plan"], market, t["tf"], t["alert_ts"], candles, *v)
+                  for name, v in VARIANTS.items()}
+        if live is None or any(v is None for v in scores.values()):
             continue
-        out.append({"market": market, "symbol": symbol, "kind": t["kind"], "tf": t["tf"],
-                    "alert_ts": t["alert_ts"], "risk_pct": trades.risk_pct(t["plan"]),
-                    "outcome": t["result"]["outcome"], "live_r": live, "trail_r": trail})
+        row = {"market": market, "symbol": symbol, "kind": t["kind"], "tf": t["tf"],
+               "alert_ts": t["alert_ts"], "risk_pct": trades.risk_pct(t["plan"]),
+               "outcome": t["result"]["outcome"], "live_r": live}
+        row.update({f"{name}_r": r for name, r in scores.items()})
+        out.append(row)
     return out
 
 
@@ -117,7 +139,8 @@ def table(df):
                 if g.empty:
                     continue
                 row = {"market": market, "alert": name, "tf": group, "trades": len(g)}
-                for col, label in (("live_r", "live"), ("trail_r", "trail")):
+                for label in ("live", *VARIANTS):
+                    col = f"{label}_r"
                     pct = g[col] * g["risk_pct"]
                     row[f"{label} R/trade"] = round(g[col].mean(), 3)
                     row[f"{label} %/trade"] = round(pct.mean(), 3)
@@ -166,7 +189,16 @@ def main() -> None:
             "TL candle stop + 1R); trail = stop follows 0.25R behind the best price once +0.5R traded, "
             "no target, out at the stop or the 20th candle's close. % = R x the trade's stop distance. "
             "Trades filled within 15 min of US CPI/PPI/FOMC left out.", "",
+            "Variants: tA/B = trail starts at +A R, B R behind the best price; +NR = also a target at N R.", "",
             summary.to_markdown(index=False) if not summary.empty else "No trades.", ""]
+    if not summary.empty:
+        names = ("live", *VARIANTS)
+        short = ["| market | alert | tf | trades | " + " | ".join(names) + " |",
+                 "|---|---|---|---|" + "---|" * len(names)]
+        for r in summary.to_dict("records"):
+            short.append(f"| {r['market']} | {r['alert']} | {r['tf']} | {r['trades']} | "
+                         + " | ".join(f"{r[n + ' R/trade']:+.2f}R / {r[n + ' %/trade']:+.2f}%" for n in names) + " |")
+        text += ["## R / % per trade", ""] + short + [""]
     (OUT / "TRAIL_FIB_TL.md").write_text("\n".join(text))
     print("\n".join(text))
 
