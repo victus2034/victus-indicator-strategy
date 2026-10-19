@@ -141,21 +141,26 @@ def tally(items):
             t["no_fill" if x["outcome"] == "no fill" else "waiting"] += 1
             continue
         t["entries"] += 1
-        t[{"SL": "sl", "BE": "be", "1R": "r1", "2R": "r2", "timeout": "timeout"}.get(x["outcome"], "running")] += 1
+        t[{"SL": "sl", "BE": "be", "1R": "r1", "2R": "r2", "TRAIL": "trail", "timeout": "timeout"}.get(x["outcome"], "running")] += 1
         at1, at2 = trades.booked_r(record["plan"], record["market"], x)
+        if x["outcome"] == "TRAIL":
+            t["trail_win" if (at1 or 0) > 0 else "trail_loss"] += 1
         net1 += at1 or 0.0
         net2 += at2 or 0.0
         risk = trades.risk_pct(record["plan"])
         pct1 += (at1 or 0.0) * risk
         pct2 += (at2 or 0.0) * risk
-    wins, decided = t["r1"] + t["r2"], t["r1"] + t["r2"] + t["sl"]
+    # A trailed exit is a win when it closed in profit after costs.
+    wins = t["r1"] + t["r2"] + t["trail_win"]
+    decided = wins + t["sl"] + t["trail_loss"]
     t["win"] = f"{wins / decided * 100:.1f}%" if decided else "N/A"
     t["net1"], t["net2"] = net1, net2
     t["pct1"], t["pct2"] = pct1, pct2
     return t
 
 
-OUTCOME_PARTS = (("sl", "SL"), ("be", "BE"), ("r1", "+1R"), ("r2", "+2R"), ("timeout", "Timeout"), ("running", "Running"))
+OUTCOME_PARTS = (("sl", "SL"), ("be", "BE"), ("r1", "+1R"), ("r2", "+2R"), ("trail", "Trail"), ("timeout", "Timeout"),
+                 ("running", "Running"))
 
 
 def _row(label, items):
@@ -186,7 +191,10 @@ def _day_block(day):
     counted = " · ".join(f"{name} {t[key]}" for key, name in OUTCOME_PARTS if t[key])
     if counted:
         lines.append(counted)
-    lines.append(f"Win rate {t['win']} · TOTAL {trades.r(t['net1'])} booking 1R / {trades.r(t['net2'])} booking 2R")
+    # Trendlines (1R) and trailed fibs have one exit, so both bookings agree.
+    total = trades.r(t["net1"]) if abs(t["net1"] - t["net2"]) < 1e-9 else \
+        f"{trades.r(t['net1'])} booking 1R / {trades.r(t['net2'])} booking 2R"
+    lines.append(f"Win rate {t['win']} · TOTAL {total}")
     if t["entries"]:
         money1, money2 = money_line(t["pct1"]), money_line(t["pct2"])
         if money1 == money2:

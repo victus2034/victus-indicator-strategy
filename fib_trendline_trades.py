@@ -28,7 +28,7 @@ Rules (Shiva, 2026-09-29):
 """
 from collections import defaultdict
 
-from config import FIB_TL_ENTRY_WAIT_BARS, FIB_TL_MAX_HOLD_BARS, TRENDLINE_SL_PCT, TRENDLINE_STOP_MIN_PCT
+from config import FIB_EXIT, FIB_TL_ENTRY_WAIT_BARS, FIB_TL_MAX_HOLD_BARS, TRENDLINE_SL_PCT, TRENDLINE_STOP_MIN_PCT
 from daily_backtest_summary import (
     BREAK_EVEN_ENABLED,
     BREAK_EVEN_OFFSET_PCT,
@@ -37,6 +37,8 @@ from daily_backtest_summary import (
     HALF_R,
     ROUND_TRIP_COST_PCT,
     SL_FILL_SLIPPAGE_PCT,
+    TRAIL_DISTANCE_R,
+    TRAIL_START_R,
 )
 from fib_trendline_data import CRYPTO, NSE
 
@@ -55,11 +57,14 @@ EVAL_PER_BAR = {
 }
 # Where the stop goes once +0.5R trades, as % past entry - the zone trades' numbers.
 BREAK_EVEN_PCT = {CRYPTO: CRYPTO_BREAK_EVEN_OFFSET_PCT, NSE: BREAK_EVEN_OFFSET_PCT}
-OUTCOMES = ["SL", "BE", "1R", "2R", "timeout", "open", "no fill"]
+OUTCOMES = ["SL", "BE", "1R", "2R", "TRAIL", "timeout", "open", "no fill"]
 
 
 def fib_plan(d, zone):
-    return {"side": "long" if d == 1 else "short", "entry": zone["entry"], "sl": zone["sl"]}
+    plan = {"side": "long" if d == 1 else "short", "entry": zone["entry"], "sl": zone["sl"]}
+    if FIB_EXIT == "trail":
+        plan["exit"] = "trail"
+    return plan
 
 
 def candle_stop(long, entry, bar, opens, highs, lows, closes):
@@ -137,6 +142,8 @@ def simulate(plan, market, tf, alert_ts, candles):
     """
     if plan.get("target_r") == 1:
         return simulate_1r(plan, market, tf, alert_ts, candles)
+    if plan.get("exit") == "trail":
+        return simulate_trail(plan, market, tf, alert_ts, candles)
     side, entry, sl = plan["side"], plan["entry"], plan["sl"]
     risk = abs(entry - sl)
     long = side == "long"
@@ -199,6 +206,61 @@ def simulate(plan, market, tf, alert_ts, candles):
     return res
 
 
+def simulate_trail(plan, market, tf, alert_ts, candles):
+    """A fib trade with the trailing stop (config.FIB_EXIT, lakky 2026-10-19): the
+    same entry wait as simulate; no target. From the candle after the fill, once
+    +TRAIL_START_R has traded the stop follows TRAIL_DISTANCE_R behind the best
+    price, raised only from the next candle (inside a candle the order is unknown).
+    Out at that stop, slip paid (outcome SL while it is still the first stop, else
+    TRAIL), or at the close of the FIB_TL_MAX_HOLD_BARS-th candle (timeout). The
+    same result dict plus exit_r, the trade's gross R (None until it closes).
+    r1 / r2 say whether +1R / +2R traded on the way."""
+    entry, sl = plan["entry"], plan["sl"]
+    risk = abs(entry - sl)
+    sign = 1 if plan["side"] == "long" else -1
+    per_bar = EVAL_PER_BAR[market][tf]
+    wait_n, hold_n = FIB_TL_ENTRY_WAIT_BARS * per_bar, FIB_TL_MAX_HOLD_BARS * per_bar
+    res = dict(outcome="open", filled=False, fill_ts=None, half=False, r1=False, r2=False, sl=False,
+               be=False, ambiguous=False, resolved=False, end_ts=None, exit_r=None)
+    if risk <= 0:
+        res.update(outcome="no fill", resolved=True)
+        return res
+    seen = fill_index = 0
+    active, peak = sl, 0.0
+    for ts, _o, h, l, c in candles:
+        if ts <= alert_ts:
+            continue
+        seen += 1
+        if not res["filled"]:
+            if seen > wait_n:
+                res.update(outcome="no fill", resolved=True, end_ts=ts)
+                return res
+            if (l <= entry) if sign > 0 else (h >= entry):
+                res.update(filled=True, fill_ts=ts)
+                fill_index = seen
+                if (l <= sl) if sign > 0 else (h >= sl):
+                    res.update(outcome="SL", sl=True, resolved=True, end_ts=ts, exit_r=stop_r(plan))
+                    return res
+            continue
+        if (l <= active) if sign > 0 else (h >= active):
+            moved = active != sl
+            res.update(outcome="TRAIL" if moved else "SL", sl=not moved, resolved=True, end_ts=ts,
+                       exit_r=sign * (slipped(active, plan) - entry) / risk)
+            return res
+        if seen - fill_index >= hold_n:
+            res.update(outcome="timeout", resolved=True, end_ts=ts, exit_r=sign * (c - entry) / risk)
+            return res
+        peak = max(peak, ((h - entry) if sign > 0 else (entry - l)) / risk)
+        res["half"] = res["half"] or peak >= HALF_R
+        res["r1"] = res["r1"] or peak >= 1
+        res["r2"] = res["r2"] or peak >= 2
+        if peak >= TRAIL_START_R:
+            level = entry + sign * (peak - TRAIL_DISTANCE_R) * risk
+            if sign * (level - active) > 0:
+                active = level
+    return res
+
+
 def simulate_1r(plan, market, tf, alert_ts, candles):
     """A trendline trade, Lakky's way: the stop or 1R, whichever trades first, held
     as long as it takes - no breakeven, no timeout. The same entry wait and the same
@@ -256,6 +318,11 @@ def booked_r(plan, market, result):
     """Net R after costs (out at 1R, held for 2R) - None where that booking is undecided.
     A 1R plan has one booking; both come back the same."""
     cost_r = COST_PCT[market] / risk_pct(plan)
+    if plan.get("exit") == "trail":
+        # One exit, wherever the trailed stop or the time limit closed it.
+        exit_r = result.get("exit_r") if result.get("resolved") and result.get("filled") else None
+        net = None if exit_r is None else exit_r - cost_r
+        return net, net
     # Stops pay the slip, like the zone trades; it used to be a flat -1.
     closed_r = stop_r(plan) if result["sl"] else break_even_r(plan, market) if result.get("be") else None
     at1 = 1 if result["r1"] else closed_r

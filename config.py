@@ -561,3 +561,12 @@ TRENDLINE_STOP_MIN_PCT = 0.75
 # clock stops overnight - so 1M waits five months.
 FIB_TL_ENTRY_WAIT_BARS = 5
 FIB_TL_MAX_HOLD_BARS = 20
+# Fib exit (lakky, 2026-10-19: "yes do it", after research/trail_fib_tl_backtest.py):
+# "trail" - no target; once +0.5R trades the stop follows 0.25R behind the best
+# price (daily_backtest_summary.TRAIL_START_R / TRAIL_DISTANCE_R), out at that stop
+# or at the close of the FIB_TL_MAX_HOLD_BARS-th candle. "2r" - the old 1R/2R targets
+# with breakeven. Only new fib alerts carry the rule (plan "exit"); older records keep
+# theirs. Sep 1 - Oct 18, news excluded, R / % per trade, 2R+BE -> trail: crypto 4H
+# -0.05R / +0.01% -> +0.03R / +0.04%, crypto 1D+ +0.42R / +1.71% -> +0.34R / +1.79%,
+# NSE 4H -0.20R / -0.42% -> -0.10R / -0.21%, NSE 1D+ -0.14R / -1.04% -> -0.09R / -0.79%.
+FIB_EXIT = os.getenv("VICTUS_FIB_EXIT", "trail").strip().lower()

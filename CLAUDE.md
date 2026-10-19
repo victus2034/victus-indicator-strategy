@@ -160,6 +160,13 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   **Breakeven (2026-10-03, Lakky):** the zone trades' rule - at +0.5R the stop moves past entry by
   `BREAK_EVEN_OFFSET_PCT` (NSE) / `CRYPTO_BREAK_EVEN_OFFSET_PCT` (crypto) from the next candle, imported
   from `daily_backtest_summary` so the two cannot drift. Exits there are `BE`: in net R, not in win rate.
+- **Fib trades trail (2026-10-19, lakky: "yes do it").** New fib plans carry `"exit": "trail"` (`config.FIB_EXIT`,
+  `VICTUS_FIB_EXIT=2r` switches back): no target; once +0.5R trades the stop follows 0.25R behind the best price
+  (`TRAIL_START_R` / `TRAIL_DISTANCE_R`, as the zone cards' trail test), out at that stop (`TRAIL`, or `SL` while it
+  is still the first stop) or at the 20th candle's close (`timeout`, priced); `trades.simulate_trail` stores the gross
+  `exit_r`. The alert's last part reads `Trail from x (+0.5R)` instead of `TP x (1R)`. Older records keep 2R + BE.
+  Picked from 7 settings (`research/trail_fib_tl_backtest.py`, part `trail-fibtl`); the live scorer equals that
+  research scorer on 2,606 random trades. The journal prices `TRAIL` / priced `timeout` from `exit_r`.
 - **Trendline trades, Lakky's way (2026-10-11, live).** SL = the most recent closed candle whose wick, or body,
   is at least `TRENDLINE_STOP_MIN_PCT` (0.75%) past the entry - the closer of the two (`trades.candle_stop`,
   matches 9 of 11 of his hand-marked 1D charts); `TRENDLINE_SL_PCT` only when none. One target at 1R, no

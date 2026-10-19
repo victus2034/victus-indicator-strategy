@@ -255,8 +255,10 @@ class AlertTextTests(unittest.TestCase):
                       fts.format_fib_alert(ftd.CRYPTO, "BTCUSD", "1d", 95.0, short))   # a short sells the bottom
         self.assertIn("0.80% away", text)
         self.assertNotIn("(L3) ·", text)                                 # the title already names it
-        tp = z["plan"]["entry"] + (z["plan"]["entry"] - z["plan"]["sl"])
-        self.assertIn(f"· TP {fts.price_text(tp)} (1R)", text)
+        # Fibs trail (config.FIB_EXIT, lakky 2026-10-19): no TP, the price where the trail starts.
+        start = z["plan"]["entry"] + 0.5 * (z["plan"]["entry"] - z["plan"]["sl"])
+        self.assertIn(f"· Trail from {fts.price_text(start)} (+0.5R)", text)
+        self.assertNotIn("· TP ", text)
         t = {"kind": SUPPORT, "level": 100.0, "distance": 1.2, "from": (90, "2026-08-06 00:00"), "to": (95, "2026-09-16 00:00"),
              "plan": ftt.trendline_plan(True, 100.0, "1d")}
         text = fts.format_touch_alert(ftd.CRYPTO, "BTCUSD", "1d", 101.2, t)
