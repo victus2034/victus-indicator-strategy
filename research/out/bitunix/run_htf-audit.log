@@ -4,18 +4,18 @@ From https://github.com/victus2034/victus-indicator-strategy
 86 live 1W/1M records
 # 1W / 1M live alerts audit
 
-Records: 86. Rules today vs as sent: not sent today 30, same 56
+Records: 86. Rules today vs as sent: not sent today 25, same 56, same fib, sent on a wick 5
 Result checks agree: 85 / 86 (diffs in traces.txt)
 
-### Today's rules, independent scorer (crypto 5m, NSE 1h)
+### Today's rules, independent scorer (crypto 5m, NSE 1h); alerts today's rules would not send left out
 
 | Group | Alerts | Not filled | Open | News | Closed | R/trade | %/trade |
 |---|---|---|---|---|---|---|---|
-| crypto fib 1M | 4 | 0 | 3 | 0 | 1 | -1.01R | -23.37% |
-| crypto fib 1w | 5 | 0 | 1 | 0 | 4 | -0.26R | -4.46% |
+| crypto fib 1M | 1 | 0 | 1 | 0 | 0 | - | - |
+| crypto fib 1w | 2 | 0 | 1 | 0 | 1 | -0.01R | -0.04% |
 | crypto trendline 1w | 1 | 0 | 0 | 0 | 1 | +0.97R | +2.59% |
-| nse fib 1M | 14 | 0 | 11 | 0 | 3 | -0.34R | -2.35% |
-| nse fib 1w | 29 | 0 | 23 | 0 | 6 | -0.02R | -0.33% |
+| nse fib 1M | 6 | 0 | 5 | 0 | 1 | -1.02R | -6.97% |
+| nse fib 1w | 18 | 0 | 15 | 0 | 3 | -0.02R | +0.04% |
 | nse trendline 1M | 7 | 0 | 2 | 0 | 5 | +0.11R | +1.14% |
 | nse trendline 1w | 25 | 0 | 7 | 0 | 18 | -0.32R | -0.26% |
 | nse zone 1w | 1 | 0 | 0 | 0 | 1 | -1.16R | -1.15% |
@@ -33,7 +33,7 @@ Result checks agree: 85 / 86 (diffs in traces.txt)
 | nse trendline 1w | 25 | 2 | 8 | 0 | 15 | -0.43R | -0.33% |
 | nse zone 1w | 1 | 1 | 0 | 0 | 0 | - | - |
 
-### After the fix: live scorer on 1h (what cards / journal will read)
+### After the fix: live scorer on 1h, every alert sent (what cards / journal will read)
 
 | Group | Alerts | Not filled | Open | News | Closed | R/trade | %/trade |
 |---|---|---|---|---|---|---|---|
@@ -46,14 +46,14 @@ Result checks agree: 85 / 86 (diffs in traces.txt)
 | nse trendline 1w | 25 | 0 | 7 | 0 | 18 | -0.32R | -0.26% |
 | nse zone 1w | 1 | 0 | 0 | 0 | 1 | -1.16R | -1.15% |
 
-### Fibs with the trail exit (draft, not live yet)
+### Fibs with the trail exit (draft, not live yet), today's rules
 
 | Group | Alerts | Not filled | Open | News | Closed | R/trade | %/trade |
 |---|---|---|---|---|---|---|---|
-| crypto fib 1M | 4 | 0 | 3 | 0 | 1 | -1.01R | -23.37% |
-| crypto fib 1w | 5 | 0 | 1 | 0 | 4 | +0.00R | -2.24% |
-| nse fib 1M | 14 | 0 | 9 | 0 | 5 | +0.19R | +2.97% |
-| nse fib 1w | 29 | 0 | 17 | 0 | 12 | +0.24R | +2.35% |
+| crypto fib 1M | 1 | 0 | 1 | 0 | 0 | - | - |
+| crypto fib 1w | 2 | 0 | 1 | 0 | 1 | +0.39R | +1.38% |
+| nse fib 1M | 6 | 0 | 5 | 0 | 1 | -1.02R | -6.97% |
+| nse fib 1w | 18 | 0 | 13 | 0 | 5 | +0.25R | +1.86% |
 
 crypto fib 1w UNIUSD sent 29 Sep 20:53 rules=not sent today key fib|UNIUSD|1w|-1|1754870400|2.303|2
   stored plan {'entry': 7.7986, 'side': 'short', 'sl': 9.16975}
@@ -145,9 +145,9 @@ nse fib 1w GLAXO.NS sent 07 Oct 12:09 rules=not sent today key fib|GLAXO.NS|1w|1
   why: bars 1266 price 2656.699951171875 last candle 05 Oct 00:00; today's fib:  | live fib d 1 base 2088.10009765625 top 3120.699951171875 base candle 2026-06-08 00:00
   stored open | prod re-run open | prod today-plan open | reference open fill 07 Oct 12:15 end -
 
-nse fib 1M ERIS.NS sent 07 Oct 12:59 rules=not sent today key fib|ERIS.NS|1M|1|1677609000|1910.0|2
+nse fib 1M ERIS.NS sent 07 Oct 12:59 rules=same fib, sent on a wick key fib|ERIS.NS|1M|1|1677609000|1910.0|2
   stored plan {'entry': 1162.7149932861328, 'side': 'long', 'sl': 975.893741607666}
-  today plan {'entry': 1162.7149932861328, 'side': 'long', 'sl': 975.893741607666}
+  today plan {'side': 'long', 'entry': 1162.7149932861328, 'sl': 975.893741607666}
   why: bars 112 price 1152.300048828125 last candle 01 Oct 00:00; today's fib:  | live fib d 1 base 551.2999877929688 top 1910.0 base candle 2023-03-01 00:00
   stored open | prod re-run open | prod today-plan open | reference open fill 07 Oct 13:15 end -
 
@@ -217,25 +217,25 @@ crypto fib 1w NVDAXUSD sent 15 Oct 18:58 rules=same key fib|NVDAXUSD|1w|1|178511
   why: -
   stored open | prod re-run open | prod today-plan open | reference BE fill 15 Oct 19:00 end 18 Oct 02:55
 
-nse fib 1w 360ONE.NS sent 19 Oct 09:24 rules=not sent today key fib|360ONE.NS|1w|1|1775413800|1222.9000244140625|2
+nse fib 1w 360ONE.NS sent 19 Oct 09:24 rules=same fib, sent on a wick key fib|360ONE.NS|1w|1|1775413800|1222.9000244140625|2
   stored plan {'side': 'long', 'entry': 1048.632504272461, 'sl': 1005.0656242370605}
   today plan {'side': 'long', 'entry': 1048.632504272461, 'sl': 1005.0656242370605}
   why: bars 370 price 1056.699951171875 last candle 12 Oct 00:00; today's fib:  | live fib d 1 base 906.0499877929688 top 1222.9000244140625 base candle 2026-04-06 00:00
   stored none | prod re-run open | prod today-plan open | reference open fill 19 Oct 10:15 end -
 
-nse fib 1w EMMVEE.NS sent 19 Oct 11:32 rules=not sent today key fib|EMMVEE.NS|1w|1|1772389800|371.54998779296875|2
+nse fib 1w EMMVEE.NS sent 19 Oct 11:32 rules=same fib, sent on a wick key fib|EMMVEE.NS|1w|1|1772389800|371.54998779296875|2
   stored plan {'side': 'long', 'entry': 266.19749450683594, 'sl': 239.85937118530273}
   today plan {'side': 'long', 'entry': 266.19749450683594, 'sl': 239.85937118530273}
   why: bars 48 price 269.3999938964844 last candle 12 Oct 00:00; today's fib:  | live fib d 1 base 180.0 top 371.54998779296875 base candle 2026-03-02 00:00
   stored none | prod re-run open | prod today-plan open | reference open fill - end -
 
-nse fib 1w HINDCOPPER.NS sent 19 Oct 13:13 rules=not sent today key fib|HINDCOPPER.NS|1w|1|1743964200|760.0499877929688|2
+nse fib 1w HINDCOPPER.NS sent 19 Oct 13:13 rules=same fib, sent on a wick key fib|HINDCOPPER.NS|1w|1|1743964200|760.0499877929688|2
   stored plan {'side': 'long', 'entry': 443.1234985351562, 'sl': 363.8918762207031}
   today plan {'side': 'long', 'entry': 443.1234985351562, 'sl': 363.8918762207031}
   why: bars 876 price 446.45001220703125 last candle 12 Oct 00:00; today's fib:  | live fib d 1 base 183.82000732421875 top 760.0499877929688 base candle 2025-04-07 00:00
   stored none | prod re-run open | prod today-plan open | reference open fill 19 Oct 14:15 end -
 
-nse fib 1M HINDCOPPER.NS sent 19 Oct 13:13 rules=not sent today key fib|HINDCOPPER.NS|1M|1|1743445800|760.0499877929688|2
+nse fib 1M HINDCOPPER.NS sent 19 Oct 13:13 rules=same fib, sent on a wick key fib|HINDCOPPER.NS|1M|1|1743445800|760.0499877929688|2
   stored plan {'side': 'long', 'entry': 443.1234985351562, 'sl': 363.8918762207031}
   today plan {'side': 'long', 'entry': 443.1234985351562, 'sl': 363.8918762207031}
   why: bars 201 price 446.45001220703125 last candle 01 Oct 00:00; today's fib:  | live fib d 1 base 183.82000732421875 top 760.0499877929688 base candle 2025-04-01 00:00
