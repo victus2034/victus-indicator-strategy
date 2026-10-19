@@ -38,7 +38,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Restore runtime state
-        run: bash .github/scripts/restore_runtime_state.sh fib_trendline_state.json fib_trendline_alert_records.jsonl fib_trendline_results.json
+        run: bash .github/scripts/restore_runtime_state.sh fib_trendline_state.json fib_trendline_alert_records.jsonl fib_trendline_results.json fib_level_results.json
 
       - name: Check fib/trendline Discord webhook configuration
         env:
@@ -83,7 +83,7 @@ jobs:
       # afterwards - otherwise the next pass would post them again.
       - name: Persist runtime state
         if: always()
-        run: bash .github/scripts/persist_runtime_state.sh fib_trendline_state.json fib_trendline_alert_records.jsonl fib_trendline_results.json
+        run: bash .github/scripts/persist_runtime_state.sh fib_trendline_state.json fib_trendline_alert_records.jsonl fib_trendline_results.json fib_level_results.json
 
       - name: Notify on failure
         if: failure()
