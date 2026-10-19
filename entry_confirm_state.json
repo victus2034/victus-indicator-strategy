@@ -73,13 +73,13 @@
   },
   "ANTHEM.NS|1d|long|814.467|802.2": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ANTHEM.NS|1w|long|842.497|808.734": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "APARINDS.NS|1d|short|18225.5|18543.1": {
     "reached_entry": false,
@@ -100,17 +100,18 @@
     "stopped_out": false
   },
   "AUBANK.NS|1d|long|974.788|967.4": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "AUBANK.NS|1w|long|971.183|960": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "AUBANK.NS|1w|long|972.253|929.291": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "AVAXUSD|1w|short|10.8109|11.1": {
@@ -247,8 +248,8 @@
     "stopped_out": false
   },
   "DEEPAKNTR.NS|1w|long|1558.06|1473.09": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "EIHOTEL.NS|1w|long|288.81|286.45": {
@@ -822,6 +823,7 @@
   "_level_ready|AUBANK.NS|1d|long|974.788|967.4": 1792386999.9248,
   "_level_ready|AUBANK.NS|1d|long|987.634|974.2": 1791949569.774586,
   "_level_ready|AUBANK.NS|1d|long|987.9|973.081": 1791517599.357562,
+  "_level_ready|AUBANK.NS|1w|long|971.183|960": 1792397814.233469,
   "_level_ready|AUBANK.NS|1w|long|972.253|929.291": 1792392703.776904,
   "_level_ready|AVAXUSD|1w|short|10.8109|11.0812": 1791454600.819574,
   "_level_ready|AVAXUSD|1w|short|10.8109|11.1": 1791736311.389518,
@@ -1596,7 +1598,7 @@
   "_ready|ATOM/USDT|30m": 1789369559.225687,
   "_ready|ATOM/USDT|4h": 1788869156.905559,
   "_ready|AUBANK.NS|1d": 1792386999.9248,
-  "_ready|AUBANK.NS|1w": 1792392703.776904,
+  "_ready|AUBANK.NS|1w": 1792397814.233469,
   "_ready|AVAXUSD|1w": 1791736311.389518,
   "_ready|AVAXUSD|30m": 1791212768.155908,
   "_ready|AVAXUSD|4h": 1790682088.785606,
