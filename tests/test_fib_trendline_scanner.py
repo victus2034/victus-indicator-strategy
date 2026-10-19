@@ -255,8 +255,10 @@ class AlertTextTests(unittest.TestCase):
                       fts.format_fib_alert(ftd.CRYPTO, "BTCUSD", "1d", 95.0, short))   # a short sells the bottom
         self.assertIn("0.80% away", text)
         self.assertNotIn("(L3) ·", text)                                 # the title already names it
-        tp = z["plan"]["entry"] + (z["plan"]["entry"] - z["plan"]["sl"])
-        self.assertIn(f"· TP {fts.price_text(tp)} (1R)", text)
+        # Fibs trail (config.FIB_EXIT, lakky 2026-10-19): no TP, the price where the trail starts.
+        start = z["plan"]["entry"] + 0.5 * (z["plan"]["entry"] - z["plan"]["sl"])
+        self.assertIn(f"· Trail from {fts.price_text(start)} (+0.5R)", text)
+        self.assertNotIn("· TP ", text)
         t = {"kind": SUPPORT, "level": 100.0, "distance": 1.2, "from": (90, "2026-08-06 00:00"), "to": (95, "2026-09-16 00:00"),
              "plan": ftt.trendline_plan(True, 100.0, "1d")}
         text = fts.format_touch_alert(ftd.CRYPTO, "BTCUSD", "1d", 101.2, t)
@@ -744,6 +746,25 @@ class DailyReportTests(unittest.TestCase):
         with mock.patch.object(self.report, "eval_candles", lambda *a: candles):
             results = self.report.score(records, dict(old), self.sent_ts + 86400)
         self.assertEqual(results["a"]["outcome"], "BE")
+        with mock.patch.object(self.report, "eval_candles", side_effect=AssertionError("re-scored")):
+            self.report.score(records, results, self.sent_ts + 2 * 86400)
+
+    def test_weekly_trades_on_daily_candles_are_graded_again_on_hourly(self):
+        # BAJAJHFL 1W (7 Oct): the daily candle skipped the rest of the alert's day
+        # and read a day that traded both 1R and the stop as SL. On 1h it is 1R.
+        records = self.report.load_records()
+        records[0].update(tf="1w", plan={"side": "long", "entry": 100.0, "sl": 99.0, "target_r": 1})
+        old = {"a": {"outcome": "SL", "filled": True, "resolved": True, "r1": False, "r2": False,
+                     "sl": True, "be": False, "reported": True}}
+        hourly = [[self.sent_ts + 3600, 0, 100.4, 99.9, 0], [self.sent_ts + 7200, 0, 101.2, 100.1, 0],
+                  [self.sent_ts + 10800, 0, 100.2, 98.5, 0]]
+        asked = []
+        with mock.patch.object(self.report, "eval_candles", lambda *a: asked.append(a[2]) or hourly):
+            results = self.report.score(records, dict(old), self.sent_ts + 86400)
+        self.assertEqual(asked, ["1h"])
+        self.assertEqual(results["a"]["outcome"], "1R")
+        self.assertEqual(results["a"]["eval"], "1h")
+        self.assertTrue(results["a"]["reported"])          # not posted twice
         with mock.patch.object(self.report, "eval_candles", side_effect=AssertionError("re-scored")):
             self.report.score(records, results, self.sent_ts + 2 * 86400)
 

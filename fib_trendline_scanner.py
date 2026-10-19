@@ -451,8 +451,16 @@ def format_fib_alert(market, symbol, tf, price, z, name=None):
         f"{_header(market, tf, f'{name} · FIB L3 · {side}', side)}\n"
         f"Price {price_text(price)} · {z['distance']:.2f}% away\n"
         f"Entry {price_text(z['entry'])} · SL {price_text(z['sl'])} ({trades.risk_pct(z['plan']):.2f}%)"
-        f" · TP {price_text(trades.target_price(z['plan']))} (1R)"
+        + (f" · Trail from {price_text(trail_start_price(z['plan']))} (+0.5R)" if z["plan"].get("exit") == "trail"
+           else f" · TP {price_text(trades.target_price(z['plan']))} (1R)")
     )
+
+
+def trail_start_price(plan):
+    """Where the trailing stop starts to move: +TRAIL_START_R from entry."""
+    risk = abs(plan["entry"] - plan["sl"])
+    sign = 1 if plan["side"] == "long" else -1
+    return plan["entry"] + sign * trades.TRAIL_START_R * risk
 
 
 def format_touch_alert(market, symbol, tf, price, t, name=None):
