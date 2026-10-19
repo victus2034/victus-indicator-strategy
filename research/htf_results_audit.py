@@ -184,7 +184,18 @@ def rebuild(record, chart):
         snaps, _ = fts.fib_engine.run(stamp, [c[2] for c in closed], [c[3] for c in closed], N=fts.FIB_SWING_LENGTH)
         live = snaps[-1]
         WHY[record["id"]] += f" | live fib d {live['d']} base {live['O']} top {live['E']} base candle {stamp[live['Ot']]}"
+        d, base, top = live["d"], live["O"], live["E"]
+        prefix = f"fib|{record['symbol']}|{record['tf']}|{d}|{closed[live['Ot']][0]}|{top}|"
+        if record["key"].startswith(prefix):
+            # The same fib today: only the band check differs, and that needs the
+            # wick traded between two passes, which this replay does not have.
+            for zone in fts.fib_zones(d, base, top):
+                if f"{prefix}{zone['zone']}" == record["key"]:
+                    SAME_FIB.add(record["id"])
+                    return trades.fib_plan(d, zone)
     return None
+
+SAME_FIB = set()
 
 
 WHY = {}
@@ -238,8 +249,9 @@ def main(argv=None):
         except Exception as error:     # noqa: BLE001
             now_plan, rule = None, f"rebuild failed: {error}"
         else:
-            rule = ("same" if now_plan and same_plan(now_plan, plan)
-                    else "not sent today" if now_plan is None else "plan differs")
+            rule = ("not sent today" if now_plan is None
+                    else "plan differs" if not same_plan(now_plan, plan)
+                    else "same fib, sent on a wick" if r["id"] in SAME_FIB else "same")
         use = now_plan or plan
         rule_exit = "1r" if use.get("target_r") == 1 else "2r"
         # Production scorer on its own candles, stored plan and today's.
@@ -273,7 +285,7 @@ def main(argv=None):
         w.writerows(rows)
     (OUT / "traces.txt").write_text("\n".join(traces) or "no differences\n")
 
-    def table(col_net, col_out, label):
+    def table(col_net, col_out, label, today_only=False):
         groups = defaultdict(list)
         for x in rows:
             groups[(x["market"], x["kind"], x["tf"])].append(x)
@@ -281,6 +293,7 @@ def main(argv=None):
                  "|---|---|---|---|---|---|---|---|"]
         for k in sorted(groups):
             g = groups[k]
+            g = [x for x in g if x["rules"] != "not sent today"] if today_only else g
             closed = [x for x in g if x[col_net] is not None and not x["news"]]
             nf = sum(1 for x in g if x[col_out] in ("no fill", "none"))
             op = sum(1 for x in g if x[col_out] in ("open", "1R") and x[col_net] is None)
@@ -297,14 +310,14 @@ def main(argv=None):
     md = ["# 1W / 1M live alerts audit", "",
           f"Records: {len(rows)}. Rules today vs as sent: " + ", ".join(f"{k} {v}" for k, v in n_rule.items()),
           f"Result checks agree: {sum(x['match'] for x in rows)} / {len(rows)} (diffs in traces.txt)", ""]
-    md += table("ref_net", "ref", "Today's rules, independent scorer (crypto 5m, NSE 1h)") + [""]
+    md += table("ref_net", "ref", "Today's rules, independent scorer (crypto 5m, NSE 1h); alerts today's rules would not send left out", True) + [""]
     md += table("stored_net", "stored", "As stored before the fix (1d candles)") + [""]
-    md += table("prod_now_net", "prod_now", "After the fix: live scorer on 1h (what cards / journal will read)") + [""]
+    md += table("prod_now_net", "prod_now", "After the fix: live scorer on 1h, every alert sent (what cards / journal will read)") + [""]
     fib_rows = [x for x in rows if x["kind"] == "fib"]
     if fib_rows:
         rows_backup = rows
         rows = [dict(x, ref_net=x["trail_net"], ref=x["trail"]) for x in fib_rows]
-        md += table("ref_net", "ref", "Fibs with the trail exit (draft, not live yet)") + [""]
+        md += table("ref_net", "ref", "Fibs with the trail exit (draft, not live yet), today's rules", True) + [""]
         rows = rows_backup
     (OUT / "AUDIT.md").write_text("\n".join(md) + "\n")
     print("\n".join(md))
