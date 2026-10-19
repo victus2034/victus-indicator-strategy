@@ -423,6 +423,11 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   cards and the fib/TL/1D+ zone cards print `10,000 at 5x: +1,234 (+12.3%)` (`ACCOUNT_BUDGET`, `ACCOUNT_LEVERAGE`
   in `config.py`; `daily_backtest_summary.money_line`). Every trade is sized at the full budget x leverage, so its
   money = 50,000 x net R x stop %. Display only. A stop over 20% at 5x would lose more than the budget.
+- **Late results on the fib/TL/1D+ zone cards (2026-10-19, lakky: "no trade result of 1w and 1m").** A card shows
+  only its own day's alerts, and a 1W/1M (often a 1D) trade closes days later, so its result never reached Discord.
+  Now each card adds `CLOSED SINCE LAST CARD (earlier alerts)`: earlier filled alerts closed since the last card,
+  by timeframe, each shown once (`reported` in the results file; `fib_trendline_daily_report.CLOSED_SINCE`, nothing
+  that closed before 19 Oct 09:00 IST is dumped). The history replay already scored 1W/1M; tables fold them into 1D+.
 - **Range filter alerts are off (2026-10-10, lakky).** Alerts are S/R zones, fibs and trendlines
   (incl. TL BROKEN) only. `ALERT_RANGE_FILTER_SIGNALS` is False in `config.py` and `nse_config.py`; the
   range filter is still computed but never posts. Pine v12.7.8 drops its RF marker too.
