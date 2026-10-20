@@ -62682,6 +62682,33 @@
       "target_half": 726.4223000000001,
       "timeframe": "30m",
       "trade_id": "METAXUSD|30m|long|722.837|715.666"
+    },
+    {
+      "alert_time": "2026-10-20T19:46:00.818162+05:30",
+      "cost_r": 0.28910000000000274,
+      "date": "2026-10-20",
+      "entry": 52.5,
+      "entry_time": "2026-10-20T19:50:00+05:30",
+      "exit_price": 52.676325,
+      "exit_time": "2026-10-20T19:50:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "other",
+      "net_realized_r": -1.464600000000004,
+      "outcome": "SL",
+      "rating": 9,
+      "realized_r": -1.175500000000001,
+      "risk": 0.14999999999999858,
+      "side": "short",
+      "stop": 52.65,
+      "stream": "live",
+      "symbol": "SLVONUSD",
+      "target_1": 52.35,
+      "target_2": 52.2,
+      "target_half": 52.425,
+      "timeframe": "4h",
+      "trade_id": "SLVONUSD|4h|short|52.5|52.65"
     }
   ],
   "handled": {
@@ -65292,24 +65319,6 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
-    },
-    "SLVONUSD|4h|short|52.5|52.65": {
-      "alert_time": "2026-10-20T19:46:00.818162+05:30",
-      "entry": 52.5,
-      "entry_time": "2026-10-20T19:50:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "other",
-      "rating": 9,
-      "risk": 0.14999999999999858,
-      "side": "short",
-      "stop": 52.65,
-      "stream": "live",
-      "symbol": "SLVONUSD",
-      "target_1": 52.35,
-      "target_2": 52.2,
-      "target_half": 52.425,
-      "timeframe": "4h"
     }
   }
 }
