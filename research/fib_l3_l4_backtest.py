@@ -31,9 +31,9 @@ from trail_fib_tl_backtest import news  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "fib_l3_l4"
 GROUPS = (("4H", ("4h",)), ("1D", ("1d",)), ("1W", ("1w",)), ("1M", ("1M",)))
-MODES = (("live: L3 once", dict(FIB_L4=False, FIB_REARM=False, FIB_REPEAT_WAIT=0)),
-         ("L3 + L4, once each", dict(FIB_L4=True, FIB_REARM=False, FIB_REPEAT_WAIT=0)),
-         ("lakky: L3 + L4, repeat rule", dict(FIB_L4=True, FIB_REARM=True, FIB_REPEAT_WAIT=4 * 3600)))
+MODES = (("live: L3 once", dict(FIB_LEVELS=None, FIB_L4=False, FIB_REARM=False, FIB_REPEAT_WAIT=0)),
+         ("L3 + L4, once each", dict(FIB_LEVELS=None, FIB_L4=True, FIB_REARM=False, FIB_REPEAT_WAIT=0)),
+         ("lakky: L3 + L4, repeat rule", dict(FIB_LEVELS=None, FIB_L4=True, FIB_REARM=True, FIB_REPEAT_WAIT=4 * 3600)))
 
 
 def main() -> None:

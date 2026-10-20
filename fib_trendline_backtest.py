@@ -73,6 +73,8 @@ FIB_REARM = False
 # and wait FIB_REPEAT_WAIT seconds before repeating a level whose last alert touched the entry.
 FIB_L4 = False
 FIB_REPEAT_WAIT = 0
+# Research hook (lakky, 2026-10-20): {timeframe: ("L1".."L4")} - which fib levels alert; overrides ALERT_ZONES and FIB_L4.
+FIB_LEVELS = None
 
 
 # ----------------------------------------------------------------- data (cached per day)
@@ -204,16 +206,27 @@ def replay(market, symbol, tf, base, evalc, now):
         if base_px == top:
             continue
         e0, e1 = bar_slice(i)
-        for zone0 in fib_zones(d, base_px, top):
-            if zone0["zone"] not in ALERT_ZONES:
-                continue
-            legs = [("L3", zone0)]
-            if FIB_L4:
-                # L4 is the strong box's far edge: its own entry, the same stop (lakky, 2026-10-20)
-                legs.append(("L4", dict(zone0, entry=zone0["low"] if d == 1 else zone0["high"])))
+        zs = {z["zone"]: z for z in fib_zones(d, base_px, top)}
+        legs = []
+        if FIB_LEVELS:
+            # L1/L2 = the weaker box's near/far edge, L3/L4 = the strong box's; one stop for all (the strong box's)
+            for name in FIB_LEVELS.get(tf, ()):
+                src = zs[1] if name in ("L1", "L2") else zs[2]
+                far = src["low"] if d == 1 else src["high"]
+                near = src["entry"]
+                legs.append((name, dict(src, entry=near if name in ("L1", "L3") else far, sl=zs[2]["sl"])))
+        else:
+            for zone0 in zs.values():
+                if zone0["zone"] not in ALERT_ZONES:
+                    continue
+                legs.append(("L3", zone0))
+                if FIB_L4:
+                    # L4 is the strong box's far edge: its own entry, the same stop (lakky, 2026-10-20)
+                    legs.append(("L4", dict(zone0, entry=zone0["low"] if d == 1 else zone0["high"])))
+        if True:
             for leg, zone in legs:
-                key = (d, times[s["Ot"]], top, zone["zone"], leg)
-                if leg == "L3":
+                key = (d, times[s["Ot"]], top, leg if FIB_LEVELS else zone["zone"], leg)
+                if leg in ("L1", "L3"):
                     lo_band = zone["low"] if d == 1 else zone["low"] * (1 - BAND)
                     hi_band = zone["high"] * (1 + BAND) if d == 1 else zone["high"]
                     ref_hi, ref_lo = zone["high"], zone["low"]
