@@ -38,6 +38,7 @@ from config import (
     FIB_TL_ENTRY_WAIT_BARS,
     FIB_TL_MAX_DISTANCE_PCT,
     FIB_TL_MAX_HOLD_BARS,
+    REARM_FACTOR,
     TRENDLINE_SL_PCT,
     TRENDLINE_SWING_LENGTH,
     TRENDLINES_KEEP,
@@ -65,6 +66,9 @@ TL_SKIP_TOUCHED_ENTRY = True
 # -> the first time price was in [lo, hi] within [start, end) on finer candles, or None.
 # None here = the eval candle's own range decides, as always.
 BAND_PROBE = None
+# Research hook (research/fib_rearm_backtest.py): a fib zone that already alerted alerts again
+# once price has left its band by REARM_FACTOR and come back. Live: one alert per zone.
+FIB_REARM = False
 
 
 # ----------------------------------------------------------------- data (cached per day)
@@ -189,7 +193,7 @@ def replay(market, symbol, tf, base, evalc, now):
 
     stamp = [str(t) for t in times]
     snaps, _ = fib_engine.run(stamp, highs, lows, N=FIB_SWING_LENGTH)
-    fired = set()
+    fired, spent = set(), set()
     for i in range(first, n):
         s = snaps[i - 1]
         d, base_px, top = s["d"], s["O"], s["E"]
@@ -200,11 +204,19 @@ def replay(market, symbol, tf, base, evalc, now):
             if zone["zone"] not in ALERT_ZONES:
                 continue
             key = (d, times[s["Ot"]], top, zone["zone"])
-            if key in fired:
-                continue
             lo_band = zone["low"] if d == 1 else zone["low"] * (1 - BAND)
             hi_band = zone["high"] * (1 + BAND) if d == 1 else zone["high"]
             entry = zone["entry"]
+            if key in fired:
+                if not FIB_REARM:
+                    continue
+                away = 1 + BAND * REARM_FACTOR
+                if key in spent:
+                    # re-arm once a candle sat wholly beyond the band by REARM_FACTOR on the approach side
+                    if any((evalc[k][3] > zone["high"] * away) if d == 1 else (evalc[k][2] < zone["low"] / away)
+                           for k in range(e0, e1)):
+                        spent.discard(key)
+                    continue
             for k in range(e0, e1):
                 ts, _o, h, l, _c = evalc[k]
                 if (l <= base_px) if d == 1 else (h >= base_px):
@@ -229,6 +241,7 @@ def replay(market, symbol, tf, base, evalc, now):
                         break
                     continue
                 fired.add(key)
+                spent.add(key)
                 clock = TouchClock(s["Et"])
                 for j in range(s["Et"] + 1, i):
                     clock.feed(j, highs[j] >= zone["low"] and lows[j] <= zone["high"])
