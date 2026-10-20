@@ -1,0 +1,29 @@
+# Fib re-arm after price leaves and returns (2026-09-01 to now)
+
+Live fib rules, net after fees. R and % per trade and in total. Crypto on Delta candles. Entries filled within 15 min of US CPI/PPI/FOMC left out. 'extra alerts only' = the second+ alerts of a zone (overlapping trades on one fib are all counted).
+
+| market   | tf   | rule                                         |   alerts |   trades |   win_% |   R_total |   R_per_trade |   %_total |   %_per_trade |
+|:---------|:-----|:---------------------------------------------|---------:|---------:|--------:|----------:|--------------:|----------:|--------------:|
+| crypto   | 4H   | live: one alert per zone                     |      175 |      127 |      54 |      -4.3 |        -0.034 |       4.7 |         0.037 |
+| crypto   | 4H   | re-arm: again after price left and came back |      352 |      237 |      51 |     -24.7 |        -0.104 |     -58.2 |        -0.246 |
+| crypto   | 4H   | extra alerts only                            |      177 |      110 |      48 |     -20.4 |        -0.185 |     -63   |        -0.572 |
+| crypto   | 1D   | live: one alert per zone                     |       35 |       30 |      68 |      12.5 |         0.416 |      35.3 |         1.178 |
+| crypto   | 1D   | re-arm: again after price left and came back |       89 |       70 |      60 |      16.8 |         0.239 |      61.6 |         0.881 |
+| crypto   | 1D   | extra alerts only                            |       54 |       40 |      54 |       4.3 |         0.107 |      26.3 |         0.658 |
+| crypto   | 1W   | live: one alert per zone                     |        5 |        3 |     100 |      -0   |        -0.008 |      -0.1 |        -0.039 |
+| crypto   | 1W   | re-arm: again after price left and came back |       10 |        8 |      80 |       0.9 |         0.115 |      33   |         4.125 |
+| crypto   | 1W   | extra alerts only                            |        5 |        5 |      67 |       0.9 |         0.189 |      33.1 |         6.623 |
+| crypto   | 1M   | live: one alert per zone                     |        1 |        1 |     nan |      -0   |        -0.002 |      -0   |        -0.039 |
+| crypto   | 1M   | re-arm: again after price left and came back |        1 |        1 |     nan |      -0   |        -0.002 |      -0   |        -0.039 |
+| nse      | 4H   | live: one alert per zone                     |      334 |      240 |      41 |     -46.1 |        -0.192 |     -95.6 |        -0.398 |
+| nse      | 4H   | re-arm: again after price left and came back |      631 |      462 |      45 |     -51.7 |        -0.112 |    -104.9 |        -0.227 |
+| nse      | 4H   | extra alerts only                            |      297 |      222 |      50 |      -5.5 |        -0.025 |      -9.3 |        -0.042 |
+| nse      | 1D   | live: one alert per zone                     |      164 |      128 |      46 |      -8.5 |        -0.066 |     -47.4 |        -0.37  |
+| nse      | 1D   | re-arm: again after price left and came back |      351 |      269 |      42 |     -34.3 |        -0.127 |    -122.3 |        -0.455 |
+| nse      | 1D   | extra alerts only                            |      187 |      141 |      40 |     -25.8 |        -0.183 |     -74.9 |        -0.531 |
+| nse      | 1W   | live: one alert per zone                     |       30 |       15 |      33 |      -8.3 |        -0.554 |     -56.3 |        -3.753 |
+| nse      | 1W   | re-arm: again after price left and came back |       58 |       29 |      35 |     -13.6 |        -0.468 |     -77   |        -2.655 |
+| nse      | 1W   | extra alerts only                            |       28 |       14 |      36 |      -5.3 |        -0.376 |     -20.7 |        -1.479 |
+| nse      | 1M   | live: one alert per zone                     |       10 |        5 |       0 |      -4.1 |        -0.816 |     -42.3 |        -8.466 |
+| nse      | 1M   | re-arm: again after price left and came back |       14 |        6 |       0 |      -4.1 |        -0.681 |     -42.4 |        -7.061 |
+| nse      | 1M   | extra alerts only                            |        4 |        1 |     nan |      -0   |        -0.003 |      -0   |        -0.036 |
