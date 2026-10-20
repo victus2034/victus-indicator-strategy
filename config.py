@@ -512,6 +512,17 @@ FIB_TL_TIMEFRAMES = [
 # -33.8R / 131 trades, Zone 2 only -4.6R / 47; NSE -151.7R / 394 vs -71.7R / 151
 # (NSE's Zone 2 is worse per trade, -0.49R vs -0.33R - kept on his call).
 FIB_ALERT_ZONES = (2,)
+# Which fib levels alert, per timeframe (lakky, 2026-10-20, "for testing"): L1/L2 are the weaker
+# box's near/far edge, L3/L4 the stronger box's; each level alerts once, on its own entry, with
+# the fib's one stop (FIB_SL_HEIGHT_PCT beyond L4). L3 is the old alert and keeps its key. Sep 1 -
+# Oct 20 replay (research/fib_levels_all_backtest.py, part fib-levels-all): crypto 4H -0.03R -> -0.14R
+# a trade, 1D +0.42R -> +0.07R; NSE worse; L4 and 1W/1M L1-L2 the weakest. Empty = L3 only.
+FIB_ALERT_LEVELS = {
+    "4h": ("L2", "L3", "L4"),
+    "1d": ("L1", "L2", "L3", "L4"),
+    "1w": ("L1", "L2", "L3", "L4"),
+    "1M": ("L1", "L2", "L3", "L4"),
+}
 # Fib stop = the support/resistance zone rule (Lakky, 2026-10-08, Notion 20):
 # ZONE_SL_HEIGHT_PCT (25%) of the fib box's height beyond its far edge, in place
 # of the inner fib's 0.55 line inside the box. Sep 1 - Oct 8, deeper zone only

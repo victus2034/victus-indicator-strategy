@@ -56,8 +56,8 @@ def geometry(record):
     if record.get("kind") != "fib":
         return None
     parts = str(record.get("key") or record.get("id", "")).split("@")[0].split("|")
-    if len(parts) < 7 or parts[0] != "fib":
-        return None
+    if len(parts) != 7 or parts[0] != "fib":
+        return None      # an L1/L2/L4 alert (key ends |Lx, 2026-10-20) is its own level: no what-ifs
     try:
         origin, top, zone = int(float(parts[4])), float(parts[5]), int(float(parts[6]))
         entry = float(record["plan"]["entry"])

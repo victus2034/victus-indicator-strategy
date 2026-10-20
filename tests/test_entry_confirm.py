@@ -777,6 +777,8 @@ class FibTrendlineSourceTests(unittest.TestCase):
         [fib] = self._load([self._row(price=100.5)])
         fib_line = entry_confirm.format_line(entry_confirm.STAGE_READY, 100.5, fib)
         self.assertTrue(fib_line.startswith("`BTC` BUY · **1D FIB L3** · 100.5"), fib_line)
+        [l4] = self._load([self._row(price=100.5, level="L4")])
+        self.assertIn("**1D FIB L4**", entry_confirm.format_line(entry_confirm.STAGE_READY, 100.5, l4))
 
     def test_a_fib_sent_with_price_already_through_its_entry_is_not_watched(self):
         # BNB 1M, 2026-10-12: entry 838.05 sent with price at 751.92, inside the

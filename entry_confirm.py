@@ -333,6 +333,7 @@ def load_fib_tl_alerts(
             "timeframe": timeframe,
             "side": plan["side"],
             "kind": row["kind"],
+            "level": row.get("level") or "L3",
             "_entry": entry,
             "_stop": stop,
             "_delivered": delivered,
@@ -602,7 +603,7 @@ def format_line(stage: int, price: float, record: dict, note: str = "") -> str:
         # edges are L1-L4 from the one price reaches first: L1/L2 the weaker
         # box, L3/L4 the stronger. The bot enters at the stronger box's near
         # edge, L3.
-        level = " L3" if record.get("kind") == "fib" else ""
+        level = f" {record.get('level') or 'L3'}" if record.get("kind") == "fib" else ""
         head = f"`{symbol}` {side} · **{TF_LABEL.get(record.get('timeframe'), record.get('timeframe'))} {kind}{level}**"
     else:
         head = f"`{symbol}` {side}{score_text}"
