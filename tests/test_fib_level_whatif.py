@@ -69,3 +69,8 @@ def test_non_fib_records_are_left_alone():
     tl = dict(RECORD, kind="trendline", key="tl|X|4h|1|1|2")
     assert flw.geometry(tl) is None
     assert flw.score_levels([tl], {}, T0, fetch=lambda *a: []) == {}
+
+
+def test_a_level_alert_is_not_given_what_ifs():
+    # 2026-10-20: L1/L2/L4 alert on their own (key ends |Lx), so they have no L1/L2/L4 what-ifs
+    assert flw.geometry(dict(RECORD, key=RECORD["key"] + "|L4")) is None

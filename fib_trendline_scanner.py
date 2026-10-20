@@ -7,7 +7,7 @@ Discord sender.
 
 - Fib alerts (DISCORD_FIB_WEBHOOK_URL): price is within FIB_TL_MAX_DISTANCE_PCT
   (0.75%) of the live fib's deeper (strong) zone, down to its near edge
-  (FIB_ALERT_ZONES; fib_engine.py). Stop = the S/R zone rule. Once per zone per
+  (FIB_ALERT_LEVELS since 2026-10-20: 4H L2-L4, 1D+ L1-L4; fib_engine.py). Stop = the S/R zone rule. Once per zone per
   fib - a new top or base is a new fib and can alert again.
 - Trendline alerts (DISCORD_TRENDLINE_WEBHOOK_URL): price is within the same
   0.75% of a live trendline (indicator v12.6 anchors, trendlines.py), or a
@@ -52,7 +52,8 @@ from config import (
     CRYPTO_WATCHLIST,
     DISCORD_FIB_WEBHOOK_URL,
     DISCORD_TRENDLINE_WEBHOOK_URL,
-    FIB_ALERT_ZONES,
+    FIB_ALERT_LEVELS,
+    FIB_ALERT_ZONES,  # noqa: F401 - the backtest test compares it
     FIB_SL_HEIGHT_PCT,
     FIB_SWING_LENGTH,
     FIB_TL_MAX_DISTANCE_PCT,
@@ -162,6 +163,32 @@ def fib_zones(d, base, top):
         zone["sl"] = zone["low"] - pad if d == 1 else zone["high"] + pad
     zone1, zone2 = (upper, lower) if d == 1 else (lower, upper)
     return [dict(zone=1, **zone1), dict(zone=2, **zone2)]
+
+
+def fib_legs(d, base, top, tf):
+    """[(level, zone)] this timeframe alerts at (FIB_ALERT_LEVELS, lakky 2026-10-20).
+
+    L1/L2 are the weaker box's near/far edge, L3/L4 the stronger box's. Every leg shares the
+    strong box's stop. A near edge (L1, L3) alerts from anywhere in its box down to the edge; a far
+    edge (L2, L4) is a single price, so only the approach to it alerts. Without a setting for
+    the timeframe it is the old rule: L3 only."""
+    zones = {z["zone"]: z for z in fib_zones(d, base, top)}
+    stop = zones[2]["sl"]
+    legs = []
+    for level in FIB_ALERT_LEVELS.get(tf, ("L3",)):
+        src = zones[1] if level in ("L1", "L2") else zones[2]
+        if level in ("L1", "L3"):
+            legs.append((level, dict(src, sl=stop)))
+        else:
+            far = src["low"] if d == 1 else src["high"]
+            legs.append((level, dict(src, low=far, high=far, entry=far, sl=stop)))
+    return legs
+
+
+def fib_level_key(symbol, tf, d, origin, top, level, zone):
+    """L3 keeps the key every fib alert has had (one per zone); the others get the level on the end."""
+    key = f"fib|{symbol}|{tf}|{d}|{origin}|{top}|{zone}"
+    return key if level == "L3" else f"{key}|{level}"
 
 
 def fib_distance(d, zone, price):
@@ -354,16 +381,14 @@ def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=No
     d, base, top = live["d"], live["O"], live["E"]
     inside_box = base < price < top if d == 1 else top < price < base
     if inside_box and base != top:
-        for zone in fib_zones(d, base, top):
-            if zone["zone"] not in FIB_ALERT_ZONES:
-                continue
+        for level, zone in fib_legs(d, base, top, tf):
             distance = fib_distance(d, zone, price)
             reached = fib_distance(d, zone, band_price(d == 1, price, swept))
             if (distance is not None and in_band(reached)
                     and not entry_already_touched(d, zone, price, forming)):
                 result["fib"].append({
-                    **zone, "key": f"fib|{symbol}|{tf}|{d}|{times[live['Ot']]}|{top}|{zone['zone']}",
-                    "d": d, "base": base, "top": top, "distance": distance,
+                    **zone, "key": fib_level_key(symbol, tf, d, times[live["Ot"]], top, level, zone["zone"]),
+                    "level": level, "d": d, "base": base, "top": top, "distance": distance,
                     "plan": trades.fib_plan(d, zone),
                 })
 
@@ -446,9 +471,10 @@ def format_fib_alert(market, symbol, tf, price, z, name=None):
     """Three lines (lakky, 2026-10-12): the zone edges stay in the record
     (fib_levels), off the message - the chart shows them. name: the title's symbol text."""
     side = "BUY" if z["d"] == 1 else "SELL"
+    level = z.get("level") or "L3"
     name = name or display(market, symbol)
     return (
-        f"{_header(market, tf, f'{name} · FIB L3 · {side}', side)}\n"
+        f"{_header(market, tf, f'{name} · FIB {level} · {side}', side)}\n"
         f"Price {price_text(price)} · {z['distance']:.2f}% away\n"
         f"Entry {price_text(z['entry'])} · SL {price_text(z['sl'])} ({trades.risk_pct(z['plan']):.2f}%)"
         f" · TP {price_text(trades.target_price(z['plan']))} (1R)"
@@ -585,7 +611,7 @@ def plan_alerts(state, market, symbol, tf, analysis, now, last_scan=None):
         if z["key"] not in state:
             record = {**base, "kind": "fib", "plan": z["plan"], "zone": z["zone"],
                       "base": z["base"], "top": z["top"], "levels": fib_levels(z["d"], z["base"], z["top"]),
-                      "level": "L3" if z["zone"] == 2 else "L1"}
+                      "level": z.get("level", "L3")}
             warning = risk_warning(market, symbol, z["plan"]["side"], analysis.get("risk"))
             if warning:
                 record["warning"] = warning

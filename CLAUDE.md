@@ -428,6 +428,12 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   Now each card adds `CLOSED SINCE LAST CARD (earlier alerts)`: earlier filled alerts closed since the last card,
   by timeframe, each shown once (`reported` in the results file; `fib_trendline_daily_report.CLOSED_SINCE`, nothing
   that closed before 19 Oct 09:00 IST is dumped). The history replay already scored 1W/1M; tables fold them into 1D+.
+- **Every fib level alerts (2026-10-20, lakky, BTW 4H, "for testing").** `FIB_ALERT_LEVELS`: 4H L2-L4, 1D/1W/1M L1-L4,
+  crypto and NSE; each level once, on its own entry, with the fib's one stop (`fib_trendline_scanner.fib_legs`). L3 keeps
+  its old key; others end `|L1` / `|L2` / `|L4`. Title and entry confirm name the level; L1/L2/L4 alerts get no what-ifs.
+  No repeats - the "again after 4h if touched" rule was backtested and made it worse (`research/fib_l3_l4_backtest.py`,
+  `fib_levels_all_backtest.py`, parts `fib-l3l4`, `fib-levels-all`). Sep 1 - Oct 20, per trade: crypto 4H -0.03R -> -0.14R,
+  1D +0.42R -> +0.07R, NSE worse at every level. BTW's 20 Oct drop to L4 had no alert because L3 had alerted on 16 Oct (one per zone).
 - **Fib what-ifs at L1 / L2 / L4 (2026-10-19, lakky).** The bot enters fibs at L3 only; once a day the fib report
   also scores each fib alert as if it had been sent at L1, L2 and L4 (`fib_level_whatif.py`): same stop as the
   alert, the level's own 0.75% band moment after the fib's top, then `trades.simulate`. Results go to

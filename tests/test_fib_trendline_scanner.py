@@ -155,6 +155,75 @@ class DeeperZoneOnlyTests(unittest.TestCase):
         self.assertEqual(ftb.ALERT_ZONES, fts.FIB_ALERT_ZONES)
 
 
+class FibLevelAlertTests(unittest.TestCase):
+    """lakky, 2026-10-20: every fib level alerts - L1-L4 on 1D and up, L2-L4 on 4H - once each."""
+
+    def levels(self, d, price, tf="4h"):
+        base, top = (90.0, 110.0) if d == 1 else (110.0, 90.0)
+        snap = {"d": d, "O": base, "E": top, "Ot": 0, "Et": 20}
+        candles = [[i * 14400, 100.0, 111.0, 89.0, 100.0] for i in range(60)]
+        with mock.patch.object(fts.fib_engine, "run", return_value=([snap] * 60, [])), \
+                mock.patch.object(fts, "build_trendlines", return_value=[]):
+            got = fts.analyse(ftd.CRYPTO, "BTCUSD", tf, candles, 10**10, price=price)["fib"]
+        return {z["level"]: z for z in got}
+
+    def edges(self, d):
+        return fts.fib_levels(d, *((90.0, 110.0) if d == 1 else (110.0, 90.0)))
+
+    def test_a_buy_alerts_each_level_on_its_approach(self):
+        e = self.edges(1)
+        self.assertEqual(list(self.levels(1, e["L1"] * 1.004, "1d")), ["L1"])
+        self.assertEqual(list(self.levels(1, e["L2"] * 1.004, "1d")), ["L2"])
+        self.assertEqual(list(self.levels(1, e["L3"] * 1.004, "1d")), ["L3"])
+        self.assertEqual(list(self.levels(1, e["L4"] * 1.004, "1d")), ["L4"])
+
+    def test_a_sell_mirrors_it(self):
+        e = self.edges(-1)
+        for level in ("L1", "L2", "L3", "L4"):
+            self.assertEqual(list(self.levels(-1, e[level] * 0.996, "1d")), [level], level)
+
+    def test_4h_has_no_l1(self):
+        e = self.edges(1)
+        self.assertEqual(self.levels(1, e["L1"] * 1.004, "4h"), {})
+        self.assertEqual(list(self.levels(1, e["L2"] * 1.004, "4h")), ["L2"])
+
+    def test_every_level_trades_its_own_entry_with_the_strong_boxs_stop(self):
+        e = self.edges(1)
+        stop = zones_by_number(1, 90.0, 110.0)[2]["sl"]
+        for level in ("L2", "L4"):
+            z = self.levels(1, e[level] * 1.004, "1d")[level]
+            self.assertAlmostEqual(z["plan"]["entry"], e[level])
+            self.assertAlmostEqual(z["plan"]["sl"], stop)
+        self.assertAlmostEqual(self.levels(1, e["L1"] * 1.004, "1d")["L1"]["plan"]["entry"], e["L1"])
+
+    def test_l3_keeps_its_old_key_and_the_others_get_the_level(self):
+        e = self.edges(1)
+        l3 = self.levels(1, e["L3"] * 1.004)["L3"]["key"]
+        self.assertTrue(l3.endswith("|2"), l3)
+        self.assertTrue(self.levels(1, e["L4"] * 1.004)["L4"]["key"].endswith("|2|L4"))
+        self.assertTrue(self.levels(1, e["L2"] * 1.004)["L2"]["key"].endswith("|1|L2"))
+
+    def test_past_the_far_edge_is_no_alert(self):
+        self.assertNotIn("L4", self.levels(1, self.edges(1)["L4"] * 0.999))
+
+    def test_the_title_and_record_name_the_level(self):
+        z = self.levels(1, self.edges(1)["L4"] * 1.004)["L4"]
+        self.assertIn("FIB L4", fts.format_fib_alert(ftd.CRYPTO, "BTCUSD", "4h", 100.0, z))
+        planned = fts.plan_alerts({}, ftd.CRYPTO, "BTCUSD", "4h", {"fib": [z], "touch": [], "break": [], "price": 100.0}, 10**9)
+        self.assertEqual(planned[0][3]["level"], "L4")
+
+    def test_an_old_alert_is_not_sent_again(self):
+        e = self.edges(1)
+        z = self.levels(1, e["L3"] * 1.004)["L3"]
+        state = {z["key"]: {"seen": 1, "sent": 1}}
+        planned = fts.plan_alerts(state, ftd.CRYPTO, "BTCUSD", "4h", {"fib": [z], "touch": [], "break": [], "price": 100.0}, 10**9)
+        self.assertEqual(planned, [])
+
+    def test_no_setting_for_a_timeframe_is_the_old_l3_only_rule(self):
+        with mock.patch.object(fts, "FIB_ALERT_LEVELS", {}):
+            self.assertEqual([lv for lv, _ in fts.fib_legs(1, 90.0, 110.0, "4h")], ["L3"])
+
+
 class DistanceBandTests(unittest.TestCase):
     """Shiva: alerts from 0.75% away down to 0.00% (1.5% at first)."""
 

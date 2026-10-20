@@ -38,6 +38,7 @@ from config import (
     FIB_TL_ENTRY_WAIT_BARS,
     FIB_TL_MAX_DISTANCE_PCT,
     FIB_TL_MAX_HOLD_BARS,
+    REARM_FACTOR,
     TRENDLINE_SL_PCT,
     TRENDLINE_SWING_LENGTH,
     TRENDLINES_KEEP,
@@ -65,6 +66,15 @@ TL_SKIP_TOUCHED_ENTRY = True
 # -> the first time price was in [lo, hi] within [start, end) on finer candles, or None.
 # None here = the eval candle's own range decides, as always.
 BAND_PROBE = None
+# Research hook (research/fib_rearm_backtest.py): a fib zone that already alerted alerts again
+# once price has left its band by REARM_FACTOR and come back. Live: one alert per zone.
+FIB_REARM = False
+# Research hook (lakky, 2026-10-20): also alert at L4, the strong box's far edge, as its own level,
+# and wait FIB_REPEAT_WAIT seconds before repeating a level whose last alert touched the entry.
+FIB_L4 = False
+FIB_REPEAT_WAIT = 0
+# Research hook (lakky, 2026-10-20): {timeframe: ("L1".."L4")} - which fib levels alert; overrides ALERT_ZONES and FIB_L4.
+FIB_LEVELS = None
 
 
 # ----------------------------------------------------------------- data (cached per day)
@@ -189,55 +199,92 @@ def replay(market, symbol, tf, base, evalc, now):
 
     stamp = [str(t) for t in times]
     snaps, _ = fib_engine.run(stamp, highs, lows, N=FIB_SWING_LENGTH)
-    fired = set()
+    fired, spent, last = set(), set(), {}
     for i in range(first, n):
         s = snaps[i - 1]
         d, base_px, top = s["d"], s["O"], s["E"]
         if base_px == top:
             continue
         e0, e1 = bar_slice(i)
-        for zone in fib_zones(d, base_px, top):
-            if zone["zone"] not in ALERT_ZONES:
-                continue
-            key = (d, times[s["Ot"]], top, zone["zone"])
-            if key in fired:
-                continue
-            lo_band = zone["low"] if d == 1 else zone["low"] * (1 - BAND)
-            hi_band = zone["high"] * (1 + BAND) if d == 1 else zone["high"]
-            entry = zone["entry"]
-            for k in range(e0, e1):
-                ts, _o, h, l, _c = evalc[k]
-                if (l <= base_px) if d == 1 else (h >= base_px):
-                    break                    # the fib died inside this bar
-                if SKIP_TOUCHED_ENTRY and ((_o < entry) if d == 1 else (_o > entry)):
-                    break                    # this candle already reached the entry (entry_already_touched)
-                outside = l > hi_band or h < lo_band
-                band_ts = None
-                if not outside and BAND_PROBE is not None:
-                    end = evalc[k + 1][0] if k + 1 < len(evalc) else ts + eval_seconds
-                    band_ts = BAND_PROBE(market, symbol, ts, end, lo_band, hi_band)
-                    outside = band_ts is None
-                if held(ts) or outside:
-                    if SKIP_TOUCHED_ENTRY and ((l < entry) if d == 1 else (h > entry)):
-                        break
+        zs = {z["zone"]: z for z in fib_zones(d, base_px, top)}
+        legs = []
+        if FIB_LEVELS:
+            # L1/L2 = the weaker box's near/far edge, L3/L4 = the strong box's; one stop for all (the strong box's)
+            for name in FIB_LEVELS.get(tf, ()):
+                src = zs[1] if name in ("L1", "L2") else zs[2]
+                far = src["low"] if d == 1 else src["high"]
+                near = src["entry"]
+                legs.append((name, dict(src, entry=near if name in ("L1", "L3") else far, sl=zs[2]["sl"])))
+        else:
+            for zone0 in zs.values():
+                if zone0["zone"] not in ALERT_ZONES:
                     continue
-                if trades.already_stopped(trades.fib_plan(d, zone), _c):
-                    # The live scanner sends nothing once price is through
-                    # the stop (fib_trendline_scanner.fib_distance); this
-                    # candle closed there, so it is not an alert either.
-                    if SKIP_TOUCHED_ENTRY:
-                        break
-                    continue
-                fired.add(key)
-                clock = TouchClock(s["Et"])
-                for j in range(s["Et"] + 1, i):
-                    clock.feed(j, highs[j] >= zone["low"] and lows[j] <= zone["high"])
-                features = {"swing_gap": s["Et"] - s["Ot"], "age": i - s["Et"],
-                            "quiet": clock.quiet(i), "max_streak": clock.max_streak}
-                out.append(trade("fib", trades.fib_plan(d, zone), k,
-                                 {"zone": zone["zone"], "fib_id": f"{symbol}|{tf}|{d}|{times[s['Ot']]}|{top}",
-                                  "band_ts": band_ts, **features}))
-                break
+                legs.append(("L3", zone0))
+                if FIB_L4:
+                    # L4 is the strong box's far edge: its own entry, the same stop (lakky, 2026-10-20)
+                    legs.append(("L4", dict(zone0, entry=zone0["low"] if d == 1 else zone0["high"])))
+        if True:
+            for leg, zone in legs:
+                key = (d, times[s["Ot"]], top, leg if FIB_LEVELS else zone["zone"], leg)
+                if leg in ("L1", "L3"):
+                    lo_band = zone["low"] if d == 1 else zone["low"] * (1 - BAND)
+                    hi_band = zone["high"] * (1 + BAND) if d == 1 else zone["high"]
+                    ref_hi, ref_lo = zone["high"], zone["low"]
+                else:
+                    lo_band = zone["entry"] if d == 1 else zone["entry"] * (1 - BAND)
+                    hi_band = zone["entry"] * (1 + BAND) if d == 1 else zone["entry"]
+                    ref_hi = ref_lo = zone["entry"]
+                entry = zone["entry"]
+                if key in fired:
+                    if not FIB_REARM:
+                        continue
+                    away = 1 + BAND * REARM_FACTOR
+                    if key in spent:
+                        # re-arm once a candle sat wholly beyond the band by REARM_FACTOR on the approach side
+                        if any((evalc[k][3] > ref_hi * away) if d == 1 else (evalc[k][2] < ref_lo / away)
+                               for k in range(e0, e1)):
+                            spent.discard(key)
+                        continue
+                for k in range(e0, e1):
+                    ts, _o, h, l, _c = evalc[k]
+                    if (l <= base_px) if d == 1 else (h >= base_px):
+                        break                    # the fib died inside this bar
+                    if SKIP_TOUCHED_ENTRY and ((_o < entry) if d == 1 else (_o > entry)):
+                        break                    # this candle already reached the entry (entry_already_touched)
+                    outside = l > hi_band or h < lo_band
+                    band_ts = None
+                    if not outside and BAND_PROBE is not None:
+                        end = evalc[k + 1][0] if k + 1 < len(evalc) else ts + eval_seconds
+                        band_ts = BAND_PROBE(market, symbol, ts, end, lo_band, hi_band)
+                        outside = band_ts is None
+                    if held(ts) or outside:
+                        if SKIP_TOUCHED_ENTRY and ((l < entry) if d == 1 else (h > entry)):
+                            break
+                        continue
+                    if trades.already_stopped(trades.fib_plan(d, zone), _c):
+                        # The live scanner sends nothing once price is through
+                        # the stop (fib_trendline_scanner.fib_distance); this
+                        # candle closed there, so it is not an alert either.
+                        if SKIP_TOUCHED_ENTRY:
+                            break
+                        continue
+                    if FIB_REPEAT_WAIT and key in fired and key in last and last[key][1] \
+                            and ts < last[key][0] + FIB_REPEAT_WAIT:
+                        continue             # the last alert of this level touched: wait before the next one
+                    fired.add(key)
+                    spent.add(key)
+                    clock = TouchClock(s["Et"])
+                    for j in range(s["Et"] + 1, i):
+                        clock.feed(j, highs[j] >= zone["low"] and lows[j] <= zone["high"])
+                    features = {"swing_gap": s["Et"] - s["Ot"], "age": i - s["Et"],
+                                "quiet": clock.quiet(i), "max_streak": clock.max_streak}
+                    got = trade("fib", trades.fib_plan(d, zone), k,
+                                {"zone": zone["zone"], "level": leg,
+                                 "fib_id": f"{symbol}|{tf}|{d}|{times[s['Ot']]}|{top}",
+                                 "band_ts": band_ts, **features})
+                    last[key] = (ts, got["result"]["filled"])
+                    out.append(got)
+                    break
 
     for line in build_trendlines(highs, lows, closes, TRENDLINE_SWING_LENGTH, TRENDLINES_KEEP, history=True):
         last = min(x for x in (line.broken_at, line.trimmed_at, n - 1) if x is not None)
