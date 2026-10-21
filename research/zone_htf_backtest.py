@@ -117,7 +117,8 @@ def replay(market, symbol, tf, base, evalc, daily, since, now):
                         break
                     touched, past, far = h >= entry * (1 - band), o > entry, (entry - c) / c > rearm
                 if touched:
-                    due = (not st["in_zone"]) or ts - st["last"] >= config.ALERT_COOLDOWN_SECONDS
+                    # as live plan_alerts: re-alert only after leaving the re-arm band AND the 4h cooldown
+                    due = (not st["in_zone"]) and ts - st["last"] >= config.ALERT_COOLDOWN_SECONDS
                     awake = market != CRYPTO or not fbt.crypto_held(ts, eval_secs)
                     against = trend_filter and scanner.against_daily_trend(zone_type, daily_trend_at(daily, ts))
                     if due and not past and awake and not against \
