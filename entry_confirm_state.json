@@ -89,6 +89,10 @@
     "stage": 2,
     "stopped_out": false
   },
+  "ANTHEM.NS|1d|long|792.916|784.1": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "ANTHEM.NS|1d|long|814.467|802.2": {
     "reached_entry": true,
     "stage": 3,
@@ -249,8 +253,8 @@
     "stopped_out": false
   },
   "CGCL.NS|1d|long|239.32|235.49": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "CHALET.NS|1M|long|835.627|774.034": {
@@ -392,6 +396,11 @@
     "stage": 1,
     "stopped_out": false
   },
+  "FINCABLES.NS|1M|long|1226.95|949.925": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "FINCABLES.NS|1d|long|1327.12|1284.16": {
     "reached_entry": true,
     "stage": 3,
@@ -415,6 +424,11 @@
   "GILLETTE.NS|1w|short|7138.76|7307": {
     "reached_entry": true,
     "stage": 2,
+    "stopped_out": false
+  },
+  "GLAND.NS|1d|long|2921.12|2910.71": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "GLAND.NS|1d|long|2962.77|2910.71": {
@@ -982,6 +996,7 @@
   },
   "SUIUSD|1d|long|1.01535|0.867387": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "TAOUSD|1w|short|277.335|415.206": {
@@ -1301,6 +1316,7 @@
   "_level_ready|FACT.NS|1d|long|710.167|669": 1792556798.737244,
   "_level_ready|FACT.NS|1w|long|710.167|660.25": 1792556798.737244,
   "_level_ready|FACT.NS|1w|long|738.742|720.274": 1791517599.357562,
+  "_level_ready|FINCABLES.NS|1M|long|1226.95|949.925": 1792561314.210422,
   "_level_ready|FINCABLES.NS|1d|long|1327.12|1284.16": 1792381903.352906,
   "_level_ready|FINCABLES.NS|1d|long|1435.04|1413.52": 1791517599.357562,
   "_level_ready|FINCABLES.NS|1w|long|1254.74|1125.83": 1792556503.449216,
@@ -1314,6 +1330,7 @@
   "_level_ready|GILLETTE.NS|1d|short|7218.19|7326.47": 1791517599.357562,
   "_level_ready|GILLETTE.NS|1w|short|7138.76|7307": 1792036915.942614,
   "_level_ready|GILLETTE.NS|1w|short|7138.76|7317.22": 1791517599.357562,
+  "_level_ready|GLAND.NS|1d|long|2921.12|2910.71": 1792561314.210422,
   "_level_ready|GLAND.NS|1d|long|2962.77|2910.71": 1792554711.035895,
   "_level_ready|GLAXO.NS|1M|long|2647.66|2521.29": 1791517599.357562,
   "_level_ready|GLAXO.NS|1d|long|2552.77|2410.79": 1791776795.761218,
@@ -1718,6 +1735,7 @@
   "_level_ready|SOXLBUSD|4h|short|156.25|157.062": 1790831162.701182,
   "_level_ready|SOXLBUSD|4h|short|166.964|168.634": 1790948798.588421,
   "_level_ready|SUIUSD|1d|long|0.95305|0.867387": 1792332704.009245,
+  "_level_ready|SUIUSD|1d|long|1.01535|0.867387": 1792561314.210422,
   "_level_ready|TACUSD|30m|long|0.00148075|0.00146606": 1790566580.565131,
   "_level_ready|TACUSD|30m|long|0.001502|0.00148825": 1791012695.995822,
   "_level_ready|TACUSD|30m|long|0.00152|0.00151625": 1790936482.523706,
@@ -1993,6 +2011,7 @@
   "_ready|EXIDEIND.NS|1w": 1792556503.449216,
   "_ready|FACT.NS|1d": 1792556798.737244,
   "_ready|FACT.NS|1w": 1792556798.737244,
+  "_ready|FINCABLES.NS|1M": 1792561314.210422,
   "_ready|FINCABLES.NS|1d": 1792381903.352906,
   "_ready|FINCABLES.NS|1w": 1792556503.449216,
   "_ready|FLUOROCHEM.NS|1d": 1792558566.875195,
@@ -2001,7 +2020,7 @@
   "_ready|GABRIEL.NS|1d": 1791518192.370228,
   "_ready|GILLETTE.NS|1d": 1791517599.357562,
   "_ready|GILLETTE.NS|1w": 1792036915.942614,
-  "_ready|GLAND.NS|1d": 1792554711.035895,
+  "_ready|GLAND.NS|1d": 1792561314.210422,
   "_ready|GLAXO.NS|1M": 1791517599.357562,
   "_ready|GLAXO.NS|1d": 1791776795.761218,
   "_ready|GLAXO.NS|1w": 1791776795.761218,
@@ -2165,7 +2184,7 @@
   "_ready|SOXLBUSD|30m": 1791448595.362661,
   "_ready|SOXLBUSD|4h": 1790948798.588421,
   "_ready|STORJ/USDT|30m": 1788930963.585849,
-  "_ready|SUIUSD|1d": 1792332704.009245,
+  "_ready|SUIUSD|1d": 1792561314.210422,
   "_ready|TACUSD|30m": 1791167791.577911,
   "_ready|TACUSD|4h": 1790566885.398299,
   "_ready|TAOUSD|1d": 1791984098.48866,
