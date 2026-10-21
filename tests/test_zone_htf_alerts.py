@@ -90,3 +90,12 @@ def test_daily_report_has_a_zone_card():
               "half": False, "resolved": True}
     cards = report.build_report(report.ist_date(record["sent_ts"]), [record], {"z@1": result})
     assert len(cards) == 1 and cards[0].startswith("S/R ZONE 1D+ BACKTEST")
+
+
+def test_1w_and_1m_zones_alert_from_3_percent(candles):
+    """lakky (2026-10-21): 1W / 1M alert from 3% away (config.EARLY_ALERT_BAND_PCT), 1D stays 0.20%."""
+    for tf in ("1w", "1M"):
+        zones = fts.zone_candidates("HYPEUSD", tf, candles, 52.9, None)     # 2.7% above entry 51.5
+        assert [(z["entry"], z["alert"]) for z in zones if z["zone_type"] == "demand"] == [(51.5, True)]
+        assert not any(z["alert"] for z in fts.zone_candidates("HYPEUSD", tf, candles, 53.2, None))   # 3.3%
+    assert fts.zone_candidates("HYPEUSD", "1d", candles, 52.9, None) == []
