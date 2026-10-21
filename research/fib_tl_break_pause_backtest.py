@@ -1,10 +1,11 @@
-"""Research only (lakky, 2026-10-21): pause fib L1 / L2 alerts for an hour after a 4H trendline break.
+"""Research only (lakky, 2026-10-21): pause fib L1 / L2 alerts after a 4H trendline break - 1h, 4h, 1 day.
 
   live      the live rules: 4H fibs at L2-L4, 1D/1W/1M at L1-L4, each level once.
   pause     after a 4H TL BROKEN on the same symbol, that side's L1/L2 send nothing for PAUSE_SECONDS
             from the break candle's close (a broken support pauses BUY, a broken resistance SELL), on every
-            fib timeframe. A level still in its band after the hour alerts then.
-  skip      the same, but a level that would have alerted inside the hour is dropped for good.
+            fib timeframe. A level still in its band after the pause alerts then.
+  skip      the same, but a level that would have alerted inside the pause is dropped for good.
+Each is run with a 1h, 4h and 1 day pause (lakky: "try a longer pause").
 
 The band inside a coarse candle (1D crypto on 4h, 1W/1M on 1d) is read off 1h candles, so the hour is an hour.
 Sep 1 to now, net after fees; trades filled within 15 min of a US CPI / PPI / FOMC release left out.
@@ -33,9 +34,9 @@ from trail_fib_tl_backtest import news  # noqa: E402
 from trendlines import SUPPORT, build_trendlines  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "fib_tl_break_pause"
-PAUSE_SECONDS = 3600
+PAUSES = (("1h", 3600), ("4h", 4 * 3600), ("1d", 86400))
 GROUPS = (("4H", ("4h",)), ("1D+", ("1d", "1w", "1M")), ("1D", ("1d",)), ("1W", ("1w",)), ("1M", ("1M",)))
-MODE = {"name": "live"}
+MODE = {"name": "live", "seconds": 3600}
 CTX = {}            # (market, symbol) -> {"windows": [(start, end, d)], "fine": [1h candles]}
 COUNT = {"paused": 0, "skipped": 0}
 
@@ -54,7 +55,7 @@ def break_windows(market, base4h, now):
         if line.broken_at is None or line.broken_at < line.created:
             continue                       # never alerted: broken before it was drawn
         start = candle_close_ts(market, times[line.broken_at], "4h")
-        out.append((start, start + PAUSE_SECONDS, 1 if line.kind == SUPPORT else -1))
+        out.append((start, 1 if line.kind == SUPPORT else -1))
     return out
 
 
@@ -62,7 +63,8 @@ def pause(market, symbol, d, leg, ts, end, lo, hi):
     if MODE["name"] == "live" or leg not in ("L1", "L2"):
         return "ok", None
     ctx = CTX.get((market, symbol), {})
-    wins = [(a, b) for a, b, side in ctx.get("windows", ()) if side == d and a < end and b > ts]
+    span = MODE["seconds"]
+    wins = [(a, a + span) for a, side in ctx.get("windows", ()) if side == d and a < end and a + span > ts]
     if not wins:
         return "ok", None
     paused = lambda t: any(a <= t < b for a, b in wins)  # noqa: E731
@@ -122,8 +124,9 @@ def main() -> None:
     since = pd.Timestamp(args.since, tz=IST).timestamp()
     now = time.time()
     runs, counts = {}, {}
-    for label in ("live", "pause", "skip"):
-        MODE["name"] = label
+    modes = [("live", "live", 0)] + [(f"{kind} {name}", kind, sec) for name, sec in PAUSES for kind in ("pause", "skip")]
+    for label, kind, seconds in modes:
+        MODE.update(name=kind, seconds=seconds)
         COUNT.update(paused=0, skipped=0)
         items, breaks = replay_all(now)
         runs[label] = [t for t in items if t["alert_ts"] >= since and not news(t["result"].get("fill_ts"))]
@@ -140,12 +143,13 @@ def main() -> None:
                         rows.append({"market": market, "tf": group, "levels": scope, **row(label, pick)})
     df = pd.DataFrame(rows)
     df.to_csv(OUT / "summary.csv", index=False)
-    text = [f"# Fib L1/L2 paused 1h after a 4H trendline break ({args.since} to now)", "",
-            "live = today's rules. pause = after a 4H TL BROKEN, same-side L1/L2 wait an hour, then alert if "
+    text = [f"# Fib L1/L2 paused after a 4H trendline break (1h / 4h / 1 day) ({args.since} to now)", "",
+            "live = today's rules. pause = after a 4H TL BROKEN, same-side L1/L2 wait 1h / 4h / 1 day, then alert if "
             "still in band. skip = dropped instead. Net after fees, 2R + BE, crypto on Delta candles. "
             "Entries filled within 15 min of US CPI/PPI/FOMC left out.", "",
             f"4H breaks in the data (all history): crypto {n_breaks[CRYPTO]}, NSE {n_breaks[NSE]}. "
-            f"Candle checks paused: {counts['pause']['paused']}; levels dropped in skip: {counts['skip']['skipped']}.",
+            "Candle checks paused / levels dropped (all history): " + ", ".join(
+                f"{k} {v['paused'] or v['skipped']}" for k, v in counts.items() if k != "live") + ".",
             "", df.to_markdown(index=False), ""]
     (OUT / "FIB_TL_BREAK_PAUSE.md").write_text("\n".join(text))
     print("\n".join(text))
