@@ -105,6 +105,7 @@
   },
   "ANANTRAJ.NS|1w|long|476.385|358.506": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ANGELONE.NS|1d|long|292.145|284.706": {
@@ -373,8 +374,8 @@
     "stopped_out": false
   },
   "COLPAL.NS|1d|long|1709.82|1694": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "COROMANDEL.NS|1d|short|1776.49|1904.65": {
@@ -871,6 +872,7 @@
   },
   "KARURVYSYA.NS|1d|long|354.201|331.666": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "KAYNES.NS|1d|long|3156.7|3131": {
@@ -1172,6 +1174,7 @@
   },
   "PFOCUS.NS|1w|long|271.12|173.125": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PHOENIXLTD.NS|1w|long|1782.49|1685.66": {
@@ -1263,7 +1266,7 @@
   },
   "REDINGTON.NS|1d|long|366.26|352.95": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "RLCUSD|1d|long|0.80293|0.631687": {
@@ -1356,6 +1359,7 @@
   "_level_ready|ANANDRATHI.NS|1d|short|2179.52|2186.71": 1792554711.035895,
   "_level_ready|ANANTRAJ.NS|1d|long|573.89|565.282": 1791523580.066005,
   "_level_ready|ANANTRAJ.NS|1d|long|575|567.55": 1791782501.247733,
+  "_level_ready|ANANTRAJ.NS|1w|long|476.385|358.506": 1792574210.022882,
   "_level_ready|ANGELONE.NS|1d|long|292.145|284.706": 1792563106.160663,
   "_level_ready|ANGELONE.NS|1d|long|297.555|284.706": 1792557668.947444,
   "_level_ready|ANGELONE.NS|1d|short|296.981|301.435": 1791517599.357562,
@@ -1773,6 +1777,7 @@
   "_level_ready|KAJARIACER.NS|1d|long|1200.63|1197.91": 1792554711.035895,
   "_level_ready|KALYANKJIL.NS|1d|long|553.904|547.4": 1792468002.381626,
   "_level_ready|KALYANKJIL.NS|1w|long|559.287|524.912": 1791517599.357562,
+  "_level_ready|KARURVYSYA.NS|1d|long|354.201|331.666": 1792574210.022882,
   "_level_ready|KAYNES.NS|1d|long|3156.7|3131": 1792567003.648281,
   "_level_ready|KEI.NS|1M|long|4335.25|3509.94": 1792558293.591918,
   "_level_ready|KEI.NS|1w|long|4335.25|3509.94": 1792558293.591918,
@@ -1962,6 +1967,7 @@
   "_level_ready|PERSISTENT.NS|1d|short|5776.91|5852.5": 1792381599.217228,
   "_level_ready|PETRONET.NS|1d|short|295.686|300.121": 1791520595.664992,
   "_level_ready|PFOCUS.NS|1d|long|274.657|252.621": 1792565202.34434,
+  "_level_ready|PFOCUS.NS|1w|long|271.12|173.125": 1792574210.022882,
   "_level_ready|PFOCUS.NS|1w|long|271.12|257.161": 1791517599.357562,
   "_level_ready|PHOENIXLTD.NS|1w|long|1782.49|1747.63": 1791518192.370228,
   "_level_ready|PHOENIXLTD.NS|1w|long|1852.91|1685.66": 1792570303.131866,
@@ -2264,6 +2270,7 @@
   "_ready|ALKEM.NS|1w": 1792047712.804424,
   "_ready|ANANDRATHI.NS|1d": 1792554711.035895,
   "_ready|ANANTRAJ.NS|1d": 1791782501.247733,
+  "_ready|ANANTRAJ.NS|1w": 1792574210.022882,
   "_ready|ANGELONE.NS|1d": 1792563106.160663,
   "_ready|ANGELONE.NS|1w": 1792565202.34434,
   "_ready|ANTHEM.NS|1d": 1792567301.300214,
@@ -2454,6 +2461,7 @@
   "_ready|KAJARIACER.NS|1d": 1792554711.035895,
   "_ready|KALYANKJIL.NS|1d": 1792468002.381626,
   "_ready|KALYANKJIL.NS|1w": 1791517599.357562,
+  "_ready|KARURVYSYA.NS|1d": 1792574210.022882,
   "_ready|KAYNES.NS|1d": 1792567003.648281,
   "_ready|KEI.NS|1M": 1792558293.591918,
   "_ready|KEI.NS|1w": 1792558293.591918,
@@ -2530,7 +2538,7 @@
   "_ready|PERSISTENT.NS|1d": 1792381599.217228,
   "_ready|PETRONET.NS|1d": 1791520595.664992,
   "_ready|PFOCUS.NS|1d": 1792565202.34434,
-  "_ready|PFOCUS.NS|1w": 1791517599.357562,
+  "_ready|PFOCUS.NS|1w": 1792574210.022882,
   "_ready|PHOENIXLTD.NS|1w": 1792570303.131866,
   "_ready|PINELABS.NS|1d": 1792565477.881975,
   "_ready|PIRAMALFIN.NS|1d": 1792468002.381626,
