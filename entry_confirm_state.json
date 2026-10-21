@@ -38,7 +38,8 @@
     "stopped_out": true
   },
   "ABSLAMC.NS|1w|long|923.844|906.3": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "ABSLAMC.NS|1w|long|940.605|869.531": {
@@ -639,6 +640,11 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "HBLENGINE.NS|1d|long|778.55|745.062": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "HBLENGINE.NS|1d|long|794.06|745.062": {
     "reached_entry": true,
     "stage": 2,
@@ -934,8 +940,8 @@
     "stopped_out": false
   },
   "LTF.NS|1M|long|244.37|194.637": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "LTTS.NS|1d|short|3613.3|3652.7": {
@@ -1649,6 +1655,7 @@
   "_level_ready|HBLENGINE.NS|1M|long|727.65|692.159": 1791517599.357562,
   "_level_ready|HBLENGINE.NS|1d|long|730.9|694.875": 1791776795.761218,
   "_level_ready|HBLENGINE.NS|1d|long|730.9|717.931": 1791517599.357562,
+  "_level_ready|HBLENGINE.NS|1d|long|778.55|745.062": 1792572103.059467,
   "_level_ready|HBLENGINE.NS|1d|long|794.06|745.062": 1792563106.160663,
   "_level_ready|HBLENGINE.NS|1w|long|727.65|629.062": 1791777105.432083,
   "_level_ready|HBLENGINE.NS|1w|long|727.65|692.159": 1791517599.357562,
@@ -2372,7 +2379,7 @@
   "_ready|GRSE.NS|1w": 1792561911.6463,
   "_ready|GWEI/USDT|30m": 1789391158.458368,
   "_ready|HBLENGINE.NS|1M": 1791777105.432083,
-  "_ready|HBLENGINE.NS|1d": 1792563106.160663,
+  "_ready|HBLENGINE.NS|1d": 1792572103.059467,
   "_ready|HBLENGINE.NS|1w": 1791777105.432083,
   "_ready|HEXT.NS|1d": 1792555573.527481,
   "_ready|HEXT.NS|1w": 1792554996.80843,
