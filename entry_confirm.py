@@ -28,11 +28,19 @@ get is backfilled into the same digest, marked as having moved fast rather
 than printed as a live distance.
 
 The dispatch interval is meant to be 5 minutes but is not reliably that -
-real gaps of 20-40+ minutes happen. Stage detection therefore looks at the
-last couple of candles' range (sweep_extreme()), not only the live ticker's
-single point-in-time price, so a stage price touched and moved past before
-this run got to look is still caught. Messages still show the live price -
-only whether a stage has been reached looks at the swept range.
+real gaps of 20-40+ minutes happen. Stage detection therefore looks at every
+fine candle (crypto Bitunix 1m, NSE Yahoo 5m) since the later of the alert
+and the market's previous check (sweep_extreme()), not only the live price,
+so a wick that touched the entry between two checks is still caught - and a
+move from before the alert existed is not. Until 2026-10-21 NSE looked at the
+latest 15m close only and missed 16 wick fills in 9 days, and crypto swept a
+fixed hour that could reach back before the alert (lakky, 1D+ entry confirms
+missing; research/entry_confirm_audit.py).
+
+A fill that ran on past half the risk, or to the stop, before the next check
+still gets its ENTRY NOW line, with "filled since the last check" and the risk
+used (lakky, 2026-10-21). It used to be silent: 8 misses in 9 days, mostly
+tight-stop L4 fibs and trendlines.
 
 Every ping from one run goes out as a single digest. Posted one message
 per symbol, a busy run buried the channel under dozens of separate blocks
@@ -435,9 +443,29 @@ def price_decimals(value: float, market: str = "crypto") -> int:
 SWEEP_CANDLES = 2
 # Candles requested per symbol for the price check (see fetch_crypto_prices).
 PRICE_OHLCV_LIMIT = 50
+# The fine-candle sweep never reaches back further than this, whatever the
+# previous check: crypto sleeps 01:00-08:00 IST, so 12 hours covers the night.
+SWEEP_MAX_SECONDS = 12 * 3600
+LAST_CHECK_KEY = "_last_check|{market}"
 
 
-def fetch_crypto_prices(symbols: list[str]) -> dict[str, dict[str, float]]:
+def fine_rows(rows, seconds: int) -> dict:
+    """The price_info fields for a fine-candle sweep: [[open_ts, high, low], ...]."""
+    return {
+        "candles": [[int(r[0]), float(r[1]), float(r[2])] for r in rows],
+        "candle_seconds": int(seconds),
+    }
+
+
+def sweep_since(record: dict, state: dict, now: pd.Timestamp) -> float:
+    """Where this record's sweep starts: the later of its alert and its
+    market's previous check, never more than SWEEP_MAX_SECONDS back."""
+    sent = record["_delivered"].timestamp()
+    last = float(state.get(LAST_CHECK_KEY.format(market=record.get("_market", "")), 0.0) or 0.0)
+    return max(sent, last, now.timestamp() - SWEEP_MAX_SECONDS)
+
+
+def fetch_crypto_prices(symbols: list[str], since: dict[str, float] | None = None) -> dict[str, dict]:
     """Latest crypto price per symbol, plus the recent candle range swept.
 
     Each entry is {"price": ..., "recent_low": ..., "recent_high": ...} -
@@ -481,11 +509,28 @@ def fetch_crypto_prices(symbols: list[str]) -> dict[str, dict[str, float]]:
         # The live ticker can itself be beyond either candle boundary - it
         # runs ahead of the last closed candle - so fold it in rather than trusting the candles
         # alone to bound where price has actually been.
-        return {
+        info = {
             "price": float(price),
             "recent_low": min(recent_low, float(price)),
             "recent_high": max(recent_high, float(price)),
         }
+        start = (since or {}).get(symbol)
+        if start is not None:
+            # Bitunix 1m since the earliest sweep start of this symbol's records
+            # (sweep_since); the fixed two-candle range above is only the
+            # fallback for symbols Bitunix does not carry (XAUT, SLVON).
+            try:
+                import bitunix_data
+
+                if bitunix_data.uses_bitunix(symbol):
+                    pair = bitunix_data.pair_for(
+                        symbol, scanner.delta_contract(symbol) or symbol
+                    )
+                    rows = bitunix_data.klines(pair, "1m", int(start) // 60 * 60, int(time.time()) + 1)
+                    info.update(fine_rows([[r[0], r[2], r[3]] for r in rows], 60))
+            except Exception as error:
+                print(f"{symbol} 1m sweep unavailable: {str(error)[:80]}")
+        return info
 
     prices: dict[str, dict[str, float]] = {}
     with ThreadPoolExecutor(max_workers=min(scanner.SCAN_WORKERS, len(symbols))) as executor:
@@ -499,15 +544,21 @@ def fetch_crypto_prices(symbols: list[str]) -> dict[str, dict[str, float]]:
     return prices
 
 
-def fetch_prices(symbols: list[str]) -> dict[str, float]:
-    """Latest traded price per symbol, including the forming candle."""
+def fetch_prices(symbols: list[str]) -> dict[str, dict]:
+    """Latest traded price per symbol, and its 5m candles of the last few
+    sessions for the sweep: {"price", "candles", "candle_seconds"}.
+
+    It returned the last 15m close only, so an NSE wick that touched the entry
+    and came back between two checks was never seen (16 of 26 missed 1D+
+    entry confirms, 9-21 Oct 2026).
+    """
     if not symbols:
         return {}
     try:
         raw = yf.download(
             tickers=" ".join(symbols),
-            period="1d",
-            interval="15m",
+            period="5d",
+            interval="5m",
             auto_adjust=False,
             progress=False,
             threads=True,
@@ -519,17 +570,36 @@ def fetch_prices(symbols: list[str]) -> dict[str, float]:
     if raw is None or raw.empty:
         return {}
 
-    closes = raw["Close"] if "Close" in raw else raw
-    if isinstance(closes, pd.Series):
-        closes = closes.to_frame(symbols[0])
+    def column(name):
+        frame = raw[name] if name in raw else None
+        if isinstance(frame, pd.Series):
+            frame = frame.to_frame(symbols[0])
+        return frame
 
-    prices: dict[str, float] = {}
+    closes, highs, lows = column("Close"), column("High"), column("Low")
+    if closes is None:
+        return {}
+
+    prices: dict[str, dict] = {}
     for symbol in symbols:
         if symbol not in closes:
             continue
-        series = pd.to_numeric(closes[symbol], errors="coerce").dropna()
-        if not series.empty:
-            prices[symbol] = float(series.iloc[-1])
+        frame = pd.DataFrame({
+            "close": pd.to_numeric(closes[symbol], errors="coerce"),
+            "high": pd.to_numeric(highs[symbol], errors="coerce") if highs is not None and symbol in highs else None,
+            "low": pd.to_numeric(lows[symbol], errors="coerce") if lows is not None and symbol in lows else None,
+        }).dropna(subset=["close"])
+        if frame.empty:
+            continue
+        info = {"price": float(frame["close"].iloc[-1])}
+        bars = frame.dropna(subset=["high", "low"])
+        if not bars.empty:
+            index = bars.index if bars.index.tz is not None else bars.index.tz_localize(IST)
+            info.update(fine_rows(
+                [[int(ts.timestamp()), h, l] for ts, h, l in zip(index, bars["high"], bars["low"])],
+                300,
+            ))
+        prices[symbol] = info
     return prices
 
 
@@ -738,7 +808,7 @@ def prune_state(state: dict, active_keys: set[str]) -> dict:
     }
 
 
-def sweep_extreme(price_info: dict, side: str) -> float:
+def sweep_extreme(price_info: dict, side: str, since: float | None = None) -> float:
     """The most favourable price reached recently, for stage detection.
 
     A long's entry is approached from above, so its favourable extreme is
@@ -746,10 +816,20 @@ def sweep_extreme(price_info: dict, side: str) -> float:
     instead of only the live point-in-time price catches a stage the
     ticker's single snapshot would have missed between two polls - price
     touched the level and moved on before this run happened to look.
-    Falls back to the live price when no sweep range was fetched (NSE).
+    With fine candles and a start (sweep_since) only candles still open after
+    the start count, and the live price is folded in. Otherwise the fixed
+    recent range, else the live price.
     """
+    price = float(price_info["price"])
+    candles = price_info.get("candles")
+    if candles is not None and since is not None:
+        seconds = int(price_info.get("candle_seconds", 60))
+        recent = [c for c in candles if c[0] + seconds > since]
+        if side == "long":
+            return min([price] + [float(c[2]) for c in recent])
+        return max([price] + [float(c[1]) for c in recent])
     key = "recent_low" if side == "long" else "recent_high"
-    return float(price_info.get(key, price_info["price"]))
+    return float(price_info.get(key, price))
 
 
 def _rank(stage: int | None) -> int:
@@ -757,7 +837,7 @@ def _rank(stage: int | None) -> int:
 
 
 def resolve_pings(
-    record: dict, price_info: dict, state: dict, now: pd.Timestamp
+    record: dict, price_info: dict, state: dict, now: pd.Timestamp, since: float | None = None
 ) -> tuple[list[tuple[int, str]], dict]:
     """Decide this record's pings for one run and its updated entry_state.
 
@@ -781,7 +861,7 @@ def resolve_pings(
     last_stage = int(entry_state.get("stage", 0))
 
     price = float(price_info["price"])
-    extreme = sweep_extreme(price_info, record.get("side", "long"))
+    extreme = sweep_extreme(price_info, record.get("side", "long"), since)
     stage_now, reached_now = classify(price, record, reached_entry)
     stage_swept, reached_swept = classify(extreme, record, reached_entry)
     reached_entry = reached_now or reached_swept
@@ -814,22 +894,32 @@ def resolve_pings(
         risk_progress(price, entry, stop, side) >= 1.0
         or risk_progress(extreme, entry, stop, side) >= 1.0
     )
+    newly_stopped = stopped_out and not entry_state.get("stopped_out", False)
     entry_state["stopped_out"] = stopped_out
+
+    pings: list[tuple[int, str]] = []
+    if last_stage < STAGE_ENTRY and (newly_stopped or stage == STAGE_LATE):
+        # Filled and already past half the risk, or stopped, by the time this
+        # check looked: entry was never announced. Say so once under ENTRY NOW
+        # with the risk used, rather than nothing (lakky, 2026-10-21: GLAND 1D
+        # L4 filled and stopped in one 5m candle; KAJARIACER L4 got a LATE but
+        # never an ENTRY). An alert sent with price already past its entry is
+        # not watched at all (past_entry_when_sent), so the BNB 1M case of
+        # 2026-10-12 still sends nothing.
+        worst = extreme if risk_progress(extreme, entry, stop, side) >= risk_progress(
+            price, entry, stop, side) else price
+        note = "filled and stopped since the last check" if stopped_out else "filled since the last check"
+        pings.append((STAGE_ENTRY, format_line(STAGE_ENTRY, worst, record, note=note)))
+        entry_state["stage"] = STAGE_LATE
+        state[key] = entry_state
+        return pings, entry_state
     if stopped_out:
         stage = None
 
-    pings: list[tuple[int, str]] = []
     if stage is not None and stage > last_stage:
         ready_seen = ready_recently(state, record, now) or level_ready_recently(
             state, record, now
         )
-        if last_stage == 0 and stage == STAGE_LATE:
-            # First seen with most of the risk already gone: the trade is on
-            # and nearly stopped, nothing to act on (lakky, 2026-10-12, BNB 1M
-            # "64% risk used" next to a GET READY 10% away).
-            entry_state["stage"] = stage
-            state[key] = entry_state
-            return pings, entry_state
         live_gap_pct = abs(price - entry) / entry * 100.0
         if (last_stage == 0 and stage == STAGE_ENTRY and not ready_seen
                 and live_gap_pct <= APPROACH_THRESHOLD_PCT):
@@ -952,17 +1042,16 @@ def main() -> None:
         return
 
     state = load_state()
-    # NSE has no sweep range (fetch_prices only ever returns a close), so it
-    # is wrapped to the same {"price": ...} shape crypto's sweep-aware fetch
-    # returns - sweep_extreme() falls back to "price" when the range is absent.
-    nse_prices = fetch_prices(
+    since = {id(record): sweep_since(record, state, now) for record in watched}
+    prices: dict[str, dict] = fetch_prices(
         sorted({r["symbol"] for r in watched if r["_market"] == "nse"})
     )
-    prices: dict[str, dict[str, float]] = {
-        symbol: {"price": price} for symbol, price in nse_prices.items()
-    }
-    crypto_symbols = {r["symbol"] for r in watched if r["_market"] == "crypto"}
-    prices.update(fetch_crypto_prices(sorted(crypto_symbols)))
+    crypto_since: dict[str, float] = {}
+    for record in watched:
+        if record["_market"] == "crypto":
+            symbol = record["symbol"]
+            crypto_since[symbol] = min(crypto_since.get(symbol, since[id(record)]), since[id(record)])
+    prices.update(fetch_crypto_prices(sorted(crypto_since), crypto_since))
     drop_legacy_keys(state)
 
     # One heads-up per symbol, not one per level. Widening the watch band to
@@ -981,7 +1070,7 @@ def main() -> None:
         if price_info is None:
             continue
         before = {k: state.get(k, _MISSING) for k in record_state_keys(record)}
-        record_pings, _ = resolve_pings(record, price_info, state, now)
+        record_pings, _ = resolve_pings(record, price_info, state, now, since[id(record)])
         pings.setdefault(record["_market"], []).extend(record_pings)
         if record_pings:
             changes.append(([line for _, line in record_pings], before))
@@ -993,6 +1082,7 @@ def main() -> None:
     if not any(digests.values()):
         print("Nothing new to report.")
     delivered: list[str] = []
+    failed: set[str] = set()
     for market, messages in digests.items():
         for message in messages:
             if args.dry_run:
@@ -1004,6 +1094,7 @@ def main() -> None:
                 # next run reports them - and the parts that did land are not
                 # repeated, as they were when nothing at all was saved.
                 print(f"{market} digest part not delivered; its stages left unmarked for the next run.")
+                failed.add(market)
                 break
             delivered.append(message)
             # Saved after every part, so a run cancelled mid-digest cannot
@@ -1012,7 +1103,13 @@ def main() -> None:
 
     if args.dry_run:
         return
-    save_state(prune_state(undo_undelivered(state, changes, delivered), active_keys))
+    final = undo_undelivered(state, changes, delivered)
+    # Where the next check's sweep starts, per market (sweep_since): only a
+    # market this run priced and fully delivered, so an undelivered fill is
+    # still inside the next run's sweep.
+    for market in {r["_market"] for r in watched if r["symbol"] in prices} - failed:
+        final[LAST_CHECK_KEY.format(market=market)] = now.timestamp()
+    save_state(prune_state(final, active_keys))
 
 if __name__ == "__main__":
     main()

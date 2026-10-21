@@ -573,16 +573,51 @@ class ResolvePingsTests(unittest.TestCase):
 
         self.assertEqual([stage for stage, _ in pings], [entry_confirm.STAGE_ENTRY])
 
-    def test_late_from_unseen_sends_nothing(self):
-        # lakky, 2026-10-12 (BNB 1M): first seen with 64% of the risk used, it
-        # came out as LATE plus a GET READY 10% away. The trade is already on.
+    def test_a_fill_already_late_when_first_seen_still_says_entry(self):
+        # lakky, 2026-10-21: filled and past half the risk before the next check
+        # used to be silent. Now one ENTRY NOW line, with the risk used, and no
+        # GET READY backfill. (The BNB 1M case of 2026-10-12, sent with price
+        # already past entry, is dropped by past_entry_when_sent before this.)
         record = watched(entry=100.0, stop=98.0, side="long")
         now = pd.Timestamp("2026-09-17 13:46", tz=entry_confirm.IST)
         state = {}
-        pings, _ = entry_confirm.resolve_pings(record, price_info(99.0), state, now)
-        self.assertEqual(pings, [])
+        pings, entry_state = entry_confirm.resolve_pings(record, price_info(99.0), state, now)
+        self.assertEqual([stage for stage, _ in pings], [entry_confirm.STAGE_ENTRY])
+        self.assertIn("50% risk used", pings[0][1])
+        self.assertIn("filled since the last check", pings[0][1])
+        self.assertEqual(entry_state["stage"], entry_confirm.STAGE_LATE)
         again, _ = entry_confirm.resolve_pings(record, price_info(99.5), state, now)
         self.assertEqual(again, [])
+
+    def test_ready_then_late_sends_entry_not_only_late(self):
+        # KAJARIACER 1D L4, 21 Oct: GET READY, then the next look was already LATE.
+        record = watched(entry=100.0, stop=99.0, side="long")
+        now = pd.Timestamp("2026-10-21 11:42", tz=entry_confirm.IST)
+        state = {entry_confirm.watch_key(record): {"stage": entry_confirm.STAGE_READY}}
+        pings, _ = entry_confirm.resolve_pings(record, price_info(99.4), state, now)
+        self.assertEqual([stage for stage, _ in pings], [entry_confirm.STAGE_ENTRY])
+        self.assertIn("filled since the last check", pings[0][1])
+
+    def test_filled_and_stopped_between_checks_says_so_once(self):
+        # GLAND 1D L4, 21 Oct: entry and stop in one 5m candle, used to send nothing.
+        record = watched(entry=100.0, stop=99.6, side="long")
+        now = pd.Timestamp("2026-10-21 11:22", tz=entry_confirm.IST)
+        state = {}
+        pings, entry_state = entry_confirm.resolve_pings(
+            record, price_info(100.2, recent_low=99.5), state, now
+        )
+        self.assertEqual([stage for stage, _ in pings], [entry_confirm.STAGE_ENTRY])
+        self.assertIn("filled and stopped since the last check", pings[0][1])
+        self.assertTrue(entry_state["stopped_out"])
+        again, _ = entry_confirm.resolve_pings(record, price_info(99.4), state, now)
+        self.assertEqual(again, [])
+
+    def test_a_trade_stopped_after_its_entry_ping_stays_quiet(self):
+        record = watched(entry=100.0, stop=98.0, side="long")
+        now = pd.Timestamp("2026-09-17 13:46", tz=entry_confirm.IST)
+        state = {entry_confirm.watch_key(record): {"stage": entry_confirm.STAGE_ENTRY, "reached_entry": True}}
+        pings, _ = entry_confirm.resolve_pings(record, price_info(97.5), state, now)
+        self.assertEqual(pings, [])
 
     def test_no_get_ready_backfill_when_price_is_already_far_from_entry(self):
         record = watched(entry=100.0, stop=90.0, side="long")
@@ -878,3 +913,69 @@ class SendPingRetryTests(unittest.TestCase):
                 patch.object(entry_confirm.time, "sleep"):
             self.assertTrue(entry_confirm.send_ping("hi"))
         self.assertEqual(post.call_count, 2)
+
+
+class FineSweepTests(unittest.TestCase):
+    """2026-10-21: the sweep reads fine candles since the later of the alert
+    and the previous check (NSE had no sweep; crypto's reached before the alert)."""
+
+    def info(self, price, candles, seconds=300):
+        return {"price": price, "candles": candles, "candle_seconds": seconds}
+
+    def test_a_wick_to_entry_between_checks_is_caught(self):
+        # CDSL 1D TL, 21 Oct 15:00: the 5m low touched 1230.19, the close did not.
+        record = watched(entry=1230.19, stop=1210.0, side="long")
+        now = pd.Timestamp("2026-10-21 15:06", tz=entry_confirm.IST)
+        since = now.timestamp() - 600
+        bar = int(since) // 300 * 300 + 300
+        pings, entry_state = entry_confirm.resolve_pings(
+            record, self.info(1233.0, [[bar, 1236.0, 1230.1]]), {}, now, since
+        )
+        self.assertTrue(entry_state["reached_entry"])
+        self.assertIn(entry_confirm.STAGE_ENTRY, [stage for stage, _ in pings])
+
+    def test_candles_closed_before_the_start_do_not_count(self):
+        # ETH 1D TL, 15 Oct: a low from before the alert marked it stopped.
+        record = watched(entry=100.0, stop=98.0, side="long")
+        now = pd.Timestamp("2026-10-15 08:16", tz=entry_confirm.IST)
+        since = now.timestamp() - 600
+        old = int(since) // 300 * 300 - 300          # closed before `since`
+        pings, entry_state = entry_confirm.resolve_pings(
+            record, self.info(100.1, [[old, 101.0, 97.0]]), {}, now, since
+        )
+        self.assertFalse(entry_state["stopped_out"])
+        self.assertFalse(entry_state["reached_entry"])
+        self.assertEqual([stage for stage, _ in pings], [entry_confirm.STAGE_READY])
+
+    def test_a_candle_open_across_the_start_counts(self):
+        since = 1_000_000.0
+        info = self.info(101.0, [[int(since) - 100, 101.5, 99.0]])
+        self.assertEqual(entry_confirm.sweep_extreme(info, "long", since), 99.0)
+        self.assertEqual(entry_confirm.sweep_extreme(info, "short", since), 101.5)
+
+    def test_sweep_starts_at_the_later_of_alert_and_last_check(self):
+        now = pd.Timestamp("2026-10-21 12:00", tz=entry_confirm.IST)
+        record = watched(_delivered=now - pd.Timedelta(hours=2), _market="nse")
+        key = entry_confirm.LAST_CHECK_KEY.format(market="nse")
+        self.assertEqual(entry_confirm.sweep_since(record, {}, now), record["_delivered"].timestamp())
+        last = now.timestamp() - 300
+        self.assertEqual(entry_confirm.sweep_since(record, {key: last}, now), last)
+        # never more than SWEEP_MAX_SECONDS back
+        old = watched(_delivered=now - pd.Timedelta(days=3), _market="crypto")
+        self.assertEqual(entry_confirm.sweep_since(old, {}, now),
+                         now.timestamp() - entry_confirm.SWEEP_MAX_SECONDS)
+
+    def test_nse_prices_carry_5m_highs_and_lows(self):
+        index = pd.DatetimeIndex(
+            ["2026-10-21 14:55", "2026-10-21 15:00"], tz=entry_confirm.IST
+        )
+        columns = pd.MultiIndex.from_product([["Close", "High", "Low"], ["CDSL.NS"]])
+        raw = pd.DataFrame(
+            [[1234.0, 1236.0, 1232.0], [1233.0, 1235.0, 1230.1]], index=index, columns=columns
+        )
+        with patch.object(entry_confirm.yf, "download", return_value=raw):
+            prices = entry_confirm.fetch_prices(["CDSL.NS"])
+        info = prices["CDSL.NS"]
+        self.assertEqual(info["price"], 1233.0)
+        self.assertEqual(info["candle_seconds"], 300)
+        self.assertEqual(entry_confirm.sweep_extreme(info, "long", index[0].timestamp()), 1230.1)
