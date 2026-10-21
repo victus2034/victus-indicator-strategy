@@ -44,8 +44,8 @@ The fib/trendline scan has no Delta fallback: Delta's shorter history draws diff
 - Zones: alert from 0.00% to 0.20% from the entry edge (`MAX_DISTANCE_PCT`), approach side only,
   stop 25% of the zone height past the far edge, stops wider than 1.5% skipped, 4h cooldown,
   crypto alert window 08:00-01:00 IST. Crypto only: daily EMA50 trend filter.
-- Fibs: deeper (strong) zone only, entry at its near edge, stop = the zone rule. Band 0-0.75%.
-- Trendlines: v12.6 anchors, band 0-0.75%, stop `TRENDLINE_SL_PCT` beyond the line, BROKEN posts
+- Fibs: deeper (strong) zone only, entry at its near edge, stop = the zone rule. Band 0-0.75% (0-3% on 1W / 1M).
+- Trendlines: v12.6 anchors, band 0-0.75% (0-3% on 1W / 1M), stop `TRENDLINE_SL_PCT` beyond the line, BROKEN posts
   only on the first scan after the break candle closes.
 
 `CLAUDE.md` has the reasoning and the backtest behind each rule. Change a rule only after a backtest.

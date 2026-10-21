@@ -66,6 +66,7 @@ from config import (
     TRENDLINE_SWING_LENGTH,
     TRENDLINES_KEEP,
     ZONE_HTF_TIMEFRAMES,
+    alert_band_pct,
 )
 from fib_trendline_data import (
     CRYPTO, IST, NSE, TF_LABEL, TF_SECONDS, candle_close_ts, candle_is_closed, crypto_charts, nse_charts,
@@ -92,6 +93,8 @@ RETRY_BACKOFF_SECONDS = 30 * 60   # a failed Discord send is not retried sooner 
 # many live fibs get a new base/top.
 # v9 (2026-10-13): past the strong box's stop, not L4 (v12.7.11).
 # v10 (2026-10-13): a fib just born from a stop kill is not stop-killed (v12.7.12).
+# Not bumped for the 3% band on 1W / 1M (2026-10-21): the first pass then sends the 1W / 1M
+# levels already within 3% once - the early warning asked for - and nothing else is new.
 SEED_VERSION = "v10"
 # Bitunix candles draw different fibs and lines, each a new key: turning the
 # source on re-seeds silently rather than posting every level already in range.
@@ -218,13 +221,14 @@ def line_distance(kind, level, price):
     return (level - price) / level * 100
 
 
-def in_band(distance):
-    """FIB_TL_MAX_DISTANCE_PCT (0.75%) away down to 0.00% (Shiva). Never beyond 0: a fib zone price has gone
+def in_band(distance, tf=None):
+    """FIB_TL_MAX_DISTANCE_PCT (0.75%) away down to 0.00% (Shiva); 3% on 1W / 1M
+    (EARLY_ALERT_BAND_PCT, lakky 2026-10-21). Never beyond 0: a fib zone price has gone
     through is None already, and price through a trendline before the candle
     closes is a break in progress - alerting it as a BUY at support (as the
     first version did, calling it "0.00%") pointed the wrong way. A close
     through the line has its own BROKEN alert."""
-    return distance is not None and FIB_TL_MIN_DISTANCE_PCT <= distance <= FIB_TL_MAX_DISTANCE_PCT
+    return distance is not None and FIB_TL_MIN_DISTANCE_PCT <= distance <= alert_band_pct(tf, FIB_TL_MAX_DISTANCE_PCT)
 
 
 # ----------------------------------------------------------------- analysis
@@ -315,7 +319,7 @@ def zone_candidates(symbol, tf, closed, price, forming, trend=None):
     # 30m zones, so it is set rather than swapped (the symbols run in threads).
     scanner.ZONE_BASE_EXTRA = 1
     supply, demand = scanner.build_zones(df)
-    band = scanner.MAX_DISTANCE_PCT
+    band = alert_band_pct(tf, scanner.MAX_DISTANCE_PCT)     # 3% on 1W / 1M (lakky, 2026-10-21)
     out = []
     for zone_type, zones in (("supply", supply), ("demand", demand)):
         zone, _ = scanner.nearest_active_zone(price, zones, zone_type, len(df))
@@ -384,7 +388,7 @@ def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=No
         for level, zone in fib_legs(d, base, top, tf):
             distance = fib_distance(d, zone, price)
             reached = fib_distance(d, zone, band_price(d == 1, price, swept))
-            if (distance is not None and in_band(reached)
+            if (distance is not None and in_band(reached, tf)
                     and not entry_already_touched(d, zone, price, forming)):
                 result["fib"].append({
                     **zone, "key": fib_level_key(symbol, tf, d, times[live["Ot"]], top, level, zone["zone"]),
@@ -405,7 +409,7 @@ def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=No
             if level <= 0:
                 continue
             distance = line_distance(line.kind, level, price)
-            if in_band(line_distance(line.kind, level, band_price(line.kind == SUPPORT, price, swept))):
+            if in_band(line_distance(line.kind, level, band_price(line.kind == SUPPORT, price, swept)), tf):
                 result["touch"].append({
                     **info, "key": f"tl|{ident}", "level": level, "distance": distance,
                     "touched": line_already_touched(line.kind, level, forming),

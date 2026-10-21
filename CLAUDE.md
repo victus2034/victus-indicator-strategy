@@ -441,6 +441,12 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   No repeats - the "again after 4h if touched" rule was backtested and made it worse (`research/fib_l3_l4_backtest.py`,
   `fib_levels_all_backtest.py`, parts `fib-l3l4`, `fib-levels-all`). Sep 1 - Oct 20, per trade: crypto 4H -0.03R -> -0.14R,
   1D +0.42R -> +0.07R, NSE worse at every level. BTW's 20 Oct drop to L4 had no alert because L3 had alerted on 16 Oct (one per zone).
+- **1W / 1M alert from 3% away (2026-10-21, lakky: "help me to get ready for big timeframe trades"), crypto and NSE.**
+  Fibs, trendlines and 1W/1M S/R zones use `config.alert_band_pct(tf, ...)`: `EARLY_ALERT_BAND_PCT` (3%) on
+  `EARLY_ALERT_TIMEFRAMES` (1w, 1M), else 0.75% (fib/TL) / `MAX_DISTANCE_PCT` (zones; re-arm at 3% x `REARM_FACTOR`).
+  Entry, stop and target unchanged. The history replay does the same (`fib_trendline_backtest.band_for`,
+  `EARLY_BAND`). `SEED_VERSION` not bumped on purpose: the first pass sends the 1W/1M levels already within 3% once.
+  The L1/L2/L4 what-ifs keep 0.75%. Backtest: `research/early_band_backtest.py`, part `early-band`.
 - **Fib what-ifs at L1 / L2 / L4 (2026-10-19, lakky).** The bot enters fibs at L3 only; once a day the fib report
   also scores each fib alert as if it had been sent at L1, L2 and L4 (`fib_level_whatif.py`): same stop as the
   alert, the level's own 0.75% band moment after the fib's top, then `trades.simulate`. Results go to
