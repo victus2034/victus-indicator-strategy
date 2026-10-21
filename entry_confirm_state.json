@@ -1,6 +1,7 @@
 {
   "1000PEPEUSD|1d|short|0.00458778|0.00482533": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "360ONE.NS|1w|long|1048.63|1005.07": {
@@ -91,7 +92,7 @@
   "ANANDRATHI.NS|1d|short|2179.52|2186.71": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "ANGELONE.NS|1d|long|292.145|284.706": {
     "reached_entry": true,
@@ -396,8 +397,8 @@
     "stopped_out": false
   },
   "DABUR.NS|1M|long|373.044|369.4": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "DALBHARAT.NS|1d|short|1659.7|1741.15": {
@@ -523,6 +524,10 @@
     "stage": 3,
     "stopped_out": true
   },
+  "FINCABLES.NS|1w|long|1200.46|1125.83": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "FINCABLES.NS|1w|long|1254.74|1125.83": {
     "reached_entry": true,
     "stage": 2,
@@ -549,7 +554,7 @@
   },
   "GILLETTE.NS|1w|short|7138.76|7307": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "GLAND.NS|1d|long|2866.01|2841.1": {
@@ -1266,6 +1271,7 @@
     "stage": 1,
     "stopped_out": false
   },
+  "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1w|long|1048.63|1005.07": 1792556189.719842,
   "_level_ready|360ONE.NS|1w|short|1080.62|1153.16": 1792042008.505102,
   "_level_ready|3MINDIA.NS|1M|long|30437.5|29524.4": 1791517599.357562,
@@ -2176,6 +2182,7 @@
   "_level_ready|ZORAUSD|4h|long|0.00767693|0.00760077": 1790965899.15149,
   "_level_ready|ZORAUSD|4h|long|0.007895|0.0078525": 1790586680.897774,
   "_ready|0G/USDT|30m": 1789441569.595457,
+  "_ready|1000PEPEUSD|1d": 1792569717.634299,
   "_ready|360ONE.NS|1w": 1792556189.719842,
   "_ready|3MINDIA.NS|1M": 1792122403.256656,
   "_ready|3MINDIA.NS|1w": 1791517599.357562,
