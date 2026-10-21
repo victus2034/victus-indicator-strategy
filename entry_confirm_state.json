@@ -281,6 +281,7 @@
   },
   "CASTROLIND.NS|1d|long|194.715|190.131": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CDSL.NS|1d|long|1230.19|1210": {
@@ -490,6 +491,7 @@
   },
   "FEDERALBNK.NS|1d|long|339.536|306.663": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "FINCABLES.NS|1M|long|1226.95|949.925": {
@@ -528,7 +530,8 @@
     "stopped_out": false
   },
   "GLAND.NS|1d|long|2866.01|2841.1": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "GLAND.NS|1d|long|2921.12|2910.71": {
@@ -598,8 +601,8 @@
     "stopped_out": false
   },
   "HEXT.NS|1d|short|589.785|637.181": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "HEXT.NS|1w|short|560.169|569.85": {
@@ -1161,6 +1164,7 @@
   },
   "RADICO.NS|1d|long|4292.45|3827.88": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "REDINGTON.NS|1d|long|366.26|352.95": {
@@ -1423,6 +1427,7 @@
   "_level_ready|CARBORUNIV.NS|1M|long|1187.12|1023.61": 1791786682.799464,
   "_level_ready|CARBORUNIV.NS|1d|long|1175.96|1127.72": 1791949569.774586,
   "_level_ready|CASTROLIND.NS|1d|long|192.785|190.131": 1791949569.774586,
+  "_level_ready|CASTROLIND.NS|1d|long|194.715|190.131": 1792565790.968066,
   "_level_ready|CDSL.NS|1d|long|1230.19|1210": 1792565202.34434,
   "_level_ready|CEMPRO.NS|1d|long|1133.54|861.394": 1792563106.160663,
   "_level_ready|CEMPRO.NS|1w|long|1133.54|861.394": 1792563106.160663,
@@ -1526,6 +1531,7 @@
   "_level_ready|FACT.NS|1d|long|710.167|669": 1792556798.737244,
   "_level_ready|FACT.NS|1w|long|710.167|660.25": 1792556798.737244,
   "_level_ready|FACT.NS|1w|long|738.742|720.274": 1791517599.357562,
+  "_level_ready|FEDERALBNK.NS|1d|long|339.536|306.663": 1792565790.968066,
   "_level_ready|FINCABLES.NS|1M|long|1226.95|949.925": 1792561314.210422,
   "_level_ready|FINCABLES.NS|1d|long|1327.12|1284.16": 1792381903.352906,
   "_level_ready|FINCABLES.NS|1d|long|1435.04|1413.52": 1791517599.357562,
@@ -1541,6 +1547,7 @@
   "_level_ready|GILLETTE.NS|1d|short|7218.19|7326.47": 1791517599.357562,
   "_level_ready|GILLETTE.NS|1w|short|7138.76|7307": 1792036915.942614,
   "_level_ready|GILLETTE.NS|1w|short|7138.76|7317.22": 1791517599.357562,
+  "_level_ready|GLAND.NS|1d|long|2866.01|2841.1": 1792565790.968066,
   "_level_ready|GLAND.NS|1d|long|2921.12|2910.71": 1792561314.210422,
   "_level_ready|GLAND.NS|1d|long|2962.77|2910.71": 1792554711.035895,
   "_level_ready|GLAXO.NS|1M|long|2647.66|2521.29": 1791517599.357562,
@@ -1856,6 +1863,7 @@
   "_level_ready|QNTUSD|1M|long|197.516|153.489": 1792032698.871294,
   "_level_ready|QNTUSD|1d|long|200.436|157.14": 1792166200.634449,
   "_level_ready|QNTUSD|1w|long|197.516|153.489": 1792032698.871294,
+  "_level_ready|RADICO.NS|1d|long|4292.45|3827.88": 1792565790.968066,
   "_level_ready|RADICO.NS|1d|short|4547.65|4589.1": 1791949569.774586,
   "_level_ready|RADICO.NS|1d|short|4553.19|4589.1": 1791776795.761218,
   "_level_ready|RADICO.NS|1d|short|4553.19|4621.49": 1791523901.914717,
@@ -2186,7 +2194,7 @@
   "_ready|CAPUSD|1d": 1791990399.414519,
   "_ready|CARBORUNIV.NS|1M": 1791786682.799464,
   "_ready|CARBORUNIV.NS|1d": 1791949569.774586,
-  "_ready|CASTROLIND.NS|1d": 1791949569.774586,
+  "_ready|CASTROLIND.NS|1d": 1792565790.968066,
   "_ready|CDSL.NS|1d": 1792565202.34434,
   "_ready|CEMPRO.NS|1d": 1792563106.160663,
   "_ready|CEMPRO.NS|1w": 1792563106.160663,
@@ -2247,6 +2255,7 @@
   "_ready|EXIDEIND.NS|1w": 1792556503.449216,
   "_ready|FACT.NS|1d": 1792556798.737244,
   "_ready|FACT.NS|1w": 1792556798.737244,
+  "_ready|FEDERALBNK.NS|1d": 1792565790.968066,
   "_ready|FINCABLES.NS|1M": 1792561314.210422,
   "_ready|FINCABLES.NS|1d": 1792381903.352906,
   "_ready|FINCABLES.NS|1w": 1792556503.449216,
@@ -2256,7 +2265,7 @@
   "_ready|GABRIEL.NS|1d": 1791518192.370228,
   "_ready|GILLETTE.NS|1d": 1791517599.357562,
   "_ready|GILLETTE.NS|1w": 1792036915.942614,
-  "_ready|GLAND.NS|1d": 1792561314.210422,
+  "_ready|GLAND.NS|1d": 1792565790.968066,
   "_ready|GLAXO.NS|1M": 1791517599.357562,
   "_ready|GLAXO.NS|1d": 1791776795.761218,
   "_ready|GLAXO.NS|1w": 1791776795.761218,
@@ -2401,7 +2410,7 @@
   "_ready|QNTUSD|1M": 1792032698.871294,
   "_ready|QNTUSD|1d": 1792166200.634449,
   "_ready|QNTUSD|1w": 1792032698.871294,
-  "_ready|RADICO.NS|1d": 1791949569.774586,
+  "_ready|RADICO.NS|1d": 1792565790.968066,
   "_ready|RBLBANK.NS|1d": 1792036000.300237,
   "_ready|RE/USDT|30m": 1789390557.764438,
   "_ready|RE/USDT|4h": 1788948356.002419,
