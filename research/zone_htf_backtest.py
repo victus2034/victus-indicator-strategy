@@ -40,6 +40,7 @@ from fib_trendline_data import (  # noqa: E402
 OUT = Path(__file__).resolve().parent / "out" / "zone_htf"
 TIMEFRAMES = ["4h", "1d", "1w", "1M"]
 MIN_HISTORY = 50          # closed candles before a zone build is tried (1M has ~55 on Bitunix)
+EARLY_BAND = [True]       # the live 3% band on 1W / 1M (config.alert_band_pct); research/early_band_backtest.py turns it off
 
 
 def crypto_load(symbol, now, since):
@@ -77,7 +78,7 @@ def replay(market, symbol, tf, base, evalc, daily, since, now):
     times = [c[0] for c in base]
     eval_ts = [c[0] for c in evalc]
     eval_secs = TF_SECONDS[trades.EVAL_RESOLUTION[market][tf]]
-    band = config.MAX_DISTANCE_PCT / 100
+    band = (config.alert_band_pct(tf, config.MAX_DISTANCE_PCT) if EARLY_BAND[0] else config.MAX_DISTANCE_PCT) / 100
     rearm = band * config.REARM_FACTOR
     horizon = (config.FIB_TL_ENTRY_WAIT_BARS + config.FIB_TL_MAX_HOLD_BARS + 1) * trades.EVAL_PER_BAR[market][tf]
     trend_filter = market == CRYPTO and symbol in config.CRYPTO_WATCHLIST and config.CRYPTO_TREND_FILTER

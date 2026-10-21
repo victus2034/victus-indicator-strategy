@@ -544,6 +544,23 @@ TRENDLINES_KEEP = 6
 # where the entry is. It is a preference, not an edge.
 FIB_TL_MIN_DISTANCE_PCT = env_float("VICTUS_FIB_TL_MIN_DISTANCE_PCT", 0.0)
 FIB_TL_MAX_DISTANCE_PCT = env_float("VICTUS_FIB_TL_MAX_DISTANCE_PCT", 0.75)
+# 1W / 1M alert early (lakky, 2026-10-21: "alert space of 3% ... to get ready for big timeframe
+# trades", crypto and NSE). Fibs, trendlines and S/R zones on these timeframes alert from
+# EARLY_ALERT_BAND_PCT away instead of 0.75% (fib/TL) / MAX_DISTANCE_PCT (zones); the 0.75% alert
+# often came after the candle had already touched the entry. Entry, stop and target are unchanged,
+# and entry confirm's GET READY (0.50%) still follows. Backtest: research/early_band_backtest.py,
+# part early-band.
+EARLY_ALERT_BAND_PCT = env_float("VICTUS_EARLY_ALERT_BAND_PCT", 3.0)
+EARLY_ALERT_TIMEFRAMES = tuple(
+    tf.strip() for tf in os.getenv("VICTUS_EARLY_ALERT_TIMEFRAMES", "1w,1M").split(",") if tf.strip()
+)
+
+
+def alert_band_pct(tf, default):
+    """The alert band (%) on timeframe tf: EARLY_ALERT_BAND_PCT on 1W / 1M, else default."""
+    return EARLY_ALERT_BAND_PCT if tf in EARLY_ALERT_TIMEFRAMES else default
+
+
 # Risk warning line (lakky, 2026-10-17), crypto fib + trendline touch alerts only:
 # the title shows the coin's 24h % ("SOL -5.2% · FIB L3 · BUY"), and a 4th line
 # "⚠️ **Big 24h move · Market down: BTC ↓ ETH ↓ SOL ↑**" when it moved this % either way

@@ -295,6 +295,20 @@ class DistanceBandTests(unittest.TestCase):
         self.assertFalse(fts.in_band(1.2))
         self.assertFalse(fts.in_band(None))
 
+    def test_1w_and_1m_band_is_three_percent(self):
+        # lakky (2026-10-21): time to get ready on the big timeframes, crypto and NSE
+        for tf in ("1w", "1M"):
+            self.assertTrue(fts.in_band(2.99, tf))
+            self.assertTrue(fts.in_band(3.0, tf))
+            self.assertFalse(fts.in_band(3.01, tf))
+            self.assertFalse(fts.in_band(-0.1, tf))
+            self.assertAlmostEqual(ftb.band_for(tf), 0.03)
+        for tf in ("4h", "1d", None):
+            self.assertFalse(fts.in_band(0.76, tf))
+        self.assertAlmostEqual(ftb.band_for("1d"), 0.0075)
+        with mock.patch.object(ftb, "EARLY_BAND", False):
+            self.assertAlmostEqual(ftb.band_for("1w"), 0.0075)
+
     def test_line_distance_is_on_the_approach_side(self):
         self.assertAlmostEqual(fts.line_distance(SUPPORT, 100.0, 101.0), 1.0)
         self.assertAlmostEqual(fts.line_distance(RESISTANCE, 100.0, 99.0), 1.0)

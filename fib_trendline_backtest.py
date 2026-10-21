@@ -42,6 +42,7 @@ from config import (
     TRENDLINE_SL_PCT,
     TRENDLINE_SWING_LENGTH,
     TRENDLINES_KEEP,
+    alert_band_pct,
 )
 from fib_trendline_data import (
     CRYPTO, IST, NSE, TF_LABEL, TF_SECONDS, TIMEFRAMES, candle_is_closed, delta_candles,
@@ -55,6 +56,8 @@ CACHE = HERE / ".fib_tl_bt_cache"
 REPORT_MD = HERE / "reports" / "FIB_TRENDLINE_BACKTEST.md"
 TRADES_CSV = HERE / "reports" / "fib_trendline_backtest_trades.csv"
 BAND = FIB_TL_MAX_DISTANCE_PCT / 100
+# The live 3% band on 1W / 1M (config.alert_band_pct, lakky 2026-10-21). Research turns it off.
+EARLY_BAND = True
 ALERT_ZONES = FIB_ALERT_ZONES      # research overrides it to replay both zones
 # The live rule since 2026-10-12: no fib alert once the candle forming has reached
 # the entry (fib_trendline_scanner.entry_already_touched). Research turns it off.
@@ -166,8 +169,14 @@ class TouchClock:
         return max(run, self.last_gap) if self.last_gap is not None else run
 
 
+def band_for(tf):
+    """The alert band as a fraction on timeframe tf: BAND, or the early band on 1W / 1M."""
+    return alert_band_pct(tf, BAND * 100) / 100 if EARLY_BAND else BAND
+
+
 def replay(market, symbol, tf, base, evalc, now):
     """Every alert the live scanner would have sent on this chart, traded and scored."""
+    band = band_for(tf)
     if base and not candle_is_closed(market, base[-1][0], tf, now):
         base = base[:-1]
     n = len(base)
@@ -227,18 +236,18 @@ def replay(market, symbol, tf, base, evalc, now):
             for leg, zone in legs:
                 key = (d, times[s["Ot"]], top, leg if FIB_LEVELS else zone["zone"], leg)
                 if leg in ("L1", "L3"):
-                    lo_band = zone["low"] if d == 1 else zone["low"] * (1 - BAND)
-                    hi_band = zone["high"] * (1 + BAND) if d == 1 else zone["high"]
+                    lo_band = zone["low"] if d == 1 else zone["low"] * (1 - band)
+                    hi_band = zone["high"] * (1 + band) if d == 1 else zone["high"]
                     ref_hi, ref_lo = zone["high"], zone["low"]
                 else:
-                    lo_band = zone["entry"] if d == 1 else zone["entry"] * (1 - BAND)
-                    hi_band = zone["entry"] * (1 + BAND) if d == 1 else zone["entry"]
+                    lo_band = zone["entry"] if d == 1 else zone["entry"] * (1 - band)
+                    hi_band = zone["entry"] * (1 + band) if d == 1 else zone["entry"]
                     ref_hi = ref_lo = zone["entry"]
                 entry = zone["entry"]
                 if key in fired:
                     if not FIB_REARM:
                         continue
-                    away = 1 + BAND * REARM_FACTOR
+                    away = 1 + band * REARM_FACTOR
                     if key in spent:
                         # re-arm once a candle sat wholly beyond the band by REARM_FACTOR on the approach side
                         if any((evalc[k][3] > ref_hi * away) if d == 1 else (evalc[k][2] < ref_lo / away)
@@ -298,7 +307,7 @@ def replay(market, symbol, tf, base, evalc, now):
             if level <= 0:
                 continue
             # the approach side only, as the live in_band: never through the line
-            lo_band, hi_band = (level, level * (1 + BAND)) if line.kind == SUPPORT else (level * (1 - BAND), level)
+            lo_band, hi_band = (level, level * (1 + band)) if line.kind == SUPPORT else (level * (1 - band), level)
             e0, e1 = bar_slice(i)
             touched = False                                # this candle has reached the line
             for k in range(e0, e1):
