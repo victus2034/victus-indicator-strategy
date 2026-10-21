@@ -1,0 +1,68 @@
+# Fib L1/L2 paused 1h after a 4H trendline break (2026-09-01 to now)
+
+live = today's rules. pause = after a 4H TL BROKEN, same-side L1/L2 wait an hour, then alert if still in band. skip = dropped instead. Net after fees, 2R + BE, crypto on Delta candles. Entries filled within 15 min of US CPI/PPI/FOMC left out.
+
+4H breaks in the data (all history): crypto 5333, NSE 6998. Candle checks paused: 46; levels dropped in skip: 78.
+
+| market   | tf   | levels     | rule   |   alerts |   trades |   win_% |   R_total |   R_per_trade |   %_total |   %_per_trade |
+|:---------|:-----|:-----------|:-------|---------:|---------:|--------:|----------:|--------------:|----------:|--------------:|
+| crypto   | 4H   | all levels | live   |      545 |      376 |      46 |     -42.7 |        -0.114 |      23.8 |         0.063 |
+| crypto   | 4H   | all levels | pause  |      545 |      376 |      46 |     -42.7 |        -0.114 |      23.8 |         0.063 |
+| crypto   | 4H   | all levels | skip   |      545 |      376 |      46 |     -42.7 |        -0.114 |      23.8 |         0.063 |
+| crypto   | 4H   | L1+L2      | live   |      231 |      157 |      53 |       9.1 |         0.058 |      22.4 |         0.142 |
+| crypto   | 4H   | L1+L2      | pause  |      231 |      157 |      53 |       9.1 |         0.058 |      22.4 |         0.142 |
+| crypto   | 4H   | L1+L2      | skip   |      231 |      157 |      53 |       9.1 |         0.058 |      22.4 |         0.142 |
+| crypto   | 1D+  | all levels | live   |      194 |      138 |      51 |       3.2 |         0.023 |    -140.7 |        -1.02  |
+| crypto   | 1D+  | all levels | pause  |      194 |      138 |      51 |       3.2 |         0.023 |    -140.7 |        -1.02  |
+| crypto   | 1D+  | all levels | skip   |      190 |      136 |      52 |       4.2 |         0.031 |    -135.8 |        -0.998 |
+| crypto   | 1D+  | L1+L2      | live   |      127 |       81 |      52 |       2.3 |         0.028 |    -158.9 |        -1.962 |
+| crypto   | 1D+  | L1+L2      | pause  |      127 |       81 |      52 |       2.3 |         0.028 |    -158.9 |        -1.962 |
+| crypto   | 1D+  | L1+L2      | skip   |      123 |       79 |      53 |       3.3 |         0.042 |    -154   |        -1.949 |
+| crypto   | 1D   | all levels | live   |      163 |      127 |      53 |       9.3 |         0.073 |     105.4 |         0.83  |
+| crypto   | 1D   | all levels | pause  |      163 |      127 |      53 |       9.3 |         0.073 |     105.4 |         0.83  |
+| crypto   | 1D   | all levels | skip   |      159 |      125 |      54 |      10.3 |         0.083 |     110.3 |         0.882 |
+| crypto   | 1D   | L1+L2      | live   |      103 |       76 |      57 |       7.4 |         0.097 |      83.3 |         1.096 |
+| crypto   | 1D   | L1+L2      | pause  |      103 |       76 |      57 |       7.4 |         0.097 |      83.3 |         1.096 |
+| crypto   | 1D   | L1+L2      | skip   |       99 |       74 |      58 |       8.4 |         0.113 |      88.2 |         1.192 |
+| crypto   | 1W   | all levels | live   |       21 |        8 |      33 |      -4.1 |        -0.514 |    -127   |       -15.876 |
+| crypto   | 1W   | all levels | pause  |       21 |        8 |      33 |      -4.1 |        -0.514 |    -127   |       -15.876 |
+| crypto   | 1W   | all levels | skip   |       21 |        8 |      33 |      -4.1 |        -0.514 |    -127   |       -15.876 |
+| crypto   | 1W   | L1+L2      | live   |       15 |        3 |       0 |      -3   |        -1.013 |    -123.2 |       -41.055 |
+| crypto   | 1W   | L1+L2      | pause  |       15 |        3 |       0 |      -3   |        -1.013 |    -123.2 |       -41.055 |
+| crypto   | 1W   | L1+L2      | skip   |       15 |        3 |       0 |      -3   |        -1.013 |    -123.2 |       -41.055 |
+| crypto   | 1M   | all levels | live   |       10 |        3 |       0 |      -2   |        -0.669 |    -119.1 |       -39.69  |
+| crypto   | 1M   | all levels | pause  |       10 |        3 |       0 |      -2   |        -0.669 |    -119.1 |       -39.69  |
+| crypto   | 1M   | all levels | skip   |       10 |        3 |       0 |      -2   |        -0.669 |    -119.1 |       -39.69  |
+| crypto   | 1M   | L1+L2      | live   |        9 |        2 |       0 |      -2   |        -1.003 |    -119   |       -59.515 |
+| crypto   | 1M   | L1+L2      | pause  |        9 |        2 |       0 |      -2   |        -1.003 |    -119   |       -59.515 |
+| crypto   | 1M   | L1+L2      | skip   |        9 |        2 |       0 |      -2   |        -1.003 |    -119   |       -59.515 |
+| nse      | 4H   | all levels | live   |     1041 |      753 |      38 |    -261.2 |        -0.347 |    -292.5 |        -0.388 |
+| nse      | 4H   | all levels | pause  |     1041 |      753 |      38 |    -261.2 |        -0.347 |    -292.5 |        -0.388 |
+| nse      | 4H   | all levels | skip   |     1040 |      753 |      38 |    -261.2 |        -0.347 |    -292.5 |        -0.388 |
+| nse      | 4H   | L1+L2      | live   |      422 |      303 |      45 |     -49.6 |        -0.164 |    -145.4 |        -0.48  |
+| nse      | 4H   | L1+L2      | pause  |      422 |      303 |      45 |     -49.6 |        -0.164 |    -145.4 |        -0.48  |
+| nse      | 4H   | L1+L2      | skip   |      421 |      303 |      45 |     -49.6 |        -0.164 |    -145.4 |        -0.48  |
+| nse      | 1D+  | all levels | live   |      964 |      627 |      42 |    -144.3 |        -0.23  |    -500.9 |        -0.799 |
+| nse      | 1D+  | all levels | pause  |      964 |      627 |      42 |    -144.3 |        -0.23  |    -500.9 |        -0.799 |
+| nse      | 1D+  | all levels | skip   |      962 |      627 |      42 |    -144.3 |        -0.23  |    -500.9 |        -0.799 |
+| nse      | 1D+  | L1+L2      | live   |      576 |      331 |      49 |     -38.1 |        -0.115 |    -294.8 |        -0.891 |
+| nse      | 1D+  | L1+L2      | pause  |      576 |      331 |      49 |     -38.1 |        -0.115 |    -294.8 |        -0.891 |
+| nse      | 1D+  | L1+L2      | skip   |      574 |      331 |      49 |     -38.1 |        -0.115 |    -294.8 |        -0.891 |
+| nse      | 1D   | all levels | live   |      798 |      548 |      43 |    -106.8 |        -0.195 |    -248.6 |        -0.454 |
+| nse      | 1D   | all levels | pause  |      798 |      548 |      43 |    -106.8 |        -0.195 |    -248.6 |        -0.454 |
+| nse      | 1D   | all levels | skip   |      796 |      548 |      43 |    -106.8 |        -0.195 |    -248.6 |        -0.454 |
+| nse      | 1D   | L1+L2      | live   |      477 |      304 |      50 |     -26.8 |        -0.088 |    -176.5 |        -0.581 |
+| nse      | 1D   | L1+L2      | pause  |      477 |      304 |      50 |     -26.8 |        -0.088 |    -176.5 |        -0.581 |
+| nse      | 1D   | L1+L2      | skip   |      475 |      304 |      50 |     -26.8 |        -0.088 |    -176.5 |        -0.581 |
+| nse      | 1W   | all levels | live   |      130 |       63 |      36 |     -26.9 |        -0.427 |    -166.7 |        -2.645 |
+| nse      | 1W   | all levels | pause  |      130 |       63 |      36 |     -26.9 |        -0.427 |    -166.7 |        -2.645 |
+| nse      | 1W   | all levels | skip   |      130 |       63 |      36 |     -26.9 |        -0.427 |    -166.7 |        -2.645 |
+| nse      | 1W   | L1+L2      | live   |       81 |       24 |      50 |      -8.2 |        -0.344 |     -83.5 |        -3.48  |
+| nse      | 1W   | L1+L2      | pause  |       81 |       24 |      50 |      -8.2 |        -0.344 |     -83.5 |        -3.48  |
+| nse      | 1W   | L1+L2      | skip   |       81 |       24 |      50 |      -8.2 |        -0.344 |     -83.5 |        -3.48  |
+| nse      | 1M   | all levels | live   |       36 |       16 |      25 |     -10.6 |        -0.664 |     -85.6 |        -5.348 |
+| nse      | 1M   | all levels | pause  |       36 |       16 |      25 |     -10.6 |        -0.664 |     -85.6 |        -5.348 |
+| nse      | 1M   | all levels | skip   |       36 |       16 |      25 |     -10.6 |        -0.664 |     -85.6 |        -5.348 |
+| nse      | 1M   | L1+L2      | live   |       18 |        3 |       0 |      -3   |        -1.013 |     -34.8 |       -11.597 |
+| nse      | 1M   | L1+L2      | pause  |       18 |        3 |       0 |      -3   |        -1.013 |     -34.8 |       -11.597 |
+| nse      | 1M   | L1+L2      | skip   |       18 |        3 |       0 |      -3   |        -1.013 |     -34.8 |       -11.597 |
