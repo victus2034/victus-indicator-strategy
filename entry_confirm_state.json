@@ -43,7 +43,7 @@
   "ACMESOLAR.NS|1d|long|410.82|407": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "ACMESOLAR.NS|1d|long|417.41|386.013": {
     "reached_entry": true,
@@ -169,6 +169,7 @@
   },
   "BELRISE.NS|1d|long|224.076|222.3": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "BEML.NS|1M|short|1991.44|2188": {
@@ -190,13 +191,13 @@
     "stopped_out": false
   },
   "BHARTIHEXA.NS|1d|short|1669.63|1704.8": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "BHARTIHEXA.NS|1w|short|1669.42|1695.4": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "BIOCON.NS|1d|long|338.391|332.9": {
@@ -389,6 +390,7 @@
   },
   "FLUOROCHEM.NS|1d|long|4341.53|4225.4": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "FORCEMOT.NS|1d|long|17303.8|12476.6": {
@@ -594,12 +596,13 @@
     "stopped_out": false
   },
   "JSWINFRA.NS|1M|long|322.018|267.356": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "JSWINFRA.NS|1d|long|323.336|317.9": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "JSWINFRA.NS|1d|long|339.53|330.538": {
@@ -951,6 +954,10 @@
     "stage": 2,
     "stopped_out": false
   },
+  "SUIUSD|1d|long|1.01535|0.867387": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "TAOUSD|1w|short|277.335|415.206": {
     "reached_entry": true,
     "stage": 2,
@@ -1083,6 +1090,7 @@
   "_level_ready|BEAT/USDT|30m|short|0.0962|0.096575": 1790265961.502154,
   "_level_ready|BEAT/USDT|30m|short|0.0973|0.09805": 1790406377.751995,
   "_level_ready|BEAT/USDT|30m|short|0.10625|0.107313": 1790429172.274138,
+  "_level_ready|BELRISE.NS|1d|long|224.076|222.3": 1792558566.875195,
   "_level_ready|BEML.NS|1M|long|1969.53|1856.78": 1791517599.357562,
   "_level_ready|BEML.NS|1M|short|1991.44|2188": 1792381599.217228,
   "_level_ready|BEML.NS|1d|long|1916|1620.62": 1792555315.989515,
@@ -1268,6 +1276,7 @@
   "_level_ready|FINCABLES.NS|1d|long|1327.12|1284.16": 1792381903.352906,
   "_level_ready|FINCABLES.NS|1d|long|1435.04|1413.52": 1791517599.357562,
   "_level_ready|FINCABLES.NS|1w|long|1254.74|1125.83": 1792556503.449216,
+  "_level_ready|FLUOROCHEM.NS|1d|long|4341.53|4225.4": 1792558566.875195,
   "_level_ready|FORCEMOT.NS|1d|long|17303.8|12476.6": 1792556189.719842,
   "_level_ready|FORCEMOT.NS|1d|short|17230|17388": 1792036000.300237,
   "_level_ready|FSL.NS|1d|short|266.19|270.183": 1791517599.357562,
@@ -1377,6 +1386,7 @@
   "_level_ready|JSL.NS|1d|long|708.588|700.5": 1792036000.300237,
   "_level_ready|JSL.NS|1w|long|721.3|703.268": 1791517599.357562,
   "_level_ready|JSL.NS|1w|long|721.3|715": 1792556798.737244,
+  "_level_ready|JSWINFRA.NS|1M|long|322.018|267.356": 1792558566.875195,
   "_level_ready|JSWINFRA.NS|1d|long|323.336|317.9": 1792558293.591918,
   "_level_ready|JSWINFRA.NS|1d|long|339.53|330.538": 1792381599.217228,
   "_level_ready|JUBLFOOD.NS|1M|long|454.928|339.159": 1791776795.761218,
@@ -1874,6 +1884,7 @@
   "_ready|BCHUSD|30m": 1791429995.770346,
   "_ready|BCHUSD|4h": 1791429995.770346,
   "_ready|BEAT/USDT|30m": 1791171365.432313,
+  "_ready|BELRISE.NS|1d": 1792558566.875195,
   "_ready|BEML.NS|1M": 1792381599.217228,
   "_ready|BEML.NS|1d": 1792555315.989515,
   "_ready|BEML.NS|1w": 1792555315.989515,
@@ -1951,6 +1962,7 @@
   "_ready|FACT.NS|1w": 1792556798.737244,
   "_ready|FINCABLES.NS|1d": 1792381903.352906,
   "_ready|FINCABLES.NS|1w": 1792556503.449216,
+  "_ready|FLUOROCHEM.NS|1d": 1792558566.875195,
   "_ready|FORCEMOT.NS|1d": 1792556189.719842,
   "_ready|FSL.NS|1d": 1791952007.912032,
   "_ready|GABRIEL.NS|1d": 1791518192.370228,
@@ -2008,6 +2020,7 @@
   "_ready|JSL.NS|1M": 1792556798.737244,
   "_ready|JSL.NS|1d": 1792036000.300237,
   "_ready|JSL.NS|1w": 1792556798.737244,
+  "_ready|JSWINFRA.NS|1M": 1792558566.875195,
   "_ready|JSWINFRA.NS|1d": 1792558293.591918,
   "_ready|JUBLFOOD.NS|1M": 1791776795.761218,
   "_ready|JUBLFOOD.NS|1w": 1792554386.505792,
