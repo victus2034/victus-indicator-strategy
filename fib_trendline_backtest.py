@@ -75,6 +75,9 @@ FIB_L4 = False
 FIB_REPEAT_WAIT = 0
 # Research hook (lakky, 2026-10-20): {timeframe: ("L1".."L4")} - which fib levels alert; overrides ALERT_ZONES and FIB_L4.
 FIB_LEVELS = None
+# Research hook (lakky, 2026-10-21): pause(market, symbol, d, level, start, end, lo, hi) -> ("ok", band_ts | None),
+# ("paused", None) to try the next candle, or ("skip", None) to drop the level. None = no pause, as live.
+FIB_PAUSE = None
 
 
 # ----------------------------------------------------------------- data (cached per day)
@@ -268,6 +271,15 @@ def replay(market, symbol, tf, base, evalc, now):
                         if SKIP_TOUCHED_ENTRY:
                             break
                         continue
+                    if FIB_PAUSE is not None:
+                        end = evalc[k + 1][0] if k + 1 < len(evalc) else ts + eval_seconds
+                        verdict, pause_ts = FIB_PAUSE(market, symbol, d, leg, ts, end, lo_band, hi_band)
+                        if verdict == "paused":
+                            continue
+                        if verdict == "skip":
+                            fired.add(key)
+                            break
+                        band_ts = pause_ts if pause_ts is not None else band_ts
                     if FIB_REPEAT_WAIT and key in fired and key in last and last[key][1] \
                             and ts < last[key][0] + FIB_REPEAT_WAIT:
                         continue             # the last alert of this level touched: wait before the next one
