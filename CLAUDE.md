@@ -59,6 +59,13 @@ All in `config.py`, which **is tracked in git**:
   Since 2026-10-10 (lakky) it posts one digest per market: NSE to `DISCORD_ENTRY_CONFIRM_NSE_WEBHOOK_URL`,
   crypto (incl. xStocks, XAUT, SLVON) to `DISCORD_ENTRY_CONFIRM_CRYPTO_WEBHOOK_URL`; either unset falls back
   to `DISCORD_ENTRY_CONFIRM_WEBHOOK_URL`.
+  **Fills between checks (2026-10-21, lakky: 1D+ entry confirms missing).** 26 of 235 in-hours fills (9-21 Oct)
+  got no ENTRY NOW: NSE read only the last 15m close, crypto swept a fixed hour that reached back before the
+  alert, and a fill already LATE / stopped by the next check was silent. Now the sweep reads fine candles
+  (Bitunix 1m, Yahoo 5m) since the later of the alert and the market's previous check (`sweep_since`,
+  `_last_check|<market>` in the state, at most `SWEEP_MAX_SECONDS`), and such a fill sends one ENTRY NOW line
+  "filled since the last check" / "filled and stopped since the last check" with the risk used.
+  `research/entry_confirm_audit.py` / `entry_confirm_replay.py`, parts `ec-audit` / `ec-replay`.
   Static on purpose; re-audit against Delta's `/v2/products` when the watchlist changes
 - `EXCHANGE_IDS` — exchange fallback order
 - `MAX_DISTANCE_PCT` — how close price must get before alerting
