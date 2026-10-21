@@ -342,7 +342,7 @@
   "CHOICEIN.NS|1d|long|718.242|711.95": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "CHOICEIN.NS|1d|short|738.115|770.172": {
     "reached_entry": false,
@@ -362,6 +362,11 @@
     "reached_entry": true,
     "stage": 3,
     "stopped_out": true
+  },
+  "COCHINSHIP.NS|1w|long|1148.44|1072.15": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
   },
   "COCHINSHIP.NS|1w|long|1190.4|1180.2": {
     "reached_entry": true,
@@ -990,8 +995,8 @@
     "stopped_out": false
   },
   "MANAPPURAM.NS|1M|long|298.862|214.35": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "MANAPPURAM.NS|1w|long|306.53|287.775": {
@@ -1001,6 +1006,7 @@
   },
   "MCX.NS|1w|long|3069.24|2851.72": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "MEDANTA.NS|1w|long|1220.6|1139.75": {
@@ -1544,6 +1550,7 @@
   "_level_ready|CHOLAHLDNG.NS|1M|long|1285.44|1048.89": 1792564286.449124,
   "_level_ready|CHOLAHLDNG.NS|1d|long|1332.42|1309.5": 1792555573.527481,
   "_level_ready|COCHINSHIP.NS|1d|long|1190.44|1180.2": 1792565477.881975,
+  "_level_ready|COCHINSHIP.NS|1w|long|1148.44|1072.15": 1792574478.914784,
   "_level_ready|COCHINSHIP.NS|1w|long|1190.4|1180.2": 1792565477.881975,
   "_level_ready|COHANCE.NS|1d|long|429.174|425.6": 1791874596.061696,
   "_level_ready|COLPAL.NS|1M|long|1775.35|1688.1": 1792122403.256656,
@@ -1848,6 +1855,7 @@
   "_level_ready|MANAPPURAM.NS|1M|long|298.862|214.35": 1792564895.35456,
   "_level_ready|MANAPPURAM.NS|1w|long|306.53|287.775": 1792556189.719842,
   "_level_ready|MANAPPURAM.NS|1w|long|306.53|299.778": 1791517599.357562,
+  "_level_ready|MCX.NS|1w|long|3069.24|2851.72": 1792574478.914784,
   "_level_ready|MEDANTA.NS|1w|long|1220.6|1139.75": 1792557668.947444,
   "_level_ready|METAXUSD|1d|long|692.359|601.425": 1792569972.971333,
   "_level_ready|METAXUSD|30m|long|722.05|721.862": 1791431198.043723,
@@ -2337,7 +2345,7 @@
   "_ready|CL/USDT|30m": 1789488077.641078,
   "_ready|CL/USDT|4h": 1788921063.531614,
   "_ready|COCHINSHIP.NS|1d": 1792565477.881975,
-  "_ready|COCHINSHIP.NS|1w": 1792565477.881975,
+  "_ready|COCHINSHIP.NS|1w": 1792574478.914784,
   "_ready|COHANCE.NS|1d": 1791874596.061696,
   "_ready|COLPAL.NS|1M": 1792122403.256656,
   "_ready|COLPAL.NS|1d": 1792570303.131866,
@@ -2490,6 +2498,7 @@
   "_ready|MAHABANK.NS|1d": 1792572404.204303,
   "_ready|MANAPPURAM.NS|1M": 1792564895.35456,
   "_ready|MANAPPURAM.NS|1w": 1792556189.719842,
+  "_ready|MCX.NS|1w": 1792574478.914784,
   "_ready|MEDANTA.NS|1w": 1792557668.947444,
   "_ready|METAXUSD|1d": 1792569972.971333,
   "_ready|METAXUSD|30m": 1791431198.043723,
