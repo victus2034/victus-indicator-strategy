@@ -62952,6 +62952,33 @@
       "target_half": 255.33000000000004,
       "timeframe": "4h",
       "trade_id": "TAOUSD|4h|long|254.83|253.83"
+    },
+    {
+      "alert_time": "2026-10-22T22:21:13.485433+05:30",
+      "cost_r": 0.08326080000000041,
+      "date": "2026-10-22",
+      "entry": 145.0512,
+      "entry_time": "2026-10-22T22:35:00+05:30",
+      "exit_price": 145.1139395032152,
+      "exit_time": "2026-10-22T23:30:00+05:30",
+      "final_result": "BE",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": -0.03966142320000155,
+      "outcome": "BE",
+      "rating": 7,
+      "realized_r": 0.04359937679999886,
+      "risk": 1.438999999999993,
+      "side": "long",
+      "stop": 143.6122,
+      "stream": "live",
+      "symbol": "AAVEUSD",
+      "target_1": 146.4902,
+      "target_2": 147.92919999999998,
+      "target_half": 145.77069999999998,
+      "timeframe": "4h",
+      "trade_id": "AAVEUSD|4h|long|145.051|143.612"
     }
   ],
   "handled": {
@@ -65572,24 +65599,6 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
-    },
-    "AAVEUSD|4h|long|145.051|143.612": {
-      "alert_time": "2026-10-22T22:21:13.485433+05:30",
-      "entry": 145.0512,
-      "entry_time": "2026-10-22T22:35:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": true,
-      "market": "crypto",
-      "rating": 7,
-      "risk": 1.438999999999993,
-      "side": "long",
-      "stop": 143.6122,
-      "stream": "live",
-      "symbol": "AAVEUSD",
-      "target_1": 146.4902,
-      "target_2": 147.92919999999998,
-      "target_half": 145.77069999999998,
-      "timeframe": "4h"
     }
   }
 }
