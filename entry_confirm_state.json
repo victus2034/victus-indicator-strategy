@@ -16,13 +16,13 @@
   },
   "AAVEUSD|1d|long|147.031|143.9": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ADAUSD|1d|long|0.213786|0.2109": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "ADAUSD|1d|long|0.21752|0.183225": {
     "reached_entry": true,
@@ -56,6 +56,12 @@
   },
   "ETHUSD|1d|long|2361.88|2327.39": {
     "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
+  "ETHUSD|1d|long|2363.7|1911.05": {
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "FILUSD|1d|long|0.985353|0.9717": {
@@ -70,7 +76,7 @@
   },
   "METAXUSD|1d|long|692.359|601.425": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "METAXUSD|1w|long|637.406|601.425": {
@@ -133,6 +139,7 @@
   },
   "SOLUSD|1d|long|102.89|80.3238": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "SUIUSD|1d|long|0.95305|0.867387": {
@@ -147,7 +154,7 @@
   },
   "TAOUSD|1d|long|256.788|253.277": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "TAOUSD|1w|short|277.335|415.206": {
@@ -194,7 +201,7 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1792687582.977595,
+  "_last_check|crypto": 1792687904.687923,
   "_last_check|nse": 1792661795.675741,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1w|long|1048.63|1005.07": 1792556189.719842,
@@ -520,6 +527,7 @@
   "_level_ready|ERIS.NS|1M|long|1162.71|975.894": 1791788502.510202,
   "_level_ready|ESCORTS.NS|1d|short|2761.92|2792.76": 1791517599.357562,
   "_level_ready|ETHUSD|1d|long|2361.6|2326.18": 1792334509.958164,
+  "_level_ready|ETHUSD|1d|long|2361.88|2327.39": 1792687904.687923,
   "_level_ready|ETHUSD|30m|long|2550.15|2531.75": 1791433588.907667,
   "_level_ready|ETHUSD|30m|long|2611.02|2598.51": 1789871757.521092,
   "_level_ready|ETHUSD|30m|long|2637.5|2623.88": 1790573782.658588,
@@ -1012,6 +1020,7 @@
   "_level_ready|SNDKBUSD|30m|short|1793.85|1800.29": 1790917594.264559,
   "_level_ready|SNDKBUSD|4h|long|1672.39|1655.8": 1791296794.445214,
   "_level_ready|SNDKBUSD|4h|long|1739.48|1722.22": 1790565116.939107,
+  "_level_ready|SOLUSD|1d|long|102.89|80.3238": 1792687904.687923,
   "_level_ready|SOLUSD|1d|long|112.663|110.973": 1791458471.900919,
   "_level_ready|SOLUSD|1d|long|112.663|111.1": 1791736311.389518,
   "_level_ready|SOLUSD|30m|long|113.396|112.901": 1790240171.049522,
@@ -1351,7 +1360,7 @@
   "_ready|ESCORTS.NS|1d": 1791517599.357562,
   "_ready|ESP/USDT|30m": 1789458664.421898,
   "_ready|ESP/USDT|4h": 1788956755.098613,
-  "_ready|ETHUSD|1d": 1792334509.958164,
+  "_ready|ETHUSD|1d": 1792687904.687923,
   "_ready|ETHUSD|30m": 1791433588.907667,
   "_ready|ETHUSD|4h": 1789488358.32405,
   "_ready|EUL/USDT|30m": 1789439750.580446,
@@ -1562,7 +1571,7 @@
   "_ready|SNDKBUSD|1d": 1791479800.16904,
   "_ready|SNDKBUSD|30m": 1791392802.537957,
   "_ready|SNDKBUSD|4h": 1791296794.445214,
-  "_ready|SOLUSD|1d": 1791736311.389518,
+  "_ready|SOLUSD|1d": 1792687904.687923,
   "_ready|SOLUSD|30m": 1791267397.97437,
   "_ready|SOLUSD|4h": 1789742770.728918,
   "_ready|SOON/USDT|30m": 1789447859.694797,
