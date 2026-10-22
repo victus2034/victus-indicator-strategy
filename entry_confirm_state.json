@@ -46,6 +46,7 @@
   },
   "AAVEUSD|1d|long|147.031|143.9": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ABBOTINDIA.NS|1d|long|25131|24868.7": {
@@ -785,11 +786,12 @@
   },
   "FILUSD|1d|long|0.985353|0.9717": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "FILUSD|1d|long|0.990115|0.918519": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "FINCABLES.NS|1M|long|1139.26|949.925": {
@@ -1549,11 +1551,12 @@
   },
   "NAM-INDIA.NS|1w|long|1009.24|944.175": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "NAM-INDIA.NS|1w|long|957.188|944.175": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "NATIONALUM.NS|1M|long|306.82|233.812": {
@@ -1853,8 +1856,14 @@
     "stage": 2,
     "stopped_out": false
   },
+  "RLCUSD|1d|long|0.665936|0.631687": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "RLCUSD|1w|long|0.665936|0.631687": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "RRKABEL.NS|1w|long|2217.68|1813.33": {
@@ -1911,8 +1920,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1792658172.43023,
-  "_last_check|nse": 1792658172.43023,
+  "_last_check|crypto": 1792658494.879335,
+  "_last_check|nse": 1792658494.879335,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1w|long|1048.63|1005.07": 1792556189.719842,
   "_level_ready|360ONE.NS|1w|short|1080.62|1153.16": 1792042008.505102,
@@ -1923,6 +1932,7 @@
   "_level_ready|AARTIIND.NS|1w|long|479.092|468.514": 1791517890.620179,
   "_level_ready|AAVEUSD|1M|long|207.164|158.995": 1791524496.136013,
   "_level_ready|AAVEUSD|1d|long|146.719|136.486": 1792420604.59488,
+  "_level_ready|AAVEUSD|1d|long|147.031|143.9": 1792658494.879335,
   "_level_ready|AAVEUSD|30m|long|134.06|133.21": 1789911352.70983,
   "_level_ready|AAVEUSD|30m|long|177.37|175.97": 1791190567.107418,
   "_level_ready|AAVEUSD|30m|short|128.48|129.368": 1789665141.396728,
@@ -2550,6 +2560,7 @@
   "_level_ready|NAM-INDIA.NS|1d|long|1046.49|1038.1": 1792384311.792363,
   "_level_ready|NAM-INDIA.NS|1w|long|1009.24|944.175": 1792563106.160663,
   "_level_ready|NAM-INDIA.NS|1w|long|1043.92|1017.83": 1791517599.357562,
+  "_level_ready|NAM-INDIA.NS|1w|long|957.188|944.175": 1792658494.879335,
   "_level_ready|NATIONALUM.NS|1M|long|306.82|233.812": 1792640801.869234,
   "_level_ready|NATIONALUM.NS|1w|long|306.82|233.812": 1792640801.869234,
   "_level_ready|NAUKRI.NS|1d|short|1270.43|1297": 1792126921.831652,
@@ -2670,7 +2681,9 @@
   "_level_ready|RIVERUSD|30m|short|1.287|1.29825": 1790436066.885471,
   "_level_ready|RIVERUSD|30m|short|1.294|1.29525": 1790148685.497371,
   "_level_ready|RIVERUSD|30m|short|1.30357|1.31661": 1790266875.674939,
+  "_level_ready|RLCUSD|1d|long|0.665936|0.631687": 1792658494.879335,
   "_level_ready|RLCUSD|1d|long|0.80293|0.631687": 1792238519.910711,
+  "_level_ready|RLCUSD|1w|long|0.665936|0.631687": 1792658494.879335,
   "_level_ready|RRKABEL.NS|1d|long|2550.17|2486.01": 1792129295.649117,
   "_level_ready|RRKABEL.NS|1d|long|2705.07|2664.49": 1791517599.357562,
   "_level_ready|RRKABEL.NS|1w|long|2217.68|1813.33": 1792642297.237984,
@@ -2913,7 +2926,7 @@
   "_ready|AADHARHFC.NS|1d": 1792641484.218837,
   "_ready|AARTIIND.NS|1w": 1791517890.620179,
   "_ready|AAVEUSD|1M": 1791524496.136013,
-  "_ready|AAVEUSD|1d": 1792420604.59488,
+  "_ready|AAVEUSD|1d": 1792658494.879335,
   "_ready|AAVEUSD|30m": 1791190567.107418,
   "_ready|AAVEUSD|4h": 1789057560.102114,
   "_ready|ABBOTINDIA.NS|1M": 1791517599.357562,
@@ -3193,7 +3206,7 @@
   "_ready|MSFT/USDT:USDT|30m": 1789542964.512681,
   "_ready|MSFT/USDT:USDT|4h": 1789376756.136711,
   "_ready|NAM-INDIA.NS|1d": 1792384311.792363,
-  "_ready|NAM-INDIA.NS|1w": 1792563106.160663,
+  "_ready|NAM-INDIA.NS|1w": 1792658494.879335,
   "_ready|NATIONALUM.NS|1M": 1792640801.869234,
   "_ready|NATIONALUM.NS|1w": 1792640801.869234,
   "_ready|NAUKRI.NS|1d": 1792126921.831652,
@@ -3252,7 +3265,8 @@
   "_ready|REDINGTON.NS|1d": 1792640801.869234,
   "_ready|RIVERUSD|1d": 1791778893.859646,
   "_ready|RIVERUSD|30m": 1791284188.370591,
-  "_ready|RLCUSD|1d": 1792238519.910711,
+  "_ready|RLCUSD|1d": 1792658494.879335,
+  "_ready|RLCUSD|1w": 1792658494.879335,
   "_ready|RRKABEL.NS|1d": 1792129295.649117,
   "_ready|RRKABEL.NS|1w": 1792642297.237984,
   "_ready|RVNL.NS|1d": 1791517599.357562,
