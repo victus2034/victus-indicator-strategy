@@ -748,7 +748,8 @@
     "stopped_out": false
   },
   "FINCABLES.NS|1M|long|1139.26|949.925": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "FINCABLES.NS|1M|long|1226.95|949.925": {
@@ -762,7 +763,8 @@
     "stopped_out": true
   },
   "FINCABLES.NS|1w|long|1140.75|1125.83": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "FINCABLES.NS|1w|long|1200.46|1125.83": {
@@ -1250,6 +1252,11 @@
   "KEI.NS|1M|long|4335.25|3509.94": {
     "reached_entry": true,
     "stage": 3,
+    "stopped_out": false
+  },
+  "KEI.NS|1d|long|3755.9|3712.2": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "KEI.NS|1w|long|4335.25|3509.94": {
@@ -1822,8 +1829,8 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "_last_check|crypto": 1792644385.836339,
-  "_last_check|nse": 1792644385.836339,
+  "_last_check|crypto": 1792644671.972234,
+  "_last_check|nse": 1792644671.972234,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1w|long|1048.63|1005.07": 1792556189.719842,
   "_level_ready|360ONE.NS|1w|short|1080.62|1153.16": 1792042008.505102,
@@ -2165,9 +2172,11 @@
   "_level_ready|FACT.NS|1w|long|710.167|660.25": 1792556798.737244,
   "_level_ready|FACT.NS|1w|long|738.742|720.274": 1791517599.357562,
   "_level_ready|FEDERALBNK.NS|1d|long|339.536|306.663": 1792565790.968066,
+  "_level_ready|FINCABLES.NS|1M|long|1139.26|949.925": 1792644671.972234,
   "_level_ready|FINCABLES.NS|1M|long|1226.95|949.925": 1792561314.210422,
   "_level_ready|FINCABLES.NS|1d|long|1327.12|1284.16": 1792381903.352906,
   "_level_ready|FINCABLES.NS|1d|long|1435.04|1413.52": 1791517599.357562,
+  "_level_ready|FINCABLES.NS|1w|long|1140.75|1125.83": 1792644671.972234,
   "_level_ready|FINCABLES.NS|1w|long|1200.46|1125.83": 1792572712.380441,
   "_level_ready|FINCABLES.NS|1w|long|1254.74|1125.83": 1792556503.449216,
   "_level_ready|FLUOROCHEM.NS|1d|long|4280.43|3922.36": 1792565202.34434,
@@ -2321,6 +2330,7 @@
   "_level_ready|KARURVYSYA.NS|1d|long|354.201|331.666": 1792642297.237984,
   "_level_ready|KAYNES.NS|1d|long|3156.7|3131": 1792567003.648281,
   "_level_ready|KEI.NS|1M|long|4335.25|3509.94": 1792558293.591918,
+  "_level_ready|KEI.NS|1d|long|3755.9|3712.2": 1792644671.972234,
   "_level_ready|KEI.NS|1w|long|4335.25|3509.94": 1792558293.591918,
   "_level_ready|KIMS.NS|1w|long|658.066|651.2": 1792641104.661578,
   "_level_ready|KIMS.NS|1w|long|702.79|663.987": 1791949569.774586,
@@ -2954,9 +2964,9 @@
   "_ready|FACT.NS|1d": 1792556798.737244,
   "_ready|FACT.NS|1w": 1792556798.737244,
   "_ready|FEDERALBNK.NS|1d": 1792565790.968066,
-  "_ready|FINCABLES.NS|1M": 1792561314.210422,
+  "_ready|FINCABLES.NS|1M": 1792644671.972234,
   "_ready|FINCABLES.NS|1d": 1792381903.352906,
-  "_ready|FINCABLES.NS|1w": 1792572712.380441,
+  "_ready|FINCABLES.NS|1w": 1792644671.972234,
   "_ready|FLUOROCHEM.NS|1d": 1792640801.869234,
   "_ready|FLUOROCHEM.NS|1w": 1792641717.800772,
   "_ready|FORCEMOT.NS|1d": 1792641104.661578,
@@ -3034,6 +3044,7 @@
   "_ready|KARURVYSYA.NS|1d": 1792642297.237984,
   "_ready|KAYNES.NS|1d": 1792567003.648281,
   "_ready|KEI.NS|1M": 1792558293.591918,
+  "_ready|KEI.NS|1d": 1792644671.972234,
   "_ready|KEI.NS|1w": 1792558293.591918,
   "_ready|KGEN/USDT|30m": 1789463159.791482,
   "_ready|KIMS.NS|1w": 1792641104.661578,
