@@ -726,6 +726,7 @@
   },
   "EXIDEIND.NS|1M|long|347.742|279.591": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "EXIDEIND.NS|1w|long|358.196|352.437": {
@@ -976,6 +977,7 @@
   },
   "HFCL.NS|1d|long|253.945|225.016": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "HINDCOPPER.NS|1M|long|443.123|363.892": {
@@ -1360,6 +1362,7 @@
   },
   "LICHSGFIN.NS|1d|long|495.761|490": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "LICHSGFIN.NS|1w|long|486.554|458.9": {
@@ -1621,7 +1624,7 @@
   },
   "OBEROIRLTY.NS|1w|long|1658.9|1577.11": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ONESOURCE.NS|1d|long|1349.67|1326": {
@@ -1706,6 +1709,11 @@
   },
   "PIRAMALFIN.NS|1w|short|2081.06|2156.02": {
     "reached_entry": false,
+    "stopped_out": false
+  },
+  "PNBHOUSING.NS|1d|long|1119.6|1115.21": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PNBHOUSING.NS|1d|long|1137.13|1115.21": {
@@ -1854,8 +1862,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1792651580.594862,
-  "_last_check|nse": 1792651580.594862,
+  "_last_check|crypto": 1792651901.329247,
+  "_last_check|nse": 1792651901.329247,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1w|long|1048.63|1005.07": 1792556189.719842,
   "_level_ready|360ONE.NS|1w|short|1080.62|1153.16": 1792042008.505102,
@@ -2192,6 +2200,7 @@
   "_level_ready|ETHUSD|30m|short|2717.2|2722.95": 1790666463.823153,
   "_level_ready|ETHUSD|30m|short|2725.55|2746.49": 1790673693.727535,
   "_level_ready|ETHUSD|30m|short|2736|2751.5": 1790915161.963091,
+  "_level_ready|EXIDEIND.NS|1M|long|347.742|279.591": 1792651901.329247,
   "_level_ready|EXIDEIND.NS|1w|long|358.196|352.437": 1792556503.449216,
   "_level_ready|EXIDEIND.NS|1w|long|381.23|352.437": 1792036000.300237,
   "_level_ready|FACT.NS|1M|long|689.907|427.553": 1792641484.218837,
@@ -2259,6 +2268,7 @@
   "_level_ready|HEXT.NS|1w|short|560.169|569.85": 1791868870.844038,
   "_level_ready|HEXT.NS|1w|short|583.598|680.391": 1792554996.80843,
   "_level_ready|HEXT.NS|1w|short|605.679|620.95": 1792640801.869234,
+  "_level_ready|HFCL.NS|1d|long|253.945|225.016": 1792651901.329247,
   "_level_ready|HINDCOPPER.NS|1M|long|443.123|363.892": 1792396916.10282,
   "_level_ready|HINDCOPPER.NS|1d|long|450.364|445.7": 1792382520.989817,
   "_level_ready|HINDCOPPER.NS|1w|long|443.123|363.892": 1792396916.10282,
@@ -2377,6 +2387,7 @@
   "_level_ready|LALPATHLAB.NS|1d|long|1861.33|1805.1": 1792381903.352906,
   "_level_ready|LALPATHLAB.NS|1d|long|1931.71|1902.74": 1791517599.357562,
   "_level_ready|LICHSGFIN.NS|1M|long|496.861|485.45": 1792643767.866121,
+  "_level_ready|LICHSGFIN.NS|1d|long|495.761|490": 1792651901.329247,
   "_level_ready|LICHSGFIN.NS|1d|long|527.728|514.809": 1792122403.256656,
   "_level_ready|LICHSGFIN.NS|1w|long|545.343|474.991": 1791949905.679563,
   "_level_ready|LICHSGFIN.NS|1w|long|545.343|520.016": 1791517599.357562,
@@ -2568,6 +2579,7 @@
   "_level_ready|PIRAMALFIN.NS|1d|long|1958.14|1904.07": 1792468002.381626,
   "_level_ready|PIRAMALFIN.NS|1w|long|1937.93|1840.82": 1791519091.189259,
   "_level_ready|PIRAMALFIN.NS|1w|short|2026.54|2156.02": 1792640801.869234,
+  "_level_ready|PNBHOUSING.NS|1d|long|1119.6|1115.21": 1792651901.329247,
   "_level_ready|PNBHOUSING.NS|1d|long|1137.13|1115.21": 1792575110.80889,
   "_level_ready|POLYMED.NS|1d|long|1556.15|1532.8": 1791518507.451007,
   "_level_ready|POONAWALLA.NS|1d|long|433.882|414.378": 1792122403.256656,
@@ -2991,6 +3003,7 @@
   "_ready|ETHUSD|30m": 1791433588.907667,
   "_ready|ETHUSD|4h": 1789488358.32405,
   "_ready|EUL/USDT|30m": 1789439750.580446,
+  "_ready|EXIDEIND.NS|1M": 1792651901.329247,
   "_ready|EXIDEIND.NS|1w": 1792556503.449216,
   "_ready|FACT.NS|1M": 1792641484.218837,
   "_ready|FACT.NS|1d": 1792556798.737244,
@@ -3024,6 +3037,7 @@
   "_ready|HBLENGINE.NS|1w": 1791777105.432083,
   "_ready|HEXT.NS|1d": 1792555573.527481,
   "_ready|HEXT.NS|1w": 1792640801.869234,
+  "_ready|HFCL.NS|1d": 1792651901.329247,
   "_ready|HINDCOPPER.NS|1M": 1792396916.10282,
   "_ready|HINDCOPPER.NS|1d": 1792382520.989817,
   "_ready|HINDCOPPER.NS|1w": 1792396916.10282,
@@ -3088,7 +3102,7 @@
   "_ready|LA/USDT|30m": 1789440963.456523,
   "_ready|LALPATHLAB.NS|1d": 1792381903.352906,
   "_ready|LICHSGFIN.NS|1M": 1792643767.866121,
-  "_ready|LICHSGFIN.NS|1d": 1792122403.256656,
+  "_ready|LICHSGFIN.NS|1d": 1792651901.329247,
   "_ready|LICHSGFIN.NS|1w": 1791949905.679563,
   "_ready|LINDEINDIA.NS|1d": 1792122403.256656,
   "_ready|LINKUSD|1d": 1791986795.176001,
@@ -3163,7 +3177,7 @@
   "_ready|PINELABS.NS|1d": 1792565477.881975,
   "_ready|PIRAMALFIN.NS|1d": 1792650102.511204,
   "_ready|PIRAMALFIN.NS|1w": 1792640801.869234,
-  "_ready|PNBHOUSING.NS|1d": 1792575110.80889,
+  "_ready|PNBHOUSING.NS|1d": 1792651901.329247,
   "_ready|POLYMED.NS|1d": 1791518507.451007,
   "_ready|POONAWALLA.NS|1d": 1792560997.470601,
   "_ready|PPLPHARMA.NS|1d": 1792640801.869234,
