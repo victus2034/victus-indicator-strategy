@@ -62817,6 +62817,33 @@
       "target_half": 12.654250000000001,
       "timeframe": "4h",
       "trade_id": "LINKUSD|4h|short|12.698|12.7855"
+    },
+    {
+      "alert_time": "2026-10-22T13:07:17.198385+05:30",
+      "cost_r": 0.10988160000000236,
+      "date": "2026-10-22",
+      "entry": 9.312,
+      "entry_time": "2026-10-22T13:10:00+05:30",
+      "exit_price": 9.237379,
+      "exit_time": "2026-10-22T13:30:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "crypto",
+      "net_realized_r": -1.1758958857142923,
+      "outcome": "SL",
+      "rating": 6,
+      "realized_r": -1.06601428571429,
+      "risk": 0.06999999999999851,
+      "side": "long",
+      "stop": 9.242,
+      "stream": "live",
+      "symbol": "AVAXUSD",
+      "target_1": 9.381999999999998,
+      "target_2": 9.451999999999996,
+      "target_half": 9.346999999999998,
+      "timeframe": "4h",
+      "trade_id": "AVAXUSD|4h|long|9.312|9.242"
     }
   ],
   "handled": {
@@ -65432,24 +65459,6 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
-    },
-    "AVAXUSD|4h|long|9.312|9.242": {
-      "alert_time": "2026-10-22T13:07:17.198385+05:30",
-      "entry": 9.312,
-      "entry_time": "2026-10-22T13:10:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "crypto",
-      "rating": 6,
-      "risk": 0.06999999999999851,
-      "side": "long",
-      "stop": 9.242,
-      "stream": "live",
-      "symbol": "AVAXUSD",
-      "target_1": 9.381999999999998,
-      "target_2": 9.451999999999996,
-      "target_half": 9.346999999999998,
-      "timeframe": "4h"
     }
   }
 }
