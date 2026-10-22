@@ -1032,10 +1032,12 @@
   },
   "IIFL.NS|1d|long|571.845|501.569": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "IIFL.NS|1w|long|571.845|501.569": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "IKS.NS|1M|long|1566.74|1465.93": {
@@ -1457,11 +1459,12 @@
   },
   "NETWEB.NS|1d|long|4557.7|4520.3": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "NETWEB.NS|1w|long|4511.15|3824.06": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "NEULANDLAB.NS|1w|long|18498.8|15476.6": {
@@ -1765,8 +1768,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1792642910.47638,
-  "_last_check|nse": 1792642910.47638,
+  "_last_check|crypto": 1792643202.89155,
+  "_last_check|nse": 1792643202.89155,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1w|long|1048.63|1005.07": 1792556189.719842,
   "_level_ready|360ONE.NS|1w|short|1080.62|1153.16": 1792042008.505102,
@@ -2219,6 +2222,8 @@
   "_level_ready|IDFCFIRSTB.NS|1w|long|75.4215|67.9331": 1792561608.307808,
   "_level_ready|IFCI.NS|1w|long|68.285|58.4813": 1792038092.080259,
   "_level_ready|IFCI.NS|1w|long|68.285|64.7557": 1791517599.357562,
+  "_level_ready|IIFL.NS|1d|long|571.845|501.569": 1792643202.89155,
+  "_level_ready|IIFL.NS|1w|long|571.845|501.569": 1792643202.89155,
   "_level_ready|IKS.NS|1M|long|1640.06|1465.93": 1792573607.653029,
   "_level_ready|IKS.NS|1M|short|1760.51|1807.64": 1791517599.357562,
   "_level_ready|IKS.NS|1M|short|1760.51|1891.44": 1792037205.474648,
@@ -2396,6 +2401,7 @@
   "_level_ready|NETWEB.NS|1d|long|4557.7|4520.3": 1792641484.218837,
   "_level_ready|NETWEB.NS|1d|long|4879.1|4645.62": 1791776795.761218,
   "_level_ready|NETWEB.NS|1d|long|4879.1|4795.05": 1791517599.357562,
+  "_level_ready|NETWEB.NS|1w|long|4511.15|3824.06": 1792643202.89155,
   "_level_ready|NEULANDLAB.NS|1w|long|18498.8|15476.6": 1792641484.218837,
   "_level_ready|NH.NS|1w|long|1732.89|1689.57": 1791517599.357562,
   "_level_ready|NH.NS|1w|long|1732.89|1703": 1792555870.172007,
@@ -2941,6 +2947,8 @@
   "_ready|IDBI.NS|1d": 1792642910.47638,
   "_ready|IDFCFIRSTB.NS|1w": 1792561608.307808,
   "_ready|IFCI.NS|1w": 1792038092.080259,
+  "_ready|IIFL.NS|1d": 1792643202.89155,
+  "_ready|IIFL.NS|1w": 1792643202.89155,
   "_ready|IKS.NS|1M": 1792573607.653029,
   "_ready|IKS.NS|1d": 1791517599.357562,
   "_ready|IKS.NS|1w": 1792573607.653029,
@@ -3017,6 +3025,7 @@
   "_ready|NAVINFLUOR.NS|1d": 1792554386.505792,
   "_ready|NBCC.NS|1w": 1792557094.347878,
   "_ready|NETWEB.NS|1d": 1792641484.218837,
+  "_ready|NETWEB.NS|1w": 1792643202.89155,
   "_ready|NEULANDLAB.NS|1w": 1792641484.218837,
   "_ready|NH.NS|1w": 1792555870.172007,
   "_ready|NHPC.NS|1d": 1792640801.869234,
