@@ -523,6 +523,15 @@ FIB_ALERT_LEVELS = {
     "1w": ("L1", "L2", "L3", "L4"),
     "1M": ("L1", "L2", "L3", "L4"),
 }
+# Skip fib L1/L2 after a 4H trendline break (lakky, 2026-10-22, "for testing"), crypto only: for
+# FIB_TL_BREAK_SKIP_SECONDS after a 4H TL BROKEN candle closes, that symbol's same-side L1/L2 fib levels
+# (a broken support skips BUY, a broken resistance SELL), on every fib timeframe, are dropped for good,
+# not sent later. L3/L4 still alert. Sep 1 - Oct 21 replay (research/fib_tl_break_pause_backtest.py, part
+# fib-tl-pause): crypto 1D +0.073R / +0.83% -> +0.092R / +1.02% a trade, 4 of 127 trades dropped; 4H, 1W,
+# 1M unchanged; NSE unchanged at 1h / 4h / 1 day, so not applied there. Empty markets = off.
+FIB_TL_BREAK_SKIP_SECONDS = 4 * 3600
+FIB_TL_BREAK_SKIP_LEVELS = ("L1", "L2")
+FIB_TL_BREAK_SKIP_MARKETS = ("crypto",)
 # Fib stop = the support/resistance zone rule (Lakky, 2026-10-08, Notion 20):
 # ZONE_SL_HEIGHT_PCT (25%) of the fib box's height beyond its far edge, in place
 # of the inner fib's 0.55 line inside the box. Sep 1 - Oct 8, deeper zone only

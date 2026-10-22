@@ -1084,3 +1084,66 @@ def test_earlier_1w_result_is_shown_once_on_the_next_card():
         assert results["a"]["reported"] and results["c"]["reported"]
         card = report.build_card("fib", "FIB", date(2026, 10, 20), joined)
         assert "CLOSED SINCE LAST CARD" not in card
+
+
+class TlBreakSkipTests(unittest.TestCase):
+    """lakky 2026-10-22: a 4H TL break drops same-side fib L1/L2 for 4h, crypto only; L3/L4 still alert."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.sent = []
+        self.close = 1_000_000.0
+        self.breaks = [{"key": "tlbreak|X|4h|S|1|2", "kind": SUPPORT, "closed_at": self.close}]
+
+    def fib(self, level, side="long"):
+        z = OnceOnlyTests().fib(f"fib|X|1d|1|0|110|2|{level}")
+        return {**z, "level": level, "plan": {**z["plan"], "side": side}}
+
+    def run_pass(self, fibs, now, market_ok=True):
+        tmp = pathlib.Path(self.tmp.name)
+        seeded = {f"{c}:{m}:{fts.SEED_VERSION}": 1 for c in fts.CHANNELS for m in (fts.CRYPTO, fts.NSE)}
+        if not (tmp / "state.json").exists():
+            (tmp / "state.json").write_text(__import__("json").dumps({fts.SEEDED_KEY: seeded}))
+        analyses = {"4h": {"fib": [], "touch": [], "break": list(self.breaks), "price": 100.5},
+                    "1d": {"fib": list(fibs), "touch": [], "break": [], "price": 100.5}}
+        with mock.patch.object(fts, "STATE_FILE", tmp / "state.json"), \
+             mock.patch.object(fts, "RECORDS_FILE", tmp / "records.jsonl"), \
+             mock.patch.object(fts, "scan_crypto", lambda tfs, now, since=None: [("X", analyses, None)]), \
+             mock.patch.object(fts, "nse_session_open", lambda now: False), \
+             mock.patch.object(fts, "format_break_alert", return_value="broken"), \
+             mock.patch.object(fts, "FIB_TL_BREAK_SKIP_MARKETS", (fts.CRYPTO,) if market_ok else ()), \
+             mock.patch.object(fts.scanner, "in_alert_window", lambda: True), \
+             mock.patch.object(fts.scanner, "get_env_or_config", return_value="http://hook"), \
+             mock.patch.object(fts, "send", lambda channel, message, market: self.sent.append(message) or True), \
+             mock.patch.object(fts.scanner, "send_status_message"), \
+             mock.patch.object(fts.time, "time", return_value=now), \
+             mock.patch.dict("sys.modules", {"fib_trendline_daily_report": mock.MagicMock()}):
+            fts.run_once()
+
+    def sent_levels(self):
+        return [m for m in self.sent if "FIB" in m]
+
+    def test_l1_l2_on_the_broken_side_are_dropped_for_good(self):
+        fibs = [self.fib(level) for level in ("L1", "L2", "L3", "L4")]
+        self.run_pass(fibs, self.close + 600)
+        self.assertEqual([m.split(" · ")[1] for m in self.sent_levels()], ["FIB L3", "FIB L4"])
+        self.breaks = []
+        self.run_pass(fibs, self.close + fts.FIB_TL_BREAK_SKIP_SECONDS + 600)   # after the 4h: still never sent
+        self.assertEqual(len(self.sent_levels()), 2)
+
+    def test_the_other_side_and_later_passes_alert(self):
+        self.run_pass([self.fib("L1", side="short")], self.close + 600)         # a broken support: SELL unaffected
+        self.assertEqual(len(self.sent_levels()), 1)
+        self.run_pass([self.fib("L2")], self.close + fts.FIB_TL_BREAK_SKIP_SECONDS)   # the 4h are over
+        self.assertEqual(len(self.sent_levels()), 2)
+
+    def test_markets_not_listed_are_untouched(self):
+        self.run_pass([self.fib("L1")], self.close + 600, market_ok=False)
+        self.assertEqual(len(self.sent_levels()), 1)
+
+    def test_sides(self):
+        resistance = {"4h": {"break": [{"kind": 1, "closed_at": 0}]}}
+        self.assertEqual(fts.tl_break_skip_sides(fts.CRYPTO, resistance, 60), {-1})
+        self.assertEqual(fts.tl_break_skip_sides(fts.NSE, resistance, 60), set())
+        self.assertEqual(fts.tl_break_skip_sides(fts.CRYPTO, resistance, fts.FIB_TL_BREAK_SKIP_SECONDS), set())
