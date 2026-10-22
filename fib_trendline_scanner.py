@@ -56,6 +56,9 @@ from config import (
     FIB_ALERT_ZONES,  # noqa: F401 - the backtest test compares it
     FIB_SL_HEIGHT_PCT,
     FIB_SWING_LENGTH,
+    FIB_TL_BREAK_SKIP_LEVELS,
+    FIB_TL_BREAK_SKIP_MARKETS,
+    FIB_TL_BREAK_SKIP_SECONDS,
     FIB_TL_MAX_DISTANCE_PCT,
     FIB_TL_MIN_DISTANCE_PCT,
     FIB_TL_TIMEFRAMES,
@@ -670,6 +673,28 @@ def plan_alerts(state, market, symbol, tf, analysis, now, last_scan=None):
     return planned
 
 
+def tl_break_skip_sides(market, analyses, now):
+    """{1, -1}: the fib sides whose L1/L2 are skipped now after a 4H TL break (lakky, 2026-10-22).
+
+    A broken support skips BUY (1), a broken resistance SELL (-1), for FIB_TL_BREAK_SKIP_SECONDS from
+    the breaking 4H candle's close. analyse keeps a break for the last two closed candles, which covers it."""
+    if market not in FIB_TL_BREAK_SKIP_MARKETS:
+        return set()
+    sides = set()
+    for b in (analyses.get("4h") or {}).get("break", []):
+        closed_at = b.get("closed_at")
+        if closed_at is not None and closed_at <= now < closed_at + FIB_TL_BREAK_SKIP_SECONDS:
+            sides.add(1 if b.get("kind") == SUPPORT else -1)
+    return sides
+
+
+def skipped_by_tl_break(channel, record, sides):
+    """True for a fib L1/L2 alert on a side tl_break_skip_sides paused."""
+    if channel != "fib" or not record or not sides or record.get("level") not in FIB_TL_BREAK_SKIP_LEVELS:
+        return False
+    return (1 if record["plan"]["side"] == "long" else -1) in sides
+
+
 def mark_sent(state, key, now):
     state[key] = {"sent": now, "seen": now, "in_band": key.startswith(("tl|", "zone|"))}
 
@@ -864,11 +889,13 @@ def run_once(dry_run=False, force_nse=False):
             if analyses is None:
                 failures.append(f"{market} {symbol}: {error}")
                 continue
+            skip_sides = tl_break_skip_sides(market, analyses, now)
             for tf, analysis in analyses.items():
                 for channel, key, message, record in plan_alerts(state, market, symbol, tf, analysis, now,
                                                                  previous_scan.get(market)):
+                    skip = skipped_by_tl_break(channel, record, skip_sides)
                     if dry_run:
-                        print(f"[{channel}] {message}\n")
+                        print(f"[{channel}]{' (skipped: 4H TL break)' if skip else ''} {message}\n")
                         continue
                     if not configured[(channel, market)]:
                         continue             # nothing recorded: no webhook, no channel yet
@@ -882,6 +909,14 @@ def run_once(dry_run=False, force_nse=False):
                         continue
                     if not awake[market]:
                         continue             # held - it alerts later if it is still true
+                    if skip:
+                        # A 4H trendline just broke against this fib's side: this L1/L2 level is
+                        # dropped for good, as if sent (FIB_TL_BREAK_SKIP_SECONDS, lakky 2026-10-22).
+                        print(f"[{channel}] skipped after a 4H TL break: {key}")
+                        mark_sent(state, key, now)
+                        state[key]["skipped"] = "4h_tl_break"
+                        save_state(state, now)
+                        continue
                     if now - attempts.get(key, 0) < RETRY_BACKOFF_SECONDS:
                         continue             # the last send failed: wait out the backoff
                     print(f"[{channel}] {message}\n")

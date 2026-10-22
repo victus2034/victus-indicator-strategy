@@ -441,6 +441,12 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   No repeats - the "again after 4h if touched" rule was backtested and made it worse (`research/fib_l3_l4_backtest.py`,
   `fib_levels_all_backtest.py`, parts `fib-l3l4`, `fib-levels-all`). Sep 1 - Oct 20, per trade: crypto 4H -0.03R -> -0.14R,
   1D +0.42R -> +0.07R, NSE worse at every level. BTW's 20 Oct drop to L4 had no alert because L3 had alerted on 16 Oct (one per zone).
+- **Fib L1/L2 skipped for 4h after a 4H TL break (2026-10-22, lakky, "for testing"), crypto only.** For
+  `FIB_TL_BREAK_SKIP_SECONDS` (4h) after a 4H TL BROKEN candle closes, that symbol's same-side `FIB_TL_BREAK_SKIP_LEVELS`
+  (L1, L2) on every fib timeframe are dropped for good, marked in the state as sent with `skipped` (a broken support
+  skips BUY, a broken resistance SELL; `tl_break_skip_sides`, `skipped_by_tl_break`). L3/L4 and NSE unchanged. Sep 1 - Oct 21
+  (`research/fib_tl_break_pause_backtest.py`, part `fib-tl-pause`, 1h / 4h / 1 day, pause vs skip): crypto 1D
+  +0.073R / +0.83% -> +0.092R / +1.02% a trade on 4 of 127 trades; pausing (alert later) did no better; NSE flat.
 - **1W / 1M alert from 3% away (2026-10-21, lakky: "help me to get ready for big timeframe trades"), crypto and NSE.**
   Fibs, trendlines and 1W/1M S/R zones use `config.alert_band_pct(tf, ...)`: `EARLY_ALERT_BAND_PCT` (3%) on
   `EARLY_ALERT_TIMEFRAMES` (1w, 1M), else 0.75% (fib/TL) / `MAX_DISTANCE_PCT` (zones; re-arm at 3% x `REARM_FACTOR`).
