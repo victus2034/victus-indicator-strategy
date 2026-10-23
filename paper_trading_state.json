@@ -64919,6 +64919,7 @@
     "XAUTUSD|30m|short|4380.4|4382.75": "stop_too_tight",
     "XAUTUSD|30m|short|4406|4407": "filled",
     "XAUTUSD|30m|short|4413.97|4415.94": "filled",
+    "XAUTUSD|4h|long|3999.71|3986.47": "filled",
     "XAUTUSD|4h|long|4109.2|4074.93": "filled",
     "XAUTUSD|4h|long|4136.23|4121.43": "filled",
     "XAUTUSD|4h|long|4281.79|4241.02": "filled",
@@ -65599,6 +65600,24 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
+    },
+    "XAUTUSD|4h|long|3999.71|3986.47": {
+      "alert_time": "2026-10-23T19:52:06.031678+05:30",
+      "entry": 3999.71,
+      "entry_time": "2026-10-23T19:55:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "other",
+      "rating": 7,
+      "risk": 13.237500000000182,
+      "side": "long",
+      "stop": 3986.4725,
+      "stream": "live",
+      "symbol": "XAUTUSD",
+      "target_1": 4012.9475,
+      "target_2": 4026.1850000000004,
+      "target_half": 4006.32875,
+      "timeframe": "4h"
     }
   }
 }
