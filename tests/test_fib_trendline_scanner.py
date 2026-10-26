@@ -58,9 +58,9 @@ class FibDiesPastItsStopTests(unittest.TestCase):
     def test_an_up_fib_dies_past_its_stop_and_the_down_move_starts_at_its_top(self):
         # base 100 (bar 0), top 200 (bar 5): L4 = 134, stop = 200 - 0.6875 * 100 = 131.25
         h = [101, 120, 140, 160, 180, 200, 190, 170, 150, 140, 136, 135, 134]
-        l = [100, 110, 130, 150, 170, 190, 180, 160, 145, 137, 135, 132, 131]
+        l = [100, 110, 130, 150, 170, 190, 180, 160, 145, 137, 135, 132, 130]
         snaps, _ = fib_engine.run([str(i) for i in range(len(h))], h, l, N=2)
-        self.assertEqual([(s["d"], s["O"], s["E"]) for s in snaps[-2:]], [(1, 100, 200), (-1, 200, 131)])
+        self.assertEqual([(s["d"], s["O"], s["E"]) for s in snaps[-2:]], [(1, 100, 200), (-1, 200, 130)])
         self.assertTrue(snaps[-1]["ended"])
 
 
@@ -83,14 +83,38 @@ class FibDiesPastItsStopTests(unittest.TestCase):
         self.assertEqual([round(v, 5) for v in fib_engine.levels(0.16358, 0.09225)],
                          [0.13933, 0.13148, 0.12435, 0.1165])
 
+    def test_ena_4h_sell_fib_holds_through_a_wick_just_past_its_stop(self):
+        # v12.10.3 (lakky, ENA 4H 2026-10-26): the 26 Oct 12:00 UTC high 0.21279 passed the
+        # SELL fib's stop 0.21264 by 0.07%; v12.10.2 flipped it to BUY 0.18371 -> 0.21279
+        path = pathlib.Path(__file__).resolve().parent / "fixtures" / "ena_usdt_4h_bitunix_400.csv"
+        rows = [line.split(",") for line in path.read_text().splitlines()[1:]]
+        stamp = [datetime.fromtimestamp(int(r[0]), timezone.utc).strftime("%Y-%m-%d %H:%M") for r in rows]
+        snaps, _ = fib_engine.run(stamp, [float(r[2]) for r in rows], [float(r[3]) for r in rows])
+        live = snaps[-1]
+        self.assertEqual((live["d"], live["O"], stamp[live["Ot"]], live["E"], stamp[live["Et"]]),
+                         (-1, 0.22579, "2026-10-21 16:00", 0.18371, "2026-10-24 16:00"))
+        stop = 0.18371 + fib_engine.KILL * (0.22579 - 0.18371)
+        self.assertAlmostEqual(stop, 0.21264, places=5)
+        self.assertLess(max(float(r[2]) for r in rows[-8:]), stop * (1 + fib_engine.KILL_BUFFER))
+
+    def test_a_wick_just_past_the_stop_does_not_kill(self):
+        # base 100, top 200, stop 131.25: a low of 131.2 is only 0.04% past it, the fib holds
+        h = [101, 120, 140, 160, 180, 200, 190, 170, 150, 140, 136, 135, 134]
+        l = [100, 110, 130, 150, 170, 190, 180, 160, 145, 137, 135, 132, 131.2]
+        snaps, _ = fib_engine.run([str(i) for i in range(len(h))], h, l, N=2)
+        self.assertEqual((snaps[-1]["d"], snaps[-1]["O"], snaps[-1]["E"]), (1, 100, 200))
+        l[-1] = 131   # 0.19% past: dead
+        snaps, _ = fib_engine.run([str(i) for i in range(len(h))], h, l, N=2)
+        self.assertEqual((snaps[-1]["d"], snaps[-1]["O"], snaps[-1]["E"]), (-1, 200, 131))
+
     def test_a_fresh_flip_still_dies_past_its_origin(self):
-        # the up fib 100 -> 200 flips at its stop (131); the down fib 200 -> 131 is fresh,
+        # the up fib 100 -> 200 flips past its stop (130); the down fib 200 -> 130 is fresh,
         # a high past 200 still kills it
         h = [101, 120, 140, 160, 180, 200, 190, 170, 150, 140, 136, 135, 134, 180, 199, 201]
-        l = [100, 110, 130, 150, 170, 190, 180, 160, 145, 137, 135, 132, 131, 133, 170, 190]
+        l = [100, 110, 130, 150, 170, 190, 180, 160, 145, 137, 135, 132, 130, 133, 170, 190]
         snaps, _ = fib_engine.run([str(i) for i in range(len(h))], h, l, N=2)
         self.assertEqual([(s["d"], s["O"], s["E"]) for s in snaps[-4:]],
-                         [(-1, 200, 131), (-1, 200, 131), (-1, 200, 131), (1, 131, 201)])
+                         [(-1, 200, 130), (-1, 200, 130), (-1, 200, 130), (1, 130, 201)])
 
 
 def zones_by_number(d, base, top):

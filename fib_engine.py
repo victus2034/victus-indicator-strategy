@@ -43,6 +43,9 @@ Up move (d = +1): O = base (low), E = top (running high),
              is not stop-killed itself until it makes a new extreme - only its
              origin kills it. MAGIC's SELL fib 0.16358 -> 0.09225 (Oct 11) was
              flipped back by the Oct 12 wick to 0.14649, 6 candles later.
+             v12.10.3 (lakky, ENA 4H 2026-10-26): the stop kills only a wick more
+             than KILL_BUFFER (0.1% of price) past it. ENA's SELL fib 0.22579 ->
+             0.18371 died on a wick to 0.21279, 0.07% past its stop 0.21264.
 Down move (d = -1) is the exact mirror.
 """
 import csv
@@ -57,6 +60,7 @@ def load(path):
 ZONE1 = 0.66     # v12.3: a pullback that reached Zone 1 (0.34 of the range) is a new base
 RESTART = 0.88   # v12.1: 0.80 - 0.95 all give the same result on every example
 KILL = ZONE1 + 0.25 * (ZONE1 - 0.55)   # v12.7.11: the strong box's stop, 25% of its height past L4
+KILL_BUFFER = 0.001                    # v12.10.3: a wick must pass that stop by more than this share of price
 
 
 def run(ist, h, l, N=10, restart=RESTART):
@@ -117,7 +121,7 @@ def run(ist, h, l, N=10, restart=RESTART):
                     O, Ot = P, Pt
                 E, Et, P, reset, rb = h[i], i, None, False, None
                 fresh = False
-            elif l[i] < O or (not fresh and l[i] < E - KILL * (E - O)):
+            elif l[i] < O or (not fresh and l[i] < (E - KILL * (E - O)) * (1 - KILL_BUFFER)):
                 ended = True
                 past_stop = l[i] >= O
                 log.append((ist[i], '%s %g broken, up fib dead, down from %g (%s)'
@@ -147,7 +151,7 @@ def run(ist, h, l, N=10, restart=RESTART):
                     O, Ot = P, Pt
                 E, Et, P, reset, rb = l[i], i, None, False, None
                 fresh = False
-            elif h[i] > O or (not fresh and h[i] > E + KILL * (O - E)):
+            elif h[i] > O or (not fresh and h[i] > (E + KILL * (O - E)) * (1 + KILL_BUFFER)):
                 ended = True
                 past_stop = h[i] <= O
                 log.append((ist[i], '%s %g broken, down fib dead, up from %g (%s)'
