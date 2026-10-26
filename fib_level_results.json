@@ -1126,6 +1126,45 @@
    "sl": false
   }
  },
+ "fib|ADAUSD|1d|1|1782345600|0.2825|2@1792911192": {
+  "L1": {
+   "alert_ts": 1791460799,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1791835200,
+   "entry": 0.233404,
+   "fill_ts": 1791460800,
+   "filled": true,
+   "half": true,
+   "outcome": "BE",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1792022399,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 0.21752,
+   "fill_ts": 1792022400,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 0.18719599999999997,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
+  }
+ },
  "fib|ADAUSD|4h|-1|1792137600|0.2109|2@1792377167": {
   "L1": {
    "alert_ts": 1792360799,
@@ -6631,8 +6670,8 @@
    "alert_ts": null,
    "entry": 1675.8160083007813,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|DALBHARAT.NS|4h|1|1791445500|1665.0|2@1791963286": {
@@ -7214,6 +7253,53 @@
    "sl": true
   }
  },
+ "fib|ENAUSD|4h|-1|1792598400|0.18371|2@1792942944": {
+  "L1": {
+   "alert_ts": 1792900799,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 0.1980172,
+   "fill_ts": 1792936800,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1792940399,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 0.202646,
+   "fill_ts": 1792940400,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": 1792965599,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 0.2114828,
+   "fill_ts": null,
+   "filled": false,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  }
+ },
  "fib|ENAUSD|4h|1|1789344000|0.29469|2@1791893892": {
   "L1": {
    "alert_ts": 1790891999,
@@ -7758,8 +7844,8 @@
    "alert_ts": null,
    "entry": 309.2640081787109,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|FEDERALBNK.NS|4h|1|1778643900|371.70001220703125|2@1790744960": {
@@ -8423,8 +8509,8 @@
    "alert_ts": null,
    "entry": 337.7,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|GILLETTE.NS|4h|-1|1788839100|6860.0|2@1792127862": {
@@ -13711,8 +13797,8 @@
    "alert_ts": null,
    "entry": 2637.3719189453122,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|MRPL.NS|4h|1|1768189500|212.3000030517578|2@1790756358": {
@@ -15486,8 +15572,8 @@
   "L4": {
    "alert_ts": 1792843199,
    "ambiguous": false,
-   "be": false,
-   "end_ts": null,
+   "be": true,
+   "end_ts": 1792915200,
    "entry": 0.400434,
    "fill_ts": 1792843200,
    "filled": true,
@@ -15495,7 +15581,7 @@
    "outcome": "1R",
    "r1": true,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   }
  },
@@ -18744,6 +18830,45 @@
    "sl": false
   }
  },
+ "fib|UNIUSD|1d|1|1786665600|10.947|2@1792911192": {
+  "L1": {
+   "alert_ts": 1791331199,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 8.30248,
+   "fill_ts": 1791331200,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1791460799,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 7.446899999999999,
+   "fill_ts": 1791460800,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 5.81352,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
+  }
+ },
  "fib|UNIUSD|1w|-1|1754870400|2.303|2@1790695403": {
   "L1": {
    "alert_ts": 1760140799,
@@ -19016,6 +19141,45 @@
    "filled": false,
    "outcome": "not reached",
    "resolved": true
+  }
+ },
+ "fib|WLDUSD|1d|1|1786060800|0.6196|2@1792918387": {
+  "L1": {
+   "alert_ts": 1791331199,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1791835200,
+   "entry": 0.508488,
+   "fill_ts": 1791460800,
+   "filled": true,
+   "half": true,
+   "outcome": "BE",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1791460799,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1792022400,
+   "entry": 0.47254000000000007,
+   "fill_ts": 1791475200,
+   "filled": true,
+   "half": true,
+   "outcome": "1R",
+   "r1": true,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 0.403912,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
   }
  },
  "fib|WLDUSD|4h|-1|1791734400|0.4619|2@1792139924": {

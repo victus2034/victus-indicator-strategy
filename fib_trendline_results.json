@@ -70,15 +70,16 @@
  },
  "fib|1000PEPEUSD|4h|1|1791475200|0.0051122|2@1792835277": {
   "ambiguous": false,
-  "be": false,
-  "end_ts": null,
+  "be": true,
+  "end_ts": 1792962000,
   "fill_ts": 1792850400,
   "filled": true,
   "half": true,
   "outcome": "1R",
   "r1": true,
   "r2": false,
-  "resolved": false,
+  "reported": true,
+  "resolved": true,
   "sl": false
  },
  "fib|360ONE.NS|1M|1|1654021800|1318.0|1|L1@1792747447": {
@@ -652,6 +653,19 @@
   "be": false,
   "end_ts": null,
   "fill_ts": 1792656000,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "fib|ADAUSD|1d|1|1782345600|0.2825|2@1792911192": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792915200,
   "filled": true,
   "half": false,
   "outcome": "open",
@@ -2632,14 +2646,15 @@
  "fib|BTCUSD|4h|1|1789488000|87378.8|2|L4@1792854761": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792929600,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "reported": true,
+  "resolved": true,
   "sl": false
  },
  "fib|BTWUSD|4h|1|1791072000|2.7537|2@1792153361": {
@@ -3930,6 +3945,32 @@
   "reported": true,
   "resolved": true,
   "sl": true
+ },
+ "fib|ENAUSD|4h|-1|1792598400|0.18371|1|L2@1792940586": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792944000,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "fib|ENAUSD|4h|-1|1792598400|0.18371|2@1792942944": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792947600,
+  "filled": true,
+  "half": true,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
  },
  "fib|ENAUSD|4h|1|1789344000|0.29469|2@1791893892": {
   "ambiguous": false,
@@ -5647,6 +5688,19 @@
   "r1": false,
   "r2": false,
   "resolved": true,
+  "sl": false
+ },
+ "fib|HYPEUSD|4h|-1|1792584000|74.411|1|L2@1792942944": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "fib|HYPEUSD|4h|1|1789488000|98.0|2@1791458284": {
@@ -8700,15 +8754,16 @@
  },
  "fib|ONDOUSD|1d|1|1782259200|0.6084|2|L4@1792833798": {
   "ambiguous": false,
-  "be": false,
-  "end_ts": null,
+  "be": true,
+  "end_ts": 1792915200,
   "fill_ts": 1792843200,
   "filled": true,
   "half": true,
   "outcome": "1R",
   "r1": true,
   "r2": false,
-  "resolved": false,
+  "reported": true,
+  "resolved": true,
   "sl": false
  },
  "fib|ONDOUSD|4h|-1|1792137600|0.4111|1|L2@1792503463": {
@@ -10180,14 +10235,15 @@
  "fib|SOLUSD|4h|-1|1792598400|98.55|1|L2@1792895603": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792969200,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "reported": true,
+  "resolved": true,
   "sl": false
  },
  "fib|SOLUSD|4h|1|1789488000|124.97|2@1791473038": {
@@ -10680,6 +10736,19 @@
   "resolved": true,
   "sl": false
  },
+ "fib|UNIUSD|1d|1|1786665600|10.947|2@1792911192": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1792915200,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|UNIUSD|1w|-1|1754870400|2.303|2@1790695403": {
   "ambiguous": false,
   "be": false,
@@ -10769,6 +10838,19 @@
   "r1": false,
   "r2": false,
   "resolved": true,
+  "sl": false
+ },
+ "fib|WLDUSD|1d|1|1786060800|0.6196|2@1792918387": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "fib|WLDUSD|4h|-1|1791734400|0.4619|2@1792139924": {
@@ -11110,6 +11192,19 @@
   "resolved": false,
   "sl": false
  },
+ "fib|ZECUSD|1w|1|1769990400|1698.46|1|L1@1792982002": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|ZECUSD|4h|-1|1790769600|1308.0|2@1790948388": {
   "ambiguous": false,
   "be": false,
@@ -11181,9 +11276,9 @@
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
-  "half": false,
+  "fill_ts": 1792947600,
+  "filled": true,
+  "half": true,
   "outcome": "open",
   "r1": false,
   "r2": false,
@@ -14899,6 +14994,46 @@
   "sl": false
  },
  "tl|BNBUSD|4h|1|1791777600|1792598400@1792895603": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1792969200,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "no fill",
+  "r1": false,
+  "r2": false,
+  "reported": true,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|BNBUSD|4h|1|1791777600|1792598400@1792912028": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|BNBUSD|4h|1|1791777600|1792598400@1792928868": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|BNBUSD|4h|1|1791777600|1792598400@1792947498": {
   "ambiguous": false,
   "be": false,
   "end_ts": null,
@@ -23146,6 +23281,45 @@
   "resolved": false,
   "sl": false
  },
+ "tl|NVDAXUSD|4h|0|1789387200|1792756800@1792915391": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|NVDAXUSD|4h|0|1789387200|1792756800@1792941772": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|NVDAXUSD|4h|0|1789387200|1792756800@1792982002": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|NVDAXUSD|4h|0|1789905600|1790251200@1791812054": {
   "ambiguous": false,
   "be": false,
@@ -24765,14 +24939,15 @@
  "tl|SNDKBUSD|4h|0|1786348800|1792267200@1792857812": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1792933200,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "reported": true,
+  "resolved": true,
   "sl": false
  },
  "tl|SNDKBUSD|4h|0|1789574400|1790596800@1790954396": {
