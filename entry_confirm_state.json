@@ -14,8 +14,8 @@
     "stopped_out": false
   },
   "360ONE.NS|1M|long|974.923|624.278": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "360ONE.NS|1d|long|1019.7|1008": {
@@ -35,6 +35,7 @@
   },
   "360ONE.NS|1w|long|968.269|931": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "360ONE.NS|1w|short|1080.62|1153.16": {
@@ -1592,6 +1593,10 @@
     "stage": 2,
     "stopped_out": false
   },
+  "IOB.NS|1d|short|30.609|31.1563": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "IOB.NS|1w|short|31.1774|33.9956": {
     "reached_entry": false,
     "stopped_out": false
@@ -2722,14 +2727,15 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793005321.826111,
-  "_last_check|nse": 1793005321.826111,
+  "_last_check|crypto": 1793005586.298262,
+  "_last_check|nse": 1793005586.298262,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1792986985.751506,
   "_level_ready|360ONE.NS|1d|long|1019.7|1008": 1792728404.281105,
   "_level_ready|360ONE.NS|1w|long|1013.78|1005.07": 1792731077.628348,
   "_level_ready|360ONE.NS|1w|long|1048.63|1005.07": 1792556189.719842,
+  "_level_ready|360ONE.NS|1w|long|968.269|931": 1793005586.298262,
   "_level_ready|360ONE.NS|1w|short|1080.62|1153.16": 1792042008.505102,
   "_level_ready|3MINDIA.NS|1M|long|30437.5|29524.4": 1791517599.357562,
   "_level_ready|3MINDIA.NS|1M|long|30437.5|30120": 1792122403.256656,
@@ -3899,7 +3905,7 @@
   "_ready|1000PEPEUSD|1d": 1792991205.370122,
   "_ready|360ONE.NS|1M": 1792986985.751506,
   "_ready|360ONE.NS|1d": 1792728404.281105,
-  "_ready|360ONE.NS|1w": 1792731077.628348,
+  "_ready|360ONE.NS|1w": 1793005586.298262,
   "_ready|3MINDIA.NS|1M": 1792122403.256656,
   "_ready|3MINDIA.NS|1w": 1791517599.357562,
   "_ready|AADHARHFC.NS|1d": 1792742513.157415,
