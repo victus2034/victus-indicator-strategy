@@ -273,6 +273,11 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   -0.01R / +0.07%, NSE -0.15R / -0.49% -> -0.14R / -0.59%; a 20-candle no-flip-back gate was the other option.
   Backtest: `research/fib_kill_backtest.py`, part `fib-kill`. `SEED_VERSION` v10 re-seeds silently.
   `fib_engine.py` is changed here first: copy it back into `fib_reference.py`.
+  **v12.10.3 (lakky, ENA 4H, 2026-10-26): the stop kill needs a wick more than 0.1% past the stop**
+  (`fib_engine.KILL_BUFFER`; base/top kills unchanged). ENA's SELL fib 0.22579 -> 0.18371 died on a wick to
+  0.21279, 0.07% past its stop 0.21264, and flipped to BUY (`tests/fixtures/ena_usdt_4h_bitunix_400.csv`).
+  Sep 1 - now (`research/fib_kill_buffer_backtest.py`, part `fib-kill-buffer`): 0.1% = live R/trade nearly
+  everywhere (NSE 4H -0.203 -> -0.197); 0.25% cost crypto 1D one winner. `SEED_VERSION` v11 re-seeds silently.
 - **Deeper fib zone only (Lakky, 2026-10-08, Notion 20).** Each fib has two boxes; only Zone 2, the
   deeper one, alerts - the lower box for a buy, the upper for a sell (`FIB_ALERT_ZONES`, crypto and NSE;
   the history backtest replays the same rule). Sep 1 - Oct 8 (`research/fib_zone_preference.py`): crypto

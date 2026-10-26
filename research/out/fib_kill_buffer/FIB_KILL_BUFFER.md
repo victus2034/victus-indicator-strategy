@@ -1,0 +1,46 @@
+# Fib stop kill with a small buffer (2026-09-01 to now)
+
+Live fib rules otherwise (every live level, S/R stop, 2R + BE), net after fees. R and % per trade and in total. Entries filled within 15 min of US CPI/PPI/FOMC left out.
+
+| market   | tf   | rule                         |   alerts |   trades |   win_% |   R_total |   R_per_trade |   %_total |   %_per_trade |
+|:---------|:-----|:-----------------------------|---------:|---------:|--------:|----------:|--------------:|----------:|--------------:|
+| crypto   | 4H   | live: any wick past the stop |      206 |      146 |      53 |      -8.3 |        -0.057 |      -1.7 |        -0.012 |
+| crypto   | 4H   | wick > 0.1% past the stop    |      200 |      145 |      52 |      -8.2 |        -0.057 |      -1.6 |        -0.011 |
+| crypto   | 4H   | wick > 0.25% past the stop   |      198 |      145 |      52 |      -8.2 |        -0.057 |      -1.6 |        -0.011 |
+| crypto   | 4H   | wick > 0.5% past the stop    |      189 |      140 |      51 |      -7   |        -0.05  |      -1.6 |        -0.012 |
+| crypto   | 1D   | live: any wick past the stop |       40 |       34 |      67 |      11.5 |         0.337 |      27.9 |         0.821 |
+| crypto   | 1D   | wick > 0.1% past the stop    |       40 |       34 |      67 |      11.5 |         0.337 |      27.9 |         0.821 |
+| crypto   | 1D   | wick > 0.25% past the stop   |       39 |       33 |      65 |       9.5 |         0.287 |      10.7 |         0.324 |
+| crypto   | 1D   | wick > 0.5% past the stop    |       39 |       33 |      65 |       9.5 |         0.287 |      10.7 |         0.324 |
+| crypto   | 1W   | live: any wick past the stop |        6 |        5 |     100 |      -0   |        -0.008 |      -0.2 |        -0.039 |
+| crypto   | 1W   | wick > 0.1% past the stop    |        6 |        5 |     100 |      -0   |        -0.008 |      -0.2 |        -0.039 |
+| crypto   | 1W   | wick > 0.25% past the stop   |        6 |        5 |     100 |      -0   |        -0.008 |      -0.2 |        -0.039 |
+| crypto   | 1W   | wick > 0.5% past the stop    |        6 |        5 |     100 |      -0   |        -0.008 |      -0.2 |        -0.039 |
+| crypto   | 1M   | live: any wick past the stop |        1 |        1 |     nan |      -0   |        -0.002 |      -0   |        -0.039 |
+| crypto   | 1M   | wick > 0.1% past the stop    |        1 |        1 |     nan |      -0   |        -0.002 |      -0   |        -0.039 |
+| crypto   | 1M   | wick > 0.25% past the stop   |        1 |        1 |     nan |      -0   |        -0.002 |      -0   |        -0.039 |
+| crypto   | 1M   | wick > 0.5% past the stop    |        1 |        1 |     nan |      -0   |        -0.002 |      -0   |        -0.039 |
+| crypto   | 1D+  | live: any wick past the stop |       47 |       40 |      69 |      11.4 |         0.285 |      27.7 |         0.692 |
+| crypto   | 1D+  | wick > 0.1% past the stop    |       47 |       40 |      69 |      11.4 |         0.285 |      27.7 |         0.692 |
+| crypto   | 1D+  | wick > 0.25% past the stop   |       46 |       39 |      68 |       9.4 |         0.242 |      10.5 |         0.268 |
+| crypto   | 1D+  | wick > 0.5% past the stop    |       46 |       39 |      68 |       9.4 |         0.242 |      10.5 |         0.268 |
+| nse      | 4H   | live: any wick past the stop |      366 |      267 |      41 |     -54.1 |        -0.203 |    -110.1 |        -0.412 |
+| nse      | 4H   | wick > 0.1% past the stop    |      354 |      260 |      41 |     -51.2 |        -0.197 |    -103.4 |        -0.398 |
+| nse      | 4H   | wick > 0.25% past the stop   |      343 |      250 |      39 |     -52.8 |        -0.211 |    -104.8 |        -0.419 |
+| nse      | 4H   | wick > 0.5% past the stop    |      322 |      236 |      41 |     -47.9 |        -0.203 |    -103.2 |        -0.437 |
+| nse      | 1D   | live: any wick past the stop |      182 |      141 |      45 |      -7.9 |        -0.056 |     -47.7 |        -0.338 |
+| nse      | 1D   | wick > 0.1% past the stop    |      180 |      140 |      45 |      -7.9 |        -0.056 |     -47.7 |        -0.341 |
+| nse      | 1D   | wick > 0.25% past the stop   |      173 |      133 |      44 |      -9.3 |        -0.07  |     -48   |        -0.361 |
+| nse      | 1D   | wick > 0.5% past the stop    |      169 |      129 |      45 |      -6.9 |        -0.054 |     -45.5 |        -0.353 |
+| nse      | 1W   | live: any wick past the stop |       50 |       28 |      23 |     -18.6 |        -0.663 |    -145.7 |        -5.202 |
+| nse      | 1W   | wick > 0.1% past the stop    |       50 |       28 |      23 |     -18.6 |        -0.663 |    -145.7 |        -5.202 |
+| nse      | 1W   | wick > 0.25% past the stop   |       49 |       27 |      24 |     -17.5 |        -0.65  |    -140.6 |        -5.207 |
+| nse      | 1W   | wick > 0.5% past the stop    |       49 |       27 |      24 |     -17.5 |        -0.65  |    -140.6 |        -5.207 |
+| nse      | 1M   | live: any wick past the stop |       12 |        6 |      29 |      -5.1 |        -0.85  |     -51.6 |        -8.593 |
+| nse      | 1M   | wick > 0.1% past the stop    |       12 |        6 |      29 |      -5.1 |        -0.85  |     -51.6 |        -8.593 |
+| nse      | 1M   | wick > 0.25% past the stop   |       12 |        6 |      29 |      -5.1 |        -0.85  |     -51.6 |        -8.593 |
+| nse      | 1M   | wick > 0.5% past the stop    |       12 |        6 |      29 |      -5.1 |        -0.85  |     -51.6 |        -8.593 |
+| nse      | 1D+  | live: any wick past the stop |      244 |      175 |      40 |     -31.6 |        -0.181 |    -244.9 |        -1.4   |
+| nse      | 1D+  | wick > 0.1% past the stop    |      242 |      174 |      40 |     -31.6 |        -0.181 |    -244.9 |        -1.408 |
+| nse      | 1D+  | wick > 0.25% past the stop   |      234 |      166 |      39 |     -31.9 |        -0.192 |    -240.1 |        -1.447 |
+| nse      | 1D+  | wick > 0.5% past the stop    |      230 |      162 |      40 |     -29.5 |        -0.182 |    -237.6 |        -1.467 |

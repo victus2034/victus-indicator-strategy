@@ -93,9 +93,10 @@ RETRY_BACKOFF_SECONDS = 30 * 60   # a failed Discord send is not retried sooner 
 # many live fibs get a new base/top.
 # v9 (2026-10-13): past the strong box's stop, not L4 (v12.7.11).
 # v10 (2026-10-13): a fib just born from a stop kill is not stop-killed (v12.7.12).
+# v11 (2026-10-26): the stop kills only a wick more than 0.1% past it (v12.10.3, ENA 4H).
 # Not bumped for the 3% band on 1W / 1M (2026-10-21): the first pass then sends the 1W / 1M
 # levels already within 3% once - the early warning asked for - and nothing else is new.
-SEED_VERSION = "v10"
+SEED_VERSION = "v11"
 # Bitunix candles draw different fibs and lines, each a new key: turning the
 # source on re-seeds silently rather than posting every level already in range.
 if bitunix_data.CRYPTO_CANDLE_SOURCE == "bitunix":
