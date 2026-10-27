@@ -518,8 +518,8 @@
     "stopped_out": false
   },
   "BANKINDIA.NS|1d|short|131.223|135.224": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "BANKINDIA.NS|1d|short|140.702|141.284": {
@@ -771,6 +771,7 @@
   },
   "CENTRALBK.NS|1d|short|29.6676|31.1063": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CESC.NS|1M|long|123.535|76.5869": {
@@ -1064,6 +1065,10 @@
     "stopped_out": false
   },
   "EMCURE.NS|1M|long|1688.72|1267.66": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "EMCURE.NS|1d|short|1846.8|1980.48": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -2006,6 +2011,10 @@
     "stage": 2,
     "stopped_out": false
   },
+  "LTTS.NS|1d|short|4142.56|4189.75": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "LTTS.NS|1w|short|3742.88|3785": {
     "reached_entry": true,
     "stage": 3,
@@ -2675,6 +2684,7 @@
   },
   "RECLTD.NS|1d|long|283.933|279.2": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "RECLTD.NS|1w|long|282.453|266.972": {
@@ -2768,8 +2778,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793075770.667926,
-  "_last_check|nse": 1793075770.667926,
+  "_last_check|crypto": 1793076101.452424,
+  "_last_check|nse": 1793076101.452424,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
@@ -3069,6 +3079,7 @@
   "_level_ready|CEMPRO.NS|1d|long|1133.54|861.394": 1793072802.908836,
   "_level_ready|CEMPRO.NS|1w|long|1133.54|861.394": 1793072802.908836,
   "_level_ready|CENTRALBK.NS|1d|long|29.8273|29.32": 1792727171.150355,
+  "_level_ready|CENTRALBK.NS|1d|short|29.6676|31.1063": 1793076101.452424,
   "_level_ready|CENTRALBK.NS|1w|long|30.4314|29.6706": 1791517599.357562,
   "_level_ready|CESC.NS|1M|long|123.535|76.5869": 1792986387.062464,
   "_level_ready|CGCL.NS|1d|long|239.32|235.49": 1792560398.241922,
@@ -3706,6 +3717,7 @@
   "_level_ready|RADICO.NS|1d|short|4553.19|4589.1": 1791776795.761218,
   "_level_ready|RADICO.NS|1d|short|4553.19|4621.49": 1791523901.914717,
   "_level_ready|RBLBANK.NS|1d|long|383.783|377.6": 1792036000.300237,
+  "_level_ready|RECLTD.NS|1d|long|283.933|279.2": 1793076101.452424,
   "_level_ready|REDINGTON.NS|1d|long|355.612|352.95": 1792730195.441606,
   "_level_ready|REDINGTON.NS|1d|long|366.26|352.95": 1792727171.150355,
   "_level_ready|RIVERUSD|1d|long|1.11025|1.0936": 1791473772.59649,
@@ -4097,7 +4109,7 @@
   "_ready|CEMPRO.NS|1M": 1792728404.281105,
   "_ready|CEMPRO.NS|1d": 1793072802.908836,
   "_ready|CEMPRO.NS|1w": 1793072802.908836,
-  "_ready|CENTRALBK.NS|1d": 1792727171.150355,
+  "_ready|CENTRALBK.NS|1d": 1793076101.452424,
   "_ready|CENTRALBK.NS|1w": 1791517599.357562,
   "_ready|CESC.NS|1M": 1792986387.062464,
   "_ready|CGCL.NS|1d": 1792560398.241922,
@@ -4397,6 +4409,7 @@
   "_ready|RBLBANK.NS|1d": 1792036000.300237,
   "_ready|RE/USDT|30m": 1789390557.764438,
   "_ready|RE/USDT|4h": 1788948356.002419,
+  "_ready|RECLTD.NS|1d": 1793076101.452424,
   "_ready|REDINGTON.NS|1d": 1792730195.441606,
   "_ready|RIVERUSD|1d": 1791778893.859646,
   "_ready|RIVERUSD|30m": 1791284188.370591,
