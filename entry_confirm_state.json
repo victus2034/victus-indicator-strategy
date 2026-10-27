@@ -154,6 +154,7 @@
   },
   "ACUTAAS.NS|1d|short|3456.36|3488": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ADAUSD|1d|long|0.20308|0.183225": {
@@ -855,8 +856,8 @@
     "stopped_out": true
   },
   "COHANCE.NS|1d|short|468.136|475.5": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "COLPAL.NS|1M|long|1568.94|1509.75": {
@@ -884,6 +885,7 @@
   },
   "COROMANDEL.NS|1d|short|1776.49|1904.65": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "COROMANDEL.NS|1w|short|1813.89|1980.27": {
@@ -1965,8 +1967,8 @@
     "stopped_out": false
   },
   "LALPATHLAB.NS|1d|short|1878.18|1956.85": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "LALPATHLAB.NS|1w|long|1778.16|1511.97": {
@@ -2090,13 +2092,13 @@
     "stopped_out": true
   },
   "MCX.NS|1d|short|3153.78|3326.27": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "MCX.NS|1d|short|3154.11|3326.43": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "MCX.NS|1w|long|2977.65|2851.72": {
@@ -2472,7 +2474,7 @@
   },
   "PHOENIXLTD.NS|1d|short|1890.18|1952.97": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "PHOENIXLTD.NS|1w|long|1782.49|1685.66": {
@@ -2761,18 +2763,13 @@
     "stage": 2,
     "stopped_out": false
   },
-  "ZECUSD|1d|long|1274.51|841.202": {
-    "reached_entry": true,
-    "stage": 2,
-    "stopped_out": false
-  },
   "ZECUSD|1w|long|1183.65|657.475": {
     "reached_entry": true,
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793075508.265993,
-  "_last_check|nse": 1793075508.265993,
+  "_last_check|crypto": 1793075770.667926,
+  "_last_check|nse": 1793075770.667926,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
@@ -2821,6 +2818,7 @@
   "_level_ready|ACMESOLAR.NS|1d|long|407.4|403.4": 1792382169.501553,
   "_level_ready|ACMESOLAR.NS|1d|long|417.41|386.013": 1792554711.035895,
   "_level_ready|ACMESOLAR.NS|1w|long|381.36|283.712": 1792727171.150355,
+  "_level_ready|ACUTAAS.NS|1d|short|3456.36|3488": 1793075770.667926,
   "_level_ready|ADAUSD|1d|long|0.20308|0.183225": 1792917105.941684,
   "_level_ready|ADAUSD|1d|long|0.213786|0.2109": 1792659719.464991,
   "_level_ready|ADAUSD|1d|long|0.21752|0.183225": 1792648310.386821,
@@ -3096,7 +3094,7 @@
   "_level_ready|COLPAL.NS|1d|long|1709.82|1694": 1792640801.869234,
   "_level_ready|COLPAL.NS|1w|long|1650.56|1631": 1792727171.150355,
   "_level_ready|CONCOR.NS|1w|long|435.084|424.207": 1791517890.620179,
-  "_level_ready|COROMANDEL.NS|1d|short|1776.49|1904.65": 1792728706.729785,
+  "_level_ready|COROMANDEL.NS|1d|short|1776.49|1904.65": 1793075770.667926,
   "_level_ready|CPPLUS.NS|1d|long|3867.05|3678.81": 1792986387.062464,
   "_level_ready|CRAFTSMAN.NS|1d|long|10964.2|9906.59": 1792640801.869234,
   "_level_ready|CRAFTSMAN.NS|1w|long|10112.9|9838.25": 1791517599.357562,
@@ -3996,6 +3994,7 @@
   "_ready|ACMESOLAR.NS|1M": 1792727171.150355,
   "_ready|ACMESOLAR.NS|1d": 1792641998.644804,
   "_ready|ACMESOLAR.NS|1w": 1792727171.150355,
+  "_ready|ACUTAAS.NS|1d": 1793075770.667926,
   "_ready|ADAUSD|1d": 1792917105.941684,
   "_ready|AEGISLOG.NS|1M": 1792986985.751506,
   "_ready|AEGISLOG.NS|1d": 1792554386.505792,
@@ -4117,7 +4116,7 @@
   "_ready|COLPAL.NS|1d": 1792640801.869234,
   "_ready|COLPAL.NS|1w": 1792727171.150355,
   "_ready|CONCOR.NS|1w": 1791517890.620179,
-  "_ready|COROMANDEL.NS|1d": 1792728706.729785,
+  "_ready|COROMANDEL.NS|1d": 1793075770.667926,
   "_ready|COTI/USDT|30m": 1789452970.13835,
   "_ready|CPPLUS.NS|1d": 1792986387.062464,
   "_ready|CRAFTSMAN.NS|1d": 1792640801.869234,
