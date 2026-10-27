@@ -187,13 +187,14 @@ class FibLevelAlertTests(unittest.TestCase):
         self.assertEqual(self.levels(1, e["L1"] * 1.004, "4h"), {})
         self.assertEqual(list(self.levels(1, e["L2"] * 1.004, "4h")), ["L2"])
 
-    def test_every_level_trades_its_own_entry_with_the_strong_boxs_stop(self):
+    def test_every_level_trades_its_own_entry_with_its_own_stop(self):
         e = self.edges(1)
-        stop = zones_by_number(1, 90.0, 110.0)[2]["sl"]
+        stops = fts.fib_level_stops(1, 90.0, 110.0, bodies=[(100.0, 100.0)])   # the test candles' bodies
+        self.assertEqual(len(set(stops.values())), 4)
         for level in ("L2", "L4"):
             z = self.levels(1, e[level] * 1.004, "1d")[level]
             self.assertAlmostEqual(z["plan"]["entry"], e[level])
-            self.assertAlmostEqual(z["plan"]["sl"], stop)
+            self.assertAlmostEqual(z["plan"]["sl"], stops[level])
         self.assertAlmostEqual(self.levels(1, e["L1"] * 1.004, "1d")["L1"]["plan"]["entry"], e["L1"])
 
     def test_l3_keeps_its_old_key_and_the_others_get_the_level(self):
