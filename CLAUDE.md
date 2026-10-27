@@ -229,6 +229,10 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   Zones went the other way (warned +0.56R on 12 trades), so they get none.
 - NSE: the zone scanner's 200 stocks (`nse_scanner.load_watchlist`), scanned only in the session
   and at most every 8 minutes - that pass takes ~3 minutes (Yahoo, 5 intervals).
+  **From the 09:15 open, not 09:00 (2026-10-27, Discord audit).** `nse_session_open` used the zone
+  scanner's 09:00 start, so the first pass ran at 09:12-09:13 on Yahoo's pre-open bar (195 alerts
+  21-27 Oct, 81 outside the band at any traded price). Candles Yahoo stamps after "now" are dropped too
+  (a 13:15 bar at 13:14 hid the morning's touch). `research/discord_alert_audit.py`, part `discord-audit`.
 - **Audit, 2026-09-29** (fixed, each with a test): the fib engine is a state machine whose end
   state depends on where history starts - a 1500-candle 4H window disagreed with full history on
   5.7% of bars - so 4H and NSE daily+ load everything; trendlines converge and don't care. Touch
