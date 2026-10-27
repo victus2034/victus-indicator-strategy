@@ -1084,3 +1084,45 @@ def test_earlier_1w_result_is_shown_once_on_the_next_card():
         assert results["a"]["reported"] and results["c"]["reported"]
         card = report.build_card("fib", "FIB", date(2026, 10, 20), joined)
         assert "CLOSED SINCE LAST CARD" not in card
+
+
+class NseSessionOpenTests(unittest.TestCase):
+    """NSE fib/TL passes start at the 09:15 open, not the 09:00 pre-open (2026-10-27 Discord audit)."""
+
+    def at(self, hhmm, day="2026-10-27"):
+        from datetime import datetime
+        return datetime.fromisoformat(f"{day}T{hhmm}:00+05:30").timestamp()
+
+    def test_pre_open_is_closed(self):
+        self.assertFalse(fts.nse_session_open(self.at("09:13")))
+        self.assertFalse(fts.nse_session_open(self.at("09:00")))
+
+    def test_open_from_0915_to_cutoff(self):
+        self.assertTrue(fts.nse_session_open(self.at("09:15")))
+        self.assertTrue(fts.nse_session_open(self.at("12:00")))
+        self.assertFalse(fts.nse_session_open(self.at("15:20")))
+
+    def test_weekend_is_closed(self):
+        self.assertFalse(fts.nse_session_open(self.at("10:00", day="2026-10-25")))
+
+    def test_scan_nse_drops_candles_stamped_after_now(self):
+        """A bar Yahoo stamps before it opens must not become the forming candle."""
+        import nse_scanner
+        now = self.at("13:14")
+        bar = lambda hhmm: [self.at(hhmm), 100.0, 101.0, 99.0, 100.5]  # noqa: E731
+        hourly = [bar("09:15"), bar("10:15"), bar("11:15"), bar("12:15"), bar("13:15")]
+        seen = {}
+
+        def fake_analyse(market, symbol, tf, candles, now_, price=None, forming=None, trend=None, swept=None):
+            seen[tf] = (candles, swept)
+            return {}
+
+        with mock.patch.object(nse_scanner, "load_watchlist", lambda: ["X.NS"]), \
+                mock.patch.object(fts, "nse_charts", lambda symbols, tfs: {"X.NS": {"4h": list(hourly)}}), \
+                mock.patch.object(fts, "nse_download", lambda symbols, interval, period=None: {
+                    "X.NS": [bar("13:05"), bar("13:10"), bar("13:15")]}), \
+                mock.patch.object(fts, "analyse", fake_analyse):
+            fts.scan_nse(["4h"], now, now - 600)
+        candles, swept = seen["4h"]
+        self.assertTrue(all(c[0] <= now for c in candles))
+        self.assertEqual(len(candles), 4)

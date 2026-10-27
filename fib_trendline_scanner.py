@@ -779,11 +779,20 @@ def scan_crypto(timeframes, now, since=None):
 
 
 def nse_session_open(now):
+    """True from the 09:15 open (nse_config.MARKET_OPEN) to the zone scanner's 15:10 cut-off.
+
+    market_window_status opens at ALERT_SCAN_START (09:00, pre-open). Before 09:15 Yahoo
+    already serves today's first candle, priced off the pre-open auction, so the first pass
+    of the day (09:12-09:13) alerted on prints nobody could trade - 81 of 207 such alerts
+    21-27 Oct were outside the band at any traded price (lakky, 2026-10-27 Discord audit)."""
     import nse_scanner
     import pandas as pd
+    from nse_config import MARKET_OPEN
 
-    is_open, *_ = nse_scanner.market_window_status(pd.Timestamp.fromtimestamp(now, tz=IST))
-    return is_open
+    stamp = pd.Timestamp.fromtimestamp(now, tz=IST)
+    is_open, *_ = nse_scanner.market_window_status(stamp)
+    hour, minute = (int(x) for x in MARKET_OPEN.split(":"))
+    return is_open and (stamp.hour, stamp.minute) >= (hour, minute)
 
 
 def scan_nse(timeframes, now, since=None):
@@ -791,9 +800,14 @@ def scan_nse(timeframes, now, since=None):
 
     since = now - SWEEP_DEFAULT_SECONDS if since is None else since
     symbols = nse_scanner.load_watchlist()
-    charts = nse_charts(symbols, timeframes)
+    # Yahoo can stamp a candle before it opens (a 13:15 bar at 13:14, the 09:15 bar in
+    # pre-open). Such a bar became "the candle forming now", so the touched-entry check
+    # saw only it and missed the morning's touch (6 alerts 22-23 Oct, Discord audit).
+    charts = {s: {tf: [c for c in rows if c[0] <= now] for tf, rows in by_tf.items()}
+              for s, by_tf in nse_charts(symbols, timeframes).items()}
     try:
-        fine = nse_download(symbols, "5m", period="1d")     # what traded since the last pass
+        fine = {s: [c for c in rows if c[0] <= now]          # what traded since the last pass
+                for s, rows in nse_download(symbols, "5m", period="1d").items()}
     except Exception as error:     # noqa: BLE001 - the price now decides
         print(f"NSE 5m sweep unavailable: {str(error)[:80]}")
         fine = {}
