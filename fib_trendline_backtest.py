@@ -33,7 +33,6 @@ import fib_trendline_trades as trades
 import scanner
 from config import (
     FIB_ALERT_ZONES,
-    FIB_LEVEL_SL_RULE,
     FIB_SL_HEIGHT_PCT,
     FIB_SWING_LENGTH,
     FIB_TL_ENTRY_WAIT_BARS,
@@ -49,7 +48,7 @@ from fib_trendline_data import (
     CRYPTO, IST, NSE, TF_LABEL, TF_SECONDS, TIMEFRAMES, candle_is_closed, delta_candles,
     monthly_from_daily, nse_download,
 )
-from fib_trendline_scanner import MIN_BARS, fib_level_stops, fib_zones
+from fib_trendline_scanner import MIN_BARS, fib_level_stops, fib_zones, sl_rule_for
 from trendlines import SUPPORT, build_trendlines
 
 HERE = Path(__file__).parent
@@ -79,7 +78,7 @@ FIB_L4 = False
 FIB_REPEAT_WAIT = 0
 # Research hook (lakky, 2026-10-20): {timeframe: ("L1".."L4")} - which fib levels alert; overrides ALERT_ZONES and FIB_L4.
 FIB_LEVELS = None
-FIB_SL_RULE = None      # per-level stop rule for FIB_LEVELS legs; None = config.FIB_LEVEL_SL_RULE
+FIB_SL_RULE = None      # per-level stop rule for FIB_LEVELS legs; None = the live per-timeframe rule (sl_rule_for)
 
 
 # ----------------------------------------------------------------- data (cached per day)
@@ -221,8 +220,8 @@ def replay(market, symbol, tf, base, evalc, now):
         legs = []
         if FIB_LEVELS:
             # L1/L2 = the weaker box's near/far edge, L3/L4 = the strong box's; each its own stop
-            # (fib_level_stops, FIB_SL_RULE None = config.FIB_LEVEL_SL_RULE; "shared" = the old one stop)
-            rule = FIB_SL_RULE or FIB_LEVEL_SL_RULE
+            # (fib_level_stops, FIB_SL_RULE None = sl_rule_for(tf); "shared" = the old one stop)
+            rule = sl_rule_for(tf, FIB_SL_RULE)
             bodies = list(zip(opens[s["Ot"]:i], closes[s["Ot"]:i])) if rule == "body" else None
             stops = fib_level_stops(d, base_px, top, rule, bodies)
             for name in FIB_LEVELS.get(tf, ()):

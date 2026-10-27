@@ -34,7 +34,7 @@ from trail_fib_tl_backtest import news  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "fib_level_sl"
 GROUPS = (("4H", ("4h",)), ("1D+", ("1d", "1w", "1M")), ("1D", ("1d",)), ("1W", ("1w",)), ("1M", ("1M",)))
-RULES = ("shared", "next", "body")
+RULES = ("shared", "next", "body", "split")
 
 
 def median_risk(items):
@@ -53,7 +53,7 @@ def main() -> None:
     now = time.time()
     runs = {}
     for rule in RULES:
-        fbt.FIB_SL_RULE = rule
+        fbt.FIB_SL_RULE = None if rule == "split" else rule     # split = the live per-timeframe rule
         runs[rule] = [t for t in replay_all(now) if t["alert_ts"] >= since and not news(t["result"].get("fill_ts"))]
     rows = []
     for market in (CRYPTO, NSE):

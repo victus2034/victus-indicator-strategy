@@ -55,6 +55,7 @@ from config import (
     FIB_ALERT_LEVELS,
     FIB_ALERT_ZONES,  # noqa: F401 - the backtest test compares it
     FIB_LEVEL_SL_RULE,
+    FIB_LEVEL_SL_RULE_BY_TF,
     FIB_SL_MIN_GAP_PCT,
     FIB_SL_HEIGHT_PCT,
     FIB_SWING_LENGTH,
@@ -170,6 +171,12 @@ def fib_zones(d, base, top):
     return [dict(zone=1, **zone1), dict(zone=2, **zone2)]
 
 
+def sl_rule_for(tf, rule=None):
+    """The per-level SL rule a timeframe uses: an explicit rule, else FIB_LEVEL_SL_RULE when set,
+    else FIB_LEVEL_SL_RULE_BY_TF (next on 4H/1D, body on 1W/1M), else "next"."""
+    return rule or FIB_LEVEL_SL_RULE or FIB_LEVEL_SL_RULE_BY_TF.get(tf, "next")
+
+
 def fib_level_stops(d, base, top, rule=None, bodies=None):
     """{L1..L4: stop} - every fib level its own stop (lakky, 2026-10-27, ENA 4H).
 
@@ -215,7 +222,7 @@ def body_stops(d, lv, bodies, gap_pct=None):
 
 def stops_for_levels(d, lv, rule=None, bodies=None):
     """fib_level_stops from the four level prices alone (a record's `levels`)."""
-    rule = rule or FIB_LEVEL_SL_RULE
+    rule = rule or FIB_LEVEL_SL_RULE or "next"
     if rule == "body":
         return body_stops(d, lv, bodies or [])
     box = abs(lv["L3"] - lv["L4"])      # both boxes are 0.11 of the range
@@ -254,8 +261,9 @@ def fib_legs(d, base, top, tf, rule=None, bodies=None):
     old rule: L3 only."""
     zones = {z["zone"]: z for z in fib_zones(d, base, top)}
     levels = fib_levels(d, base, top)
+    rule = sl_rule_for(tf, rule)
     stops = fib_level_stops(d, base, top, rule, bodies)
-    check_level_stops(d, levels, stops if (rule or FIB_LEVEL_SL_RULE) != "shared" else {})
+    check_level_stops(d, levels, stops if rule != "shared" else {})
     legs = []
     for level in FIB_ALERT_LEVELS.get(tf, ("L3",)):
         src = zones[1] if level in ("L1", "L2") else zones[2]

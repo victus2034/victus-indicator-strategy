@@ -79,5 +79,20 @@ class BodyStops(unittest.TestCase):
     cases = LevelStops.cases
 
 
+class RulePerTimeframe(unittest.TestCase):
+    """lakky's pick (2026-10-27): next on 4H / 1D, body on 1W / 1M."""
+
+    def test_split(self):
+        self.assertEqual([fts.sl_rule_for(tf) for tf in ("4h", "1d", "1w", "1M")], ["next", "next", "body", "body"])
+
+    def test_1w_legs_use_the_body_and_1d_the_next_level(self):
+        d, base, top = -1, 98.0, 74.411
+        bodies = BodyStops.bodies(None)
+        body = fts.fib_level_stops(d, base, top, "body", bodies)
+        nxt = fts.fib_level_stops(d, base, top, "next")
+        self.assertEqual({k: z["sl"] for k, z in fts.fib_legs(d, base, top, "1w", bodies=bodies)}, body)
+        self.assertEqual({k: z["sl"] for k, z in fts.fib_legs(d, base, top, "1d", bodies=bodies)}, nxt)
+
+
 if __name__ == "__main__":
     unittest.main()
