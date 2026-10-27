@@ -55,6 +55,7 @@ from config import (
     FIB_ALERT_LEVELS,
     FIB_ALERT_ZONES,  # noqa: F401 - the backtest test compares it
     FIB_LEVEL_SL_RULE,
+    FIB_SL_MIN_GAP_PCT,
     FIB_SL_HEIGHT_PCT,
     FIB_SWING_LENGTH,
     FIB_TL_MAX_DISTANCE_PCT,
@@ -169,7 +170,7 @@ def fib_zones(d, base, top):
     return [dict(zone=1, **zone1), dict(zone=2, **zone2)]
 
 
-def fib_level_stops(d, base, top, rule=None):
+def fib_level_stops(d, base, top, rule=None, bodies=None):
     """{L1..L4: stop} - every fib level its own stop (lakky, 2026-10-27, ENA 4H).
 
     rule (FIB_LEVEL_SL_RULE):
@@ -181,12 +182,42 @@ def fib_level_stops(d, base, top, rule=None):
       "own"     just past the level itself (the pad only) - research.
       "shared"  the old rule (PR #61 - Oct 27): every level on the strong box's stop.
     """
-    return stops_for_levels(d, fib_levels(d, base, top), rule)
+    return stops_for_levels(d, fib_levels(d, base, top), rule, bodies)
 
 
-def stops_for_levels(d, lv, rule=None):
+def body_stops(d, lv, bodies, gap_pct=None):
+    """lakky's hand SLs (HYPE 1D, 2026-10-27): for each level the nearest candle BODY edge (open or
+    close) at least FIB_SL_MIN_GAP_PCT past it - and past the level by the box pad, where the
+    shallower level's fallback stop sits - and short of the next deeper level (L4: within one
+    box past it), over the closed candles since the fib's origin. A level with none takes the
+    "next" stop. Each pick lies between its level and the next one, beyond the shallower
+    level's fallback, so no two levels share a stop and the order always holds."""
+    gap = (FIB_SL_MIN_GAP_PCT if gap_pct is None else gap_pct) / 100
+    box = abs(lv["L3"] - lv["L4"])
+    pad = box * FIB_SL_HEIGHT_PCT / 100
+    fallback = stops_for_levels(d, lv, "next")
+    edges = [p for o_c in bodies for p in o_c]
+    names = ("L1", "L2", "L3", "L4")
+    out = {}
+    for n, k in enumerate(names):
+        p = lv[k]
+        far = lv[names[n + 1]] if n < 3 else p - d * box
+        if d == 1:
+            near = min(p * (1 - gap), p - pad)
+            pick = [e for e in edges if far < e <= near]
+            out[k] = max(pick) if pick else fallback[k]
+        else:
+            near = max(p * (1 + gap), p + pad)
+            pick = [e for e in edges if near <= e < far]
+            out[k] = min(pick) if pick else fallback[k]
+    return out
+
+
+def stops_for_levels(d, lv, rule=None, bodies=None):
     """fib_level_stops from the four level prices alone (a record's `levels`)."""
     rule = rule or FIB_LEVEL_SL_RULE
+    if rule == "body":
+        return body_stops(d, lv, bodies or [])
     box = abs(lv["L3"] - lv["L4"])      # both boxes are 0.11 of the range
     pad = box * FIB_SL_HEIGHT_PCT / 100
     if rule == "shared":
@@ -213,7 +244,7 @@ def check_level_stops(d, levels, stops):
             raise ValueError(f"fib {a}/{b} stops {stops[a]} / {stops[b]} are shared or out of order")
 
 
-def fib_legs(d, base, top, tf, rule=None):
+def fib_legs(d, base, top, tf, rule=None, bodies=None):
     """[(level, zone)] this timeframe alerts at (FIB_ALERT_LEVELS, lakky 2026-10-20).
 
     L1/L2 are the weaker box's near/far edge, L3/L4 the stronger box's. Each leg has its own
@@ -223,7 +254,7 @@ def fib_legs(d, base, top, tf, rule=None):
     old rule: L3 only."""
     zones = {z["zone"]: z for z in fib_zones(d, base, top)}
     levels = fib_levels(d, base, top)
-    stops = fib_level_stops(d, base, top, rule)
+    stops = fib_level_stops(d, base, top, rule, bodies)
     check_level_stops(d, levels, stops if (rule or FIB_LEVEL_SL_RULE) != "shared" else {})
     legs = []
     for level in FIB_ALERT_LEVELS.get(tf, ("L3",)):
@@ -434,7 +465,8 @@ def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=No
     inside_box = base < price < top if d == 1 else top < price < base
     if inside_box and base != top:
         try:
-            legs = fib_legs(d, base, top, tf)
+            legs = fib_legs(d, base, top, tf,
+                            bodies=list(zip(opens[live["Ot"]:], closes[live["Ot"]:])))
         except ValueError as exc:       # check_level_stops: never alert a fib whose levels share a stop
             print(f"  {symbol} {tf}: fib skipped - {exc}")
             legs = []

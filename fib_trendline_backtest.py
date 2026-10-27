@@ -33,6 +33,7 @@ import fib_trendline_trades as trades
 import scanner
 from config import (
     FIB_ALERT_ZONES,
+    FIB_LEVEL_SL_RULE,
     FIB_SL_HEIGHT_PCT,
     FIB_SWING_LENGTH,
     FIB_TL_ENTRY_WAIT_BARS,
@@ -221,7 +222,9 @@ def replay(market, symbol, tf, base, evalc, now):
         if FIB_LEVELS:
             # L1/L2 = the weaker box's near/far edge, L3/L4 = the strong box's; each its own stop
             # (fib_level_stops, FIB_SL_RULE None = config.FIB_LEVEL_SL_RULE; "shared" = the old one stop)
-            stops = fib_level_stops(d, base_px, top, FIB_SL_RULE)
+            rule = FIB_SL_RULE or FIB_LEVEL_SL_RULE
+            bodies = list(zip(opens[s["Ot"]:i], closes[s["Ot"]:i])) if rule == "body" else None
+            stops = fib_level_stops(d, base_px, top, rule, bodies)
             for name in FIB_LEVELS.get(tf, ()):
                 src = zs[1] if name in ("L1", "L2") else zs[2]
                 far = src["low"] if d == 1 else src["high"]

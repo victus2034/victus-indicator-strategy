@@ -49,5 +49,35 @@ class LevelStops(unittest.TestCase):
             self.assertGreater((lv[k] - stops[k]) / lv[k] * 100, 0.9, k)
 
 
+class BodyStops(unittest.TestCase):
+    """lakky's hand SLs on HYPE 1D (2026-10-27): SELL fib 98.0 (Sep 23) -> 74.411 (Oct 24)."""
+
+    def bodies(self):
+        import csv
+        from pathlib import Path
+        rows = list(csv.DictReader(open(Path(__file__).parent / "fixtures" / "hype_usdt_1d_bitunix_fib_sl.csv")))
+        return [(float(r["open"]), float(r["close"])) for r in rows]
+
+    def test_hype_1d_matches_his_chart(self):
+        stops = fts.fib_level_stops(-1, 98.0, 74.411, "body", self.bodies())
+        self.assertAlmostEqual(stops["L1"], 84.17, places=3)    # his line 84.193 (Oct 8 close; Oct 9 close 84.17)
+        self.assertAlmostEqual(stops["L2"], 86.031, places=3)   # his line, Sep 29 close
+        self.assertAlmostEqual(stops["L3"], 88.488, places=3)   # his line, Oct 7 close
+        self.assertAlmostEqual(stops["L4"], 90.964, places=3)   # his line 91.211 (Oct 6 low); nearest body Sep 30 close
+        fts.check_level_stops(-1, fts.fib_levels(-1, 98.0, 74.411), stops)
+
+    def test_never_shared_whatever_the_candles(self):
+        import random
+        rnd = random.Random(7)
+        for d, base, top in self.cases():
+            lo, hi = min(base, top), max(base, top)
+            for _ in range(200):
+                bodies = [(rnd.uniform(lo, hi), rnd.uniform(lo, hi)) for _ in range(rnd.randint(0, 40))]
+                stops = fts.fib_level_stops(d, base, top, "body", bodies)
+                fts.check_level_stops(d, fts.fib_levels(d, base, top), stops)
+
+    cases = LevelStops.cases
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -4,6 +4,8 @@
   own      just past the level itself (25% of a box) - his "too tight" stop (~0.2% on ENA 4H).
   next     a level's stop just past the NEXT deeper level (L1 -> past L2, L2 -> past L3,
            L3 -> past L4 = today's stop, L4 -> one box past L4). His pick in the note.
+  body     nearest candle body edge >= 0.75% past the level, short of the next level, "next" if none
+           (his HYPE 1D lines, 2026-10-27).
 
 Live levels (config.FIB_ALERT_LEVELS), each alerts once, 2R + breakeven, net after fees.
 Sep 1 to now; trades filled within 15 min of a US CPI / PPI / FOMC release left out.
@@ -32,7 +34,7 @@ from trail_fib_tl_backtest import news  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "fib_level_sl"
 GROUPS = (("4H", ("4h",)), ("1D+", ("1d", "1w", "1M")), ("1D", ("1d",)), ("1W", ("1w",)), ("1M", ("1M",)))
-RULES = ("shared", "own", "next")
+RULES = ("shared", "next", "body")
 
 
 def median_risk(items):
@@ -66,8 +68,8 @@ def main() -> None:
     df = pd.DataFrame(rows)
     df.to_csv(OUT / "summary.csv", index=False)
     text = [f"# Fib stop per level ({args.since} to now)", "",
-            "shared = all levels on L3's stop (old live), own = just past the level, next = just past the "
-            "next deeper level. Live levels, once each, 2R + BE, net after fees, R and % per trade. "
+            "shared = all levels on L3's stop (old live), next = just past the next deeper level, body = nearest "
+            "candle body edge >= 0.75% past the level (else next). Live levels, once each, 2R + BE, net after fees, R and % per trade. "
             "Crypto on Delta candles. Entries filled within 15 min of US CPI/PPI/FOMC left out.", "",
             df.to_markdown(index=False), ""]
     (OUT / "FIB_LEVEL_SL.md").write_text("\n".join(text))
