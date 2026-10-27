@@ -310,6 +310,74 @@ def match_part_b(market, replayed, records, all_keys, seeded_keys, since):
     return missing, extra
 
 
+# ----------------------------------------------------------------- Part C
+
+def analysis_at(market, symbol, tf, ts, feed, passes):
+    """fts.analyse as one live pass at ts would have run it, on today's copy of the candles."""
+    width = 60 if market == "crypto" else 300
+    opened = candle_open(market, tf, ts)
+    prev = previous(passes, ts)
+    since = fts.sweep_start(prev, ts)
+    fine = feed.fine(symbol, min(opened, since) - 1800, ts)
+    done = [c for c in fine if c[0] + width <= ts]
+    if not done:
+        return None, None
+    price = done[-1][4]
+    own = [c for c in done if c[0] >= opened]
+    swept_rows = [c for c in done if c[0] + width > since]
+    candles = [c for c in feed.chart(symbol, tf, ts) if c[0] <= ts]
+    if market == "crypto":
+        candles = closed_at(market, tf, candles, ts)
+    forming = (min(c[3] for c in own), max(c[2] for c in own)) if own else None
+    swept = (min(c[3] for c in swept_rows), max(c[2] for c in swept_rows)) if swept_rows else None
+    return fts.analyse(market, symbol, tf, candles, ts, price, forming, None, swept), price
+
+
+def quiet(market, ts):
+    if market != "crypto":
+        return False
+    t = datetime.fromtimestamp(ts, IST)
+    return 1 <= t.hour < 8
+
+
+def part_c(market, missing, feed, passes):
+    """Each replay-only alert: would any real pass near it have sent it?"""
+    out = Counter()
+    rows = []
+    for a in missing[:250]:
+        tf, symbol = a["tf"], a["symbol"]
+        eval_s = ftd.TF_SECONDS[trades.EVAL_RESOLUTION[market][tf]]
+        near = [p for p in passes if a["alert_ts"] - 600 <= p <= a["alert_ts"] + eval_s + 600]
+        verdict, hit_at = "no pass would alert (moved through between passes / data)", None
+        if not near:
+            verdict = "no pass in that hour" + (" (crypto quiet hours)" if quiet(market, a["alert_ts"]) else "")
+        for p in near:
+            try:
+                an, _ = analysis_at(market, symbol, tf, p, feed, passes)
+            except Exception as error:     # noqa: BLE001
+                verdict = f"error {error!r}"[:120]
+                break
+            if an is None:
+                continue
+            if a["kind"] == "fib":
+                d_, origin, top = a["fib_id"].split("|")[2:5]
+                hits = [h for h in an["fib"] if h["level"] == a["level"] and str(h["top"]) == top
+                        and str(h["d"]) == d_]
+            else:
+                hits = [h for h in an["touch"] if not h.get("touched")
+                        and abs(h["level"] - a["plan"]["entry"]) <= 0.01 * a["plan"]["entry"]
+                        and (h["kind"] == "support") == (a["plan"]["side"] == "long")]
+            if hits:
+                verdict, hit_at = ("held: crypto quiet hours" if quiet(market, p) else "MISSED: a pass would alert"), when(p)
+                if not quiet(market, p):
+                    break
+        out[verdict] += 1
+        rows.append({"symbol": symbol, "tf": tf, "kind": a["kind"], "level": a.get("level"),
+                     "replay_at": when(a["alert_ts"]), "verdict": verdict, "pass": hit_at,
+                     "entry": a["plan"]["entry"]})
+    return out, rows
+
+
 # ----------------------------------------------------------------- main
 
 def main():
@@ -404,6 +472,12 @@ def main():
                            "entry": r["plan"]["entry"], "side": r["plan"]["side"]})
         tally = Counter((a["tf"], a["kind"]) for a in missing)
         say(f"  replay-only by tf/kind: {dict(tally)}")
+        verdicts, rows_c = part_c(market, missing, crypto if market == "crypto" else nse, passes.get(market, []))
+        say(f"  replay-only, re-run at each real pass nearby: {dict(verdicts)}")
+        for x in rows_c:
+            if x["verdict"].startswith("MISSED"):
+                say("    - " + json.dumps(x))
+        (OUT / f"part_c_{market}.json").write_text(json.dumps(rows_c, indent=1))
         tally = Counter((r["tf"], r["kind"]) for r in extra)
         say(f"  live-only by tf/kind: {dict(tally)}")
     (OUT / "part_b.json").write_text(json.dumps(rows_b, indent=1))
