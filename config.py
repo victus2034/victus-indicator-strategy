@@ -530,6 +530,11 @@ FIB_ALERT_LEVELS = {
 # about the same number of alerts. The S/R 1.5% stop cap and daily trend filter
 # were tested too and are not applied to fibs.
 FIB_SL_HEIGHT_PCT = ZONE_SL_HEIGHT_PCT
+# Each fib level its own stop (lakky, 2026-10-27, ENA 4H: "how is it possible to have all L1 to L4
+# the same SL"). "next": a level's stop is just past the next deeper level (L1 -> past L2, L2 -> past
+# L3, L3 -> past L4 = the old stop, L4 -> one box past L4), pad FIB_SL_HEIGHT_PCT of a box. "shared"
+# is the old rule (every level on L3's stop). fib_trendline_scanner.fib_level_stops / check_level_stops.
+FIB_LEVEL_SL_RULE = os.getenv("VICTUS_FIB_LEVEL_SL_RULE", "next")
 # The indicator's own lengths: fib_len 10, tl_len 10, tl_keep 6.
 FIB_SWING_LENGTH = 10
 TRENDLINE_SWING_LENGTH = 10

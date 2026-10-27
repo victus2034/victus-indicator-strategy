@@ -54,6 +54,7 @@ from config import (
     DISCORD_TRENDLINE_WEBHOOK_URL,
     FIB_ALERT_LEVELS,
     FIB_ALERT_ZONES,  # noqa: F401 - the backtest test compares it
+    FIB_LEVEL_SL_RULE,
     FIB_SL_HEIGHT_PCT,
     FIB_SWING_LENGTH,
     FIB_TL_MAX_DISTANCE_PCT,
@@ -168,23 +169,70 @@ def fib_zones(d, base, top):
     return [dict(zone=1, **zone1), dict(zone=2, **zone2)]
 
 
-def fib_legs(d, base, top, tf):
+def fib_level_stops(d, base, top, rule=None):
+    """{L1..L4: stop} - every fib level its own stop (lakky, 2026-10-27, ENA 4H).
+
+    rule (FIB_LEVEL_SL_RULE):
+      "next"    the live rule: a level's stop sits just past the NEXT deeper level - that
+                level's price + FIB_SL_HEIGHT_PCT of a box's height (L1 -> past L2, L2 -> past
+                L3, L3 -> past L4); L4 one box height + the same pad past L4. His note: a
+                stop just past the level itself (~0.2% on ENA 4H) is too tight, he takes the
+                next one. L3's stop is the old shared one, so L3 trades are unchanged.
+      "own"     just past the level itself (the pad only) - research.
+      "shared"  the old rule (PR #61 - Oct 27): every level on the strong box's stop.
+    """
+    return stops_for_levels(d, fib_levels(d, base, top), rule)
+
+
+def stops_for_levels(d, lv, rule=None):
+    """fib_level_stops from the four level prices alone (a record's `levels`)."""
+    rule = rule or FIB_LEVEL_SL_RULE
+    box = abs(lv["L3"] - lv["L4"])      # both boxes are 0.11 of the range
+    pad = box * FIB_SL_HEIGHT_PCT / 100
+    if rule == "shared":
+        stop = lv["L4"] - d * pad
+        return {k: stop for k in lv}
+    if rule == "own":
+        return {k: p - d * pad for k, p in lv.items()}
+    if rule == "next":
+        return {"L1": lv["L2"] - d * pad, "L2": lv["L3"] - d * pad, "L3": lv["L4"] - d * pad,
+                "L4": lv["L4"] - d * (box + pad)}
+    raise ValueError(f"unknown FIB_LEVEL_SL_RULE {rule!r}")
+
+
+def check_level_stops(d, levels, stops):
+    """Guard (lakky, 2026-10-27: "how is it possible to have all L1 to L4 the same SL"):
+    every level's stop is past its own entry, no two levels share a stop, and a deeper level
+    always has the deeper stop. Raises ValueError otherwise - such a fib does not alert."""
+    names = [k for k in ("L1", "L2", "L3", "L4") if k in stops]
+    for k in names:
+        if not (stops[k] < levels[k] if d == 1 else stops[k] > levels[k]):
+            raise ValueError(f"fib {k} stop {stops[k]} is not past its entry {levels[k]}")
+    for a, b in zip(names, names[1:]):
+        if not (stops[b] < stops[a] if d == 1 else stops[b] > stops[a]):
+            raise ValueError(f"fib {a}/{b} stops {stops[a]} / {stops[b]} are shared or out of order")
+
+
+def fib_legs(d, base, top, tf, rule=None):
     """[(level, zone)] this timeframe alerts at (FIB_ALERT_LEVELS, lakky 2026-10-20).
 
-    L1/L2 are the weaker box's near/far edge, L3/L4 the stronger box's. Every leg shares the
-    strong box's stop. A near edge (L1, L3) alerts from anywhere in its box down to the edge; a far
-    edge (L2, L4) is a single price, so only the approach to it alerts. Without a setting for
-    the timeframe it is the old rule: L3 only."""
+    L1/L2 are the weaker box's near/far edge, L3/L4 the stronger box's. Each leg has its own
+    stop (fib_level_stops, 2026-10-27; until then all shared the strong box's). A near edge
+    (L1, L3) alerts from anywhere in its box down to the edge; a far edge (L2, L4) is a single
+    price, so only the approach to it alerts. Without a setting for the timeframe it is the
+    old rule: L3 only."""
     zones = {z["zone"]: z for z in fib_zones(d, base, top)}
-    stop = zones[2]["sl"]
+    levels = fib_levels(d, base, top)
+    stops = fib_level_stops(d, base, top, rule)
+    check_level_stops(d, levels, stops if (rule or FIB_LEVEL_SL_RULE) != "shared" else {})
     legs = []
     for level in FIB_ALERT_LEVELS.get(tf, ("L3",)):
         src = zones[1] if level in ("L1", "L2") else zones[2]
         if level in ("L1", "L3"):
-            legs.append((level, dict(src, sl=stop)))
+            legs.append((level, dict(src, sl=stops[level])))
         else:
             far = src["low"] if d == 1 else src["high"]
-            legs.append((level, dict(src, low=far, high=far, entry=far, sl=stop)))
+            legs.append((level, dict(src, low=far, high=far, entry=far, sl=stops[level])))
     return legs
 
 
@@ -385,7 +433,12 @@ def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=No
     d, base, top = live["d"], live["O"], live["E"]
     inside_box = base < price < top if d == 1 else top < price < base
     if inside_box and base != top:
-        for level, zone in fib_legs(d, base, top, tf):
+        try:
+            legs = fib_legs(d, base, top, tf)
+        except ValueError as exc:       # check_level_stops: never alert a fib whose levels share a stop
+            print(f"  {symbol} {tf}: fib skipped - {exc}")
+            legs = []
+        for level, zone in legs:
             distance = fib_distance(d, zone, price)
             reached = fib_distance(d, zone, band_price(d == 1, price, swept))
             if (distance is not None and in_band(reached, tf)
