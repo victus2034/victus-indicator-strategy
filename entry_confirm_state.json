@@ -1223,11 +1223,6 @@
     "stage": 3,
     "stopped_out": true
   },
-  "FILUSD|1d|long|0.985353|0.9717": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "FINCABLES.NS|1M|long|1059.54|949.925": {
     "reached_entry": false,
     "stopped_out": false
@@ -2109,8 +2104,8 @@
     "stopped_out": false
   },
   "LTTS.NS|1d|short|4142.56|4189.75": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "LTTS.NS|1w|short|3742.88|3785": {
@@ -2119,8 +2114,8 @@
     "stopped_out": true
   },
   "LTTS.NS|1w|short|4142.56|4189.75": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "LTTS.NS|1w|short|4255.87|4355.5": {
@@ -2388,7 +2383,8 @@
     "stopped_out": false
   },
   "NAVINFLUOR.NS|1d|short|8112.48|8262.97": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "NAVINFLUOR.NS|1w|long|7436.16|5889.44": {
@@ -2953,8 +2949,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793088708.439679,
-  "_last_check|nse": 1793088708.439679,
+  "_last_check|crypto": 1793088992.068536,
+  "_last_check|nse": 1793088992.068536,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
@@ -3780,6 +3776,7 @@
   "_level_ready|NAVINFLUOR.NS|1d|long|8114|8035": 1792381599.217228,
   "_level_ready|NAVINFLUOR.NS|1d|long|8291.5|8213.12": 1792039603.76918,
   "_level_ready|NAVINFLUOR.NS|1d|short|8003.02|8262.97": 1793080585.42143,
+  "_level_ready|NAVINFLUOR.NS|1d|short|8112.48|8262.97": 1793088992.068536,
   "_level_ready|NAVINFLUOR.NS|1d|short|8537.98|8663.72": 1791786392.529459,
   "_level_ready|NBCC.NS|1M|long|68.0767|50.1375": 1792729605.131874,
   "_level_ready|NBCC.NS|1w|long|72.66|55.8667": 1792557094.347878,
@@ -4543,7 +4540,7 @@
   "_ready|NATIONALUM.NS|1w": 1792640801.869234,
   "_ready|NAUKRI.NS|1M": 1793072802.908836,
   "_ready|NAUKRI.NS|1d": 1793072802.908836,
-  "_ready|NAVINFLUOR.NS|1d": 1793080585.42143,
+  "_ready|NAVINFLUOR.NS|1d": 1793088992.068536,
   "_ready|NBCC.NS|1M": 1792729605.131874,
   "_ready|NBCC.NS|1w": 1792557094.347878,
   "_ready|NEARUSD|1d": 1792832197.224494,
