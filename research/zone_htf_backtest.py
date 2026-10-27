@@ -125,7 +125,11 @@ def replay(market, symbol, tf, base, evalc, daily, since, now):
                             and ts - st["last"] >= scanner.ZONE_REPEAT_SUPPRESSION_SECONDS:
                         st["last"] = ts
                         plan = {"side": "long" if zone_type == "demand" else "short", "entry": entry, "sl": stop}
+                        # alert price: where price stood when it first came within the band
+                        price = min(o, entry * (1 + band)) if zone_type == "demand" else max(o, entry * (1 - band))
                         out.append({"market": market, "symbol": symbol, "tf": tf, "kind": "zone", "alert_ts": ts,
+                                    "eval_secs": eval_secs, "band": band, "price": price,
+                                    "zone": {"type": zone_type, "top": zone["top"], "bottom": zone["bottom"]},
                                     "plan": plan,
                                     "result": trades.simulate(plan, market, tf, ts, evalc[k + 1:k + 1 + horizon])})
                     st["in_zone"] = True
