@@ -299,6 +299,15 @@ significant figures (`price_text`); nothing parses the text - records carry the 
 - **NSE 1D gap fill (2026-10-10, GLENMARK).** During a session Yahoo's batch 1d download can leave out the
   previous session's row, so the close that broke a line was never seen and the line alerted again the next
   day. `fib_trendline_data.fill_daily_gaps` adds missing days from the 1h candles (`research/tl_after_break_audit.py`).
+- **Every fib level its own SL (lakky, 2026-10-27, ENA 4H / HYPE 1D).** Until then L1-L4 all used L3's stop
+  (and the chart's candle rule could land every level on one candle). `FIB_LEVEL_SL_RULE` "body" (live): each
+  level's SL is the nearest candle open/close at least `FIB_SL_MIN_GAP_PCT` (0.75%) and the box pad past it,
+  short of the next deeper level (L4: within one box), over closed candles since the fib's origin; none ->
+  "next" (just past the next deeper level). `fib_trendline_scanner.body_stops` / `check_level_stops` (a fib
+  whose levels share or misorder SLs never alerts), `tests/test_fib_level_stops.py` (HYPE 1D fixture = his lines).
+  Sep 1 - Oct 27 R/trade shared / next / body: crypto 4H -0.16/-0.12/-0.20, 1D +0.03/+0.03/-0.06, NSE 4H
+  -0.34/-0.20/-0.26, NSE 1D -0.16/-0.10/-0.19; 1W/1M body as good or better - his call to run body
+  (`research/fib_level_sl_backtest.py`, part `fib-level-sl`). Pine v12.10.5. What-ifs keep the alert's stop.
 - **One message per price (lakky, 2026-10-27).** Alerts one pass plans on the same channel, symbol and side with
   entries within `SAME_PRICE_PCT` (0.1%) go out as one message (`merge_same_price`): `**4H + 1D NSE**` in the
   title, one `4H · Entry .. · SL ..` line each (one line when the plans are identical; `FIB L1/L2` when levels
