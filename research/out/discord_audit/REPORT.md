@@ -1,6 +1,6 @@
-# Discord alert audit - alerts sent 10-21 20:45 IST to 10-27 22:54 IST
+# Discord alert audit - alerts sent 10-21 20:45 IST to 10-27 23:23 IST
 
-1017 fib / trendline / 1D+ zone records; passes: crypto 1437, NSE 187
+1017 fib / trendline / 1D+ zone records; passes: crypto 1443, NSE 187
 
 ## A. Every alert vs today's rules
 
@@ -111,9 +111,34 @@
 
 - crypto: replay 256 alerts, live 235; replay-only 26, live-only 32
   replay-only by tf/kind: {('1d', 'fib'): 9, ('4h', 'fib'): 9, ('4h', 'trendline'): 8}
+  replay-only, re-run at each real pass nearby: {'no pass would alert (moved through between passes / data)': 21, 'MISSED: a pass would alert': 5}
+    - {"symbol": "BTWUSD", "tf": "1d", "kind": "fib", "level": "L2", "replay_at": "10-23 09:30", "verdict": "MISSED: a pass would alert", "pass": "10-23 12:18", "entry": 1.6324530000000002}
+    - {"symbol": "RLCUSD", "tf": "4h", "kind": "trendline", "level": null, "replay_at": "10-26 16:30", "verdict": "MISSED: a pass would alert", "pass": "10-26 17:21", "entry": 0.5456142857142858}
+    - {"symbol": "XAUTUSD", "tf": "4h", "kind": "fib", "level": "L2", "replay_at": "10-22 11:30", "verdict": "MISSED: a pass would alert", "pass": "10-22 11:48", "entry": 4142.412}
+    - {"symbol": "XAUTUSD", "tf": "4h", "kind": "fib", "level": "L3", "replay_at": "10-27 20:30", "verdict": "MISSED: a pass would alert", "pass": "10-27 21:13", "entry": 4098.5255}
+    - {"symbol": "TSLAXUSD", "tf": "4h", "kind": "trendline", "level": null, "replay_at": "10-26 18:30", "verdict": "MISSED: a pass would alert", "pass": "10-26 19:01", "entry": 389.3138271604939}
   live-only by tf/kind: {('1w', 'fib'): 10, ('4h', 'trendline'): 19, ('4h', 'fib'): 2, ('1d', 'fib'): 1}
 - nse: replay 596 alerts, live 705; replay-only 116, live-only 265
   replay-only by tf/kind: {('4h', 'fib'): 18, ('1d', 'trendline'): 19, ('1d', 'fib'): 40, ('4h', 'trendline'): 39}
+  replay-only, re-run at each real pass nearby: {'no pass in that hour': 3, 'MISSED: a pass would alert': 18, 'no pass would alert (moved through between passes / data)': 95}
+    - {"symbol": "BHARTIHEXA.NS", "tf": "1d", "kind": "trendline", "level": null, "replay_at": "10-27 09:15", "verdict": "MISSED: a pass would alert", "pass": "10-27 09:23", "entry": 1664.8867797851562}
+    - {"symbol": "NHPC.NS", "tf": "1d", "kind": "fib", "level": "L2", "replay_at": "10-27 09:15", "verdict": "MISSED: a pass would alert", "pass": "10-27 09:23", "entry": 72.88500022888184}
+    - {"symbol": "NHPC.NS", "tf": "1d", "kind": "fib", "level": "L3", "replay_at": "10-27 10:15", "verdict": "MISSED: a pass would alert", "pass": "10-27 10:35", "entry": 73.79500007629395}
+    - {"symbol": "BANKINDIA.NS", "tf": "1d", "kind": "fib", "level": "L2", "replay_at": "10-23 09:15", "verdict": "MISSED: a pass would alert", "pass": "10-23 09:23", "entry": 136.25649909973146}
+    - {"symbol": "APLAPOLLO.NS", "tf": "4h", "kind": "trendline", "level": null, "replay_at": "10-27 09:15", "verdict": "MISSED: a pass would alert", "pass": "10-27 09:23", "entry": 2152.89990234375}
+    - {"symbol": "NAVINFLUOR.NS", "tf": "1d", "kind": "fib", "level": "L1", "replay_at": "10-27 09:15", "verdict": "MISSED: a pass would alert", "pass": "10-27 09:34", "entry": 7882.63}
+    - {"symbol": "LALPATHLAB.NS", "tf": "1d", "kind": "fib", "level": "L1", "replay_at": "10-27 09:15", "verdict": "MISSED: a pass would alert", "pass": "10-27 09:44", "entry": 1875.9320239257813}
+    - {"symbol": "MANAPPURAM.NS", "tf": "1d", "kind": "fib", "level": "L1", "replay_at": "10-27 09:15", "verdict": "MISSED: a pass would alert", "pass": "10-27 09:23", "entry": 290.9610040283203}
+    - {"symbol": "CRAFTSMAN.NS", "tf": "1d", "kind": "fib", "level": "L2", "replay_at": "10-23 09:15", "verdict": "MISSED: a pass would alert", "pass": "10-23 09:53", "entry": 10629.425}
+    - {"symbol": "NETWEB.NS", "tf": "1d", "kind": "fib", "level": "L1", "replay_at": "10-27 09:15", "verdict": "MISSED: a pass would alert", "pass": "10-27 09:44", "entry": 4454.226064453125}
+    - {"symbol": "ACUTAAS.NS", "tf": "4h", "kind": "trendline", "level": null, "replay_at": "10-27 10:15", "verdict": "MISSED: a pass would alert", "pass": "10-27 10:46", "entry": 3485.722401494565}
+    - {"symbol": "ACUTAAS.NS", "tf": "1d", "kind": "fib", "level": "L1", "replay_at": "10-23 09:15", "verdict": "MISSED: a pass would alert", "pass": "10-23 09:23", "entry": 3173.2200000000003}
+    - {"symbol": "ANGELONE.NS", "tf": "1d", "kind": "fib", "level": "L1", "replay_at": "10-27 10:15", "verdict": "MISSED: a pass would alert", "pass": "10-27 10:35", "entry": 290.15398986816405}
+    - {"symbol": "CARBORUNIV.NS", "tf": "1d", "kind": "fib", "level": "L1", "replay_at": "10-26 14:15", "verdict": "MISSED: a pass would alert", "pass": "10-26 15:08", "entry": 1117.0440002441405}
+    - {"symbol": "HBLENGINE.NS", "tf": "1d", "kind": "fib", "level": "L3", "replay_at": "10-27 09:15", "verdict": "MISSED: a pass would alert", "pass": "10-27 09:23", "entry": 795.1550109863281}
+    - {"symbol": "CHOICEIN.NS", "tf": "4h", "kind": "fib", "level": "L2", "replay_at": "10-27 13:15", "verdict": "MISSED: a pass would alert", "pass": "10-27 14:08", "entry": 704.102505493164}
+    - {"symbol": "CHOICEIN.NS", "tf": "1d", "kind": "fib", "level": "L2", "replay_at": "10-27 09:15", "verdict": "MISSED: a pass would alert", "pass": "10-27 09:44", "entry": 728.9850067138672}
+    - {"symbol": "COHANCE.NS", "tf": "4h", "kind": "trendline", "level": null, "replay_at": "10-27 09:15", "verdict": "MISSED: a pass would alert", "pass": "10-27 09:23", "entry": 467.39049130394346}
   live-only by tf/kind: {('1w', 'fib'): 116, ('1M', 'fib'): 62, ('1w', 'trendline'): 37, ('1d', 'fib'): 20, ('1M', 'trendline'): 6, ('4h', 'trendline'): 15, ('1d', 'trendline'): 5, ('4h', 'fib'): 4}
 - {"market": "crypto", "type": "replay-only", "symbol": "BTCUSD", "tf": "1d", "kind": "fib", "level": "L1", "when": "10-22 05:30", "entry": 83139.238, "side": "long"}
 - {"market": "crypto", "type": "replay-only", "symbol": "XRPUSD", "tf": "4h", "kind": "fib", "level": "L2", "when": "10-21 21:30", "entry": 1.3786100000000001, "side": "long"}
