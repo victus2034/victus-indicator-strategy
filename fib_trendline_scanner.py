@@ -565,6 +565,74 @@ def format_break_alert(market, symbol, tf, b):
     )
 
 
+# ----------------------------------------------------------------- one message per price
+
+SAME_PRICE_PCT = 0.1     # entries this close (%) on one symbol, side and channel share a message
+
+
+def _tf_of(key):
+    parts = str(key).split("|")
+    return parts[2] if len(parts) > 2 else None
+
+
+def merge_same_price(market, planned):
+    """[(channel, [(key, record)], message)]: one message per price (lakky, 2026-10-27).
+
+    One pass often sent the same entry twice on one channel - a 4H and a 1D fib level, a 1W and
+    a 1M one, a 4H and a 1D trendline (92 of 1,017 alerts 21-27 Oct). Those go out as one
+    message: the title names every timeframe, and each keeps its own Entry / SL / TP line.
+    Keys and records stay one per timeframe, so state, entry confirm and the reports see no change.
+    TL BROKEN (no record) and alerts on different channels are never merged."""
+    groups = []
+    for channel, key, message, record in planned:
+        plan = (record or {}).get("plan")
+        home = None
+        if plan:
+            for g in groups:
+                head = g[0]
+                hplan = (head[3] or {}).get("plan")
+                if (head[0] == channel and hplan and hplan["side"] == plan["side"]
+                        and abs(hplan["entry"] - plan["entry"]) <= hplan["entry"] * SAME_PRICE_PCT / 100
+                        and _tf_of(key) not in {_tf_of(item[1]) for item in g}):
+                    home = g
+                    break
+        if home is None:
+            groups.append([(channel, key, message, record)])
+        else:
+            home.append((channel, key, message, record))
+    out = []
+    for g in groups:
+        g.sort(key=lambda item: TF_ORDER.index(_tf_of(item[1])) if _tf_of(item[1]) in TF_ORDER else 99)
+        items = [(key, record) for _, key, _, record in g]
+        out.append((g[0][0], items, g[0][2] if len(g) == 1 else _merged_message(market, g)))
+    return out
+
+
+def _merged_message(market, group):
+    first = group[0][2].split("\n")
+    tfs = [_tf_of(key) for _, key, _, _ in group]
+    labels = " + ".join(TF_LABEL[tf] for tf in tfs)
+    levels = [(record or {}).get("level") for _, _, _, record in group]
+    header = first[0]
+    tag = f"**{TF_LABEL[tfs[0]]} {MARKET_LABEL[market]}**"
+    if tag in header:                                   # fib / trendline
+        header = header.replace(tag, f"**{labels} {MARKET_LABEL[market]}**")
+    else:                                               # zone: **X | BUY | 1D**
+        header = header.replace(f"| {TF_LABEL[tfs[0]]}**", f"| {labels}**")
+    mixed = len(set(levels)) > 1 and levels[0] is not None
+    if mixed:
+        header = header.replace(f"FIB {levels[0]}", "FIB " + "/".join(dict.fromkeys(levels)))
+    lines = [header, first[1]]
+    plans = {message.split(chr(10))[2] for _, _, message, _ in group}
+    if len(plans) == 1 and not mixed:                   # the same fib on both: one plan line
+        return "\n".join(lines + [first[2]] + first[3:])
+    for (_, key, message, record), level in zip(group, levels):
+        name = TF_LABEL[_tf_of(key)] + (f" {level}" if mixed else "")
+        lines.append(f"{name} · {message.split(chr(10))[2]}")
+    lines += first[3:]                                  # the risk warning, shared by the symbol
+    return "\n".join(lines)
+
+
 # ----------------------------------------------------------------- state, records, sending
 
 def load_state():
@@ -878,11 +946,12 @@ def run_once(dry_run=False, force_nse=False):
             if analyses is None:
                 failures.append(f"{market} {symbol}: {error}")
                 continue
+            ready = []
             for tf, analysis in analyses.items():
                 for channel, key, message, record in plan_alerts(state, market, symbol, tf, analysis, now,
                                                                  previous_scan.get(market)):
                     if dry_run:
-                        print(f"[{channel}] {message}\n")
+                        ready.append((channel, key, message, record))
                         continue
                     if not configured[(channel, market)]:
                         continue             # nothing recorded: no webhook, no channel yet
@@ -898,17 +967,24 @@ def run_once(dry_run=False, force_nse=False):
                         continue             # held - it alerts later if it is still true
                     if now - attempts.get(key, 0) < RETRY_BACKOFF_SECONDS:
                         continue             # the last send failed: wait out the backoff
-                    print(f"[{channel}] {message}\n")
-                    if send(channel, message, market):
+                    ready.append((channel, key, message, record))
+            for channel, items, message in merge_same_price(market, ready):
+                print(f"[{channel}] {message}\n")
+                if dry_run:
+                    continue
+                tally = (channel, market)
+                if send(channel, message, market):
+                    for key, record in items:
                         attempts.pop(key, None)
                         mark_sent(state, key, now)
                         if record:
                             append_record(record, key, now)
                         counts[tally] = counts.get(tally, 0) + 1
-                        # Saved per alert: a crash later in this pass must not
-                        # send the ones already posted again.
-                        save_state(state, now)
-                    else:
+                    # Saved per message: a crash later in this pass must not
+                    # send the ones already posted again.
+                    save_state(state, now)
+                else:
+                    for key, _ in items:
                         attempts[key] = now  # stays out of state so it still alerts once Discord is back
 
     if not dry_run:

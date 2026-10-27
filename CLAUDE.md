@@ -299,6 +299,10 @@ significant figures (`price_text`); nothing parses the text - records carry the 
 - **NSE 1D gap fill (2026-10-10, GLENMARK).** During a session Yahoo's batch 1d download can leave out the
   previous session's row, so the close that broke a line was never seen and the line alerted again the next
   day. `fib_trendline_data.fill_daily_gaps` adds missing days from the 1h candles (`research/tl_after_break_audit.py`).
+- **One message per price (lakky, 2026-10-27).** Alerts one pass plans on the same channel, symbol and side with
+  entries within `SAME_PRICE_PCT` (0.1%) go out as one message (`merge_same_price`): `**4H + 1D NSE**` in the
+  title, one `4H · Entry .. · SL ..` line each (one line when the plans are identical; `FIB L1/L2` when levels
+  differ). Keys and records stay one per timeframe. 92 of 1,017 alerts 21-27 Oct were such pairs.
 - Each channel seeds silently per market on its first pass with a webhook, so adding a webhook
   never dumps a backlog. Deleting the state file re-seeds rather than bursting.
 - `python fib_trendline_scanner.py --dry-run [--force-nse]` prints what would alert, sends nothing.
