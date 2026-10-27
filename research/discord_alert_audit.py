@@ -108,13 +108,13 @@ class Crypto:
         src, name = self.source(symbol)
         if src == "bitunix":
             return [r[:5] for r in bitunix_data.klines(name, res, int(start), int(end) + 1)]
-        return ftd.delta_candles(name, res, start, end)
+        return ftd.delta_candles(name, "5m" if res == "1m" else res, start, end)
 
     def chart(self, symbol, tf, now):
         key = (symbol, tf)
         if key not in self.cache:
             fetch_tf = "1d" if tf in ("1d", "1M") else tf
-            self.cache[key] = self.rows(symbol, fetch_tf, ftd.HISTORY_START, now)
+            self.cache[key] = self.rows(symbol, fetch_tf, ftd.HISTORY_START, time.time())
         rows = self.cache[key]
         return rows if tf != "1M" else ftd.monthly_from_daily(rows)
 
@@ -281,7 +281,7 @@ def replay_window(market, symbol, feed, since, now, eval_rows):
     return got
 
 
-def match_part_b(market, replayed, records, all_keys, seeded_keys):
+def match_part_b(market, replayed, records, all_keys, seeded_keys, since):
     """(missing, extra): replay alerts with no live record, live records with no replay alert."""
     live = [r for r in records if r["market"] == market and r["kind"] in ("fib", "trendline")]
     used = set()
@@ -305,6 +305,7 @@ def match_part_b(market, replayed, records, all_keys, seeded_keys):
                 used.update(r["id"] for r in near)
             else:
                 missing.append(a)
+    live = [r for r in live if r["sent_ts"] >= since]
     extra = [r for r in live if (r["key"] not in used if r["kind"] == "fib" else r["id"] not in used)]
     return missing, extra
 
@@ -390,7 +391,7 @@ def main():
                 replayed += replay_window(market, symbol, feed, since, now, eval_rows)
             except Exception as error:     # noqa: BLE001
                 print(f"replay {symbol}: {error}")
-        missing, extra = match_part_b(market, replayed, records, all_keys, seeded)
+        missing, extra = match_part_b(market, replayed, records, all_keys, seeded, since)
         live_n = sum(1 for r in window if r["market"] == market and r["kind"] in ("fib", "trendline"))
         say(f"- {market}: replay {len(replayed)} alerts, live {live_n}; replay-only {len(missing)}, live-only {len(extra)}")
         for a in missing[:40]:
