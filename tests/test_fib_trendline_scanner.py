@@ -1126,3 +1126,83 @@ class NseSessionOpenTests(unittest.TestCase):
         candles, swept = seen["4h"]
         self.assertTrue(all(c[0] <= now for c in candles))
         self.assertEqual(len(candles), 4)
+
+
+class SamePriceMergeTests(unittest.TestCase):
+    """One message per price on a channel (lakky, 2026-10-27): 4H + 1D, 1W + 1M at one entry."""
+
+    def fib(self, tf, entry, sl, level="L4", side="long"):
+        key = f"fib|X.NS|{tf}|1|0|110|2|{level}"
+        record = {"market": ftd.NSE, "symbol": "X.NS", "tf": tf, "kind": "fib", "level": level,
+                  "plan": {"side": side, "entry": entry, "sl": sl}}
+        mark = "BUY" if side == "long" else "SELL"
+        message = (f"🟢 **X · FIB {level} · {mark}** · **{ftd.TF_LABEL[tf]} NSE**\n"
+                   f"Price 288.10 · 0.70% away\nEntry {entry} · SL {sl} (x%) · TP y (1R)")
+        return ("fib", key, message, record)
+
+    def test_same_entry_two_timeframes_is_one_message(self):
+        got = fts.merge_same_price(ftd.NSE, [self.fib("1d", 286.11, 270.0), self.fib("4h", 286.20, 280.0)])
+        self.assertEqual(len(got), 1)
+        channel, items, message = got[0]
+        self.assertEqual(len(items), 2)
+        self.assertEqual(message.split("\n"), [
+            "🟢 **X · FIB L4 · BUY** · **4H + 1D NSE**",
+            "Price 288.10 · 0.70% away",
+            "4H · Entry 286.2 · SL 280.0 (x%) · TP y (1R)",
+            "1D · Entry 286.11 · SL 270.0 (x%) · TP y (1R)",
+        ])
+
+    def test_different_levels_are_named(self):
+        _, _, message = fts.merge_same_price(ftd.NSE, [self.fib("1w", 100.0, 90.0, "L1"),
+                                                        self.fib("1M", 100.05, 80.0, "L2")])[0]
+        self.assertIn("FIB L1/L2", message)
+        self.assertIn("1W L1 · Entry", message)
+        self.assertIn("1M L2 · Entry", message)
+
+    def test_apart_or_opposite_or_other_channel_stay_separate(self):
+        a = self.fib("4h", 100.0, 99.0)
+        far = self.fib("1d", 100.2, 95.0)                      # 0.2% apart
+        sell = self.fib("1d", 100.0, 101.0, side="short")
+        tl = ("trendline",) + self.fib("1d", 100.0, 95.0)[1:]
+        broken = ("trendline", "tlbreak|X.NS|1d|0|1|2", "BROKEN", None)
+        for other in (far, sell, tl, broken):
+            self.assertEqual(len(fts.merge_same_price(ftd.NSE, [a, other])), 2)
+
+    def test_single_alert_is_unchanged(self):
+        a = self.fib("4h", 100.0, 99.0)
+        self.assertEqual(fts.merge_same_price(ftd.NSE, [a]), [("fib", [(a[1], a[3])], a[2])])
+
+    def test_run_once_sends_one_message_and_records_both(self):
+        import json as _json
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = pathlib.Path(tmp)
+            seeded = {f"{c}:{m}:{fts.SEED_VERSION}": 1 for c in fts.CHANNELS for m in (fts.CRYPTO, fts.NSE)}
+            (tmp / "state.json").write_text(_json.dumps({fts.SEEDED_KEY: seeded}))
+            f4 = OnceOnlyTests().fib("fib|X|4h|1|0|110|2")
+            f1 = dict(OnceOnlyTests().fib("fib|X|1d|1|0|110|2"), plan={"side": "long", "entry": 100.85, "sl": 99.0})
+            analyses = {"4h": {"fib": [f4], "touch": [], "break": [], "price": 100.5},
+                        "1d": {"fib": [f1], "touch": [], "break": [], "price": 100.5}}
+            sent = []
+            with mock.patch.object(fts, "STATE_FILE", tmp / "state.json"), \
+                    mock.patch.object(fts, "RECORDS_FILE", tmp / "records.jsonl"), \
+                    mock.patch.object(fts, "scan_crypto", lambda tfs, now, since=None: [("X", analyses, None)]), \
+                    mock.patch.object(fts, "nse_session_open", lambda now: False), \
+                    mock.patch.object(fts.scanner, "in_alert_window", lambda: True), \
+                    mock.patch.object(fts.scanner, "send_discord_message",
+                                      lambda message, webhook_env_name, webhook_config_value: sent.append(message) or True), \
+                    mock.patch.object(fts.scanner, "send_status_message", lambda m: None), \
+                    mock.patch("fib_trendline_daily_report.maybe_send", lambda state, now: None), \
+                    mock.patch.dict(os.environ, {fts.FIB_ENV: "https://example.invalid/fib"}):
+                fts.run_once()
+                state = fts.load_state()
+            self.assertEqual(len(sent), 1)
+            self.assertIn("4H + 1D Crypto", sent[0])
+            self.assertIn(f4["key"], state)
+            self.assertIn(f1["key"], state)
+            self.assertEqual(len((tmp / "records.jsonl").read_text().splitlines()), 2)
+
+    def test_identical_plans_print_once(self):
+        _, _, message = fts.merge_same_price(ftd.NSE, [self.fib("1w", 100.0, 90.0, "L3"),
+                                                        self.fib("1M", 100.0, 90.0, "L3")])[0]
+        self.assertEqual(message.split("\n")[0], "🟢 **X · FIB L3 · BUY** · **1W + 1M NSE**")
+        self.assertEqual(message.split("\n")[2:], ["Entry 100.0 · SL 90.0 (x%) · TP y (1R)"])
