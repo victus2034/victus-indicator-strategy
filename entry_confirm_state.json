@@ -228,8 +228,8 @@
     "stopped_out": false
   },
   "AJANTPHARM.NS|1d|short|3389.96|3584.21": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "AJANTPHARM.NS|1d|short|3507.35|3584.21": {
@@ -300,10 +300,12 @@
   },
   "ANGELONE.NS|1d|short|290.154|296.768": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ANGELONE.NS|1d|short|290.319|306.947": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ANGELONE.NS|1w|long|291.102|190.431": {
@@ -370,8 +372,8 @@
     "stopped_out": false
   },
   "ASAHIINDIA.NS|1d|short|913.589|956.453": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ASAHIINDIA.NS|1d|short|922.796|960.812": {
@@ -848,7 +850,7 @@
   },
   "COHANCE.NS|1d|short|480.25|484": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "COHANCE.NS|1d|short|481.476|486": {
@@ -1144,11 +1146,6 @@
     "stage": 2,
     "stopped_out": false
   },
-  "FACT.NS|1d|long|710.167|669": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": false
-  },
   "FACT.NS|1w|long|710.167|660.25": {
     "reached_entry": true,
     "stage": 3,
@@ -1442,17 +1439,17 @@
   },
   "HBLENGINE.NS|1d|short|788.32|811.5": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "HBLENGINE.NS|1d|short|795.155|809.469": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "HBLENGINE.NS|1d|short|798.08|811.5": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "HBLENGINE.NS|1w|long|727.65|629.062": {
@@ -1946,11 +1943,6 @@
   "KIRLOSENG.NS|1M|long|1740.98|1224.28": {
     "reached_entry": false,
     "stopped_out": false
-  },
-  "KIRLOSENG.NS|1d|long|1930.94|1915": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
   },
   "KIRLOSENG.NS|1w|long|1740.98|1224.28": {
     "reached_entry": false,
@@ -2497,6 +2489,11 @@
     "stage": 2,
     "stopped_out": false
   },
+  "ONESOURCE.NS|1d|short|1649.06|1731.18": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "ONESOURCE.NS|1w|long|1349.67|1326": {
     "reached_entry": false,
     "stopped_out": false
@@ -2861,8 +2858,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793160703.985372,
-  "_last_check|nse": 1793160703.985372,
+  "_last_check|crypto": 1793160987.89469,
+  "_last_check|nse": 1793160987.89469,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
@@ -3784,6 +3781,7 @@
   "_level_ready|ONESOURCE.NS|1d|long|1349.67|1326": 1792729271.284174,
   "_level_ready|ONESOURCE.NS|1d|short|1523.65|1731.18": 1793078799.804412,
   "_level_ready|ONESOURCE.NS|1d|short|1574.6|1587": 1793082099.451805,
+  "_level_ready|ONESOURCE.NS|1d|short|1649.06|1731.18": 1793160987.89469,
   "_level_ready|ONESOURCE.NS|1w|long|1349.67|1326": 1792729271.284174,
   "_level_ready|PAGEIND.NS|1M|long|33396.8|28158.7": 1793075508.265993,
   "_level_ready|PAGEIND.NS|1d|long|34778.1|34300": 1792572712.380441,
@@ -4511,7 +4509,7 @@
   "_ready|OIL.NS|1d": 1792986700.301796,
   "_ready|OLAELEC.NS|1d": 1791518192.370228,
   "_ready|ONDOUSD|1d": 1792851406.222554,
-  "_ready|ONESOURCE.NS|1d": 1793082099.451805,
+  "_ready|ONESOURCE.NS|1d": 1793160987.89469,
   "_ready|ONESOURCE.NS|1w": 1792729271.284174,
   "_ready|PAGEIND.NS|1M": 1793075508.265993,
   "_ready|PAGEIND.NS|1d": 1792572712.380441,
