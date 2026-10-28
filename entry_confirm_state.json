@@ -861,11 +861,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "CRAFTSMAN.NS|1d|long|10964.2|9906.59": {
-    "reached_entry": true,
-    "stage": 2,
-    "stopped_out": false
-  },
   "CRAFTSMAN.NS|1w|long|10112.9|8185.09": {
     "reached_entry": false,
     "stopped_out": false
@@ -922,15 +917,16 @@
   "CUB.NS|1d|short|216.449|226.311": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "CUB.NS|1d|short|219.571|226.311": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "CUB.NS|1d|short|227.862|236.925": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "CUB.NS|1w|long|205.393|194.529": {
@@ -1277,11 +1273,6 @@
     "stopped_out": false
   },
   "GLAND.NS|1d|short|2990.46|3045.63": {
-    "reached_entry": false,
-    "stage": 1,
-    "stopped_out": false
-  },
-  "GLAXO.NS|1d|long|2439.18|2410.79": {
     "reached_entry": false,
     "stage": 1,
     "stopped_out": false
@@ -2054,11 +2045,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "MAHABANK.NS|1d|long|78.0772|77.41": {
-    "reached_entry": false,
-    "stage": 1,
-    "stopped_out": false
-  },
   "MAHABANK.NS|1d|short|80.8715|82.8969": {
     "reached_entry": false,
     "stopped_out": false
@@ -2816,8 +2802,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793169692.448202,
-  "_last_check|nse": 1793169692.448202,
+  "_last_check|crypto": 1793170004.946751,
+  "_last_check|nse": 1793170004.946751,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
