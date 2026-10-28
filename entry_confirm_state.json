@@ -299,13 +299,13 @@
     "stopped_out": false
   },
   "ANGELONE.NS|1d|short|290.154|296.768": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ANGELONE.NS|1d|short|290.319|306.947": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ANGELONE.NS|1w|long|291.102|190.431": {
@@ -851,12 +851,12 @@
   "COHANCE.NS|1d|short|480.25|484": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "COHANCE.NS|1d|short|481.476|486": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "COLPAL.NS|1M|long|1568.94|1509.75": {
     "reached_entry": false,
@@ -1280,6 +1280,7 @@
   },
   "GILLETTE.NS|1d|short|7394.99|7941.78": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "GILLETTE.NS|1w|short|7138.76|7307": {
@@ -1289,6 +1290,7 @@
   },
   "GILLETTE.NS|1w|short|7394.99|7941.78": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "GILLETTE.NS|1w|short|7568.07|7941.78": {
@@ -1348,8 +1350,8 @@
     "stopped_out": false
   },
   "GLENMARK.NS|1d|short|2297.8|2353.39": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "GLENMARK.NS|1w|long|2045.9|2025.41": {
@@ -1435,22 +1437,22 @@
   "HBLENGINE.NS|1d|short|777.584|811.5": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "HBLENGINE.NS|1d|short|788.32|811.5": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "HBLENGINE.NS|1d|short|795.155|809.469": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "HBLENGINE.NS|1d|short|798.08|811.5": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "HBLENGINE.NS|1w|long|727.65|629.062": {
     "reached_entry": false,
@@ -1663,6 +1665,7 @@
   },
   "IKS.NS|1d|short|1714.25|1848.91": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "IKS.NS|1w|long|1566.74|1465.93": {
@@ -1959,6 +1962,7 @@
   },
   "KPIL.NS|1d|short|1332.85|1415.59": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "KPIL.NS|1w|long|1224.4|1158.01": {
@@ -2209,6 +2213,7 @@
   },
   "MOTILALOFS.NS|1d|short|978.325|1026.66": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "MOTILALOFS.NS|1w|long|876.343|763.447": {
@@ -2285,8 +2290,8 @@
     "stopped_out": false
   },
   "NAUKRI.NS|1w|short|1220.24|1539.07": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "NAVINFLUOR.NS|1d|long|7664.25|7595": {
@@ -2858,8 +2863,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793160987.89469,
-  "_last_check|nse": 1793160987.89469,
+  "_last_check|crypto": 1793161306.732731,
+  "_last_check|nse": 1793161306.732731,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
@@ -3345,8 +3350,10 @@
   "_level_ready|GESHIP.NS|1d|short|1576.24|1590.3": 1793074276.581891,
   "_level_ready|GICRE.NS|1d|short|326.513|345.434": 1792999913.801395,
   "_level_ready|GILLETTE.NS|1d|short|7218.19|7326.47": 1791517599.357562,
+  "_level_ready|GILLETTE.NS|1d|short|7394.99|7941.78": 1793161306.732731,
   "_level_ready|GILLETTE.NS|1w|short|7138.76|7307": 1792986387.062464,
   "_level_ready|GILLETTE.NS|1w|short|7138.76|7317.22": 1791517599.357562,
+  "_level_ready|GILLETTE.NS|1w|short|7394.99|7941.78": 1793161306.732731,
   "_level_ready|GLAND.NS|1d|long|2818.48|2792.4": 1792727505.027921,
   "_level_ready|GLAND.NS|1d|long|2866.01|2841.1": 1792565790.968066,
   "_level_ready|GLAND.NS|1d|long|2874.32|2840.6": 1792650102.511204,
@@ -3472,6 +3479,7 @@
   "_level_ready|IKS.NS|1M|short|1760.51|1807.64": 1791517599.357562,
   "_level_ready|IKS.NS|1M|short|1760.51|1891.44": 1792037205.474648,
   "_level_ready|IKS.NS|1d|long|1752.68|1726.39": 1791517599.357562,
+  "_level_ready|IKS.NS|1d|short|1714.25|1848.91": 1793161306.732731,
   "_level_ready|IKS.NS|1w|long|1640.06|1465.93": 1792727171.150355,
   "_level_ready|IOB.NS|1d|short|30.211|31.1563": 1793072802.908836,
   "_level_ready|IPCALAB.NS|1d|long|1862.92|1805.9": 1792129295.649117,
@@ -3543,7 +3551,7 @@
   "_level_ready|KPIL.NS|1d|long|1312.9|1299.8": 1793159201.504703,
   "_level_ready|KPIL.NS|1d|long|1362.51|1330.64": 1792554996.80843,
   "_level_ready|KPIL.NS|1d|long|1411.19|1399.71": 1791517599.357562,
-  "_level_ready|KPIL.NS|1d|short|1332.85|1415.59": 1793082972.307655,
+  "_level_ready|KPIL.NS|1d|short|1332.85|1415.59": 1793161306.732731,
   "_level_ready|KPIL.NS|1w|long|1272.69|1158.01": 1792986387.062464,
   "_level_ready|KPRMILL.NS|1M|long|1079.75|1034.73": 1791517599.357562,
   "_level_ready|KPRMILL.NS|1d|long|1040.58|953.469": 1791518507.451007,
@@ -3653,7 +3661,7 @@
   "_level_ready|MOTILALOFS.NS|1d|long|1029.91|1021.02": 1792389724.420896,
   "_level_ready|MOTILALOFS.NS|1d|short|1031.21|1062.3": 1792554711.035895,
   "_level_ready|MOTILALOFS.NS|1d|short|1050|1062.3": 1792037796.781654,
-  "_level_ready|MOTILALOFS.NS|1d|short|978.325|1026.66": 1793081198.350927,
+  "_level_ready|MOTILALOFS.NS|1d|short|978.325|1026.66": 1793161306.732731,
   "_level_ready|MOTILALOFS.NS|1w|long|928.631|763.447": 1793072802.908836,
   "_level_ready|MPHASIS.NS|1d|short|2339.95|2438.93": 1791517599.357562,
   "_level_ready|MPHASIS.NS|1d|short|2428.25|2461.1": 1791863502.097245,
@@ -4330,8 +4338,8 @@
   "_ready|GABRIEL.NS|1w": 1792729001.765396,
   "_ready|GESHIP.NS|1d": 1793074276.581891,
   "_ready|GICRE.NS|1d": 1792999913.801395,
-  "_ready|GILLETTE.NS|1d": 1791517599.357562,
-  "_ready|GILLETTE.NS|1w": 1792986387.062464,
+  "_ready|GILLETTE.NS|1d": 1793161306.732731,
+  "_ready|GILLETTE.NS|1w": 1793161306.732731,
   "_ready|GLAND.NS|1d": 1793159201.504703,
   "_ready|GLAXO.NS|1M": 1791517599.357562,
   "_ready|GLAXO.NS|1d": 1793159201.504703,
@@ -4382,7 +4390,7 @@
   "_ready|IIFL.NS|1d": 1792728706.729785,
   "_ready|IIFL.NS|1w": 1792728706.729785,
   "_ready|IKS.NS|1M": 1792727171.150355,
-  "_ready|IKS.NS|1d": 1791517599.357562,
+  "_ready|IKS.NS|1d": 1793161306.732731,
   "_ready|IKS.NS|1w": 1792727171.150355,
   "_ready|IOB.NS|1d": 1793072802.908836,
   "_ready|IPCALAB.NS|1d": 1792735900.7583,
@@ -4418,7 +4426,7 @@
   "_ready|KGEN/USDT|30m": 1789463159.791482,
   "_ready|KIMS.NS|1w": 1792986387.062464,
   "_ready|KIRLOSENG.NS|1d": 1792555870.172007,
-  "_ready|KPIL.NS|1d": 1793159201.504703,
+  "_ready|KPIL.NS|1d": 1793161306.732731,
   "_ready|KPIL.NS|1w": 1792986387.062464,
   "_ready|KPRMILL.NS|1M": 1791517599.357562,
   "_ready|KPRMILL.NS|1d": 1792123319.120652,
@@ -4456,7 +4464,7 @@
   "_ready|METAXUSD|30m": 1791431198.043723,
   "_ready|METAXUSD|4h": 1791380798.231245,
   "_ready|MNT/USDT|30m": 1789480563.544585,
-  "_ready|MOTILALOFS.NS|1d": 1793081198.350927,
+  "_ready|MOTILALOFS.NS|1d": 1793161306.732731,
   "_ready|MOTILALOFS.NS|1w": 1793072802.908836,
   "_ready|MPHASIS.NS|1d": 1793072802.908836,
   "_ready|MRF.NS|1M": 1791517599.357562,
