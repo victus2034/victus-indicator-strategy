@@ -147,9 +147,17 @@
     "stage": 2,
     "stopped_out": false
   },
+  "AEGISLOG.NS|1M|long|1100.03|978.573": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "AEGISLOG.NS|1M|long|1204.82|873.787": {
     "reached_entry": true,
     "stage": 2,
+    "stopped_out": false
+  },
+  "AEGISLOG.NS|1w|long|1100.03|1010": {
+    "reached_entry": false,
     "stopped_out": false
   },
   "AEGISLOG.NS|1w|long|1204.82|873.787": {
@@ -1758,11 +1766,6 @@
     "stage": 2,
     "stopped_out": false
   },
-  "JSWINFRA.NS|1d|long|323.336|317.9": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "JSWINFRA.NS|1w|long|297.356|291": {
     "reached_entry": false,
     "stopped_out": false
@@ -1783,6 +1786,7 @@
   },
   "JUBLFOOD.NS|1w|long|415.108|408.55": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "JYOTICNC.NS|1d|long|907.836|870": {
@@ -1903,6 +1907,10 @@
   "KIMS.NS|1w|long|702.79|663.987": {
     "reached_entry": true,
     "stage": 2,
+    "stopped_out": false
+  },
+  "KIMS.NS|1w|short|724.053|736.25": {
+    "reached_entry": false,
     "stopped_out": false
   },
   "KIRLOSENG.NS|1M|long|1740.98|1224.28": {
@@ -2334,6 +2342,7 @@
   },
   "NH.NS|1d|short|1733.91|1847.47": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "NH.NS|1w|long|1660.59|1483.19": {
@@ -2552,6 +2561,7 @@
   },
   "PIRAMALFIN.NS|1d|long|1813.72|1781.2": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PIRAMALFIN.NS|1d|long|1913.93|1781.2": {
@@ -2596,11 +2606,6 @@
     "stopped_out": false
   },
   "POONAWALLA.NS|1d|long|418.279|414.378": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
-  "POONAWALLA.NS|1d|long|435.877|430": {
     "reached_entry": true,
     "stage": 3,
     "stopped_out": true
@@ -2759,7 +2764,7 @@
   },
   "REDINGTON.NS|1d|long|355.612|352.95": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "REDINGTON.NS|1w|long|341.915|262.619": {
@@ -2830,8 +2835,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793162480.642091,
-  "_last_check|nse": 1793162480.642091,
+  "_last_check|crypto": 1793162809.242492,
+  "_last_check|nse": 1793162809.242492,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
@@ -3490,7 +3495,7 @@
   "_level_ready|JSWINFRA.NS|1w|long|311.564|277.82": 1792986387.062464,
   "_level_ready|JUBLFOOD.NS|1M|long|454.928|339.159": 1791776795.761218,
   "_level_ready|JUBLFOOD.NS|1M|long|454.928|413.251": 1791517599.357562,
-  "_level_ready|JUBLFOOD.NS|1w|long|415.108|408.55": 1792554386.505792,
+  "_level_ready|JUBLFOOD.NS|1w|long|415.108|408.55": 1793162809.242492,
   "_level_ready|JYOTICNC.NS|1d|long|1030.22|1014.77": 1791517599.357562,
   "_level_ready|JYOTICNC.NS|1w|long|885.075|753.381": 1792986387.062464,
   "_level_ready|JYOTICNC.NS|1w|long|946.07|753.381": 1792556189.719842,
@@ -3699,6 +3704,7 @@
   "_level_ready|NEULANDLAB.NS|1w|long|18498.8|15476.6": 1792729271.284174,
   "_level_ready|NH.NS|1M|long|1633.69|880.937": 1792986700.301796,
   "_level_ready|NH.NS|1d|long|1666.46|1625": 1793072802.908836,
+  "_level_ready|NH.NS|1d|short|1733.91|1847.47": 1793162809.242492,
   "_level_ready|NH.NS|1w|long|1660.59|1483.19": 1792727505.027921,
   "_level_ready|NH.NS|1w|long|1732.89|1689.57": 1791517599.357562,
   "_level_ready|NH.NS|1w|long|1732.89|1703": 1792555870.172007,
@@ -3784,6 +3790,7 @@
   "_level_ready|PHOENIXLTD.NS|1w|long|1852.91|1685.66": 1792733510.483129,
   "_level_ready|PINELABS.NS|1d|long|159.091|157.121": 1792565477.881975,
   "_level_ready|PINELABS.NS|1d|long|166.972|157.121": 1792122674.418502,
+  "_level_ready|PIRAMALFIN.NS|1d|long|1813.72|1781.2": 1793162809.242492,
   "_level_ready|PIRAMALFIN.NS|1d|long|1913.93|1781.2": 1792650102.511204,
   "_level_ready|PIRAMALFIN.NS|1d|long|1914.89|1904.07": 1792729917.454067,
   "_level_ready|PIRAMALFIN.NS|1d|long|1958.14|1904.07": 1792468002.381626,
@@ -4380,7 +4387,7 @@
   "_ready|JSWINFRA.NS|1d": 1792558293.591918,
   "_ready|JSWINFRA.NS|1w": 1792986387.062464,
   "_ready|JUBLFOOD.NS|1M": 1791776795.761218,
-  "_ready|JUBLFOOD.NS|1w": 1792554386.505792,
+  "_ready|JUBLFOOD.NS|1w": 1793162809.242492,
   "_ready|JYOTICNC.NS|1d": 1791517599.357562,
   "_ready|JYOTICNC.NS|1w": 1792986387.062464,
   "_ready|KAJARIACER.NS|1M": 1792986387.062464,
@@ -4464,7 +4471,7 @@
   "_ready|NETWEB.NS|1w": 1793073108.145997,
   "_ready|NEULANDLAB.NS|1w": 1792729271.284174,
   "_ready|NH.NS|1M": 1792986700.301796,
-  "_ready|NH.NS|1d": 1793072802.908836,
+  "_ready|NH.NS|1d": 1793162809.242492,
   "_ready|NH.NS|1w": 1792727505.027921,
   "_ready|NHPC.NS|1d": 1793159201.504703,
   "_ready|NLCINDIA.NS|1d": 1792134704.864255,
@@ -4501,7 +4508,7 @@
   "_ready|PHOENIXLTD.NS|1d": 1792989679.891144,
   "_ready|PHOENIXLTD.NS|1w": 1792733510.483129,
   "_ready|PINELABS.NS|1d": 1792565477.881975,
-  "_ready|PIRAMALFIN.NS|1d": 1792729917.454067,
+  "_ready|PIRAMALFIN.NS|1d": 1793162809.242492,
   "_ready|PIRAMALFIN.NS|1w": 1792640801.869234,
   "_ready|PNBHOUSING.NS|1d": 1793072802.908836,
   "_ready|PNBHOUSING.NS|1w": 1792986985.751506,
