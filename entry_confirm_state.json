@@ -990,8 +990,8 @@
     "stopped_out": false
   },
   "DATAPATTNS.NS|1w|long|4024.54|3027.56": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "DEEPAKNTR.NS|1d|long|1490.09|1473.09": {
@@ -2143,6 +2143,10 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "MEDANTA.NS|1d|short|1293.86|1345.97": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "MEDANTA.NS|1w|long|1155.92|1139.75": {
     "reached_entry": false,
     "stopped_out": false
@@ -2495,7 +2499,7 @@
   "PATANJALI.NS|1d|long|340.666|338": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "PATANJALI.NS|1w|long|331.989|328.2": {
     "reached_entry": false,
@@ -2594,6 +2598,11 @@
     "stage": 3,
     "stopped_out": true
   },
+  "PNBHOUSING.NS|1d|short|1113.52|1136.71": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "PNBHOUSING.NS|1w|long|1056.43|884.35": {
     "reached_entry": false,
     "stopped_out": false
@@ -2651,11 +2660,6 @@
   },
   "PRESTIGE.NS|1d|long|1383.17|1293.59": {
     "reached_entry": false,
-    "stopped_out": false
-  },
-  "PRESTIGE.NS|1d|long|1448.33|1293.59": {
-    "reached_entry": true,
-    "stage": 2,
     "stopped_out": false
   },
   "PRESTIGE.NS|1w|long|1383.17|1293.59": {
@@ -2831,8 +2835,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793164879.464898,
-  "_last_check|nse": 1793164879.464898,
+  "_last_check|crypto": 1793165197.202933,
+  "_last_check|nse": 1793165197.202933,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
@@ -3798,6 +3802,7 @@
   "_level_ready|PNBHOUSING.NS|1d|long|1082.48|1073.4": 1793072802.908836,
   "_level_ready|PNBHOUSING.NS|1d|long|1119.6|1115.21": 1792651901.329247,
   "_level_ready|PNBHOUSING.NS|1d|long|1137.13|1115.21": 1792575110.80889,
+  "_level_ready|PNBHOUSING.NS|1d|short|1113.52|1136.71": 1793165197.202933,
   "_level_ready|PNBHOUSING.NS|1w|long|1056.43|884.35": 1792986985.751506,
   "_level_ready|POLICYBZR.NS|1w|long|989.745|960.35": 1793159201.504703,
   "_level_ready|POLYMED.NS|1d|long|1556.15|1532.8": 1791518507.451007,
@@ -4511,7 +4516,7 @@
   "_ready|PINELABS.NS|1d": 1792565477.881975,
   "_ready|PIRAMALFIN.NS|1d": 1793162809.242492,
   "_ready|PIRAMALFIN.NS|1w": 1792640801.869234,
-  "_ready|PNBHOUSING.NS|1d": 1793072802.908836,
+  "_ready|PNBHOUSING.NS|1d": 1793165197.202933,
   "_ready|PNBHOUSING.NS|1w": 1792986985.751506,
   "_ready|POLICYBZR.NS|1w": 1793159201.504703,
   "_ready|POLYMED.NS|1d": 1791518507.451007,
