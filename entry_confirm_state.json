@@ -1463,8 +1463,8 @@
     "stopped_out": false
   },
   "HFCL.NS|1d|long|244.787|234.173": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "HFCL.NS|1d|long|253.945|225.016": {
@@ -1859,6 +1859,7 @@
   },
   "KAYNES.NS|1d|long|3161.32|3130": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "KAYNES.NS|1d|short|3356.56|3403.9": {
@@ -2612,6 +2613,7 @@
   },
   "PPLPHARMA.NS|1M|short|228.88|235": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PPLPHARMA.NS|1d|long|191.324|181.172": {
@@ -2620,6 +2622,7 @@
   },
   "PPLPHARMA.NS|1w|short|228.88|253.025": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PREMIERENE.NS|1d|long|871.626|864": {
@@ -2826,8 +2829,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793163404.530606,
-  "_last_check|nse": 1793163404.530606,
+  "_last_check|crypto": 1793163721.172195,
+  "_last_check|nse": 1793163721.172195,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
@@ -3504,6 +3507,7 @@
   "_level_ready|KARURVYSYA.NS|1w|long|326.547|260.876": 1792986985.751506,
   "_level_ready|KAYNES.NS|1d|long|3156.7|3131": 1792567003.648281,
   "_level_ready|KAYNES.NS|1d|long|3159.78|3130": 1792986387.062464,
+  "_level_ready|KAYNES.NS|1d|long|3161.32|3130": 1793163721.172195,
   "_level_ready|KEI.NS|1M|long|4335.25|3509.94": 1792558293.591918,
   "_level_ready|KEI.NS|1d|long|3755.9|3712.2": 1792728109.90404,
   "_level_ready|KEI.NS|1w|long|4335.25|3509.94": 1792558293.591918,
@@ -3797,9 +3801,11 @@
   "_level_ready|POONAWALLA.NS|1d|long|433.882|414.378": 1792122403.256656,
   "_level_ready|POONAWALLA.NS|1d|long|435.877|430": 1792560997.470601,
   "_level_ready|POONAWALLA.NS|1w|long|409.879|400": 1792743681.583308,
+  "_level_ready|PPLPHARMA.NS|1M|short|228.88|235": 1793163721.172195,
   "_level_ready|PPLPHARMA.NS|1d|long|191.324|181.172": 1792986387.062464,
   "_level_ready|PPLPHARMA.NS|1d|long|194.251|192.62": 1792468002.381626,
   "_level_ready|PPLPHARMA.NS|1d|long|194.692|192.62": 1792727171.150355,
+  "_level_ready|PPLPHARMA.NS|1w|short|228.88|253.025": 1793163721.172195,
   "_level_ready|PREMIERENE.NS|1d|long|871.626|864": 1792640801.869234,
   "_level_ready|PREMIERENE.NS|1w|long|821.16|808.125": 1793091108.300697,
   "_level_ready|PREMIERENE.NS|1w|long|873.3|808.125": 1792568171.649857,
@@ -4387,7 +4393,7 @@
   "_ready|KALYANKJIL.NS|1w": 1791517599.357562,
   "_ready|KARURVYSYA.NS|1d": 1793161918.75218,
   "_ready|KARURVYSYA.NS|1w": 1792986985.751506,
-  "_ready|KAYNES.NS|1d": 1792986387.062464,
+  "_ready|KAYNES.NS|1d": 1793163721.172195,
   "_ready|KEI.NS|1M": 1792558293.591918,
   "_ready|KEI.NS|1d": 1792728109.90404,
   "_ready|KEI.NS|1w": 1792558293.591918,
@@ -4507,7 +4513,9 @@
   "_ready|POLYMED.NS|1d": 1791518507.451007,
   "_ready|POONAWALLA.NS|1d": 1792729917.454067,
   "_ready|POONAWALLA.NS|1w": 1792743681.583308,
+  "_ready|PPLPHARMA.NS|1M": 1793163721.172195,
   "_ready|PPLPHARMA.NS|1d": 1792986387.062464,
+  "_ready|PPLPHARMA.NS|1w": 1793163721.172195,
   "_ready|PREMIERENE.NS|1d": 1792640801.869234,
   "_ready|PREMIERENE.NS|1w": 1793091108.300697,
   "_ready|PRESTIGE.NS|1d": 1792986387.062464,
