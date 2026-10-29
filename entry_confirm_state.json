@@ -681,7 +681,8 @@
     "stopped_out": true
   },
   "CAMS.NS|1d|short|693.558|700": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "CAMS.NS|1w|long|677.285|665.05": {
@@ -1266,6 +1267,10 @@
     "stage": 3,
     "stopped_out": true
   },
+  "GLAND.NS|1w|short|3163.74|3266": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "GLAXO.NS|1w|long|2439.18|2410.79": {
     "reached_entry": false,
     "stopped_out": false
@@ -1457,8 +1462,8 @@
     "stopped_out": false
   },
   "HUDCO.NS|1w|long|146.922|138.306": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "HUDCO.NS|1w|long|159.075|155.8": {
@@ -2525,6 +2530,7 @@
   },
   "PNBHOUSING.NS|1d|long|1082.48|1073.4": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PNBHOUSING.NS|1d|long|1119.6|1115.21": {
@@ -2794,8 +2800,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793254912.692013,
-  "_last_check|nse": 1793254912.692013,
+  "_last_check|crypto": 1793255174.800428,
+  "_last_check|nse": 1793255174.800428,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
@@ -3106,6 +3112,7 @@
   "_level_ready|BTCUSD|4h|short|84660|85365": 1790772077.323224,
   "_level_ready|BTCUSD|4h|short|86875.5|87513.6": 1790915487.078945,
   "_level_ready|BTWUSD|1d|long|1.38329|1.04068": 1793023318.473324,
+  "_level_ready|CAMS.NS|1d|short|693.558|700": 1793255174.800428,
   "_level_ready|CAMS.NS|1w|long|677.285|660.353": 1791517599.357562,
   "_level_ready|CAMS.NS|1w|long|677.285|665.05": 1793245588.963685,
   "_level_ready|CAPLIPOINT.NS|1M|long|2170.67|1965.83": 1792641104.661578,
@@ -3795,7 +3802,7 @@
   "_level_ready|PIRAMALFIN.NS|1d|long|1958.14|1904.07": 1792468002.381626,
   "_level_ready|PIRAMALFIN.NS|1w|long|1937.93|1840.82": 1791519091.189259,
   "_level_ready|PIRAMALFIN.NS|1w|short|2026.54|2156.02": 1792640801.869234,
-  "_level_ready|PNBHOUSING.NS|1d|long|1082.48|1073.4": 1793072802.908836,
+  "_level_ready|PNBHOUSING.NS|1d|long|1082.48|1073.4": 1793255174.800428,
   "_level_ready|PNBHOUSING.NS|1d|long|1119.6|1115.21": 1792651901.329247,
   "_level_ready|PNBHOUSING.NS|1d|long|1137.13|1115.21": 1792575110.80889,
   "_level_ready|PNBHOUSING.NS|1d|short|1113.52|1136.71": 1793165197.202933,
@@ -4226,6 +4233,7 @@
   "_ready|BTCUSD|4h": 1791395201.440366,
   "_ready|BTW/USDT|30m": 1789194664.716904,
   "_ready|BTWUSD|1d": 1793023318.473324,
+  "_ready|CAMS.NS|1d": 1793255174.800428,
   "_ready|CAMS.NS|1w": 1793245588.963685,
   "_ready|CAP/USDT|30m": 1789361459.428611,
   "_ready|CAPLIPOINT.NS|1M": 1792641104.661578,
@@ -4526,7 +4534,7 @@
   "_ready|PINELABS.NS|1d": 1792565477.881975,
   "_ready|PIRAMALFIN.NS|1d": 1793162809.242492,
   "_ready|PIRAMALFIN.NS|1w": 1792640801.869234,
-  "_ready|PNBHOUSING.NS|1d": 1793165197.202933,
+  "_ready|PNBHOUSING.NS|1d": 1793255174.800428,
   "_ready|PNBHOUSING.NS|1w": 1792986985.751506,
   "_ready|POLICYBZR.NS|1w": 1793245588.963685,
   "_ready|POLYMED.NS|1d": 1791518507.451007,
