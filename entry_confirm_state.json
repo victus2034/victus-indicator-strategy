@@ -114,10 +114,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "ACMESOLAR.NS|1d|long|389.648|386.013": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "ACMESOLAR.NS|1d|short|403.904|442.337": {
     "reached_entry": true,
     "stage": 3,
@@ -125,7 +121,7 @@
   },
   "ACMESOLAR.NS|1d|short|416.07|442.337": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ACMESOLAR.NS|1d|short|427.13|442.337": {
@@ -615,6 +611,7 @@
   },
   "BLUESTARCO.NS|1d|short|1627.85|1658.1": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "BLUESTARCO.NS|1w|long|1462.87|1444": {
@@ -1582,6 +1579,7 @@
   },
   "ITCHOTELS.NS|1d|short|167.018|176.078": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ITCHOTELS.NS|1d|short|175.029|176.078": {
@@ -1590,7 +1588,7 @@
   },
   "ITCHOTELS.NS|1w|short|165.613|167.79": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ITCHOTELS.NS|1w|short|179.569|222.77": {
@@ -1792,8 +1790,8 @@
     "stopped_out": false
   },
   "KIMS.NS|1w|long|702.79|663.987": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "KIMS.NS|1w|short|724.053|736.25": {
@@ -2001,6 +1999,11 @@
   "MANAPPURAM.NS|1d|short|297.468|305.009": {
     "reached_entry": true,
     "stage": 3,
+    "stopped_out": false
+  },
+  "MANAPPURAM.NS|1d|short|303.383|311.516": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "MANAPPURAM.NS|1w|long|288.447|282.55": {
@@ -2234,10 +2237,6 @@
     "stopped_out": false
   },
   "NH.NS|1M|long|1633.69|880.937": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
-  "NH.NS|1d|long|1666.46|1625": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -2748,8 +2747,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793247706.98925,
-  "_last_check|nse": 1793247706.98925,
+  "_last_check|crypto": 1793248002.053119,
+  "_last_check|nse": 1793248002.053119,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
@@ -2991,6 +2990,7 @@
   "_level_ready|BLUESTARCO.NS|1d|short|1544.81|1659.79": 1793160377.016256,
   "_level_ready|BLUESTARCO.NS|1d|short|1581.21|1659.79": 1792660599.547955,
   "_level_ready|BLUESTARCO.NS|1d|short|1614.29|1659.79": 1792038710.393369,
+  "_level_ready|BLUESTARCO.NS|1d|short|1627.85|1658.1": 1793248002.053119,
   "_level_ready|BLUESTARCO.NS|1w|long|1522.64|1050.61": 1793159201.504703,
   "_level_ready|BNBUSD|1M|long|719.149|555.317": 1791479193.326867,
   "_level_ready|BNBUSD|1M|long|776.619|627.154": 1791548171.874333,
@@ -3393,7 +3393,7 @@
   "_level_ready|IRCTC.NS|1d|short|457.31|464.17": 1791517890.620179,
   "_level_ready|ITCHOTELS.NS|1d|short|161.837|163.2": 1792654002.860469,
   "_level_ready|ITCHOTELS.NS|1d|short|162.821|176.078": 1793001984.532925,
-  "_level_ready|ITCHOTELS.NS|1d|short|167.018|176.078": 1793003788.865691,
+  "_level_ready|ITCHOTELS.NS|1d|short|167.018|176.078": 1793248002.053119,
   "_level_ready|ITCHOTELS.NS|1d|short|175.029|176.078": 1793073108.145997,
   "_level_ready|ITCHOTELS.NS|1w|short|165.613|167.79": 1793245588.963685,
   "_level_ready|ITI.NS|1d|long|237.302|233.742": 1791518192.370228,
@@ -4153,7 +4153,7 @@
   "_ready|BIOCON.NS|1w": 1792554386.505792,
   "_ready|BLESSUSD|1d": 1791457601.347161,
   "_ready|BLESSUSD|30m": 1791109896.008063,
-  "_ready|BLUESTARCO.NS|1d": 1793160377.016256,
+  "_ready|BLUESTARCO.NS|1d": 1793248002.053119,
   "_ready|BLUESTARCO.NS|1w": 1793159201.504703,
   "_ready|BNBUSD|1M": 1791777105.432083,
   "_ready|BNBUSD|1d": 1792854987.403518,
@@ -4327,7 +4327,7 @@
   "_ready|IOB.NS|1d": 1793072802.908836,
   "_ready|IPCALAB.NS|1d": 1792735900.7583,
   "_ready|IRCTC.NS|1d": 1792728404.281105,
-  "_ready|ITCHOTELS.NS|1d": 1793073108.145997,
+  "_ready|ITCHOTELS.NS|1d": 1793248002.053119,
   "_ready|ITCHOTELS.NS|1w": 1793245588.963685,
   "_ready|ITI.NS|1d": 1791518192.370228,
   "_ready|ITI.NS|1w": 1792554386.505792,
