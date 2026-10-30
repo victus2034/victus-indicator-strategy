@@ -81,6 +81,7 @@
   },
   "ABBOTINDIA.NS|1d|short|26410|26850": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ABBOTINDIA.NS|1w|short|26925|27200": {
@@ -2355,6 +2356,7 @@
   },
   "NUVAMA.NS|1d|long|1736.51|1603.25": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "NUVAMA.NS|1w|long|1629.91|1399.74": {
@@ -2529,6 +2531,7 @@
   },
   "PNBHOUSING.NS|1d|long|1082.48|1073.4": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PNBHOUSING.NS|1d|short|1113.52|1136.71": {
@@ -2688,13 +2691,13 @@
     "stopped_out": false
   },
   "REDINGTON.NS|1M|long|341.915|262.619": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "REDINGTON.NS|1w|long|341.915|262.619": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "RLCUSD|1w|long|0.665936|0.631687": {
@@ -2786,8 +2789,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793334368.93941,
-  "_last_check|nse": 1793334368.93941,
+  "_last_check|crypto": 1793334680.412542,
+  "_last_check|nse": 1793334680.412542,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
@@ -2826,6 +2829,7 @@
   "_level_ready|ABBOTINDIA.NS|1d|long|25131|24868.7": 1793073108.145997,
   "_level_ready|ABBOTINDIA.NS|1d|short|25738|26850": 1793161599.803883,
   "_level_ready|ABBOTINDIA.NS|1d|short|26090|26498": 1793331989.35983,
+  "_level_ready|ABBOTINDIA.NS|1d|short|26410|26850": 1793334680.412542,
   "_level_ready|ABDL.NS|1d|long|664.105|638.406": 1792986985.751506,
   "_level_ready|ABDL.NS|1d|long|682.795|638.406": 1792727505.027921,
   "_level_ready|ABDL.NS|1d|long|703.354|638.406": 1792640801.869234,
@@ -3731,6 +3735,7 @@
   "_level_ready|NTPCGREEN.NS|1d|short|84.7732|87.108": 1793332287.548648,
   "_level_ready|NUVAMA.NS|1M|long|1629.91|1399.74": 1792986387.062464,
   "_level_ready|NUVAMA.NS|1d|long|1629.91|1399.74": 1792986387.062464,
+  "_level_ready|NUVAMA.NS|1d|long|1736.51|1603.25": 1793334680.412542,
   "_level_ready|NUVAMA.NS|1w|long|1629.91|1399.74": 1792986387.062464,
   "_level_ready|NVDAXUSD|1d|long|217.905|215.93": 1792032101.114887,
   "_level_ready|NVDAXUSD|1d|long|224.716|220.002": 1791814578.665635,
@@ -3817,7 +3822,7 @@
   "_level_ready|PIRAMALFIN.NS|1d|long|1958.14|1904.07": 1792468002.381626,
   "_level_ready|PIRAMALFIN.NS|1w|long|1937.93|1840.82": 1791519091.189259,
   "_level_ready|PIRAMALFIN.NS|1w|short|2026.54|2156.02": 1792640801.869234,
-  "_level_ready|PNBHOUSING.NS|1d|long|1082.48|1073.4": 1793255174.800428,
+  "_level_ready|PNBHOUSING.NS|1d|long|1082.48|1073.4": 1793334680.412542,
   "_level_ready|PNBHOUSING.NS|1d|long|1119.6|1115.21": 1792651901.329247,
   "_level_ready|PNBHOUSING.NS|1d|long|1137.13|1115.21": 1792575110.80889,
   "_level_ready|PNBHOUSING.NS|1d|short|1113.52|1136.71": 1793165197.202933,
@@ -4153,7 +4158,7 @@
   "_ready|AAVEUSD|30m": 1791190567.107418,
   "_ready|AAVEUSD|4h": 1789057560.102114,
   "_ready|ABBOTINDIA.NS|1M": 1791517599.357562,
-  "_ready|ABBOTINDIA.NS|1d": 1793331989.35983,
+  "_ready|ABBOTINDIA.NS|1d": 1793334680.412542,
   "_ready|ABDL.NS|1d": 1792986985.751506,
   "_ready|ABSLAMC.NS|1d": 1792554711.035895,
   "_ready|ABSLAMC.NS|1w": 1793333172.618426,
@@ -4530,7 +4535,7 @@
   "_ready|NMDC.NS|1w": 1791776795.761218,
   "_ready|NTPCGREEN.NS|1d": 1793332287.548648,
   "_ready|NUVAMA.NS|1M": 1792986387.062464,
-  "_ready|NUVAMA.NS|1d": 1792986387.062464,
+  "_ready|NUVAMA.NS|1d": 1793334680.412542,
   "_ready|NUVAMA.NS|1w": 1792986387.062464,
   "_ready|NVDAXUSD|1d": 1792550470.89171,
   "_ready|NVDAXUSD|1w": 1793327513.220878,
@@ -4561,7 +4566,7 @@
   "_ready|PINELABS.NS|1d": 1792565477.881975,
   "_ready|PIRAMALFIN.NS|1d": 1793162809.242492,
   "_ready|PIRAMALFIN.NS|1w": 1792640801.869234,
-  "_ready|PNBHOUSING.NS|1d": 1793255174.800428,
+  "_ready|PNBHOUSING.NS|1d": 1793334680.412542,
   "_ready|PNBHOUSING.NS|1w": 1792986985.751506,
   "_ready|POLICYBZR.NS|1w": 1793245588.963685,
   "_ready|POLYMED.NS|1d": 1791518507.451007,
