@@ -95,14 +95,14 @@
     "stopped_out": false
   },
   "ABSLAMC.NS|1M|long|811.845|785": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ABSLAMC.NS|1w|long|822.149|815": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "ABSLAMC.NS|1w|long|883.746|869.531": {
     "reached_entry": true,
@@ -914,7 +914,7 @@
   },
   "CUB.NS|1d|long|218.905|215.206": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "CUB.NS|1d|long|221.595|218.165": {
@@ -1300,7 +1300,8 @@
     "stopped_out": false
   },
   "GMDCLTD.NS|1M|long|411.995|396.999": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "GMDCLTD.NS|1M|long|471.98|396.999": {
@@ -2606,7 +2607,7 @@
   },
   "PRESTIGE.NS|1d|short|1445.09|1471": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "PRESTIGE.NS|1w|long|1383.17|1293.59": {
@@ -2758,8 +2759,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793343721.107223,
-  "_last_check|nse": 1793343721.107223,
+  "_last_check|crypto": 1793343986.126886,
+  "_last_check|nse": 1793343986.126886,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
