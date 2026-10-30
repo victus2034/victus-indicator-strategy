@@ -63168,6 +63168,33 @@
       "target_half": 87.56275,
       "timeframe": "4h",
       "trade_id": "HYPEUSD|4h|short|87.759|88.1515"
+    },
+    {
+      "alert_time": "2026-10-30T08:35:26.406953+05:30",
+      "cost_r": 0.24270630800368634,
+      "date": "2026-10-30",
+      "entry": 3992.46,
+      "entry_time": "2026-10-30T12:15:00+05:30",
+      "exit_price": 3976.8830637500005,
+      "exit_time": "2026-10-30T13:20:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "other",
+      "net_realized_r": -1.3891229593376315,
+      "outcome": "SL",
+      "rating": 5,
+      "realized_r": -1.146416651333945,
+      "risk": 13.587499999999636,
+      "side": "long",
+      "stop": 3978.8725000000004,
+      "stream": "live",
+      "symbol": "XAUTUSD",
+      "target_1": 4006.0474999999997,
+      "target_2": 4019.6349999999993,
+      "target_half": 3999.25375,
+      "timeframe": "4h",
+      "trade_id": "XAUTUSD|4h|long|3992.46|3978.87"
     }
   ],
   "handled": {
@@ -65797,24 +65824,6 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
-    },
-    "XAUTUSD|4h|long|3992.46|3978.87": {
-      "alert_time": "2026-10-30T08:35:26.406953+05:30",
-      "entry": 3992.46,
-      "entry_time": "2026-10-30T12:15:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "other",
-      "rating": 5,
-      "risk": 13.587499999999636,
-      "side": "long",
-      "stop": 3978.8725000000004,
-      "stream": "live",
-      "symbol": "XAUTUSD",
-      "target_1": 4006.0474999999997,
-      "target_2": 4019.6349999999993,
-      "target_half": 3999.25375,
-      "timeframe": "4h"
     }
   }
 }
