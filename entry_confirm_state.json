@@ -938,7 +938,7 @@
   "CUB.NS|1d|long|218.905|215.206": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "CUB.NS|1d|long|221.595|218.165": {
     "reached_entry": true,
@@ -1555,7 +1555,7 @@
   "IFCI.NS|1w|long|57.5913|55": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "IFCI.NS|1w|long|58.4889|57.87": {
     "reached_entry": true,
@@ -1675,8 +1675,8 @@
     "stopped_out": false
   },
   "JINDALSAW.NS|1w|long|228.15|205.188": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "JINDALSAW.NS|1w|long|244.85|205.188": {
@@ -1946,8 +1946,8 @@
     "stopped_out": false
   },
   "LICHSGFIN.NS|1M|long|496.861|485.45": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "LICHSGFIN.NS|1d|short|517.228|549.963": {
@@ -1973,8 +1973,8 @@
     "stopped_out": false
   },
   "LTF.NS|1M|long|244.37|194.637": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "LTTS.NS|1M|short|4355.5|4440.4": {
@@ -2694,6 +2694,7 @@
   },
   "RECLTD.NS|1d|long|283.508|279.2": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "RECLTD.NS|1w|long|282.453|266.972": {
@@ -2794,8 +2795,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793348808.368515,
-  "_last_check|nse": 1793348808.368515,
+  "_last_check|crypto": 1793349100.9287,
+  "_last_check|nse": 1793349100.9287,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
@@ -3889,6 +3890,7 @@
   "_level_ready|RADICO.NS|1d|short|4553.19|4589.1": 1791776795.761218,
   "_level_ready|RADICO.NS|1d|short|4553.19|4621.49": 1791523901.914717,
   "_level_ready|RBLBANK.NS|1d|long|383.783|377.6": 1792036000.300237,
+  "_level_ready|RECLTD.NS|1d|long|283.508|279.2": 1793349100.9287,
   "_level_ready|RECLTD.NS|1d|long|283.933|279.2": 1793159201.504703,
   "_level_ready|RECLTD.NS|1w|long|282.453|266.972": 1793076691.324433,
   "_level_ready|REDINGTON.NS|1M|long|341.915|262.619": 1793333172.618426,
@@ -4615,7 +4617,7 @@
   "_ready|RBLBANK.NS|1d": 1792036000.300237,
   "_ready|RE/USDT|30m": 1789390557.764438,
   "_ready|RE/USDT|4h": 1788948356.002419,
-  "_ready|RECLTD.NS|1d": 1793159201.504703,
+  "_ready|RECLTD.NS|1d": 1793349100.9287,
   "_ready|RECLTD.NS|1w": 1793076691.324433,
   "_ready|REDINGTON.NS|1M": 1793333172.618426,
   "_ready|REDINGTON.NS|1d": 1793077903.064448,
