@@ -46,11 +46,12 @@
   },
   "AADHARHFC.NS|1M|long|419.813|413.847": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "AADHARHFC.NS|1d|long|428.37|415": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "AADHARHFC.NS|1w|short|473.438|520.594": {
@@ -509,8 +510,8 @@
     "stopped_out": false
   },
   "BANKINDIA.NS|1d|long|131.989|130.25": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "BANKINDIA.NS|1d|short|129.369|135.224": {
@@ -895,6 +896,7 @@
   },
   "CRAFTSMAN.NS|1d|long|10234.7|10077": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CRAFTSMAN.NS|1d|long|10629.4|10241.4": {
@@ -2586,6 +2588,7 @@
   },
   "PNBHOUSING.NS|1w|long|1056.43|884.35": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "POLICYBZR.NS|1w|long|989.745|960.35": {
@@ -2600,7 +2603,7 @@
   "POONAWALLA.NS|1d|short|447.687|462.573": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "POONAWALLA.NS|1d|short|459.362|475.416": {
     "reached_entry": true,
@@ -2722,12 +2725,13 @@
     "stopped_out": false
   },
   "RECLTD.NS|1d|long|283.508|279.2": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "RECLTD.NS|1w|long|282.453|266.972": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "REDINGTON.NS|1M|long|316.814|287.72": {
@@ -2831,8 +2835,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793352389.128612,
-  "_last_check|nse": 1793352389.128612,
+  "_last_check|crypto": 1793352708.456203,
+  "_last_check|nse": 1793352708.456203,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
@@ -2845,6 +2849,7 @@
   "_level_ready|3MINDIA.NS|1M|long|30437.5|29524.4": 1791517599.357562,
   "_level_ready|3MINDIA.NS|1M|long|30437.5|30120": 1792122403.256656,
   "_level_ready|3MINDIA.NS|1w|long|30269|29512.3": 1791517599.357562,
+  "_level_ready|AADHARHFC.NS|1M|long|419.813|413.847": 1793352708.456203,
   "_level_ready|AADHARHFC.NS|1d|long|428.115|415": 1792742513.157415,
   "_level_ready|AADHARHFC.NS|1d|long|428.217|415": 1793073998.504755,
   "_level_ready|AADHARHFC.NS|1d|long|428.268|415": 1793245891.21936,
@@ -3218,6 +3223,7 @@
   "_level_ready|COROMANDEL.NS|1d|long|1653.05|1597": 1793346102.421366,
   "_level_ready|COROMANDEL.NS|1d|short|1776.49|1904.65": 1793075770.667926,
   "_level_ready|CPPLUS.NS|1d|long|3867.05|3678.81": 1792986387.062464,
+  "_level_ready|CRAFTSMAN.NS|1d|long|10234.7|10077": 1793352708.456203,
   "_level_ready|CRAFTSMAN.NS|1d|long|10629.4|10241.4": 1793332606.092705,
   "_level_ready|CRAFTSMAN.NS|1d|long|10964.2|9906.59": 1793159201.504703,
   "_level_ready|CRAFTSMAN.NS|1w|long|10112.9|9838.25": 1791517599.357562,
@@ -3889,7 +3895,7 @@
   "_level_ready|PNBHOUSING.NS|1d|long|1119.6|1115.21": 1792651901.329247,
   "_level_ready|PNBHOUSING.NS|1d|long|1137.13|1115.21": 1792575110.80889,
   "_level_ready|PNBHOUSING.NS|1d|short|1113.52|1136.71": 1793165197.202933,
-  "_level_ready|PNBHOUSING.NS|1w|long|1056.43|884.35": 1792986985.751506,
+  "_level_ready|PNBHOUSING.NS|1w|long|1056.43|884.35": 1793352708.456203,
   "_level_ready|POLICYBZR.NS|1w|long|989.745|960.35": 1793245588.963685,
   "_level_ready|POLYMED.NS|1d|long|1556.15|1532.8": 1791518507.451007,
   "_level_ready|POONAWALLA.NS|1d|long|418.279|414.378": 1792729917.454067,
@@ -3934,7 +3940,7 @@
   "_level_ready|RBLBANK.NS|1d|long|383.783|377.6": 1792036000.300237,
   "_level_ready|RECLTD.NS|1d|long|283.508|279.2": 1793349100.9287,
   "_level_ready|RECLTD.NS|1d|long|283.933|279.2": 1793159201.504703,
-  "_level_ready|RECLTD.NS|1w|long|282.453|266.972": 1793076691.324433,
+  "_level_ready|RECLTD.NS|1w|long|282.453|266.972": 1793352708.456203,
   "_level_ready|REDINGTON.NS|1M|long|341.915|262.619": 1793333172.618426,
   "_level_ready|REDINGTON.NS|1d|long|355.612|352.95": 1793077903.064448,
   "_level_ready|REDINGTON.NS|1d|long|366.26|352.95": 1792727171.150355,
@@ -4216,6 +4222,7 @@
   "_ready|360ONE.NS|1w": 1793331989.35983,
   "_ready|3MINDIA.NS|1M": 1792122403.256656,
   "_ready|3MINDIA.NS|1w": 1791517599.357562,
+  "_ready|AADHARHFC.NS|1M": 1793352708.456203,
   "_ready|AADHARHFC.NS|1d": 1793335609.796146,
   "_ready|AARTIIND.NS|1d": 1793331989.35983,
   "_ready|AARTIIND.NS|1w": 1793339173.937436,
@@ -4370,7 +4377,7 @@
   "_ready|COROMANDEL.NS|1d": 1793346102.421366,
   "_ready|COTI/USDT|30m": 1789452970.13835,
   "_ready|CPPLUS.NS|1d": 1792986387.062464,
-  "_ready|CRAFTSMAN.NS|1d": 1793332606.092705,
+  "_ready|CRAFTSMAN.NS|1d": 1793352708.456203,
   "_ready|CRAFTSMAN.NS|1w": 1791517599.357562,
   "_ready|CREDITACC.NS|1M": 1793245588.963685,
   "_ready|CREDITACC.NS|1d": 1792727171.150355,
@@ -4639,7 +4646,7 @@
   "_ready|PIRAMALFIN.NS|1d": 1793335279.692229,
   "_ready|PIRAMALFIN.NS|1w": 1792640801.869234,
   "_ready|PNBHOUSING.NS|1d": 1793334680.412542,
-  "_ready|PNBHOUSING.NS|1w": 1792986985.751506,
+  "_ready|PNBHOUSING.NS|1w": 1793352708.456203,
   "_ready|POLICYBZR.NS|1w": 1793245588.963685,
   "_ready|POLYMED.NS|1d": 1791518507.451007,
   "_ready|POONAWALLA.NS|1d": 1793333172.618426,
@@ -4661,7 +4668,7 @@
   "_ready|RE/USDT|30m": 1789390557.764438,
   "_ready|RE/USDT|4h": 1788948356.002419,
   "_ready|RECLTD.NS|1d": 1793349100.9287,
-  "_ready|RECLTD.NS|1w": 1793076691.324433,
+  "_ready|RECLTD.NS|1w": 1793352708.456203,
   "_ready|REDINGTON.NS|1M": 1793333172.618426,
   "_ready|REDINGTON.NS|1d": 1793077903.064448,
   "_ready|REDINGTON.NS|1w": 1793333172.618426,
