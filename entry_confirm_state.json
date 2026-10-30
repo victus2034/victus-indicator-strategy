@@ -510,6 +510,7 @@
   },
   "BANKINDIA.NS|1d|long|131.989|130.25": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "BANKINDIA.NS|1d|short|129.369|135.224": {
@@ -2013,8 +2014,8 @@
     "stopped_out": false
   },
   "M&MFIN.NS|1M|long|256.86|254.55": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "M&MFIN.NS|1M|long|316.683|292.104": {
@@ -2305,8 +2306,8 @@
     "stopped_out": false
   },
   "NETWEB.NS|1w|long|4221.85|3824.06": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "NETWEB.NS|1w|long|4511.15|3824.06": {
@@ -2597,6 +2598,11 @@
     "stage": 3,
     "stopped_out": false
   },
+  "POONAWALLA.NS|1d|short|459.362|475.416": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
   "POONAWALLA.NS|1w|long|409.879|400": {
     "reached_entry": false,
     "stopped_out": false
@@ -2609,7 +2615,7 @@
   "POONAWALLA.NS|1w|short|455.34|461.55": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "PPLPHARMA.NS|1M|short|228.88|235": {
     "reached_entry": true,
@@ -2629,14 +2635,16 @@
   "PREMIERENE.NS|1d|short|859.891|874.83": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "PREMIERENE.NS|1d|short|871.672|903.225": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "PREMIERENE.NS|1d|short|871.842|885.695": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "PREMIERENE.NS|1w|long|821.16|808.125": {
@@ -2720,6 +2728,10 @@
   "REDINGTON.NS|1M|long|341.915|262.619": {
     "reached_entry": true,
     "stage": 2,
+    "stopped_out": false
+  },
+  "REDINGTON.NS|1d|long|320.786|312.5": {
+    "reached_entry": false,
     "stopped_out": false
   },
   "REDINGTON.NS|1w|long|316.814|287.72": {
@@ -2810,8 +2822,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793351774.32076,
-  "_last_check|nse": 1793351774.32076,
+  "_last_check|crypto": 1793352077.830922,
+  "_last_check|nse": 1793352077.830922,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
@@ -2996,6 +3008,7 @@
   "_level_ready|BALKRISIND.NS|1w|long|1976.22|1951.55": 1791863195.148749,
   "_level_ready|BALKRISIND.NS|1w|long|2037.74|1986.79": 1791517599.357562,
   "_level_ready|BALKRISIND.NS|1w|short|2166.42|2372.59": 1793093773.708684,
+  "_level_ready|BANKINDIA.NS|1d|long|131.989|130.25": 1793352077.830922,
   "_level_ready|BANKINDIA.NS|1d|short|129.369|135.224": 1793073108.145997,
   "_level_ready|BANKINDIA.NS|1d|short|131.223|135.224": 1793159201.504703,
   "_level_ready|BANKINDIA.NS|1d|short|132.908|135.224": 1793171508.531037,
@@ -4271,7 +4284,7 @@
   "_ready|BAJAJHFL.NS|1d": 1793074596.137844,
   "_ready|BAJAJHFL.NS|1w": 1792124784.794434,
   "_ready|BALKRISIND.NS|1w": 1793093773.708684,
-  "_ready|BANKINDIA.NS|1d": 1793331989.35983,
+  "_ready|BANKINDIA.NS|1d": 1793352077.830922,
   "_ready|BANKINDIA.NS|1w": 1793159201.504703,
   "_ready|BCHUSD|30m": 1791429995.770346,
   "_ready|BCHUSD|4h": 1791429995.770346,
