@@ -307,6 +307,7 @@
   },
   "ANTHEM.NS|1d|short|849.378|916.862": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ANTHEM.NS|1w|long|842.497|808.734": {
@@ -315,6 +316,11 @@
     "stopped_out": false
   },
   "ANTHEM.NS|1w|short|849.378|916.862": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
+  "ANTHEM.NS|1w|short|870.74|895.5": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -353,11 +359,6 @@
   },
   "APOLLOTYRE.NS|1M|long|377.598|374.3": {
     "reached_entry": false,
-    "stopped_out": false
-  },
-  "APOLLOTYRE.NS|1d|long|388.037|380.3": {
-    "reached_entry": true,
-    "stage": 2,
     "stopped_out": false
   },
   "APOLLOTYRE.NS|1w|long|365.35|359": {
@@ -426,6 +427,7 @@
   },
   "ATUL.NS|1M|long|5008.79|3518.73": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ATUL.NS|1M|long|5697.21|5560.5": {
@@ -595,8 +597,8 @@
     "stopped_out": false
   },
   "BHARTIHEXA.NS|1w|short|1657.98|1678.7": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "BIOCON.NS|1M|long|332.13|271.425": {
@@ -1169,10 +1171,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "FLUOROCHEM.NS|1d|long|4129.66|3922.36": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "FLUOROCHEM.NS|1w|long|4039.86|3554.82": {
     "reached_entry": false,
     "stopped_out": false
@@ -1487,11 +1485,6 @@
   },
   "ICICIGI.NS|1d|long|1546.49|1536.51": {
     "reached_entry": false,
-    "stopped_out": false
-  },
-  "ICICIGI.NS|1d|long|1586.4|1536.51": {
-    "reached_entry": true,
-    "stage": 3,
     "stopped_out": false
   },
   "ICICIGI.NS|1w|short|1642.6|1866.95": {
@@ -1984,11 +1977,6 @@
     "stage": 3,
     "stopped_out": true
   },
-  "M&MFIN.NS|1d|long|276.105|273.4": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "M&MFIN.NS|1w|long|250.657|246.35": {
     "reached_entry": false,
     "stopped_out": false
@@ -2365,6 +2353,10 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "NUVAMA.NS|1d|long|1736.51|1603.25": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "NUVAMA.NS|1w|long|1629.91|1399.74": {
     "reached_entry": false,
     "stopped_out": false
@@ -2551,10 +2543,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "POONAWALLA.NS|1d|long|418.279|414.378": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "POONAWALLA.NS|1d|short|434.845|450.898": {
     "reached_entry": true,
     "stage": 3,
@@ -2704,11 +2692,6 @@
     "stage": 1,
     "stopped_out": false
   },
-  "REDINGTON.NS|1d|long|355.612|352.95": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "REDINGTON.NS|1w|long|341.915|262.619": {
     "reached_entry": false,
     "stage": 1,
@@ -2731,7 +2714,7 @@
   },
   "RRKABEL.NS|1w|long|2217.68|1813.33": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "SNDKBUSD|1w|short|1448.81|1565.18": {
@@ -2803,8 +2786,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793334082.028738,
-  "_last_check|nse": 1793334082.028738,
+  "_last_check|crypto": 1793334368.93941,
+  "_last_check|nse": 1793334368.93941,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|360ONE.NS|1M|long|974.923|624.278": 1793072802.908836,
@@ -2912,6 +2895,8 @@
   "_level_ready|ANGELONE.NS|1w|long|291.102|190.431": 1793331989.35983,
   "_level_ready|ANTHEM.NS|1d|long|792.916|784.1": 1792727171.150355,
   "_level_ready|ANTHEM.NS|1d|long|814.467|802.2": 1792554386.505792,
+  "_level_ready|ANTHEM.NS|1d|short|849.378|916.862": 1793334368.93941,
+  "_level_ready|ANTHEM.NS|1w|short|849.378|916.862": 1793334368.93941,
   "_level_ready|APARINDS.NS|1M|long|14179.6|8982.1": 1792727505.027921,
   "_level_ready|APARINDS.NS|1d|long|15131.6|14820": 1793159201.504703,
   "_level_ready|APARINDS.NS|1d|short|16257.6|16954.8": 1793332287.548648,
@@ -2938,6 +2923,7 @@
   "_level_ready|ASTRAL.NS|1d|long|1327.57|1317.1": 1793003788.865691,
   "_level_ready|ASTRAL.NS|1w|long|1326.89|1316.1": 1793003509.137511,
   "_level_ready|ATHERENERG.NS|1d|long|1348.94|945.159": 1792986985.751506,
+  "_level_ready|ATUL.NS|1M|long|5008.79|3518.73": 1793334368.93941,
   "_level_ready|ATUL.NS|1d|long|5817.44|5772.5": 1792734108.77975,
   "_level_ready|AUBANK.NS|1M|long|849.507|694.028": 1793159201.504703,
   "_level_ready|AUBANK.NS|1M|long|921.519|694.028": 1792729917.454067,
@@ -4202,7 +4188,8 @@
   "_ready|ANANTRAJ.NS|1w": 1792640801.869234,
   "_ready|ANGELONE.NS|1d": 1793248890.106217,
   "_ready|ANGELONE.NS|1w": 1793331989.35983,
-  "_ready|ANTHEM.NS|1d": 1792727171.150355,
+  "_ready|ANTHEM.NS|1d": 1793334368.93941,
+  "_ready|ANTHEM.NS|1w": 1793334368.93941,
   "_ready|APARINDS.NS|1M": 1792727505.027921,
   "_ready|APARINDS.NS|1d": 1793332287.548648,
   "_ready|APARINDS.NS|1w": 1792727505.027921,
@@ -4220,6 +4207,7 @@
   "_ready|ATHERENERG.NS|1d": 1792986985.751506,
   "_ready|ATOM/USDT|30m": 1789369559.225687,
   "_ready|ATOM/USDT|4h": 1788869156.905559,
+  "_ready|ATUL.NS|1M": 1793334368.93941,
   "_ready|ATUL.NS|1d": 1792734108.77975,
   "_ready|AUBANK.NS|1M": 1793159201.504703,
   "_ready|AUBANK.NS|1d": 1792468002.381626,
