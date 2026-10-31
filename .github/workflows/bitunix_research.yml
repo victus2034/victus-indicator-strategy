@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       parts:
-        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm tl-break-audit tl-sl fib-sl tl-ex tl-sl-long tl-mkt-trend fib-start bitunix-depth bnb-fib fib-touched fib-entry tl-entry doge-fib fib-kill coindcx magic-fib zone-htf volume qnt-late band-wick risk-warn scores-audit realert trail-fibtl fib-levels fib-levels-apply fib-rearm fib-l3l4 fib-levels-all ec-audit ec-replay early-band discord-audit discord-trace fib-level-sl fib-sl-trace tl-broken tl-broken-long)"
+        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm tl-break-audit tl-sl fib-sl tl-ex tl-sl-long tl-mkt-trend fib-start bitunix-depth bnb-fib fib-touched fib-entry tl-entry doge-fib fib-kill coindcx magic-fib zone-htf volume qnt-late band-wick risk-warn scores-audit realert trail-fibtl fib-levels fib-levels-apply fib-rearm fib-l3l4 fib-levels-all ec-audit ec-replay early-band discord-audit discord-trace fib-level-sl fib-sl-trace tl-broken tl-broken-long fibtl-rebuild fibtl-rebuild-apply)"
         default: "zones-30m zones-4h fib"
 
 permissions:
@@ -184,4 +184,47 @@ jobs:
           git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
           git add research/out/fib_levels
           git commit -m "Fib level backfill report [skip ci]" || exit 0
+          for i in 1 2 3 4 5; do git pull --rebase origin ${GITHUB_REF_NAME} && git push origin HEAD:${GITHUB_REF_NAME} && break; sleep $((i*5)); done
+  # Fib + trendline backtest rebuilt under today's rules, Sep 1 to now (lakky, 2026-10-27;
+  # research/fibtl_rebuild.py). "-apply" also writes three new fibtl_rebuild_* files to
+  # scanner-runtime-state for the journal. No live file changes.
+  fibtl-rebuild:
+    if: contains(format(' {0} ', inputs.parts), ' fibtl-rebuild ') || contains(format(' {0} ', inputs.parts), ' fibtl-rebuild-apply ')
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      APPLY: ${{ contains(format(' {0} ', inputs.parts), ' fibtl-rebuild-apply ') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt tabulate
+      - name: Rebuild
+        id: rebuild
+        run: |
+          git fetch --depth 1 origin scanner-runtime-state
+          mkdir -p /tmp/rt && git archive FETCH_HEAD | tar -x -C /tmp/rt
+          PYTHONPATH=research python research/fibtl_rebuild.py --since 2026-09-01 --state /tmp/rt 2>&1 | tee research/out/fibtl_rebuild_run.log
+          test -s research/out/fibtl_rebuild/fibtl_rebuild_meta.json
+          cat research/out/fibtl_rebuild/SUMMARY.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Persist runtime state
+        if: ${{ steps.rebuild.outcome == 'success' && env.APPLY == 'true' }}
+        run: |
+          cp research/out/fibtl_rebuild/fibtl_rebuild_*.json* .
+          bash .github/scripts/persist_runtime_state.sh \
+            fibtl_rebuild_records.jsonl \
+            fibtl_rebuild_results.json \
+            fibtl_rebuild_meta.json
+          rm -f fibtl_rebuild_*.json*
+      - name: Commit the report to this branch
+        if: always() && steps.rebuild.outcome == 'success'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
+          git add research/out/fibtl_rebuild research/out/fibtl_rebuild_run.log
+          git commit -m "Fib/TL rebuild report [skip ci]" || exit 0
           for i in 1 2 3 4 5; do git pull --rebase origin ${GITHUB_REF_NAME} && git push origin HEAD:${GITHUB_REF_NAME} && break; sleep $((i*5)); done

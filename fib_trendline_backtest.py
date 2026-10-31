@@ -295,6 +295,7 @@ def replay(market, symbol, tf, base, evalc, now):
                     got = trade("fib", trades.fib_plan(d, zone), k,
                                 {"zone": zone["zone"], "level": leg,
                                  "fib_id": f"{symbol}|{tf}|{d}|{times[s['Ot']]}|{top}",
+                                 "d": d, "base": base_px, "top": top, "origin": times[s["Ot"]],
                                  "band_ts": band_ts, **features})
                     last[key] = (ts, got["result"]["filled"])
                     out.append(got)
@@ -339,6 +340,7 @@ def replay(market, symbol, tf, base, evalc, now):
                     out.append(trade("trendline", plan, k, {
                         "band_ts": band_ts,
                         "line": line.kind, "swing_gap": line.x2 - line.x1, "age": i - line.created,
+                        "anchors": (times[line.x1], line.y1, times[line.x2], line.y2),
                         "quiet": clock.quiet(i), "max_streak": clock.max_streak}))
                     last_alert = ts
                 in_band = True

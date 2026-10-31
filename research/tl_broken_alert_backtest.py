@@ -52,7 +52,7 @@ RULES = (("at close, SL break candle, 1R", "close", "candle", 1),
          ("break low/high, SL break candle, 1R", "hl", "candle", 1))
 
 
-def breaks(market, symbol, tf, base, evalc, now, since):
+def breaks(market, symbol, tf, base, evalc, now, since, rules=RULES):
     """Every break trade, for each rule, on one chart."""
     if base and not candle_is_closed(market, base[-1][0], tf, now):
         base = base[:-1]
@@ -87,7 +87,7 @@ def breaks(market, symbol, tf, base, evalc, now, since):
                 fills["hl"] = (k, max(level, o) if long else min(level, o))    # a gap fills at the open
                 break
         entry_bar = min(b + 1, n - 1)
-        for label, how, stop, target in RULES:
+        for label, how, stop, target in rules:
             fill, fill_px = fills[how]
             if stop == "candle":
                 sl = lows[b] if long else highs[b]
@@ -109,7 +109,8 @@ def breaks(market, symbol, tf, base, evalc, now, since):
                 result = trades.simulate(plan, market, tf, evalc[fill][0] - 1, after)
             out.append({"market": market, "symbol": symbol, "tf": tf, "kind": "break", "rule": label,
                         "how": how, "alert_ts": close_ts, "plan": plan, "result": result,
-                        "line": "S" if line.kind == SUPPORT else "R", "break_ts": times[b]})
+                        "line": "S" if line.kind == SUPPORT else "R", "break_ts": times[b],
+                        "line_kind": line.kind, "anchors": (times[line.x1], line.y1, times[line.x2], line.y2)})
     return out
 
 
