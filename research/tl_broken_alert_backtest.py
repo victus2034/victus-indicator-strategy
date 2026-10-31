@@ -181,7 +181,11 @@ def main() -> None:
     parser.add_argument("--since", default="2026-09-01")
     parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--no-nse", action="store_true")
+    parser.add_argument("--out", default="")
     args = parser.parse_args()
+    global OUT
+    if args.out:
+        OUT = OUT.parent / f"tl_broken_alert_{args.out}"
     OUT.mkdir(parents=True, exist_ok=True)
     fbt.TIMEFRAMES = list(config.FIB_TL_TIMEFRAMES)
     since = int(pd.Timestamp(args.since, tz=IST).timestamp())
