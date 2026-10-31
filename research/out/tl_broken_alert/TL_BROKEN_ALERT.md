@@ -1,0 +1,60 @@
+# TL BROKEN alerts traded in the break direction (2026-09-01 to now)
+
+Support closed below -> sell; resistance closed above -> buy. 'at close' = market entry at the next candle's open; 'break low/high' = stop order at the break candle's far end within 5 candles. candle SL = break candle's other end; line SL = back inside the line. Net after fees + stop slippage; % = net R x stop %. Crypto on Delta candles; 29 crypto trades filled within 15 min of CPI/PPI/FOMC left out.
+
+| market   | tf   | rule                          |   signals |   trades |   win_% |   avg_stop_% |   R_per_trade |   %_per_trade |   R_total |
+|:---------|:-----|:------------------------------|----------:|---------:|--------:|-------------:|--------------:|--------------:|----------:|
+| crypto   | 4H   | at close, candle SL, 1R       |       543 |      525 |      49 |         3.28 |        -0.112 |        -0.541 |     -59   |
+| crypto   | 4H   | at close, candle SL, 2R+BE    |       543 |      511 |      23 |         3.28 |         0.022 |        -0.1   |      11.3 |
+| crypto   | 4H   | at close, line SL, 1R         |       543 |      526 |      42 |         1.55 |        -0.513 |        -0.372 |    -269.9 |
+| crypto   | 4H   | at close, line SL, 2R+BE      |       543 |      527 |      22 |         1.55 |        -0.381 |        -0.233 |    -200.8 |
+| crypto   | 4H   | break low/high, candle SL, 1R |       538 |      419 |      48 |         4.03 |        -0.11  |        -0.75  |     -46.2 |
+| crypto   | 4H   | live TL touch (now)           |       947 |      697 |      35 |         1.27 |        -0.402 |        -0.458 |    -279.9 |
+| crypto   | 1D+  | at close, candle SL, 1R       |        85 |       77 |      60 |         8.93 |         0.17  |         1.321 |      13.1 |
+| crypto   | 1D+  | at close, candle SL, 2R+BE    |        85 |       75 |      19 |         8.93 |         0.061 |         0.731 |       4.6 |
+| crypto   | 1D+  | at close, line SL, 1R         |        85 |       82 |      52 |         4.34 |        -0.034 |         0.698 |      -2.8 |
+| crypto   | 1D+  | at close, line SL, 2R+BE      |        85 |       81 |      22 |         4.34 |        -0.052 |        -0.225 |      -4.2 |
+| crypto   | 1D+  | break low/high, candle SL, 1R |        85 |       65 |      57 |        10.69 |         0.122 |         1.487 |       8   |
+| crypto   | 1D+  | live TL touch (now)           |       133 |      119 |      26 |         1.95 |        -0.57  |        -0.667 |     -67.8 |
+| crypto   | 1D   | at close, candle SL, 1R       |        82 |       75 |      61 |         8.23 |         0.201 |         1.867 |      15.1 |
+| crypto   | 1D   | at close, candle SL, 2R+BE    |        82 |       72 |      19 |         8.23 |         0.091 |         1.295 |       6.6 |
+| crypto   | 1D   | at close, line SL, 1R         |        82 |       79 |      53 |         3.76 |        -0.022 |         0.775 |      -1.7 |
+| crypto   | 1D   | at close, line SL, 2R+BE      |        82 |       78 |      23 |         3.76 |        -0.028 |         0.176 |      -2.2 |
+| crypto   | 1D   | break low/high, candle SL, 1R |        82 |       65 |      57 |        10.17 |         0.122 |         1.487 |       8   |
+| crypto   | 1D   | live TL touch (now)           |       129 |      115 |      24 |         1.82 |        -0.606 |        -0.847 |     -69.7 |
+| crypto   | 1W   | at close, candle SL, 1R       |         3 |        2 |       0 |        27.8  |        -1.008 |       -19.179 |      -2   |
+| crypto   | 1W   | at close, candle SL, 2R+BE    |         3 |        3 |       0 |        27.8  |        -0.672 |       -12.799 |      -2   |
+| crypto   | 1W   | at close, line SL, 1R         |         3 |        3 |      33 |        19.88 |        -0.343 |        -1.342 |      -1   |
+| crypto   | 1W   | at close, line SL, 2R+BE      |         3 |        3 |       0 |        19.88 |        -0.676 |       -10.654 |      -2   |
+| crypto   | 1W   | break low/high, candle SL, 1R |         3 |        0 |     nan |        46.98 |       nan     |       nan     |       0   |
+| crypto   | 1W   | live TL touch (now)           |         4 |        4 |      75 |         5.52 |         0.471 |         4.497 |       1.9 |
+| nse      | 4H   | at close, candle SL, 1R       |       824 |      767 |      51 |         2.63 |        -0.089 |        -0.039 |     -68.5 |
+| nse      | 4H   | at close, candle SL, 2R+BE    |       824 |      771 |      21 |         2.63 |        -0.047 |        -0.034 |     -36.1 |
+| nse      | 4H   | at close, line SL, 1R         |       824 |      741 |      45 |         1.39 |        -0.487 |        -0.043 |    -360.9 |
+| nse      | 4H   | at close, line SL, 2R+BE      |       824 |      745 |      22 |         1.39 |        -0.398 |        -0.062 |    -296.4 |
+| nse      | 4H   | break low/high, candle SL, 1R |       824 |      650 |      55 |         3.2  |         0.034 |         0.157 |      22.3 |
+| nse      | 4H   | live TL touch (now)           |      1629 |     1273 |      35 |         1.28 |        -0.432 |        -0.534 |    -550   |
+| nse      | 1D+  | at close, candle SL, 1R       |       523 |      457 |      51 |         4.55 |        -0.052 |        -0.142 |     -23.9 |
+| nse      | 1D+  | at close, candle SL, 2R+BE    |       523 |      456 |      19 |         4.55 |        -0.078 |        -0.49  |     -35.5 |
+| nse      | 1D+  | at close, line SL, 1R         |       523 |      441 |      48 |         2.31 |        -0.412 |         0.03  |    -181.8 |
+| nse      | 1D+  | at close, line SL, 2R+BE      |       523 |      439 |      23 |         2.31 |        -0.348 |        -0.124 |    -152.6 |
+| nse      | 1D+  | break low/high, candle SL, 1R |       523 |      348 |      58 |         5.66 |         0.123 |         0.31  |      42.8 |
+| nse      | 1D+  | live TL touch (now)           |       979 |      775 |      38 |         1.6  |        -0.366 |        -0.464 |    -283.6 |
+| nse      | 1D   | at close, candle SL, 1R       |       432 |      395 |      51 |         3.73 |        -0.071 |        -0.222 |     -28.2 |
+| nse      | 1D   | at close, candle SL, 2R+BE    |       432 |      396 |      20 |         3.73 |        -0.069 |        -0.334 |     -27.2 |
+| nse      | 1D   | at close, line SL, 1R         |       432 |      364 |      48 |         1.98 |        -0.413 |        -0.085 |    -150.3 |
+| nse      | 1D   | at close, line SL, 2R+BE      |       432 |      364 |      23 |         1.98 |        -0.334 |        -0.131 |    -121.7 |
+| nse      | 1D   | break low/high, candle SL, 1R |       432 |      312 |      57 |         4.66 |         0.101 |         0.25  |      31.5 |
+| nse      | 1D   | live TL touch (now)           |       802 |      649 |      38 |         1.48 |        -0.366 |        -0.466 |    -237.4 |
+| nse      | 1W   | at close, candle SL, 1R       |        84 |       59 |      54 |         8.05 |         0.056 |        -0.039 |       3.3 |
+| nse      | 1W   | at close, candle SL, 2R+BE    |        84 |       58 |      14 |         8.05 |        -0.126 |        -1.45  |      -7.3 |
+| nse      | 1W   | at close, line SL, 1R         |        84 |       71 |      51 |         3.5  |        -0.412 |         0.664 |     -29.3 |
+| nse      | 1W   | at close, line SL, 2R+BE      |        84 |       70 |      24 |         3.5  |        -0.41  |        -0.017 |     -28.7 |
+| nse      | 1W   | break low/high, candle SL, 1R |        84 |       35 |      69 |         9.74 |         0.351 |         1.467 |      12.3 |
+| nse      | 1W   | live TL touch (now)           |       171 |      121 |      36 |         2.14 |        -0.386 |        -0.492 |     -46.7 |
+| nse      | 1M   | at close, candle SL, 1R       |         7 |        3 |      67 |        12.82 |         0.321 |         8.402 |       1   |
+| nse      | 1M   | at close, candle SL, 2R+BE    |         7 |        2 |       0 |        12.82 |        -0.512 |        -3.501 |      -1   |
+| nse      | 1M   | at close, line SL, 1R         |         7 |        6 |      33 |         5.61 |        -0.373 |        -0.511 |      -2.2 |
+| nse      | 1M   | at close, line SL, 2R+BE      |         7 |        5 |      20 |         5.61 |        -0.444 |        -1.176 |      -2.2 |
+| nse      | 1M   | break low/high, candle SL, 1R |         7 |        1 |       0 |        15.24 |        -1.007 |       -21.498 |      -1   |
+| nse      | 1M   | live TL touch (now)           |         6 |        5 |      60 |         2.83 |         0.115 |         0.406 |       0.6 |
