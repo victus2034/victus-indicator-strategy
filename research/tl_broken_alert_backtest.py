@@ -7,8 +7,10 @@ support closed below -> SELL, resistance closed above -> BUY. Rules tested:
            break candle closes (on 5m/1h evaluation candles, so a gap counts)
   hl     = stop order at the break candle's low (sell) / high (buy), fills within
            FIB_TL_ENTRY_WAIT_BARS candles (lakky's 2026-10-23 rule, PR #65, for comparison)
-Stops:
+Stops (lakky 2026-10-31: "sl is above the previous candle"):
   candle = the break candle's other end (sell: its high, buy: its low)
+  before = the candle before the break candle (sell: its high, buy: its low)
+  both   = the wider of those two
   line   = back inside the line: the line's price on the entry candle
 Exits: 1R, no breakeven, no hold limit (the live TL exit) and 2R + BE, hold 20 (the fib exit).
 Compared with the live TL touch trades over the same period. Crypto on Delta candles,
@@ -41,9 +43,13 @@ from trendlines import SUPPORT, build_trendlines  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "tl_broken_alert"
 GROUPS = (("4H", ("4h",)), ("1D+", ("1d", "1w", "1M")), ("1D", ("1d",)), ("1W", ("1w",)), ("1M", ("1M",)))
-RULES = (("at close, candle SL, 1R", "close", "candle", 1), ("at close, candle SL, 2R+BE", "close", "candle", 2),
-         ("at close, line SL, 1R", "close", "line", 1), ("at close, line SL, 2R+BE", "close", "line", 2),
-         ("break low/high, candle SL, 1R", "hl", "candle", 1))
+RULES = (("at close, SL break candle, 1R", "close", "candle", 1),
+         ("at close, SL break candle, 2R+BE", "close", "candle", 2),
+         ("at close, SL candle before break, 1R", "close", "before", 1),
+         ("at close, SL candle before break, 2R+BE", "close", "before", 2),
+         ("at close, SL wider of the two, 1R", "close", "both", 1),
+         ("at close, SL line, 1R", "close", "line", 1),
+         ("break low/high, SL break candle, 1R", "hl", "candle", 1))
 
 
 def breaks(market, symbol, tf, base, evalc, now, since):
@@ -85,6 +91,10 @@ def breaks(market, symbol, tf, base, evalc, now, since):
             fill, fill_px = fills[how]
             if stop == "candle":
                 sl = lows[b] if long else highs[b]
+            elif stop == "before":
+                sl = lows[b - 1] if long else highs[b - 1]
+            elif stop == "both":
+                sl = min(lows[b - 1], lows[b]) if long else max(highs[b - 1], highs[b])
             else:
                 sl = line.price_at(b + 1)
             plan = {"side": "long" if long else "short", "entry": fill_px, "sl": sl}
@@ -215,7 +225,8 @@ def main() -> None:
     text = [f"# TL BROKEN alerts traded in the break direction ({args.since} to now)", "",
             "Support closed below -> sell; resistance closed above -> buy. 'at close' = market entry at the next "
             "candle's open; 'break low/high' = stop order at the break candle's far end within 5 candles. "
-            "candle SL = break candle's other end; line SL = back inside the line. "
+            "SL break candle = its other end; SL candle before break = that candle's high (sell) / low (buy); "
+            "wider = the further of the two; SL line = back inside the line. "
             "Net after fees + stop slippage; % = net R x stop %. "
             f"Crypto on Delta candles; {skipped} crypto trades filled within 15 min of CPI/PPI/FOMC left out.", "",
             df.to_markdown(index=False), ""]
