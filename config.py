@@ -429,6 +429,13 @@ SCAN_WORKERS = 8
 ALERT_COOLDOWN_SECONDS = env_int("VICTUS_ALERT_COOLDOWN_SECONDS", 4 * 60 * 60)
 # Off since 2026-10-10 (lakky): alerts are S/R zones, fibs and trendlines only.
 ALERT_RANGE_FILTER_SIGNALS = False
+
+# Backtest cards on Discord are off (lakky, 2026-10-31: "remove backtest data from discord ...
+# i use journal more"). The daily zone cards, the fib / trendline / 1D+ zone card, the weekly
+# workbook and the paper table are still graded and stored exactly as before (the journal
+# reads those files); only the Discord post is skipped. VICTUS_DISCORD_BACKTEST_CARDS=1
+# turns them back on.
+DISCORD_BACKTEST_CARDS = os.getenv("VICTUS_DISCORD_BACKTEST_CARDS", "").strip().lower() in {"1", "true", "yes", "on"}
 # Money line on the daily backtest cards (lakky, 2026-10-18: "a budget of 10000 ... with
 # 5x leverage"). Every trade is sized at the full budget x leverage (a 50,000 position),
 # so a trade's money result = BUDGET x LEVERAGE x its net % move (net R x stop %).

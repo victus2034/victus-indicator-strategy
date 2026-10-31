@@ -2372,7 +2372,18 @@ def _report_webhook_url() -> str:
     return discord_wait_url(webhook_url)
 
 
+def backtest_cards_on() -> bool:
+    """config.DISCORD_BACKTEST_CARDS: off since 2026-10-31 - grading and storage go on, the post is skipped."""
+    import config
+    if config.DISCORD_BACKTEST_CARDS:
+        return True
+    print("Backtest card not posted: Discord backtest cards are off (config.DISCORD_BACKTEST_CARDS).")
+    return False
+
+
 def send_discord_message(message: str) -> None:
+    if not backtest_cards_on():
+        return
     webhook_url = _report_webhook_url()
     payload = discord_payload(message)
     _post_with_retry(
@@ -2382,6 +2393,8 @@ def send_discord_message(message: str) -> None:
 
 
 def send_discord_message_with_attachment(message: str, filename: str, file_bytes: bytes) -> None:
+    if not backtest_cards_on():
+        return
     webhook_url = _report_webhook_url()
     payload = discord_payload(message)
 

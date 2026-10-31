@@ -776,6 +776,8 @@ def build_report(
 
 
 def post_report(message: str) -> None:
+    if not backtest.backtest_cards_on():
+        return
     webhook = os.getenv(WEBHOOK_ENV, "").strip() or os.getenv(FALLBACK_WEBHOOK_ENV, "").strip()
     if not webhook:
         print(f"Neither {WEBHOOK_ENV} nor {FALLBACK_WEBHOOK_ENV} is configured; skipping send.")

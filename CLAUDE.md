@@ -313,6 +313,14 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   entries within `SAME_PRICE_PCT` (0.1%) go out as one message (`merge_same_price`): `**4H + 1D NSE**` in the
   title, one `4H · Entry .. · SL ..` line each (one line when the plans are identical; `FIB L1/L2` when levels
   differ). Keys and records stay one per timeframe. 92 of 1,017 alerts 21-27 Oct were such pairs.
+- **TL BROKEN is a trade (lakky, 2026-10-31).** "i trade only when a candle closes below or above the trendline
+  ... sl is above the previous candle": each TL BROKEN alert is recorded (kind `trendline`, `broken: true`, key
+  `tlbreak|SYM|tf|line|x1|x2`) with `trades.break_plan` - entry at the price when it is sent (`"fill": "market"`,
+  filled on the first evaluation candle after), stop past the candle before the break candle, one 1R target, no
+  hold limit. Discord text unchanged; never merged with a touch; entry confirm skips it. The journal's SP / RS TL BR
+  types read it. Backtest Jun 1 - Oct 31 (`research/tl_broken_alert_backtest.py`, parts `tl-broken` /
+  `tl-broken-long`): crypto 1D +0.17R / +2.63% a trade, crypto 4H -0.03R, NSE ~-0.04R. Sep 1 - Oct 31 history for
+  the journal: `research/fibtl_rebuild.py` adds the break trades (key `...|br`), part `fibtl-rebuild-apply`.
 - Each channel seeds silently per market on its first pass with a webhook, so adding a webhook
   never dumps a backlog. Deleting the state file re-seeds rather than bursting.
 - `python fib_trendline_scanner.py --dry-run [--force-nse]` prints what would alert, sends nothing.
@@ -474,6 +482,10 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   `bitunix_research.yml`, in the fib scan's concurrency group) adds `base`, `top`, `levels` and `level` to every
   fib alert since Oct 1 and scores the what-ifs at once; backup `fib_trendline_alert_records.pre_levels_2026-10-19.jsonl`.
   New fib records carry `level` too (L3; L1 for an old zone-1 alert).
+- **Backtest cards are off Discord (2026-10-31, lakky: "i use journal more").** `config.DISCORD_BACKTEST_CARDS`
+  (`VICTUS_DISCORD_BACKTEST_CARDS=1` turns them back on): the daily zone cards and quiet lines, the fib / trendline /
+  1D+ zone card, the weekly workbook and the paper table are graded and stored as before (the journal reads those
+  files) - only the post is skipped (`daily_backtest_summary.backtest_cards_on`, `fib_trendline_daily_report.send_card`).
 - **Range filter alerts are off (2026-10-10, lakky).** Alerts are S/R zones, fibs and trendlines
   (incl. TL BROKEN) only. `ALERT_RANGE_FILTER_SIGNALS` is False in `config.py` and `nse_config.py`; the
   range filter is still computed but never posts. Pine v12.7.8 drops its RF marker too.
