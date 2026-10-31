@@ -95,6 +95,21 @@ def trendline_plan(kind_is_support, level, tf, bar=None, opens=None, highs=None,
     return {"side": "long" if kind_is_support else "short", "entry": level, "sl": sl, "target_r": 1}
 
 
+def break_plan(support_broken, bar, highs, lows, closes, entry=None):
+    """A TL BROKEN trade, lakky's way (2026-10-31: "i trade only when a candle closes below or above
+    the trendline ... sl is above the previous candle"): in the break's direction at the break
+    candle's close (or `entry`: the price when the alert goes out), stop past the candle before
+    it, one 1R target. None when that stop is not on the right side of the entry."""
+    if bar < 1:
+        return None
+    entry = closes[bar] if entry is None else entry
+    long = not support_broken            # resistance closed above -> buy
+    sl = lows[bar - 1] if long else highs[bar - 1]
+    if (sl >= entry) if long else (sl <= entry):
+        return None
+    return {"side": "long" if long else "short", "entry": entry, "sl": sl, "target_r": 1, "fill": "market"}
+
+
 def target_price(plan):
     """The single target of a 1R plan."""
     risk = abs(plan["entry"] - plan["sl"])
@@ -222,7 +237,8 @@ def simulate_1r(plan, market, tf, alert_ts, candles):
             if seen > wait_n:
                 res.update(outcome="no fill", resolved=True, end_ts=ts)
                 return res
-            if (l <= entry) if long else (h >= entry):
+            # "fill": "market" (TL BROKEN) is entered when it is sent: the first candle after
+            if plan.get("fill") == "market" or ((l <= entry) if long else (h >= entry)):
                 res.update(filled=True, fill_ts=ts)
                 if (l <= sl) if long else (h >= sl):
                     res.update(outcome="SL", sl=True, resolved=True, end_ts=ts)

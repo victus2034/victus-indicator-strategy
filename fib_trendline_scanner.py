@@ -514,6 +514,8 @@ def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=No
                 **info, "key": f"tlbreak|{ident}", "level": line.price_at(line.broken_at),
                 "close": closes[line.broken_at], "time": stamp[line.broken_at],
                 "closed_at": candle_close_ts(market, times[line.broken_at], tf),
+                # entered at market when the alert goes out: the price now
+                "plan": trades.break_plan(line.kind == SUPPORT, line.broken_at, highs, lows, closes, entry=price),
             })
     return result
 
@@ -675,15 +677,18 @@ def merge_same_price(market, planned):
     a 1M one, a 4H and a 1D trendline (92 of 1,017 alerts 21-27 Oct). Those go out as one
     message: the title names every timeframe, and each keeps its own Entry / SL / TP line.
     Keys and records stay one per timeframe, so state, entry confirm and the reports see no change.
-    TL BROKEN (no record) and alerts on different channels are never merged."""
+    TL BROKEN and alerts on different channels are never merged."""
+    def mergeable_plan(record):
+        return None if (record or {}).get("broken") else (record or {}).get("plan")
+
     groups = []
     for channel, key, message, record in planned:
-        plan = (record or {}).get("plan")
+        plan = mergeable_plan(record)
         home = None
         if plan:
             for g in groups:
                 head = g[0]
-                hplan = (head[3] or {}).get("plan")
+                hplan = mergeable_plan(head[3])
                 if (head[0] == channel and hplan and hplan["side"] == plan["side"]
                         and abs(hplan["entry"] - plan["entry"]) <= hplan["entry"] * SAME_PRICE_PCT / 100
                         and _tf_of(key) not in {_tf_of(item[1]) for item in g}):
@@ -786,7 +791,14 @@ def plan_alerts(state, market, symbol, tf, analysis, now, last_scan=None):
             state[z["key"]]["seen"] = now   # still true: keep it from being pruned
     for b in analysis["break"]:
         if b["key"] not in state and break_is_fresh(b, last_scan):
-            planned.append(("trendline", b["key"], format_break_alert(market, symbol, tf, b), None))
+            # Recorded as a trade since 2026-10-31 (lakky): the journal's SP / RS TL BR types
+            # and the daily scoring read it. Discord text unchanged.
+            record = None
+            if b.get("plan"):
+                record = {**base, "kind": "trendline", "plan": b["plan"], "line": b["kind"], "broken": True,
+                          "line_level": b["level"], "close": b["close"],
+                          "from": list(b["from"]), "to": list(b["to"])}
+            planned.append(("trendline", b["key"], format_break_alert(market, symbol, tf, b), record))
 
     in_band_now = {t["key"] for t in analysis["touch"]}
     prefix = f"tl|{symbol}|{tf}|"

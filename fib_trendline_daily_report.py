@@ -27,6 +27,7 @@ from pathlib import Path
 import requests
 
 import fib_trendline_trades as trades
+import config
 import scanner
 from daily_backtest_summary import money_line
 from fib_trendline_data import CRYPTO, IST, NSE, TF_LABEL, TF_SECONDS, delta_candles, nse_download
@@ -270,6 +271,9 @@ def build_report(report_day, records, results):
 
 def send_card(text):
     """Post one card as an embed, like the crypto and NSE daily cards in the same channel."""
+    if not config.DISCORD_BACKTEST_CARDS:
+        print("fib/trendline card not posted: Discord backtest cards are off (config.DISCORD_BACKTEST_CARDS)")
+        return
     url = scanner.get_env_or_config(WEBHOOK_ENV, "")
     if not url:
         return

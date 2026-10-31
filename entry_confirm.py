@@ -320,8 +320,8 @@ def load_fib_tl_alerts(
             continue
         if row.get("market") != market or row.get("tf") != timeframe:
             continue
-        if row.get("kind") not in FIB_TL_KIND_LABEL:
-            continue
+        if row.get("kind") not in FIB_TL_KIND_LABEL or row.get("broken"):
+            continue                      # TL BROKEN trades are entered at the break close
         symbol = str(row.get("symbol", ""))
         if market == "crypto" and symbol.upper() not in CRYPTO_WATCHLIST_SET:
             continue

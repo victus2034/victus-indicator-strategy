@@ -60,7 +60,7 @@ Most are dispatched by cron-job.org (GitHub's own cron was too unreliable).
 | `nse_scan.yml`, `nse_scan_30m.yml` | NSE zone scans, market hours only |
 | `fib_trendline_scan.yml` | fib + trendline alerts, runs after each 30m crypto scan |
 | `entry_confirm.yml` | entry-confirmed digest |
-| `daily_backtest_summary.yml`, `weekly_backtest_summary.yml`, `daily_catchup.yml` | scores alerts on real candles, posts the reports; paper trading |
+| `daily_backtest_summary.yml`, `weekly_backtest_summary.yml`, `daily_catchup.yml` | scores alerts on real candles and stores the results for the journal (Discord backtest cards off since 2026-10-31, `config.DISCORD_BACKTEST_CARDS`); paper trading |
 | `daily_astrology.yml`, `weekly_astrology.yml` | astrology posts (`astrology_engine.js`) |
 | `tests.yml` | the test suite on every push |
 | `bitunix_research.yml`, `research_backtest.yml`, `backtest_audit.yml` | research only, run by hand |
