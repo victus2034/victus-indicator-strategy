@@ -2459,8 +2459,8 @@
    "alert_ts": null,
    "entry": 5263.69,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|AMBER.NS|4h|-1|1791359100|6380.0|2@1791869610": {
@@ -2554,22 +2554,22 @@
    "alert_ts": null,
    "entry": 2095.8759667968748,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   },
   "L2": {
    "alert_ts": null,
    "entry": 2124.629956054687,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   },
   "L4": {
    "alert_ts": null,
    "entry": 2179.523935546875,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|ANANDRATHI.NS|4h|-1|1789703100|2060.699951171875|2@1791260078": {
@@ -9443,6 +9443,45 @@
    "sl": true
   }
  },
+ "fib|ENAUSD|4h|-1|1793289600|0.1657|2@1793415206": {
+  "L1": {
+   "alert_ts": 1793325599,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 0.18341739999999998,
+   "fill_ts": 1793325600,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793332799,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1793390400,
+   "entry": 0.1891495,
+   "fill_ts": 1793336400,
+   "filled": true,
+   "half": true,
+   "outcome": "BE",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 0.2000926,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
+  }
+ },
  "fib|ENAUSD|4h|1|1789344000|0.29469|2@1791893892": {
   "L1": {
    "alert_ts": 1790891999,
@@ -12053,8 +12092,8 @@
    "alert_ts": null,
    "entry": 872.675,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|GRANULES.NS|4h|1|1785728700|919.0|2@1790741967": {
@@ -13194,8 +13233,8 @@
    "alert_ts": null,
    "entry": 76.51186,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|HYPEUSD|4h|1|1792843200|82.45|2@1793241182": {
@@ -13929,8 +13968,8 @@
    "alert_ts": null,
    "entry": 106.25119857788086,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|IREDA.NS|4h|-1|1792381500|99.16000366210938|2@1792989247": {
@@ -14539,8 +14578,8 @@
    "alert_ts": null,
    "entry": 719.8990161132813,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|JSL.NS|4h|1|1791863100|747.1500244140625|2@1792554228": {
@@ -18828,38 +18867,46 @@
    "alert_ts": 1793332799,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1793462400,
    "entry": 4.21778,
    "fill_ts": 1793332800,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L2": {
    "alert_ts": 1793339999,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1793462400,
    "entry": 4.31865,
    "fill_ts": 1793340000,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1793458799,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1793462400,
    "entry": 4.511220000000001,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1793462400,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
   }
  },
  "fib|NEARUSD|4h|1|1791475200|6.019|2@1791890964": {
@@ -24113,15 +24160,15 @@
    "alert_ts": 1793372399,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1793444400,
    "entry": 0.915868,
    "fill_ts": null,
    "filled": false,
    "half": false,
-   "outcome": "open",
+   "outcome": "no fill",
    "r1": false,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   }
  },
