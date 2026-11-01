@@ -36,6 +36,7 @@ fib_trendline_daily_report.py scores once a day.
 """
 import argparse
 import json
+import math
 import os
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -351,7 +352,7 @@ def current_candle_range(market, charts, tf, now, live=None):
     rows = [c for c in candles if c[0] >= opened]
     for finer in TF_ORDER[:TF_ORDER.index(tf)]:
         rows += [c for c in charts.get(finer) or [] if c[0] >= opened]
-    if live and live[0] >= opened:
+    if live and live[0] >= opened and scanner.clean_candles([live]):
         rows.append(live)
     if not rows:
         return None
@@ -452,6 +453,7 @@ def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=No
     (band_price). Messages still show the price now and its distance.
     trend: crypto daily EMA trend for the zone filter (scanner.daily_trend's sign)."""
     result = {"fib": [], "touch": [], "break": [], "zone": [], "bars": 0, "price": None}
+    candles = scanner.clean_candles(candles)    # a zero / NaN row used to skip the whole symbol
     if len(candles) < 2:
         return result
     closed = candles if candle_is_closed(market, candles[-1][0], tf, now) else candles[:-1]
@@ -849,8 +851,18 @@ def mark_sent(state, key, now):
 
 def append_record(record, key, now):
     row = {**record, "id": f"{key}@{int(now)}", "key": key, "sent_ts": int(now)}
+    # A run killed mid-write leaves a line with no newline; appending onto it would
+    # glue this record to it and lose both. Start a fresh line first.
+    try:
+        with RECORDS_FILE.open("rb") as file:
+            torn = False
+            if file.seek(0, os.SEEK_END) > 0:
+                file.seek(-1, os.SEEK_END)
+                torn = file.read(1) != b"\n"
+    except OSError:
+        torn = False
     with RECORDS_FILE.open("a", encoding="utf-8") as file:
-        file.write(json.dumps(row) + "\n")
+        file.write(("\n" if torn else "") + json.dumps(row) + "\n")
 
 
 def send(channel, message, market):
@@ -868,7 +880,8 @@ def send(channel, message, market):
 
 def swept_since(rows, since, seconds=60):
     """(low, high) of the `seconds` candles [ts, o, h, l, c, ...] that closed after `since`, or None."""
-    rows = [r for r in rows if r[0] + seconds > since]
+    rows = [r for r in rows if r[0] + seconds > since
+            and all(isinstance(x, (int, float)) and math.isfinite(x) and x > 0 for x in r[2:4])]   # a 0 low is no wick
     return (min(r[3] for r in rows), max(r[2] for r in rows)) if rows else None
 
 
@@ -904,7 +917,8 @@ def scan_crypto(timeframes, now, since=None):
             # Bitunix down skips the symbol; BREAK_GRACE_SECONDS covers the gap.
             # A Bitunix pair passes through bitunix_pair unchanged, so the
             # xStocks' own pairs (TSLAUSDT for TSLAXUSD) reach the API as is.
-            charts = crypto_charts(pair or contract, timeframes, now, source=source)
+            charts = {tf: scanner.clean_candles(rows)       # bad rows out before price and range
+                      for tf, rows in crypto_charts(pair or contract, timeframes, now, source=source).items()}
             price = current_price(charts)
             live = swept = move = None
             if source == "bitunix":
@@ -976,7 +990,7 @@ def scan_nse(timeframes, now, since=None):
     # Yahoo can stamp a candle before it opens (a 13:15 bar at 13:14, the 09:15 bar in
     # pre-open). Such a bar became "the candle forming now", so the touched-entry check
     # saw only it and missed the morning's touch (6 alerts 22-23 Oct, Discord audit).
-    charts = {s: {tf: [c for c in rows if c[0] <= now] for tf, rows in by_tf.items()}
+    charts = {s: {tf: [c for c in scanner.clean_candles(rows) if c[0] <= now] for tf, rows in by_tf.items()}
               for s, by_tf in nse_charts(symbols, timeframes).items()}
     try:
         fine = {s: [c for c in rows if c[0] <= now]          # what traded since the last pass
@@ -1094,7 +1108,10 @@ def run_once(dry_run=False, force_nse=False):
 
     if not dry_run:
         for market, results in markets.items():
-            if results and awake[market]:
+            # Only a pass that read some charts counts as a scan. With every fetch failing
+            # (a Bitunix / Yahoo outage) it used to move __last_scan__ on, so a TL BROKEN
+            # whose candle closed during the outage was dropped as stale once data came back.
+            if awake[market] and any(a is not None for _, a, _ in results):
                 last_scans[market] = now
 
     for market, results in markets.items():

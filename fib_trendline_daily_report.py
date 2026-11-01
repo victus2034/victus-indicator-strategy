@@ -46,11 +46,22 @@ CLOSED_SINCE = datetime(2026, 10, 19, 9, tzinfo=IST).timestamp()   # after that 
 
 
 def load_records():
+    """Every record; a line cut off mid-write is skipped, not fatal (weekly audit, 2026-11-01)."""
     try:
         with RECORDS_FILE.open("r", encoding="utf-8") as file:
-            return [json.loads(line) for line in file if line.strip()]
+            lines = [line for line in file if line.strip()]
     except OSError:
         return []
+    out = []
+    for line in lines:
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError:
+            print(f"daily report: unreadable record line skipped: {line[:80]!r}")
+            continue
+        if isinstance(row, dict):
+            out.append(row)
+    return out
 
 
 def load_results():
@@ -75,8 +86,27 @@ def eval_candles(market, symbol, resolution, start, now):
     return nse_download([symbol], resolution).get(symbol, [])
 
 
+def scoreable(record):
+    """True for a record score() can simulate: id, market, timeframe, sent time and a plan."""
+    plan = record.get("plan") if isinstance(record, dict) else None
+    try:
+        return (bool(record.get("id")) and record.get("market") in trades.EVAL_RESOLUTION
+                and record.get("tf") in trades.EVAL_RESOLUTION[record["market"]]
+                and isinstance(plan, dict) and plan.get("side") in ("long", "short")
+                and float(plan["entry"]) > 0 and float(plan["sl"]) > 0
+                and float(record["sent_ts"]) > 0)
+    except (KeyError, TypeError, ValueError):
+        return False
+
+
 def score(records, results, now):
     """Simulate every record without a final result; returns the updated results."""
+    # One record without a usable plan (hand-edited, or cut off mid-write) used to stop the
+    # whole morning's scoring with a TypeError / KeyError (weekly audit, 2026-11-01).
+    usable = [r for r in records if scoreable(r)]
+    if len(usable) < len(records):
+        print(f"daily report: {len(records) - len(usable)} record(s) without a usable plan skipped")
+    records = usable
     # A result without "be" was scored before the breakeven rule (2026-10-03);
     # it is scored once more so a trade that reached +0.5R and came back reads BE.
     for record in records:

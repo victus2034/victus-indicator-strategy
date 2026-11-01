@@ -489,5 +489,12 @@ significant figures (`price_text`); nothing parses the text - records carry the 
 - **Range filter alerts are off (2026-10-10, lakky).** Alerts are S/R zones, fibs and trendlines
   (incl. TL BROKEN) only. `ALERT_RANGE_FILTER_SIGNALS` is False in `config.py` and `nse_config.py`; the
   range filter is still computed but never posts. Pine v12.7.8 drops its RF marker too.
+- **Bad candles and torn records (weekly audit, 2026-11-01).** `scanner.clean_candles` drops rows with a
+  missing, zero or negative price, widens high/low over open/close and keeps one row per timestamp - on the
+  zone scan's candles, every fib/TL chart, the forming candle and the 1m/5m sweep (NSE's zone scanner drops
+  zero prints too). One zero row used to raise ZeroDivisionError in `tighten_wide_zone` and skip the symbol's
+  whole pass. The fib/TL daily report skips unreadable record lines and records with no usable plan instead of
+  stopping; `append_record` starts a new line after a torn one. A pass where every chart failed no longer moves
+  `__last_scan__`, so TL BROKEN alerts from an outage are not dropped as stale. `tests/test_weekly_audit_2026_11_01.py`.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.
