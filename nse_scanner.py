@@ -437,6 +437,9 @@ def prepare_ohlcv(data):
         }
     )
     data = data[["open", "high", "low", "close", "volume"]].dropna()
+    # A zero / negative print (Yahoo, some sessions) made the zone engine divide by zero
+    # and skip the stock (scanner.clean_candles, weekly audit 2026-11-01).
+    data = data[(data[["open", "high", "low", "close"]] > 0).all(axis=1)]
 
     data = resample_for_timeframe(data)
 

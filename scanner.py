@@ -184,6 +184,31 @@ def active_watchlist():
     return symbols
 
 
+def clean_candles(rows):
+    """Candles [ts, o, h, l, c, ...] safe to build levels on (weekly audit, 2026-11-01).
+
+    A feed can hand back a row of zeros, a NaN or a high under the low (Yahoo does on
+    some NSE sessions). One such row raised ZeroDivisionError in tighten_wide_zone and
+    the whole symbol was skipped for the pass - every timeframe's fibs, trendlines and
+    zones. Rows with a missing, zero or negative price are dropped, high / low are
+    widened to cover open and close, and rows come back sorted with one per timestamp
+    (the later copy wins). Good rows are returned unchanged.
+    """
+    out = {}
+    for row in rows or []:
+        try:
+            o, h, l, c = (float(x) for x in row[1:5])
+        except (TypeError, ValueError, IndexError):
+            continue
+        if not all(math.isfinite(x) and x > 0 for x in (o, h, l, c)):
+            continue
+        top, bottom = max(o, h, l, c), min(o, h, l, c)
+        if top != h or bottom != l:
+            row = [row[0], o, top, bottom, c, *row[5:]]
+        out[row[0]] = row
+    return [out[k] for k in sorted(out)]
+
+
 def atr(df, period=50):
     high = df["high"]
     low = df["low"]
@@ -1038,6 +1063,9 @@ def fetch_symbol_ohlcv(symbol):
     if ohlcv is None:
         raise RuntimeError(f"all exchanges failed for {symbol}: {last_error}")
 
+    ohlcv = clean_candles(ohlcv)
+    if not ohlcv:
+        raise RuntimeError(f"{exchange_name} returned no usable candles for {symbol}")
     return ohlcv, exchange_name
 
 
