@@ -190,7 +190,13 @@
     "stopped_out": false
   },
   "ZECUSD|1M|long|1183.65|975.449": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
+  "ZECUSD|1d|long|1184.99|1151.76": {
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ZECUSD|1w|long|1183.65|657.475": {
@@ -198,7 +204,7 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793640406.814626,
+  "_last_check|crypto": 1793640723.949663,
   "_last_check|nse": 1793612218.28657,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -1626,8 +1632,10 @@
   "_level_ready|XRPUSD|30m|short|1.55|1.5655": 1790941595.114569,
   "_level_ready|XRPUSD|4h|short|1.4808|1.49493": 1789983964.89935,
   "_level_ready|ZECUSD|1M|long|1126.31|1043.02": 1791474400.00058,
+  "_level_ready|ZECUSD|1M|long|1183.65|975.449": 1793640723.949663,
   "_level_ready|ZECUSD|1d|long|1137.35|841.202": 1792834902.305949,
   "_level_ready|ZECUSD|1d|long|1183.65|1108.69": 1791471990.567377,
+  "_level_ready|ZECUSD|1d|long|1184.99|1151.76": 1793640723.949663,
   "_level_ready|ZECUSD|1d|long|1274.51|841.202": 1792646206.941535,
   "_level_ready|ZECUSD|1w|long|1183.65|1108.69": 1791471990.567377,
   "_level_ready|ZECUSD|1w|long|1183.65|657.475": 1792982803.899171,
@@ -2162,8 +2170,8 @@
   "_ready|XRPUSD|4h": 1789983964.89935,
   "_ready|ZAMA/USDT|30m": 1789225271.699613,
   "_ready|ZAMA/USDT|4h": 1789458964.864873,
-  "_ready|ZECUSD|1M": 1791474400.00058,
-  "_ready|ZECUSD|1d": 1792834902.305949,
+  "_ready|ZECUSD|1M": 1793640723.949663,
+  "_ready|ZECUSD|1d": 1793640723.949663,
   "_ready|ZECUSD|1w": 1792982803.899171,
   "_ready|ZECUSD|30m": 1791432082.857584,
   "_ready|ZIL/USDT|30m": 1789230352.789374,
