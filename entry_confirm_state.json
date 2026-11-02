@@ -633,6 +633,10 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "BLUESTARCO.NS|1d|long|1564.69|1534": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "BLUESTARCO.NS|1d|long|1591.16|1558.07": {
     "reached_entry": true,
     "stage": 3,
@@ -883,6 +887,11 @@
   "CHOLAHLDNG.NS|1d|short|1391.58|1414.2": {
     "reached_entry": true,
     "stage": 2,
+    "stopped_out": false
+  },
+  "CHOLAHLDNG.NS|1d|short|1405.27|1447.42": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CHOLAHLDNG.NS|1w|long|1226.63|1195": {
@@ -2007,6 +2016,7 @@
   },
   "KIMS.NS|1d|short|724.053|751.959": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "KIMS.NS|1w|long|658.066|651.2": {
@@ -2020,6 +2030,7 @@
   },
   "KIMS.NS|1w|short|724.053|736.25": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "KIRLOSENG.NS|1M|long|1740.98|1224.28": {
@@ -3041,7 +3052,7 @@
   "RRKABEL.NS|1w|long|2047.43|1979": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "RRKABEL.NS|1w|long|2217.68|1813.33": {
     "reached_entry": true,
@@ -3106,8 +3117,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793608878.21405,
-  "_last_check|nse": 1793608878.21405,
+  "_last_check|crypto": 1793609183.171336,
+  "_last_check|nse": 1793609183.171336,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3497,6 +3508,7 @@
   "_level_ready|CHOLAHLDNG.NS|1d|short|1340.91|1383.05": 1793253999.616509,
   "_level_ready|CHOLAHLDNG.NS|1d|short|1374.62|1413.7": 1793591507.862065,
   "_level_ready|CHOLAHLDNG.NS|1d|short|1391.58|1414.2": 1793602918.778533,
+  "_level_ready|CHOLAHLDNG.NS|1d|short|1405.27|1447.42": 1793609183.171336,
   "_level_ready|COCHINSHIP.NS|1M|long|1105.66|1027.59": 1793092890.154464,
   "_level_ready|COCHINSHIP.NS|1d|long|1190.44|1180.2": 1792565477.881975,
   "_level_ready|COCHINSHIP.NS|1w|long|1148.44|1072.15": 1793331989.35983,
@@ -3895,9 +3907,11 @@
   "_level_ready|KEI.NS|1M|long|4335.25|3509.94": 1792558293.591918,
   "_level_ready|KEI.NS|1d|long|3755.9|3712.2": 1792728109.90404,
   "_level_ready|KEI.NS|1w|long|4335.25|3509.94": 1792558293.591918,
+  "_level_ready|KIMS.NS|1d|short|724.053|751.959": 1793609183.171336,
   "_level_ready|KIMS.NS|1w|long|658.066|651.2": 1792986387.062464,
   "_level_ready|KIMS.NS|1w|long|702.79|663.987": 1793591209.526473,
   "_level_ready|KIMS.NS|1w|long|702.79|688.821": 1791517599.357562,
+  "_level_ready|KIMS.NS|1w|short|724.053|736.25": 1793609183.171336,
   "_level_ready|KIRLOSENG.NS|1M|long|1740.98|1224.28": 1793591209.526473,
   "_level_ready|KIRLOSENG.NS|1d|long|1943.25|1910.88": 1792555870.172007,
   "_level_ready|KIRLOSENG.NS|1d|long|2032.3|1991.3": 1792124203.852134,
@@ -4694,7 +4708,7 @@
   "_ready|CHENNPETRO.NS|1d": 1793245891.21936,
   "_ready|CHOICEIN.NS|1d": 1793598985.000467,
   "_ready|CHOLAHLDNG.NS|1M": 1792730195.441606,
-  "_ready|CHOLAHLDNG.NS|1d": 1793602918.778533,
+  "_ready|CHOLAHLDNG.NS|1d": 1793609183.171336,
   "_ready|CL/USDT|30m": 1789488077.641078,
   "_ready|CL/USDT|4h": 1788921063.531614,
   "_ready|COCHINSHIP.NS|1M": 1793092890.154464,
@@ -4866,7 +4880,8 @@
   "_ready|KEI.NS|1d": 1792728109.90404,
   "_ready|KEI.NS|1w": 1792558293.591918,
   "_ready|KGEN/USDT|30m": 1789463159.791482,
-  "_ready|KIMS.NS|1w": 1793591209.526473,
+  "_ready|KIMS.NS|1d": 1793609183.171336,
+  "_ready|KIMS.NS|1w": 1793609183.171336,
   "_ready|KIRLOSENG.NS|1M": 1793591209.526473,
   "_ready|KIRLOSENG.NS|1d": 1792555870.172007,
   "_ready|KIRLOSENG.NS|1w": 1793591209.526473,
