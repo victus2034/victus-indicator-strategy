@@ -875,6 +875,10 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "CHOLAHLDNG.NS|1w|short|1431.59|1449": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "COCHINSHIP.NS|1M|long|1105.66|1027.59": {
     "reached_entry": false,
     "stopped_out": false
@@ -1724,6 +1728,10 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "IOB.NS|1d|short|29.7072|30.2682": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "IOB.NS|1d|short|30.609|31.1563": {
     "reached_entry": false,
     "stopped_out": false
@@ -2371,15 +2379,18 @@
     "stopped_out": true
   },
   "MSUMI.NS|1M|short|39.8026|40.54": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "MSUMI.NS|1d|short|39.7884|41.2651": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "MSUMI.NS|1w|short|39.8026|40.5": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "NAM-INDIA.NS|1M|long|904.816|532.087": {
@@ -2769,6 +2780,10 @@
     "stage": 1,
     "stopped_out": false
   },
+  "PIRAMALFIN.NS|1d|short|1916.8|1970.47": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "PIRAMALFIN.NS|1w|short|2026.54|2156.02": {
     "reached_entry": false,
     "stopped_out": false
@@ -2796,8 +2811,8 @@
     "stopped_out": false
   },
   "POLICYBZR.NS|1d|long|926.883|910": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "POLICYBZR.NS|1w|long|989.745|960.35": {
@@ -3073,8 +3088,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793603492.973397,
-  "_last_check|nse": 1793603492.973397,
+  "_last_check|crypto": 1793603827.974103,
+  "_last_check|nse": 1793603827.974103,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
   "_level_ready|1000PEPEUSD|1d|short|0.00508283|0.0051403": 1793430976.550252,
@@ -4026,6 +4041,7 @@
   "_level_ready|MRVL/USDT:USDT|30m|short|272.71|273.322": 1790929286.046386,
   "_level_ready|MRVL/USDT:USDT|4h|short|258.433|261.017": 1790014567.180453,
   "_level_ready|MSFT/USDT:USDT|30m|long|497.07|495.733": 1789542964.512681,
+  "_level_ready|MSUMI.NS|1d|short|39.7884|41.2651": 1793603827.974103,
   "_level_ready|NAM-INDIA.NS|1M|long|904.816|532.087": 1793333500.515903,
   "_level_ready|NAM-INDIA.NS|1d|long|1046.49|1038.1": 1792384311.792363,
   "_level_ready|NAM-INDIA.NS|1w|long|1009.24|944.175": 1792563106.160663,
@@ -4881,6 +4897,7 @@
   "_ready|MRVL/USDT:USDT|4h": 1790014567.180453,
   "_ready|MSFT/USDT:USDT|30m": 1789542964.512681,
   "_ready|MSFT/USDT:USDT|4h": 1789376756.136711,
+  "_ready|MSUMI.NS|1d": 1793603827.974103,
   "_ready|NAM-INDIA.NS|1M": 1793333500.515903,
   "_ready|NAM-INDIA.NS|1d": 1792384311.792363,
   "_ready|NAM-INDIA.NS|1w": 1792658494.879335,
