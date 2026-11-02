@@ -41,6 +41,19 @@
   "resolved": true,
   "sl": true
  },
+ "fib|1000PEPEUSD|1d|1|1791417600|0.0056871|1|L2@1793547192": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|1000PEPEUSD|4h|-1|1790049600|0.0036376|2@1792512214": {
   "ambiguous": false,
   "be": true,
@@ -151,6 +164,19 @@
   "r2": true,
   "reported": true,
   "resolved": true,
+  "sl": false
+ },
+ "fib|1000PEPEUSD|4h|1|1793318400|0.0053122|2@1793547192": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "fib|360ONE.NS|1M|1|1654021800|1318.0|1|L1@1792747447": {
@@ -476,6 +502,19 @@
   "resolved": true,
   "sl": true
  },
+ "fib|AAVEUSD|1d|-1|1791244800|115.02|1|L1@1793504280": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1793505600,
+  "filled": true,
+  "half": true,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|AAVEUSD|1d|1|1789516800|187.65|2@1792418622": {
   "ambiguous": false,
   "be": false,
@@ -555,6 +594,19 @@
   "half": false,
   "outcome": "open",
   "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "fib|AAVEUSD|4h|-1|1792598400|115.02|2@1793508802": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1793509200,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
   "resolved": false,
   "sl": false
@@ -2760,7 +2812,7 @@
   "end_ts": null,
   "fill_ts": 1793304000,
   "filled": true,
-  "half": false,
+  "half": true,
   "outcome": "open",
   "r1": false,
   "r2": false,
@@ -2971,6 +3023,19 @@
   "reported": true,
   "resolved": true,
   "sl": true
+ },
+ "fib|AVAXUSD|4h|1|1793318400|9.045|1|L2@1793559791": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
  },
  "fib|AWL.NS|4h|-1|1787629500|172.9199981689453|2@1791958344": {
   "ambiguous": false,
@@ -6973,6 +7038,19 @@
   "resolved": true,
   "sl": false
  },
+ "fib|ETHUSD|4h|-1|1793217600|2172.96|2@1793523201": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1793581200,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|ETHUSD|4h|1|1789488000|2806.58|2@1791374700": {
   "ambiguous": false,
   "be": false,
@@ -9299,15 +9377,16 @@
  },
  "fib|HYPEUSD|1d|1|1792800000|97.13|1|L2@1793434691": {
   "ambiguous": false,
-  "be": false,
-  "end_ts": null,
+  "be": true,
+  "end_ts": 1793548800,
   "fill_ts": 1793448000,
   "filled": true,
   "half": true,
-  "outcome": "open",
+  "outcome": "BE",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "reported": true,
+  "resolved": true,
   "sl": false
  },
  "fib|HYPEUSD|4h|-1|1792584000|74.411|1|L2@1792942944": {
@@ -9395,15 +9474,16 @@
  },
  "fib|HYPEUSD|4h|1|1792843200|97.13|1|L2@1793434691": {
   "ambiguous": false,
-  "be": false,
-  "end_ts": null,
+  "be": true,
+  "end_ts": 1793559600,
   "fill_ts": 1793455200,
   "filled": true,
   "half": true,
-  "outcome": "open",
+  "outcome": "BE",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "reported": true,
+  "resolved": true,
   "sl": false
  },
  "fib|ICICIGI.NS|1d|1|1789410600|1786.0|1|L2@1792556602": {
@@ -13565,14 +13645,15 @@
  "fib|NEARUSD|4h|-1|1793217600|3.906|2|L4@1793461049": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1793559600,
   "fill_ts": 1793462400,
   "filled": true,
   "half": true,
-  "outcome": "open",
-  "r1": false,
-  "r2": false,
-  "resolved": false,
+  "outcome": "2R",
+  "r1": true,
+  "r2": true,
+  "reported": true,
+  "resolved": true,
   "sl": false
  },
  "fib|NEARUSD|4h|1|1791475200|6.019|2@1791890964": {
@@ -13587,6 +13668,33 @@
   "r2": false,
   "resolved": true,
   "sl": true
+ },
+ "fib|NEARUSD|4h|1|1793318400|4.562|1|L2@1793556178": {
+  "ambiguous": false,
+  "be": true,
+  "end_ts": 1793570400,
+  "fill_ts": 1793559600,
+  "filled": true,
+  "half": true,
+  "outcome": "BE",
+  "r1": false,
+  "r2": false,
+  "reported": true,
+  "resolved": true,
+  "sl": false
+ },
+ "fib|NEARUSD|4h|1|1793318400|4.562|2@1793560702": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
  },
  "fib|NETWEB.NS|1M|1|1743445800|5813.0|1|L1@1792727613": {
   "ambiguous": false,
@@ -18086,6 +18194,19 @@
   "resolved": true,
   "sl": false
  },
+ "fib|ZECUSD|1M|1|1769904000|1698.46|1|L1@1793560702": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "fib|ZECUSD|1d|1|1785283200|1698.46|1|L1@1792643739": {
   "ambiguous": false,
   "be": false,
@@ -18372,6 +18493,32 @@
   "resolved": true,
   "sl": true
  },
+ "tlbreak|AVAXUSD|4h|1|1791316800|1791792000@1793520171": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1793523600,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tlbreak|AVAXUSD|4h|1|1792598400|1793217600@1793520171": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1793523600,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tlbreak|FILUSD|4h|1|1792598400|1793217600@1793462593": {
   "ambiguous": false,
   "be": false,
@@ -18388,6 +18535,34 @@
  "tlbreak|LINKUSD|4h|1|1792598400|1793289600@1793500407": {
   "ambiguous": false,
   "be": false,
+  "end_ts": 1793512800,
+  "fill_ts": 1793502000,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "reported": true,
+  "resolved": true,
+  "sl": false
+ },
+ "tlbreak|METAXUSD|4h|1|1793001600|1793289600@1793520171": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1793548800,
+  "fill_ts": 1793523600,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "reported": true,
+  "resolved": true,
+  "sl": false
+ },
+ "tlbreak|QNTUSD|4h|1|1791072000|1791331200@1793586778": {
+  "ambiguous": false,
+  "be": false,
   "end_ts": null,
   "fill_ts": null,
   "filled": false,
@@ -18401,15 +18576,16 @@
  "tlbreak|WLDUSD|4h|1|1792627200|1793217600@1793462593": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1793534400,
   "fill_ts": 1793466000,
   "filled": true,
   "half": false,
-  "outcome": "open",
+  "outcome": "SL",
   "r1": false,
   "r2": false,
-  "resolved": false,
-  "sl": false
+  "reported": true,
+  "resolved": true,
+  "sl": true
  },
  "tl|1000PEPEUSD|1d|1|1767484800|1790035200@1792755171": {
   "ambiguous": false,
@@ -21504,6 +21680,20 @@
   "reported": true,
   "resolved": true,
   "sl": false
+ },
+ "tl|AVAXUSD|4h|1|1792598400|1793217600@1793507001": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1793509200,
+  "fill_ts": 1793509200,
+  "filled": true,
+  "half": false,
+  "outcome": "SL",
+  "r1": false,
+  "r2": false,
+  "reported": true,
+  "resolved": true,
+  "sl": true
  },
  "tl|AWL.NS|1d|0|1773599400|1790620200@1792730046": {
   "ambiguous": false,
@@ -26278,6 +26468,19 @@
   "reported": true,
   "resolved": true,
   "sl": true
+ },
+ "tl|ETHUSD|4h|1|1792598400|1793217600@1793586778": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
  },
  "tl|FACT.NS|1d|0|1743964200|1772994600@1792555996": {
   "ambiguous": false,
@@ -31741,6 +31944,34 @@
  "tl|METAXUSD|4h|0|1788854400|1793203200@1793441011": {
   "ambiguous": false,
   "be": false,
+  "end_ts": 1793516400,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "no fill",
+  "r1": false,
+  "r2": false,
+  "reported": true,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|METAXUSD|4h|0|1788854400|1793203200@1793501868": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1793574000,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "no fill",
+  "r1": false,
+  "r2": false,
+  "reported": true,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|METAXUSD|4h|0|1788854400|1793203200@1793531296": {
+  "ambiguous": false,
+  "be": false,
   "end_ts": null,
   "fill_ts": null,
   "filled": false,
@@ -31777,6 +32008,19 @@
   "r2": false,
   "reported": true,
   "resolved": true,
+  "sl": false
+ },
+ "tl|METAXUSD|4h|0|1793203200|1793361600@1793520171": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
   "sl": false
  },
  "tl|METAXUSD|4h|1|1790323200|1791273600@1791792542": {
@@ -31852,8 +32096,8 @@
   "ambiguous": false,
   "be": false,
   "end_ts": null,
-  "fill_ts": null,
-  "filled": false,
+  "fill_ts": 1793523600,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -32777,14 +33021,15 @@
  "tl|NEARUSD|4h|1|1792598400|1793217600@1793465859": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1793538000,
   "fill_ts": null,
   "filled": false,
   "half": false,
-  "outcome": "open",
+  "outcome": "no fill",
   "r1": false,
   "r2": false,
-  "resolved": false,
+  "reported": true,
+  "resolved": true,
   "sl": false
  },
  "tl|NETWEB.NS|1d|0|1784831400|1789497000@1792575215": {
@@ -35258,9 +35503,36 @@
  "tl|QNTUSD|4h|1|1791072000|1791331200@1793500407": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1793574000,
   "fill_ts": null,
   "filled": false,
+  "half": false,
+  "outcome": "no fill",
+  "r1": false,
+  "r2": false,
+  "reported": true,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|QNTUSD|4h|1|1791072000|1791331200@1793516593": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1793574000,
+  "filled": true,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
+ "tl|QNTUSD|4h|1|1791072000|1791331200@1793534609": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": 1793570400,
+  "filled": true,
   "half": false,
   "outcome": "open",
   "r1": false,
@@ -35694,6 +35966,19 @@
   "resolved": true,
   "sl": true
  },
+ "tl|RLCUSD|4h|0|1791129600|1793390400@1793560385": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|RLCUSD|4h|0|1791417600|1792411200@1792643110": {
   "ambiguous": false,
   "be": false,
@@ -35949,6 +36234,19 @@
   "r2": false,
   "resolved": true,
   "sl": true
+ },
+ "tl|SOLUSD|4h|0|1786910400|1793318400@1793560385": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
  },
  "tl|SOLUSD|4h|0|1789488000|1791849600@1792031623": {
   "ambiguous": false,
@@ -36570,6 +36868,19 @@
   "resolved": true,
   "sl": false
  },
+ "tl|SUIUSD|4h|1|1792598400|1793217600@1793586778": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|TACUSD|4h|0|1788984000|1790596800@1791394732": {
   "ambiguous": false,
   "be": false,
@@ -37041,6 +37352,19 @@
   "resolved": true,
   "sl": true
  },
+ "tl|TSLAXUSD|4h|0|1792972800|1793361600@1793586778": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|TSLAXUSD|4h|1|1784116800|1790164800@1791530030": {
   "ambiguous": false,
   "be": false,
@@ -37389,6 +37713,19 @@
   "resolved": true,
   "sl": true
  },
+ "tl|UNIUSD|4h|1|1792540800|1793289600@1793542089": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
+ },
  "tl|WLDUSD|1d|0|1786060800|1789516800@1793191099": {
   "ambiguous": false,
   "be": false,
@@ -37516,14 +37853,15 @@
  "tl|WLDUSD|4h|1|1792627200|1793217600@1793450281": {
   "ambiguous": false,
   "be": false,
-  "end_ts": null,
+  "end_ts": 1793534400,
   "fill_ts": 1793458800,
   "filled": true,
-  "half": false,
-  "outcome": "open",
-  "r1": false,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
   "r2": false,
-  "resolved": false,
+  "reported": true,
+  "resolved": true,
   "sl": false
  },
  "tl|WUSD|4h|0|1790971200|1791374400@1792031623": {
@@ -38307,6 +38645,47 @@
   "r2": false,
   "resolved": true,
   "sl": true
+ },
+ "tl|ZECUSD|4h|0|1792339200|1792843200@1793535779": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1793566800,
+  "fill_ts": 1793559600,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "reported": true,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|ZECUSD|4h|0|1792339200|1792843200@1793556768": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": 1793566800,
+  "fill_ts": 1793559600,
+  "filled": true,
+  "half": true,
+  "outcome": "1R",
+  "r1": true,
+  "r2": false,
+  "reported": true,
+  "resolved": true,
+  "sl": false
+ },
+ "tl|ZECUSD|4h|0|1792843200|1793318400@1793560702": {
+  "ambiguous": false,
+  "be": false,
+  "end_ts": null,
+  "fill_ts": null,
+  "filled": false,
+  "half": false,
+  "outcome": "open",
+  "r1": false,
+  "r2": false,
+  "resolved": false,
+  "sl": false
  },
  "tl|ZECUSD|4h|1|1790769600|1791288000@1791736719": {
   "ambiguous": false,
