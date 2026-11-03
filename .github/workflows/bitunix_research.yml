@@ -111,7 +111,7 @@ jobs:
             early-band) PYTHONPATH=research python research/early_band_backtest.py --since 2026-09-01 ;;
             fib-levels-all) PYTHONPATH=research python research/fib_levels_all_backtest.py --since 2026-09-01 ;;
             fib-level-sl) PYTHONPATH=research python research/fib_level_sl_backtest.py --since 2026-09-01 ;;
-            fib-sl-trace) python research/fib_sl_trace.py HYPEUSD:1d ENAUSD:4h ;;
+            fib-sl-trace) python research/fib_sl_trace.py METAXUSD:4h HYPEUSD:1d ENAUSD:4h ;;
             fib-l3l4) PYTHONPATH=research python research/fib_l3_l4_backtest.py --since 2026-09-01 ;;
             fib-rearm) PYTHONPATH=research python research/fib_rearm_backtest.py --since 2026-09-01 ;;
             risk-warn) PYTHONPATH=research python research/risk_warning_backtest.py --since 2026-09-01 ;;
