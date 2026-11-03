@@ -334,6 +334,11 @@
     "stage": 3,
     "stopped_out": false
   },
+  "ANGELONE.NS|1d|short|305.546|312.16": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "ANGELONE.NS|1w|long|291.102|190.431": {
     "reached_entry": false,
     "stage": 1,
@@ -670,7 +675,7 @@
   "BRIGADE.NS|1d|long|530.85|526.15": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BRIGADE.NS|1d|short|567.872|603.769": {
     "reached_entry": false,
@@ -678,6 +683,7 @@
   },
   "BRIGADE.NS|1w|long|523.568|518.95": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "BTCUSD|1M|long|76355.4|71362.9": {
@@ -739,6 +745,10 @@
   "CARBORUNIV.NS|1w|short|1159.02|1175": {
     "reached_entry": true,
     "stage": 3,
+    "stopped_out": false
+  },
+  "CARBORUNIV.NS|1w|short|1197.18|1215": {
+    "reached_entry": false,
     "stopped_out": false
   },
   "CARBORUNIV.NS|1w|short|1239.16|1249.65": {
@@ -1188,6 +1198,7 @@
   },
   "ELGIEQUIP.NS|1w|short|536.303|674.591": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "EMCURE.NS|1M|long|1688.72|1267.66": {
@@ -2245,8 +2256,8 @@
     "stopped_out": false
   },
   "MCX.NS|1d|short|3312.62|3380.88": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "MCX.NS|1w|long|2977.65|2851.72": {
@@ -2521,8 +2532,8 @@
     "stopped_out": true
   },
   "NH.NS|1d|short|1916|1932.9": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "NH.NS|1w|long|1660.59|1483.19": {
@@ -3097,8 +3108,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793679709.923637,
-  "_last_check|nse": 1793679709.923637,
+  "_last_check|crypto": 1793679995.980126,
+  "_last_check|nse": 1793679995.980126,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3217,6 +3228,7 @@
   "_level_ready|ANGELONE.NS|1d|short|290.319|306.947": 1793592084.940843,
   "_level_ready|ANGELONE.NS|1d|short|295.445|301.578": 1793677604.261117,
   "_level_ready|ANGELONE.NS|1d|short|296.981|301.435": 1791517599.357562,
+  "_level_ready|ANGELONE.NS|1d|short|305.546|312.16": 1793679995.980126,
   "_level_ready|ANGELONE.NS|1w|long|291.102|190.431": 1793677604.261117,
   "_level_ready|ANTHEM.NS|1d|long|792.916|784.1": 1792727171.150355,
   "_level_ready|ANTHEM.NS|1d|long|814.467|802.2": 1792554386.505792,
@@ -3411,7 +3423,7 @@
   "_level_ready|BRIGADE.NS|1d|long|530.85|526.15": 1793245588.963685,
   "_level_ready|BRIGADE.NS|1d|long|562.73|552.1": 1791776795.761218,
   "_level_ready|BRIGADE.NS|1d|short|567.872|603.769": 1793086600.75204,
-  "_level_ready|BRIGADE.NS|1w|long|523.568|518.95": 1793591209.526473,
+  "_level_ready|BRIGADE.NS|1w|long|523.568|518.95": 1793679995.980126,
   "_level_ready|BTCUSD|1M|long|76355.4|71362.9": 1793368605.402768,
   "_level_ready|BTCUSD|1d|long|79149.1|78806.2": 1792855307.903694,
   "_level_ready|BTCUSD|1d|long|80520.7|78806.2": 1791475349.701402,
@@ -3602,6 +3614,7 @@
   "_level_ready|EIHOTEL.NS|1w|long|290.315|286.45": 1793331989.35983,
   "_level_ready|ELGIEQUIP.NS|1d|long|566.104|560.15": 1792122403.256656,
   "_level_ready|ELGIEQUIP.NS|1d|long|566.161|560.15": 1792381599.217228,
+  "_level_ready|ELGIEQUIP.NS|1w|short|536.303|674.591": 1793679995.980126,
   "_level_ready|EMCURE.NS|1d|short|1846.8|1980.48": 1793078207.678618,
   "_level_ready|EMCURE.NS|1d|short|1889.11|1980.48": 1793343104.041192,
   "_level_ready|EMCURE.NS|1d|short|1927.58|1980.48": 1793678202.474602,
@@ -4625,7 +4638,7 @@
   "_ready|ANANTRAJ.NS|1M": 1793677604.261117,
   "_ready|ANANTRAJ.NS|1d": 1791782501.247733,
   "_ready|ANANTRAJ.NS|1w": 1792640801.869234,
-  "_ready|ANGELONE.NS|1d": 1793677604.261117,
+  "_ready|ANGELONE.NS|1d": 1793679995.980126,
   "_ready|ANGELONE.NS|1w": 1793677604.261117,
   "_ready|ANTHEM.NS|1d": 1793334368.93941,
   "_ready|ANTHEM.NS|1w": 1793334368.93941,
@@ -4693,7 +4706,7 @@
   "_ready|BOME/USDT|30m": 1789466760.110004,
   "_ready|BRIGADE.NS|1M": 1793677604.261117,
   "_ready|BRIGADE.NS|1d": 1793245588.963685,
-  "_ready|BRIGADE.NS|1w": 1793591209.526473,
+  "_ready|BRIGADE.NS|1w": 1793679995.980126,
   "_ready|BTCUSD|1M": 1793368605.402768,
   "_ready|BTCUSD|1d": 1792855307.903694,
   "_ready|BTCUSD|1w": 1793327513.220878,
@@ -4775,6 +4788,7 @@
   "_ready|EIHOTEL.NS|1d": 1792986387.062464,
   "_ready|EIHOTEL.NS|1w": 1793331989.35983,
   "_ready|ELGIEQUIP.NS|1d": 1792381599.217228,
+  "_ready|ELGIEQUIP.NS|1w": 1793679995.980126,
   "_ready|EMCURE.NS|1d": 1793678202.474602,
   "_ready|EMCURE.NS|1w": 1792731077.628348,
   "_ready|EMMVEE.NS|1w": 1792554386.505792,
