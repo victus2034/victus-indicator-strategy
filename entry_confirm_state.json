@@ -232,11 +232,15 @@
   "AIAENG.NS|1M|long|3522.19|3258": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "AIAENG.NS|1d|long|3305.44|3256.2": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
+    "stopped_out": false
+  },
+  "AIAENG.NS|1w|long|3194.77|3150.6": {
+    "reached_entry": false,
     "stopped_out": false
   },
   "AIAENG.NS|1w|long|3539.21|3377": {
@@ -549,11 +553,6 @@
   },
   "BDL.NS|1M|long|983.428|705.134": {
     "reached_entry": false,
-    "stopped_out": false
-  },
-  "BDL.NS|1d|long|1001.78|975": {
-    "reached_entry": true,
-    "stage": 2,
     "stopped_out": false
   },
   "BDL.NS|1w|long|1003.33|975.4": {
@@ -1084,13 +1083,13 @@
     "stopped_out": false
   },
   "DALBHARAT.NS|1M|long|1368.26|1283.65": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "DALBHARAT.NS|1w|long|1368.26|1296.5": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "DALBHARAT.NS|1w|long|1582.83|1073.23": {
@@ -1908,14 +1907,14 @@
     "stopped_out": false
   },
   "JYOTICNC.NS|1M|short|995.99|1026": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "JYOTICNC.NS|1d|short|961.152|997.287": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "JYOTICNC.NS|1w|long|885.075|753.381": {
     "reached_entry": false,
@@ -2418,11 +2417,6 @@
     "reached_entry": false,
     "stage": 1,
     "stopped_out": false
-  },
-  "NAVINFLUOR.NS|1d|short|8232.87|8262.97": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
   },
   "NAVINFLUOR.NS|1w|long|7436.16|5889.44": {
     "reached_entry": false,
@@ -3064,8 +3058,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793693791.838825,
-  "_last_check|nse": 1793693791.838825,
+  "_last_check|crypto": 1793694109.711367,
+  "_last_check|nse": 1793694109.711367,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
