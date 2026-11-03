@@ -1273,6 +1273,11 @@
     "stage": 2,
     "stopped_out": false
   },
+  "FEDERALBNK.NS|1d|long|329.13|317.069": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "FINCABLES.NS|1M|long|1059.54|949.925": {
     "reached_entry": false,
     "stopped_out": false
@@ -2270,8 +2275,8 @@
     "stopped_out": false
   },
   "METAXUSD|1d|long|606.442|598.13": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "METAXUSD|1w|long|608.621|601.425": {
@@ -2400,11 +2405,6 @@
     "reached_entry": false,
     "stage": 1,
     "stopped_out": false
-  },
-  "NAVINFLUOR.NS|1d|short|8112.48|8262.97": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
   },
   "NAVINFLUOR.NS|1d|short|8232.87|8262.97": {
     "reached_entry": true,
@@ -2908,6 +2908,7 @@
   },
   "PWL.NS|1d|long|128.096|119.219": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PWL.NS|1w|long|114.489|103.254": {
@@ -3036,8 +3037,8 @@
     "stopped_out": false
   },
   "WLDUSD|1d|long|0.364702|0.3612": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ZECUSD|1M|long|1183.65|975.449": {
@@ -3055,8 +3056,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793688393.751118,
-  "_last_check|nse": 1793688393.751118,
+  "_last_check|crypto": 1793688678.101539,
+  "_last_check|nse": 1793688678.101539,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3613,6 +3614,7 @@
   "_level_ready|FACT.NS|1d|long|710.167|669": 1792556798.737244,
   "_level_ready|FACT.NS|1w|long|710.167|660.25": 1792556798.737244,
   "_level_ready|FACT.NS|1w|long|738.742|720.274": 1791517599.357562,
+  "_level_ready|FEDERALBNK.NS|1d|long|329.13|317.069": 1793688678.101539,
   "_level_ready|FEDERALBNK.NS|1d|long|339.536|306.663": 1792986387.062464,
   "_level_ready|FILUSD|1d|long|0.932838|0.918519": 1792832798.455375,
   "_level_ready|FILUSD|1d|long|0.990115|0.918519": 1792656712.027939,
@@ -4253,7 +4255,7 @@
   "_level_ready|PTCIL.NS|1d|long|24026.2|22939.7": 1793245588.963685,
   "_level_ready|PTCIL.NS|1d|long|24529.5|22939.7": 1792727806.136961,
   "_level_ready|PWL.NS|1d|long|121.133|111.559": 1792641998.644804,
-  "_level_ready|PWL.NS|1d|long|128.096|119.219": 1793248576.208669,
+  "_level_ready|PWL.NS|1d|long|128.096|119.219": 1793688678.101539,
   "_level_ready|QNTUSD|1M|long|197.516|153.489": 1792032698.871294,
   "_level_ready|QNTUSD|1d|long|200.436|157.14": 1792166200.634449,
   "_level_ready|QNTUSD|1w|long|197.516|153.489": 1792032698.871294,
@@ -4772,7 +4774,7 @@
   "_ready|FACT.NS|1M": 1792641484.218837,
   "_ready|FACT.NS|1d": 1792556798.737244,
   "_ready|FACT.NS|1w": 1792556798.737244,
-  "_ready|FEDERALBNK.NS|1d": 1792986387.062464,
+  "_ready|FEDERALBNK.NS|1d": 1793688678.101539,
   "_ready|FILUSD|1d": 1792832798.455375,
   "_ready|FINCABLES.NS|1M": 1793677604.261117,
   "_ready|FINCABLES.NS|1d": 1792381903.352906,
@@ -5017,7 +5019,7 @@
   "_ready|PRESTIGE.NS|1d": 1793680606.357613,
   "_ready|PRESTIGE.NS|1w": 1793591209.526473,
   "_ready|PTCIL.NS|1d": 1793245588.963685,
-  "_ready|PWL.NS|1d": 1793248576.208669,
+  "_ready|PWL.NS|1d": 1793688678.101539,
   "_ready|QNTUSD|1M": 1792032698.871294,
   "_ready|QNTUSD|1d": 1792166200.634449,
   "_ready|QNTUSD|1w": 1792032698.871294,
