@@ -107,8 +107,8 @@
     "stopped_out": false
   },
   "ABBOTINDIA.NS|1d|short|26090|26498": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ABBOTINDIA.NS|1d|short|26410|26850": {
@@ -209,7 +209,8 @@
     "stopped_out": false
   },
   "AFFLE.NS|1M|short|1569.06|1597.9": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "AFFLE.NS|1d|short|1441.17|1505.13": {
@@ -227,7 +228,8 @@
     "stopped_out": false
   },
   "AFFLE.NS|1w|short|1569.06|1595.4": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "AIAENG.NS|1M|long|3522.19|3258": {
@@ -329,7 +331,7 @@
   },
   "ANGELONE.NS|1d|short|300.255|306.869": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ANGELONE.NS|1w|long|291.102|190.431": {
@@ -693,8 +695,8 @@
     "stopped_out": false
   },
   "CAMS.NS|1d|short|693.558|700": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "CAMS.NS|1w|long|677.285|665.05": {
@@ -725,8 +727,8 @@
     "stopped_out": false
   },
   "CARBORUNIV.NS|1d|short|1159.02|1207.67": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "CARBORUNIV.NS|1w|short|1117.04|1169.51": {
@@ -735,8 +737,8 @@
     "stopped_out": false
   },
   "CARBORUNIV.NS|1w|short|1159.02|1175": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "CARBORUNIV.NS|1w|short|1239.16|1249.65": {
@@ -2309,12 +2311,12 @@
   "MOTILALOFS.NS|1d|short|955.94|1026.66": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "MOTILALOFS.NS|1d|short|978.325|1026.66": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "MOTILALOFS.NS|1w|long|876.343|763.447": {
     "reached_entry": false,
@@ -2331,6 +2333,7 @@
   },
   "MRPL.NS|1M|short|184.568|196.65": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "MRPL.NS|1d|long|175.315|168.608": {
@@ -2348,6 +2351,7 @@
   },
   "MRPL.NS|1w|short|184.568|229.772": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "MRPL.NS|1w|short|186.905|190.72": {
@@ -3093,8 +3097,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793679396.23429,
-  "_last_check|nse": 1793679396.23429,
+  "_last_check|crypto": 1793679709.923637,
+  "_last_check|nse": 1793679709.923637,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4050,10 +4054,11 @@
   "_level_ready|MRF.NS|1M|long|122215|118548": 1791517599.357562,
   "_level_ready|MRF.NS|1w|long|119243|117544": 1792640801.869234,
   "_level_ready|MRF.NS|1w|long|122429|119368": 1791517599.357562,
+  "_level_ready|MRPL.NS|1M|short|184.568|196.65": 1793679709.923637,
   "_level_ready|MRPL.NS|1d|long|169.949|158.364": 1792556503.449216,
   "_level_ready|MRPL.NS|1d|short|190.978|194.85": 1793159201.504703,
   "_level_ready|MRPL.NS|1w|short|163.632|229.772": 1792986700.301796,
-  "_level_ready|MRPL.NS|1w|short|184.568|229.772": 1793072802.908836,
+  "_level_ready|MRPL.NS|1w|short|184.568|229.772": 1793679709.923637,
   "_level_ready|MRVL/USDT:USDT|1d|long|222.524|202.833": 1792334193.472618,
   "_level_ready|MRVL/USDT:USDT|1d|long|236.846|202.833": 1792636308.608434,
   "_level_ready|MRVL/USDT:USDT|1d|long|255.213|252.57": 1791988307.960162,
@@ -4946,8 +4951,9 @@
   "_ready|MPHASIS.NS|1d": 1793072802.908836,
   "_ready|MRF.NS|1M": 1791517599.357562,
   "_ready|MRF.NS|1w": 1792640801.869234,
+  "_ready|MRPL.NS|1M": 1793679709.923637,
   "_ready|MRPL.NS|1d": 1793159201.504703,
-  "_ready|MRPL.NS|1w": 1793072802.908836,
+  "_ready|MRPL.NS|1w": 1793679709.923637,
   "_ready|MRVL/USDT:USDT|1d": 1792636308.608434,
   "_ready|MRVL/USDT:USDT|1w": 1792683700.035192,
   "_ready|MRVL/USDT:USDT|30m": 1791203779.356736,
