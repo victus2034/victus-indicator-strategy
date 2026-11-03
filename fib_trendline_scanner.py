@@ -58,6 +58,7 @@ from config import (
     FIB_LEVEL_SL_RULE,
     FIB_LEVEL_SL_RULE_BY_TF,
     FIB_SL_MIN_GAP_PCT,
+    FIB_SL_WICK_GAP_PCT,
     FIB_SL_HEIGHT_PCT,
     FIB_SWING_LENGTH,
     FIB_TL_MAX_DISTANCE_PCT,
@@ -221,11 +222,38 @@ def body_stops(d, lv, bodies, gap_pct=None):
     return out
 
 
+def wick_stops(d, lv, wicks, gap_pct=None):
+    """lakky's hand SLs (METAUSDT 4H, 2026-11-03): for each level the nearest candle WICK past it -
+    a high above it on a SELL, a low below it on a BUY - by at least FIB_SL_WICK_GAP_PCT, short of
+    the next deeper level (L4: within one box past it), over the closed candles since the fib's
+    origin. `wicks` = [(high, low)]. A level with none takes the "own" stop (just past itself by
+    the box pad). Each pick lies between its level and the next one, so the order always holds."""
+    gap = (FIB_SL_WICK_GAP_PCT if gap_pct is None else gap_pct) / 100
+    box = abs(lv["L3"] - lv["L4"])
+    fallback = stops_for_levels(d, lv, "own")
+    edges = [lo for _, lo in wicks] if d == 1 else [hi for hi, _ in wicks]
+    names = ("L1", "L2", "L3", "L4")
+    out = {}
+    for n, k in enumerate(names):
+        p = lv[k]
+        far = lv[names[n + 1]] if n < 3 else p - d * box
+        if d == 1:
+            pick = [e for e in edges if far < e < p and e <= p * (1 - gap)]
+            out[k] = max(pick) if pick else fallback[k]
+        else:
+            pick = [e for e in edges if p < e < far and e >= p * (1 + gap)]
+            out[k] = min(pick) if pick else fallback[k]
+    return out
+
+
 def stops_for_levels(d, lv, rule=None, bodies=None):
-    """fib_level_stops from the four level prices alone (a record's `levels`)."""
+    """fib_level_stops from the four level prices alone (a record's `levels`). `bodies` holds the
+    candles a candle rule reads: (open, close) pairs for "body", (high, low) pairs for "wick"."""
     rule = rule or FIB_LEVEL_SL_RULE or "next"
     if rule == "body":
         return body_stops(d, lv, bodies or [])
+    if rule == "wick":
+        return wick_stops(d, lv, bodies or [])
     box = abs(lv["L3"] - lv["L4"])      # both boxes are 0.11 of the range
     pad = box * FIB_SL_HEIGHT_PCT / 100
     if rule == "shared":
@@ -475,8 +503,9 @@ def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=No
     inside_box = base < price < top if d == 1 else top < price < base
     if inside_box and base != top:
         try:
+            pairs = (highs, lows) if sl_rule_for(tf) == "wick" else (opens, closes)
             legs = fib_legs(d, base, top, tf,
-                            bodies=list(zip(opens[live["Ot"]:], closes[live["Ot"]:])))
+                            bodies=list(zip(pairs[0][live["Ot"]:], pairs[1][live["Ot"]:])))
         except ValueError as exc:       # check_level_stops: never alert a fib whose levels share a stop
             print(f"  {symbol} {tf}: fib skipped - {exc}")
             legs = []

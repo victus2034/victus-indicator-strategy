@@ -547,6 +547,10 @@ FIB_LEVEL_SL_RULE_BY_TF = {"4h": "next", "1d": "next", "1w": "body", "1M": "body
 # "body" (lakky HYPE 1D, 2026-10-27; 1W / 1M): the nearest candle body edge (open/close, closed
 # candles since the fib origin) at least this % past the level and short of the next level; "next" if none.
 FIB_SL_MIN_GAP_PCT = 0.75
+# "wick" (lakky METAUSDT 4H, 2026-11-03: L2 619.19 -> SL 620.83, L3 622.18 -> 622.78, L4 625.47 -> 626.56):
+# the nearest candle wick (SELL: high, BUY: low; closed candles since the fib origin) past the level by
+# at least this % and short of the next level (L4: one box); none -> just past the level (the box pad).
+FIB_SL_WICK_GAP_PCT = float(os.getenv("VICTUS_FIB_SL_WICK_GAP_PCT", "0"))
 # The indicator's own lengths: fib_len 10, tl_len 10, tl_keep 6.
 FIB_SWING_LENGTH = 10
 TRENDLINE_SWING_LENGTH = 10

@@ -222,7 +222,8 @@ def replay(market, symbol, tf, base, evalc, now):
             # L1/L2 = the weaker box's near/far edge, L3/L4 = the strong box's; each its own stop
             # (fib_level_stops, FIB_SL_RULE None = sl_rule_for(tf); "shared" = the old one stop)
             rule = sl_rule_for(tf, FIB_SL_RULE)
-            bodies = list(zip(opens[s["Ot"]:i], closes[s["Ot"]:i])) if rule == "body" else None
+            bodies = (list(zip(opens[s["Ot"]:i], closes[s["Ot"]:i])) if rule == "body" else
+                      list(zip(highs[s["Ot"]:i], lows[s["Ot"]:i])) if rule == "wick" else None)
             stops = fib_level_stops(d, base_px, top, rule, bodies)
             for name in FIB_LEVELS.get(tf, ()):
                 src = zs[1] if name in ("L1", "L2") else zs[2]
