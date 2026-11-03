@@ -411,7 +411,7 @@
   "ASAHIINDIA.NS|1d|short|988.961|1004": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "ASAHIINDIA.NS|1w|long|850.26|732.175": {
     "reached_entry": false,
@@ -525,10 +525,12 @@
   },
   "BANKINDIA.NS|1d|long|131.989|130.25": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "BANKINDIA.NS|1d|long|132.075|130.318": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "BANKINDIA.NS|1d|short|132.908|135.224": {
@@ -1363,6 +1365,7 @@
   },
   "GESHIP.NS|1d|long|1523.58|1497.87": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "GESHIP.NS|1d|long|1583.42|1557.71": {
@@ -1377,11 +1380,6 @@
   },
   "GESHIP.NS|1w|long|1457.83|1110.16": {
     "reached_entry": false,
-    "stopped_out": false
-  },
-  "GILLETTE.NS|1d|short|7394.99|7941.78": {
-    "reached_entry": true,
-    "stage": 2,
     "stopped_out": false
   },
   "GILLETTE.NS|1w|short|7138.76|7307": {
@@ -2775,7 +2773,7 @@
   "POONAWALLA.NS|1M|short|476.26|482.95": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "POONAWALLA.NS|1d|long|458.906|445.623": {
     "reached_entry": false,
@@ -2804,7 +2802,7 @@
   "POONAWALLA.NS|1d|short|472.205|488.258": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "POONAWALLA.NS|1w|long|409.879|400": {
     "reached_entry": false,
@@ -2823,7 +2821,7 @@
   "POONAWALLA.NS|1w|short|476.26|484": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "PPLPHARMA.NS|1M|short|228.88|235": {
     "reached_entry": true,
@@ -3058,8 +3056,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793697387.267308,
-  "_last_check|nse": 1793697387.267308,
+  "_last_check|crypto": 1793697708.304598,
+  "_last_check|nse": 1793697708.304598,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3264,7 +3262,7 @@
   "_level_ready|BALKRISIND.NS|1w|long|1976.22|1951.55": 1791863195.148749,
   "_level_ready|BALKRISIND.NS|1w|long|2037.74|1986.79": 1791517599.357562,
   "_level_ready|BALKRISIND.NS|1w|short|2166.42|2372.59": 1793677896.558765,
-  "_level_ready|BANKINDIA.NS|1d|long|131.989|130.25": 1793352077.830922,
+  "_level_ready|BANKINDIA.NS|1d|long|131.989|130.25": 1793697708.304598,
   "_level_ready|BANKINDIA.NS|1d|short|129.369|135.224": 1793073108.145997,
   "_level_ready|BANKINDIA.NS|1d|short|131.223|135.224": 1793159201.504703,
   "_level_ready|BANKINDIA.NS|1d|short|132.908|135.224": 1793171508.531037,
@@ -3651,6 +3649,7 @@
   "_level_ready|GABRIEL.NS|1d|long|1351.39|1335.4": 1792727171.150355,
   "_level_ready|GABRIEL.NS|1w|long|1326.54|1047.04": 1792729001.765396,
   "_level_ready|GESHIP.NS|1d|long|1473.52|1361.62": 1792986700.301796,
+  "_level_ready|GESHIP.NS|1d|long|1523.58|1497.87": 1793697708.304598,
   "_level_ready|GESHIP.NS|1d|long|1583.42|1557.71": 1793591209.526473,
   "_level_ready|GESHIP.NS|1d|short|1575.84|1590.3": 1793175108.666106,
   "_level_ready|GESHIP.NS|1d|short|1576.24|1590.3": 1793074276.581891,
@@ -4650,7 +4649,7 @@
   "_ready|BAJAJHFL.NS|1w": 1792124784.794434,
   "_ready|BALKRISIND.NS|1d": 1793678202.474602,
   "_ready|BALKRISIND.NS|1w": 1793677896.558765,
-  "_ready|BANKINDIA.NS|1d": 1793677604.261117,
+  "_ready|BANKINDIA.NS|1d": 1793697708.304598,
   "_ready|BANKINDIA.NS|1w": 1793159201.504703,
   "_ready|BCHUSD|30m": 1791429995.770346,
   "_ready|BCHUSD|4h": 1791429995.770346,
@@ -4797,7 +4796,7 @@
   "_ready|FSL.NS|1d": 1792641484.218837,
   "_ready|GABRIEL.NS|1d": 1792729271.284174,
   "_ready|GABRIEL.NS|1w": 1792729001.765396,
-  "_ready|GESHIP.NS|1d": 1793591209.526473,
+  "_ready|GESHIP.NS|1d": 1793697708.304598,
   "_ready|GICRE.NS|1d": 1793259709.569321,
   "_ready|GILLETTE.NS|1d": 1793688105.721091,
   "_ready|GILLETTE.NS|1w": 1793688105.721091,
