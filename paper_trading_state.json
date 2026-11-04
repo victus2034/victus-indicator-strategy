@@ -63357,6 +63357,33 @@
       "target_half": 44.668749999999996,
       "timeframe": "4h",
       "trade_id": "SLVONUSD|4h|long|44.55|44.3125"
+    },
+    {
+      "alert_time": "2026-11-04T15:12:31.221526+05:30",
+      "cost_r": 0.09887259146919473,
+      "date": "2026-11-04",
+      "entry": 631.42,
+      "entry_time": "2026-11-04T15:15:00+05:30",
+      "exit_price": 637.0133474999999,
+      "exit_time": "2026-11-04T15:45:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "net_realized_r": -1.159222828436012,
+      "outcome": "SL",
+      "rating": 8,
+      "realized_r": -1.0603502369668172,
+      "risk": 5.274999999999977,
+      "side": "short",
+      "stop": 636.6949999999999,
+      "stream": "live",
+      "symbol": "METAXUSD",
+      "target_1": 626.145,
+      "target_2": 620.87,
+      "target_half": 628.7825,
+      "timeframe": "4h",
+      "trade_id": "METAXUSD|4h|short|631.42|636.695"
     }
   ],
   "handled": {
@@ -65993,24 +66020,6 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
-    },
-    "METAXUSD|4h|short|631.42|636.695": {
-      "alert_time": "2026-11-04T15:12:31.221526+05:30",
-      "entry": 631.42,
-      "entry_time": "2026-11-04T15:15:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "xstock",
-      "rating": 8,
-      "risk": 5.274999999999977,
-      "side": "short",
-      "stop": 636.6949999999999,
-      "stream": "live",
-      "symbol": "METAXUSD",
-      "target_1": 626.145,
-      "target_2": 620.87,
-      "target_half": 628.7825,
-      "timeframe": "4h"
     }
   }
 }
