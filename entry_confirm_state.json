@@ -664,7 +664,7 @@
   "BIOCON.NS|1w|long|342.384|338.9": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BIOCON.NS|1w|short|362.175|370.7": {
     "reached_entry": false,
@@ -1935,7 +1935,11 @@
   },
   "JYOTICNC.NS|1d|short|1016.34|1052.47": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
+    "stopped_out": false
+  },
+  "JYOTICNC.NS|1d|short|1045.25|1081.38": {
+    "reached_entry": false,
     "stopped_out": false
   },
   "JYOTICNC.NS|1d|short|961.152|997.287": {
@@ -2887,10 +2891,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "PRESTIGE.NS|1d|long|1384.21|1372.4": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "PRESTIGE.NS|1d|short|1445.09|1471": {
     "reached_entry": true,
     "stage": 3,
@@ -3067,8 +3067,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793778407.752306,
-  "_last_check|nse": 1793778407.752306,
+  "_last_check|crypto": 1793778708.787901,
+  "_last_check|nse": 1793778708.787901,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
