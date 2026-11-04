@@ -111,8 +111,8 @@
     "stopped_out": false
   },
   "ABBOTINDIA.NS|1d|short|26410|26850": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ABBOTINDIA.NS|1w|short|26781.1|27200": {
@@ -336,7 +336,7 @@
   },
   "ANTHEM.NS|1d|short|870.74|895.5": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ANTHEM.NS|1w|long|842.497|808.734": {
@@ -346,12 +346,12 @@
   },
   "ANTHEM.NS|1w|short|849.378|916.862": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ANTHEM.NS|1w|short|870.74|895.5": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ANTHEM.NS|1w|short|890.16|916.862": {
@@ -473,9 +473,14 @@
   },
   "ASTRAL.NS|1d|short|1422.6|1438.2": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ASTRAL.NS|1w|long|1326.89|1316.1": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "ATGL.NS|1d|short|572.005|593.421": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -1090,6 +1095,7 @@
   },
   "CUB.NS|1d|short|215.689|219.441": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CUB.NS|1d|short|227.453|229.48": {
@@ -1248,6 +1254,11 @@
   },
   "EIHOTEL.NS|1w|long|290.315|286.45": {
     "reached_entry": false,
+    "stopped_out": false
+  },
+  "ELGIEQUIP.NS|1d|short|554.07|574.764": {
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ELGIEQUIP.NS|1w|short|536.303|674.591": {
@@ -3128,8 +3139,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793783479.882984,
-  "_last_check|nse": 1793783479.882984,
+  "_last_check|crypto": 1793783808.148074,
+  "_last_check|nse": 1793783808.148074,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3299,6 +3310,7 @@
   "_level_ready|ASTERDM.NS|1w|long|686.59|668.166": 1791517599.357562,
   "_level_ready|ASTRAL.NS|1d|long|1327.57|1317.1": 1793003788.865691,
   "_level_ready|ASTRAL.NS|1d|long|1328.43|1317.1": 1793345798.44272,
+  "_level_ready|ASTRAL.NS|1d|short|1422.6|1438.2": 1793783808.148074,
   "_level_ready|ASTRAL.NS|1w|long|1326.89|1316.1": 1793347903.150723,
   "_level_ready|ATHERENERG.NS|1d|long|1348.94|945.159": 1792986985.751506,
   "_level_ready|ATUL.NS|1M|long|5008.79|3518.73": 1793764604.922956,
@@ -3601,6 +3613,7 @@
   "_level_ready|CUB.NS|1d|long|215.946|212.247": 1793344606.1491,
   "_level_ready|CUB.NS|1d|long|218.905|215.206": 1793335609.796146,
   "_level_ready|CUB.NS|1d|long|221.595|218.165": 1793333172.618426,
+  "_level_ready|CUB.NS|1d|short|215.689|219.441": 1793783808.148074,
   "_level_ready|CUB.NS|1d|short|216.449|226.311": 1793591209.526473,
   "_level_ready|CUB.NS|1d|short|227.862|236.925": 1793245891.21936,
   "_level_ready|CUB.NS|1d|short|231.678|236.925": 1792554386.505792,
@@ -3672,6 +3685,7 @@
   "_level_ready|EIHOTEL.NS|1w|long|290.315|286.45": 1793331989.35983,
   "_level_ready|ELGIEQUIP.NS|1d|long|566.104|560.15": 1792122403.256656,
   "_level_ready|ELGIEQUIP.NS|1d|long|566.161|560.15": 1792381599.217228,
+  "_level_ready|ELGIEQUIP.NS|1d|short|554.07|574.764": 1793783808.148074,
   "_level_ready|ELGIEQUIP.NS|1w|short|536.303|674.591": 1793764008.797417,
   "_level_ready|EMCURE.NS|1d|short|1846.8|1980.48": 1793078207.678618,
   "_level_ready|EMCURE.NS|1d|short|1889.11|1980.48": 1793343104.041192,
@@ -4767,7 +4781,7 @@
   "_ready|ASAHIINDIA.NS|1w": 1793331989.35983,
   "_ready|ASTERDM.NS|1d": 1793772706.844506,
   "_ready|ASTERDM.NS|1w": 1793591209.526473,
-  "_ready|ASTRAL.NS|1d": 1793345798.44272,
+  "_ready|ASTRAL.NS|1d": 1793783808.148074,
   "_ready|ASTRAL.NS|1w": 1793347903.150723,
   "_ready|ATHERENERG.NS|1d": 1792986985.751506,
   "_ready|ATOM/USDT|30m": 1789369559.225687,
@@ -4875,7 +4889,7 @@
   "_ready|CRISIL.NS|1d": 1793072802.908836,
   "_ready|CRISIL.NS|1w": 1793072802.908836,
   "_ready|CRV/USDT|30m": 1789461071.110789,
-  "_ready|CUB.NS|1d": 1793685702.3561,
+  "_ready|CUB.NS|1d": 1793783808.148074,
   "_ready|CUB.NS|1w": 1793677604.261117,
   "_ready|DABUR.NS|1M": 1792640801.869234,
   "_ready|DABUR.NS|1d": 1793591209.526473,
@@ -4901,7 +4915,7 @@
   "_ready|DOSUSD|1d": 1792120004.566349,
   "_ready|EIHOTEL.NS|1d": 1792986387.062464,
   "_ready|EIHOTEL.NS|1w": 1793331989.35983,
-  "_ready|ELGIEQUIP.NS|1d": 1792381599.217228,
+  "_ready|ELGIEQUIP.NS|1d": 1793783808.148074,
   "_ready|ELGIEQUIP.NS|1w": 1793764008.797417,
   "_ready|EMCURE.NS|1d": 1793678202.474602,
   "_ready|EMCURE.NS|1w": 1792731077.628348,
