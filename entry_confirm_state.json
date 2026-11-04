@@ -1555,11 +1555,12 @@
   },
   "HAVELLS.NS|1d|short|1061.97|1079.76": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "HAVELLS.NS|1d|short|1075.92|1095.11": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "HBLENGINE.NS|1M|long|727.65|629.062": {
@@ -2123,6 +2124,10 @@
   "LALPATHLAB.NS|1d|long|1903.53|1881.5": {
     "reached_entry": true,
     "stage": 2,
+    "stopped_out": false
+  },
+  "LALPATHLAB.NS|1d|short|2005.6|2025": {
+    "reached_entry": false,
     "stopped_out": false
   },
   "LALPATHLAB.NS|1w|long|1778.16|1511.97": {
@@ -2978,6 +2983,11 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "REDINGTON.NS|1d|short|362.025|375.349": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "REDINGTON.NS|1w|long|316.814|287.72": {
     "reached_entry": false,
     "stopped_out": false
@@ -3079,8 +3089,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793780512.007957,
-  "_last_check|nse": 1793780512.007957,
+  "_last_check|crypto": 1793780770.573242,
+  "_last_check|nse": 1793780770.573242,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3757,6 +3767,7 @@
   "_level_ready|GRSE.NS|1w|long|2037.32|2000": 1792561911.6463,
   "_level_ready|HAVELLS.NS|1d|short|1046.63|1065.81": 1793764008.797417,
   "_level_ready|HAVELLS.NS|1d|short|1061.97|1079.76": 1793771214.44934,
+  "_level_ready|HAVELLS.NS|1d|short|1075.92|1095.11": 1793780770.573242,
   "_level_ready|HBLENGINE.NS|1M|long|727.65|629.062": 1791777105.432083,
   "_level_ready|HBLENGINE.NS|1M|long|727.65|692.159": 1791517599.357562,
   "_level_ready|HBLENGINE.NS|1d|long|730.9|694.875": 1791776795.761218,
@@ -4363,6 +4374,7 @@
   "_level_ready|REDINGTON.NS|1d|long|320.786|312.5": 1793677896.558765,
   "_level_ready|REDINGTON.NS|1d|long|355.612|352.95": 1793077903.064448,
   "_level_ready|REDINGTON.NS|1d|long|366.26|352.95": 1792727171.150355,
+  "_level_ready|REDINGTON.NS|1d|short|362.025|375.349": 1793780770.573242,
   "_level_ready|REDINGTON.NS|1w|long|316.814|287.72": 1793591209.526473,
   "_level_ready|REDINGTON.NS|1w|long|341.915|262.619": 1793333172.618426,
   "_level_ready|RIVERUSD|1d|long|1.11025|1.0936": 1791473772.59649,
@@ -4900,7 +4912,7 @@
   "_ready|GRANULES.NS|1d": 1793591209.526473,
   "_ready|GRSE.NS|1w": 1792561911.6463,
   "_ready|GWEI/USDT|30m": 1789391158.458368,
-  "_ready|HAVELLS.NS|1d": 1793771214.44934,
+  "_ready|HAVELLS.NS|1d": 1793780770.573242,
   "_ready|HBLENGINE.NS|1M": 1791777105.432083,
   "_ready|HBLENGINE.NS|1d": 1793591209.526473,
   "_ready|HBLENGINE.NS|1w": 1793159201.504703,
@@ -5127,7 +5139,7 @@
   "_ready|RECLTD.NS|1d": 1793764008.797417,
   "_ready|RECLTD.NS|1w": 1793764008.797417,
   "_ready|REDINGTON.NS|1M": 1793591209.526473,
-  "_ready|REDINGTON.NS|1d": 1793677896.558765,
+  "_ready|REDINGTON.NS|1d": 1793780770.573242,
   "_ready|REDINGTON.NS|1w": 1793591209.526473,
   "_ready|RIVERUSD|1d": 1791778893.859646,
   "_ready|RIVERUSD|30m": 1791284188.370591,
