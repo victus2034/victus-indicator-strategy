@@ -425,11 +425,6 @@
     "stage": 3,
     "stopped_out": false
   },
-  "ASAHIINDIA.NS|1d|short|927.158|942.885": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "ASAHIINDIA.NS|1d|short|939.493|956.453": {
     "reached_entry": true,
     "stage": 3,
@@ -458,8 +453,8 @@
     "stopped_out": false
   },
   "ASTERDM.NS|1d|short|701.9|720.005": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ASTERDM.NS|1w|long|620.85|603.8": {
@@ -1430,10 +1425,6 @@
     "stage": 3,
     "stopped_out": true
   },
-  "GESHIP.NS|1d|short|1575.84|1590.3": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "GESHIP.NS|1w|long|1457.83|1110.16": {
     "reached_entry": false,
     "stopped_out": false
@@ -1944,7 +1935,7 @@
   "JYOTICNC.NS|1M|short|995.99|1026": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "JYOTICNC.NS|1d|short|1016.34|1052.47": {
     "reached_entry": true,
@@ -2621,10 +2612,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "OLAELEC.NS|1d|short|37.6335|39.7469": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "OLAELEC.NS|1w|short|37.95|38.48": {
     "reached_entry": false,
     "stopped_out": false
@@ -2738,6 +2725,7 @@
   },
   "PIRAMALFIN.NS|1d|short|1959.73|2009.5": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PIRAMALFIN.NS|1w|short|1966.57|2023.3": {
@@ -2868,6 +2856,7 @@
   },
   "PREMIERENE.NS|1M|short|907.52|937.95": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PREMIERENE.NS|1d|short|859.891|874.83": {
@@ -2888,11 +2877,11 @@
   "PREMIERENE.NS|1d|short|891.887|904": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "PREMIERENE.NS|1d|short|894.659|909.598": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "PREMIERENE.NS|1w|long|821.16|808.125": {
@@ -3087,8 +3076,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793776601.111245,
-  "_last_check|nse": 1793776601.111245,
+  "_last_check|crypto": 1793776911.545692,
+  "_last_check|nse": 1793776911.545692,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4294,6 +4283,7 @@
   "_level_ready|PIRAMALFIN.NS|1d|long|1914.89|1904.07": 1792729917.454067,
   "_level_ready|PIRAMALFIN.NS|1d|long|1958.14|1904.07": 1792468002.381626,
   "_level_ready|PIRAMALFIN.NS|1d|short|1916.8|1970.47": 1793764008.797417,
+  "_level_ready|PIRAMALFIN.NS|1d|short|1959.73|2009.5": 1793776911.545692,
   "_level_ready|PIRAMALFIN.NS|1w|long|1937.93|1840.82": 1791519091.189259,
   "_level_ready|PIRAMALFIN.NS|1w|short|2026.54|2156.02": 1792640801.869234,
   "_level_ready|PNBHOUSING.NS|1M|long|1047.65|880.194": 1793685978.359785,
@@ -4326,6 +4316,7 @@
   "_level_ready|PPLPHARMA.NS|1d|long|194.692|192.62": 1792727171.150355,
   "_level_ready|PPLPHARMA.NS|1d|short|231.089|234.4": 1793169409.13753,
   "_level_ready|PPLPHARMA.NS|1w|short|228.88|253.025": 1793163721.172195,
+  "_level_ready|PREMIERENE.NS|1M|short|907.52|937.95": 1793776911.545692,
   "_level_ready|PREMIERENE.NS|1d|long|871.626|864": 1792640801.869234,
   "_level_ready|PREMIERENE.NS|1d|short|859.891|874.83": 1793331989.35983,
   "_level_ready|PREMIERENE.NS|1d|short|871.672|903.225": 1793591209.526473,
@@ -5096,7 +5087,7 @@
   "_ready|PHOENIXLTD.NS|1d": 1793265972.685757,
   "_ready|PHOENIXLTD.NS|1w": 1792733510.483129,
   "_ready|PINELABS.NS|1d": 1792565477.881975,
-  "_ready|PIRAMALFIN.NS|1d": 1793764008.797417,
+  "_ready|PIRAMALFIN.NS|1d": 1793776911.545692,
   "_ready|PIRAMALFIN.NS|1w": 1792640801.869234,
   "_ready|PNBHOUSING.NS|1M": 1793764008.797417,
   "_ready|PNBHOUSING.NS|1d": 1793334680.412542,
@@ -5110,6 +5101,7 @@
   "_ready|PPLPHARMA.NS|1M": 1793163721.172195,
   "_ready|PPLPHARMA.NS|1d": 1793169409.13753,
   "_ready|PPLPHARMA.NS|1w": 1793163721.172195,
+  "_ready|PREMIERENE.NS|1M": 1793776911.545692,
   "_ready|PREMIERENE.NS|1d": 1793764008.797417,
   "_ready|PREMIERENE.NS|1w": 1793680606.357613,
   "_ready|PRESTIGE.NS|1d": 1793680606.357613,
