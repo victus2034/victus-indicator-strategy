@@ -11,7 +11,7 @@
   "1000PEPEUSD|1d|short|0.00506111|0.0051181": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "360ONE.NS|1M|long|974.923|624.278": {
     "reached_entry": false,
@@ -111,6 +111,7 @@
   },
   "ABBOTINDIA.NS|1d|short|26410|26850": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ABBOTINDIA.NS|1w|short|26781.1|27200": {
@@ -2622,6 +2623,10 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "ONDOUSD|1d|short|0.407014|0.4152": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "ONESOURCE.NS|1M|long|1530.44|1480.7": {
     "reached_entry": false,
     "stopped_out": false
@@ -3074,8 +3079,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793780204.408034,
-  "_last_check|nse": 1793780204.408034,
+  "_last_check|crypto": 1793780512.007957,
+  "_last_check|nse": 1793780512.007957,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3124,7 +3129,7 @@
   "_level_ready|ABBOTINDIA.NS|1d|long|25131|24868.7": 1793073108.145997,
   "_level_ready|ABBOTINDIA.NS|1d|short|25738|26850": 1793677604.261117,
   "_level_ready|ABBOTINDIA.NS|1d|short|26090|26498": 1793764604.922956,
-  "_level_ready|ABBOTINDIA.NS|1d|short|26410|26850": 1793681170.594552,
+  "_level_ready|ABBOTINDIA.NS|1d|short|26410|26850": 1793780512.007957,
   "_level_ready|ABDL.NS|1d|long|664.105|638.406": 1792986985.751506,
   "_level_ready|ABDL.NS|1d|long|682.795|638.406": 1792727505.027921,
   "_level_ready|ABDL.NS|1d|long|703.354|638.406": 1792640801.869234,
@@ -4652,7 +4657,7 @@
   "_ready|AAVEUSD|30m": 1791190567.107418,
   "_ready|AAVEUSD|4h": 1789057560.102114,
   "_ready|ABBOTINDIA.NS|1M": 1791517599.357562,
-  "_ready|ABBOTINDIA.NS|1d": 1793764604.922956,
+  "_ready|ABBOTINDIA.NS|1d": 1793780512.007957,
   "_ready|ABDL.NS|1d": 1792986985.751506,
   "_ready|ABSLAMC.NS|1M": 1793691703.653116,
   "_ready|ABSLAMC.NS|1d": 1792554711.035895,
