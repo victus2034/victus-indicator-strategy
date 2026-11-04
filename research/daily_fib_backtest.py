@@ -53,6 +53,15 @@ def news(ts) -> bool:
     return any(abs(ts - e) <= 15 * 60 for e in EVENTS)
 
 
+def drop_close_print(candles, interval):
+    """Yahoo's last NSE candle of the day (15:25 on 5m, 15:15 on 1h) carries the official closing price
+    (a 30-minute average) as its close, so its high/low can sit far from anything that traded: Nov 4 it
+    made 23,960.60 the day's high (traded high 23,945.70 at 09:20). Drop that candle."""
+    last = {"5m": (15, 25), "1h": (15, 15)}[interval]
+    return [c for c in candles
+            if (datetime.fromtimestamp(c[0], IST).hour, datetime.fromtimestamp(c[0], IST).minute) < last]
+
+
 def by_day(candles, tz):
     days = OrderedDict()
     for c in candles:
@@ -148,7 +157,7 @@ def nifty(since):
     import fib_trendline_data as fdata
     out = []
     for interval, label in (("5m", "NIFTY 5m"), ("1h", "NIFTY 1h (2y)")):
-        candles = fdata.nse_download(["^NSEI"], interval).get("^NSEI", [])
+        candles = drop_close_print(fdata.nse_download(["^NSEI"], interval).get("^NSEI", []), interval)
         if not candles:
             print(f"no ^NSEI {interval} candles")
             continue

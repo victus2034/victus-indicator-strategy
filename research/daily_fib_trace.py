@@ -7,11 +7,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import fib_trendline_data as fdata  # noqa: E402
-from daily_fib_backtest import by_day  # noqa: E402
+from daily_fib_backtest import by_day, drop_close_print  # noqa: E402
 from daily_fib_breakout_backtest import fib_boxes, run_side  # noqa: E402
 from fib_trendline_data import IST  # noqa: E402
 
-candles = fdata.nse_download(["^NSEI"], "5m").get("^NSEI", [])
+candles = drop_close_print(fdata.nse_download(["^NSEI"], "5m").get("^NSEI", []), "5m")
 days = list(by_day(candles, IST).items())
 for (pd_, pb), (d, b) in zip(days, days[1:]):
     if str(d) < "2026-10-27":
@@ -27,6 +27,9 @@ for (pd_, pb), (d, b) in zip(days, days[1:]):
         if (side == "buy" and hi > ph) or (side == "sell" and lo < pl):
             print("   ", side, "boxes at day extreme:", [(n, round(e, 2), round(s, 2)) for n, e, s in
                                                        fib_boxes(side, pl if side == "buy" else ph, ext, "near")])
+            near = [x for x in b if x[3] <= fib_boxes(side, pl if side == "buy" else ph, ext, "near")[0][1] + 5]
+            if side == "buy" and near:
+                print("    closest dip to upper box (within 5 pts):", [(hit(x[0]), x[3]) for x in near][:5])
             for t in run_side(side, ph, pl, b, "near", "high", 0):
                 print("    trade", t["box"], round(t["entry"], 2), "sl", round(t["stop"], 2), "tp", round(t["target"], 2),
                       hit(t["fill_ts"]), t["outcome"], round(t["exit"], 2))

@@ -33,7 +33,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import config  # noqa: E402
 import daily_backtest_summary as dbs  # noqa: E402
-from daily_fib_backtest import FUTURES_COST, SLIP, by_day, news, summarize  # noqa: E402
+from daily_fib_backtest import FUTURES_COST, SLIP, by_day, drop_close_print, news, summarize  # noqa: E402
 from fib_trendline_data import IST  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "daily_fib_breakout"
@@ -130,7 +130,7 @@ def main() -> None:
     import fib_trendline_data as fdata
     rows = []
     for interval, label in (("5m", "NIFTY 5m"), ("1h", "NIFTY 1h (2y)")):
-        candles = fdata.nse_download(["^NSEI"], interval).get("^NSEI", [])
+        candles = drop_close_print(fdata.nse_download(["^NSEI"], interval).get("^NSEI", []), interval)
         print(f"^NSEI {interval}: {len(candles)} candles")
         start = since if interval == "5m" else datetime(2000, 1, 1).date()
         rows += backtest(label, "NIFTY", candles, IST, start, dbs.ROUND_TRIP_COST_PCT, dbs.BREAK_EVEN_OFFSET_PCT,
