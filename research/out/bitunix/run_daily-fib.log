@@ -1,0 +1,54 @@
+^NSEI 5m: 4496 candles, 2026-08-10 to 2026-11-04 15:25
+Nov 3 low -> Nov 4 high high 23960.60 low 23482.95 up=True {'buy': (23697.89, 23645.35, 23632.21), 'sell': (23745.66, 23798.2, 23811.33)}
+Nov 3 only high 23810.85 low 23482.95 up=True {'buy': (23630.5, 23594.44, 23585.42), 'sell': (23663.29, 23699.36, 23708.38)}
+^NSEI 1h: 3290 candles, 2024-12-06 to 2026-11-04 15:15
+BTCUSD: 18874 5m candles
+ETHUSD: 18874 5m candles
+ZECUSD: 18874 5m candles
+SOLUSD: 18874 5m candles
+XRPUSD: 18874 5m candles
+NEARUSD: 18875 5m candles
+HYPEUSD: 18875 5m candles
+DOGEUSD: 18875 5m candles
+QNTUSD: 18875 5m candles
+SUIUSD: 18875 5m candles
+UNIUSD: 18875 5m candles
+BNBUSD: 18875 5m candles
+ENAUSD: 18875 5m candles
+1000PEPEUSD: 18875 5m candles
+WLDUSD: 18875 5m candles
+ADAUSD: 18875 5m candles
+AVAXUSD: 18876 5m candles
+LINKUSD: 18876 5m candles
+ONDOUSD: 18876 5m candles
+TAOUSD: 18876 5m candles
+STRKUSD: 18876 5m candles
+BTWUSD: 18876 5m candles
+FILUSD: 18876 5m candles
+AAVEUSD: 18876 5m candles
+RLCUSD: 18876 5m candles
+# One fib per day from the previous day's high/low (run 2026-11-04 18:34 IST)
+
+Entry 0.55, stop 25% of box past 0.66, closed at day end. 30 trades within 15 min of US CPI/PPI/FOMC left out.
+
+| market        | rule   | boxes   | range                    |   trades |   win_% |   R/trade |   %/trade |   avg_stop_% |   R fut cost |   % fut cost |
+|:--------------|:-------|:--------|:-------------------------|---------:|--------:|----------:|----------:|-------------:|-------------:|-------------:|
+| NIFTY 5m      | 1R     | all     | 2026-09-01 to 2026-10-28 |       21 |      24 |     -1.76 |    -0.222 |        0.137 |        -1.1  |       -0.145 |
+| NIFTY 5m      | 1R     | with    | 2026-09-04 to 2026-10-28 |       15 |      20 |     -1.72 |    -0.253 |        0.148 |        -1.12 |       -0.176 |
+| NIFTY 5m      | 1R     | against | 2026-09-01 to 2026-10-21 |        6 |      33 |     -1.84 |    -0.145 |        0.111 |        -1.05 |       -0.068 |
+| NIFTY 5m      | 2R+BE  | all     | 2026-09-01 to 2026-10-28 |       21 |      14 |     -1.54 |    -0.199 |        0.137 |        -0.89 |       -0.122 |
+| NIFTY 5m      | 2R+BE  | with    | 2026-09-04 to 2026-10-28 |       15 |       7 |     -1.55 |    -0.242 |        0.148 |        -0.95 |       -0.165 |
+| NIFTY 5m      | 2R+BE  | against | 2026-09-01 to 2026-10-21 |        6 |      33 |     -1.51 |    -0.092 |        0.111 |        -0.72 |       -0.015 |
+| NIFTY 1h (2y) | 1R     | all     | 2024-12-09 to 2026-10-28 |      240 |      26 |     -1.94 |    -0.184 |        0.115 |        -1.15 |       -0.108 |
+| NIFTY 1h (2y) | 1R     | with    | 2024-12-09 to 2026-10-28 |      157 |      24 |     -1.94 |    -0.193 |        0.12  |        -1.18 |       -0.117 |
+| NIFTY 1h (2y) | 1R     | against | 2024-12-10 to 2026-10-21 |       83 |      29 |     -1.94 |    -0.168 |        0.105 |        -1.1  |       -0.092 |
+| NIFTY 1h (2y) | 2R+BE  | all     | 2024-12-09 to 2026-10-28 |      240 |      21 |     -1.73 |    -0.159 |        0.115 |        -0.94 |       -0.082 |
+| NIFTY 1h (2y) | 2R+BE  | with    | 2024-12-09 to 2026-10-28 |      157 |      18 |     -1.74 |    -0.169 |        0.12  |        -0.98 |       -0.093 |
+| NIFTY 1h (2y) | 2R+BE  | against | 2024-12-10 to 2026-10-21 |       83 |      25 |     -1.71 |    -0.139 |        0.105 |        -0.87 |       -0.062 |
+| Crypto 5m     | 1R     | all     | 2026-09-01 to 2026-11-03 |     1091 |      49 |     -0.17 |    -0.068 |        1.022 |       nan    |      nan     |
+| Crypto 5m     | 1R     | with    | 2026-09-01 to 2026-11-03 |      767 |      51 |     -0.11 |    -0.026 |        1.092 |       nan    |      nan     |
+| Crypto 5m     | 1R     | against | 2026-09-01 to 2026-11-03 |      324 |      44 |     -0.32 |    -0.169 |        0.854 |       nan    |      nan     |
+| Crypto 5m     | 2R+BE  | all     | 2026-09-01 to 2026-11-03 |     1091 |      13 |     -0.19 |    -0.076 |        1.022 |       nan    |      nan     |
+| Crypto 5m     | 2R+BE  | with    | 2026-09-01 to 2026-11-03 |      767 |      14 |     -0.15 |    -0.048 |        1.092 |       nan    |      nan     |
+| Crypto 5m     | 2R+BE  | against | 2026-09-01 to 2026-11-03 |      324 |      11 |     -0.3  |    -0.144 |        0.854 |       nan    |      nan     |
+
