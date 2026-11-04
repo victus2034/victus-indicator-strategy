@@ -52,7 +52,7 @@ def hm(ts):
     return datetime.fromtimestamp(ts, IST).strftime("%m-%d %H:%M")
 
 
-def swings(bars, t_pct, gap_pct=GAP_PCT):
+def swings(bars, t_pct, gap_pct=GAP_PCT, min_pct=0.0):
     """Yield (i, fib) for each bar: fib = (dir, start_price, start_ts, ext_price, ext_ts, confirmed_i) in force
     from bar i on, or None. A fib becomes active on the bar after its swing is confirmed."""
     d, p, p_ts, e, e_ts = 1, bars[0][3], bars[0][0], bars[0][2], bars[0][0]
@@ -70,15 +70,38 @@ def swings(bars, t_pct, gap_pct=GAP_PCT):
             if h > e:
                 e, e_ts = h, ts
             elif (e - lo) / e * 100 >= t_pct:
-                fib = (1, p, p_ts, e, e_ts, i)
+                if (e - p) / p * 100 >= min_pct:          # smaller swings leave the last fib in force
+                    fib = (1, p, p_ts, e, e_ts, i)
                 d, p, p_ts, e, e_ts = -1, e, e_ts, lo, ts
         else:
             if lo < e:
                 e, e_ts = lo, ts
             elif (h - e) / e * 100 >= t_pct:
-                fib = (-1, p, p_ts, e, e_ts, i)
+                if (p - e) / p * 100 >= min_pct:
+                    fib = (-1, p, p_ts, e, e_ts, i)
                 d, p, p_ts, e, e_ts = 1, e, e_ts, h, ts
     return out
+
+
+def walk_1m(d, entry, stop, target, ones, ts):
+    """Same walk on 1m candles, from the first 1m candle inside the 5m fill candle that touches the entry."""
+    day = day_of(ts)
+    idx = [k for k, b in enumerate(ones) if ts <= b[0] < ts + 300 and ((b[3] if d == 1 else b[2]) - entry) * d <= 0]
+    if not idx:
+        return None
+    k = idx[0]
+    if ((ones[k][3] if d == 1 else ones[k][2]) - stop) * d <= 0:
+        return "SL*", stop
+    last = ones[k]
+    for b in ones[k + 1:]:
+        if day_of(b[0]) != day:
+            break
+        last = b
+        if ((b[3] if d == 1 else b[2]) - stop) * d <= 0:
+            return "SL", stop
+        if ((b[2] if d == 1 else b[3]) - target) * d >= 0:
+            return "TP", target
+    return ("EOD+" if (last[4] - entry) * d > 0 else "EOD-"), last[4]
 
 
 def walk(d, entry, stop, target, bars, i):
@@ -98,8 +121,9 @@ def walk(d, entry, stop, target, bars, i):
     return ("EOD+" if (last[4] - entry) * d > 0 else "EOD-"), last[4]
 
 
-def backtest(bars, t_pct, since):
-    fibs = swings(bars, t_pct)
+def backtest(bars, t_pct, since, min_pct=0.0, ones=None):
+    fibs = swings(bars, t_pct, min_pct=min_pct)
+    one_days = {day_of(b[0]) for b in ones or []}
     rows, used, dead = [], set(), set()
     for i, fib in enumerate(fibs):
         if fib is None or day_of(bars[i][0]) < since:
@@ -122,8 +146,14 @@ def backtest(bars, t_pct, since):
             risk = abs(entry - stop)
             for tgt in TARGETS:
                 target = ext if tgt == "high" else entry + d * float(tgt[:-1]) * risk
-                out, px = walk(d, entry, stop, target, bars, i)
-                rows.append({"T%": t_pct, "target": tgt, "day": str(day_of(ts)), "fill": hm(ts),
+                res = "5m"
+                got = walk_1m(d, entry, stop, target, ones, ts) if day_of(ts) in one_days else None
+                if got:
+                    res = "1m"
+                    out, px = got
+                else:
+                    out, px = walk(d, entry, stop, target, bars, i)
+                rows.append({"T%": t_pct, "min swing %": min_pct, "res": res, "target": tgt, "day": str(day_of(ts)), "fill": hm(ts),
                              "side": "buy" if d == 1 else "sell", "level": name,
                              "fib": f"{start:.2f} ({hm(start_ts)}) -> {ext:.2f} ({hm(ext_ts)})",
                              "entry": round(entry, 2), "stop": round(stop, 2), "target_px": round(target, 2),
@@ -149,16 +179,53 @@ def load(args):
     return bars
 
 
+def load_1m(args):
+    path = Path(args.csv).with_name("nifty_1m.csv") if args.csv else None
+    if path and path.exists():
+        with open(path) as f:
+            return [[int(r[0])] + [float(x) for x in r[1:5]] for r in csv.reader(f) if r[0] != "ts"]
+    if args.csv:
+        return []
+    import time as _t
+
+    import yfinance as yf
+    from fib_trendline_data import _frame_to_candles
+    out = {}
+    end = _t.time()
+    for _ in range(4):                                    # Yahoo keeps 1m for 30 days, 8 days a request
+        start = end - 7 * 86400
+        try:
+            raw = yf.download("^NSEI", interval="1m", start=datetime.fromtimestamp(start),
+                              end=datetime.fromtimestamp(end), progress=False, auto_adjust=False)
+            if isinstance(raw.columns, pd.MultiIndex):
+                raw.columns = raw.columns.get_level_values(0)
+            for c in _frame_to_candles(raw):
+                out[c[0]] = c
+        except Exception as error:  # noqa: BLE001
+            print("1m chunk failed:", error)
+        end = start
+    ones = [out[k] for k in sorted(out)
+            if (datetime.fromtimestamp(k, IST).hour, datetime.fromtimestamp(k, IST).minute) < (15, 29)]
+    with open(OUT / "nifty_1m.csv", "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["ts", "open", "high", "low", "close"])
+        w.writerows([b[:5] for b in ones])
+    return ones
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--since", default="2026-09-01")
     ap.add_argument("--csv")
-    ap.add_argument("--t", default="0.25,0.3,0.4")
+    ap.add_argument("--t", default="0.3")
+    ap.add_argument("--min", default="0,0.6")
     args = ap.parse_args()
     since = datetime.strptime(args.since, "%Y-%m-%d").date()
     bars = load(args)
     print(f"NIFTY 5m: {len(bars)} candles, {hm(bars[0][0])} to {hm(bars[-1][0])}")
     OUT.mkdir(parents=True, exist_ok=True)
+    ones = load_1m(args)
+    print(f"NIFTY 1m: {len(ones)} candles" + (f", {hm(ones[0][0])} to {hm(ones[-1][0])}" if ones else ""))
     rows = []
     for t in [float(x) for x in args.t.split(",")]:
         # the fibs on his chart days, to compare with what he drew
@@ -170,23 +237,26 @@ def main() -> None:
                 r = (e - s) * d
                 print(f"T={t}% fib {'up' if d == 1 else 'down'} {s:.2f} ({hm(s_ts)}) -> {e:.2f} ({hm(e_ts)}): "
                       + ", ".join(f"{n} {e - d * fr * r:.2f}" for n, fr in LEVELS.items()))
-        rows += backtest(bars, t, since)
+        for mn in [float(x) for x in args.min.split(",")]:
+            rows += backtest(bars, t, since, mn, ones)
     df = pd.DataFrame(rows)
     df.to_csv(OUT / "trades.csv", index=False)
     table = []
-    for (t, tgt), g in df.groupby(["T%", "target"], sort=False):
+    df["window"] = df["res"].map({"1m": "1m candles (last ~30 days)", "5m": "5m candles (earlier)"})
+    for (t, mn, win, tgt), g in df.groupby(["T%", "min swing %", "window", "target"], sort=False):
         mine = g.outcome.isin(["TP", "EOD+"])
-        table.append({"swing T%": t, "target": tgt, "trades": len(g), "TP": int((g.outcome == "TP").sum()),
-                      "SL": int(g.outcome.isin(["SL", "SL*"]).sum()), "of which fill-candle SL": int((g.outcome == "SL*").sum()),
-                      "day end +": int((g.outcome == "EOD+").sum()), "day end -": int((g.outcome == "EOD-").sum()),
+        table.append({"swing T%": t, "min swing %": mn, "scored on": win, "target": tgt, "trades": len(g),
                       "your side": f"{int(mine.sum())} ({100 * mine.mean():.0f}%)",
+                      "TP": int((g.outcome == "TP").sum()), "SL": int(g.outcome.isin(["SL", "SL*"]).sum()),
+                      "SL on fill candle": int((g.outcome == "SL*").sum()),
+                      "day end +/-": f"{int((g.outcome == 'EOD+').sum())}/{int((g.outcome == 'EOD-').sum())}",
                       "R/trade (no costs)": round(g.r.mean(), 2), "avg stop pts": round(g.risk_pts.mean(), 1)})
     tdf = pd.DataFrame(table)
     tdf.to_csv(OUT / "summary.csv", index=False)
-    check = df[df.day.isin(CHECK_DAYS)]
+    check = df[df.day.isin(CHECK_DAYS) & (df["min swing %"] == 0.6) & (df.target == "high")]
     text = [f"# Swing fib, lakky's hand rule, NIFTY 5m (run {datetime.now(IST):%Y-%m-%d %H:%M} IST)", "",
-            tdf.to_markdown(index=False), "", "## His chart days", "",
-            check.drop(columns=["T%"]).loc[check["T%"] == 0.3].to_markdown(index=False), ""]
+            tdf.to_markdown(index=False), "", "## His chart days (min swing 0.6%, target = swing extreme)", "",
+            check.drop(columns=["T%", "min swing %", "window"]).to_markdown(index=False), ""]
     (OUT / "SWING_FIB.md").write_text("\n".join(text))
     print("\n".join(text))
 
