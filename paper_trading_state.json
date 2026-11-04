@@ -63411,6 +63411,33 @@
       "target_half": 2360.3611111111113,
       "timeframe": "4h",
       "trade_id": "ETHUSD|4h|short|2372.22|2395.94"
+    },
+    {
+      "alert_time": "2026-11-04T20:39:36.445843+05:30",
+      "cost_r": 0.11935476756756783,
+      "date": "2026-11-04",
+      "entry": 1.3366,
+      "entry_time": "2026-11-04T20:40:00+05:30",
+      "exit_price": 1.3181,
+      "exit_time": "2026-11-04T21:15:00+05:30",
+      "final_result": "+2R",
+      "geometry": "wick",
+      "half_r_hit": true,
+      "market": "crypto",
+      "net_realized_r": 1.880645232432432,
+      "outcome": "+2R",
+      "rating": 8,
+      "realized_r": 2.0,
+      "risk": 0.00924999999999998,
+      "side": "short",
+      "stop": 1.34585,
+      "stream": "live",
+      "symbol": "XRPUSD",
+      "target_1": 1.32735,
+      "target_2": 1.3181,
+      "target_half": 1.331975,
+      "timeframe": "4h",
+      "trade_id": "XRPUSD|4h|short|1.3366|1.34585"
     }
   ],
   "handled": {
@@ -66049,24 +66076,6 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
-    },
-    "XRPUSD|4h|short|1.3366|1.34585": {
-      "alert_time": "2026-11-04T20:39:36.445843+05:30",
-      "entry": 1.3366,
-      "entry_time": "2026-11-04T20:40:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": true,
-      "market": "crypto",
-      "rating": 8,
-      "risk": 0.00924999999999998,
-      "side": "short",
-      "stop": 1.34585,
-      "stream": "live",
-      "symbol": "XRPUSD",
-      "target_1": 1.32735,
-      "target_2": 1.3181,
-      "target_half": 1.331975,
-      "timeframe": "4h"
     }
   }
 }
