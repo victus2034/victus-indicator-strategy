@@ -532,6 +532,10 @@
     "stage": 3,
     "stopped_out": true
   },
+  "BALKRISIND.NS|1M|short|2444.2|2554.8": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "BALKRISIND.NS|1d|short|2166.42|2248": {
     "reached_entry": true,
     "stage": 3,
@@ -549,12 +553,12 @@
   "BALKRISIND.NS|1w|short|2166.42|2372.59": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BALKRISIND.NS|1w|short|2231.68|2372.59": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BALKRISIND.NS|1w|short|2291.01|2320": {
     "reached_entry": true,
@@ -564,6 +568,10 @@
   "BALKRISIND.NS|1w|short|2356.28|2389.9": {
     "reached_entry": true,
     "stage": 2,
+    "stopped_out": true
+  },
+  "BALKRISIND.NS|1w|short|2445.16|2482": {
+    "reached_entry": false,
     "stopped_out": false
   },
   "BANDHANBNK.NS|1d|short|160.455|167.236": {
@@ -775,6 +783,7 @@
   },
   "CAPLIPOINT.NS|1d|short|2452.89|2564.79": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CAPLIPOINT.NS|1w|long|2170.67|1965.83": {
@@ -881,7 +890,7 @@
   "CEMPRO.NS|1d|short|1318.13|1340": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "CEMPRO.NS|1w|long|1133.54|861.394": {
     "reached_entry": false,
@@ -1566,7 +1575,7 @@
   },
   "GLAXO.NS|1w|long|2638.61|2419.34": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "GLAXO.NS|1w|short|2608.14|2714.93": {
@@ -2928,6 +2937,11 @@
     "stage": 3,
     "stopped_out": true
   },
+  "PIRAMALFIN.NS|1d|short|2041.7|2095.36": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "PIRAMALFIN.NS|1w|short|1966.57|2023.3": {
     "reached_entry": true,
     "stage": 3,
@@ -3150,6 +3164,11 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "RECLTD.NS|1d|short|296.425|299": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "RECLTD.NS|1w|long|282.453|266.972": {
     "reached_entry": false,
     "stopped_out": false
@@ -3201,6 +3220,7 @@
   },
   "SBICARD.NS|1d|short|589.227|609.111": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "SNDKBUSD|1w|short|1448.81|1565.18": {
@@ -3287,8 +3307,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793851900.588262,
-  "_last_check|nse": 1793851900.588262,
+  "_last_check|crypto": 1793852212.98242,
+  "_last_check|nse": 1793852212.98242,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3677,6 +3697,7 @@
   "_level_ready|CAMS.NS|1w|long|677.285|665.05": 1793764008.797417,
   "_level_ready|CAPLIPOINT.NS|1M|long|2170.67|1965.83": 1792641104.661578,
   "_level_ready|CAPLIPOINT.NS|1d|long|2558|2519.63": 1791517599.357562,
+  "_level_ready|CAPLIPOINT.NS|1d|short|2452.89|2564.79": 1793852212.98242,
   "_level_ready|CAPLIPOINT.NS|1w|long|2170.67|1965.83": 1792641104.661578,
   "_level_ready|CAPUSD|1d|long|0.078786|0.068105": 1791990399.414519,
   "_level_ready|CARBORUNIV.NS|1M|long|1187.12|1023.61": 1791786682.799464,
@@ -4541,6 +4562,7 @@
   "_level_ready|PIRAMALFIN.NS|1d|long|1958.14|1904.07": 1792468002.381626,
   "_level_ready|PIRAMALFIN.NS|1d|short|1916.8|1970.47": 1793764008.797417,
   "_level_ready|PIRAMALFIN.NS|1d|short|1959.73|2009.5": 1793776911.545692,
+  "_level_ready|PIRAMALFIN.NS|1d|short|2041.7|2095.36": 1793852212.98242,
   "_level_ready|PIRAMALFIN.NS|1w|long|1937.93|1840.82": 1791519091.189259,
   "_level_ready|PIRAMALFIN.NS|1w|short|2026.54|2156.02": 1793851315.776468,
   "_level_ready|PNBHOUSING.NS|1M|long|1047.65|880.194": 1793685978.359785,
@@ -4608,6 +4630,7 @@
   "_level_ready|RECLTD.NS|1d|long|283.225|279.2": 1793764008.797417,
   "_level_ready|RECLTD.NS|1d|long|283.508|279.2": 1793349100.9287,
   "_level_ready|RECLTD.NS|1d|long|283.933|279.2": 1793159201.504703,
+  "_level_ready|RECLTD.NS|1d|short|296.425|299": 1793852212.98242,
   "_level_ready|RECLTD.NS|1w|long|282.453|266.972": 1793764008.797417,
   "_level_ready|REDINGTON.NS|1M|long|316.814|287.72": 1793591209.526473,
   "_level_ready|REDINGTON.NS|1M|long|341.915|262.619": 1793333172.618426,
@@ -4643,6 +4666,7 @@
   "_level_ready|RRKABEL.NS|1w|long|2217.68|1813.33": 1793245588.963685,
   "_level_ready|RVNL.NS|1d|long|190.352|187.497": 1791517599.357562,
   "_level_ready|SAMSUNG/USDT:USDT|30m|short|185.91|187.322": 1789532163.790065,
+  "_level_ready|SBICARD.NS|1d|short|589.227|609.111": 1793852212.98242,
   "_level_ready|SLVONUSD|30m|long|53.71|53.4225": 1791439319.318217,
   "_level_ready|SLVONUSD|30m|long|54.71|54.435": 1791363086.455875,
   "_level_ready|SLVONUSD|30m|long|54.74|54.7275": 1791087095.433826,
@@ -5028,7 +5052,7 @@
   "_ready|CAMS.NS|1w": 1793764008.797417,
   "_ready|CAP/USDT|30m": 1789361459.428611,
   "_ready|CAPLIPOINT.NS|1M": 1792641104.661578,
-  "_ready|CAPLIPOINT.NS|1d": 1791517599.357562,
+  "_ready|CAPLIPOINT.NS|1d": 1793852212.98242,
   "_ready|CAPLIPOINT.NS|1w": 1792641104.661578,
   "_ready|CAPUSD|1d": 1791990399.414519,
   "_ready|CARBORUNIV.NS|1M": 1793850405.511611,
@@ -5354,7 +5378,7 @@
   "_ready|PHOENIXLTD.NS|1d": 1793265972.685757,
   "_ready|PHOENIXLTD.NS|1w": 1792733510.483129,
   "_ready|PINELABS.NS|1d": 1792565477.881975,
-  "_ready|PIRAMALFIN.NS|1d": 1793776911.545692,
+  "_ready|PIRAMALFIN.NS|1d": 1793852212.98242,
   "_ready|PIRAMALFIN.NS|1w": 1793851315.776468,
   "_ready|PNBHOUSING.NS|1M": 1793764008.797417,
   "_ready|PNBHOUSING.NS|1d": 1793334680.412542,
@@ -5383,7 +5407,7 @@
   "_ready|RBLBANK.NS|1d": 1792036000.300237,
   "_ready|RE/USDT|30m": 1789390557.764438,
   "_ready|RE/USDT|4h": 1788948356.002419,
-  "_ready|RECLTD.NS|1d": 1793764008.797417,
+  "_ready|RECLTD.NS|1d": 1793852212.98242,
   "_ready|RECLTD.NS|1w": 1793764008.797417,
   "_ready|REDINGTON.NS|1M": 1793591209.526473,
   "_ready|REDINGTON.NS|1d": 1793780770.573242,
@@ -5397,6 +5421,7 @@
   "_ready|RRKABEL.NS|1w": 1793850405.511611,
   "_ready|RVNL.NS|1d": 1791517599.357562,
   "_ready|SAMSUNG/USDT:USDT|30m": 1789532163.790065,
+  "_ready|SBICARD.NS|1d": 1793852212.98242,
   "_ready|SLVONUSD|30m": 1791439319.318217,
   "_ready|SLVONUSD|4h": 1789377364.322639,
   "_ready|SNDKBUSD|1d": 1791479800.16904,
