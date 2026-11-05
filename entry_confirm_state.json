@@ -505,8 +505,8 @@
     "stopped_out": false
   },
   "AUBANK.NS|1d|short|946.76|987.872": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "AUBANK.NS|1w|long|937.883|929.291": {
@@ -520,8 +520,8 @@
     "stopped_out": true
   },
   "AUBANK.NS|1w|short|946.76|987.872": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "AVAXUSD|1w|short|10.8109|11.1": {
@@ -1987,6 +1987,16 @@
     "stage": 3,
     "stopped_out": true
   },
+  "IOB.NS|1d|short|30.9848|31.5": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
+  "IOB.NS|1d|short|31.0128|31.5738": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "IOB.NS|1w|short|31.1114|31.97": {
     "reached_entry": false,
     "stopped_out": false
@@ -2459,7 +2469,7 @@
   "MAHABANK.NS|1d|short|82.4918|84.5172": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "MAHABANK.NS|1w|long|70.875|58.4062": {
     "reached_entry": false,
@@ -3030,6 +3040,7 @@
   },
   "PIRAMALFIN.NS|1w|short|2081.06|2156.02": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PNBHOUSING.NS|1M|long|1047.65|880.194": {
@@ -3393,8 +3404,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793865078.248145,
-  "_last_check|nse": 1793865078.248145,
+  "_last_check|crypto": 1793865371.934564,
+  "_last_check|nse": 1793865371.934564,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4231,6 +4242,7 @@
   "_level_ready|IOB.NS|1d|short|29.7072|30.2682": 1793764919.634557,
   "_level_ready|IOB.NS|1d|short|30.156|30.6762": 1793767589.730301,
   "_level_ready|IOB.NS|1d|short|30.211|31.1563": 1793072802.908836,
+  "_level_ready|IOB.NS|1d|short|31.0128|31.5738": 1793865371.934564,
   "_level_ready|IPCALAB.NS|1d|long|1862.92|1805.9": 1792129295.649117,
   "_level_ready|IPCALAB.NS|1d|long|1874.38|1788.03": 1792735900.7583,
   "_level_ready|IPCALAB.NS|1d|long|1914.38|1864.38": 1793338312.714362,
@@ -4679,6 +4691,7 @@
   "_level_ready|PIRAMALFIN.NS|1d|short|2041.7|2095.36": 1793852212.98242,
   "_level_ready|PIRAMALFIN.NS|1w|long|1937.93|1840.82": 1791519091.189259,
   "_level_ready|PIRAMALFIN.NS|1w|short|2026.54|2156.02": 1793851315.776468,
+  "_level_ready|PIRAMALFIN.NS|1w|short|2081.06|2156.02": 1793865371.934564,
   "_level_ready|PNBHOUSING.NS|1M|long|1047.65|880.194": 1793685978.359785,
   "_level_ready|PNBHOUSING.NS|1M|long|1056.43|1040": 1793764008.797417,
   "_level_ready|PNBHOUSING.NS|1d|long|1082.48|1073.4": 1793334680.412542,
@@ -5339,7 +5352,7 @@
   "_ready|IKS.NS|1d": 1793766402.305843,
   "_ready|IKS.NS|1w": 1792727171.150355,
   "_ready|INDUSINDBK.NS|1d": 1793862119.433316,
-  "_ready|IOB.NS|1d": 1793767589.730301,
+  "_ready|IOB.NS|1d": 1793865371.934564,
   "_ready|IPCALAB.NS|1d": 1793338312.714362,
   "_ready|IRCTC.NS|1d": 1793850973.989597,
   "_ready|ITCHOTELS.NS|1d": 1793764008.797417,
@@ -5498,7 +5511,7 @@
   "_ready|PHOENIXLTD.NS|1w": 1792733510.483129,
   "_ready|PINELABS.NS|1d": 1792565477.881975,
   "_ready|PIRAMALFIN.NS|1d": 1793852212.98242,
-  "_ready|PIRAMALFIN.NS|1w": 1793851315.776468,
+  "_ready|PIRAMALFIN.NS|1w": 1793865371.934564,
   "_ready|PNBHOUSING.NS|1M": 1793764008.797417,
   "_ready|PNBHOUSING.NS|1d": 1793334680.412542,
   "_ready|PNBHOUSING.NS|1w": 1793764008.797417,
