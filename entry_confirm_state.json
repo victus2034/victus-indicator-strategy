@@ -17,11 +17,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "360ONE.NS|1d|short|1015.44|1035.56": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "360ONE.NS|1d|short|1031.54|1050.19": {
     "reached_entry": true,
     "stage": 3,
@@ -106,6 +101,7 @@
   },
   "ABBOTINDIA.NS|1d|long|26478.2|26097.3": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ABBOTINDIA.NS|1d|short|27236.7|27495": {
@@ -2178,10 +2174,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "KARURVYSYA.NS|1d|short|361.685|370.581": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "KARURVYSYA.NS|1w|long|326.547|260.876": {
     "reached_entry": false,
     "stopped_out": false
@@ -2642,10 +2634,12 @@
   },
   "NAUKRI.NS|1M|short|1220.24|1249.4": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "NAUKRI.NS|1w|short|1220.24|1539.07": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "NAVINFLUOR.NS|1d|long|8325.27|8155.53": {
@@ -2880,7 +2874,7 @@
   },
   "PATANJALI.NS|1d|short|379.013|399.562": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "PATANJALI.NS|1w|long|331.989|328.2": {
@@ -3339,8 +3333,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793857601.371389,
-  "_last_check|nse": 1793857601.371389,
+  "_last_check|crypto": 1793857916.376073,
+  "_last_check|nse": 1793857916.376073,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3388,6 +3382,7 @@
   "_level_ready|AAVEUSD|30m|short|182.36|183.685": 1791081979.673311,
   "_level_ready|ABBOTINDIA.NS|1M|long|25775.9|24141.8": 1791517599.357562,
   "_level_ready|ABBOTINDIA.NS|1d|long|25131|24868.7": 1793073108.145997,
+  "_level_ready|ABBOTINDIA.NS|1d|long|26478.2|26097.3": 1793857916.376073,
   "_level_ready|ABBOTINDIA.NS|1d|short|25738|26850": 1793677604.261117,
   "_level_ready|ABBOTINDIA.NS|1d|short|26090|26498": 1793764604.922956,
   "_level_ready|ABBOTINDIA.NS|1d|short|26410|26850": 1793780512.007957,
@@ -4459,9 +4454,10 @@
   "_level_ready|NATIONALUM.NS|1M|long|306.82|233.812": 1793093510.969486,
   "_level_ready|NATIONALUM.NS|1w|long|306.82|233.812": 1793093510.969486,
   "_level_ready|NAUKRI.NS|1M|long|1185.5|1025.43": 1793677604.261117,
+  "_level_ready|NAUKRI.NS|1M|short|1220.24|1249.4": 1793857916.376073,
   "_level_ready|NAUKRI.NS|1d|long|1192.12|1087.16": 1793245588.963685,
   "_level_ready|NAUKRI.NS|1d|short|1270.43|1297": 1792126921.831652,
-  "_level_ready|NAUKRI.NS|1w|short|1220.24|1539.07": 1793159785.345958,
+  "_level_ready|NAUKRI.NS|1w|short|1220.24|1539.07": 1793857916.376073,
   "_level_ready|NAVINFLUOR.NS|1d|long|7654.38|7595": 1792731077.628348,
   "_level_ready|NAVINFLUOR.NS|1d|long|8114.67|8035": 1792554386.505792,
   "_level_ready|NAVINFLUOR.NS|1d|long|8114|8035": 1792381599.217228,
@@ -4981,7 +4977,7 @@
   "_ready|AAVEUSD|30m": 1791190567.107418,
   "_ready|AAVEUSD|4h": 1789057560.102114,
   "_ready|ABBOTINDIA.NS|1M": 1791517599.357562,
-  "_ready|ABBOTINDIA.NS|1d": 1793780512.007957,
+  "_ready|ABBOTINDIA.NS|1d": 1793857916.376073,
   "_ready|ABBOTINDIA.NS|1w": 1793784701.538771,
   "_ready|ABDL.NS|1d": 1792986985.751506,
   "_ready|ABSLAMC.NS|1M": 1793691703.653116,
@@ -5371,9 +5367,9 @@
   "_ready|NAM-INDIA.NS|1w": 1792658494.879335,
   "_ready|NATIONALUM.NS|1M": 1793093510.969486,
   "_ready|NATIONALUM.NS|1w": 1793093510.969486,
-  "_ready|NAUKRI.NS|1M": 1793677604.261117,
+  "_ready|NAUKRI.NS|1M": 1793857916.376073,
   "_ready|NAUKRI.NS|1d": 1793245588.963685,
-  "_ready|NAUKRI.NS|1w": 1793159785.345958,
+  "_ready|NAUKRI.NS|1w": 1793857916.376073,
   "_ready|NAVINFLUOR.NS|1d": 1793678485.475546,
   "_ready|NBCC.NS|1M": 1792729605.131874,
   "_ready|NBCC.NS|1w": 1792557094.347878,
