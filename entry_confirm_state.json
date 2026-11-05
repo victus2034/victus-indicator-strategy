@@ -501,6 +501,7 @@
   },
   "AUBANK.NS|1d|short|946.76|987.872": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "AUBANK.NS|1w|long|937.883|929.291": {
@@ -520,6 +521,7 @@
   },
   "AUBANK.NS|1w|short|946.76|987.872": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "AVAXUSD|1w|short|10.8109|11.1": {
@@ -1576,6 +1578,7 @@
   },
   "GLAXO.NS|1M|long|2485.78|2421.4": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "GLAXO.NS|1d|short|2608.14|2714.93": {
@@ -2120,6 +2123,10 @@
     "stage": 2,
     "stopped_out": false
   },
+  "JUBLFOOD.NS|1d|short|456.322|472.904": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "JUBLFOOD.NS|1w|long|391.099|377.45": {
     "reached_entry": false,
     "stopped_out": false
@@ -2409,13 +2416,13 @@
     "stopped_out": false
   },
   "MAHABANK.NS|1d|short|82.46|83.1": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "MAHABANK.NS|1d|short|82.4918|84.5172": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "MAHABANK.NS|1w|long|70.875|58.4062": {
@@ -3020,8 +3027,8 @@
     "stopped_out": true
   },
   "POLYMED.NS|1d|short|1652.58|1715.34": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "POONAWALLA.NS|1M|short|476.26|482.95": {
@@ -3109,6 +3116,7 @@
   },
   "PREMIERENE.NS|1d|long|879.314|867.571": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PREMIERENE.NS|1d|short|871.842|885.695": {
@@ -3343,8 +3351,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793858526.517385,
-  "_last_check|nse": 1793858526.517385,
+  "_last_check|crypto": 1793858809.664081,
+  "_last_check|nse": 1793858809.664081,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3536,9 +3544,11 @@
   "_level_ready|AUBANK.NS|1d|long|974.788|967.4": 1792468002.381626,
   "_level_ready|AUBANK.NS|1d|long|987.634|974.2": 1791949569.774586,
   "_level_ready|AUBANK.NS|1d|long|987.9|973.081": 1791517599.357562,
+  "_level_ready|AUBANK.NS|1d|short|946.76|987.872": 1793858809.664081,
   "_level_ready|AUBANK.NS|1w|long|937.883|929.291": 1792727171.150355,
   "_level_ready|AUBANK.NS|1w|long|971.183|960": 1792397814.233469,
   "_level_ready|AUBANK.NS|1w|long|972.253|929.291": 1792468002.381626,
+  "_level_ready|AUBANK.NS|1w|short|946.76|987.872": 1793858809.664081,
   "_level_ready|AVAXUSD|1d|long|8.52495|7.65444": 1793244712.068625,
   "_level_ready|AVAXUSD|1d|long|8.56479|8.203": 1793241675.01791,
   "_level_ready|AVAXUSD|1d|long|9.15805|7.65444": 1792656712.027939,
@@ -4024,7 +4034,7 @@
   "_level_ready|GLAND.NS|1d|short|2952.94|3067.75": 1793159201.504703,
   "_level_ready|GLAND.NS|1d|short|2990.46|3045.63": 1793166102.188457,
   "_level_ready|GLAND.NS|1w|short|3163.74|3266": 1793850405.511611,
-  "_level_ready|GLAXO.NS|1M|long|2485.78|2421.4": 1793769406.757242,
+  "_level_ready|GLAXO.NS|1M|long|2485.78|2421.4": 1793858809.664081,
   "_level_ready|GLAXO.NS|1M|long|2647.66|2521.29": 1791517599.357562,
   "_level_ready|GLAXO.NS|1d|long|2439.18|2410.79": 1793159201.504703,
   "_level_ready|GLAXO.NS|1d|long|2552.77|2410.79": 1791776795.761218,
@@ -4652,6 +4662,7 @@
   "_level_ready|PPLPHARMA.NS|1w|short|228.88|253.025": 1793163721.172195,
   "_level_ready|PREMIERENE.NS|1M|short|907.52|937.95": 1793776911.545692,
   "_level_ready|PREMIERENE.NS|1d|long|871.626|864": 1792640801.869234,
+  "_level_ready|PREMIERENE.NS|1d|long|879.314|867.571": 1793858809.664081,
   "_level_ready|PREMIERENE.NS|1d|short|859.891|874.83": 1793331989.35983,
   "_level_ready|PREMIERENE.NS|1d|short|871.672|903.225": 1793591209.526473,
   "_level_ready|PREMIERENE.NS|1d|short|882.707|897.647": 1793764008.797417,
@@ -5051,8 +5062,8 @@
   "_ready|ATUL.NS|1M": 1793764604.922956,
   "_ready|ATUL.NS|1d": 1792734108.77975,
   "_ready|AUBANK.NS|1M": 1793159201.504703,
-  "_ready|AUBANK.NS|1d": 1792468002.381626,
-  "_ready|AUBANK.NS|1w": 1792727171.150355,
+  "_ready|AUBANK.NS|1d": 1793858809.664081,
+  "_ready|AUBANK.NS|1w": 1793858809.664081,
   "_ready|AVAXUSD|1d": 1793244712.068625,
   "_ready|AVAXUSD|1w": 1791736311.389518,
   "_ready|AVAXUSD|30m": 1791212768.155908,
@@ -5220,7 +5231,7 @@
   "_ready|GLAND.NS|1M": 1793850405.511611,
   "_ready|GLAND.NS|1d": 1793166102.188457,
   "_ready|GLAND.NS|1w": 1793850405.511611,
-  "_ready|GLAXO.NS|1M": 1793769406.757242,
+  "_ready|GLAXO.NS|1M": 1793858809.664081,
   "_ready|GLAXO.NS|1d": 1793764008.797417,
   "_ready|GLAXO.NS|1w": 1793764008.797417,
   "_ready|GLENMARK.NS|1d": 1793764008.797417,
@@ -5448,7 +5459,7 @@
   "_ready|PPLPHARMA.NS|1d": 1793169409.13753,
   "_ready|PPLPHARMA.NS|1w": 1793163721.172195,
   "_ready|PREMIERENE.NS|1M": 1793776911.545692,
-  "_ready|PREMIERENE.NS|1d": 1793764008.797417,
+  "_ready|PREMIERENE.NS|1d": 1793858809.664081,
   "_ready|PREMIERENE.NS|1w": 1793680606.357613,
   "_ready|PRESTIGE.NS|1d": 1793680606.357613,
   "_ready|PRESTIGE.NS|1w": 1793591209.526473,
