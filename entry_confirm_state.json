@@ -1172,6 +1172,10 @@
     "stage": 2,
     "stopped_out": false
   },
+  "CUB.NS|1d|short|221.419|225.172": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "CUB.NS|1d|short|227.453|229.48": {
     "reached_entry": false,
     "stopped_out": false
@@ -2010,7 +2014,8 @@
     "stopped_out": false
   },
   "IRB.NS|1d|short|17.3528|18.0293": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "IRCTC.NS|1d|short|450.3|456.488": {
@@ -2431,8 +2436,8 @@
     "stopped_out": true
   },
   "LTTS.NS|1w|short|4255.87|4355.5": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "M&MFIN.NS|1M|long|256.86|254.55": {
@@ -2940,11 +2945,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "PATANJALI.NS|1d|short|379.013|399.562": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "PATANJALI.NS|1d|short|395.453|414.507": {
     "reached_entry": true,
     "stage": 2,
@@ -3404,8 +3404,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793866001.530873,
-  "_last_check|nse": 1793866001.530873,
+  "_last_check|crypto": 1793866304.601149,
+  "_last_check|nse": 1793866304.601149,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4246,6 +4246,7 @@
   "_level_ready|IPCALAB.NS|1d|long|1862.92|1805.9": 1792129295.649117,
   "_level_ready|IPCALAB.NS|1d|long|1874.38|1788.03": 1792735900.7583,
   "_level_ready|IPCALAB.NS|1d|long|1914.38|1864.38": 1793338312.714362,
+  "_level_ready|IRB.NS|1d|short|17.3528|18.0293": 1793866304.601149,
   "_level_ready|IRCTC.NS|1d|long|447.127|443.45": 1792640801.869234,
   "_level_ready|IRCTC.NS|1d|long|447.182|443.45": 1792728404.281105,
   "_level_ready|IRCTC.NS|1d|short|450.3|456.488": 1793764919.634557,
@@ -5354,6 +5355,7 @@
   "_ready|INDUSINDBK.NS|1d": 1793862119.433316,
   "_ready|IOB.NS|1d": 1793865371.934564,
   "_ready|IPCALAB.NS|1d": 1793338312.714362,
+  "_ready|IRB.NS|1d": 1793866304.601149,
   "_ready|IRCTC.NS|1d": 1793850973.989597,
   "_ready|ITCHOTELS.NS|1d": 1793764008.797417,
   "_ready|ITCHOTELS.NS|1w": 1793245588.963685,
