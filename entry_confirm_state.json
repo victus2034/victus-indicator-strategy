@@ -480,6 +480,10 @@
     "stage": 3,
     "stopped_out": false
   },
+  "ATGL.NS|1d|short|589.137|608.996": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "ATUL.NS|1M|long|5008.79|3518.73": {
     "reached_entry": false,
     "stopped_out": false
@@ -611,7 +615,7 @@
   },
   "BELRISE.NS|1d|short|221.231|228.892": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "BELRISE.NS|1w|long|188.708|146.753": {
@@ -796,8 +800,8 @@
     "stopped_out": false
   },
   "CARBORUNIV.NS|1M|short|1111.22|1178.2": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "CARBORUNIV.NS|1d|long|1029.25|1005.6": {
@@ -806,6 +810,7 @@
   },
   "CARBORUNIV.NS|1d|short|1117.04|1169.51": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CARBORUNIV.NS|1d|short|1159.02|1207.67": {
@@ -814,6 +819,7 @@
   },
   "CARBORUNIV.NS|1w|short|1117.04|1169.51": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CARBORUNIV.NS|1w|short|1159.02|1175": {
@@ -1189,6 +1195,11 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "DALBHARAT.NS|1d|short|1494.5|1544.22": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "DALBHARAT.NS|1w|long|1368.26|1296.5": {
     "reached_entry": false,
     "stopped_out": false
@@ -1262,6 +1273,7 @@
   },
   "DELHIVERY.NS|1d|short|435.468|450.222": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "DELHIVERY.NS|1w|short|418.829|426.75": {
@@ -1271,6 +1283,7 @@
   },
   "DELHIVERY.NS|1w|short|436.357|450.7": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "DIXON.NS|1M|long|11680.7|7739.22": {
@@ -2516,6 +2529,11 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "MRF.NS|1d|short|123282|126554": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "MRF.NS|1w|long|119243|117544": {
     "reached_entry": false,
     "stage": 1,
@@ -3298,8 +3316,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793852504.89325,
-  "_last_check|nse": 1793852504.89325,
+  "_last_check|crypto": 1793852802.047467,
+  "_last_check|nse": 1793852802.047467,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3695,9 +3713,9 @@
   "_level_ready|CARBORUNIV.NS|1M|short|1111.22|1178.2": 1793850405.511611,
   "_level_ready|CARBORUNIV.NS|1d|long|1029.25|1005.6": 1793350619.979723,
   "_level_ready|CARBORUNIV.NS|1d|long|1175.96|1127.72": 1791949569.774586,
-  "_level_ready|CARBORUNIV.NS|1d|short|1117.04|1169.51": 1793764604.922956,
+  "_level_ready|CARBORUNIV.NS|1d|short|1117.04|1169.51": 1793852802.047467,
   "_level_ready|CARBORUNIV.NS|1d|short|1159.02|1207.67": 1793679396.23429,
-  "_level_ready|CARBORUNIV.NS|1w|short|1117.04|1169.51": 1793764604.922956,
+  "_level_ready|CARBORUNIV.NS|1w|short|1117.04|1169.51": 1793852802.047467,
   "_level_ready|CARBORUNIV.NS|1w|short|1159.02|1175": 1793679396.23429,
   "_level_ready|CASTROLIND.NS|1d|long|185.367|183.95": 1793076691.324433,
   "_level_ready|CASTROLIND.NS|1d|long|192.785|190.131": 1791949569.774586,
@@ -3804,6 +3822,7 @@
   "_level_ready|DALBHARAT.NS|1d|long|1606.07|1581.98": 1791529898.238542,
   "_level_ready|DALBHARAT.NS|1d|long|1606.07|1585": 1791776795.761218,
   "_level_ready|DALBHARAT.NS|1d|long|1606.08|1581.99": 1791517599.357562,
+  "_level_ready|DALBHARAT.NS|1d|short|1494.5|1544.22": 1793852802.047467,
   "_level_ready|DALBHARAT.NS|1d|short|1659.7|1741.15": 1792555315.989515,
   "_level_ready|DALBHARAT.NS|1d|short|1708.92|1741.15": 1792141001.751989,
   "_level_ready|DALBHARAT.NS|1w|long|1368.26|1296.5": 1793689602.898729,
@@ -3821,7 +3840,9 @@
   "_level_ready|DELHIVERY.NS|1M|long|365.891|326.364": 1792986387.062464,
   "_level_ready|DELHIVERY.NS|1d|short|401.132|415.886": 1793340989.497315,
   "_level_ready|DELHIVERY.NS|1d|short|423.665|438.419": 1793765780.193854,
+  "_level_ready|DELHIVERY.NS|1d|short|435.468|450.222": 1793852802.047467,
   "_level_ready|DELHIVERY.NS|1w|short|418.829|426.75": 1793764308.62811,
+  "_level_ready|DELHIVERY.NS|1w|short|436.357|450.7": 1793852802.047467,
   "_level_ready|DIXON.NS|1M|long|11680.7|7739.22": 1792727171.150355,
   "_level_ready|DIXON.NS|1d|long|12137|11970": 1792554386.505792,
   "_level_ready|DIXON.NS|1d|short|11895.6|12285.2": 1793593601.441888,
@@ -4364,6 +4385,7 @@
   "_level_ready|MPHASIS.NS|1d|short|2443.9|2482": 1791865303.128486,
   "_level_ready|MPHASIS.NS|1d|short|2542.1|2674.38": 1793072802.908836,
   "_level_ready|MRF.NS|1M|long|122215|118548": 1791517599.357562,
+  "_level_ready|MRF.NS|1d|short|123282|126554": 1793852802.047467,
   "_level_ready|MRF.NS|1w|long|119243|117544": 1793850405.511611,
   "_level_ready|MRF.NS|1w|long|122429|119368": 1791517599.357562,
   "_level_ready|MRPL.NS|1M|short|184.568|196.65": 1793850405.511611,
@@ -5048,8 +5070,8 @@
   "_ready|CAPLIPOINT.NS|1w": 1792641104.661578,
   "_ready|CAPUSD|1d": 1791990399.414519,
   "_ready|CARBORUNIV.NS|1M": 1793850405.511611,
-  "_ready|CARBORUNIV.NS|1d": 1793764604.922956,
-  "_ready|CARBORUNIV.NS|1w": 1793764604.922956,
+  "_ready|CARBORUNIV.NS|1d": 1793852802.047467,
+  "_ready|CARBORUNIV.NS|1w": 1793852802.047467,
   "_ready|CASTROLIND.NS|1d": 1793764008.797417,
   "_ready|CASTROLIND.NS|1w": 1793764008.797417,
   "_ready|CDSL.NS|1d": 1793606799.701028,
@@ -5095,7 +5117,7 @@
   "_ready|DABUR.NS|1M": 1792640801.869234,
   "_ready|DABUR.NS|1d": 1793591209.526473,
   "_ready|DALBHARAT.NS|1M": 1793689602.898729,
-  "_ready|DALBHARAT.NS|1d": 1792555315.989515,
+  "_ready|DALBHARAT.NS|1d": 1793852802.047467,
   "_ready|DALBHARAT.NS|1w": 1793689602.898729,
   "_ready|DATAPATTNS.NS|1M": 1792986387.062464,
   "_ready|DATAPATTNS.NS|1d": 1791776795.761218,
@@ -5103,8 +5125,8 @@
   "_ready|DEEPAKNTR.NS|1d": 1793850405.511611,
   "_ready|DEEPAKNTR.NS|1w": 1793778969.089612,
   "_ready|DELHIVERY.NS|1M": 1792986387.062464,
-  "_ready|DELHIVERY.NS|1d": 1793765780.193854,
-  "_ready|DELHIVERY.NS|1w": 1793764308.62811,
+  "_ready|DELHIVERY.NS|1d": 1793852802.047467,
+  "_ready|DELHIVERY.NS|1w": 1793852802.047467,
   "_ready|DEXE/USDT|30m": 1789389359.59074,
   "_ready|DEXE/USDT|4h": 1788962475.195541,
   "_ready|DIXON.NS|1M": 1792727171.150355,
@@ -5298,6 +5320,7 @@
   "_ready|MOTILALOFS.NS|1w": 1793072802.908836,
   "_ready|MPHASIS.NS|1d": 1793072802.908836,
   "_ready|MRF.NS|1M": 1791517599.357562,
+  "_ready|MRF.NS|1d": 1793852802.047467,
   "_ready|MRF.NS|1w": 1793850405.511611,
   "_ready|MRPL.NS|1M": 1793850405.511611,
   "_ready|MRPL.NS|1d": 1793159201.504703,
