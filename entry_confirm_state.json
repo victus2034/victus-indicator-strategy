@@ -1502,6 +1502,11 @@
     "stage": 3,
     "stopped_out": true
   },
+  "FLUOROCHEM.NS|1d|short|4756.55|4819.9": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "FLUOROCHEM.NS|1w|long|4039.86|3554.82": {
     "reached_entry": false,
     "stopped_out": false
@@ -1511,6 +1516,14 @@
     "stopped_out": false
   },
   "FORTIS.NS|1M|long|717.84|513.875": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "FORTIS.NS|1d|short|820.986|833": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "FORTIS.NS|1w|short|840.729|855.7": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -2344,6 +2357,11 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "LALPATHLAB.NS|1d|long|1935.96|1903.93": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "LALPATHLAB.NS|1d|long|1963.59|1929.05": {
     "reached_entry": true,
     "stage": 3,
@@ -2915,7 +2933,7 @@
   "PATANJALI.NS|1d|short|379.013|399.562": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "PATANJALI.NS|1d|short|395.453|414.507": {
     "reached_entry": true,
@@ -3139,7 +3157,7 @@
   },
   "PREMIERENE.NS|1d|long|879.314|867.571": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "PREMIERENE.NS|1d|short|871.842|885.695": {
@@ -3167,8 +3185,8 @@
     "stopped_out": false
   },
   "PREMIERENE.NS|1w|long|873.3|808.125": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "PRESTIGE.NS|1M|long|1414.81|1359.5": {
@@ -3375,8 +3393,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793864493.73434,
-  "_last_check|nse": 1793864493.73434,
+  "_last_check|crypto": 1793864788.913376,
+  "_last_check|nse": 1793864788.913376,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4021,6 +4039,7 @@
   "_level_ready|FLUOROCHEM.NS|1d|long|4280.43|3922.36": 1792727171.150355,
   "_level_ready|FLUOROCHEM.NS|1d|long|4341.53|4225.4": 1792640801.869234,
   "_level_ready|FLUOROCHEM.NS|1d|short|4557.15|4601": 1793766714.035924,
+  "_level_ready|FLUOROCHEM.NS|1d|short|4756.55|4819.9": 1793864788.913376,
   "_level_ready|FLUOROCHEM.NS|1w|long|4264.52|3554.82": 1793331989.35983,
   "_level_ready|FORCEMOT.NS|1d|long|16526.1|16356": 1792727505.027921,
   "_level_ready|FORCEMOT.NS|1d|long|16526.6|16356": 1793074276.581891,
@@ -5250,7 +5269,7 @@
   "_ready|FINCABLES.NS|1M": 1793677604.261117,
   "_ready|FINCABLES.NS|1d": 1793850405.511611,
   "_ready|FINCABLES.NS|1w": 1793850405.511611,
-  "_ready|FLUOROCHEM.NS|1d": 1793766714.035924,
+  "_ready|FLUOROCHEM.NS|1d": 1793864788.913376,
   "_ready|FLUOROCHEM.NS|1w": 1793331989.35983,
   "_ready|FORCEMOT.NS|1d": 1793159201.504703,
   "_ready|FORTIS.NS|1M": 1792727505.027921,
