@@ -983,6 +983,7 @@
   },
   "CHOLAHLDNG.NS|1d|short|1500.77|1525.6": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CHOLAHLDNG.NS|1w|long|1226.63|1195": {
@@ -1103,8 +1104,8 @@
     "stopped_out": true
   },
   "CRAFTSMAN.NS|1d|long|10268.7|10158": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "CRAFTSMAN.NS|1w|long|10112.9|8185.09": {
@@ -1881,6 +1882,7 @@
   },
   "IDFCFIRSTB.NS|1w|long|75.4215|67.9331": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "IFCI.NS|1M|long|60.442|58.4813": {
@@ -2000,7 +2002,7 @@
   },
   "IRCTC.NS|1d|short|455.25|460.988": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "IRCTC.NS|1d|short|464.7|470.887": {
@@ -2022,6 +2024,7 @@
   },
   "ITI.NS|1d|short|249.891|265.715": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ITI.NS|1w|long|238.683|236.15": {
@@ -2030,6 +2033,7 @@
   },
   "ITI.NS|1w|short|249.891|256.3": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ITI.NS|1w|short|262.55|272.1": {
@@ -2280,7 +2284,7 @@
   "KIMS.NS|1w|short|724.053|736.25": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "KIMS.NS|1w|short|746.377|760": {
     "reached_entry": false,
@@ -2460,16 +2464,6 @@
   "MAHABANK.NS|1M|long|76.65|58.4062": {
     "reached_entry": false,
     "stopped_out": false
-  },
-  "MAHABANK.NS|1d|short|82.46|83.1": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
-  "MAHABANK.NS|1d|short|82.4918|84.5172": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
   },
   "MAHABANK.NS|1w|long|70.875|58.4062": {
     "reached_entry": false,
@@ -2791,7 +2785,7 @@
   },
   "NH.NS|1d|short|1916|1932.9": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "NH.NS|1w|long|1660.59|1483.19": {
@@ -2961,11 +2955,6 @@
   },
   "PATANJALI.NS|1w|long|331.989|328.2": {
     "reached_entry": false,
-    "stopped_out": false
-  },
-  "PERSISTENT.NS|1d|short|6047.48|6400": {
-    "reached_entry": true,
-    "stage": 2,
     "stopped_out": false
   },
   "PERSISTENT.NS|1d|short|6065.38|6400": {
@@ -3433,8 +3422,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793937978.189416,
-  "_last_check|nse": 1793937978.189416,
+  "_last_check|crypto": 1793938311.903426,
+  "_last_check|nse": 1793938311.903426,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3900,6 +3889,7 @@
   "_level_ready|CHOLAHLDNG.NS|1d|short|1374.62|1413.7": 1793591507.862065,
   "_level_ready|CHOLAHLDNG.NS|1d|short|1391.58|1414.2": 1793764008.797417,
   "_level_ready|CHOLAHLDNG.NS|1d|short|1405.27|1447.42": 1793677604.261117,
+  "_level_ready|CHOLAHLDNG.NS|1d|short|1500.77|1525.6": 1793938311.903426,
   "_level_ready|CHOLAHLDNG.NS|1w|short|1494.64|1516.7": 1793937726.224563,
   "_level_ready|COCHINSHIP.NS|1M|long|1105.66|1027.59": 1793092890.154464,
   "_level_ready|COCHINSHIP.NS|1d|long|1190.44|1180.2": 1792565477.881975,
@@ -4263,7 +4253,7 @@
   "_level_ready|IDBI.NS|1d|short|80.2336|99.8813": 1792727171.150355,
   "_level_ready|IDBI.NS|1w|short|80.5158|100.452": 1793850405.511611,
   "_level_ready|IDFCFIRSTB.NS|1w|long|72.2685|67.9331": 1793591209.526473,
-  "_level_ready|IDFCFIRSTB.NS|1w|long|75.4215|67.9331": 1792561608.307808,
+  "_level_ready|IDFCFIRSTB.NS|1w|long|75.4215|67.9331": 1793938311.903426,
   "_level_ready|IFCI.NS|1M|long|60.442|58.4813": 1792727171.150355,
   "_level_ready|IFCI.NS|1w|long|57.5913|55": 1793677604.261117,
   "_level_ready|IFCI.NS|1w|long|58.4889|57.87": 1793936864.300001,
@@ -4308,11 +4298,11 @@
   "_level_ready|ITCHOTELS.NS|1d|short|175.029|176.078": 1793073108.145997,
   "_level_ready|ITCHOTELS.NS|1w|short|165.613|167.79": 1793245588.963685,
   "_level_ready|ITI.NS|1d|long|237.302|233.742": 1791518192.370228,
-  "_level_ready|ITI.NS|1d|short|249.891|265.715": 1793592990.798681,
+  "_level_ready|ITI.NS|1d|short|249.891|265.715": 1793938311.903426,
   "_level_ready|ITI.NS|1w|long|238.567|232.603": 1791517599.357562,
   "_level_ready|ITI.NS|1w|long|238.567|236.5": 1791863195.148749,
   "_level_ready|ITI.NS|1w|long|238.683|236.15": 1792554386.505792,
-  "_level_ready|ITI.NS|1w|short|249.891|256.3": 1793592990.798681,
+  "_level_ready|ITI.NS|1w|short|249.891|256.3": 1793938311.903426,
   "_level_ready|JINDALSAW.NS|1M|long|228.004|145.752": 1793347903.150723,
   "_level_ready|JINDALSAW.NS|1d|long|268.389|264.363": 1791517890.620179,
   "_level_ready|JINDALSAW.NS|1d|long|270.206|266.153": 1791532886.829545,
@@ -5273,7 +5263,7 @@
   "_ready|CHENNPETRO.NS|1d": 1793869594.600093,
   "_ready|CHOICEIN.NS|1d": 1793850405.511611,
   "_ready|CHOLAHLDNG.NS|1M": 1792730195.441606,
-  "_ready|CHOLAHLDNG.NS|1d": 1793764008.797417,
+  "_ready|CHOLAHLDNG.NS|1d": 1793938311.903426,
   "_ready|CHOLAHLDNG.NS|1w": 1793937726.224563,
   "_ready|CL/USDT|30m": 1789488077.641078,
   "_ready|CL/USDT|4h": 1788921063.531614,
@@ -5414,7 +5404,7 @@
   "_ready|IDBI.NS|1M": 1793850405.511611,
   "_ready|IDBI.NS|1d": 1792727171.150355,
   "_ready|IDBI.NS|1w": 1793850405.511611,
-  "_ready|IDFCFIRSTB.NS|1w": 1793591209.526473,
+  "_ready|IDFCFIRSTB.NS|1w": 1793938311.903426,
   "_ready|IFCI.NS|1M": 1792727171.150355,
   "_ready|IFCI.NS|1w": 1793936864.300001,
   "_ready|IIFL.NS|1M": 1793677604.261117,
@@ -5431,8 +5421,8 @@
   "_ready|IRCTC.NS|1d": 1793936864.300001,
   "_ready|ITCHOTELS.NS|1d": 1793764008.797417,
   "_ready|ITCHOTELS.NS|1w": 1793245588.963685,
-  "_ready|ITI.NS|1d": 1793592990.798681,
-  "_ready|ITI.NS|1w": 1793592990.798681,
+  "_ready|ITI.NS|1d": 1793938311.903426,
+  "_ready|ITI.NS|1w": 1793938311.903426,
   "_ready|JINDALSAW.NS|1M": 1793347903.150723,
   "_ready|JINDALSAW.NS|1d": 1793936864.300001,
   "_ready|JINDALSAW.NS|1w": 1793677604.261117,
