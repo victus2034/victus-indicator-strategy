@@ -69,8 +69,8 @@
     "stopped_out": true
   },
   "AADHARHFC.NS|1M|long|419.813|413.847": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "AADHARHFC.NS|1w|short|473.438|520.594": {
@@ -120,7 +120,7 @@
   "ABSLAMC.NS|1w|long|883.746|869.531": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "ABSLAMC.NS|1w|long|923.844|906.3": {
     "reached_entry": true,
@@ -541,14 +541,14 @@
     "stopped_out": true
   },
   "BAJAJHFL.NS|1d|long|80.2625|79.2744": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "BAJAJHFL.NS|1d|long|81.115|80.0494": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BAJAJHFL.NS|1d|short|80.6395|81.954": {
     "reached_entry": true,
@@ -1089,6 +1089,7 @@
   },
   "COROMANDEL.NS|1d|long|1793.49|1760.49": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "COROMANDEL.NS|1d|short|1817.06|1864.08": {
@@ -1155,7 +1156,7 @@
   },
   "CREDITACC.NS|1M|long|1147.91|1026.39": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "CREDITACC.NS|1w|short|1325.39|1469.19": {
@@ -2469,7 +2470,8 @@
     "stopped_out": false
   },
   "LINDEINDIA.NS|1d|short|6342.98|6569.35": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "LTF.NS|1M|long|223.43|194.637": {
@@ -3030,11 +3032,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "PERSISTENT.NS|1d|short|6065.38|6400": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": false
-  },
   "PERSISTENT.NS|1w|short|5891.32|5963.92": {
     "reached_entry": true,
     "stage": 3,
@@ -3354,6 +3351,10 @@
     "stage": 3,
     "stopped_out": true
   },
+  "RRKABEL.NS|1M|long|1812.96|1520.25": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "RRKABEL.NS|1M|long|2025.84|1754.42": {
     "reached_entry": true,
     "stage": 3,
@@ -3498,8 +3499,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793947000.846099,
-  "_last_check|nse": 1793947000.846099,
+  "_last_check|crypto": 1793947306.755783,
+  "_last_check|nse": 1793947306.755783,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3986,6 +3987,7 @@
   "_level_ready|COLPAL.NS|1w|long|1650.56|1631": 1793943106.438875,
   "_level_ready|CONCOR.NS|1w|long|435.084|424.207": 1791517890.620179,
   "_level_ready|COROMANDEL.NS|1d|long|1653.05|1597": 1793346102.421366,
+  "_level_ready|COROMANDEL.NS|1d|long|1793.49|1760.49": 1793947306.755783,
   "_level_ready|COROMANDEL.NS|1d|short|1776.49|1904.65": 1793075770.667926,
   "_level_ready|COROMANDEL.NS|1d|short|1817.06|1864.08": 1793764604.922956,
   "_level_ready|COROMANDEL.NS|1d|short|1853.94|1904.65": 1793850405.511611,
@@ -4505,7 +4507,7 @@
   "_level_ready|LINDEINDIA.NS|1d|long|6014.7|5924.48": 1791521790.718862,
   "_level_ready|LINDEINDIA.NS|1d|long|6014.7|5950": 1792122403.256656,
   "_level_ready|LINDEINDIA.NS|1d|long|6056.13|5965.28": 1791517599.357562,
-  "_level_ready|LINDEINDIA.NS|1d|short|6342.98|6569.35": 1793774503.430527,
+  "_level_ready|LINDEINDIA.NS|1d|short|6342.98|6569.35": 1793947306.755783,
   "_level_ready|LINKUSD|1d|long|12.0646|11.8836": 1791481891.112203,
   "_level_ready|LINKUSD|1d|long|12.4615|12.349": 1791986795.176001,
   "_level_ready|LINKUSD|1d|long|12.9292|12.2203": 1791816108.639832,
@@ -5359,7 +5361,7 @@
   "_ready|COLPAL.NS|1d": 1792640801.869234,
   "_ready|COLPAL.NS|1w": 1793943106.438875,
   "_ready|CONCOR.NS|1w": 1791517890.620179,
-  "_ready|COROMANDEL.NS|1d": 1793936864.300001,
+  "_ready|COROMANDEL.NS|1d": 1793947306.755783,
   "_ready|COROMANDEL.NS|1w": 1793869594.600093,
   "_ready|COTI/USDT|30m": 1789452970.13835,
   "_ready|CPPLUS.NS|1d": 1793781403.105803,
@@ -5553,7 +5555,7 @@
   "_ready|LICHSGFIN.NS|1d": 1793939523.57151,
   "_ready|LICHSGFIN.NS|1w": 1792986985.751506,
   "_ready|LINDEINDIA.NS|1M": 1793591209.526473,
-  "_ready|LINDEINDIA.NS|1d": 1793774503.430527,
+  "_ready|LINDEINDIA.NS|1d": 1793947306.755783,
   "_ready|LINKUSD|1d": 1791986795.176001,
   "_ready|LINKUSD|30m": 1791427299.04642,
   "_ready|LTCUSD|1d": 1791945705.675274,
