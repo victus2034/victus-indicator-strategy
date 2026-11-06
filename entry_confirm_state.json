@@ -369,11 +369,13 @@
     "stopped_out": false
   },
   "APARINDS.NS|1M|long|14179.6|8982.1": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "APARINDS.NS|1w|long|14179.6|8982.1": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "APLAPOLLO.NS|1w|short|2046.97|2124.71": {
@@ -712,8 +714,8 @@
     "stopped_out": false
   },
   "BIOCON.NS|1d|short|362.175|379.878": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "BIOCON.NS|1w|long|342.384|338.9": {
@@ -721,8 +723,8 @@
     "stopped_out": false
   },
   "BIOCON.NS|1w|short|362.175|370.7": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "BLUESTARCO.NS|1d|long|1564.69|1534": {
@@ -1121,10 +1123,11 @@
   "CRAFTSMAN.NS|1d|long|10268.7|10158": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "CRAFTSMAN.NS|1w|long|10112.9|8185.09": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CREDITACC.NS|1M|long|1044.25|951.95": {
@@ -2983,7 +2986,7 @@
   },
   "PERSISTENT.NS|1d|short|6065.38|6400": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "PERSISTENT.NS|1w|short|5891.32|5963.92": {
@@ -3073,6 +3076,7 @@
   },
   "PNBHOUSING.NS|1d|short|1095.06|1112.2": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PNBHOUSING.NS|1d|short|1108.77|1124.66": {
@@ -3446,8 +3450,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793939523.57151,
-  "_last_check|nse": 1793939523.57151,
+  "_last_check|crypto": 1793939791.778061,
+  "_last_check|nse": 1793939791.778061,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3596,11 +3600,11 @@
   "_level_ready|ANTHEM.NS|1w|short|870.74|895.5": 1793764008.797417,
   "_level_ready|ANTHEM.NS|1w|short|890.16|916.862": 1793784111.577175,
   "_level_ready|ANTHEM.NS|1w|short|911.522|928.5": 1793936864.300001,
-  "_level_ready|APARINDS.NS|1M|long|14179.6|8982.1": 1792727505.027921,
+  "_level_ready|APARINDS.NS|1M|long|14179.6|8982.1": 1793939791.778061,
   "_level_ready|APARINDS.NS|1d|long|15131.6|14820": 1793159201.504703,
   "_level_ready|APARINDS.NS|1d|short|15656.1|16408": 1793764008.797417,
   "_level_ready|APARINDS.NS|1d|short|16257.6|16954.8": 1793332287.548648,
-  "_level_ready|APARINDS.NS|1w|long|14179.6|8982.1": 1792727505.027921,
+  "_level_ready|APARINDS.NS|1w|long|14179.6|8982.1": 1793939791.778061,
   "_level_ready|APLAPOLLO.NS|1d|short|2046.97|2124.71": 1792986700.301796,
   "_level_ready|APLAPOLLO.NS|1w|short|2046.97|2124.71": 1792986700.301796,
   "_level_ready|APLAPOLLO.NS|1w|short|2109.16|2124.71": 1793072802.908836,
@@ -3947,7 +3951,7 @@
   "_level_ready|CRAFTSMAN.NS|1d|long|10268.7|10158": 1793937726.224563,
   "_level_ready|CRAFTSMAN.NS|1d|long|10629.4|10241.4": 1793851900.588262,
   "_level_ready|CRAFTSMAN.NS|1d|long|10964.2|9906.59": 1793159201.504703,
-  "_level_ready|CRAFTSMAN.NS|1w|long|10112.9|8185.09": 1793591209.526473,
+  "_level_ready|CRAFTSMAN.NS|1w|long|10112.9|8185.09": 1793939791.778061,
   "_level_ready|CRAFTSMAN.NS|1w|long|10112.9|9838.25": 1791517599.357562,
   "_level_ready|CREDITACC.NS|1M|long|1044.25|951.95": 1793245588.963685,
   "_level_ready|CREDITACC.NS|1M|long|1050.69|1026.39": 1793768204.512892,
@@ -4774,6 +4778,7 @@
   "_level_ready|PNBHOUSING.NS|1d|long|1082.48|1073.4": 1793334680.412542,
   "_level_ready|PNBHOUSING.NS|1d|long|1119.6|1115.21": 1792651901.329247,
   "_level_ready|PNBHOUSING.NS|1d|long|1137.13|1115.21": 1792575110.80889,
+  "_level_ready|PNBHOUSING.NS|1d|short|1095.06|1112.2": 1793939791.778061,
   "_level_ready|PNBHOUSING.NS|1d|short|1108.77|1124.66": 1793866893.09944,
   "_level_ready|PNBHOUSING.NS|1d|short|1113.52|1136.71": 1793165197.202933,
   "_level_ready|PNBHOUSING.NS|1w|long|1056.43|884.35": 1793764008.797417,
@@ -5188,9 +5193,9 @@
   "_ready|ANGELONE.NS|1w": 1793677604.261117,
   "_ready|ANTHEM.NS|1d": 1793936864.300001,
   "_ready|ANTHEM.NS|1w": 1793936864.300001,
-  "_ready|APARINDS.NS|1M": 1792727505.027921,
+  "_ready|APARINDS.NS|1M": 1793939791.778061,
   "_ready|APARINDS.NS|1d": 1793764008.797417,
-  "_ready|APARINDS.NS|1w": 1792727505.027921,
+  "_ready|APARINDS.NS|1w": 1793939791.778061,
   "_ready|APLAPOLLO.NS|1d": 1792986700.301796,
   "_ready|APLAPOLLO.NS|1w": 1793072802.908836,
   "_ready|APOLLOTYRE.NS|1M": 1793168791.057776,
@@ -5306,7 +5311,7 @@
   "_ready|COTI/USDT|30m": 1789452970.13835,
   "_ready|CPPLUS.NS|1d": 1793781403.105803,
   "_ready|CRAFTSMAN.NS|1d": 1793937726.224563,
-  "_ready|CRAFTSMAN.NS|1w": 1793591209.526473,
+  "_ready|CRAFTSMAN.NS|1w": 1793939791.778061,
   "_ready|CREDITACC.NS|1M": 1793850405.511611,
   "_ready|CREDITACC.NS|1d": 1792727171.150355,
   "_ready|CREDITACC.NS|1w": 1791795395.666723,
@@ -5604,7 +5609,7 @@
   "_ready|PIRAMALFIN.NS|1d": 1793852212.98242,
   "_ready|PIRAMALFIN.NS|1w": 1793865371.934564,
   "_ready|PNBHOUSING.NS|1M": 1793764008.797417,
-  "_ready|PNBHOUSING.NS|1d": 1793866893.09944,
+  "_ready|PNBHOUSING.NS|1d": 1793939791.778061,
   "_ready|PNBHOUSING.NS|1w": 1793764008.797417,
   "_ready|POLICYBZR.NS|1d": 1793771507.069881,
   "_ready|POLICYBZR.NS|1w": 1793591209.526473,
