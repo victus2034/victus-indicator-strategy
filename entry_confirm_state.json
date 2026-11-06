@@ -134,8 +134,8 @@
     "stopped_out": false
   },
   "ACC.NS|1d|short|1232.16|1279.55": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ACMESOLAR.NS|1M|long|381.36|283.712": {
@@ -1785,7 +1785,7 @@
   "HAVELLS.NS|1w|short|1106.57|1121": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "HAVELLS.NS|1w|short|1141.31|1154": {
     "reached_entry": false,
@@ -3147,7 +3147,8 @@
     "stopped_out": false
   },
   "PIRAMALFIN.NS|1w|short|2141.03|2216": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "PNBHOUSING.NS|1M|long|1047.65|880.194": {
@@ -3276,13 +3277,13 @@
     "stopped_out": true
   },
   "PREMIERENE.NS|1d|short|891.887|904": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "PREMIERENE.NS|1d|short|894.659|909.598": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "PREMIERENE.NS|1w|long|821.16|808.125": {
@@ -3544,8 +3545,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1793957202.848501,
-  "_last_check|nse": 1793957202.848501,
+  "_last_check|crypto": 1793957517.761415,
+  "_last_check|nse": 1793957517.761415,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4889,6 +4890,7 @@
   "_level_ready|PIRAMALFIN.NS|1w|long|1937.93|1840.82": 1791519091.189259,
   "_level_ready|PIRAMALFIN.NS|1w|short|2026.54|2156.02": 1793851315.776468,
   "_level_ready|PIRAMALFIN.NS|1w|short|2081.06|2156.02": 1793865371.934564,
+  "_level_ready|PIRAMALFIN.NS|1w|short|2141.03|2216": 1793957517.761415,
   "_level_ready|PNBHOUSING.NS|1M|long|1047.65|880.194": 1793685978.359785,
   "_level_ready|PNBHOUSING.NS|1M|long|1056.43|1040": 1793764008.797417,
   "_level_ready|PNBHOUSING.NS|1d|long|1082.48|1073.4": 1793334680.412542,
@@ -5733,7 +5735,7 @@
   "_ready|PHOENIXLTD.NS|1w": 1792733510.483129,
   "_ready|PINELABS.NS|1d": 1792565477.881975,
   "_ready|PIRAMALFIN.NS|1d": 1793852212.98242,
-  "_ready|PIRAMALFIN.NS|1w": 1793865371.934564,
+  "_ready|PIRAMALFIN.NS|1w": 1793957517.761415,
   "_ready|PNBHOUSING.NS|1M": 1793764008.797417,
   "_ready|PNBHOUSING.NS|1d": 1793939791.778061,
   "_ready|PNBHOUSING.NS|1w": 1793764008.797417,
