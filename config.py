@@ -606,3 +606,24 @@ TRENDLINE_STOP_MIN_PCT = 0.75
 # clock stops overnight - so 1M waits five months.
 FIB_TL_ENTRY_WAIT_BARS = 5
 FIB_TL_MAX_HOLD_BARS = 20
+
+
+# CoinDCX demo account (lakky, 2026-11-07: "i want to trade 1d fib ... for next week
+# do a demo for testing and after that go with real money"). coindcx_demo.py trades
+# every 1D crypto fib alert as a pretend CoinDCX order - no real order, no money -
+# sized like the journal's Demo account in lakky's screenshot: start 1,000, fixed
+# risk 50 a trade, leverage capped at 10x, exit at 1R (same stop, no breakeven).
+COINDCX_DEMO_ENABLED = env_flag("VICTUS_COINDCX_DEMO", True)
+COINDCX_DEMO_KINDS = ("fib",)
+COINDCX_DEMO_TIMEFRAMES = ("1d",)
+COINDCX_DEMO_LEVELS = tuple(
+    level.strip() for level in os.getenv("VICTUS_COINDCX_DEMO_LEVELS", "L1,L2,L3,L4").split(",") if level.strip())
+COINDCX_DEMO_START_BALANCE = env_float("VICTUS_COINDCX_DEMO_START_BALANCE", 1000.0)
+COINDCX_DEMO_RISK = env_float("VICTUS_COINDCX_DEMO_RISK", 50.0)
+COINDCX_DEMO_MAX_LEVERAGE = env_float("VICTUS_COINDCX_DEMO_MAX_LEVERAGE", 10.0)
+# A real account must hold every working order's margin (position / max leverage);
+# one that does not fit is skipped. Off = take every alert, like the journal's demo.
+COINDCX_DEMO_MARGIN_LIMIT = env_flag("VICTUS_COINDCX_DEMO_MARGIN_LIMIT", True)
+# Round trip, % of the position. Delta's crypto number (daily_backtest_summary,
+# CRYPTO_ROUND_TRIP_COST_PCT) until CoinDCX's own fees are checked.
+COINDCX_DEMO_ROUND_TRIP_COST_PCT = env_float("VICTUS_COINDCX_DEMO_COST_PCT", 0.0826)

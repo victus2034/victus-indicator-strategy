@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       parts:
-        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm tl-break-audit tl-sl fib-sl tl-ex tl-sl-long tl-mkt-trend fib-start bitunix-depth bnb-fib fib-touched fib-entry tl-entry doge-fib fib-kill coindcx magic-fib zone-htf volume qnt-late band-wick risk-warn scores-audit realert trail-fibtl fib-levels fib-levels-apply fib-rearm fib-l3l4 fib-levels-all ec-audit ec-replay early-band discord-audit discord-trace fib-level-sl fib-sl-trace tl-broken tl-broken-long fibtl-rebuild fibtl-rebuild-apply)"
+        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm tl-break-audit tl-sl fib-sl tl-ex tl-sl-long tl-mkt-trend fib-start bitunix-depth bnb-fib fib-touched fib-entry tl-entry doge-fib fib-kill coindcx magic-fib zone-htf volume qnt-late band-wick risk-warn scores-audit realert trail-fibtl fib-levels fib-levels-apply fib-rearm fib-l3l4 fib-levels-all ec-audit ec-replay early-band discord-audit discord-trace fib-level-sl fib-sl-trace tl-broken tl-broken-long fibtl-rebuild fibtl-rebuild-apply coindcx-demo)"
         default: "zones-30m zones-4h fib"
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr, xstock, xstock-zones-30m, xstock-zones-4h, xstock-fib, live-audit, uni-trace, bitunix-page, trend-all, tl-confirm, tl-break-audit, tl-sl, fib-sl, tl-ex, tl-sl-long, tl-mkt-trend, fib-start, bitunix-depth, bnb-fib, fib-touched, fib-entry, tl-entry, doge-fib, fib-kill, coindcx, magic-fib, zone-htf, volume, qnt-late, band-wick, risk-warn, scores-audit, realert, trail-fibtl, fib-rearm, fib-l3l4, fib-levels-all, ec-audit, ec-replay, early-band, discord-audit, discord-trace, fib-level-sl, fib-sl-trace, tl-broken, tl-broken-long]
+        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr, xstock, xstock-zones-30m, xstock-zones-4h, xstock-fib, live-audit, uni-trace, bitunix-page, trend-all, tl-confirm, tl-break-audit, tl-sl, fib-sl, tl-ex, tl-sl-long, tl-mkt-trend, fib-start, bitunix-depth, bnb-fib, fib-touched, fib-entry, tl-entry, doge-fib, fib-kill, coindcx, magic-fib, zone-htf, volume, qnt-late, band-wick, risk-warn, scores-audit, realert, trail-fibtl, fib-rearm, fib-l3l4, fib-levels-all, ec-audit, ec-replay, early-band, discord-audit, discord-trace, fib-level-sl, fib-sl-trace, tl-broken, tl-broken-long, coindcx-demo]
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
@@ -123,6 +123,12 @@ jobs:
                        mkdir -p /tmp/rt
                        git archive FETCH_HEAD | tar -x -C /tmp/rt
                        python research/discord_alert_audit.py --state /tmp/rt --git-dir . ;;
+            coindcx-demo) git fetch --depth 1 origin scanner-runtime-state
+                       git show FETCH_HEAD:fib_trendline_alert_records.jsonl > fib_trendline_alert_records.jsonl
+                       mkdir -p research/out/coindcx_demo
+                       python coindcx_demo.py --replay-since 2026-10-07 --out research/out/coindcx_demo/state_margin.json > research/out/coindcx_demo/replay_margin_limit.txt
+                       python coindcx_demo.py --replay-since 2026-10-07 --no-margin-limit --out research/out/coindcx_demo/state_no_limit.json > research/out/coindcx_demo/replay_no_limit.txt
+                       head -3 research/out/coindcx_demo/replay_*.txt ;;
             discord-trace) git fetch --shallow-since=2026-10-19 origin scanner-runtime-state
                        python research/discord_alert_trace.py ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log

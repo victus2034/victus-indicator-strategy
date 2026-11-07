@@ -95,7 +95,8 @@ jobs:
             crypto_alert_records.jsonl \
             fib_trendline_alert_records.jsonl \
             entry_confirm_state.json \
-            paper_trading_state.json
+            paper_trading_state.json \
+            coindcx_demo_state.json
 
       - name: Send entry confirmation pings
         env:
@@ -162,6 +163,21 @@ jobs:
             --market crypto \
             "${EXTRA_ARGS[@]}"
 
+      # CoinDCX demo account (lakky, 2026-11-07): 1D crypto fib alerts traded as
+      # pretend orders - no real order, no money. Last, so it can never delay a ping.
+      - name: Advance CoinDCX demo
+        env:
+          DISCORD_COINDCX_DEMO_WEBHOOK_URL: ${{ secrets.DISCORD_COINDCX_DEMO_WEBHOOK_URL }}
+          # Used when the demo's own channel is not set up.
+          DISCORD_ENTRY_CONFIRM_CRYPTO_WEBHOOK_URL: ${{ secrets.DISCORD_ENTRY_CONFIRM_CRYPTO_WEBHOOK_URL }}
+          INPUT_DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: |
+          EXTRA_ARGS=()
+          if [ "$INPUT_DRY_RUN" = "true" ]; then
+            EXTRA_ARGS+=(--dry-run)
+          fi
+          python coindcx_demo.py --tick "${EXTRA_ARGS[@]}"
+
       # always(): alerts already sent are recorded even if a later step failed or
       # timed out. Never after a failed restore - there is nothing safe to save.
       - name: Persist runtime state
@@ -169,7 +185,8 @@ jobs:
         run: |
           bash .github/scripts/persist_runtime_state.sh \
             entry_confirm_state.json \
-            paper_trading_state.json
+            paper_trading_state.json \
+            coindcx_demo_state.json
 
       - name: Notify on failure
         if: failure()
