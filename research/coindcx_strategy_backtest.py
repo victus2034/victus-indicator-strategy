@@ -151,6 +151,8 @@ def demo(rows):
     """journal demoRun: alerts in the order they fired, fixed risk, leverage capped."""
     bal, peak, low, dd = START, START, START, 0.0
     for t in sorted(rows, key=lambda t: t["alert_ts"]):
+        if bal <= START * 1e-6:
+            break                            # blown: the journal's demo stops here too
         risk = min(RISK, bal)
         lev = risk / (t["risk_pct"] / 100) / bal
         if lev > LEVERAGE:
