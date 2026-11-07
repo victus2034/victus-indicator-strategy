@@ -193,7 +193,8 @@ jobs:
           git add research/out/fib_levels
           git commit -m "Fib level backfill report [skip ci]" || exit 0
           for i in 1 2 3 4 5; do git pull --rebase origin ${GITHUB_REF_NAME} && git push origin HEAD:${GITHUB_REF_NAME} && break; sleep $((i*5)); done
-  # Fib + trendline backtest rebuilt under today's rules, Sep 1 to now (lakky, 2026-10-27;
+  # Fib + trendline backtest rebuilt under today's rules, Jun 1 to now (lakky, 2026-10-27;
+  # from Jun 1 instead of Sep 1 since 2026-11-07, for more history;
   # research/fibtl_rebuild.py). "-apply" also writes three new fibtl_rebuild_* files to
   # scanner-runtime-state for the journal. No live file changes.
   fibtl-rebuild:
@@ -216,7 +217,7 @@ jobs:
         run: |
           git fetch --depth 1 origin scanner-runtime-state
           mkdir -p /tmp/rt && git archive FETCH_HEAD | tar -x -C /tmp/rt
-          PYTHONPATH=research python research/fibtl_rebuild.py --since 2026-09-01 --state /tmp/rt 2>&1 | tee research/out/fibtl_rebuild_run.log
+          PYTHONPATH=research python research/fibtl_rebuild.py --since 2026-06-01 --state /tmp/rt 2>&1 | tee research/out/fibtl_rebuild_run.log
           test -s research/out/fibtl_rebuild/fibtl_rebuild_meta.json
           cat research/out/fibtl_rebuild/SUMMARY.md >> "$GITHUB_STEP_SUMMARY"
       - name: Persist runtime state

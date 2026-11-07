@@ -4,7 +4,8 @@ Same idea as research/zone_rebuild.py: the journal's Fib and Trendline tabs read
 the scanner's stored alerts, graded under the rules of their day (L3-only fibs
 before 20 Oct, 0.75% band on 1W/1M before 21 Oct, older fib kill and trendline
 rules, coins since dropped). This replays every fib and trendline touch alert
-today's scanner would have sent, Sep 1 to now, on today's watchlists, with
+today's scanner would have sent, Jun 1 to now (Sep 1 until 2026-11-07, when lakky
+asked for more history), on today's watchlists, with
 fib_trendline_backtest.replay (the history backtest the live rules are
 checked against):
 
@@ -31,7 +32,7 @@ fibtl_rebuild_results.json (like fib_trendline_results.json),
 fibtl_rebuild_meta.json and SUMMARY.md. The workflow's -apply part copies the
 three data files to scanner-runtime-state (new files; no live file changes).
 
-    PYTHONPATH=research python research/fibtl_rebuild.py --since 2026-09-01 --state /tmp/rt
+    PYTHONPATH=research python research/fibtl_rebuild.py --since 2026-06-01 --state /tmp/rt
 """
 from __future__ import annotations
 
@@ -230,7 +231,7 @@ def live_match(state: Path, recs, since_live: float):
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--since", default="2026-09-01")
+    parser.add_argument("--since", default="2026-06-01")
     parser.add_argument("--state", default="")
     parser.add_argument("--limit", type=int, default=0)
     args = parser.parse_args()

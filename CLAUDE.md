@@ -321,6 +321,9 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   types read it. Backtest Jun 1 - Oct 31 (`research/tl_broken_alert_backtest.py`, parts `tl-broken` /
   `tl-broken-long`): crypto 1D +0.17R / +2.63% a trade, crypto 4H -0.03R, NSE ~-0.04R. Sep 1 - Oct 31 history for
   the journal: `research/fibtl_rebuild.py` adds the break trades (key `...|br`), part `fibtl-rebuild-apply`.
+- **Journal history from 1 Jun (lakky, 2026-11-07: "add more data to backtest it more precisely").** `fibtl_rebuild.py`
+  (part `fibtl-rebuild-apply`) replays from 2026-06-01 instead of 2026-09-01, ~2.5x the alerts; June / July CPI, PPI
+  and FOMC were added to `zone_rebuild.NEWS_TS` so those fills are left out like the rest. Zones stay from Sep 1.
 - **CoinDCX demo account (lakky, 2026-11-07: "trade 1d fib ... next week do a demo ... after that go with real money").**
   `coindcx_demo.py` (step in `entry_confirm.yml`) turns every 1D crypto fib alert (L1-L4) into a pretend CoinDCX
   order - NO real order, no API key in the repo. Limit at entry, the alert's SL, TP 1R, no BE; sized like the journal's
