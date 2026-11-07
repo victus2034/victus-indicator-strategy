@@ -21,6 +21,7 @@ import urllib.request
 BASE = "https://api.india.delta.exchange"
 OUT = "research/out/demo_sl_audit"
 SAMPLE = "research/in/demo_sl_audit_sample.json"
+SYMBOLS = "research/in/demo_sl_audit_symbols.json"
 # The journal's tgtOne: the finest resolution that covers 2 x 20 candles of the
 # alert's timeframe in at most 1900 candles, from one candle before the alert.
 RES = [(1, "1m"), (5, "5m"), (15, "15m"), (60, "1h"), (240, "4h"), (1440, "1d")]
@@ -46,8 +47,40 @@ def get(path: str, params: dict) -> dict:
     raise RuntimeError(f"{url}: {err}")
 
 
+def coindcx() -> None:
+    """CoinDCX futures specs (min order, steps, max leverage) for the bases alerts used."""
+    want = {s.removesuffix("USD") for s in json.load(open(SYMBOLS))}
+    url = "https://api.coindcx.com/exchange/v1/derivatives/futures/data/active_instruments"
+    req = urllib.request.Request(url, headers={"User-Agent": "victus-research"})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        pairs = json.loads(r.read().decode())
+    out, raw = {}, {}
+    for pair in pairs:
+        base = str(pair).removeprefix("B-").split("_")[0]
+        if base not in want:
+            continue
+        q = urllib.parse.urlencode({"pair": pair, "margin_currency_short_name": "USDT"})
+        try:
+            req = urllib.request.Request(url.replace("active_instruments", "instrument") + "?" + q, headers={"User-Agent": "victus-research"})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                j = json.loads(r.read().decode())
+        except Exception as e:  # noqa: BLE001
+            j = {"error": str(e)}
+        if base in ("BTC", "ETH", "DOGE"):
+            raw[pair] = j
+        ins = j.get("instrument") if isinstance(j, dict) else None
+        out[base] = ins if isinstance(ins, dict) else j
+        time.sleep(0.1)
+    with open(f"{OUT}/coindcx_specs.json", "w") as f:
+        json.dump({"fetched_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "instruments": out, "raw_sample": raw}, f, indent=1, sort_keys=True)
+    print(f"CoinDCX: {len(out)} of {len(want)} bases listed")
+
+
 def main() -> None:
     os.makedirs(OUT, exist_ok=True)
+    if os.environ.get("DEMO_SL_PART") == "coindcx":
+        coindcx()
+        return
     prods = get("/v2/products", {"contract_types": "perpetual_futures", "page_size": 1000}).get("result") or []
     raw = {p["symbol"]: p for p in prods if p.get("symbol") in ("BTCUSD", "ETHUSD", "DOGEUSD", "XAUTUSD", "TSLAXUSD")}
     with open(f"{OUT}/products_raw_sample.json", "w") as f:
