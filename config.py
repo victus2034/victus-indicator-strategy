@@ -612,15 +612,25 @@ FIB_TL_MAX_HOLD_BARS = 20
 # do a demo for testing and after that go with real money"). coindcx_demo.py trades
 # every 1D crypto fib alert as a pretend CoinDCX order - no real order, no money -
 # sized like the journal's Demo account in lakky's screenshot: start 1,000, fixed
-# risk 50 a trade, leverage capped at 10x, exit at 1R (same stop, no breakeven).
+# risk 75 a trade, leverage capped at 20x (2026-11-08, his "so far final strategy";
+# it was 50 / 10x / exit at 1R on 2026-11-07).
 COINDCX_DEMO_ENABLED = env_flag("VICTUS_COINDCX_DEMO", True)
 COINDCX_DEMO_KINDS = ("fib",)
 COINDCX_DEMO_TIMEFRAMES = ("1d",)
 COINDCX_DEMO_LEVELS = tuple(
     level.strip() for level in os.getenv("VICTUS_COINDCX_DEMO_LEVELS", "L1,L2,L3,L4").split(",") if level.strip())
 COINDCX_DEMO_START_BALANCE = env_float("VICTUS_COINDCX_DEMO_START_BALANCE", 1000.0)
-COINDCX_DEMO_RISK = env_float("VICTUS_COINDCX_DEMO_RISK", 50.0)
-COINDCX_DEMO_MAX_LEVERAGE = env_float("VICTUS_COINDCX_DEMO_MAX_LEVERAGE", 10.0)
+COINDCX_DEMO_RISK = env_float("VICTUS_COINDCX_DEMO_RISK", 75.0)
+COINDCX_DEMO_MAX_LEVERAGE = env_float("VICTUS_COINDCX_DEMO_MAX_LEVERAGE", 20.0)
+# Exits, as the journal's Signals tab (lakky, 2026-11-08): Exit at 1.5R, Trail TP +0.25R
+# with the stop 0.5R behind (TP locked), SL shift to +0.75R at +1R, held till the stop.
+COINDCX_DEMO_TARGET_R = 1.5
+COINDCX_DEMO_TRAIL_STEP_R = 0.25
+COINDCX_DEMO_TRAIL_GAP_R = 0.5
+COINDCX_DEMO_SHIFT_AT_R = 1.0
+COINDCX_DEMO_SHIFT_TO_R = 0.75
+# A limit not filled in this many days is cancelled (the journal's 20 candles of 1D).
+COINDCX_DEMO_FILL_DAYS = 20
 # A real account must hold every working order's margin (position / max leverage);
 # one that does not fit is skipped. Off = take every alert, like the journal's demo.
 COINDCX_DEMO_MARGIN_LIMIT = env_flag("VICTUS_COINDCX_DEMO_MARGIN_LIMIT", True)

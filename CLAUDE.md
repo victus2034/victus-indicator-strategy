@@ -331,6 +331,10 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   does not fit is skipped; cancelled after 5 days unfilled; graded on Bitunix 1m. State `coindcx_demo_state.json`
   (starts on its first tick, no backlog); digest to `DISCORD_COINDCX_DEMO_WEBHOOK_URL`, else the crypto entry-confirm
   channel. Replay 7 Oct - 7 Nov (part `coindcx-demo`): 1,000 -> 423 with the margin limit, 544 without; lakky started it anyway.
+  **2026-11-08 (lakky, "so far final strategy", journal Signals): Exit 1.5R + Trail TP +0.25R with the stop 0.5R
+  behind (locked at +1.5R), SL shift to +0.75R at +1R, held till the stop; fill within 20 days; risk 75, 20x**
+  (`COINDCX_DEMO_TARGET_R` / `TRAIL_*` / `SHIFT_*` / `FILL_DAYS`). Same walk as the journal's tgtScore, also in
+  `research/coindcx_strategy_backtest.py` (part `coindcx-strategy`; top 3 / top 5 CoinDCX-volume coins vs all).
   Real money needs his explicit go plus a live order path (API key secret, IP whitelist, CoinDCX fees).
 - Each channel seeds silently per market on its first pass with a webhook, so adding a webhook
   never dumps a backlog. Deleting the state file re-seeds rather than bursting.
