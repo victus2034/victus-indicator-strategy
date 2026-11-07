@@ -74,22 +74,49 @@ class Trades(unittest.TestCase):
         demo.tick(state, records, now, fake_fetch(candles))
         return state
 
-    def test_fill_then_target(self):
+    def test_target_locks_then_trails(self):
+        # long 100, stop 98: 1R = 2.0, first target 1.5R = 103
         candles = {"BTCUSD": [
             [T0, 100, 100, 99, 100],               # the alert's own minute: not used
             [T0 + 60, 101, 101, 100.5, 101],       # above the limit
             [T0 + 120, 100.5, 100.6, 99.9, 100],   # fills
-            [T0 + 180, 100, 102.1, 99.5, 102],     # 1R = 102
+            [T0 + 180, 100, 103.1, 99.5, 103],     # 1.55R: stop locked at +1.5R, target 1.75R
+            [T0 + 240, 103, 104.6, 103.2, 104],    # 2.3R: targets 1.75 / 2.0 / 2.25 -> stop +1.75R
+            [T0 + 300, 104, 104.1, 103.4, 103.5],  # back to 103.4: the +1.75R stop (103.5) is hit
         ]}
         state = self.run_demo([record()], candles, T0 + 600)
         o = next(iter(state["orders"].values()))
         self.assertEqual(o["status"], "won")
+        self.assertEqual(o["exit_why"], "Trail TP")
         self.assertEqual(o["fill_ts"], T0 + 120)
-        # 50 x (1R - round trip / 2% stop): by hand 50 x (1 - 0.0826/2) = 47.935
-        self.assertAlmostEqual(o["pnl"], 50 * (1 - config.COINDCX_DEMO_ROUND_TRIP_COST_PCT / 2), places=3)
+        # by hand, as the journal's exit(): 1.75 - (1 + 1.75 x 2/100) x 0.05/2 - 0.0826/2
+        r = 1.75 - (1 + 1.75 * 0.02) * 0.05 / 2 - config.COINDCX_DEMO_ROUND_TRIP_COST_PCT / 2
+        self.assertAlmostEqual(o["r"], r, places=4)
+        self.assertAlmostEqual(o["pnl"], 75 * r, places=2)
         self.assertAlmostEqual(state["balance"], 1000 + o["pnl"], places=3)
-        events = [e["event"] for e in state["unposted"]]
-        self.assertEqual(events, ["placed", "filled", "won"])
+        events = [(e["event"], e.get("r")) for e in state["unposted"]]
+        self.assertEqual(events, [("placed", None), ("filled", None), ("stop", 1.5), ("stop", 1.75), ("won", None)])
+
+    def test_sl_shift_at_1r(self):
+        candles = {"BTCUSD": [
+            [T0 + 60, 100.5, 100.6, 99.9, 100],    # fills
+            [T0 + 120, 100, 102.1, 99.5, 102],     # +1.05R: stop to +0.75R (101.5)
+            [T0 + 180, 102, 102.2, 101.4, 101.6],  # 101.4: stopped at +0.75R
+        ]}
+        state = self.run_demo([record()], candles, T0 + 600)
+        o = next(iter(state["orders"].values()))
+        self.assertEqual(o["status"], "won")
+        self.assertEqual(o["exit_why"], "SL shift")
+        self.assertAlmostEqual(o["r"], demo.moved_stop_r(o, 0.75), places=4)
+        self.assertGreater(o["r"], 0.6)
+
+    def test_stop_moves_only_from_the_next_candle(self):
+        candles = {"BTCUSD": [
+            [T0 + 60, 100.5, 100.6, 99.9, 100],    # fills
+            [T0 + 120, 100, 102.1, 101.0, 102],    # reaches 1R and dips to 101.0 in the same candle
+        ]}
+        state = self.run_demo([record()], candles, T0 + 600)
+        self.assertEqual(next(iter(state["orders"].values()))["status"], "open")
 
     def test_alert_minute_never_fills(self):
         candles = {"BTCUSD": [[T0, 100, 100, 99, 100]]}
@@ -99,7 +126,7 @@ class Trades(unittest.TestCase):
     def test_candle_touching_stop_and_target_is_the_stop(self):
         candles = {"BTCUSD": [
             [T0 + 60, 100.5, 100.6, 99.9, 100],
-            [T0 + 120, 100, 102.5, 97.5, 100],
+            [T0 + 120, 100, 103.5, 97.5, 100],
         ]}
         state = self.run_demo([record()], candles, T0 + 600)
         o = next(iter(state["orders"].values()))
@@ -107,47 +134,50 @@ class Trades(unittest.TestCase):
         plan = {"side": "long", "entry": 100.0, "sl": 98.0}
         expect = trades.stop_r(plan) - config.COINDCX_DEMO_ROUND_TRIP_COST_PCT / 2
         self.assertAlmostEqual(o["r"], expect, places=4)
-        self.assertLess(o["pnl"], -50)
+        self.assertLess(o["pnl"], -75)
 
     def test_short(self):
         candles = {"ETHUSD": [
             [T0 + 60, 99.5, 100.1, 99.4, 100],     # sell limit at 100 fills
-            [T0 + 120, 100, 100.2, 97.9, 98],      # 1R = 98
+            [T0 + 120, 100, 100.2, 96.9, 97],      # 1.55R: stop locked at +1.5R (97)
+            [T0 + 180, 97, 97.1, 96.95, 97],       # back to 97.1: stopped at +1.5R
         ]}
         state = self.run_demo([record("ETHUSD", "short", 100.0, 102.0)], candles, T0 + 600)
         self.assertEqual(next(iter(state["orders"].values()))["status"], "won")
 
-    def test_no_fill_in_five_days_is_cancelled(self):
+    def test_no_fill_in_twenty_days_is_cancelled(self):
         candles = {"BTCUSD": [[T0 + 60 * i, 101, 101.5, 100.5, 101] for i in range(1, 5)]
-                   + [[T0 + 5 * DAY + 60, 101, 101.5, 100.5, 101]]}
-        state = self.run_demo([record()], candles, T0 + 5 * DAY + 600)
+                   + [[T0 + 20 * DAY + 60, 101, 101.5, 100.5, 101]]}
+        state = self.run_demo([record()], candles, T0 + 19 * DAY)
+        self.assertEqual(next(iter(state["orders"].values()))["status"], "pending")
+        state = self.run_demo([record()], candles, T0 + 20 * DAY + 600)
         o = next(iter(state["orders"].values()))
         self.assertEqual(o["status"], "cancelled")
         self.assertAlmostEqual(state["balance"], 1000)
 
     def test_cancelled_on_the_clock_when_candles_stop(self):
-        state = self.run_demo([record()], {}, T0 + 5 * DAY + demo.CANCEL_GRACE_SECONDS + 60)
+        state = self.run_demo([record()], {}, T0 + 20 * DAY + demo.CANCEL_GRACE_SECONDS + 60)
         self.assertEqual(next(iter(state["orders"].values()))["status"], "cancelled")
 
     def test_margin_that_does_not_fit_is_skipped(self):
-        # 0.5% stop: 10,000 position at the 10x cap = all 1,000 as margin
+        # 0.5% stop: 75 / 0.5% = 15,000 position, 15x, margin 750 of the 1,000 at the 20x max
         first = record(entry=100.0, sl=99.5, rid="a")
         second = record(symbol="ETHUSD", entry=100.0, sl=99.5, sent=T0 + 30, rid="b")
         state = self.run_demo([first, second], {}, T0 + 600)
         self.assertEqual(state["orders"]["a"]["status"], "pending")
+        self.assertAlmostEqual(state["orders"]["a"]["margin"], 750)
         self.assertEqual(state["orders"]["b"]["status"], "skipped")
         self.assertIn("margin", state["orders"]["b"]["reason"])
 
     def test_a_close_frees_margin_for_a_later_alert(self):
         first = record(entry=100.0, sl=99.5, rid="a")
         later = record(symbol="ETHUSD", entry=100.0, sl=99.5, sent=T0 + 600, rid="b")
-        candles = {"BTCUSD": [[T0 + 60, 100, 100.1, 99.9, 100], [T0 + 120, 100, 100.6, 99.8, 100.5]]}
+        candles = {"BTCUSD": [[T0 + 60, 100, 100.1, 99.9, 100], [T0 + 120, 100, 100.1, 99.4, 99.5]]}
         state = self.run_demo([first, later], candles, T0 + 900)
-        self.assertEqual(state["orders"]["a"]["status"], "won")
+        self.assertEqual(state["orders"]["a"]["status"], "lost")
+        self.assertLess(state["balance"], 925)
+        # without BTC's close its 750 margin would have left no room
         self.assertEqual(state["orders"]["b"]["status"], "pending")
-        # without BTC's close its 1,000 margin would have left no room: 50 / 0.5% = 10,000 at 10x
-        self.assertAlmostEqual(state["orders"]["b"]["margin"], 1000)
-        self.assertGreater(state["balance"], 1000)
 
     def test_an_order_is_made_once(self):
         state = demo.new_state(T0, 1000)

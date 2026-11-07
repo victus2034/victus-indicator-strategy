@@ -5,24 +5,27 @@ testing and after that go with real money". This is the demo. It places NO
 orders - there is no CoinDCX order code in this repo - and moves no money.
 
 Each 1D crypto fib alert (every level, L1-L4) becomes a pretend CoinDCX USDT
-futures order the moment the bot sees it, sized the way the journal's Demo
-account sizes it (lakky's screenshot: start 1,000, fixed risk 50 a trade, max
-leverage 10x):
+futures order the moment the bot sees it. Since 2026-11-08 the rules are lakky's
+"so far final strategy" from his journal (Signals, Fib alerts, CRYPTO 1D):
 
-- a limit order at the alert's entry, with the alert's stop and one target at 1R
-  (the journal's "Exit at 1R": same stop, no breakeven, no time limit);
-- risk = min(COINDCX_DEMO_RISK, balance); position = risk / stop distance;
-  leverage = position / balance, and above COINDCX_DEMO_MAX_LEVERAGE the trade
-  is taken at the cap, so it risks less (the journal's demoRun);
-- a real account has to hold the margin of every working order: position /
-  max leverage. An order whose margin does not fit in what is left of the
-  balance is SKIPPED, as the exchange would reject it. The journal's demo has
-  no such limit, so this is where the two can differ;
-- not filled within FIB_TL_ENTRY_WAIT_BARS days (5): cancelled;
-- filled: the stop or 1R, whichever trades first, on Bitunix 1m candles (the
-  alerts' own feed); a candle touching both is the stop. The stop pays the
-  scanner's slip, and every trade pays a round trip of
-  COINDCX_DEMO_ROUND_TRIP_COST_PCT (Delta's number until CoinDCX's is known).
+- a limit order at the alert's entry with the alert's stop, filled within
+  COINDCX_DEMO_FILL_DAYS (20) days or cancelled;
+- Exit at 1.5R with Trail TP: at 1.5R the stop locks at +1.5R and the target steps
+  +0.25R; the stop then trails 0.5R behind the highest target reached (never under
+  +1.5R). Move SL "SL shift": at +1R the stop goes to +0.75R. Held till the stop -
+  no time limit. A moved stop counts from the next candle; a candle touching the
+  stop is the stop (the journal's tgtScore);
+- sized like the journal's Demo account: risk = min(COINDCX_DEMO_RISK (75),
+  balance); position = risk / stop distance; above COINDCX_DEMO_MAX_LEVERAGE (20x)
+  the trade is taken at the cap, so it risks less;
+- a real account has to hold the margin of every working order (position / max
+  leverage): an order that does not fit is SKIPPED (the journal's demo has no
+  such limit);
+- graded on Bitunix 1m candles (the alerts' own feed); stops slip 0.05%; every
+  trade pays COINDCX_DEMO_ROUND_TRIP_COST_PCT (CoinDCX 0.02% maker in + 0.05%
+  taker out + 18% GST = 0.0826%).
+
+Research: research/coindcx_strategy_backtest.py (part coindcx-strategy).
 
 The state (coindcx_demo_state.json, runtime-state branch) starts on the first
 tick: alerts sent before it are ignored, so it never trades a backlog. Each
@@ -51,7 +54,7 @@ STATE_FILE = Path(__file__).with_name(os.getenv("VICTUS_COINDCX_DEMO_STATE_FILE"
 RECORDS_FILE = Path(__file__).with_name(os.getenv("VICTUS_FIB_TL_RECORDS_FILE", "fib_trendline_alert_records.jsonl"))
 WEBHOOK_ENV = "DISCORD_COINDCX_DEMO_WEBHOOK_URL"
 FALLBACK_WEBHOOK_ENV = "DISCORD_ENTRY_CONFIRM_CRYPTO_WEBHOOK_URL"
-WAIT_SECONDS = config.FIB_TL_ENTRY_WAIT_BARS * 86400
+WAIT_SECONDS = config.COINDCX_DEMO_FILL_DAYS * 86400
 ACTIVE = ("pending", "open")
 CLOSED = ("won", "lost", "cancelled", "skipped")
 DISCORD_LIMIT = 1900
@@ -166,14 +169,17 @@ def open_order(state, record, now):
     risk, position, leverage, capped = size(balance, entry, sl)
     margin = position / config.COINDCX_DEMO_MAX_LEVERAGE
     free = balance - margin_in_use(state)
+    tp_r = config.COINDCX_DEMO_TARGET_R
     order = {
         "id": record["id"], "symbol": record["symbol"], "pair": coindcx_pair(record["symbol"]),
         "side": plan["side"], "level": record.get("level") or "L3", "tf": "1D",
-        "entry": entry, "sl": sl, "tp": entry + risk_dist if long else entry - risk_dist,
+        "entry": entry, "sl": sl, "tp": entry + tp_r * risk_dist if long else entry - tp_r * risk_dist,
         "stop_pct": risk_dist / entry * 100, "sent_ts": int(float(record["sent_ts"])),
         "placed_ts": int(now), "risk": round(risk, 4), "position": round(position, 2),
         "leverage": round(leverage, 3), "capped": capped, "margin": round(margin, 2),
         "status": "pending", "checked_until": (int(float(record["sent_ts"])) // 60 + 1) * 60,
+        # the trade's walk, in R: best move so far, the moved stop (None = the alert's), next target
+        "best_r": 0.0, "stop_r": None, "tgt_r": tp_r,
     }
     if config.COINDCX_DEMO_MARGIN_LIMIT and margin > free + 1e-9:
         order.update(status="skipped", margin=0.0,
@@ -184,48 +190,101 @@ def open_order(state, record, now):
     return order
 
 
-def net_r(order, won):
+def full_stop_r(order):
+    """Net R of the alert's own stop: slip and fees included, a little worse than -1."""
     plan = {"side": order["side"], "entry": order["entry"], "sl": order["sl"]}
-    gross = 1.0 if won else trades.stop_r(plan)
-    return gross - config.COINDCX_DEMO_ROUND_TRIP_COST_PCT / order["stop_pct"]
+    return trades.stop_r(plan) - config.COINDCX_DEMO_ROUND_TRIP_COST_PCT / order["stop_pct"]
 
 
-def close(state, order, status, ts, won=None):
+def moved_stop_r(order, level_r):
+    """Net R of a moved stop at +level_r (the journal's tgtScore exit): slip and fees off."""
+    sign = 1 if order["side"] == "long" else -1
+    risk_pct = order["stop_pct"]
+    return (level_r - (1 + sign * level_r * risk_pct / 100) * trades.SL_FILL_SLIPPAGE_PCT / risk_pct
+            - config.COINDCX_DEMO_ROUND_TRIP_COST_PCT / risk_pct)
+
+
+def stop_price(order):
+    if order.get("stop_r") is None:
+        return order["sl"]
+    sign = 1 if order["side"] == "long" else -1
+    return order["entry"] * (1 + sign * order["stop_r"] * order["stop_pct"] / 100)
+
+
+def move_r(order, price):
+    sign = 1 if order["side"] == "long" else -1
+    return sign * (price - order["entry"]) / order["entry"] * 100 / order["stop_pct"]
+
+
+def raise_stop(state, order, level_r, why, ts):
+    if order.get("stop_r") is None or level_r > order["stop_r"] + 1e-9:
+        order.update(stop_r=round(level_r, 6), stop_why=why)
+        state["unposted"].append({"event": "stop", "id": order["id"], "ts": int(ts), "r": order["stop_r"], "why": why})
+
+
+def apply_best(state, order, ts):
+    """Journal Exit at 1.5R + Move SL + Trail TP: each target reached locks the stop at
+    max(first target, target - gap) and steps the target up; at +SHIFT_AT R the stop
+    goes to +SHIFT_TO R. A stop moved here counts from the next candle."""
+    first, step_r, gap = config.COINDCX_DEMO_TARGET_R, config.COINDCX_DEMO_TRAIL_STEP_R, config.COINDCX_DEMO_TRAIL_GAP_R
+    best = order["best_r"]
+    while best >= order["tgt_r"] - 1e-9:
+        raise_stop(state, order, max(first, order["tgt_r"] - gap), "Trail TP", ts)
+        order["tgt_r"] = round(order["tgt_r"] + step_r, 6)
+    at, to = config.COINDCX_DEMO_SHIFT_AT_R, config.COINDCX_DEMO_SHIFT_TO_R
+    if at and at < first and best >= at - 1e-9:
+        raise_stop(state, order, to, "SL shift", ts)
+
+
+def close(state, order, status, ts, r=None, why=None):
     order.update(status=status, exit_ts=int(ts))
-    if status in ("won", "lost"):
-        r = net_r(order, won)
+    if r is not None:
         pnl = order["risk"] * r
         if state["balance"] + pnl < 0:
             pnl = -state["balance"]
         state["balance"] = round(state["balance"] + pnl, 4)
-        order.update(r=round(r, 4), pnl=round(pnl, 4), balance_after=state["balance"])
+        order.update(r=round(r, 4), pnl=round(pnl, 4), balance_after=state["balance"], exit_why=why)
     state["unposted"].append({"event": status, "id": order["id"], "ts": int(ts)})
+
+
+def stopped(state, order, ts):
+    if order.get("stop_r") is None:
+        close(state, order, "lost", ts, full_stop_r(order), "SL")
+    else:
+        r = moved_stop_r(order, order["stop_r"])
+        close(state, order, "won" if r > 0 else "lost", ts, r, order.get("stop_why"))
 
 
 def step(state, order, candle, width=60):
     """Advance one order by one closed candle [ts, open, high, low, close] of `width` seconds."""
-    ts, _o, h, l = candle[0], candle[1], candle[2], candle[3]
+    ts, _o, h, l, c = candle[0], candle[1], candle[2], candle[3], candle[4]
     if ts < order["checked_until"]:
         return
     order["checked_until"] = int(ts) + width
+    for key, value in (("best_r", 0.0), ("stop_r", None), ("tgt_r", config.COINDCX_DEMO_TARGET_R)):
+        order.setdefault(key, value)       # orders placed before 2026-11-08
     long = order["side"] == "long"
-    hit_sl = (l <= order["sl"]) if long else (h >= order["sl"])
-    hit_tp = (h >= order["tp"]) if long else (l <= order["tp"])
+    hit = lambda price: (l <= price) if long else (h >= price)
     if order["status"] == "pending":
         if ts >= order["sent_ts"] + WAIT_SECONDS:
             close(state, order, "cancelled", ts)
             return
-        if (l <= order["entry"]) if long else (h >= order["entry"]):
+        if hit(order["entry"]):
             order.update(status="open", fill_ts=int(ts))
             state["unposted"].append({"event": "filled", "id": order["id"], "ts": int(ts)})
-            if hit_sl:      # filled and stopped in the same candle; a target there is not counted
-                close(state, order, "lost", ts, won=False)
+            if hit(order["sl"]):      # filled and stopped in the same candle
+                stopped(state, order, ts)
+                return
+            # on the fill candle only its close is known to come after the fill
+            order["best_r"] = max(0.0, move_r(order, c))
+            apply_best(state, order, ts)
         return
     if order["status"] == "open":
-        if hit_sl:
-            close(state, order, "lost", ts, won=False)
-        elif hit_tp:
-            close(state, order, "won", ts, won=True)
+        if hit(stop_price(order)):
+            stopped(state, order, ts)
+            return
+        order["best_r"] = max(order["best_r"], move_r(order, h if long else l))
+        apply_best(state, order, ts)
 
 
 # A pending order whose candles stop coming is still cancelled, this long after its wait.
@@ -303,24 +362,29 @@ def coin(symbol):
     return symbol[:-3] if symbol.endswith("USD") else symbol
 
 
-def event_line(order, event):
+def event_line(order, event, e=None):
+    e = e or {}
     side = "BUY" if order["side"] == "long" else "SELL"
     head = f"**{coin(order['symbol'])} · FIB {order['level']} · {side}**"
     p = scanner.price_text
     if event == "placed":
         cap = " (capped)" if order["capped"] else ""
         return (f"🧪 {head} · order placed\n"
-                f"Limit {p(order['entry'])} · SL {p(order['sl'])} ({order['stop_pct']:.2f}%) · TP {p(order['tp'])} (1R)\n"
+                f"Limit {p(order['entry'])} · SL {p(order['sl'])} ({order['stop_pct']:.2f}%) · TP {p(order['tp'])} ({config.COINDCX_DEMO_TARGET_R:g}R, then trails)\n"
                 f"Size {money(order['position'])} · {order['leverage']:.1f}x{cap} · margin {money(order['margin'])} · risk {money(order['risk'])}")
     if event == "skipped":
         return f"⏭️ {head} · skipped: {order.get('reason', 'no margin')}"
     if event == "filled":
         return f"📥 {head} · filled at {p(order['entry'])}"
     if event == "cancelled":
-        return f"⌛ {head} · cancelled, no fill in {config.FIB_TL_ENTRY_WAIT_BARS} days"
+        return f"⌛ {head} · cancelled, no fill in {config.COINDCX_DEMO_FILL_DAYS} days"
+    if event == "stop":
+        what = "TP reached, stop locked" if e.get("why") == "Trail TP" else "stop moved"
+        return f"🔒 {head} · {what} at {e['r']:+.2f}R"
     if event in ("won", "lost"):
-        icon, what = ("✅", "TP hit") if event == "won" else ("🛑", "SL hit")
-        return f"{icon} {head} · {what} · {money(order['pnl'])} ({order['r']:+.2f}R) · balance {money(order['balance_after'])}"
+        icon = "✅" if event == "won" else "🛑"
+        why = {"SL": "SL hit", "SL shift": "stopped at +0.75R", "Trail TP": "trailing stop hit"}.get(order.get("exit_why"), "closed")
+        return f"{icon} {head} · {why} · {money(order['pnl'])} ({order['r']:+.2f}R) · balance {money(order['balance_after'])}"
     return f"{head} · {event}"
 
 
@@ -344,7 +408,7 @@ def digest(state, now):
     for e in sorted(state["unposted"], key=lambda e: e["ts"]):
         order = state["orders"].get(e["id"])
         if order:
-            lines.append(event_line(order, e["event"]))
+            lines.append(event_line(order, e["event"], e))
     lines.append(summary(state))
     return "\n".join(lines)
 
