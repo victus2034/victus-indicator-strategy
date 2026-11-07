@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       parts:
-        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm tl-break-audit tl-sl fib-sl tl-ex tl-sl-long tl-mkt-trend fib-start bitunix-depth bnb-fib fib-touched fib-entry tl-entry doge-fib fib-kill coindcx magic-fib zone-htf volume qnt-late band-wick risk-warn scores-audit realert trail-fibtl fib-levels fib-levels-apply fib-rearm fib-l3l4 fib-levels-all ec-audit ec-replay early-band discord-audit discord-trace fib-level-sl fib-sl-trace tl-broken tl-broken-long fibtl-rebuild fibtl-rebuild-apply)"
+        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm tl-break-audit tl-sl fib-sl tl-ex tl-sl-long tl-mkt-trend fib-start bitunix-depth bnb-fib fib-touched fib-entry tl-entry doge-fib fib-kill coindcx magic-fib zone-htf volume qnt-late band-wick risk-warn scores-audit realert trail-fibtl fib-levels fib-levels-apply fib-rearm fib-l3l4 fib-levels-all ec-audit ec-replay early-band discord-audit discord-trace fib-level-sl fib-sl-trace tl-broken tl-broken-long fibtl-rebuild fibtl-rebuild-apply demo-sl)"
         default: "zones-30m zones-4h fib"
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr, xstock, xstock-zones-30m, xstock-zones-4h, xstock-fib, live-audit, uni-trace, bitunix-page, trend-all, tl-confirm, tl-break-audit, tl-sl, fib-sl, tl-ex, tl-sl-long, tl-mkt-trend, fib-start, bitunix-depth, bnb-fib, fib-touched, fib-entry, tl-entry, doge-fib, fib-kill, coindcx, magic-fib, zone-htf, volume, qnt-late, band-wick, risk-warn, scores-audit, realert, trail-fibtl, fib-rearm, fib-l3l4, fib-levels-all, ec-audit, ec-replay, early-band, discord-audit, discord-trace, fib-level-sl, fib-sl-trace, tl-broken, tl-broken-long]
+        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr, xstock, xstock-zones-30m, xstock-zones-4h, xstock-fib, live-audit, uni-trace, bitunix-page, trend-all, tl-confirm, tl-break-audit, tl-sl, fib-sl, tl-ex, tl-sl-long, tl-mkt-trend, fib-start, bitunix-depth, bnb-fib, fib-touched, fib-entry, tl-entry, doge-fib, fib-kill, coindcx, magic-fib, zone-htf, volume, qnt-late, band-wick, risk-warn, scores-audit, realert, trail-fibtl, fib-rearm, fib-l3l4, fib-levels-all, ec-audit, ec-replay, early-band, discord-audit, discord-trace, fib-level-sl, fib-sl-trace, tl-broken, tl-broken-long, demo-sl]
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
@@ -117,6 +117,7 @@ jobs:
             risk-warn) PYTHONPATH=research python research/risk_warning_backtest.py --since 2026-09-01 ;;
             zone-htf) PYTHONPATH=research python research/zone_htf_backtest.py --since 2026-09-01 ;;
             tl-length) python research/trendline_length_backtest.py --lengths 10,15,20 ;;
+            demo-sl) python research/demo_sl_audit.py ;;
             ec-audit) python research/entry_confirm_audit.py ;;
             ec-replay) python research/entry_confirm_replay.py ;;
             discord-audit) git fetch --shallow-since=2026-10-19 origin scanner-runtime-state
