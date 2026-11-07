@@ -23,16 +23,134 @@ BTWUSD: 15 alerts
 FILUSD: 28 alerts
 AAVEUSD: 9 alerts
 RLCUSD: 5 alerts
-Traceback (most recent call last):
-  File "/home/runner/work/victus-indicator-strategy/victus-indicator-strategy/research/coindcx_strategy_backtest.py", line 246, in <module>
-    main()
-  File "/home/runner/work/victus-indicator-strategy/victus-indicator-strategy/research/coindcx_strategy_backtest.py", line 225, in main
-    lines.append(row(s[:-3], pick([s])))
-                 ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/victus-indicator-strategy/victus-indicator-strategy/research/coindcx_strategy_backtest.py", line 173, in row
-    bal, dd, low = demo(done)
-                   ^^^^^^^^^^
-  File "/home/runner/work/victus-indicator-strategy/victus-indicator-strategy/research/coindcx_strategy_backtest.py", line 155, in demo
-    lev = risk / (t["risk_pct"] / 100) / bal
-          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
-ZeroDivisionError: float division by zero
+# CoinDCX strategy backtest - 1D crypto fibs, 2026-09-01 to 2026-11-08
+
+Exit 1.5R, SL to +0.75R at 1R, Trail TP +0.25R with SL 0.5R behind (TP locked), held till TP / SL; fill within 20 days; fees 0.0826% (CoinDCX limit in, market out, GST); stop slip 0.05%; demo 1,000, fixed 75 risk, max 20x. Bitunix 1h candles. 2 fills within 15 min of US CPI/PPI/FOMC left out.
+
+Top by CoinDCX 30d volume: BTC (11,653M), ETH (8,612M), ZEC (2,176M), SOL (2,120M), XRP (1,134M)
+
+| Group | Trades | Won | Total R | R/trade | %/trade | Demo 1,000 -> | Max DD | Still open |
+|---|---|---|---|---|---|---|---|---|
+| Top 3 (BTC/ETH/ZEC) | 10 | 70% | +5.1R | +0.51R | +0.85% | 1,381 (+38%) | 12% | 0 |
+| Top 5 (BTC/ETH/ZEC/SOL/XRP) | 13 | 69% | +5.5R | +0.43R | +0.85% | 1,415 (+42%) | 17% | 2 |
+| All 25 coins | 185 | 54% | +23.2R | +0.13R | +1.44% | 2,740 (+174%) | 61% | 7 |
+
+## By level (all coins)
+
+| Group | Trades | Won | Total R | R/trade | %/trade | Demo 1,000 -> | Max DD | Still open |
+|---|---|---|---|---|---|---|---|---|
+| L1 | 67 | 54% | +11.9R | +0.18R | +0.81% | 1,892 (+89%) | 55% | 0 |
+| L2 | 50 | 60% | +10.3R | +0.21R | +3.28% | 1,772 (+77%) | 23% | 2 |
+| L3 | 40 | 52% | +2.5R | +0.06R | +1.11% | 1,186 (+19%) | 32% | 3 |
+| L4 | 28 | 46% | -1.5R | -0.05R | +0.13% | 889 (-11%) | 43% | 2 |
+
+## By coin
+
+| Group | Trades | Won | Total R | R/trade | %/trade | Demo 1,000 -> | Max DD | Still open |
+|---|---|---|---|---|---|---|---|---|
+| BTC | 6 | 83% | +5.6R | +0.94R | +2.32% | 1,423 (+42%) | 6% | 0 |
+| ETH | 2 | 50% | -0.3R | -0.14R | -1.12% | 979 (-2%) | 8% | 0 |
+| ZEC | 2 | 50% | -0.3R | -0.13R | -1.62% | 980 (-2%) | 8% | 0 |
+| SOL | 1 | 0% | -1.0R | -1.01R | -8.81% | 924 (-8%) | 8% | 2 |
+| XRP | 2 | 100% | +1.5R | +0.73R | +5.68% | 1,110 (+11%) | 0% | 0 |
+| NEAR | 4 | 25% | -2.3R | -0.58R | -6.44% | 827 (-17%) | 17% | 1 |
+| HYPE | 12 | 58% | +1.3R | +0.11R | +0.72% | 1,099 (+10%) | 25% | 0 |
+| DOGE | 4 | 25% | -2.3R | -0.58R | -3.63% | 825 (-18%) | 22% | 0 |
+| QNT | 11 | 45% | +1.5R | +0.14R | +0.49% | 1,116 (+12%) | 24% | 1 |
+| SUI | 11 | 64% | +5.2R | +0.47R | +2.85% | 1,388 (+39%) | 19% | 0 |
+| UNI | 4 | 50% | -0.5R | -0.14R | -1.83% | 959 (-4%) | 14% | 0 |
+| BNB | 2 | 100% | +1.4R | +0.72R | +3.73% | 1,109 (+11%) | 0% | 0 |
+| ENA | 8 | 88% | +6.4R | +0.80R | +7.82% | 1,479 (+48%) | 6% | 0 |
+| 1000PEPE | 11 | 55% | +0.8R | +0.07R | +1.01% | 1,057 (+6%) | 15% | 0 |
+| WLD | 7 | 57% | +2.9R | +0.42R | +3.84% | 1,218 (+22%) | 7% | 0 |
+| ADA | 3 | 33% | -1.3R | -0.43R | -4.08% | 903 (-10%) | 14% | 1 |
+| AVAX | 3 | 33% | -1.3R | -0.43R | -3.37% | 903 (-10%) | 10% | 1 |
+| LINK | 7 | 57% | +1.3R | +0.19R | +1.67% | 1,100 (+10%) | 20% | 0 |
+| ONDO | 3 | 33% | -0.5R | -0.18R | -2.03% | 959 (-4%) | 8% | 1 |
+| TAO | 10 | 80% | +6.0R | +0.60R | +3.67% | 1,451 (+45%) | 7% | 0 |
+| STRK | 19 | 37% | -6.5R | -0.34R | -2.83% | 514 (-49%) | 54% | 0 |
+| BTW | 14 | 79% | +13.1R | +0.94R | +17.02% | 1,985 (+98%) | 5% | 0 |
+| FIL | 25 | 24% | -13.0R | -0.52R | -2.40% | 0 (-100%) | 100% | 0 |
+| AAVE | 9 | 89% | +7.0R | +0.78R | +4.18% | 1,527 (+53%) | 5% | 0 |
+| RLC | 5 | 40% | -1.5R | -0.31R | -6.51% | 884 (-12%) | 15% | 0 |
+
+Exits: SL 85, SL shift 59, Trail TP 41, open 7
+Alerts 200, filled 194.
+BTCUSD: 58 alerts
+ETHUSD: 22 alerts
+ZECUSD: 39 alerts
+SOLUSD: 50 alerts
+XRPUSD: 20 alerts
+NEARUSD: 73 alerts
+HYPEUSD: 107 alerts
+DOGEUSD: 44 alerts
+QNTUSD: 64 alerts
+SUIUSD: 55 alerts
+UNIUSD: 66 alerts
+BNBUSD: 81 alerts
+ENAUSD: 41 alerts
+1000PEPEUSD: 23 alerts
+WLDUSD: 73 alerts
+ADAUSD: 45 alerts
+AVAXUSD: 44 alerts
+LINKUSD: 41 alerts
+ONDOUSD: 56 alerts
+TAOUSD: 61 alerts
+STRKUSD: 57 alerts
+BTWUSD: 28 alerts
+FILUSD: 110 alerts
+AAVEUSD: 60 alerts
+RLCUSD: 53 alerts
+# CoinDCX strategy backtest - 1D crypto fibs, 2025-01-01 to 2026-11-08
+
+Exit 1.5R, SL to +0.75R at 1R, Trail TP +0.25R with SL 0.5R behind (TP locked), held till TP / SL; fill within 20 days; fees 0.0826% (CoinDCX limit in, market out, GST); stop slip 0.05%; demo 1,000, fixed 75 risk, max 20x. Bitunix 1h candles. 8 fills within 15 min of US CPI/PPI/FOMC left out.
+
+Top by CoinDCX 30d volume: BTC (11,653M), ETH (8,612M), ZEC (2,176M), SOL (2,120M), XRP (1,134M)
+
+| Group | Trades | Won | Total R | R/trade | %/trade | Demo 1,000 -> | Max DD | Still open |
+|---|---|---|---|---|---|---|---|---|
+| Top 3 (BTC/ETH/ZEC) | 111 | 59% | +19.9R | +0.18R | +1.60% | 2,493 (+149%) | 30% | 0 |
+| Top 5 (BTC/ETH/ZEC/SOL/XRP) | 177 | 56% | +22.0R | +0.12R | +1.43% | 2,649 (+165%) | 36% | 2 |
+| All 25 coins | 1289 | 54% | +113.2R | +0.09R | +0.82% | 9,488 (+849%) | 37% | 7 |
+
+## By level (all coins)
+
+| Group | Trades | Won | Total R | R/trade | %/trade | Demo 1,000 -> | Max DD | Still open |
+|---|---|---|---|---|---|---|---|---|
+| L1 | 473 | 57% | +73.7R | +0.16R | +1.42% | 6,524 (+552%) | 46% | 0 |
+| L2 | 337 | 54% | +19.0R | +0.06R | +0.60% | 2,423 (+142%) | 56% | 2 |
+| L3 | 273 | 54% | +16.8R | +0.06R | +0.43% | 2,263 (+126%) | 51% | 3 |
+| L4 | 206 | 50% | +3.7R | +0.02R | +0.31% | 1,278 (+28%) | 62% | 2 |
+
+## By coin
+
+| Group | Trades | Won | Total R | R/trade | %/trade | Demo 1,000 -> | Max DD | Still open |
+|---|---|---|---|---|---|---|---|---|
+| BTC | 51 | 67% | +20.0R | +0.39R | +1.30% | 2,498 (+150%) | 32% | 0 |
+| ETH | 21 | 52% | +1.6R | +0.08R | +0.81% | 1,122 (+12%) | 20% | 0 |
+| ZEC | 39 | 51% | -1.7R | -0.04R | +2.42% | 873 (-13%) | 45% | 0 |
+| SOL | 48 | 48% | -0.3R | -0.01R | +0.52% | 980 (-2%) | 42% | 2 |
+| XRP | 18 | 61% | +2.3R | +0.13R | +2.80% | 1,176 (+18%) | 25% | 0 |
+| NEAR | 66 | 53% | +8.0R | +0.12R | +1.27% | 1,599 (+60%) | 32% | 1 |
+| HYPE | 101 | 51% | +0.7R | +0.01R | +0.70% | 1,051 (+5%) | 60% | 0 |
+| DOGE | 42 | 60% | +5.4R | +0.13R | +1.33% | 1,404 (+40%) | 22% | 0 |
+| QNT | 62 | 56% | +11.3R | +0.18R | +0.88% | 1,844 (+84%) | 25% | 1 |
+| SUI | 54 | 67% | +18.5R | +0.34R | +2.96% | 2,391 (+139%) | 14% | 0 |
+| UNI | 61 | 56% | +8.7R | +0.14R | +0.67% | 1,649 (+65%) | 26% | 0 |
+| BNB | 73 | 56% | +8.5R | +0.12R | +0.43% | 1,638 (+64%) | 41% | 0 |
+| ENA | 36 | 56% | +3.2R | +0.09R | +0.56% | 1,241 (+24%) | 45% | 0 |
+| 1000PEPE | 20 | 45% | -3.1R | -0.15R | -1.24% | 769 (-23%) | 31% | 0 |
+| WLD | 72 | 39% | -14.9R | -0.21R | -1.14% | 0 (-100%) | 100% | 0 |
+| ADA | 42 | 50% | -1.0R | -0.02R | -0.99% | 926 (-7%) | 37% | 1 |
+| AVAX | 41 | 61% | +7.7R | +0.19R | +1.72% | 1,579 (+58%) | 24% | 1 |
+| LINK | 40 | 68% | +16.1R | +0.40R | +3.30% | 2,208 (+121%) | 14% | 0 |
+| ONDO | 52 | 71% | +21.5R | +0.41R | +4.17% | 2,612 (+161%) | 11% | 1 |
+| TAO | 58 | 53% | +1.8R | +0.03R | -0.88% | 1,135 (+13%) | 55% | 0 |
+| STRK | 57 | 46% | -7.7R | -0.14R | -2.25% | 420 (-58%) | 66% | 0 |
+| BTW | 25 | 68% | +14.8R | +0.59R | +10.66% | 2,109 (+111%) | 13% | 0 |
+| FIL | 103 | 44% | -14.5R | -0.14R | -0.92% | 0 (-100%) | 100% | 0 |
+| AAVE | 59 | 54% | +2.9R | +0.05R | +0.14% | 1,220 (+22%) | 52% | 0 |
+| RLC | 48 | 56% | +3.3R | +0.07R | +0.28% | 1,250 (+25%) | 49% | 0 |
+
+Exits: SL 587, SL shift 457, Trail TP 245, open 7
+Alerts 1371, filled 1304.
