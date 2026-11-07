@@ -486,6 +486,11 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   (`VICTUS_DISCORD_BACKTEST_CARDS=1` turns them back on): the daily zone cards and quiet lines, the fib / trendline /
   1D+ zone card, the weekly workbook and the paper table are graded and stored as before (the journal reads those
   files) - only the post is skipped (`daily_backtest_summary.backtest_cards_on`, `fib_trendline_daily_report.send_card`).
+- **Journal Demo account specs (2026-11-07, lakky: "is it possible to have my desire sl").** Part `demo-sl` of
+  `bitunix_research.yml` (`research/demo_sl_audit.py`) saves every Delta perpetual's contract value, tick, max leverage
+  (100 / `initial_margin`) and spread, plus Delta candles for 42 graded alerts (`research/in/demo_sl_audit_sample.json`);
+  `demo-sl-dcx` saves CoinDCX's min orders / steps / leverage. The journal's Demo account embeds them (real orders: whole
+  contracts, the coin's max leverage, min stop). Re-run both and re-copy when Delta changes contract sizes. Read only.
 - **Range filter alerts are off (2026-10-10, lakky).** Alerts are S/R zones, fibs and trendlines
   (incl. TL BROKEN) only. `ALERT_RANGE_FILTER_SIGNALS` is False in `config.py` and `nse_config.py`; the
   range filter is still computed but never posts. Pine v12.7.8 drops its RF marker too.
