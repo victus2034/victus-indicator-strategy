@@ -40,7 +40,7 @@ import fib_trendline_backtest as fbt  # noqa: E402
 import fib_trendline_trades as trades  # noqa: E402
 import scanner  # noqa: E402
 from fib_trendline_data import CRYPTO, HISTORY_START, IST, bitunix_candles, monthly_from_daily  # noqa: E402
-from zone_rebuild import news_overlap  # noqa: E402
+from news_window_backtest import EVENT_TS, WINDOW_MIN  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "coindcx_strategy"
 VOLUME = Path(__file__).resolve().parent / "out" / "volume" / "volume_7d_30d.json"
@@ -50,6 +50,11 @@ COST_PCT, SLIP_PCT = 0.0826, 0.05
 FILL_WINDOW = 20 * 86400
 START, RISK, LEVERAGE = 1000.0, 75.0, 20.0
 H = 3600
+
+
+def news_overlap(start, end):
+    """True when [start, end) touches a US CPI / PPI / FOMC release +-15 min (Jan 2025 - Dec 2026)."""
+    return any(start <= ev + WINDOW_MIN * 60 and end > ev - WINDOW_MIN * 60 for _name, ev in EVENT_TS)
 
 
 def exit_r(level, risk_pct, side):
@@ -188,6 +193,7 @@ def main() -> None:
     args = ap.parse_args()
     since = int(pd.Timestamp(args.since, tz=IST).timestamp())
     now = int(time.time())
+    fbt.FIB_LEVELS = config.FIB_ALERT_LEVELS        # every live level (1D: L1-L4), as live
     order, vol = ranked()
     got = []
     with ThreadPoolExecutor(max_workers=4) as pool:
