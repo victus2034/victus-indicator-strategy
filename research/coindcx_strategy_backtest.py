@@ -14,8 +14,14 @@ The settings, from his journal's Signals tab (Fib alerts, CRYPTO 1D):
 The journal's own scoring (index.html tgtWalk / tgtScore / demoRun), on Bitunix 1h
 candles, with the alerts fib_trendline_backtest.replay finds under today's live rules.
 
-Groups: top 3 and top 5 coins by CoinDCX volume (30-day average, research/out/volume),
-and every crypto on the watchlist (all 25 pass the CoinDCX 100M rule).
+2026-11-08 (lakky: "also in demo trades in coindcx put this strategy also", journal Signals,
+Trendline alerts, CRYPTO 1D, type All): the same exit on every 1D crypto trendline alert -
+touches (S TL / R TL: limit at the line, the candle stop) and TL BROKEN trades (SP / RS TL BR:
+in at the price when the alert goes out, stop past the candle before the break, as
+fibtl_rebuild / the live break_plan). Reported per kind, and fib + TL in one demo account.
+
+Groups: top 3 and top 5 coins by CoinDCX volume (30-day average, research/out/coin_list,
+2026-11-08; research/out/volume before it), and every crypto on the watchlist.
 Fills within 15 min of US CPI / PPI / FOMC are left out (backtest standard).
 
     PYTHONPATH=research python research/coindcx_strategy_backtest.py --since 2026-09-01
@@ -40,10 +46,15 @@ import fib_trendline_backtest as fbt  # noqa: E402
 import fib_trendline_trades as trades  # noqa: E402
 import scanner  # noqa: E402
 from fib_trendline_data import CRYPTO, HISTORY_START, IST, bitunix_candles, monthly_from_daily  # noqa: E402
+import tl_broken_alert_backtest as tlb  # noqa: E402
+from trendlines import SUPPORT  # noqa: E402
 from news_window_backtest import EVENT_TS, WINDOW_MIN  # noqa: E402
 
 OUT = Path(__file__).resolve().parent / "out" / "coindcx_strategy"
 VOLUME = Path(__file__).resolve().parent / "out" / "volume" / "volume_7d_30d.json"
+COIN_LIST = Path(__file__).resolve().parent / "out" / "coin_list" / "coin_list_review.json"
+BREAK_RULE = (("at close, SL candle before break, 1R", "close", "before", 1),)    # = fibtl_rebuild
+KIND_NAME = {"fib": "Fib", "tl": "TL touch", "br": "TL break"}
 
 TARGET_R, SHIFT_AT, SHIFT_TO, TRAIL_STEP, TRAIL_GAP = 1.5, 1.0, 0.75, 0.25, 0.5
 COST_PCT, SLIP_PCT = 0.0826, 0.05
@@ -124,6 +135,7 @@ def alert_hour(plan, ts4h, hourly_ts, hourly, band):
 
 
 def symbol_trades(symbol, since, now):
+    """Every 1D fib (kind fib), trendline touch (tl) and TL BROKEN (br) trade on one coin."""
     contract = scanner.delta_contract(symbol)
     pair = bitunix_data.pair_for(symbol, contract)
 
@@ -132,18 +144,30 @@ def symbol_trades(symbol, since, now):
 
     daily, four = get("1d", HISTORY_START), get("4h", HISTORY_START)
     hourly = get("1h", since - 3 * 86400)
-    alerts = [t for t in fbt.replay(CRYPTO, symbol, "1d", daily, four, now)
-              if t["kind"] == "fib" and t["alert_ts"] >= since]
-    out = []
     band = fbt.band_for("1d")
     hourly_ts = [c[0] for c in hourly]
-    for t in alerts:
-        start = alert_hour(t["plan"], t["alert_ts"], hourly_ts, hourly, band)
-        w = walk(t["plan"], start, hourly, now)
+    out = []
+
+    def add(kind, plan, start, extra):
+        w = walk(plan, start, hourly, now)
         news = bool(w.get("filled")) and news_overlap(w["fill_ts"], w["fill_ts"] + H)
-        out.append({"symbol": symbol, "level": t.get("level"), "side": t["plan"]["side"],
-                    "entry": t["plan"]["entry"], "sl": t["plan"]["sl"], "alert_ts": t["alert_ts"],
-                    "news": news, **w})
+        out.append({"symbol": symbol, "kind": kind, "side": plan["side"], "entry": plan["entry"],
+                    "sl": plan["sl"], "news": news, **extra, **w})
+
+    for t in fbt.replay(CRYPTO, symbol, "1d", daily, four, now):
+        if t["alert_ts"] < since or t["kind"] not in ("fib", "trendline"):
+            continue
+        kind = "fib" if t["kind"] == "fib" else "tl"
+        add(kind, t["plan"], alert_hour(t["plan"], t["alert_ts"], hourly_ts, hourly, band),
+            {"level": t.get("level") if kind == "fib" else ("S TL" if t.get("line") == SUPPORT else "R TL"),
+             "alert_ts": t["alert_ts"]})
+    for t in tlb.breaks(CRYPTO, symbol, "1d", daily, four, now, since, rules=BREAK_RULE):
+        p = t["plan"]
+        if (p["sl"] >= p["entry"]) if p["side"] == "long" else (p["sl"] <= p["entry"]):
+            continue                          # the live break_plan sends no trade then
+        # in at the price when the alert goes out (the open after the break candle closed)
+        add("br", p, t["alert_ts"], {"level": ("SP" if t["line"] == "S" else "RS") + " TL BR",
+                                     "alert_ts": t["alert_ts"]})
     return out
 
 
@@ -183,9 +207,19 @@ HEAD = ("| Group | Trades | Won | Total R | R/trade | %/trade | Demo 1,000 -> | 
 
 
 def ranked():
-    rows = json.loads(VOLUME.read_text(encoding="utf-8"))
-    vol = {r["watched"]: r.get("dcx_30d") or 0 for r in rows if r.get("watched")}
-    return sorted(config.CRYPTO_WATCHLIST, key=lambda s: -vol.get(s, 0)), vol
+    """Watchlist crypto by CoinDCX 30-day volume (M USD a day), biggest first."""
+    vol = {}
+    if COIN_LIST.exists():
+        for r in json.loads(COIN_LIST.read_text(encoding="utf-8")):
+            if r.get("kind") == "crypto" and r.get("dcx30"):
+                vol[r["base"]] = r["dcx30"]
+    else:
+        for r in json.loads(VOLUME.read_text(encoding="utf-8")):
+            if r.get("watched"):
+                vol[r["watched"][:-3]] = r.get("dcx_30d") or 0
+    v = lambda s: vol.get(s[:-3].replace("1000", ""), vol.get(s[:-3], 0))
+    order = sorted(config.CRYPTO_WATCHLIST, key=lambda s: -v(s))
+    return order, {s: v(s) for s in order}
 
 
 def main() -> None:
@@ -200,37 +234,50 @@ def main() -> None:
     got = []
     with ThreadPoolExecutor(max_workers=4) as pool:
         for symbol, res in zip(order, pool.map(lambda s: _safe(s, since, now), order)):
-            print(f"{symbol}: {len(res)} alerts")
+            print(f"{symbol}: " + ", ".join(f"{k} {sum(t['kind'] == k for t in res)}" for k in KIND_NAME))
             got += res
     OUT.mkdir(parents=True, exist_ok=True)
     tag = args.tag or args.since
     (OUT / f"trades_{tag}.json").write_text(json.dumps(got, indent=0), encoding="utf-8")
     top3, top5 = order[:3], order[:5]
-    pick = lambda syms: [t for t in got if t["symbol"] in syms]
-    lines = [f"# CoinDCX strategy backtest - 1D crypto fibs, {args.since} to {pd.Timestamp(now, unit='s', tz=IST):%Y-%m-%d}",
+    pick = lambda items, syms: [t for t in items if t["symbol"] in syms]
+    lines = [f"# CoinDCX strategy backtest - 1D crypto fibs and trendlines, {args.since} to "
+             f"{pd.Timestamp(now, unit='s', tz=IST):%Y-%m-%d}",
              "",
              "Exit 1.5R, SL to +0.75R at 1R, Trail TP +0.25R with SL 0.5R behind (TP locked), held till TP / SL; "
              "fill within 20 days; fees 0.0826% (CoinDCX limit in, market out, GST); stop slip 0.05%; "
              "demo 1,000, fixed 75 risk, max 20x. Bitunix 1h candles. "
              f"{sum(t['news'] for t in got)} fills within 15 min of US CPI/PPI/FOMC left out.",
              "",
-             f"Top by CoinDCX 30d volume: {', '.join(s[:-3] + f' ({vol.get(s, 0):,.0f}M)' for s in top5)}",
-             "", HEAD,
-             row("Top 3 (" + "/".join(s[:-3] for s in top3) + ")", pick(top3)),
-             row("Top 5 (" + "/".join(s[:-3] for s in top5) + ")", pick(top5)),
-             row(f"All {len(order)} coins", got),
-             "", "## By level (all coins)", "", HEAD]
-    for lv in ("L1", "L2", "L3", "L4"):
+             "Fib = L1-L4. TL touch = S TL / R TL (limit at the line, candle stop). TL break = SP / RS TL BR "
+             "(in at the alert's price, stop past the candle before the break).",
+             "",
+             f"Top by CoinDCX 30d volume: {', '.join(s[:-3] + f' ({vol.get(s, 0):,.0f}M)' for s in top5)}"]
+    sets = (("Fib", ("fib",)), ("TL touch", ("tl",)), ("TL break", ("br",)), ("TL all (touch + break)", ("tl", "br")),
+            ("Fib + TL all, one account", ("fib", "tl", "br")))
+    for title, kinds in sets:
+        items = [t for t in got if t["kind"] in kinds]
+        lines += ["", f"## {title}", "", HEAD,
+                  row("Top 3 (" + "/".join(s[:-3] for s in top3) + ")", pick(items, top3)),
+                  row("Top 5 (" + "/".join(s[:-3] for s in top5) + ")", pick(items, top5)),
+                  row(f"All {len(order)} coins", items)]
+    lines += ["", "## By level / line (all coins)", "", HEAD]
+    for lv in ("L1", "L2", "L3", "L4", "S TL", "R TL", "SP TL BR", "RS TL BR"):
         lines.append(row(lv, [t for t in got if t["level"] == lv]))
-    lines += ["", "## By coin", "", HEAD]
+    lines += ["", "## By coin, TL all", "", HEAD]
     for s in order:
-        lines.append(row(s[:-3], pick([s])))
-    outcomes = {}
-    for t in got:
-        if t.get("filled") and not t["news"]:
-            outcomes[t["outcome"]] = outcomes.get(t["outcome"], 0) + 1
-    lines += ["", "Exits: " + ", ".join(f"{k} {v}" for k, v in sorted(outcomes.items())),
-              f"Alerts {len(got)}, filled {sum(1 for t in got if t.get('filled'))}."]
+        lines.append(row(s[:-3], pick([t for t in got if t["kind"] in ("tl", "br")], [s])))
+    lines += ["", "## By coin, fib", "", HEAD]
+    for s in order:
+        lines.append(row(s[:-3], pick([t for t in got if t["kind"] == "fib"], [s])))
+    for k, name in KIND_NAME.items():
+        outcomes = {}
+        for t in got:
+            if t["kind"] == k and t.get("filled") and not t["news"]:
+                outcomes[t["outcome"]] = outcomes.get(t["outcome"], 0) + 1
+        mine = [t for t in got if t["kind"] == k]
+        lines += ["", f"{name} exits: " + ", ".join(f"{a} {b}" for a, b in sorted(outcomes.items())) +
+                  f". Alerts {len(mine)}, filled {sum(1 for t in mine if t.get('filled'))}."]
     text = "\n".join(lines)
     (OUT / f"SUMMARY_{tag}.md").write_text(text + "\n", encoding="utf-8")
     print(text)
