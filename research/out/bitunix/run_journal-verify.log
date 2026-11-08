@@ -1,0 +1,185 @@
+From https://github.com/victus2034/victus-indicator-strategy
+ * branch            scanner-runtime-state -> FETCH_HEAD
+ * [new branch]      scanner-runtime-state -> origin/scanner-runtime-state
+
+== journal ==
+10-08 09:30 BTCUSD  L2 long  entry 81767.6 sl 80177.8 risk 1.94% fill 10-08 18:30 exit 10-09 17:30 SL shift  +0.68R +1.32% [1h]
+10-08 17:30 BTCUSD  L3 long  entry 80520.7 sl 78806.2 risk 2.13% fill 10-08 22:30 exit 10-09 17:30 Trail TP  +1.44R +3.06% [1h]
+10-08 17:30 ZECUSD  L2 long  entry 1137.35 sl 978.364 risk 13.98% fill 10-08 20:30 exit 10-12 02:30 SL shift  +0.74R +10.35% [1h]
+10-15 05:30 ETHUSD  L1 long  entry 2363.7 sl 2184.59 risk 7.58% fill 10-15 07:30 exit 10-30 06:30 SL        -1.02R -7.71% [1h]
+10-15 17:30 BTCUSD  L4 long  entry 79149.1 sl 77434.5 risk 2.17% fill 10-30 01:30 exit 10-30 05:30 SL        -1.06R -2.30% [1h]
+10-30 05:30 ETHUSD  L2 long  entry 2220.41 sl 2054.33 risk 7.48% fill 10-30 05:45 exit 11-05 20:15 SL shift  +0.73R +5.47% [15m]
+10-30 05:30 XRPUSD  L4 long  entry 1.22863 sl 1.13043 risk 7.99% fill 10-30 05:45 exit 11-05 00:30 SL shift  +0.73R +5.86% [15m]
+11-04 17:30 BTCUSD  L1 short entry 80047.1 sl 81574.5 risk 1.91% fill 11-04 20:30 exit 11-05 20:35 Trail TP  +1.43R +2.73% [5m]
+11-04 17:30 BTCUSD  L2 short entry 81269 sl 82685.4 risk 1.74% fill -           exit -           waiting    [5m]
+11-05 05:30 BTCUSD  L2 short entry 80952.3 sl 82442.1 risk 1.84% fill -           exit -           waiting    [5m]
+filled+closed 8, wins 6, total +3.68R, per filled +0.46R
+
+== delta5 ==
+10-08 09:30 BTCUSD  L2 long  entry 81767.6 sl 80177.8 risk 1.94% fill 10-08 19:10 exit 10-09 18:20 SL shift  +0.68R +1.32%
+10-08 17:30 BTCUSD  L3 long  entry 80520.7 sl 78806.2 risk 2.13% fill 10-08 22:50 exit 10-09 17:50 Trail TP  +1.44R +3.06%
+10-08 17:30 ZECUSD  L2 long  entry 1137.35 sl 978.364 risk 13.98% fill 10-08 20:50 exit 10-12 02:45 SL shift  +0.74R +10.35%
+10-15 05:30 ETHUSD  L1 long  entry 2363.7 sl 2184.59 risk 7.58% fill 10-15 07:50 exit 10-30 07:00 SL        -1.02R -7.71%
+10-15 17:30 BTCUSD  L4 long  entry 79149.1 sl 77434.5 risk 2.17% fill 10-30 02:10 exit 10-30 05:45 SL        -1.06R -2.30%
+10-30 05:30 ETHUSD  L2 long  entry 2220.41 sl 2054.33 risk 7.48% fill 10-30 05:45 exit 11-05 20:25 SL shift  +0.73R +5.47%
+10-30 05:30 XRPUSD  L4 long  entry 1.22863 sl 1.13043 risk 7.99% fill 10-30 05:45 exit 11-05 00:30 SL shift  +0.73R +5.86%
+11-04 17:30 BTCUSD  L1 short entry 80047.1 sl 81574.5 risk 1.91% fill 11-04 20:30 exit 11-05 20:35 Trail TP  +1.43R +2.73%
+11-04 17:30 BTCUSD  L2 short entry 81269 sl 82685.4 risk 1.74% fill -           exit -           waiting   
+11-05 05:30 BTCUSD  L2 short entry 80952.3 sl 82442.1 risk 1.84% fill -           exit -           waiting   
+filled+closed 8, wins 6, total +3.68R, per filled +0.46R
+
+== bitunix5 ==
+10-08 09:30 BTCUSD  L2 long  entry 81767.6 sl 80177.8 risk 1.94% fill 10-08 19:10 exit 10-09 18:20 SL shift  +0.68R +1.32%
+10-08 17:30 BTCUSD  L3 long  entry 80520.7 sl 78806.2 risk 2.13% fill 10-08 22:50 exit 10-09 17:50 Trail TP  +1.44R +3.06%
+10-08 17:30 ZECUSD  L2 long  entry 1137.35 sl 978.364 risk 13.98% fill 10-08 20:50 exit 10-12 02:45 SL shift  +0.74R +10.35%
+10-15 05:30 ETHUSD  L1 long  entry 2363.7 sl 2184.59 risk 7.58% fill 10-15 07:50 exit 10-30 07:00 SL        -1.02R -7.71%
+10-15 17:30 BTCUSD  L4 long  entry 79149.1 sl 77434.5 risk 2.17% fill 10-30 02:10 exit 10-30 05:45 SL        -1.06R -2.30%
+10-30 05:30 ETHUSD  L2 long  entry 2220.41 sl 2054.33 risk 7.48% fill 10-30 05:45 exit 11-05 20:25 SL shift  +0.73R +5.47%
+10-30 05:30 XRPUSD  L4 long  entry 1.22863 sl 1.13043 risk 7.99% fill 10-30 05:45 exit 11-05 00:30 SL shift  +0.73R +5.86%
+11-04 17:30 BTCUSD  L1 short entry 80047.1 sl 81574.5 risk 1.91% fill 11-04 20:30 exit 11-05 20:35 Trail TP  +1.43R +2.73%
+11-04 17:30 BTCUSD  L2 short entry 81269 sl 82685.4 risk 1.74% fill -           exit -           waiting   
+11-05 05:30 BTCUSD  L2 short entry 80952.3 sl 82442.1 risk 1.84% fill -           exit -           waiting   
+filled+closed 8, wins 6, total +3.68R, per filled +0.46R
+
+== journal ==
+10-08 21:28 BTCUSD  L3 long  entry 80520.7 sl 78806.2 risk 2.13% fill 10-08 22:30 exit 10-09 17:30 Trail TP  +1.44R +3.06% [1h]
+10-15 08:09 XRPUSD  L3 long  entry 1.30719 sl 1.20899 risk 7.51% fill 10-15 07:30 exit 10-30 05:30 SL        -1.02R -7.64% [1h]
+10-22 10:05 ZECUSD  L1 long  entry 1274.51 sl 841.202 risk 34.00% fill 10-22 11:00 exit -           open       [15m]
+10-22 12:39 BTCUSD  L2 long  entry 81767.6 sl 78806.2 risk 3.62% fill 10-22 14:30 exit 10-30 02:00 SL        -1.04R -3.75% [15m]
+10-22 22:15 ETHUSD  L1 long  entry 2363.7 sl 1911.05 risk 19.15% fill 10-22 22:15 exit -           open       [15m]
+10-24 14:57 ZECUSD  L2 long  entry 1137.35 sl 841.202 risk 26.04% fill 10-24 19:45 exit -           open       [15m]
+10-24 20:42 BTCUSD  L4 long  entry 79149.1 sl 78806.2 risk 0.43% fill 10-30 02:00 exit 10-30 02:00 SL        -1.31R -0.57% [15m]
+10-31 09:47 ETHUSD  L2 long  entry 2220.41 sl 2054.33 risk 7.48% fill 11-06 02:45 exit -           open       [15m]
+11-04 20:18 BTCUSD  L1 short entry 80047.1 sl 81574.5 risk 1.91% fill 11-04 20:30 exit 11-05 20:35 Trail TP  +1.43R +2.73% [5m]
+11-04 20:44 BTCUSD  L2 short entry 81269 sl 82685.4 risk 1.74% fill -           exit -           waiting    [5m]
+11-05 08:03 BTCUSD  L2 short entry 80952.3 sl 82442.1 risk 1.84% fill -           exit -           waiting    [5m]
+filled+closed 5, wins 2, total -0.49R, per filled -0.10R
+
+== delta5 ==
+10-08 21:28 BTCUSD  L3 long  entry 80520.7 sl 78806.2 risk 2.13% fill 10-08 22:50 exit 10-09 17:50 Trail TP  +1.44R +3.06%
+10-15 08:09 XRPUSD  L3 long  entry 1.30719 sl 1.20899 risk 7.51% fill 10-15 08:30 exit 10-30 05:50 SL        -1.02R -7.64%
+10-22 10:05 ZECUSD  L1 long  entry 1274.51 sl 841.202 risk 34.00% fill 10-22 11:10 exit -           open      
+10-22 12:39 BTCUSD  L2 long  entry 81767.6 sl 78806.2 risk 3.62% fill 10-22 14:30 exit 10-30 02:10 SL        -1.04R -3.75%
+10-22 22:15 ETHUSD  L1 long  entry 2363.7 sl 1911.05 risk 19.15% fill 10-22 22:20 exit -           open      
+10-24 14:57 ZECUSD  L2 long  entry 1137.35 sl 841.202 risk 26.04% fill 10-24 19:45 exit -           open      
+10-24 20:42 BTCUSD  L4 long  entry 79149.1 sl 78806.2 risk 0.43% fill 10-30 02:10 exit 10-30 02:10 SL        -1.31R -0.57%
+10-31 09:47 ETHUSD  L2 long  entry 2220.41 sl 2054.33 risk 7.48% fill 11-06 02:55 exit -           open      
+11-04 20:18 BTCUSD  L1 short entry 80047.1 sl 81574.5 risk 1.91% fill 11-04 20:30 exit 11-05 20:35 Trail TP  +1.43R +2.73%
+11-04 20:44 BTCUSD  L2 short entry 81269 sl 82685.4 risk 1.74% fill -           exit -           waiting   
+11-05 08:03 BTCUSD  L2 short entry 80952.3 sl 82442.1 risk 1.84% fill -           exit -           waiting   
+filled+closed 5, wins 2, total -0.49R, per filled -0.10R
+
+== bitunix5 ==
+10-08 21:28 BTCUSD  L3 long  entry 80520.7 sl 78806.2 risk 2.13% fill 10-08 22:50 exit 10-09 17:50 Trail TP  +1.44R +3.06%
+10-15 08:09 XRPUSD  L3 long  entry 1.30719 sl 1.20899 risk 7.51% fill 10-15 08:10 exit 10-30 05:50 SL        -1.02R -7.64%
+10-22 10:05 ZECUSD  L1 long  entry 1274.51 sl 841.202 risk 34.00% fill 10-22 11:10 exit -           open      
+10-22 12:39 BTCUSD  L2 long  entry 81767.6 sl 78806.2 risk 3.62% fill 10-22 14:30 exit 10-30 02:10 SL        -1.04R -3.75%
+10-22 22:15 ETHUSD  L1 long  entry 2363.7 sl 1911.05 risk 19.15% fill 10-22 22:20 exit -           open      
+10-24 14:57 ZECUSD  L2 long  entry 1137.35 sl 841.202 risk 26.04% fill 10-24 19:45 exit -           open      
+10-24 20:42 BTCUSD  L4 long  entry 79149.1 sl 78806.2 risk 0.43% fill 10-30 02:10 exit 10-30 02:10 SL        -1.31R -0.57%
+10-31 09:47 ETHUSD  L2 long  entry 2220.41 sl 2054.33 risk 7.48% fill 11-06 02:55 exit -           open      
+11-04 20:18 BTCUSD  L1 short entry 80047.1 sl 81574.5 risk 1.91% fill 11-04 20:30 exit 11-05 20:35 Trail TP  +1.43R +2.73%
+11-04 20:44 BTCUSD  L2 short entry 81269 sl 82685.4 risk 1.74% fill -           exit -           waiting   
+11-05 08:03 BTCUSD  L2 short entry 80952.3 sl 82442.1 risk 1.84% fill -           exit -           waiting   
+filled+closed 5, wins 2, total -0.49R, per filled -0.10R
+bitunix SLVONUSD Bitunix SLVONUSDT 5m: {'code': 20015, 'data': None, 'msg': 'this Futures is not allowed to trade.'}
+10-08 09:30 BTCUSD          L2 long  risk   1.94% fill 10-08 19:10 exit 10-09 18:20 SL shift  +0.68R +1.32% [bitunix]
+10-08 09:30 DOGEUSD         L3 long  risk   6.20% fill 10-08 20:50 exit 10-15 07:50 SL        -1.02R -6.33% [bitunix]
+10-08 09:30 1000PEPEUSD     L4 long  risk   7.55% fill 10-08 20:40 exit 10-08 22:55 SL        -1.02R -7.68% [bitunix]  DELTA: SL shift 0.73
+10-08 09:30 LINKUSD         L3 long  risk   5.48% fill 10-08 18:15 exit 10-08 22:50 SL        -1.02R -5.61% [bitunix]
+10-08 17:30 BTCUSD          L3 long  risk   2.13% fill 10-08 22:50 exit 10-09 17:50 Trail TP  +1.44R +3.06% [bitunix]
+10-08 17:30 ZECUSD          L2 long  risk  13.98% fill 10-08 20:50 exit 10-12 02:45 SL shift  +0.74R +10.35% [bitunix]
+10-08 17:30 HYPEUSD         L4 long  risk   3.79% fill 10-08 22:55 exit 10-09 18:20 SL shift  +0.71R +2.71% [bitunix]
+10-08 17:30 SUIUSD          L1 long  risk   7.90% fill 10-08 19:10 exit 10-08 23:25 SL        -1.02R -8.03% [bitunix]
+10-08 17:30 SUIUSD          L2 long  risk   7.82% fill 10-08 22:40 exit 10-10 20:05 Trail TP  +1.48R +11.60% [bitunix]
+10-08 17:30 UNIUSD          L2 long  risk  13.32% fill 10-08 20:45 exit 10-30 03:20 SL        -1.01R -13.44% [bitunix]
+10-08 17:30 ENAUSD          L3 long  risk  10.64% fill 10-08 20:50 exit 10-11 22:10 Trail TP  +1.49R +15.82% [bitunix]
+10-08 17:30 WLDUSD          L2 long  risk   8.82% fill 10-08 21:35 exit 10-10 10:15 Trail TP  +1.48R +13.09% [bitunix]
+10-08 17:30 ADAUSD          L1 long  risk   8.51% fill 10-08 20:50 exit 10-11 05:55 SL shift  +0.73R +6.24% [bitunix]
+10-08 17:30 AVAXUSD         L1 long  risk   8.83% fill 10-08 22:50 exit 10-12 22:20 SL shift  +0.73R +6.49% [bitunix]
+10-08 17:30 LINKUSD         L4 long  risk   5.74% fill 10-08 21:05 exit 10-11 09:15 SL shift  +0.73R +4.17% [bitunix]
+10-08 17:30 TAOUSD          L3 long  risk   6.48% fill 10-08 20:45 exit 10-11 22:15 Trail TP  +1.48R +9.59% [bitunix]
+10-08 21:30 DOGEUSD         L4 long  risk   6.53% fill 10-13 06:20 exit 10-24 20:40 SL        -1.02R -6.66% [bitunix]
+10-08 21:30 BNBUSD          L1 long  risk   5.24% fill 10-08 22:55 exit 10-12 19:00 SL shift  +0.72R +3.79% [bitunix]
+10-08 21:30 TAOUSD          L4 long  risk   6.84% fill 10-08 22:25 exit 10-10 13:40 Trail TP  +1.48R +10.12% [bitunix]
+10-08 21:30 AAVEUSD         L1 long  risk   6.30% fill 10-08 22:40 exit 10-11 01:25 SL shift  +0.73R +4.59% [bitunix]
+10-08 21:30 NVDAXUSD        L1 long  risk   2.03% fill 10-08 22:35 exit 10-12 19:35 SL        -1.06R -2.16% [bitunix]
+10-09 17:30 SLVONUSD        L1 short risk   2.02% fill -           exit -           no fill    [delta]
+10-09 17:30 NVDAXUSD        L2 long  risk   1.92% fill 10-12 19:05 exit 10-13 08:15 SL        -1.07R -2.05% [bitunix]
+10-10 13:30 RLCUSD          L2 long  risk  17.12% fill 10-10 18:10 exit 10-11 07:50 SL shift  +0.74R +12.70% [bitunix]
+10-10 17:30 LINKUSD         L1 short risk   3.80% fill 10-11 21:25 exit 10-13 06:45 Trail TP  +1.47R +5.57% [bitunix]
+10-11 09:30 BTWUSD          L1 long  risk  16.48% fill 10-26 20:10 exit 10-26 20:50 SL        -1.01R -16.60% [bitunix]
+10-11 21:30 1000PEPEUSD     L1 short risk   5.62% fill 10-11 22:50 exit 10-13 05:40 Trail TP  +1.48R +8.30% [bitunix]
+10-12 17:30 STRKUSD         L1 long  risk  14.96% fill 10-12 19:40 exit 10-14 14:50 SL        -1.01R -15.08% [bitunix]
+10-12 17:30 NVDAXUSD        L3 long  risk   2.10% fill 10-13 05:35 exit 10-14 16:30 SL shift  +0.69R +1.44% [bitunix]
+10-13 05:30 SOLUSD          L1 long  risk   8.68% fill 10-13 06:20 exit 10-30 05:45 SL        -1.01R -8.81% [bitunix]
+10-13 05:30 AAVEUSD         L2 long  risk   6.16% fill 10-13 06:00 exit 10-16 18:30 SL shift  +0.73R +4.48% [bitunix]
+10-14 09:30 STRKUSD         L2 long  risk  15.76% fill 10-14 11:05 exit 10-15 21:55 SL shift  +0.74R +11.68% [bitunix]
+10-14 17:30 ENAUSD          L4 long  risk  11.63% fill 10-14 18:00 exit 10-21 21:25 Trail TP  +1.49R +17.30% [bitunix]
+10-14 17:30 FILUSD          L1 long  risk   6.51% fill 10-14 18:00 exit 10-15 07:55 SL        -1.02R -6.64% [bitunix]
+10-14 21:30 NVDAXUSD        L4 long  risk   2.13% fill 10-14 23:20 exit 10-15 18:55 SL        -1.06R -2.26% [bitunix]
+10-15 05:30 ETHUSD          L1 long  risk   7.58% fill 10-15 07:50 exit 10-30 07:00 SL        -1.02R -7.71% [bitunix]
+10-15 05:30 ONDOUSD         L3 long  risk   9.96% fill 10-15 07:45 exit 10-30 02:10 SL        -1.01R -10.09% [bitunix]
+10-15 05:30 FILUSD          L2 long  risk   6.37% fill 10-15 07:50 exit 10-16 01:25 Trail TP  +1.48R +9.42% [bitunix]
+10-15 05:30 AAVEUSD         L3 long  risk   6.97% fill 10-19 01:05 exit 10-20 20:40 SL shift  +0.73R +5.10% [bitunix]
+10-15 05:30 RLCUSD          L3 long  risk  21.33% fill 10-15 07:50 exit 10-15 20:35 SL shift  +0.74R +15.85% [bitunix]
+10-15 05:30 MRVL/USDT:USDT  L2 long  risk   7.71% fill 10-15 13:40 exit 10-29 19:20 SL        -1.02R -7.84% [bitunix]
+10-15 17:30 BTCUSD          L4 long  risk   2.17% fill 10-30 02:10 exit 10-30 05:45 SL        -1.06R -2.30% [bitunix]
+10-15 17:30 NEARUSD         L1 long  risk  13.71% fill 10-24 14:30 exit 11-03 00:10 SL        -1.01R -13.84% [bitunix]
+10-15 17:30 SUIUSD          L3 long  risk   8.99% fill 10-18 03:05 exit 10-20 20:40 SL shift  +0.73R +6.61% [bitunix]
+10-16 13:30 BTWUSD          L2 long  risk  19.46% fill 10-16 16:40 exit 10-16 20:15 SL shift  +0.74R +14.46% [bitunix]
+10-16 21:30 STRKUSD         L3 long  risk  19.39% fill 10-17 08:00 exit 10-19 19:20 SL        -1.01R -19.51% [bitunix]
+10-18 05:30 MRVL/USDT:USDT  L3 long  risk   8.85% fill 10-18 23:15 exit 10-19 19:25 SL shift  +0.73R +6.50% [bitunix]
+10-18 17:30 STRKUSD         L4 long  risk  22.95% fill 10-18 22:15 exit 10-24 21:50 SL        -1.01R -23.07% [bitunix]
+10-18 21:30 FILUSD          L3 long  risk   7.23% fill 10-22 14:05 exit 10-24 19:45 SL        -1.02R -7.36% [bitunix]
+10-19 17:30 METAXUSD        L1 long  risk   5.20% fill 10-20 19:00 exit 10-22 01:40 SL shift  +0.72R +3.76% [bitunix]
+10-20 17:30 1000PEPEUSD     L2 short risk   4.99% fill 10-20 19:30 exit 10-20 22:30 SL        -1.03R -5.12% [bitunix]
+10-20 17:30 1000PEPEUSD     L3 short risk   5.18% fill 10-20 19:35 exit 10-23 00:00 SL shift  +0.72R +3.75% [bitunix]
+10-21 05:30 NVDAXUSD        L1 short risk   1.99% fill 10-22 02:15 exit 10-22 19:55 Trail TP  +1.43R +2.85% [bitunix]
+10-21 17:30 ENAUSD          L1 short risk   7.69% fill 10-21 20:40 exit 10-22 19:00 SL shift  +0.73R +5.64% [bitunix]
+10-21 17:30 1000PEPEUSD     L4 short risk   4.97% fill 10-21 20:20 exit 10-22 14:10 Trail TP  +1.47R +7.33% [bitunix]
+10-21 21:30 BTWUSD          L3 long  risk  24.77% fill 10-21 21:30 exit 10-21 22:25 SL shift  +0.74R +18.43% [bitunix]
+10-22 13:30 AVAXUSD         L2 long  risk   8.81% fill 10-22 19:20 exit 10-30 02:15 SL        -1.01R -8.94% [bitunix]
+10-22 13:30 RLCUSD          L4 long  risk  25.71% fill 10-22 18:30 exit 10-29 07:35 SL        -1.00R -25.83% [bitunix]
+10-22 17:30 METAXUSD        L2 long  risk   5.03% fill 10-22 19:00 exit 10-26 16:25 SL        -1.03R -5.16% [bitunix]
+10-22 21:30 METAXUSD        L3 long  risk   5.64% fill 10-23 19:00 exit 11-05 20:35 SL        -1.02R -5.77% [bitunix]
+10-24 13:30 ONDOUSD         L4 long  risk  10.82% fill 10-24 19:45 exit -           open       [bitunix]
+10-24 13:30 FILUSD          L4 long  risk   7.67% fill 10-24 19:00 exit 10-30 02:00 SL        -1.02R -7.80% [bitunix]
+10-24 17:30 UNIUSD          L3 long  risk  16.04% fill 10-24 19:45 exit 11-05 16:15 SL shift  +0.74R +11.89% [bitunix]
+10-24 17:30 ADAUSD          L3 long  risk   9.78% fill 10-24 19:45 exit 10-30 05:50 SL        -1.01R -9.90% [bitunix]
+10-24 17:30 AAVEUSD         L4 long  risk   7.39% fill 10-24 19:35 exit 10-30 02:10 SL        -1.02R -7.52% [bitunix]
+10-25 13:30 WLDUSD          L3 long  risk  10.22% fill 10-25 14:20 exit 10-30 02:10 SL        -1.01R -10.34% [bitunix]
+10-26 17:30 BTWUSD          L4 long  risk  30.89% fill 10-26 20:20 exit 10-26 21:00 Trail TP  +1.49R +46.17% [bitunix]  DELTA: SL shift 0.75
+10-27 17:30 BTWUSD          L1 short risk  17.04% fill 10-27 19:35 exit 10-28 03:00 SL        -1.01R -17.18% [bitunix]
+10-27 21:30 HYPEUSD         L1 short risk   3.94% fill 10-28 15:30 exit 10-29 16:00 SL shift  +0.72R +2.82% [bitunix]
+10-28 13:30 NVDAXUSD        L1 short risk   2.03% fill -           exit -           waiting    [bitunix]
+10-28 17:30 METAXUSD        L4 long  risk   5.91% fill 11-03 02:20 exit -           open       [bitunix]
+10-28 21:30 SOXLBUSD        L1 short risk  11.52% fill -           exit -           waiting    [bitunix]
+10-29 05:30 AVAXUSD         L3 long  risk  10.21% fill 10-30 02:10 exit -           open       [bitunix]
+10-29 13:30 HYPEUSD         L2 short risk   3.54% fill 10-29 16:15 exit 10-29 17:30 SL        -1.04R -3.67% [bitunix]
+10-29 13:30 HYPEUSD         L3 short risk   3.71% fill 10-29 17:15 exit 10-29 18:35 SL        -1.04R -3.85% [bitunix]
+10-30 05:30 ETHUSD          L2 long  risk   7.48% fill 10-30 05:45 exit 11-05 20:25 SL shift  +0.73R +5.47% [bitunix]
+10-30 05:30 XRPUSD          L4 long  risk   7.99% fill 10-30 05:45 exit 11-05 00:30 SL shift  +0.73R +5.86% [bitunix]
+10-30 05:30 NEARUSD         L2 long  risk  14.28% fill 10-30 05:45 exit -           open       [bitunix]
+10-30 05:30 BNBUSD          L2 long  risk   5.07% fill 10-30 05:50 exit 11-05 10:50 SL shift  +0.72R +3.67% [bitunix]
+10-30 05:30 1000PEPEUSD     L4 long  risk   6.50% fill 10-30 06:00 exit 10-30 06:55 SL shift  +0.73R +4.74% [bitunix]  DELTA: Trail TP 1.48
+10-30 05:30 ADAUSD          L4 long  risk  10.61% fill 10-30 05:45 exit -           open       [bitunix]
+10-30 05:30 MRVL/USDT:USDT  L4 long  risk   9.52% fill 10-30 06:30 exit 11-02 20:00 SL        -1.01R -9.65% [bitunix]
+10-31 05:30 SOLUSD          L2 long  risk   8.65% fill 10-31 10:10 exit -           open       [bitunix]
+10-31 05:30 HYPEUSD         L1 long  risk   3.49% fill 10-31 06:25 exit 11-02 12:10 SL        -1.04R -3.62% [bitunix]
+10-31 13:30 HYPEUSD         L2 long  risk   3.33% fill 10-31 14:00 exit 11-02 22:50 SL        -1.04R -3.46% [bitunix]
+11-01 05:30 AAVEUSD         L1 short risk   7.15% fill 11-01 10:30 exit 11-03 08:30 Trail TP  +1.48R +10.59% [bitunix]
+11-01 17:30 1000PEPEUSD     L2 long  risk   5.48% fill 11-02 19:40 exit 11-03 19:05 SL shift  +0.73R +3.98% [bitunix]
+11-02 17:30 HYPEUSD         L3 long  risk   3.69% fill 11-02 22:40 exit 11-03 21:20 SL shift  +0.71R +2.63% [bitunix]
+11-02 21:30 1000PEPEUSD     L3 long  risk   6.18% fill -           exit -           waiting    [bitunix]
+11-03 05:30 HYPEUSD         L4 long  risk   3.80% fill 11-04 07:10 exit 11-04 14:20 Trail TP  +1.46R +5.57% [bitunix]
+11-04 05:30 SOLUSD          L3 long  risk  10.00% fill 11-05 21:20 exit -           open       [bitunix]
+11-04 17:30 BTCUSD          L1 short risk   1.91% fill 11-04 20:30 exit 11-05 20:35 Trail TP  +1.43R +2.73% [bitunix]
+11-04 17:30 BTCUSD          L2 short risk   1.74% fill -           exit -           waiting    [bitunix]
+11-04 17:30 TSLAXUSD        L1 long  risk   4.45% fill 11-05 19:55 exit 11-05 20:10 SL        -1.03R -4.58% [bitunix]
+11-05 05:30 BTCUSD          L2 short risk   1.84% fill -           exit -           waiting    [bitunix]
+11-05 05:30 XAUTUSD         L1 short risk   2.66% fill -           exit -           waiting    [bitunix]
+11-05 17:30 TSLAXUSD        L3 long  risk   4.77% fill 11-05 20:20 exit -           open       [bitunix]  DELTA: SL shift 0.72
+
+alerts 97; closed 82, no fill 1, open 8, waiting 6
+closed 82: 45W / 37L, total +6.79R (+44.74%), per trade +0.083R / +0.546%
