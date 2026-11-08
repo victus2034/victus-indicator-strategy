@@ -18,7 +18,8 @@ anything; +1R moves the stop to +0.75R; at 1.5R the stop locks at +1.5R and the
 target steps +0.25R, the stop trailing 0.5R behind the highest target; no time limit.
 Stops slip 0.05%; fees 0.0826% round trip (Delta).
 
-    python research/journal_fib_verify.py
+    python research/journal_fib_verify.py fib_trendline_alert_records.jsonl live
+    python research/journal_fib_verify.py fibtl_rebuild_records.jsonl rebuild   # what the journal shows
 """
 from __future__ import annotations
 
@@ -115,7 +116,8 @@ def score(rec, bars, res_s, include_alert_candle):
 
 
 def main():
-    OUT.mkdir(parents=True, exist_ok=True)
+    out = OUT / (sys.argv[2] if len(sys.argv) > 2 else "live")
+    out.mkdir(parents=True, exist_ok=True)
     recs = []
     for line in open(sys.argv[1] if len(sys.argv) > 1 else "fib_trendline_alert_records.jsonl"):
         try:
@@ -148,7 +150,7 @@ def main():
             "delta5": score(rec, cache[(sym, "d5")], 300, False),
             "bitunix5": score(rec, cache[(sym, "b5")], 300, False),
         })
-    (OUT / "result.json").write_text(json.dumps(rows, indent=1))
+    (out / "result.json").write_text(json.dumps(rows, indent=1))
     lines = []
     for way in ("journal", "delta5", "bitunix5"):
         lines.append(f"\n== {way} ==")
@@ -167,7 +169,7 @@ def main():
                 w += r > 0
         lines.append(f"filled+closed {n}, wins {w}, total {tot:+.2f}R, per filled {tot / max(n, 1):+.2f}R")
     text = "\n".join(lines)
-    (OUT / "result.txt").write_text(text)
+    (out / "result.txt").write_text(text)
     print(text)
 
 

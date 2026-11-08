@@ -135,7 +135,9 @@ jobs:
                        head -3 research/out/coindcx_demo/replay_*.txt ;;
             journal-verify) git fetch --depth 1 origin scanner-runtime-state
                        git show FETCH_HEAD:fib_trendline_alert_records.jsonl > /tmp/fib_records.jsonl
-                       python research/journal_fib_verify.py /tmp/fib_records.jsonl ;;
+                       git show FETCH_HEAD:fibtl_rebuild_records.jsonl > /tmp/fibtl_rebuild.jsonl
+                       python research/journal_fib_verify.py /tmp/fibtl_rebuild.jsonl rebuild
+                       python research/journal_fib_verify.py /tmp/fib_records.jsonl live ;;
             discord-trace) git fetch --shallow-since=2026-10-19 origin scanner-runtime-state
                        python research/discord_alert_trace.py ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
