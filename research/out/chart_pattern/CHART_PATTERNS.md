@@ -1,0 +1,209 @@
+# Chart patterns as confirmation for fib / TL alerts (2026-09-01 to now)
+
+live = today's alerts (limit at entry). confirm entry = after the fill, the pattern on one of the first 3 candles of the alert's timeframe; enter at its close, same stop, fib 2R + BE / TL 1R. filter = double bottom / H&S already formed at the entry before the touch, live trade kept. Net after fees, R and % per trade. Crypto on Delta candles, NSE on Yahoo. Entries filled within 15 min of US CPI/PPI/FOMC left out.
+
+| market   | alert   | tf   | rule                                         |   alerts |   trades |   win_% |   R_total |   R_per_trade |   %_total |   %_per_trade |
+|:---------|:--------|:-----|:---------------------------------------------|---------:|---------:|--------:|----------:|--------------:|----------:|--------------:|
+| crypto   | Fib     | 4H   | live (all alerts)                            |      846 |      612 |      46 |     -90.8 |        -0.148 |     -58.7 |        -0.096 |
+| crypto   | Fib     | 4H   | Engulfing (confirm entry)                    |       80 |       66 |      46 |     -14.1 |        -0.213 |     -32.3 |        -0.489 |
+| crypto   | Fib     | 4H   | Hammer / Shooting star (confirm entry)       |       63 |       52 |      52 |      -8.2 |        -0.157 |     -24.5 |        -0.471 |
+| crypto   | Fib     | 4H   | Inv. hammer / Hanging man (confirm entry)    |       48 |       45 |      55 |      -5   |        -0.112 |      -1.5 |        -0.034 |
+| crypto   | Fib     | 4H   | Morning / Evening star (confirm entry)       |       30 |       28 |      55 |       0.4 |         0.015 |      43   |         1.535 |
+| crypto   | Fib     | 4H   | Piercing / Dark cloud (confirm entry)        |       44 |       38 |      62 |      -5.1 |        -0.134 |     -18.3 |        -0.482 |
+| crypto   | Fib     | 4H   | Harami (confirm entry)                       |       84 |       76 |      46 |      -9.3 |        -0.123 |     -57   |        -0.75  |
+| crypto   | Fib     | 4H   | Dragonfly / Gravestone doji (confirm entry)  |        7 |        6 |      50 |      -1.2 |        -0.207 |      -1   |        -0.167 |
+| crypto   | Fib     | 4H   | Any candle pattern (confirm entry)           |      272 |      243 |      47 |     -48.6 |        -0.2   |    -144.4 |        -0.594 |
+| crypto   | Fib     | 4H   | Double bottom / top (filter)                 |      125 |      120 |      55 |      -3.5 |        -0.029 |      13.5 |         0.113 |
+| crypto   | Fib     | 4H   | Double bottom / top + candle (confirm entry) |       66 |       58 |      48 |     -11.3 |        -0.194 |      -8.5 |        -0.147 |
+| crypto   | Fib     | 4H   | Inverse H&S / H&S (filter)                   |      191 |      190 |      36 |     -50.2 |        -0.264 |     -39   |        -0.205 |
+| crypto   | Fib     | 4H   | Inverse H&S / H&S + candle (confirm entry)   |       68 |       64 |      42 |     -19.2 |        -0.299 |     -52   |        -0.812 |
+| crypto   | Fib     | 1D+  | live (all alerts)                            |      259 |      212 |      49 |      -9.3 |        -0.044 |     -52.8 |        -0.249 |
+| crypto   | Fib     | 1D+  | Engulfing (confirm entry)                    |       23 |       18 |      45 |      -0.2 |        -0.009 |      -0.9 |        -0.051 |
+| crypto   | Fib     | 1D+  | Hammer / Shooting star (confirm entry)       |       14 |       14 |      20 |      -6.1 |        -0.439 |     -82.2 |        -5.871 |
+| crypto   | Fib     | 1D+  | Inv. hammer / Hanging man (confirm entry)    |       22 |       22 |      38 |      -2.6 |        -0.117 |      13.9 |         0.63  |
+| crypto   | Fib     | 1D+  | Morning / Evening star (confirm entry)       |       17 |       14 |      89 |      14.9 |         1.064 |     150.1 |        10.724 |
+| crypto   | Fib     | 1D+  | Piercing / Dark cloud (confirm entry)        |       12 |        9 |      33 |      -4.1 |        -0.453 |     -50.7 |        -5.638 |
+| crypto   | Fib     | 1D+  | Harami (confirm entry)                       |       42 |       36 |      44 |      -3.7 |        -0.102 |     -19.2 |        -0.535 |
+| crypto   | Fib     | 1D+  | Any candle pattern (confirm entry)           |       97 |       81 |      41 |     -11.3 |        -0.139 |    -111.3 |        -1.374 |
+| crypto   | Fib     | 1D+  | Double bottom / top (filter)                 |       16 |       15 |      50 |      -0.3 |        -0.023 |     -17.5 |        -1.166 |
+| crypto   | Fib     | 1D+  | Double bottom / top + candle (confirm entry) |        8 |        7 |      40 |       0.9 |         0.129 |      -0.8 |        -0.12  |
+| crypto   | Fib     | 1D+  | Inverse H&S / H&S (filter)                   |       25 |       25 |      68 |      11.3 |         0.451 |      41.6 |         1.663 |
+| crypto   | Fib     | 1D+  | Inverse H&S / H&S + candle (confirm entry)   |       15 |       13 |      44 |      -5.2 |        -0.402 |     -43.3 |        -3.333 |
+| crypto   | Fib     | 1D   | live (all alerts)                            |      210 |      179 |      51 |      -0.3 |        -0.002 |     -40.3 |        -0.225 |
+| crypto   | Fib     | 1D   | Engulfing (confirm entry)                    |       21 |       18 |      45 |      -0.2 |        -0.009 |      -0.9 |        -0.051 |
+| crypto   | Fib     | 1D   | Hammer / Shooting star (confirm entry)       |       12 |       12 |      22 |      -5.1 |        -0.428 |     -65.4 |        -5.452 |
+| crypto   | Fib     | 1D   | Inv. hammer / Hanging man (confirm entry)    |       21 |       21 |      38 |      -2.6 |        -0.122 |      13.9 |         0.661 |
+| crypto   | Fib     | 1D   | Morning / Evening star (confirm entry)       |       17 |       14 |      89 |      14.9 |         1.064 |     150.1 |        10.724 |
+| crypto   | Fib     | 1D   | Piercing / Dark cloud (confirm entry)        |       10 |        9 |      33 |      -4.1 |        -0.453 |     -50.7 |        -5.638 |
+| crypto   | Fib     | 1D   | Harami (confirm entry)                       |       38 |       34 |      46 |      -2.6 |        -0.078 |     -14.5 |        -0.427 |
+| crypto   | Fib     | 1D   | Any candle pattern (confirm entry)           |       87 |       77 |      43 |      -9.2 |        -0.12  |     -89.8 |        -1.166 |
+| crypto   | Fib     | 1D   | Double bottom / top (filter)                 |       15 |       14 |      55 |       0.7 |         0.047 |      13   |         0.926 |
+| crypto   | Fib     | 1D   | Double bottom / top + candle (confirm entry) |        8 |        7 |      40 |       0.9 |         0.129 |      -0.8 |        -0.12  |
+| crypto   | Fib     | 1D   | Inverse H&S / H&S (filter)                   |       25 |       25 |      68 |      11.3 |         0.451 |      41.6 |         1.663 |
+| crypto   | Fib     | 1D   | Inverse H&S / H&S + candle (confirm entry)   |       15 |       13 |      44 |      -5.2 |        -0.402 |     -43.3 |        -3.333 |
+| crypto   | Fib     | 1W   | live (all alerts)                            |       37 |       27 |      32 |      -8   |        -0.297 |       7.9 |         0.292 |
+| crypto   | Fib     | 1W   | Engulfing (confirm entry)                    |        1 |        0 |     nan |       0   |       nan     |       0   |       nan     |
+| crypto   | Fib     | 1W   | Hammer / Shooting star (confirm entry)       |        2 |        2 |       0 |      -1   |        -0.505 |     -16.8 |        -8.386 |
+| crypto   | Fib     | 1W   | Inv. hammer / Hanging man (confirm entry)    |        1 |        1 |     nan |      -0   |        -0.007 |      -0   |        -0.039 |
+| crypto   | Fib     | 1W   | Piercing / Dark cloud (confirm entry)        |        1 |        0 |     nan |       0   |       nan     |       0   |       nan     |
+| crypto   | Fib     | 1W   | Harami (confirm entry)                       |        2 |        2 |       0 |      -1   |        -0.518 |      -4.7 |        -2.37  |
+| crypto   | Fib     | 1W   | Any candle pattern (confirm entry)           |        6 |        4 |       0 |      -2   |        -0.511 |     -21.5 |        -5.378 |
+| crypto   | Fib     | 1M   | live (all alerts)                            |       12 |        6 |      57 |      -1   |        -0.173 |     -20.3 |        -3.381 |
+| crypto   | Fib     | 1M   | Engulfing (confirm entry)                    |        1 |        0 |     nan |       0   |       nan     |       0   |       nan     |
+| crypto   | Fib     | 1M   | Piercing / Dark cloud (confirm entry)        |        1 |        0 |     nan |       0   |       nan     |       0   |       nan     |
+| crypto   | Fib     | 1M   | Harami (confirm entry)                       |        2 |        0 |     nan |       0   |       nan     |       0   |       nan     |
+| crypto   | Fib     | 1M   | Any candle pattern (confirm entry)           |        4 |        0 |     nan |       0   |       nan     |       0   |       nan     |
+| crypto   | Fib     | 1M   | Double bottom / top (filter)                 |        1 |        1 |       0 |      -1   |        -1.005 |     -30.4 |       -30.449 |
+| crypto   | TL      | 4H   | live (all alerts)                            |     1091 |      793 |      36 |    -303.1 |        -0.382 |    -353.8 |        -0.446 |
+| crypto   | TL      | 4H   | Engulfing (confirm entry)                    |      102 |       98 |      60 |      16.3 |         0.167 |      40.9 |         0.417 |
+| crypto   | TL      | 4H   | Hammer / Shooting star (confirm entry)       |       56 |       49 |      55 |       2.1 |         0.043 |       3.1 |         0.063 |
+| crypto   | TL      | 4H   | Inv. hammer / Hanging man (confirm entry)    |       25 |       25 |      48 |      -4   |        -0.161 |      -6.4 |        -0.254 |
+| crypto   | TL      | 4H   | Morning / Evening star (confirm entry)       |       18 |       17 |      59 |       2.5 |         0.147 |      12.1 |         0.711 |
+| crypto   | TL      | 4H   | Piercing / Dark cloud (confirm entry)        |       40 |       35 |      60 |       5.2 |         0.149 |      -0.7 |        -0.019 |
+| crypto   | TL      | 4H   | Harami (confirm entry)                       |       44 |       41 |      44 |      -7.9 |        -0.193 |       9.3 |         0.227 |
+| crypto   | TL      | 4H   | Dragonfly / Gravestone doji (confirm entry)  |       10 |       10 |      20 |      -6.8 |        -0.679 |     -15.9 |        -1.591 |
+| crypto   | TL      | 4H   | Any candle pattern (confirm entry)           |      222 |      210 |      55 |       8.4 |         0.04  |      44.9 |         0.214 |
+| crypto   | TL      | 4H   | Double bottom / top (filter)                 |      422 |      413 |      34 |    -174.9 |        -0.423 |    -190.3 |        -0.461 |
+| crypto   | TL      | 4H   | Double bottom / top + candle (confirm entry) |      114 |      105 |      56 |       6.3 |         0.06  |      34.2 |         0.326 |
+| crypto   | TL      | 4H   | Inverse H&S / H&S (filter)                   |      180 |      180 |      31 |     -89.7 |        -0.499 |    -109   |        -0.605 |
+| crypto   | TL      | 4H   | Inverse H&S / H&S + candle (confirm entry)   |       42 |       40 |      50 |      -2.5 |        -0.063 |      11.3 |         0.282 |
+| crypto   | TL      | 1D+  | live (all alerts)                            |      145 |      133 |      27 |     -73.3 |        -0.551 |     -83.8 |        -0.63  |
+| crypto   | TL      | 1D+  | Engulfing (confirm entry)                    |        9 |        9 |      33 |      -3.2 |        -0.355 |     -36.5 |        -4.056 |
+| crypto   | TL      | 1D+  | Hammer / Shooting star (confirm entry)       |        5 |        5 |      40 |      -1.1 |        -0.228 |      -9.4 |        -1.879 |
+| crypto   | TL      | 1D+  | Inv. hammer / Hanging man (confirm entry)    |        3 |        3 |     100 |       2.9 |         0.965 |      21.4 |         7.119 |
+| crypto   | TL      | 1D+  | Morning / Evening star (confirm entry)       |        2 |        2 |       0 |      -2.1 |        -1.03  |      -9.3 |        -4.625 |
+| crypto   | TL      | 1D+  | Piercing / Dark cloud (confirm entry)        |        1 |        1 |       0 |      -1   |        -1.01  |     -12.6 |       -12.56  |
+| crypto   | TL      | 1D+  | Harami (confirm entry)                       |        6 |        6 |      50 |      -0.2 |        -0.032 |      15.1 |         2.513 |
+| crypto   | TL      | 1D+  | Any candle pattern (confirm entry)           |       20 |       20 |      50 |      -0.6 |        -0.03  |       2.7 |         0.135 |
+| crypto   | TL      | 1D+  | Double bottom / top (filter)                 |       38 |       38 |      21 |     -26   |        -0.684 |     -30.5 |        -0.803 |
+| crypto   | TL      | 1D+  | Double bottom / top + candle (confirm entry) |        4 |        4 |      75 |       1.9 |         0.467 |      27.2 |         6.797 |
+| crypto   | TL      | 1D+  | Inverse H&S / H&S (filter)                   |       25 |       25 |      28 |     -13.3 |        -0.533 |     -18.8 |        -0.753 |
+| crypto   | TL      | 1D+  | Inverse H&S / H&S + candle (confirm entry)   |        5 |        5 |     100 |       4.8 |         0.959 |      14.7 |         2.949 |
+| crypto   | TL      | 1D   | live (all alerts)                            |      141 |      129 |      26 |     -75.2 |        -0.583 |    -101.8 |        -0.789 |
+| crypto   | TL      | 1D   | Engulfing (confirm entry)                    |        9 |        9 |      33 |      -3.2 |        -0.355 |     -36.5 |        -4.056 |
+| crypto   | TL      | 1D   | Hammer / Shooting star (confirm entry)       |        5 |        5 |      40 |      -1.1 |        -0.228 |      -9.4 |        -1.879 |
+| crypto   | TL      | 1D   | Inv. hammer / Hanging man (confirm entry)    |        2 |        2 |     100 |       1.9 |         0.95  |       3.1 |         1.561 |
+| crypto   | TL      | 1D   | Morning / Evening star (confirm entry)       |        2 |        2 |       0 |      -2.1 |        -1.03  |      -9.3 |        -4.625 |
+| crypto   | TL      | 1D   | Piercing / Dark cloud (confirm entry)        |        1 |        1 |       0 |      -1   |        -1.01  |     -12.6 |       -12.56  |
+| crypto   | TL      | 1D   | Harami (confirm entry)                       |        5 |        5 |      40 |      -1.2 |        -0.237 |       0.2 |         0.04  |
+| crypto   | TL      | 1D   | Any candle pattern (confirm entry)           |       19 |       19 |      47 |      -1.6 |        -0.084 |     -12.2 |        -0.641 |
+| crypto   | TL      | 1D   | Double bottom / top (filter)                 |       37 |       37 |      19 |     -27   |        -0.729 |     -35.4 |        -0.957 |
+| crypto   | TL      | 1D   | Double bottom / top + candle (confirm entry) |        3 |        3 |      67 |       0.9 |         0.291 |      12.3 |         4.103 |
+| crypto   | TL      | 1D   | Inverse H&S / H&S (filter)                   |       25 |       25 |      28 |     -13.3 |        -0.533 |     -18.8 |        -0.753 |
+| crypto   | TL      | 1D   | Inverse H&S / H&S + candle (confirm entry)   |        5 |        5 |     100 |       4.8 |         0.959 |      14.7 |         2.949 |
+| crypto   | TL      | 1W   | live (all alerts)                            |        4 |        4 |      75 |       1.9 |         0.471 |      18   |         4.497 |
+| crypto   | TL      | 1W   | Inv. hammer / Hanging man (confirm entry)    |        1 |        1 |     100 |       1   |         0.995 |      18.2 |        18.234 |
+| crypto   | TL      | 1W   | Harami (confirm entry)                       |        1 |        1 |     100 |       1   |         0.994 |      14.9 |        14.878 |
+| crypto   | TL      | 1W   | Any candle pattern (confirm entry)           |        1 |        1 |     100 |       1   |         0.994 |      14.9 |        14.878 |
+| crypto   | TL      | 1W   | Double bottom / top (filter)                 |        1 |        1 |     100 |       1   |         0.983 |       4.9 |         4.895 |
+| crypto   | TL      | 1W   | Double bottom / top + candle (confirm entry) |        1 |        1 |     100 |       1   |         0.994 |      14.9 |        14.878 |
+| nse      | Fib     | 4H   | live (all alerts)                            |     1464 |     1087 |      41 |    -237.5 |        -0.219 |    -434.1 |        -0.399 |
+| nse      | Fib     | 4H   | Engulfing (confirm entry)                    |      111 |       95 |      46 |      -2.1 |        -0.022 |      -5.8 |        -0.061 |
+| nse      | Fib     | 4H   | Hammer / Shooting star (confirm entry)       |      121 |      108 |      51 |      -1.3 |        -0.012 |      23.9 |         0.221 |
+| nse      | Fib     | 4H   | Inv. hammer / Hanging man (confirm entry)    |       73 |       67 |      18 |     -37.9 |        -0.566 |     -85.9 |        -1.282 |
+| nse      | Fib     | 4H   | Morning / Evening star (confirm entry)       |       50 |       38 |      50 |      -5.1 |        -0.135 |     -15.8 |        -0.417 |
+| nse      | Fib     | 4H   | Piercing / Dark cloud (confirm entry)        |       50 |       44 |      39 |      -8.7 |        -0.198 |     -24.5 |        -0.558 |
+| nse      | Fib     | 4H   | Harami (confirm entry)                       |      140 |      123 |      36 |     -30.3 |        -0.246 |     -67   |        -0.545 |
+| nse      | Fib     | 4H   | Dragonfly / Gravestone doji (confirm entry)  |       16 |       15 |      55 |       4.3 |         0.29  |      22.5 |         1.501 |
+| nse      | Fib     | 4H   | Any candle pattern (confirm entry)           |      422 |      367 |      40 |     -69.9 |        -0.19  |    -117.4 |        -0.32  |
+| nse      | Fib     | 4H   | Double bottom / top (filter)                 |      229 |      218 |      39 |     -43.2 |        -0.198 |     -83.5 |        -0.383 |
+| nse      | Fib     | 4H   | Double bottom / top + candle (confirm entry) |       81 |       69 |      45 |     -12.5 |        -0.182 |     -11.3 |        -0.164 |
+| nse      | Fib     | 4H   | Inverse H&S / H&S (filter)                   |      433 |      421 |      36 |    -126.9 |        -0.301 |    -174.6 |        -0.415 |
+| nse      | Fib     | 4H   | Inverse H&S / H&S + candle (confirm entry)   |      151 |      135 |      36 |     -29.8 |        -0.221 |     -47.2 |        -0.35  |
+| nse      | Fib     | 1D+  | live (all alerts)                            |     1643 |     1204 |      40 |    -217.4 |        -0.181 |    -479.5 |        -0.398 |
+| nse      | Fib     | 1D+  | Engulfing (confirm entry)                    |       83 |       55 |      44 |     -15.1 |        -0.274 |     -96.2 |        -1.748 |
+| nse      | Fib     | 1D+  | Hammer / Shooting star (confirm entry)       |       81 |       66 |      49 |      -1.5 |        -0.023 |     -35.2 |        -0.533 |
+| nse      | Fib     | 1D+  | Inv. hammer / Hanging man (confirm entry)    |       71 |       40 |      48 |      -0.4 |        -0.011 |      -6.6 |        -0.166 |
+| nse      | Fib     | 1D+  | Morning / Evening star (confirm entry)       |       36 |       30 |      56 |       7.5 |         0.251 |      25.1 |         0.836 |
+| nse      | Fib     | 1D+  | Piercing / Dark cloud (confirm entry)        |       44 |       39 |      42 |      -3.8 |        -0.098 |     -34.2 |        -0.878 |
+| nse      | Fib     | 1D+  | Harami (confirm entry)                       |      112 |       93 |      48 |      -5   |        -0.053 |      -2.4 |        -0.026 |
+| nse      | Fib     | 1D+  | Dragonfly / Gravestone doji (confirm entry)  |        7 |        6 |      67 |       0.9 |         0.154 |      -4.2 |        -0.702 |
+| nse      | Fib     | 1D+  | Any candle pattern (confirm entry)           |      339 |      252 |      48 |     -14.6 |        -0.058 |    -118.4 |        -0.47  |
+| nse      | Fib     | 1D+  | Double bottom / top (filter)                 |      132 |      124 |      39 |     -17.5 |        -0.141 |     -39.2 |        -0.316 |
+| nse      | Fib     | 1D+  | Double bottom / top + candle (confirm entry) |       45 |       33 |      50 |      -0.9 |        -0.028 |      -1.4 |        -0.042 |
+| nse      | Fib     | 1D+  | Inverse H&S / H&S (filter)                   |      261 |      248 |      44 |     -39.7 |        -0.16  |     -61.2 |        -0.247 |
+| nse      | Fib     | 1D+  | Inverse H&S / H&S + candle (confirm entry)   |       62 |       51 |      43 |      -9.5 |        -0.185 |     -37.6 |        -0.736 |
+| nse      | Fib     | 1D   | live (all alerts)                            |     1213 |      927 |      41 |    -158.6 |        -0.171 |    -312   |        -0.337 |
+| nse      | Fib     | 1D   | Engulfing (confirm entry)                    |       65 |       49 |      41 |     -13   |        -0.265 |     -73.4 |        -1.498 |
+| nse      | Fib     | 1D   | Hammer / Shooting star (confirm entry)       |       68 |       54 |      52 |       1.7 |         0.031 |      -2   |        -0.037 |
+| nse      | Fib     | 1D   | Inv. hammer / Hanging man (confirm entry)    |       66 |       36 |      48 |       0.7 |         0.019 |      -3.9 |        -0.11  |
+| nse      | Fib     | 1D   | Morning / Evening star (confirm entry)       |       30 |       29 |      56 |       8.6 |         0.295 |      33.2 |         1.146 |
+| nse      | Fib     | 1D   | Piercing / Dark cloud (confirm entry)        |       36 |       33 |      48 |       0.3 |         0.009 |      -2.7 |        -0.083 |
+| nse      | Fib     | 1D   | Harami (confirm entry)                       |      103 |       85 |      49 |      -1.8 |        -0.022 |      11.7 |         0.137 |
+| nse      | Fib     | 1D   | Dragonfly / Gravestone doji (confirm entry)  |        5 |        4 |     100 |       1.9 |         0.486 |       5.8 |         1.455 |
+| nse      | Fib     | 1D   | Any candle pattern (confirm entry)           |      293 |      225 |      49 |      -2.1 |        -0.009 |     -35.1 |        -0.156 |
+| nse      | Fib     | 1D   | Double bottom / top (filter)                 |      119 |      111 |      43 |      -7.7 |        -0.069 |     -13.4 |        -0.121 |
+| nse      | Fib     | 1D   | Double bottom / top + candle (confirm entry) |       44 |       33 |      48 |      -0.9 |        -0.028 |      -1.4 |        -0.042 |
+| nse      | Fib     | 1D   | Inverse H&S / H&S (filter)                   |      231 |      219 |      45 |     -32.6 |        -0.149 |     -55.4 |        -0.253 |
+| nse      | Fib     | 1D   | Inverse H&S / H&S + candle (confirm entry)   |       61 |       50 |      44 |      -8.4 |        -0.169 |     -30.9 |        -0.617 |
+| nse      | Fib     | 1W   | live (all alerts)                            |      330 |      206 |      36 |     -40.5 |        -0.196 |     -74.8 |        -0.363 |
+| nse      | Fib     | 1W   | Engulfing (confirm entry)                    |       16 |        6 |      56 |      -2.1 |        -0.352 |     -22.8 |        -3.792 |
+| nse      | Fib     | 1W   | Hammer / Shooting star (confirm entry)       |       13 |       12 |      29 |      -3.2 |        -0.265 |     -33.2 |        -2.763 |
+| nse      | Fib     | 1W   | Inv. hammer / Hanging man (confirm entry)    |        5 |        4 |      50 |      -1.1 |        -0.274 |      -2.7 |        -0.668 |
+| nse      | Fib     | 1W   | Morning / Evening star (confirm entry)       |        6 |        1 |      50 |      -1   |        -1.019 |      -8.2 |        -8.163 |
+| nse      | Fib     | 1W   | Piercing / Dark cloud (confirm entry)        |        8 |        6 |      20 |      -4.1 |        -0.684 |     -31.5 |        -5.252 |
+| nse      | Fib     | 1W   | Harami (confirm entry)                       |        9 |        8 |      40 |      -3.1 |        -0.393 |     -14.1 |        -1.761 |
+| nse      | Fib     | 1W   | Dragonfly / Gravestone doji (confirm entry)  |        2 |        2 |       0 |      -1   |        -0.51  |     -10   |        -5.016 |
+| nse      | Fib     | 1W   | Any candle pattern (confirm entry)           |       44 |       27 |      42 |     -12.5 |        -0.464 |     -83.3 |        -3.085 |
+| nse      | Fib     | 1W   | Double bottom / top (filter)                 |       12 |       12 |       9 |      -8.8 |        -0.73  |     -22.4 |        -1.869 |
+| nse      | Fib     | 1W   | Double bottom / top + candle (confirm entry) |        1 |        0 |     100 |       0   |       nan     |       0   |       nan     |
+| nse      | Fib     | 1W   | Inverse H&S / H&S (filter)                   |       30 |       29 |      37 |      -7.1 |        -0.245 |      -5.8 |        -0.202 |
+| nse      | Fib     | 1W   | Inverse H&S / H&S + candle (confirm entry)   |        1 |        1 |       0 |      -1   |        -1.023 |      -6.7 |        -6.682 |
+| nse      | Fib     | 1M   | live (all alerts)                            |      100 |       71 |      42 |     -18.3 |        -0.258 |     -92.7 |        -1.305 |
+| nse      | Fib     | 1M   | Engulfing (confirm entry)                    |        2 |        0 |     nan |       0   |       nan     |       0   |       nan     |
+| nse      | Fib     | 1M   | Any candle pattern (confirm entry)           |        2 |        0 |     nan |       0   |       nan     |       0   |       nan     |
+| nse      | Fib     | 1M   | Double bottom / top (filter)                 |        1 |        1 |       0 |      -1   |        -1.05  |      -3.3 |        -3.275 |
+| nse      | TL      | 4H   | live (all alerts)                            |     1844 |     1451 |      34 |    -642.2 |        -0.443 |    -785.9 |        -0.542 |
+| nse      | TL      | 4H   | Engulfing (confirm entry)                    |      100 |       96 |      39 |     -26.9 |        -0.28  |     -78.5 |        -0.818 |
+| nse      | TL      | 4H   | Hammer / Shooting star (confirm entry)       |       80 |       76 |      53 |      -0.8 |        -0.01  |      -3.4 |        -0.044 |
+| nse      | TL      | 4H   | Inv. hammer / Hanging man (confirm entry)    |       75 |       70 |      46 |     -16.7 |        -0.239 |      -1.6 |        -0.022 |
+| nse      | TL      | 4H   | Morning / Evening star (confirm entry)       |       40 |       40 |      45 |      -5.9 |        -0.148 |     -32.5 |        -0.811 |
+| nse      | TL      | 4H   | Piercing / Dark cloud (confirm entry)        |       60 |       56 |      45 |      -9.2 |        -0.164 |     -20.2 |        -0.36  |
+| nse      | TL      | 4H   | Harami (confirm entry)                       |      132 |      120 |      36 |     -46.6 |        -0.389 |     -73.4 |        -0.611 |
+| nse      | TL      | 4H   | Dragonfly / Gravestone doji (confirm entry)  |        9 |        9 |      56 |       0.5 |         0.057 |       0.4 |         0.048 |
+| nse      | TL      | 4H   | Any candle pattern (confirm entry)           |      391 |      364 |      41 |    -100.4 |        -0.276 |    -186.4 |        -0.512 |
+| nse      | TL      | 4H   | Double bottom / top (filter)                 |      829 |      823 |      32 |    -409.4 |        -0.497 |    -531.1 |        -0.645 |
+| nse      | TL      | 4H   | Double bottom / top + candle (confirm entry) |      216 |      199 |      33 |     -89.3 |        -0.449 |    -166.8 |        -0.838 |
+| nse      | TL      | 4H   | Inverse H&S / H&S (filter)                   |      325 |      324 |      38 |    -119   |        -0.367 |    -131.1 |        -0.405 |
+| nse      | TL      | 4H   | Inverse H&S / H&S + candle (confirm entry)   |       94 |       88 |      45 |     -14.1 |        -0.16  |     -33.7 |        -0.383 |
+| nse      | TL      | 1D+  | live (all alerts)                            |     1118 |      897 |      38 |    -326.3 |        -0.364 |    -389   |        -0.434 |
+| nse      | TL      | 1D+  | Engulfing (confirm entry)                    |       48 |       36 |      50 |      -1.3 |        -0.035 |      -3.3 |        -0.091 |
+| nse      | TL      | 1D+  | Hammer / Shooting star (confirm entry)       |       42 |       38 |      21 |     -24   |        -0.633 |     -62.4 |        -1.641 |
+| nse      | TL      | 1D+  | Inv. hammer / Hanging man (confirm entry)    |       24 |       19 |      21 |     -12.2 |        -0.644 |     -30.6 |        -1.609 |
+| nse      | TL      | 1D+  | Morning / Evening star (confirm entry)       |       15 |       12 |      25 |      -6.5 |        -0.539 |     -31   |        -2.587 |
+| nse      | TL      | 1D+  | Piercing / Dark cloud (confirm entry)        |       25 |       20 |      30 |      -9   |        -0.449 |     -31.8 |        -1.592 |
+| nse      | TL      | 1D+  | Harami (confirm entry)                       |       42 |       39 |      38 |     -11.3 |        -0.29  |     -29.2 |        -0.75  |
+| nse      | TL      | 1D+  | Dragonfly / Gravestone doji (confirm entry)  |        1 |        1 |       0 |      -1   |        -1.042 |      -3.8 |        -3.804 |
+| nse      | TL      | 1D+  | Any candle pattern (confirm entry)           |      158 |      131 |      32 |     -53.8 |        -0.411 |    -158.5 |        -1.21  |
+| nse      | TL      | 1D+  | Double bottom / top (filter)                 |      347 |      341 |      37 |    -132.7 |        -0.389 |    -149.1 |        -0.437 |
+| nse      | TL      | 1D+  | Double bottom / top + candle (confirm entry) |       59 |       54 |      28 |     -26.9 |        -0.497 |     -92.3 |        -1.71  |
+| nse      | TL      | 1D+  | Inverse H&S / H&S (filter)                   |      194 |      189 |      38 |     -69.5 |        -0.368 |     -87.1 |        -0.461 |
+| nse      | TL      | 1D+  | Inverse H&S / H&S + candle (confirm entry)   |       39 |       34 |      15 |     -26   |        -0.764 |     -69   |        -2.029 |
+| nse      | TL      | 1D   | live (all alerts)                            |      913 |      747 |      38 |    -274.1 |        -0.367 |    -328.9 |        -0.44  |
+| nse      | TL      | 1D   | Engulfing (confirm entry)                    |       43 |       34 |      53 |       0.8 |         0.022 |      14.7 |         0.433 |
+| nse      | TL      | 1D   | Hammer / Shooting star (confirm entry)       |       39 |       36 |      19 |     -24   |        -0.667 |     -63.7 |        -1.771 |
+| nse      | TL      | 1D   | Inv. hammer / Hanging man (confirm entry)    |       17 |       14 |      14 |     -11.1 |        -0.791 |     -26.7 |        -1.907 |
+| nse      | TL      | 1D   | Morning / Evening star (confirm entry)       |       11 |       10 |      30 |      -4.4 |        -0.44  |     -20.6 |        -2.064 |
+| nse      | TL      | 1D   | Piercing / Dark cloud (confirm entry)        |       24 |       20 |      30 |      -9   |        -0.449 |     -31.8 |        -1.592 |
+| nse      | TL      | 1D   | Harami (confirm entry)                       |       37 |       34 |      38 |     -10.2 |        -0.3   |     -24.2 |        -0.711 |
+| nse      | TL      | 1D   | Dragonfly / Gravestone doji (confirm entry)  |        1 |        1 |       0 |      -1   |        -1.042 |      -3.8 |        -3.804 |
+| nse      | TL      | 1D   | Any candle pattern (confirm entry)           |      137 |      118 |      33 |     -46.5 |        -0.394 |    -113.6 |        -0.963 |
+| nse      | TL      | 1D   | Double bottom / top (filter)                 |      319 |      314 |      37 |    -123   |        -0.392 |    -140.2 |        -0.447 |
+| nse      | TL      | 1D   | Double bottom / top + candle (confirm entry) |       51 |       47 |      28 |     -23.7 |        -0.505 |     -66   |        -1.405 |
+| nse      | TL      | 1D   | Inverse H&S / H&S (filter)                   |      162 |      158 |      39 |     -55   |        -0.348 |     -79.7 |        -0.504 |
+| nse      | TL      | 1D   | Inverse H&S / H&S + candle (confirm entry)   |       36 |       32 |      12 |     -25.9 |        -0.81  |     -69.9 |        -2.185 |
+| nse      | TL      | 1W   | live (all alerts)                            |      190 |      137 |      36 |     -52.4 |        -0.382 |     -58.3 |        -0.426 |
+| nse      | TL      | 1W   | Engulfing (confirm entry)                    |        5 |        2 |       0 |      -2   |        -1.017 |     -18   |        -8.992 |
+| nse      | TL      | 1W   | Hammer / Shooting star (confirm entry)       |        3 |        2 |      50 |      -0   |        -0.02  |       1.4 |         0.692 |
+| nse      | TL      | 1W   | Inv. hammer / Hanging man (confirm entry)    |        7 |        5 |      40 |      -1.2 |        -0.23  |      -3.9 |        -0.777 |
+| nse      | TL      | 1W   | Morning / Evening star (confirm entry)       |        4 |        2 |       0 |      -2.1 |        -1.03  |     -10.4 |        -5.206 |
+| nse      | TL      | 1W   | Piercing / Dark cloud (confirm entry)        |        1 |        0 |     nan |       0   |       nan     |       0   |       nan     |
+| nse      | TL      | 1W   | Harami (confirm entry)                       |        5 |        5 |      40 |      -1.1 |        -0.224 |      -5.1 |        -1.013 |
+| nse      | TL      | 1W   | Any candle pattern (confirm entry)           |       21 |       13 |      23 |      -7.4 |        -0.565 |     -44.9 |        -3.451 |
+| nse      | TL      | 1W   | Double bottom / top (filter)                 |       27 |       27 |      37 |      -9.7 |        -0.36  |      -8.8 |        -0.328 |
+| nse      | TL      | 1W   | Double bottom / top + candle (confirm entry) |        8 |        7 |      29 |      -3.1 |        -0.449 |     -26.3 |        -3.754 |
+| nse      | TL      | 1W   | Inverse H&S / H&S (filter)                   |       31 |       30 |      33 |     -13.4 |        -0.446 |      -6.4 |        -0.212 |
+| nse      | TL      | 1W   | Inverse H&S / H&S + candle (confirm entry)   |        3 |        2 |      50 |      -0   |        -0.021 |       0.9 |         0.455 |
+| nse      | TL      | 1M   | live (all alerts)                            |       15 |       13 |      54 |       0.1 |         0.01  |      -1.8 |        -0.14  |
+| nse      | TL      | 1M   | Double bottom / top (filter)                 |        1 |        0 |     nan |       0   |       nan     |       0   |       nan     |
+| nse      | TL      | 1M   | Inverse H&S / H&S (filter)                   |        1 |        1 |       0 |      -1.2 |        -1.173 |      -1.1 |        -1.055 |
