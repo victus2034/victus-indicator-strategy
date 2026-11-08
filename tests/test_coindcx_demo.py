@@ -1,5 +1,6 @@
 """CoinDCX demo account (coindcx_demo.py): 1D crypto fib and trendline alerts as pretend orders."""
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -81,8 +82,22 @@ def tl_record(symbol="BTCUSD", side="long", entry=100.0, sl=98.0, sent=T0 + 10, 
     return rec
 
 
+class DefaultKinds(unittest.TestCase):
+    @unittest.skipIf(os.getenv("VICTUS_COINDCX_DEMO_KINDS"), "set in this environment")
+    def test_fibs_and_breaks_not_touches(self):
+        # backtest Jan 2025 - now: TL BROKEN +0.22R a trade, touches -0.20R
+        self.assertEqual(config.COINDCX_DEMO_KINDS, ("fib", "break"))
+        self.assertTrue(demo.eligible(tl_record(broken=True), T0))
+        self.assertFalse(demo.eligible(tl_record(), T0))
+
+
 class TrendlineAlerts(unittest.TestCase):
     """lakky, 2026-11-08: "also in demo trades in coindcx put this strategy also" - 1D TL alerts."""
+
+    def setUp(self):
+        kinds = patch.object(config, "COINDCX_DEMO_KINDS", ("fib", "trendline", "break"))
+        kinds.start()
+        self.addCleanup(kinds.stop)
 
     def test_1d_crypto_touches_and_breaks_are_traded(self):
         self.assertTrue(demo.eligible(tl_record(), T0))

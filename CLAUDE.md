@@ -343,7 +343,9 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   **1D crypto trendlines too (lakky, 2026-11-08: "also in demo trades in coindcx put this strategy also")**, same exits:
   touches (S TL / R TL, a limit at the line, the candle stop) and TL BROKEN trades (`"fill": "market"`: filled on the
   first candle after the alert, at the alert's price) - `COINDCX_DEMO_KINDS` (`VICTUS_COINDCX_DEMO_KINDS`, default
-  `fib,trendline,break`). Lines read `S TL` / `R TL BROKEN` like Discord; one account for fibs and trendlines.
+  `fib,break`). Lines read `S TL` / `R TL BROKEN` like Discord; one account for fibs and trendlines.
+  Backtest Jan 2025 - now, 16 coins (part `coindcx-strategy`): touches -0.20R a trade (the demo blows up), breaks
+  +0.22R, fib + breaks one account +0.14R (1,000 -> 14,695, max DD 70%; top 3 +0.27R, DD 25%), so touches are off.
   Real money needs his explicit go plus a live order path (API key secret, IP whitelist, CoinDCX fees).
 - Each channel seeds silently per market on its first pass with a webhook, so adding a webhook
   never dumps a backlog. Deleting the state file re-seeds rather than bursting.
