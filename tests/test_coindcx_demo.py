@@ -1,4 +1,4 @@
-"""CoinDCX demo account (coindcx_demo.py): 1D crypto fib alerts as pretend orders."""
+"""CoinDCX demo account (coindcx_demo.py): 1D crypto fib and trendline alerts as pretend orders."""
 import json
 import tempfile
 import unittest
@@ -54,7 +54,7 @@ class Eligibility(unittest.TestCase):
         self.assertFalse(demo.eligible(record(sent=T0 - 1), T0))          # before the demo began
         self.assertFalse(demo.eligible(record(tf="4h"), T0))
         self.assertFalse(demo.eligible(record(tf="1w"), T0))
-        self.assertFalse(demo.eligible(record(kind="trendline"), T0))
+        self.assertFalse(demo.eligible(record(kind="zone"), T0))
         self.assertFalse(demo.eligible(record(symbol="TSLAXUSD"), T0))     # xStock: not on CoinDCX
         self.assertFalse(demo.eligible(record(symbol="XAUTUSD"), T0))
         self.assertFalse(demo.eligible(record(market="nse", symbol="RELIANCE.NS"), T0))
@@ -66,6 +66,109 @@ class Eligibility(unittest.TestCase):
         self.assertEqual(demo.coindcx_pair("1000PEPEUSD"), "B-1000PEPE_USDT")
         for symbol in config.CRYPTO_WATCHLIST:
             self.assertTrue(demo.coindcx_pair(symbol).endswith("_USDT"), symbol)
+
+
+def tl_record(symbol="BTCUSD", side="long", entry=100.0, sl=98.0, sent=T0 + 10, tf="1d", line=0, broken=False):
+    """A trendline touch, or a TL BROKEN trade (in at market), as fib_trendline_scanner records them."""
+    plan = {"side": side, "entry": entry, "sl": sl, "target_r": 1}
+    if broken:
+        plan["fill"] = "market"
+    key = f"tl{'break' if broken else ''}|{symbol}|{tf}|{line}|1|2"
+    rec = {"market": "crypto", "symbol": symbol, "tf": tf, "kind": "trendline", "plan": plan, "line": line,
+           "id": f"{key}@{sent}", "key": key, "sent_ts": sent}
+    if broken:
+        rec["broken"] = True
+    return rec
+
+
+class TrendlineAlerts(unittest.TestCase):
+    """lakky, 2026-11-08: "also in demo trades in coindcx put this strategy also" - 1D TL alerts."""
+
+    def test_1d_crypto_touches_and_breaks_are_traded(self):
+        self.assertTrue(demo.eligible(tl_record(), T0))
+        self.assertTrue(demo.eligible(tl_record(line=1, side="short", sl=102.0), T0))
+        self.assertTrue(demo.eligible(tl_record(broken=True), T0))
+        self.assertFalse(demo.eligible(tl_record(tf="4h"), T0))
+        self.assertFalse(demo.eligible(tl_record(tf="4h", broken=True), T0))
+        self.assertFalse(demo.eligible(tl_record(symbol="XAUTUSD"), T0))
+        self.assertFalse(demo.eligible(tl_record(sent=T0 - 1), T0))
+
+    def test_kinds_switch(self):
+        with patch.object(config, "COINDCX_DEMO_KINDS", ("fib",)):
+            self.assertFalse(demo.eligible(tl_record(), T0))
+            self.assertFalse(demo.eligible(tl_record(broken=True), T0))
+            self.assertTrue(demo.eligible(record(), T0))
+        with patch.object(config, "COINDCX_DEMO_KINDS", ("fib", "trendline")):
+            self.assertTrue(demo.eligible(tl_record(), T0))
+            self.assertFalse(demo.eligible(tl_record(broken=True), T0))
+        with patch.object(config, "COINDCX_DEMO_LEVELS", ("L1",)):
+            self.assertTrue(demo.eligible(tl_record(), T0))            # levels are a fib setting
+            self.assertFalse(demo.eligible(record(level="L3"), T0))
+
+    def test_names_as_on_discord(self):
+        self.assertEqual(demo.label(record(level="L2")), "FIB L2")
+        self.assertEqual(demo.label(tl_record(line=0)), "S TL")
+        self.assertEqual(demo.label(tl_record(line=1)), "R TL")
+        self.assertEqual(demo.label(tl_record(line=0, broken=True)), "S TL BROKEN")
+        self.assertEqual(demo.label(tl_record(line=1, broken=True)), "R TL BROKEN")
+
+    def test_touch_is_a_limit_with_the_fib_exits(self):
+        candles = {"BTCUSD": [
+            [T0 + 60, 101, 101, 100.5, 101],       # above the line: no fill
+            [T0 + 120, 100.5, 100.6, 99.9, 100],   # fills at the line
+            [T0 + 180, 100, 102.1, 99.5, 102],     # +1.05R: stop to +0.75R
+            [T0 + 240, 102, 102.2, 101.4, 101.6],  # stopped at +0.75R
+        ]}
+        state = demo.new_state(T0, 1000)
+        demo.tick(state, [tl_record()], T0 + 600, fake_fetch(candles))
+        o = next(iter(state["orders"].values()))
+        self.assertEqual((o["kind"], o["label"], o["level"]), ("trendline", "S TL", None))
+        self.assertEqual(o["fill_ts"], T0 + 120)
+        self.assertEqual((o["status"], o["exit_why"]), ("won", "SL shift"))
+        self.assertAlmostEqual(o["r"], demo.moved_stop_r(o, 0.75), places=4)
+        self.assertIn("BTC · S TL · BUY** · order placed\nLimit 100", demo.event_line(o, "placed"))
+
+    def test_break_fills_at_market_on_the_next_candle(self):
+        # resistance broken -> buy at 100 (the price when the alert went out); price runs on
+        candles = {"BTCUSD": [
+            [T0, 100, 100, 99.5, 100],             # the alert's own minute: not used
+            [T0 + 60, 100.4, 101, 100.3, 100.8],   # never back to 100: a market order still fills
+            [T0 + 120, 100.8, 103.2, 100.7, 103],  # 1.6R: stop locked at +1.5R
+            [T0 + 180, 103, 103.1, 102.9, 103],    # stopped at +1.5R
+        ]}
+        state = demo.new_state(T0, 1000)
+        demo.tick(state, [tl_record(line=1, broken=True)], T0 + 600, fake_fetch(candles))
+        o = next(iter(state["orders"].values()))
+        self.assertEqual((o["kind"], o["label"], o["market_fill"]), ("break", "R TL BROKEN", True))
+        self.assertEqual(o["fill_ts"], T0 + 60)
+        self.assertEqual((o["status"], o["exit_why"]), ("won", "Trail TP"))
+        self.assertAlmostEqual(o["r"], demo.moved_stop_r(o, 1.5), places=4)
+        self.assertIn("BTC · R TL BROKEN · BUY** · order placed\nMarket 100", demo.event_line(o, "placed"))
+        self.assertIn("R TL BROKEN", demo.report_text(state))
+
+    def test_break_stopped_on_its_fill_candle(self):
+        candles = {"BTCUSD": [[T0 + 60, 100, 100.2, 97.9, 98]]}
+        state = demo.new_state(T0, 1000)
+        demo.tick(state, [tl_record(broken=True)], T0 + 600, fake_fetch(candles))
+        o = next(iter(state["orders"].values()))
+        self.assertEqual((o["status"], o["exit_why"]), ("lost", "SL"))
+
+    def test_fib_and_tl_share_one_account(self):
+        candles = {"BTCUSD": [[T0 + 60, 100.5, 100.6, 99.9, 100], [T0 + 120, 100, 100.2, 97.9, 98]],
+                   "ETHUSD": [[T0 + 60, 100.5, 100.6, 99.9, 100], [T0 + 120, 100, 100.2, 97.9, 98]]}
+        state = demo.new_state(T0, 1000)
+        demo.tick(state, [record(), tl_record("ETHUSD")], T0 + 600, fake_fetch(candles))
+        self.assertEqual(sorted(o["status"] for o in state["orders"].values()), ["lost", "lost"])
+        self.assertAlmostEqual(state["balance"], 1000 + sum(o["pnl"] for o in state["orders"].values()), places=3)
+
+    def test_orders_placed_before_trendlines_keep_their_name(self):
+        state = demo.new_state(T0, 1000)
+        demo.tick(state, [record(level="L2")], T0 + 30, fake_fetch({}))
+        o = next(iter(state["orders"].values()))
+        for key in ("kind", "label", "market_fill"):
+            o.pop(key)
+        self.assertIn("BTC · FIB L2 · BUY", demo.event_line(o, "filled"))
+        self.assertIn("L2", demo.report_text(state))
 
 
 class Trades(unittest.TestCase):

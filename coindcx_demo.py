@@ -1,11 +1,15 @@
-"""CoinDCX demo account: 1D crypto fib alerts traded as if they were real orders.
+"""CoinDCX demo account: 1D crypto fib and trendline alerts traded as if they were real orders.
 
 lakky, 2026-11-07: "i want to trade 1d fib ... for next week do a demo for
 testing and after that go with real money". This is the demo. It places NO
 orders - there is no CoinDCX order code in this repo - and moves no money.
 
 Each 1D crypto fib alert (every level, L1-L4) becomes a pretend CoinDCX USDT
-futures order the moment the bot sees it. Since 2026-11-08 the rules are lakky's
+futures order the moment the bot sees it; since 2026-11-08 (lakky: "also in demo
+trades in coindcx put this strategy also") so does each 1D crypto trendline alert -
+touches (S TL / R TL, a limit at the line) and TL BROKEN trades (in at the price
+when the alert went out, filled on the next candle) - with the same exits
+(COINDCX_DEMO_KINDS). Since 2026-11-08 the rules are lakky's
 "so far final strategy" from his journal (Signals, Fib alerts, CRYPTO 1D):
 
 - a limit order at the alert's entry with the alert's stop, filled within
@@ -70,18 +74,31 @@ def coindcx_pair(symbol):
     return f"B-{symbol[:-3]}_USDT" if symbol.endswith("USD") else None
 
 
+def kind_of(record):
+    """fib / trendline (a touch) / break (TL BROKEN)."""
+    return "break" if record.get("broken") else record.get("kind")
+
+
+def label(record):
+    """The alert's name on Discord: FIB L3, S TL, R TL BROKEN."""
+    if record.get("kind") == "fib":
+        return f"FIB {record.get('level') or 'L3'}"
+    line = "S" if record.get("line") in (0, "0", "support") else "R"
+    return f"{line} TL BROKEN" if record.get("broken") else f"{line} TL"
+
+
 def eligible(record, started_ts):
-    """A 1D crypto fib alert, on a coin CoinDCX lists, sent after the demo started."""
+    """A 1D crypto fib or trendline alert, on a coin CoinDCX lists, sent after the demo started."""
     if not isinstance(record, dict):
         return False
     plan = record.get("plan")
     try:
-        ok = (record.get("kind") in config.COINDCX_DEMO_KINDS
+        ok = (kind_of(record) in config.COINDCX_DEMO_KINDS
+              and record.get("kind") in ("fib", "trendline")
               and record.get("market") == "crypto"
               and str(record.get("tf", "")).lower() in config.COINDCX_DEMO_TIMEFRAMES
               and record.get("symbol") in config.CRYPTO_WATCHLIST
-              and (record.get("level") or "L3") in config.COINDCX_DEMO_LEVELS
-              and not record.get("broken")
+              and (record.get("kind") != "fib" or (record.get("level") or "L3") in config.COINDCX_DEMO_LEVELS)
               and isinstance(plan, dict) and plan.get("side") in ("long", "short")
               and float(plan["entry"]) > 0 and float(plan["sl"]) > 0
               and float(plan["entry"]) != float(plan["sl"])
@@ -178,7 +195,10 @@ def open_order(state, record, now):
     tp_r = config.COINDCX_DEMO_TARGET_R
     order = {
         "id": record["id"], "symbol": record["symbol"], "pair": coindcx_pair(record["symbol"]),
-        "side": plan["side"], "level": record.get("level") or "L3", "tf": "1D",
+        "side": plan["side"], "kind": kind_of(record), "label": label(record),
+        "level": (record.get("level") or "L3") if record.get("kind") == "fib" else None, "tf": "1D",
+        # a TL BROKEN trade goes in at market: filled on the next candle, at the alert's price
+        "market_fill": plan.get("fill") == "market",
         "entry": entry, "sl": sl, "tp": entry + tp_r * risk_dist if long else entry - tp_r * risk_dist,
         "stop_pct": risk_dist / entry * 100, "sent_ts": int(float(record["sent_ts"])),
         "placed_ts": int(now), "risk": round(risk, 4), "position": round(position, 2),
@@ -277,7 +297,7 @@ def step(state, order, candle, width=60):
         if ts >= order["sent_ts"] + WAIT_SECONDS:
             close(state, order, "cancelled", ts)
             return
-        if hit(order["entry"]):
+        if hit(order["entry"]) or order.get("market_fill"):
             order.update(status="open", fill_ts=int(ts))
             state["unposted"].append({"event": "filled", "id": order["id"], "ts": int(ts)})
             if hit(order["sl"]):      # filled and stopped in the same candle
@@ -376,12 +396,14 @@ def coin(symbol):
 def event_line(order, event, e=None):
     e = e or {}
     side = "BUY" if order["side"] == "long" else "SELL"
-    head = f"**{coin(order['symbol'])} · FIB {order['level']} · {side}**"
+    name = order.get("label") or f"FIB {order['level']}"      # orders placed before 2026-11-08: fibs
+    head = f"**{coin(order['symbol'])} · {name} · {side}**"
     p = scanner.price_text
     if event == "placed":
         cap = " (capped)" if order["capped"] else ""
+        how = "Market" if order.get("market_fill") else "Limit"
         return (f"🧪 {head} · order placed\n"
-                f"Limit {p(order['entry'])} · SL {p(order['sl'])} ({order['stop_pct']:.2f}%) · TP {p(order['tp'])} ({config.COINDCX_DEMO_TARGET_R:g}R, then trails)\n"
+                f"{how} {p(order['entry'])} · SL {p(order['sl'])} ({order['stop_pct']:.2f}%) · TP {p(order['tp'])} ({config.COINDCX_DEMO_TARGET_R:g}R, then trails)\n"
                 f"Size {money(order['position'])} · {order['leverage']:.1f}x{cap} · margin {money(order['margin'])} · risk {money(order['risk'])}")
     if event == "skipped":
         return f"⏭️ {head} · skipped: {order.get('reason', 'no margin')}"
@@ -416,7 +438,7 @@ def digest_lines(state, now):
     if not state["unposted"]:
         return []
     stamp = datetime.fromtimestamp(now, scanner.IST).strftime("%d %b %H:%M IST")
-    lines = [(f"**CoinDCX demo · 1D fib** · {stamp} · no real orders", None)]
+    lines = [(f"**CoinDCX demo · 1D fib + TL** · {stamp} · no real orders", None)]
     for e in sorted(state["unposted"], key=lambda e: e["ts"]):
         order = state["orders"].get(e["id"])
         lines.append((event_line(order, e["event"], e) if order else None, e))
@@ -534,13 +556,14 @@ def replay(since, now=None, start_balance=None, interval="5m"):
 
 
 def report_text(state):
-    lines = [f"**CoinDCX demo · 1D fib** · since {datetime.fromtimestamp(state['started_ts'], scanner.IST):%d %b %H:%M IST}",
+    lines = [f"**CoinDCX demo · 1D fib + TL** · since {datetime.fromtimestamp(state['started_ts'], scanner.IST):%d %b %H:%M IST}",
              summary(state)]
     for o in sorted(state["orders"].values(), key=lambda o: o["sent_ts"]):
         when = datetime.fromtimestamp(o["sent_ts"], scanner.IST).strftime("%d %b")
         side = "BUY" if o["side"] == "long" else "SELL"
         tail = f"{money(o['pnl'])} ({o['r']:+.2f}R)" if "pnl" in o else o["status"]
-        lines.append(f"{when} {coin(o['symbol'])} {o['level']} {side} · {o['status']} · {tail}")
+        name = o.get("label") or o["level"]
+        lines.append(f"{when} {coin(o['symbol'])} {name} {side} · {o['status']} · {tail}")
     return "\n".join(lines)
 
 

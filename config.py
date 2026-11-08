@@ -607,7 +607,11 @@ FIB_TL_MAX_HOLD_BARS = 20
 # risk 75 a trade, leverage capped at 20x (2026-11-08, his "so far final strategy";
 # it was 50 / 10x / exit at 1R on 2026-11-07).
 COINDCX_DEMO_ENABLED = env_flag("VICTUS_COINDCX_DEMO", True)
-COINDCX_DEMO_KINDS = ("fib",)
+# What it trades: "fib" (L1-L4), "trendline" (S TL / R TL touches) and "break" (TL BROKEN
+# trades, in at the alert's price). Trendlines added 2026-11-08 (lakky: "also in demo
+# trades in coindcx put this strategy also"), with the same exits.
+COINDCX_DEMO_KINDS = tuple(
+    kind.strip() for kind in os.getenv("VICTUS_COINDCX_DEMO_KINDS", "fib,trendline,break").split(",") if kind.strip())
 COINDCX_DEMO_TIMEFRAMES = ("1d",)
 COINDCX_DEMO_LEVELS = tuple(
     level.strip() for level in os.getenv("VICTUS_COINDCX_DEMO_LEVELS", "L1,L2,L3,L4").split(",") if level.strip())
