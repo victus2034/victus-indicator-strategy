@@ -54,7 +54,7 @@ class DefaultTests(unittest.TestCase):
     def test_every_crypto_symbol_maps_to_a_bitunix_pair(self):
         pairs = {s: bitunix_data.bitunix_pair(scanner.delta_contract(s)) for s in config.CRYPTO_WATCHLIST}
         self.assertEqual(pairs["BTCUSD"], "BTCUSDT")
-        self.assertEqual(pairs["RLCUSD"], "RLCUSDT")
+        self.assertEqual(pairs["UNIUSD"], "UNIUSDT")
         self.assertEqual(pairs["1000PEPEUSD"], "1000PEPEUSDT")
         self.assertEqual(bitunix_data.bitunix_pair(scanner.delta_contract("SUSD")), "SUSDT")
         self.assertTrue(all(p.endswith("USDT") for p in pairs.values()))
@@ -79,16 +79,15 @@ class OnTests(unittest.TestCase):
         # (TSLAXUSDT, MRVLBUSDT); Bitunix trades the stock as TSLAUSDT.
         pairs = {s: bitunix_data.pair_for(s, scanner.delta_contract(s)) for s in config.XSTOCK_WATCHLIST}
         self.assertEqual(pairs, {
-            "TSLAXUSD": "TSLAUSDT", "METAXUSD": "METAUSDT", "SOXLBUSD": "SOXLUSDT",
-            "SNDKBUSD": "SNDKUSDT", "MRVL/USDT:USDT": "MRVLUSDT", "NVDAXUSD": "NVDAUSDT",
+            "TSLAXUSD": "TSLAUSDT", "SNDKBUSD": "SNDKUSDT", "QQQXUSD": "QQQUSDT",
         })
         self.assertEqual(bitunix_data.pair_for("BTCUSD", "BTCUSD"), "BTCUSDT")
 
     def test_xstock_zone_scan_asks_bitunix_for_its_own_pair(self):
         fake, now, forming, step = self._scan_fake()
         with patch.object(bitunix_data, "_request", fake), patch("time.time", return_value=now):
-            scanner.fetch_bitunix_ohlcv("MRVL/USDT:USDT")
-        self.assertEqual({c[0] for c in fake.calls}, {"MRVLUSDT"})
+            scanner.fetch_bitunix_ohlcv("QQQXUSD")
+        self.assertEqual({c[0] for c in fake.calls}, {"QQQUSDT"})
 
     def test_klines_pages_back_and_returns_oldest_first(self):
         fake = FakeBitunix(1_000_800, 1_000_800 + 499 * 1800, 1800)
