@@ -45,6 +45,8 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+import requests
+
 import bitunix_data
 import config
 import fib_trendline_trades as trades
@@ -166,7 +168,11 @@ def open_order(state, record, now):
     long = plan["side"] == "long"
     risk_dist = abs(entry - sl)
     balance = state["balance"]
-    risk, position, leverage, capped = size(balance, entry, sl)
+    if balance <= 0:            # an empty account takes no orders (weekly audit 2026-11-08)
+        risk = position = leverage = 0.0
+        capped = False
+    else:
+        risk, position, leverage, capped = size(balance, entry, sl)
     margin = position / config.COINDCX_DEMO_MAX_LEVERAGE
     free = balance - margin_in_use(state)
     tp_r = config.COINDCX_DEMO_TARGET_R
@@ -181,7 +187,9 @@ def open_order(state, record, now):
         # the trade's walk, in R: best move so far, the moved stop (None = the alert's), next target
         "best_r": 0.0, "stop_r": None, "tgt_r": tp_r,
     }
-    if config.COINDCX_DEMO_MARGIN_LIMIT and margin > free + 1e-9:
+    if balance <= 0:
+        order.update(status="skipped", margin=0.0, reason="account empty")
+    elif config.COINDCX_DEMO_MARGIN_LIMIT and margin > free + 1e-9:
         order.update(status="skipped", margin=0.0,
                      reason=f"margin {money(margin)} > free {money(max(free, 0))}")
     state["orders"][order["id"]] = order
@@ -342,8 +350,11 @@ def tick(state, records, now, fetch=fetch_candles, width=60):
     """Bring the demo up to `now`: new alerts become orders in the order they
     were sent, each after every older order has been walked up to its send time."""
     known = state["orders"]
-    new = sorted((r for r in records if eligible(r, state["started_ts"]) and r["id"] not in known),
-                 key=lambda r: float(r["sent_ts"]))
+    fresh = {}
+    for r in records:              # one order per alert id, even if a line is on file twice
+        if eligible(r, state["started_ts"]) and r["id"] not in known:
+            fresh.setdefault(r["id"], r)
+    new = sorted(fresh.values(), key=lambda r: float(r["sent_ts"]))
     for record in new:
         sent = int(float(record["sent_ts"]))
         advance(state, min(sent, now), fetch, width)
@@ -400,17 +411,21 @@ def summary(state):
             f" · {open_} open · {pending} waiting · margin in use {money(margin_in_use(state))}")
 
 
-def digest(state, now):
+def digest_lines(state, now):
+    """[(line, event or None)] for the unposted events: a title, one line each, the account."""
     if not state["unposted"]:
-        return ""
+        return []
     stamp = datetime.fromtimestamp(now, scanner.IST).strftime("%d %b %H:%M IST")
-    lines = [f"**CoinDCX demo · 1D fib** · {stamp} · no real orders"]
+    lines = [(f"**CoinDCX demo · 1D fib** · {stamp} · no real orders", None)]
     for e in sorted(state["unposted"], key=lambda e: e["ts"]):
         order = state["orders"].get(e["id"])
-        if order:
-            lines.append(event_line(order, e["event"], e))
-    lines.append(summary(state))
-    return "\n".join(lines)
+        lines.append((event_line(order, e["event"], e) if order else None, e))
+    lines.append((summary(state), None))
+    return lines
+
+
+def digest(state, now):
+    return "\n".join(line for line, _ in digest_lines(state, now) if line)
 
 
 def chunks(text):
@@ -426,13 +441,57 @@ def chunks(text):
 
 
 def send(text):
+    """True when Discord took it, False when it failed (kept for the next tick),
+    None when no channel is set up (nowhere to post: the events are dropped)."""
     env = WEBHOOK_ENV if scanner.get_env_or_config(WEBHOOK_ENV, "") else FALLBACK_WEBHOOK_ENV
+    if not scanner.get_env_or_config(env, ""):
+        return None
     sent = False
     for part in chunks(text):
-        sent = scanner.send_discord_message(part.rstrip(), webhook_env_name=env, webhook_config_value="")
+        try:
+            sent = scanner.send_discord_message(part.rstrip(), webhook_env_name=env, webhook_config_value="")
+        except requests.RequestException as error:     # weekly audit 2026-11-01: it used to raise
+            print(f"coindcx demo: Discord post failed: {str(error)[:80]}")
+            sent = False
         if not sent:
             return False
     return sent
+
+
+def deliver(state, now, save=None):
+    """Post the digest a message at a time; each message's events are dropped once
+    Discord takes it (and the state saved), so a later failure, or the run being
+    cancelled, never posts them twice. A failed post leaves the rest for the next tick.
+    Weekly audit 2026-11-08: one failed post used to raise past save_state, and a
+    digest split in two re-posted its first half on every failure of the second."""
+    lines = digest_lines(state, now)
+    parts, cur, cur_events = [], [], []
+    for line, event in lines:
+        if not line:
+            if event:
+                cur_events.append(event)          # its order is gone: nothing to say
+            continue
+        if cur and sum(len(x) + 1 for x in cur) + len(line) + 1 > DISCORD_LIMIT:
+            parts.append((cur, cur_events))
+            cur, cur_events = [], []
+        cur.append(line)
+        if event:
+            cur_events.append(event)
+    if cur:
+        parts.append((cur, cur_events))
+    for text_lines, events in parts:
+        result = send("\n".join(text_lines))
+        if result is None:
+            print("coindcx demo: no Discord channel set up - events not posted")
+            state["unposted"] = []
+            return False
+        if not result:
+            return False
+        done = {id(e) for e in events}
+        state["unposted"] = [e for e in state["unposted"] if id(e) not in done]
+        if save:
+            save(state)
+    return True
 
 
 # ---------------------------------------------------------------- main
@@ -456,8 +515,7 @@ def run_tick(now=None, dry_run=False, fetch=fetch_candles):
         print(text)
         if dry_run:
             return state
-        if send(text):
-            state["unposted"] = []
+        deliver(state, now, save_state)
     if not dry_run:
         save_state(state)
     return state

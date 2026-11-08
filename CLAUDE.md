@@ -516,5 +516,10 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   whole pass. The fib/TL daily report skips unreadable record lines and records with no usable plan instead of
   stopping; `append_record` starts a new line after a torn one. A pass where every chart failed no longer moves
   `__last_scan__`, so TL BROKEN alerts from an outage are not dropped as stale. `tests/test_weekly_audit_2026_11_01.py`.
+- **CoinDCX demo delivery (weekly audit, 2026-11-08).** `coindcx_demo.deliver` posts the digest a message at a
+  time and drops each message's events (saving the state) once Discord takes it: a Discord error used to raise past
+  `save_state`, and a two-message digest re-posted its first half whenever the second failed. With no channel set
+  up the events are dropped, not piled up in the state. An empty account takes no orders ("account empty"), and an
+  alert id on file twice is one order. `tests/test_weekly_audit_2026_11_08.py`.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.
