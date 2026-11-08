@@ -42,6 +42,11 @@ CRYPTO_WATCHLIST = [
     # Removed 19: BCH, AKE, ARB, LTC, TRUMP, INJ, APT, MAGIC, GTC, ZRO, TIA,
     # OGN, W, S, BAT, CAP, RSR, CT, DOS. Added RLC. Delta alone passes only
     # BTC, ETH and SOL; CoinDCX decides the rest.
+    # 2026-11-08 (lakky): same volume rule plus a pump/dump chart check - no
+    # 40%+ day, no 10x volume day, listed 90+ days (research/coin_list_review.py,
+    # part coin-list; research/out/coin_list/). Removed 9: QNT, RLC, STRK, BTW
+    # (pump/dump and low volume), FIL, AVAX, TAO, AAVE, ONDO (under 100M).
+    # No adds: PUMP has no Bitunix perp; JCT, AKE, AIN are pump/dump charts.
     "BTCUSD",
     "ETHUSD",
     "ZECUSD",
@@ -50,7 +55,6 @@ CRYPTO_WATCHLIST = [
     "NEARUSD",
     "HYPEUSD",
     "DOGEUSD",
-    "QNTUSD",
     "SUIUSD",
     "UNIUSD",
     "BNBUSD",
@@ -58,15 +62,7 @@ CRYPTO_WATCHLIST = [
     "1000PEPEUSD",
     "WLDUSD",
     "ADAUSD",
-    "AVAXUSD",
     "LINKUSD",
-    "ONDOUSD",
-    "TAOUSD",
-    "STRKUSD",
-    "BTWUSD",
-    "FILUSD",
-    "AAVEUSD",
-    "RLCUSD",
 ]
 
 # Crypto Bitunix lists but Delta does not. The 2026-10-13 six (W, OGN, DOS,
@@ -88,12 +84,13 @@ OTHER_WATCHLIST = [
 #
 # BZ, SAMSUNG, AXTI, SLX and MSFT dropped 2026-09-16: not listed on Delta.
 XSTOCK_WATCHLIST = [
+    # 2026-11-08 (lakky): >= 1M USD a day on Delta over both 7 and 30 days, and
+    # no pump/dump chart (research/coin_list_review.py, part coin-list). Removed
+    # SOXL (3x ETF: a 61% day, -67% in 90 days), META, NVDA, MRVL (0.3-0.5M a
+    # day). Added QQQ (2.5M a day, calm). KORU skipped (3x ETF, a 63% day).
     "TSLAXUSD",
-    "METAXUSD",
-    "SOXLBUSD",
     "SNDKBUSD",
-    "MRVL/USDT:USDT",
-    "NVDAXUSD",
+    "QQQXUSD",
     # Dropped earlier for thin volume: FLNC, IBM, PHAROS, SOXX, NVDL, BABA,
     # DELL, AVGO, TAIKO, TQQQ, OPENAI, AMZN, VANRY, SPY (SPY stays in the
     # rating registry as its own sector marker).
@@ -114,16 +111,14 @@ WATCHLIST = CRYPTO_WATCHLIST + OTHER_WATCHLIST + XSTOCK_WATCHLIST
 # it against /v2/products when the watchlist is next reviewed.
 DELTA_LISTED_SYMBOLS = {
     "BTCUSD", "ETHUSD", "SOLUSD", "XRPUSD", "HYPEUSD",
-    "ZECUSD", "DOGEUSD", "AAVEUSD", "UNIUSD", "LINKUSD",
-    "AVAXUSD", "BNBUSD", "SLVONUSD",
-    "XAUTUSD", "TSLAXUSD", "METAXUSD", "SOXLBUSD", "SNDKBUSD",
-    "MRVL/USDT:USDT", "NVDAXUSD",
+    "ZECUSD", "DOGEUSD", "UNIUSD", "LINKUSD",
+    "BNBUSD", "SLVONUSD",
+    "XAUTUSD", "TSLAXUSD", "SNDKBUSD",
+    # 2026-11-08 addition; Delta lists QQQXUSD (live perp, coin-list probe).
+    "QQQXUSD",
     # 2026-10-13 CoinDCX 100M+ additions that Delta lists too (/v2/products).
-    "NEARUSD", "STRKUSD", "SUIUSD", "ENAUSD", "WLDUSD",
-    "FILUSD", "1000PEPEUSD", "ADAUSD", "BTWUSD", "TAOUSD", "ONDOUSD",
-    "QNTUSD",
-    # 2026-10-16 volume cut addition; Delta lists RLCUSD (live perp).
-    "RLCUSD",
+    "NEARUSD", "SUIUSD", "ENAUSD", "WLDUSD",
+    "1000PEPEUSD", "ADAUSD",
 }
 
 DELTA_API_BASE_URL = "https://api.india.delta.exchange"
@@ -154,11 +149,8 @@ BITUNIX_MIN_REQUEST_GAP_SECONDS = env_float("VICTUS_BITUNIX_MIN_REQUEST_GAP_SECO
 # (research/xstock_bitunix_probe.py, research/out/xstock/).
 BITUNIX_XSTOCK_PAIRS = {
     "TSLAXUSD": "TSLAUSDT",
-    "METAXUSD": "METAUSDT",
-    "SOXLBUSD": "SOXLUSDT",
     "SNDKBUSD": "SNDKUSDT",
-    "MRVL/USDT:USDT": "MRVLUSDT",
-    "NVDAXUSD": "NVDAUSDT",
+    "QQQXUSD": "QQQUSDT",       # listed, 230 days of 1d candles (2026-11-08)
 }
 BITUNIX_SYMBOLS = set(CRYPTO_WATCHLIST) | set(BITUNIX_XSTOCK_PAIRS)
 USE_LIVE_TICKER = env_flag("VICTUS_USE_LIVE_TICKER")

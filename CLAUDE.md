@@ -41,7 +41,7 @@ what was checked, what's next.
 
 All in `config.py`, which **is tracked in git**:
 
-- `WATCHLIST` — the 33 symbols scanned: 25 crypto, 6 xStocks, XAUT + SLVON (64 on
+- `WATCHLIST` — the 21 symbols scanned: 16 crypto, 3 xStocks (TSLA, SNDK, QQQ), XAUT + SLVON (64 on
   2026-09-01, cut on Delta volume and again when CoinSwitch was dropped; 27 crypto added
   2026-10-13 (lakky): every CoinDCX USDT future with 24h volume >= 100M USDT that Bitunix
   lists, commodities left out - `research/coindcx_volume_probe.py`, part `coindcx`; same day
@@ -49,8 +49,13 @@ All in `config.py`, which **is tracked in git**:
   (lakky): crypto = average >= 100M USDT a day over BOTH the last 7 and 30 days on CoinDCX or
   Delta, with a Bitunix perp** - `research/volume_7d_30d_probe.py`, part `volume`; 19 removed
   (BCH, AKE, ARB, LTC, TRUMP, INJ, APT, MAGIC, GTC, ZRO, TIA, OGN, W, S, BAT, CAP, RSR, CT, DOS),
-  RLC added. A one-day 24h snapshot misleads: MAGIC/W/BAT spiked to 100M+ for a week on a ~40M month)
-- `DELTA_LISTED_SYMBOLS` — the 33 watchlist symbols Delta India lists. `WATCHLIST` equals it
+  RLC added. A one-day 24h snapshot misleads: MAGIC/W/BAT spiked to 100M+ for a week on a ~40M month.
+  **2026-11-08 (lakky): same rule plus no pump/dump chart** (Bitunix 1d, last 90 days: no 40%+ day, no day
+  at 10x the median traded value, listed 90+ days) - `research/coin_list_review.py`, part `coin-list`;
+  removed QNT, RLC, STRK, BTW (pump/dump), FIL, AVAX, TAO, AAVE, ONDO (under 100M); xStocks need 1M+ USD a
+  day on Delta: SOXL (pump/dump), META, NVDA, MRVL removed, QQQ (QQQXUSD) added. A 7-day move alone is not
+  a fail: ZEC/NEAR/ENA ran 76-97% in a week as steady trends)
+- `DELTA_LISTED_SYMBOLS` — the 21 watchlist symbols Delta India lists. `WATCHLIST` equals it
   plus `NOT_DELTA_LISTED_CRYPTO` (empty since 2026-10-16; such coins grade their daily backtest
   on the ccxt fallback venues). `entry_confirm.py` used to tag
   each ping with the venue ("Delta"); dropped 2026-10-08 (lakky) - its crypto prices come

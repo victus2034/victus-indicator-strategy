@@ -17,7 +17,7 @@ class CryptoConfigTests(unittest.TestCase):
         with patch.dict(os.environ, {}, clear=True):
             import config
 
-            self.assertEqual(len(config.CRYPTO_WATCHLIST), 25)
+            self.assertEqual(len(config.CRYPTO_WATCHLIST), 16)
             self.assertLessEqual(len(config.CRYPTO_WATCHLIST), 100)
             self.assertEqual(
                 config.WATCHLIST,
@@ -27,19 +27,25 @@ class CryptoConfigTests(unittest.TestCase):
             )
             self.assertEqual(len(config.WATCHLIST), len(set(config.WATCHLIST)))
 
-    def test_existing_xstock_symbols_are_preserved(self):
+    def test_xstock_list_is_the_2026_11_08_review(self):
+        # lakky, 2026-11-08: >= 1M a day on Delta and no pump/dump chart
+        # (research/coin_list_review.py). SOXL failed the chart; META, NVDA
+        # and MRVL the volume; QQQ came in.
         with patch.dict(os.environ, {}, clear=True):
             import config
 
-            for symbol in (
-                "MRVL/USDT:USDT",
-                # Re-admitted 2026-09-01. It had been dropped for having no
-                # live data, but a re-audit - two rounds 30s apart, the same
-                # method that removed it - answered from delta_india both
-                # times, so the fetch chain reaches it now.
-                "NVDAXUSD",
-            ):
-                self.assertIn(symbol, config.XSTOCK_WATCHLIST)
+            self.assertEqual(config.XSTOCK_WATCHLIST, ["TSLAXUSD", "SNDKBUSD", "QQQXUSD"])
+
+    def test_coin_list_review_removals_are_gone(self):
+        # lakky, 2026-11-08: pump/dump charts and coins under 100M a day.
+        with patch.dict(os.environ, {}, clear=True):
+            import config
+
+            for symbol in ("QNTUSD", "RLCUSD", "STRKUSD", "BTWUSD", "FILUSD", "AVAXUSD",
+                           "TAOUSD", "AAVEUSD", "ONDOUSD", "SOXLBUSD", "METAXUSD",
+                           "NVDAXUSD", "MRVL/USDT:USDT"):
+                self.assertNotIn(symbol, config.WATCHLIST)
+                self.assertNotIn(symbol, config.DELTA_LISTED_SYMBOLS)
 
     def test_non_delta_xstock_symbols_are_gone(self):
         # 2026-09-16: none of these five is listed on Delta, where Shiva trades.

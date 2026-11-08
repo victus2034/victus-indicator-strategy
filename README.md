@@ -16,12 +16,14 @@ Everything runs on GitHub Actions. There is no server.
 
 ## Watchlist
 
-`config.py` holds it. 33 symbols. Since 2026-10-16 crypto is every coin averaging 100M+ USDT a day
+`config.py` holds it. 21 symbols. Since 2026-10-16 crypto is every coin averaging 100M+ USDT a day
 over both the last 7 and the last 30 days on CoinDCX or Delta that Bitunix lists
-(`research/volume_7d_30d_probe.py`, part `volume`); all are on Delta (`DELTA_LISTED_SYMBOLS`):
+(`research/volume_7d_30d_probe.py`, part `volume`). Since 2026-11-08 a coin or xStock with a
+pump/dump chart is left out too: a 40%+ day, a 10x volume day or under 90 days listed
+(`research/coin_list_review.py`, part `coin-list`; xStocks need 1M+ USD a day on Delta). All are on Delta (`DELTA_LISTED_SYMBOLS`):
 
-- `CRYPTO_WATCHLIST`: 25 coins (BTC, ETH, SOL, ...)
-- `XSTOCK_WATCHLIST`: 6 tokenised stocks (TSLA, META, SOXL, SNDK, MRVL, NVDA)
+- `CRYPTO_WATCHLIST`: 16 coins (BTC, ETH, SOL, ...)
+- `XSTOCK_WATCHLIST`: 3 tokenised stocks (TSLA, SNDK, QQQ)
 - `OTHER_WATCHLIST`: XAUT (gold) and SLVON (silver)
 
 NSE scans 200 stocks, market-cap ranks 100-300 (`NSE_RANK_START`/`END` in `nse_config.py`, `nse_scanner.load_watchlist`).
