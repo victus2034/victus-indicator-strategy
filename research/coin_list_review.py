@@ -14,9 +14,13 @@ Chart check, on Bitunix daily candles (the alert feed), last 90 complete days:
   week  biggest 7-day close-to-close move, either way
   spike biggest day's traded value / median day's, over the 90 days
   age   days since the pair's first Bitunix daily candle
-A coin is a pump/dump chart when day >= --max-day, week >= --max-week (moves
-measured as |log|, so a fall counts like the rise that undoes it), spike >=
---max-spike, or age < --min-age. Posts nothing, touches no state.
+A coin is a pump/dump chart when day >= --max-day (moves measured as |log|, so
+a fall counts like the rise that undoes it), spike >= --max-spike, or age <
+--min-age. The week column is shown, not a fail: the first run (2026-11-08)
+flagged ZEC, NEAR, ENA, UNI and AAVE on it - big coins in a steady trend, with
+no pump day (max 29%) and no volume spike (max 8.8x) - while every coin with a
+40%+ day or a 10x volume day (QNT, RLC, STRK, BTW, AIN, JCT, AKE, SOXL, KORU)
+was a one-off spike. Posts nothing, touches no state.
 """
 import argparse
 import json
@@ -93,13 +97,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--min", type=float, default=100e6)
     ap.add_argument("--xstock-min", type=float, default=1e6)
-    ap.add_argument("--max-day", type=float, default=30.0, help="one-day move, %%")
-    ap.add_argument("--max-week", type=float, default=60.0, help="7-day move, %%")
+    ap.add_argument("--max-day", type=float, default=40.0, help="one-day move, %%")
     ap.add_argument("--max-spike", type=float, default=10.0)
     ap.add_argument("--min-age", type=int, default=90)
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
-    lim_day, lim_week = math.log(1 + a.max_day / 100), math.log(1 + a.max_week / 100)
+    lim_day = math.log(1 + a.max_day / 100)
 
     cd, cd_note = coindcx()
     dl, dl_note = delta()
@@ -156,8 +159,6 @@ def main():
         if ch:
             if ch["day"] >= lim_day:
                 why.append(f"day {pct(ch['day']):.0f}%")
-            if ch["week"] >= lim_week:
-                why.append(f"week {pct(ch['week']):.0f}%")
             if ch["spike"] >= a.max_spike:
                 why.append(f"vol spike {ch['spike']:.0f}x")
             if ch["age"] < a.min_age:
@@ -192,8 +193,8 @@ def main():
     text = "\n".join([
         "# Coin list review (M USD a day, avg of last 7 / 30 complete UTC days)", "",
         f"- Volume pass: one venue >= {a.min / 1e6:.0f}M (crypto) / {a.xstock_min / 1e6:.1f}M (xStocks) on BOTH 7d and 30d",
-        f"- Pump/dump chart (Bitunix 1d, last 90 days): one-day move >= {a.max_day:.0f}%, 7-day move >= {a.max_week:.0f}% "
-        f"(falls as |log|, so -23% = +30%), a day's traded value >= {a.max_spike:.0f}x the median day, or listed < {a.min_age} days",
+        f"- Pump/dump chart (Bitunix 1d, last 90 days): one-day move >= {a.max_day:.0f}% "
+        f"(falls as |log|, so -29% = +40%), a day's traded value >= {a.max_spike:.0f}x the median day, or listed < {a.min_age} days",
         f"- {cd_note}", f"- {dl_note}", f"- Bitunix: {len(bx)} pairs", ""]
         + table("crypto") + table("xstock"))
     (OUT / "COIN_LIST_REVIEW.md").write_text(text + "\n")
