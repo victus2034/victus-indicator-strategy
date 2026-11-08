@@ -173,5 +173,81 @@ def main():
     print(text)
 
 
+def load(path):
+    for line in open(path):
+        try:
+            yield json.loads(line)
+        except ValueError:
+            continue
+
+
+def bitunix_any(sym, start, end):
+    pair = bitunix_data.pair_for(sym, sym)
+    return [(r[0], r[2], r[3], r[4]) for r in bitunix_data.klines(pair, "5m", int(start), int(end))]
+
+
+def main_all(rebuild_path, rebuild_results, live_path, cutoff, now):
+    """Every CRYPTO 1D fib alert the journal shows for 8 Oct - now: the rebuild before
+    its cutoff (news-window fills left out, as the journal does), live alerts after."""
+    global NOW
+    NOW = now
+    res = json.load(open(rebuild_results))
+    recs = [r for r in load(rebuild_path) if r.get("kind") == "fib" and r.get("tf") == "1d"
+            and r.get("market") == "crypto" and SINCE <= r.get("sent_ts", 0) <= NOW
+            and not (res.get(r["id"]) or {}).get("news_window")]
+    recs += [r for r in load(live_path) if r.get("kind") == "fib" and r.get("tf") == "1d"
+             and r.get("market") == "crypto" and cutoff <= r.get("sent_ts", 0) <= NOW]
+    recs.sort(key=lambda r: r["sent_ts"])
+    out = OUT / "all"
+    out.mkdir(parents=True, exist_ok=True)
+    cache, rows = {}, []
+    for rec in recs:
+        sym = rec["symbol"]
+        if sym not in cache:
+            try:
+                b = bitunix_any(sym, SINCE - 86400, NOW)
+            except Exception as e:  # noqa: BLE001
+                print("bitunix", sym, e)
+                b = []
+            d = delta(sym, 5, "5m", SINCE - 86400, NOW)
+            cache[sym] = (b, d)
+        b, d = cache[sym]
+        rows.append({"id": rec["id"], "bitunix5": score(rec, b, 300, False) if b else None,
+                     "delta5": score(rec, d, 300, False) if d else None})
+    (out / "result.json").write_text(json.dumps(rows, indent=1))
+    lines, tot = [], {}
+    for row in rows:
+        x = row["bitunix5"] or row["delta5"]
+        src = "bitunix" if row["bitunix5"] else ("delta" if row["delta5"] else "none")
+        if x is None:
+            lines.append(f"{row['id']} no candles")
+            continue
+        y = row["delta5"]
+        r, pct = x.get("r"), (None if x.get("r") is None else x["r"] * x["risk_pct"])
+        diff = ""
+        if row["bitunix5"] and y and (y.get("result"), round(y.get("r") or 0, 2)) != (x.get("result"), round(r or 0, 2)):
+            diff = f"  DELTA: {y.get('result')} {y.get('r') if y.get('r') is None else round(y['r'], 2)}"
+        lines.append(f"{x['alert']} {x['symbol']:15} {x['level']} {x['side']:5} risk {x['risk_pct']:6.2f}% "
+                     f"fill {x.get('fill', '-'):11} exit {x.get('exit', '-'):11} {x['result']:9} "
+                     + ("" if r is None else f"{r:+.2f}R {pct:+.2f}%") + f" [{src}]" + diff)
+        t = tot.setdefault(x["result"] if r is None else "closed", [0, 0.0, 0.0, 0])
+        t[0] += 1
+        if r is not None:
+            t[1] += r
+            t[2] += pct
+            t[3] += r > 0
+    c = tot.get("closed", [0, 0, 0, 0])
+    lines.append(f"\nalerts {len(rows)}; " + ", ".join(f"{k} {v[0]}" for k, v in tot.items()))
+    lines.append(f"closed {c[0]}: {c[3]}W / {c[0] - c[3]}L, total {c[1]:+.2f}R ({c[2]:+.2f}%), "
+                 f"per trade {c[1] / max(c[0], 1):+.3f}R / {c[2] / max(c[0], 1):+.3f}%")
+    text = "\n".join(lines)
+    (out / "result.txt").write_text(text)
+    print(text)
+
+
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) > 1 and sys.argv[1] == "--all":
+        # --all REBUILD RESULTS LIVE CUTOFF_TS NOW_TS
+        main_all(sys.argv[2], sys.argv[3], sys.argv[4], float(sys.argv[5]), float(sys.argv[6]))
+    else:
+        main()

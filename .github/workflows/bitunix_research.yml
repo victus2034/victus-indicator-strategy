@@ -137,7 +137,9 @@ jobs:
                        git show FETCH_HEAD:fib_trendline_alert_records.jsonl > /tmp/fib_records.jsonl
                        git show FETCH_HEAD:fibtl_rebuild_records.jsonl > /tmp/fibtl_rebuild.jsonl
                        python research/journal_fib_verify.py /tmp/fibtl_rebuild.jsonl rebuild
-                       python research/journal_fib_verify.py /tmp/fib_records.jsonl live ;;
+                       python research/journal_fib_verify.py /tmp/fib_records.jsonl live
+                       git show FETCH_HEAD:fibtl_rebuild_results.json > /tmp/fibtl_rebuild_results.json
+                       python research/journal_fib_verify.py --all /tmp/fibtl_rebuild.jsonl /tmp/fibtl_rebuild_results.json /tmp/fib_records.jsonl 1794078474 1794122940 ;;
             discord-trace) git fetch --shallow-since=2026-10-19 origin scanner-runtime-state
                        python research/discord_alert_trace.py ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
