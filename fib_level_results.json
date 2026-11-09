@@ -1905,15 +1905,15 @@
    "alert_ts": 1793962799,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794171600,
    "entry": 0.18841,
    "fill_ts": 1793973600,
    "filled": true,
    "half": true,
-   "outcome": "1R",
+   "outcome": "2R",
    "r1": true,
-   "r2": false,
-   "resolved": false,
+   "r2": true,
+   "resolved": true,
    "sl": false
   },
   "L4": {
@@ -2183,7 +2183,7 @@
    "entry": 247.6225067138672,
    "fill_ts": 1792693800,
    "filled": true,
-   "half": false,
+   "half": true,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -2955,8 +2955,8 @@
    "be": false,
    "end_ts": null,
    "entry": 5316.125,
-   "fill_ts": null,
-   "filled": false,
+   "fill_ts": 1794076200,
+   "filled": true,
    "half": false,
    "outcome": "open",
    "r1": false,
@@ -4686,7 +4686,7 @@
    "entry": 723.8099822998047,
    "fill_ts": 1790620200,
    "filled": true,
-   "half": false,
+   "half": true,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -5046,11 +5046,19 @@
    "sl": false
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794167999,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
    "entry": 7.828539999999999,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1794168000,
+   "filled": true,
+   "half": true,
+   "outcome": "1R",
+   "r1": true,
+   "r2": false,
+   "resolved": false,
+   "sl": false
   }
  },
  "fib|AVAXUSD|4h|-1|1791316800|9.756|2@1791733688": {
@@ -9709,7 +9717,7 @@
    "entry": 1494.6399841308594,
    "fill_ts": 1793903400,
    "filled": true,
-   "half": false,
+   "half": true,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -13372,7 +13380,7 @@
    "entry": 1139.259994506836,
    "fill_ts": 1792607400,
    "filled": true,
-   "half": false,
+   "half": true,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -14040,8 +14048,8 @@
    "alert_ts": null,
    "entry": 1599.7780322265626,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|GESHIP.NS|4h|1|1792122300|1646.800048828125|2@1793677702": {
@@ -19625,8 +19633,8 @@
    "alert_ts": null,
    "entry": 762.6160119628906,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|KIRLOSENG.NS|1d|1|1778524200|2720.0|2@1792035966": {
@@ -19834,8 +19842,8 @@
    "fill_ts": 1792693800,
    "filled": true,
    "half": true,
-   "outcome": "open",
-   "r1": false,
+   "outcome": "1R",
+   "r1": true,
    "r2": false,
    "resolved": false,
    "sl": false
@@ -22081,8 +22089,8 @@
    "alert_ts": null,
    "entry": 3173.28009765625,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|MEDANTA.NS|1w|1|1774809000|1544.0|2@1792554808": {
@@ -25048,8 +25056,8 @@
    "alert_ts": null,
    "entry": 214.0514,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|NVDAXUSD|4h|-1|1793188800|212.82|2@1793280785": {
@@ -25282,16 +25290,16 @@
   "L2": {
    "alert_ts": 1793816999,
    "ambiguous": false,
-   "be": false,
-   "end_ts": null,
+   "be": true,
+   "end_ts": 1794076200,
    "entry": 1756.6949890136718,
    "fill_ts": 1793817000,
    "filled": true,
    "half": true,
-   "outcome": "open",
+   "outcome": "BE",
    "r1": false,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   },
   "L4": {
@@ -26189,8 +26197,8 @@
    "alert_ts": null,
    "entry": 36658.3,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|PATANJALI.NS|1d|-1|1779129000|328.20001220703125|2@1793867611": {
@@ -26910,22 +26918,22 @@
    "alert_ts": null,
    "entry": 2040.7119189453124,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   },
   "L2": {
    "alert_ts": null,
    "entry": 1997.4599243164062,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   },
   "L4": {
    "alert_ts": null,
    "entry": 1914.8879345703126,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|PIRAMALFIN.NS|1w|-1|1788719400|1781.199951171875|2@1792640596": {
@@ -27695,11 +27703,19 @@
    "sl": false
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794076199,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
    "entry": 248.19599700927733,
+   "fill_ts": null,
    "filled": false,
+   "half": false,
    "outcome": "open",
-   "resolved": false
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
   }
  },
  "fib|PPLPHARMA.NS|4h|-1|1792381500|186.11000061035156|2@1792988608": {
@@ -29738,8 +29754,8 @@
    "alert_ts": null,
    "entry": 99.07639999999999,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|SOLUSD|4h|-1|1793217600|92.29|2@1793337207": {
@@ -30026,8 +30042,8 @@
    "fill_ts": 1793934000,
    "filled": true,
    "half": true,
-   "outcome": "open",
-   "r1": false,
+   "outcome": "1R",
+   "r1": true,
    "r2": false,
    "resolved": false,
    "sl": false
@@ -30659,9 +30675,9 @@
    "entry": 221.5112,
    "fill_ts": 1793955600,
    "filled": true,
-   "half": false,
-   "outcome": "open",
-   "r1": false,
+   "half": true,
+   "outcome": "1R",
+   "r1": true,
    "r2": false,
    "resolved": false,
    "sl": false
@@ -30669,16 +30685,16 @@
   "L2": {
    "alert_ts": 1793959199,
    "ambiguous": false,
-   "be": false,
-   "end_ts": null,
+   "be": true,
+   "end_ts": 1794135600,
    "entry": 224.61100000000002,
    "fill_ts": 1793959200,
    "filled": true,
    "half": true,
-   "outcome": "open",
+   "outcome": "BE",
    "r1": false,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   },
   "L4": {
@@ -30911,6 +30927,45 @@
   "L4": {
    "alert_ts": null,
    "entry": 334.4092,
+   "filled": false,
+   "outcome": "no fill",
+   "resolved": true
+  }
+ },
+ "fib|TSLAXUSD|1w|1|1785110400|414.68|2@1794191581": {
+  "L1": {
+   "alert_ts": 1793750399,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1793836800,
+   "entry": 373.5876,
+   "fill_ts": 1793836800,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
+  },
+  "L2": {
+   "alert_ts": 1793836799,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1793836800,
+   "entry": 360.293,
+   "fill_ts": 1793836800,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 334.9124,
    "filled": false,
    "outcome": "no fill",
    "resolved": true
@@ -32741,11 +32796,19 @@
    "sl": false
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794171599,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794171600,
    "entry": 1199.2268,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1794171600,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
   }
  },
  "fib|ZECUSD|4h|1|1793678400|1387.84|2@1794066497": {
@@ -32753,38 +32816,46 @@
    "alert_ts": 1794031199,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794171600,
    "entry": 1296.9478,
    "fill_ts": 1794045600,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L2": {
    "alert_ts": 1794056399,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794171600,
    "entry": 1267.5415,
    "fill_ts": 1794060000,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794171599,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794171600,
    "entry": 1211.4022,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1794171600,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
   }
  },
  "fib|ZROUSD|4h|-1|1791792000|1.7976|2@1792120760": {
