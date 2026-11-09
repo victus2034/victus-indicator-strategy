@@ -296,7 +296,7 @@
   },
   "ALKEM.NS|1w|short|5316.12|5582.72": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ALKEM.NS|1w|short|5428.38|5485": {
@@ -1121,11 +1121,12 @@
   },
   "COROMANDEL.NS|1d|short|1817.06|1864.08": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "COROMANDEL.NS|1d|short|1853.94|1904.65": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "COROMANDEL.NS|1d|short|1891.07|1942.5": {
@@ -1711,8 +1712,8 @@
     "stopped_out": false
   },
   "GLAXO.NS|1d|short|2693.57|2792.59": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "GLAXO.NS|1w|long|2439.18|2410.79": {
@@ -1730,8 +1731,8 @@
     "stopped_out": false
   },
   "GLAXO.NS|1w|short|2693.57|2771.1": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "GLENMARK.NS|1w|long|2045.9|2025.41": {
@@ -2143,6 +2144,11 @@
     "stage": 3,
     "stopped_out": false
   },
+  "IRB.NS|1d|short|17.894|18.5213": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "IRCTC.NS|1d|long|449.85|445.312": {
     "reached_entry": false,
     "stopped_out": false
@@ -2181,6 +2187,10 @@
     "reached_entry": true,
     "stage": 3,
     "stopped_out": true
+  },
+  "IREDA.NS|1w|short|118.612|120.38": {
+    "reached_entry": false,
+    "stopped_out": false
   },
   "ITCHOTELS.NS|1M|short|179.569|196.663": {
     "reached_entry": false,
@@ -3514,8 +3524,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794199305.741516,
-  "_last_check|nse": 1794199305.741516,
+  "_last_check|crypto": 1794199615.067583,
+  "_last_check|nse": 1794199615.067583,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4022,7 +4032,7 @@
   "_level_ready|COROMANDEL.NS|1d|long|1793.49|1760.49": 1793947306.755783,
   "_level_ready|COROMANDEL.NS|1d|short|1776.49|1904.65": 1793075770.667926,
   "_level_ready|COROMANDEL.NS|1d|short|1817.06|1864.08": 1794196012.334544,
-  "_level_ready|COROMANDEL.NS|1d|short|1853.94|1904.65": 1793850405.511611,
+  "_level_ready|COROMANDEL.NS|1d|short|1853.94|1904.65": 1794199615.067583,
   "_level_ready|COROMANDEL.NS|1d|short|1891.07|1942.5": 1793856400.768769,
   "_level_ready|COROMANDEL.NS|1d|short|1894.51|1945.22": 1793936864.300001,
   "_level_ready|COROMANDEL.NS|1w|short|1813.89|1980.27": 1793764008.797417,
@@ -4418,6 +4428,7 @@
   "_level_ready|IPCALAB.NS|1d|long|1874.38|1788.03": 1792735900.7583,
   "_level_ready|IPCALAB.NS|1d|long|1914.38|1864.38": 1793338312.714362,
   "_level_ready|IRB.NS|1d|short|17.3528|18.0293": 1794196012.334544,
+  "_level_ready|IRB.NS|1d|short|17.894|18.5213": 1794199615.067583,
   "_level_ready|IRCTC.NS|1d|long|447.127|443.45": 1792640801.869234,
   "_level_ready|IRCTC.NS|1d|long|447.182|443.45": 1792728404.281105,
   "_level_ready|IRCTC.NS|1d|short|450.3|456.488": 1793764919.634557,
@@ -5430,7 +5441,7 @@
   "_ready|COLPAL.NS|1d": 1792640801.869234,
   "_ready|COLPAL.NS|1w": 1793943106.438875,
   "_ready|CONCOR.NS|1w": 1791517890.620179,
-  "_ready|COROMANDEL.NS|1d": 1794196012.334544,
+  "_ready|COROMANDEL.NS|1d": 1794199615.067583,
   "_ready|COROMANDEL.NS|1w": 1793869594.600093,
   "_ready|COTI/USDT|30m": 1789452970.13835,
   "_ready|CPPLUS.NS|1d": 1793781403.105803,
@@ -5578,7 +5589,7 @@
   "_ready|IOB.NS|1d": 1794196012.334544,
   "_ready|IOB.NS|1w": 1794196012.334544,
   "_ready|IPCALAB.NS|1d": 1793338312.714362,
-  "_ready|IRB.NS|1d": 1794196012.334544,
+  "_ready|IRB.NS|1d": 1794199615.067583,
   "_ready|IRCTC.NS|1d": 1794196012.334544,
   "_ready|IREDA.NS|1d": 1794197505.208611,
   "_ready|IREDA.NS|1w": 1794198126.429793,
