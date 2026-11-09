@@ -963,7 +963,7 @@
   },
   "CENTRALBK.NS|1d|short|30.9924|31.5617": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "CESC.NS|1M|long|123.535|76.5869": {
@@ -1333,11 +1333,6 @@
   },
   "DELHIVERY.NS|1M|long|394.638|386": {
     "reached_entry": false,
-    "stopped_out": false
-  },
-  "DELHIVERY.NS|1d|short|423.665|438.419": {
-    "reached_entry": true,
-    "stage": 3,
     "stopped_out": false
   },
   "DELHIVERY.NS|1d|short|435.468|450.222": {
@@ -1835,6 +1830,7 @@
   },
   "HAVELLS.NS|1w|short|1141.31|1154": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "HBLENGINE.NS|1M|long|727.65|629.062": {
@@ -2153,21 +2149,21 @@
   "IREDA.NS|1d|short|112.515|113.84": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "IREDA.NS|1d|short|112.825|113.84": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "IREDA.NS|1d|short|113.764|119.823": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "IREDA.NS|1w|short|113.764|115": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "ITCHOTELS.NS|1M|short|179.569|196.663": {
@@ -2921,11 +2917,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "NH.NS|1d|short|1838.49|1883.42": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "NH.NS|1d|short|1916|1932.9": {
     "reached_entry": true,
     "stage": 2,
@@ -3195,8 +3186,8 @@
     "stopped_out": false
   },
   "POONAWALLA.NS|1M|short|476.26|482.95": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "POONAWALLA.NS|1M|short|499.272|528.037": {
@@ -3210,7 +3201,7 @@
   "POONAWALLA.NS|1d|short|467.954|476.9": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "POONAWALLA.NS|1d|short|472.205|488.258": {
     "reached_entry": true,
@@ -3232,8 +3223,8 @@
     "stopped_out": true
   },
   "POONAWALLA.NS|1w|short|476.26|484": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "POONAWALLA.NS|1w|short|495.945|506": {
@@ -3511,8 +3502,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794198370.018478,
-  "_last_check|nse": 1794198370.018478,
+  "_last_check|crypto": 1794198722.95594,
+  "_last_check|nse": 1794198722.95594,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4282,6 +4273,7 @@
   "_level_ready|HAVELLS.NS|1d|short|1075.92|1095.11": 1793941881.703493,
   "_level_ready|HAVELLS.NS|1d|short|1091.27|1110.45": 1793947909.619753,
   "_level_ready|HAVELLS.NS|1w|short|1106.57|1121": 1793953312.109598,
+  "_level_ready|HAVELLS.NS|1w|short|1141.31|1154": 1794198722.95594,
   "_level_ready|HBLENGINE.NS|1M|long|727.65|629.062": 1791777105.432083,
   "_level_ready|HBLENGINE.NS|1M|long|727.65|692.159": 1791517599.357562,
   "_level_ready|HBLENGINE.NS|1M|short|842.05|885.7": 1793850405.511611,
@@ -5522,7 +5514,7 @@
   "_ready|GRSE.NS|1w": 1792561911.6463,
   "_ready|GWEI/USDT|30m": 1789391158.458368,
   "_ready|HAVELLS.NS|1d": 1793947909.619753,
-  "_ready|HAVELLS.NS|1w": 1793953312.109598,
+  "_ready|HAVELLS.NS|1w": 1794198722.95594,
   "_ready|HBLENGINE.NS|1M": 1793850405.511611,
   "_ready|HBLENGINE.NS|1d": 1793591209.526473,
   "_ready|HBLENGINE.NS|1w": 1793850405.511611,
