@@ -108,8 +108,8 @@
     "stopped_out": false
   },
   "ABSLAMC.NS|1w|long|883.746|869.531": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ABSLAMC.NS|1w|long|923.844|906.3": {
@@ -1700,11 +1700,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "GLENMARK.NS|1d|short|2389.36|2449.31": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "GLENMARK.NS|1w|long|2045.9|2025.41": {
     "reached_entry": false,
     "stopped_out": false
@@ -2099,11 +2094,6 @@
   "IRCTC.NS|1d|long|449.85|445.312": {
     "reached_entry": false,
     "stopped_out": false
-  },
-  "IRCTC.NS|1d|short|450.3|456.488": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
   },
   "IRCTC.NS|1d|short|455.25|460.988": {
     "reached_entry": true,
@@ -2702,6 +2692,7 @@
   },
   "MOTILALOFS.NS|1M|short|1155.59|1240.85": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "MOTILALOFS.NS|1d|short|1089.66|1240.85": {
@@ -2719,6 +2710,7 @@
   },
   "MOTILALOFS.NS|1w|short|1157.29|1266.45": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "MPHASIS.NS|1w|short|2741.09|2770": {
@@ -3152,6 +3144,7 @@
   },
   "POLYMED.NS|1d|short|1606.92|1665.13": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "POLYMED.NS|1d|short|1652.58|1715.34": {
@@ -3475,8 +3468,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794196601.002329,
-  "_last_check|nse": 1794196601.002329,
+  "_last_check|crypto": 1794196905.696003,
+  "_last_check|nse": 1794196905.696003,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4618,6 +4611,7 @@
   "_level_ready|METAXUSD|30m|short|746.85|747.725": 1791267698.622435,
   "_level_ready|METAXUSD|4h|long|725.95|722.263": 1791380798.231245,
   "_level_ready|MFSL.NS|1M|long|1181.13|1003.29": 1793764008.797417,
+  "_level_ready|MOTILALOFS.NS|1M|short|1155.59|1240.85": 1794196905.696003,
   "_level_ready|MOTILALOFS.NS|1d|long|1029.91|1021.02": 1792389724.420896,
   "_level_ready|MOTILALOFS.NS|1d|short|1031.21|1062.3": 1792554711.035895,
   "_level_ready|MOTILALOFS.NS|1d|short|1050|1062.3": 1792037796.781654,
@@ -4625,6 +4619,7 @@
   "_level_ready|MOTILALOFS.NS|1d|short|955.94|1026.66": 1793591209.526473,
   "_level_ready|MOTILALOFS.NS|1d|short|978.325|1026.66": 1793245588.963685,
   "_level_ready|MOTILALOFS.NS|1w|long|928.631|763.447": 1793072802.908836,
+  "_level_ready|MOTILALOFS.NS|1w|short|1157.29|1266.45": 1794196905.696003,
   "_level_ready|MPHASIS.NS|1d|short|2339.95|2438.93": 1791517599.357562,
   "_level_ready|MPHASIS.NS|1d|short|2428.25|2461.1": 1791863502.097245,
   "_level_ready|MPHASIS.NS|1d|short|2443.9|2482": 1791865303.128486,
@@ -4851,7 +4846,7 @@
   "_level_ready|POLICYBZR.NS|1w|long|989.745|960.35": 1793591209.526473,
   "_level_ready|POLYMED.NS|1d|long|1556.15|1532.8": 1791518507.451007,
   "_level_ready|POLYMED.NS|1d|short|1556.71|1619.48": 1793779307.13118,
-  "_level_ready|POLYMED.NS|1d|short|1606.92|1665.13": 1793955990.211284,
+  "_level_ready|POLYMED.NS|1d|short|1606.92|1665.13": 1794196905.696003,
   "_level_ready|POLYMED.NS|1d|short|1652.58|1715.34": 1793855810.926895,
   "_level_ready|POONAWALLA.NS|1M|short|476.26|482.95": 1794196012.334544,
   "_level_ready|POONAWALLA.NS|1d|long|418.279|414.378": 1792729917.454067,
@@ -5608,8 +5603,9 @@
   "_ready|METAXUSD|4h": 1791380798.231245,
   "_ready|MFSL.NS|1M": 1793764008.797417,
   "_ready|MNT/USDT|30m": 1789480563.544585,
+  "_ready|MOTILALOFS.NS|1M": 1794196905.696003,
   "_ready|MOTILALOFS.NS|1d": 1793937114.247749,
-  "_ready|MOTILALOFS.NS|1w": 1793072802.908836,
+  "_ready|MOTILALOFS.NS|1w": 1794196905.696003,
   "_ready|MPHASIS.NS|1d": 1793072802.908836,
   "_ready|MRF.NS|1M": 1791517599.357562,
   "_ready|MRF.NS|1d": 1794196012.334544,
@@ -5692,7 +5688,7 @@
   "_ready|PNBHOUSING.NS|1w": 1793764008.797417,
   "_ready|POLICYBZR.NS|1d": 1794196012.334544,
   "_ready|POLICYBZR.NS|1w": 1793591209.526473,
-  "_ready|POLYMED.NS|1d": 1793955990.211284,
+  "_ready|POLYMED.NS|1d": 1794196905.696003,
   "_ready|POONAWALLA.NS|1M": 1794196012.334544,
   "_ready|POONAWALLA.NS|1d": 1794196012.334544,
   "_ready|POONAWALLA.NS|1w": 1794196012.334544,
