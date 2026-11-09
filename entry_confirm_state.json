@@ -1501,6 +1501,11 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "EXIDEIND.NS|1d|short|378.596|383.1": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "EXIDEIND.NS|1w|long|358.196|352.437": {
     "reached_entry": false,
     "stopped_out": false
@@ -2197,14 +2202,24 @@
     "stage": 3,
     "stopped_out": false
   },
+  "IREDA.NS|1d|short|118.612|124.23": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
+  "IREDA.NS|1d|short|119.33|120.61": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
   "IREDA.NS|1w|short|113.764|115": {
     "reached_entry": true,
     "stage": 3,
     "stopped_out": true
   },
   "IREDA.NS|1w|short|118.612|120.38": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ITCHOTELS.NS|1M|short|179.569|196.663": {
@@ -3092,6 +3107,7 @@
   },
   "PAGEIND.NS|1d|short|36075.5|36805.6": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PAGEIND.NS|1w|long|33396.8|28158.7": {
@@ -3553,8 +3569,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794204093.117098,
-  "_last_check|nse": 1794204093.117098,
+  "_last_check|crypto": 1794204412.351887,
+  "_last_check|nse": 1794204412.351887,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4217,6 +4233,7 @@
   "_level_ready|ETHUSD|30m|short|2725.55|2746.49": 1790673693.727535,
   "_level_ready|ETHUSD|30m|short|2736|2751.5": 1790915161.963091,
   "_level_ready|EXIDEIND.NS|1M|long|347.742|279.591": 1793764008.797417,
+  "_level_ready|EXIDEIND.NS|1d|short|378.596|383.1": 1794204412.351887,
   "_level_ready|EXIDEIND.NS|1w|long|358.196|352.437": 1793936864.300001,
   "_level_ready|EXIDEIND.NS|1w|long|381.23|352.437": 1792036000.300237,
   "_level_ready|FACT.NS|1M|long|689.907|427.553": 1792641484.218837,
@@ -4470,6 +4487,7 @@
   "_level_ready|IRCTC.NS|1d|short|457.31|464.17": 1791517890.620179,
   "_level_ready|IRCTC.NS|1d|short|464.7|470.887": 1794196012.334544,
   "_level_ready|IREDA.NS|1d|short|112.515|113.84": 1794197505.208611,
+  "_level_ready|IREDA.NS|1d|short|118.612|124.23": 1794204412.351887,
   "_level_ready|IREDA.NS|1w|short|113.764|115": 1794198126.429793,
   "_level_ready|IREDA.NS|1w|short|118.612|120.38": 1794204093.117098,
   "_level_ready|ITCHOTELS.NS|1M|short|179.569|196.663": 1794196012.334544,
@@ -4894,7 +4912,7 @@
   "_level_ready|PAGEIND.NS|1M|long|33396.8|28158.7": 1793075508.265993,
   "_level_ready|PAGEIND.NS|1d|long|34778.1|34300": 1792572712.380441,
   "_level_ready|PAGEIND.NS|1d|short|35544.5|36221.5": 1794196012.334544,
-  "_level_ready|PAGEIND.NS|1d|short|36075.5|36805.6": 1793850405.511611,
+  "_level_ready|PAGEIND.NS|1d|short|36075.5|36805.6": 1794204412.351887,
   "_level_ready|PAGEIND.NS|1w|long|33396.8|28158.7": 1793075508.265993,
   "_level_ready|PATANJALI.NS|1d|long|340.666|338": 1793159201.504703,
   "_level_ready|PATANJALI.NS|1d|long|360.283|356.2": 1792382520.989817,
@@ -5536,6 +5554,7 @@
   "_ready|ETHUSD|4h": 1789488358.32405,
   "_ready|EUL/USDT|30m": 1789439750.580446,
   "_ready|EXIDEIND.NS|1M": 1793764008.797417,
+  "_ready|EXIDEIND.NS|1d": 1794204412.351887,
   "_ready|EXIDEIND.NS|1w": 1793936864.300001,
   "_ready|FACT.NS|1M": 1792641484.218837,
   "_ready|FACT.NS|1d": 1792556798.737244,
@@ -5629,7 +5648,7 @@
   "_ready|IRB.NS|1d": 1794202603.799262,
   "_ready|IRB.NS|1w": 1794203508.286905,
   "_ready|IRCTC.NS|1d": 1794196012.334544,
-  "_ready|IREDA.NS|1d": 1794197505.208611,
+  "_ready|IREDA.NS|1d": 1794204412.351887,
   "_ready|IREDA.NS|1w": 1794204093.117098,
   "_ready|ITCHOTELS.NS|1M": 1794196012.334544,
   "_ready|ITCHOTELS.NS|1d": 1793764008.797417,
@@ -5777,7 +5796,7 @@
   "_ready|ONESOURCE.NS|1d": 1793678800.61305,
   "_ready|ONESOURCE.NS|1w": 1793677896.558765,
   "_ready|PAGEIND.NS|1M": 1793075508.265993,
-  "_ready|PAGEIND.NS|1d": 1794196012.334544,
+  "_ready|PAGEIND.NS|1d": 1794204412.351887,
   "_ready|PAGEIND.NS|1w": 1793075508.265993,
   "_ready|PATANJALI.NS|1d": 1793937726.224563,
   "_ready|PERSISTENT.NS|1d": 1793764008.797417,
