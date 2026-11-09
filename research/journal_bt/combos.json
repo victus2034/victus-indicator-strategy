@@ -1,0 +1,21 @@
+[
+ {"label":"fib All Scanner with","kind":"fib","chan":"","coins":"","btc":"","lvl":"","tl":"","tgt":"","hold":"tp","nofee":false,"stop":{"mode":"off"},"trail":{"on":false},
+  "row":{"kind":"fib","channel":"All","coins":"All","btc_day":"All days","level_or_type":"All","exit_at":"Scanner","fees":"with"}},
+ {"label":"fib 1D 1% shift1->0.5 trail .25/.25 tp with","kind":"fib","chan":"CRYPTO 1D","coins":"","btc":"","lvl":"","tl":"","tgt":"1%","hold":"tp","nofee":false,
+  "stop":{"mode":"shift","shAtP":1,"shToP":0.5,"beAtP":1,"beAt":1,"shAt":1,"shTo":0.75},"trail":{"on":true,"step":0.25,"gap":0.25,"stepP":0.25,"gapP":0.25},
+  "row":{"kind":"fib","channel":"1D","coins":"All","btc_day":"All days","level_or_type":"All","exit_at":"1%","move_sl":"SL to +0.5% at +1%","trail_tp":"TP +0.25%, SL 0.25% behind","hold":"Till TP / SL","fees":"with"}},
+ {"label":"fib 1D 1% shift .75->.5 trail .25/.25 tp with","kind":"fib","chan":"CRYPTO 1D","coins":"","btc":"","lvl":"","tl":"","tgt":"1%","hold":"tp","nofee":false,
+  "stop":{"mode":"shift","shAtP":0.75,"shToP":0.5,"beAtP":1,"beAt":1,"shAt":1,"shTo":0.75},"trail":{"on":true,"step":0.25,"gap":0.25,"stepP":0.25,"gapP":0.25},
+  "row":{"kind":"fib","channel":"1D","coins":"All","btc_day":"All days","level_or_type":"All","exit_at":"1%","move_sl":"SL to +0.5% at +0.75%","trail_tp":"TP +0.25%, SL 0.25% behind","hold":"Till TP / SL","fees":"with"}},
+ {"label":"TL 1D Top3 Bearish RS TL BR 2R BE1 20 without","kind":"trendline","chan":"CRYPTO 1D","coins":"top3","btc":"bear","lvl":"","tl":"rsbr","tgt":"2R","hold":"20","nofee":true,
+  "stop":{"mode":"be","beAt":1,"shAt":1,"shTo":0.75,"beAtP":1,"shAtP":1,"shToP":0.5},"trail":{"on":false},
+  "row":{"kind":"trendline","channel":"1D","coins":"Top 3","btc_day":"Bearish","level_or_type":"RS TL BR","exit_at":"2R","move_sl":"BE at +1R","trail_tp":"off","hold":"20 candles","fees":"without"}},
+ {"label":"fib 4H Top5 Bullish L3 3% trail .5/.25 tp with","kind":"fib","chan":"CRYPTO 4H","coins":"top5","btc":"bull","lvl":"L3","tl":"","tgt":"3%","hold":"tp","nofee":false,
+  "stop":{"mode":"off"},"trail":{"on":true,"step":0.5,"gap":0.25,"stepP":0.5,"gapP":0.25},
+  "row":{"kind":"fib","channel":"4H","coins":"Top 5","btc_day":"Bullish","level_or_type":"L3","exit_at":"3%","move_sl":"off","trail_tp":"TP +0.5%, SL 0.25% behind","hold":"Till TP / SL","fees":"with"}},
+ {"label":"TL All Picks Sideways Support 1.5R shift1->0.5 trail 1/0.5 20 with","kind":"trendline","chan":"","coins":"picks","btc":"side","lvl":"","tl":"support","tgt":"1.5R","hold":"20","nofee":false,
+  "stop":{"mode":"shift","shAt":1,"shTo":0.5,"beAt":1,"beAtP":1,"shAtP":1,"shToP":0.5},"trail":{"on":true,"step":1,"gap":0.5,"stepP":1,"gapP":0.5},
+  "row":{"kind":"trendline","channel":"All","coins":"Picks BTC/ETH/SOL","btc_day":"Sideways","level_or_type":"Support TL","exit_at":"1.5R","move_sl":"SL to +0.5R at +1R","trail_tp":"TP +1R, SL 0.5R behind","hold":"20 candles","fees":"with"}},
+ {"label":"fib 1W L4 2R tp without","kind":"fib","chan":"CRYPTO 1W","coins":"","btc":"","lvl":"L4","tl":"","tgt":"2R","hold":"tp","nofee":true,"stop":{"mode":"off"},"trail":{"on":false},
+  "row":{"kind":"fib","channel":"1W","coins":"All","btc_day":"All days","level_or_type":"L4","exit_at":"2R","move_sl":"off","trail_tp":"off","hold":"Till TP / SL","fees":"without"}}
+]
