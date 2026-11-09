@@ -296,7 +296,7 @@
   },
   "ALKEM.NS|1w|short|5192.65|5582.72": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ALKEM.NS|1w|short|5316.12|5582.72": {
@@ -402,6 +402,7 @@
   },
   "APOLLOTYRE.NS|1d|long|408.33|400.604": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "APOLLOTYRE.NS|1d|short|396.573|405.297": {
@@ -591,11 +592,11 @@
   "BANDHANBNK.NS|1d|short|160.455|167.236": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BANDHANBNK.NS|1d|short|165.88|172.167": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "BANDHANBNK.NS|1w|long|140.92|139.84": {
@@ -732,6 +733,10 @@
   "BIOCON.NS|1d|short|362.175|379.878": {
     "reached_entry": true,
     "stage": 3,
+    "stopped_out": false
+  },
+  "BIOCON.NS|1d|short|376.337|392.753": {
+    "reached_entry": false,
     "stopped_out": false
   },
   "BIOCON.NS|1w|long|342.384|338.9": {
@@ -998,6 +1003,11 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "CHOLAHLDNG.NS|1d|long|1418.99|1381.01": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
   "CHOLAHLDNG.NS|1d|short|1391.58|1414.2": {
     "reached_entry": true,
     "stage": 3,
@@ -1229,8 +1239,8 @@
     "stopped_out": false
   },
   "DABUR.NS|1d|long|376.147|369.472": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "DABUR.NS|1d|short|385.275|388.4": {
@@ -1261,6 +1271,11 @@
     "stopped_out": true
   },
   "DATAPATTNS.NS|1M|long|3759.39|2491.42": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
+  "DATAPATTNS.NS|1d|short|3869.01|3934.13": {
     "reached_entry": true,
     "stage": 2,
     "stopped_out": false
@@ -2092,6 +2107,10 @@
     "stopped_out": false
   },
   "IRCTC.NS|1d|long|449.85|445.312": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "IRCTC.NS|1d|long|456.78|452.242": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -2938,8 +2957,8 @@
     "stopped_out": false
   },
   "OBEROIRLTY.NS|1d|short|1741.65|1784.81": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "OBEROIRLTY.NS|1w|long|1593.47|1577.11": {
@@ -2953,12 +2972,12 @@
   "OBEROIRLTY.NS|1w|short|1710.81|1741.1": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "OBEROIRLTY.NS|1w|short|1712.86|1741.1": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "OBEROIRLTY.NS|1w|short|1756.69|1775": {
     "reached_entry": false,
@@ -3468,8 +3487,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794196905.696003,
-  "_last_check|nse": 1794196905.696003,
+  "_last_check|crypto": 1794197174.702453,
+  "_last_check|nse": 1794197174.702453,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3633,7 +3652,7 @@
   "_level_ready|APLAPOLLO.NS|1w|short|2109.16|2124.71": 1793072802.908836,
   "_level_ready|APOLLOTYRE.NS|1M|long|377.598|374.3": 1793168791.057776,
   "_level_ready|APOLLOTYRE.NS|1d|long|388.037|380.3": 1793072802.908836,
-  "_level_ready|APOLLOTYRE.NS|1d|long|408.33|400.604": 1793937978.189416,
+  "_level_ready|APOLLOTYRE.NS|1d|long|408.33|400.604": 1794197174.702453,
   "_level_ready|APOLLOTYRE.NS|1d|short|396.573|405.297": 1793764008.797417,
   "_level_ready|APOLLOTYRE.NS|1w|long|396.058|296.391": 1793764008.797417,
   "_level_ready|APTUSD|1d|short|0.86766|0.89725": 1792135595.111276,
@@ -3947,6 +3966,7 @@
   "_level_ready|CHOICEIN.NS|1d|short|760.458|783.95": 1793598985.000467,
   "_level_ready|CHOLAHLDNG.NS|1M|long|1285.44|1048.89": 1792730195.441606,
   "_level_ready|CHOLAHLDNG.NS|1d|long|1332.42|1309.5": 1792555573.527481,
+  "_level_ready|CHOLAHLDNG.NS|1d|long|1418.99|1381.01": 1794197174.702453,
   "_level_ready|CHOLAHLDNG.NS|1d|short|1340.91|1383.05": 1793253999.616509,
   "_level_ready|CHOLAHLDNG.NS|1d|short|1374.62|1413.7": 1793591507.862065,
   "_level_ready|CHOLAHLDNG.NS|1d|short|1391.58|1414.2": 1793764008.797417,
@@ -5265,7 +5285,7 @@
   "_ready|APLAPOLLO.NS|1d": 1792986700.301796,
   "_ready|APLAPOLLO.NS|1w": 1793072802.908836,
   "_ready|APOLLOTYRE.NS|1M": 1793168791.057776,
-  "_ready|APOLLOTYRE.NS|1d": 1793937978.189416,
+  "_ready|APOLLOTYRE.NS|1d": 1794197174.702453,
   "_ready|APOLLOTYRE.NS|1w": 1793764008.797417,
   "_ready|APTUSD|1d": 1792135595.111276,
   "_ready|ASAHIINDIA.NS|1d": 1793775109.881829,
@@ -5360,7 +5380,7 @@
   "_ready|CHENNPETRO.NS|1d": 1793869594.600093,
   "_ready|CHOICEIN.NS|1d": 1794196012.334544,
   "_ready|CHOLAHLDNG.NS|1M": 1792730195.441606,
-  "_ready|CHOLAHLDNG.NS|1d": 1793938311.903426,
+  "_ready|CHOLAHLDNG.NS|1d": 1794197174.702453,
   "_ready|CHOLAHLDNG.NS|1w": 1793937726.224563,
   "_ready|CL/USDT|30m": 1789488077.641078,
   "_ready|CL/USDT|4h": 1788921063.531614,
