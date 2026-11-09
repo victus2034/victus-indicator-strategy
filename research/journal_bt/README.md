@@ -21,8 +21,14 @@ alerts get 1h-1d candles); `--walk fine` walks every alert on 15m candles.
 Checks: `pycheck.py` (plain-Python re-score of 600 alerts x 4 rule sets, 0 differences) and
 `ui_check.mjs` + `combos.json` + `ui_compare.py` (the Signals tab on screen vs the grid, 7
 combos, 0 mismatches). `btcprev.py`: the BTC-day split by the previous day's candle.
+`fixcmp.py`: the journal after its fix (journal#93, v.179; run step 1 again into `fixed/` on that
+build) against the app's old grid and the 15m grid with the scanner's fib booking.
 
-Findings (journal side, not changed here): the Signals "Scanner" exit books a fib trade that
+Findings (journal side, fixed in journal#93, v.179): the Signals "Scanner" exit books a fib trade that
 reached +1R and came back to breakeven as +1R (fib all +17.7R vs -281.2R on the scanner's own
 2R + BE), and tight Trail TP rules on old alerts read better on coarse candles than on 15m
 (RS TL BR 3R + trail +273R vs +165R).
+
+After the fix (`fixcmp.py`): fib Scanner -281.2R, the scanner's own booking; alert x rule results that
+differ from the 15m grid 6.59% -> 0.12% (trades still open after ~18 days walk their tail on coarser
+candles); RS TL BR 3R + trail 273.1R -> 167.9R (164.9R on 15m).
