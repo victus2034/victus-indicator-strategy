@@ -87,7 +87,7 @@ def crypto_data(symbol, now, since):
     return base, evals
 
 
-def replay_all(since, now, limit):
+def replay_all(since, now, limit, nse=True):
     got, opens = [], {}
     started = time.time()
 
@@ -120,7 +120,8 @@ def replay_all(since, now, limit):
             got += res
 
     import nse_scanner
-    for symbol, (base, evals) in fbt.nse_data(nse_scanner.load_watchlist()[: limit or None]).items():
+    nse_list = nse_scanner.load_watchlist()[: limit or None] if nse else []
+    for symbol, (base, evals) in (fbt.nse_data(nse_list).items() if nse_list else []):
         keep(NSE, symbol, evals)
         for tf in TIMEFRAMES:
             got += fbt.replay(NSE, symbol, tf, base.get(tf, []), evals.get(trades.EVAL_RESOLUTION[NSE][tf], []), now)
@@ -234,7 +235,14 @@ def main() -> None:
     parser.add_argument("--since", default="2026-06-01")
     parser.add_argument("--state", default="")
     parser.add_argument("--limit", type=int, default=0)
+    # Crypto only, into its own folder (lakky, 2026-11-09: the journal's Signals filters
+    # backtested from 1 Jan; research/journal_bt_candles.py, part journal-bt).
+    parser.add_argument("--crypto-only", action="store_true")
+    parser.add_argument("--out", default="")
     args = parser.parse_args()
+    global OUT
+    if args.out:
+        OUT = Path(args.out)
     OUT.mkdir(parents=True, exist_ok=True)
     fbt.TIMEFRAMES = TIMEFRAMES
     fbt.FIB_LEVELS = config.FIB_ALERT_LEVELS
@@ -242,7 +250,7 @@ def main() -> None:
     since = int(pd.Timestamp(args.since, tz=IST).timestamp())
     now = int(time.time())
 
-    got, opens = replay_all(since, now, args.limit)
+    got, opens = replay_all(since, now, args.limit, nse=not args.crypto_only)
     recs, results = records(got, opens)
     with (OUT / "fibtl_rebuild_records.jsonl").open("w", encoding="utf-8") as fh:
         for r in sorted(recs, key=lambda r: r["sent_ts"]):

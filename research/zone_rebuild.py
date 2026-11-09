@@ -69,11 +69,15 @@ FILLED = {"SL", "BE", "+1R", "+2R", "Neither"}
 
 # US CPI / PPI 08:30 and FOMC 14:00, New York time (BLS and Fed calendars;
 # the same list as research/news_window_backtest.py, PR #54). June and July were
-# added when the fib / trendline rebuild moved back to 1 Jun (lakky, 2026-11-07).
+# added when the fib / trendline rebuild moved back to 1 Jun (lakky, 2026-11-07);
+# January to May for the journal's Signals backtest from 1 Jan (2026-11-09; BLS 2026
+# schedule, Fed 2026 calendar).
 NEWS_MIN = 15
-CPI = ["2026-06-10", "2026-07-14", "2026-08-12", "2026-09-11", "2026-10-14", "2026-11-10", "2026-12-10"]
-PPI = ["2026-06-11", "2026-07-15", "2026-08-13", "2026-09-10", "2026-10-15", "2026-11-13", "2026-12-15"]
-FOMC = ["2026-06-17", "2026-07-29", "2026-09-16", "2026-10-28", "2026-12-09"]
+CPI = ["2026-01-13", "2026-02-13", "2026-03-11", "2026-04-10", "2026-05-12",
+       "2026-06-10", "2026-07-14", "2026-08-12", "2026-09-11", "2026-10-14", "2026-11-10", "2026-12-10"]
+PPI = ["2026-01-14", "2026-01-30", "2026-02-27", "2026-03-18", "2026-04-14", "2026-05-13",
+       "2026-06-11", "2026-07-15", "2026-08-13", "2026-09-10", "2026-10-15", "2026-11-13", "2026-12-15"]
+FOMC = ["2026-01-28", "2026-03-18", "2026-04-29", "2026-06-17", "2026-07-29", "2026-09-16", "2026-10-28", "2026-12-09"]
 NEWS_TS = sorted([int(pd.Timestamp(f"{d} 08:30", tz="America/New_York").timestamp()) for d in CPI + PPI]
                  + [int(pd.Timestamp(f"{d} 14:00", tz="America/New_York").timestamp()) for d in FOMC])
 
