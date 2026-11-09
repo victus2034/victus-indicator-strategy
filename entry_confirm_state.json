@@ -884,7 +884,7 @@
   },
   "CASTROLIND.NS|1d|long|191.584|189.826": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "CASTROLIND.NS|1d|long|193.101|191.205": {
@@ -903,7 +903,7 @@
   "CASTROLIND.NS|1w|long|192.979|190.522": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "CDSL.NS|1M|long|1137.66|924.622": {
     "reached_entry": false,
@@ -2152,6 +2152,11 @@
     "stage": 3,
     "stopped_out": false
   },
+  "IRB.NS|1d|short|18.386|19.0625": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "IRB.NS|1w|short|18.4918|18.95": {
     "reached_entry": false,
     "stopped_out": false
@@ -3011,6 +3016,16 @@
     "stage": 3,
     "stopped_out": false
   },
+  "OBEROIRLTY.NS|1d|short|1776.17|1819.34": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
+  "OBEROIRLTY.NS|1d|short|1779.54|1793.7": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "OBEROIRLTY.NS|1w|long|1593.47|1577.11": {
     "reached_entry": false,
     "stopped_out": false
@@ -3530,8 +3545,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794202315.043935,
-  "_last_check|nse": 1794202315.043935,
+  "_last_check|crypto": 1794202603.799262,
+  "_last_check|nse": 1794202603.799262,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4436,6 +4451,7 @@
   "_level_ready|IPCALAB.NS|1d|long|1914.38|1864.38": 1793338312.714362,
   "_level_ready|IRB.NS|1d|short|17.3528|18.0293": 1794196012.334544,
   "_level_ready|IRB.NS|1d|short|17.894|18.5213": 1794199615.067583,
+  "_level_ready|IRB.NS|1d|short|18.386|19.0625": 1794202603.799262,
   "_level_ready|IRCTC.NS|1d|long|447.127|443.45": 1792640801.869234,
   "_level_ready|IRCTC.NS|1d|long|447.182|443.45": 1792728404.281105,
   "_level_ready|IRCTC.NS|1d|short|450.3|456.488": 1793764919.634557,
@@ -4841,6 +4857,7 @@
   "_level_ready|OBEROIRLTY.NS|1d|short|1675.73|1718.89": 1793679094.42107,
   "_level_ready|OBEROIRLTY.NS|1d|short|1710.26|1750.28": 1793765478.34057,
   "_level_ready|OBEROIRLTY.NS|1d|short|1741.65|1784.81": 1794196012.334544,
+  "_level_ready|OBEROIRLTY.NS|1d|short|1776.17|1819.34": 1794202603.799262,
   "_level_ready|OBEROIRLTY.NS|1w|long|1593.47|1577.11": 1793245588.963685,
   "_level_ready|OBEROIRLTY.NS|1w|long|1658.9|1577.11": 1793764008.797417,
   "_level_ready|OBEROIRLTY.NS|1w|short|1756.69|1775": 1794199001.67656,
@@ -5597,7 +5614,7 @@
   "_ready|IOB.NS|1d": 1794196012.334544,
   "_ready|IOB.NS|1w": 1794196012.334544,
   "_ready|IPCALAB.NS|1d": 1793338312.714362,
-  "_ready|IRB.NS|1d": 1794199615.067583,
+  "_ready|IRB.NS|1d": 1794202603.799262,
   "_ready|IRCTC.NS|1d": 1794196012.334544,
   "_ready|IREDA.NS|1d": 1794197505.208611,
   "_ready|IREDA.NS|1w": 1794198126.429793,
@@ -5737,7 +5754,7 @@
   "_ready|NVDAXUSD|4h": 1791254797.771908,
   "_ready|O/USDT|30m": 1789481164.028485,
   "_ready|OBEROIRLTY.NS|1M": 1793591209.526473,
-  "_ready|OBEROIRLTY.NS|1d": 1794196012.334544,
+  "_ready|OBEROIRLTY.NS|1d": 1794202603.799262,
   "_ready|OBEROIRLTY.NS|1w": 1794199001.67656,
   "_ready|OGNUSD|1d": 1791981396.099046,
   "_ready|OIL.NS|1d": 1794196012.334544,
