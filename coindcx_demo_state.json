@@ -1,6 +1,31 @@
 {
  "balance": 1000.0,
- "orders": {},
+ "orders": {
+  "fib|NEARUSD|1d|1|1786406400|6.019|2@1794200911": {
+   "best_r": 0.0,
+   "capped": false,
+   "checked_until": 1794201420,
+   "entry": 3.5533499999999996,
+   "id": "fib|NEARUSD|1d|1|1786406400|6.019|2@1794200911",
+   "level": "L3",
+   "leverage": 0.432,
+   "margin": 21.62,
+   "pair": "B-NEAR_USDT",
+   "placed_ts": 1794200911,
+   "position": 432.34,
+   "risk": 75.0,
+   "sent_ts": 1794200911,
+   "side": "long",
+   "sl": 2.9369374999999995,
+   "status": "pending",
+   "stop_pct": 17.347362348206623,
+   "stop_r": null,
+   "symbol": "NEARUSD",
+   "tf": "1D",
+   "tgt_r": 1.5,
+   "tp": 4.47796875
+  }
+ },
  "start_balance": 1000.0,
  "started_ts": 1794058890,
  "unposted": [],
