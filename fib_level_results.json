@@ -55,7 +55,7 @@
    "entry": 0.00499027,
    "fill_ts": 1793304000,
    "filled": true,
-   "half": false,
+   "half": true,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -686,6 +686,53 @@
    "filled": false,
    "outcome": "not reached",
    "resolved": true
+  }
+ },
+ "fib|AADHARHFC.NS|4h|1|1793677500|448.79998779296875|2@1794211685": {
+  "L1": {
+   "alert_ts": 1793868299,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1793936700,
+   "entry": 437.6819940185547,
+   "fill_ts": 1793868300,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
+  },
+  "L2": {
+   "alert_ts": 1793868299,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1793936700,
+   "entry": 434.08499603271486,
+   "fill_ts": 1793936700,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
+  },
+  "L4": {
+   "alert_ts": 1793936699,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1793936700,
+   "entry": 427.2179998779297,
+   "fill_ts": 1793936700,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
   }
  },
  "fib|AARTIIND.NS|1d|1|1781116200|551.75|2@1790741090": {
@@ -2183,7 +2230,7 @@
    "entry": 247.6225067138672,
    "fill_ts": 1792693800,
    "filled": true,
-   "half": true,
+   "half": false,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -2955,7 +3002,7 @@
    "be": false,
    "end_ts": null,
    "entry": 5316.125,
-   "fill_ts": 1794076200,
+   "fill_ts": 1794162600,
    "filled": true,
    "half": false,
    "outcome": "open",
@@ -3189,6 +3236,53 @@
    "filled": false,
    "outcome": "not reached",
    "resolved": true
+  }
+ },
+ "fib|AMBER.NS|4h|1|1793346300|6605.5|2@1794196098": {
+  "L1": {
+   "alert_ts": 1793936699,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 6351.35,
+   "fill_ts": 1793943900,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1794195899,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 6269.125,
+   "fill_ts": 1794195900,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": 1794195899,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794199500,
+   "entry": 6112.15,
+   "fill_ts": 1794195900,
+   "filled": true,
+   "half": true,
+   "outcome": "2R",
+   "r1": true,
+   "r2": true,
+   "resolved": true,
+   "sl": false
   }
  },
  "fib|ANANDRATHI.NS|1d|-1|1789669800|2007.0|2@1791258249": {
@@ -4686,7 +4780,7 @@
    "entry": 723.8099822998047,
    "fill_ts": 1790620200,
    "filled": true,
-   "half": true,
+   "half": false,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -4963,8 +5057,8 @@
    "alert_ts": null,
    "entry": 957.6000244140625,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|AUBANK.NS|4h|1|1784778300|1143.800048828125|2@1791270562": {
@@ -5048,8 +5142,8 @@
   "L4": {
    "alert_ts": 1794167999,
    "ambiguous": false,
-   "be": false,
-   "end_ts": null,
+   "be": true,
+   "end_ts": 1794196800,
    "entry": 7.828539999999999,
    "fill_ts": 1794168000,
    "filled": true,
@@ -5057,7 +5151,7 @@
    "outcome": "1R",
    "r1": true,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   }
  },
@@ -5790,7 +5884,7 @@
    "entry": 80.2625,
    "fill_ts": 1793943900,
    "filled": true,
-   "half": false,
+   "half": true,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -5923,7 +6017,7 @@
    "entry": 80.19550247192383,
    "fill_ts": 1793943900,
    "filled": true,
-   "half": false,
+   "half": true,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -6510,9 +6604,9 @@
    "entry": 1054.3880322265625,
    "fill_ts": 1793936700,
    "filled": true,
-   "half": false,
-   "outcome": "open",
-   "r1": false,
+   "half": true,
+   "outcome": "1R",
+   "r1": true,
    "r2": false,
    "resolved": false,
    "sl": false
@@ -6521,15 +6615,15 @@
    "alert_ts": 1793936699,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794213900,
    "entry": 1040.9900268554688,
    "fill_ts": 1793936700,
    "filled": true,
    "half": true,
-   "outcome": "open",
-   "r1": false,
-   "r2": false,
-   "resolved": false,
+   "outcome": "2R",
+   "r1": true,
+   "r2": true,
+   "resolved": true,
    "sl": false
   },
   "L4": {
@@ -6559,16 +6653,16 @@
   "L2": {
    "alert_ts": 1793781899,
    "ambiguous": false,
-   "be": false,
-   "end_ts": null,
+   "be": true,
+   "end_ts": 1794195900,
    "entry": 221.23050079345703,
    "fill_ts": 1793850300,
    "filled": true,
    "half": true,
-   "outcome": "open",
+   "outcome": "BE",
    "r1": false,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   },
   "L4": {
@@ -6645,24 +6739,24 @@
   "L2": {
    "alert_ts": 1793781899,
    "ambiguous": false,
-   "be": false,
-   "end_ts": null,
+   "be": true,
+   "end_ts": 1794195900,
    "entry": 221.2745018005371,
    "fill_ts": 1793850300,
    "filled": true,
    "half": true,
-   "outcome": "open",
+   "outcome": "BE",
    "r1": false,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   },
   "L4": {
    "alert_ts": null,
    "entry": 233.87660064697266,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|BELRISE.NS|4h|1|1783323900|268.0|2@1790741090": {
@@ -6892,6 +6986,53 @@
    "sl": false
   }
  },
+ "fib|BEML.NS|4h|1|1792727100|2160.199951171875|2@1794196098": {
+  "L1": {
+   "alert_ts": 1793864699,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 2039.7719677734376,
+   "fill_ts": 1793864700,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793868299,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 2000.8099731445313,
+   "fill_ts": 1793868300,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": 1793936699,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1793940300,
+   "entry": 1926.4279833984374,
+   "fill_ts": 1793936700,
+   "filled": true,
+   "half": true,
+   "outcome": "2R",
+   "r1": true,
+   "r2": true,
+   "resolved": true,
+   "sl": false
+  }
+ },
  "fib|BERGEPAINT.NS|1d|-1|1786559400|441.1000061035156|2@1793851159": {
   "L1": {
    "alert_ts": 1791949499,
@@ -6995,8 +7136,8 @@
    "fill_ts": 1793850300,
    "filled": true,
    "half": true,
-   "outcome": "open",
-   "r1": false,
+   "outcome": "1R",
+   "r1": true,
    "r2": false,
    "resolved": false,
    "sl": false
@@ -7005,8 +7146,8 @@
    "alert_ts": null,
    "entry": 523.6469818115235,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|BHARTIHEXA.NS|1d|1|1737484200|2052.89990234375|2@1791517992": {
@@ -7155,16 +7296,16 @@
    "alert_ts": 1793166299,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794195900,
    "entry": 345.3240081787109,
    "fill_ts": 1793169900,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L2": {
    "alert_ts": 1793245499,
@@ -7182,11 +7323,19 @@
    "sl": false
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794195899,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794195900,
    "entry": 370.47601013183595,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1794195900,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
   }
  },
  "fib|BLUESTARCO.NS|1d|-1|1784053800|1432.300048828125|2@1791958344": {
@@ -7234,6 +7383,45 @@
    "r2": false,
    "resolved": true,
    "sl": true
+  }
+ },
+ "fib|BLUESTARCO.NS|1d|1|1788892200|1673.0|2@1794196098": {
+  "L1": {
+   "alert_ts": 1793331899,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1793594700,
+   "entry": 1591.1620166015625,
+   "fill_ts": 1793331900,
+   "filled": true,
+   "half": true,
+   "outcome": "BE",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793331899,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1793688300,
+   "entry": 1564.6850219726562,
+   "fill_ts": 1793331900,
+   "filled": true,
+   "half": true,
+   "outcome": "1R",
+   "r1": true,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 1514.1380322265625,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
   }
  },
  "fib|BLUESTARCO.NS|4h|-1|1785815100|1432.5|2@1791882802": {
@@ -8027,7 +8215,7 @@
    "entry": 2319.6350219726564,
    "fill_ts": 1792002600,
    "filled": true,
-   "half": false,
+   "half": true,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -8113,7 +8301,7 @@
    "entry": 2319.6350219726564,
    "fill_ts": 1792002600,
    "filled": true,
-   "half": false,
+   "half": true,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -8575,11 +8763,19 @@
    "sl": false
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794203099,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
    "entry": 188.68859771728515,
+   "fill_ts": null,
    "filled": false,
+   "half": false,
    "outcome": "open",
-   "resolved": false
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
   }
  },
  "fib|CASTROLIND.NS|4h|-1|1790567100|184.02999877929688|2@1793607618": {
@@ -8774,31 +8970,31 @@
    "alert_ts": 1793778299,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794195900,
    "entry": 30.073500537872313,
    "fill_ts": 1793850300,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L4": {
    "alert_ts": 1793861099,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794195900,
    "entry": 30.919800682067873,
-   "fill_ts": null,
-   "filled": false,
+   "fill_ts": 1794195900,
+   "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   }
  },
  "fib|CESC.NS|4h|-1|1791963900|122.20999908447266|2@1793677702": {
@@ -8900,38 +9096,46 @@
    "alert_ts": 1793612699,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794199500,
    "entry": 236.85499786376954,
    "fill_ts": 1793677500,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L2": {
    "alert_ts": 1793677499,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794199500,
    "entry": 240.51249618530272,
    "fill_ts": 1793691900,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794199499,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794199500,
    "entry": 247.49499298095702,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1794199500,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
   }
  },
  "fib|CGCL.NS|1d|1|1787250600|287.45001220703125|2@1790741967": {
@@ -8986,38 +9190,46 @@
    "alert_ts": 1793612699,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794199500,
    "entry": 236.7938003540039,
    "fill_ts": 1793677500,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L2": {
    "alert_ts": 1793677499,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794199500,
    "entry": 240.43149948120117,
    "fill_ts": 1793688300,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794199499,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794199500,
    "entry": 247.3761978149414,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1794199500,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
   }
  },
  "fib|CHALET.NS|1M|1|1738348200|1082.0|2@1791192862": {
@@ -9718,8 +9930,8 @@
    "fill_ts": 1793903400,
    "filled": true,
    "half": true,
-   "outcome": "open",
-   "r1": false,
+   "outcome": "1R",
+   "r1": true,
    "r2": false,
    "resolved": false,
    "sl": false
@@ -9777,6 +9989,45 @@
    "r2": false,
    "resolved": true,
    "sl": true
+  }
+ },
+ "fib|COCHINSHIP.NS|4h|-1|1790048700|1101.4000244140625|2@1794206275": {
+  "L1": {
+   "alert_ts": 1793677499,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 1206.6640161132811,
+   "fill_ts": 1793677500,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793763899,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1794195900,
+   "entry": 1240.7200134277343,
+   "fill_ts": 1793850300,
+   "filled": true,
+   "half": true,
+   "outcome": "BE",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 1305.7360083007814,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
   }
  },
  "fib|COLPAL.NS|4h|-1|1789717500|1716.5|2@1791517992": {
@@ -9912,6 +10163,45 @@
    "sl": false
   }
  },
+ "fib|COROMANDEL.NS|1d|1|1791484200|1915.0|2@1794196098": {
+  "L1": {
+   "alert_ts": 1793943899,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 1825.2739916992186,
+   "fill_ts": 1793943900,
+   "filled": true,
+   "half": true,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793943899,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1794195900,
+   "entry": 1796.2449890136718,
+   "fill_ts": 1793943900,
+   "filled": true,
+   "half": true,
+   "outcome": "BE",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 1740.8259838867189,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
+  }
+ },
  "fib|COROMANDEL.NS|1w|-1|1785695400|1651.0999755859375|2@1793850487": {
   "L1": {
    "alert_ts": 1792520999,
@@ -9931,8 +10221,8 @@
   "L2": {
    "alert_ts": 1793816999,
    "ambiguous": false,
-   "be": false,
-   "end_ts": null,
+   "be": true,
+   "end_ts": 1794162600,
    "entry": 1866.5599426269532,
    "fill_ts": 1793817000,
    "filled": true,
@@ -9940,7 +10230,7 @@
    "outcome": "1R",
    "r1": true,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   },
   "L4": {
@@ -9996,6 +10286,45 @@
    "r2": false,
    "resolved": true,
    "sl": false
+  }
+ },
+ "fib|COROMANDEL.NS|4h|1|1791517500|1910.0|2@1794196098": {
+  "L1": {
+   "alert_ts": 1793943899,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 1821.9739916992187,
+   "fill_ts": 1793943900,
+   "filled": true,
+   "half": true,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793943899,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 1793.4949890136718,
+   "fill_ts": 1794195900,
+   "filled": true,
+   "half": true,
+   "outcome": "1R",
+   "r1": true,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 1739.1259838867188,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
   }
  },
  "fib|CPPLUS.NS|1d|1|1787077800|4620.0|2@1792568054": {
@@ -10646,8 +10975,8 @@
    "be": false,
    "end_ts": null,
    "entry": 224.42139923095704,
-   "fill_ts": null,
-   "filled": false,
+   "fill_ts": 1794213900,
+   "filled": true,
    "half": false,
    "outcome": "open",
    "r1": false,
@@ -10794,45 +11123,45 @@
    "alert_ts": 1793778299,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794213900,
    "entry": 215.32640228271484,
    "fill_ts": 1793850300,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L2": {
    "alert_ts": 1793850299,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794213900,
    "entry": 218.18200302124023,
    "fill_ts": 1793857500,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L4": {
    "alert_ts": 1793868299,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794199500,
    "entry": 223.63360443115235,
-   "fill_ts": null,
-   "filled": false,
-   "half": false,
-   "outcome": "open",
-   "r1": false,
-   "r2": false,
-   "resolved": false,
+   "fill_ts": 1794195900,
+   "filled": true,
+   "half": true,
+   "outcome": "2R",
+   "r1": true,
+   "r2": true,
+   "resolved": true,
    "sl": false
   }
  },
@@ -10881,6 +11210,45 @@
    "r2": true,
    "resolved": true,
    "sl": false
+  }
+ },
+ "fib|DABUR.NS|1d|1|1793039400|402.8500061035156|2@1794196098": {
+  "L1": {
+   "alert_ts": 1793853899,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 386.3429998779297,
+   "fill_ts": 1793853900,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793936699,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 381.0024978637695,
+   "fill_ts": 1793936700,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 370.8069940185547,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
   }
  },
  "fib|DABUR.NS|4h|1|1793072700|402.0|2@1793951298": {
@@ -11304,6 +11672,53 @@
    "end_ts": 1792399500,
    "entry": 1637.06,
    "fill_ts": 1792399500,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
+  }
+ },
+ "fib|DATAPATTNS.NS|4h|-1|1793087100|3648.199951171875|2@1794197877": {
+  "L1": {
+   "alert_ts": 1794199499,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794203100,
+   "entry": 3817.9960009765623,
+   "fill_ts": 1794199500,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
+  },
+  "L2": {
+   "alert_ts": 1794199499,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794203100,
+   "entry": 3872.9300170898437,
+   "fill_ts": 1794199500,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
+  },
+  "L4": {
+   "alert_ts": 1794199499,
+   "ambiguous": true,
+   "be": false,
+   "end_ts": 1794203100,
+   "entry": 3977.8040478515627,
+   "fill_ts": 1794199500,
    "filled": true,
    "half": false,
    "outcome": "SL",
@@ -11835,6 +12250,92 @@
    "filled": false,
    "outcome": "open",
    "resolved": false
+  }
+ },
+ "fib|EIHOTEL.NS|1d|1|1775068200|352.75|2@1794196098": {
+  "L1": {
+   "alert_ts": 1783586699,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1784191500,
+   "entry": 325.00599792480466,
+   "fill_ts": null,
+   "filled": false,
+   "half": false,
+   "outcome": "no fill",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1784864699,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1785469500,
+   "entry": 316.02999725341795,
+   "fill_ts": null,
+   "filled": false,
+   "half": false,
+   "outcome": "no fill",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": 1786419899,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1786679100,
+   "entry": 298.8939959716797,
+   "fill_ts": 1786506300,
+   "filled": true,
+   "half": true,
+   "outcome": "1R",
+   "r1": true,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  }
+ },
+ "fib|EIHOTEL.NS|1w|1|1679855400|502.20001220703125|2@1794196098": {
+  "L1": {
+   "alert_ts": 1717439399,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1722969000,
+   "entry": 382.5710101318359,
+   "fill_ts": 1717439400,
+   "filled": true,
+   "half": true,
+   "outcome": "BE",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1730053799,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1733855400,
+   "entry": 343.86750946044924,
+   "fill_ts": 1730053800,
+   "filled": true,
+   "half": true,
+   "outcome": "2R",
+   "r1": true,
+   "r2": true,
+   "resolved": true,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 269.97900817871096,
+   "filled": false,
+   "outcome": "no fill",
+   "resolved": true
   }
  },
  "fib|EIHOTEL.NS|4h|1|1775101500|352.0|2@1793866274": {
@@ -12663,15 +13164,15 @@
    "alert_ts": 1793850299,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794217500,
    "entry": 2583.083935546875,
    "fill_ts": null,
    "filled": false,
    "half": false,
-   "outcome": "open",
+   "outcome": "no fill",
    "r1": false,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   }
  },
@@ -12806,6 +13307,45 @@
    "r2": false,
    "resolved": true,
    "sl": false
+  }
+ },
+ "fib|ETHUSD|1d|1|1780704000|2806.58|2@1794206892": {
+  "L1": {
+   "alert_ts": 1792022399,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1793764800,
+   "entry": 2363.6994,
+   "fill_ts": 1792022400,
+   "filled": true,
+   "half": false,
+   "outcome": "timeout",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793303999,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1793908800,
+   "entry": 2220.4145,
+   "fill_ts": 1793318400,
+   "filled": true,
+   "half": true,
+   "outcome": "BE",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 1946.8706,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
   }
  },
  "fib|ETHUSD|4h|-1|1791777600|2314.15|2@1792079831": {
@@ -14639,6 +15179,45 @@
    "resolved": true
   }
  },
+ "fib|GLAXO.NS|1d|-1|1787855400|2344.10009765625|2@1794205073": {
+  "L1": {
+   "alert_ts": 1793681099,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 2608.1440478515624,
+   "fill_ts": 1794195900,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1794195899,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 2693.570031738281,
+   "fill_ts": 1794199500,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 2856.6560009765626,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
+  }
+ },
  "fib|GLAXO.NS|1d|1|1781202600|3120.699951171875|2@1791438799": {
   "L1": {
    "alert_ts": 1789447499,
@@ -14686,6 +15265,45 @@
    "sl": false
   }
  },
+ "fib|GLAXO.NS|1w|-1|1787509800|2344.10009765625|2@1794199701": {
+  "L1": {
+   "alert_ts": 1793644199,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1794162600,
+   "entry": 2608.1440478515624,
+   "fill_ts": 1793730600,
+   "filled": true,
+   "half": true,
+   "outcome": "BE",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1794162599,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 2693.570031738281,
+   "fill_ts": 1794162600,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 2856.6560009765626,
+   "filled": false,
+   "outcome": "no fill",
+   "resolved": true
+  }
+ },
  "fib|GLAXO.NS|1w|1|1738521000|3515.699951171875|2@1791355178": {
   "L1": {
    "alert_ts": 1753986599,
@@ -14731,6 +15349,45 @@
    "r2": false,
    "resolved": true,
    "sl": true
+  }
+ },
+ "fib|GLAXO.NS|4h|-1|1787903100|2346.0|2@1794205073": {
+  "L1": {
+   "alert_ts": 1793681099,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1793936700,
+   "entry": 2608.9220166015625,
+   "fill_ts": null,
+   "filled": false,
+   "half": false,
+   "outcome": "no fill",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1794195899,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 2693.9850219726563,
+   "fill_ts": 1794199500,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 2856.3780322265625,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
   }
  },
  "fib|GLENMARK.NS|1d|-1|1787855400|2101.60009765625|2@1793332054": {
@@ -15367,6 +16024,45 @@
    "resolved": true
   }
  },
+ "fib|GODREJCP.NS|4h|1|1793331900|892.6500244140625|2@1794196098": {
+  "L1": {
+   "alert_ts": 1793936699,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 853.5160119628906,
+   "fill_ts": 1793936700,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793936699,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 840.8550079345703,
+   "fill_ts": 1794195900,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 816.6840002441406,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
+  }
+ },
  "fib|GODREJIND.NS|1M|1|1772303400|1443.0|2@1790741090": {
   "L1": {
    "alert_ts": 1786559399,
@@ -15748,6 +16444,45 @@
    "r2": false,
    "resolved": true,
    "sl": true
+  }
+ },
+ "fib|HAVELLS.NS|1w|-1|1786905000|999.2000122070312|2@1794198515": {
+  "L1": {
+   "alert_ts": 1793903399,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 1106.5720080566407,
+   "fill_ts": 1793903400,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1794162599,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 1141.310006713867,
+   "fill_ts": 1794162600,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 1207.6280041503906,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
   }
  },
  "fib|HAVELLS.NS|4h|-1|1789717500|1015.2000122070312|2@1791883424": {
@@ -16303,6 +17038,45 @@
    "r2": true,
    "resolved": true,
    "sl": false
+  }
+ },
+ "fib|HBLENGINE.NS|4h|1|1792727100|863.5999755859375|2@1794210450": {
+  "L1": {
+   "alert_ts": 1794195899,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 823.1739880371094,
+   "fill_ts": 1794195900,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1794195899,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1794203100,
+   "entry": 810.0949920654297,
+   "fill_ts": 1794195900,
+   "filled": true,
+   "half": true,
+   "outcome": "BE",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 785.1259997558593,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
   }
  },
  "fib|HEXT.NS|1d|-1|1770057000|400.20001220703125|2@1792132959": {
@@ -16962,6 +17736,45 @@
    "sl": false
   }
  },
+ "fib|ICICIGI.NS|1d|-1|1792002600|1533.0|2@1794204475": {
+  "L1": {
+   "alert_ts": 1793763899,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 1619.02,
+   "fill_ts": 1793763900,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793954699,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 1646.85,
+   "fill_ts": 1793958300,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 1699.98,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
+  }
+ },
  "fib|ICICIGI.NS|1d|1|1789410600|1786.0|2@1792729434": {
   "L1": {
    "alert_ts": 1792122299,
@@ -17054,6 +17867,45 @@
    "r2": false,
    "resolved": true,
    "sl": true
+  }
+ },
+ "fib|ICICIGI.NS|4h|-1|1792035900|1534.300048828125|2@1794204475": {
+  "L1": {
+   "alert_ts": 1793763899,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 1617.8380322265625,
+   "fill_ts": 1793763900,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793947499,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 1644.8650268554688,
+   "fill_ts": 1793954700,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 1696.4620166015625,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
   }
  },
  "fib|ICICIGI.NS|4h|1|1789458300|1780.0|2@1792729434": {
@@ -17760,6 +18612,45 @@
    "resolved": true
   }
  },
+ "fib|IRB.NS|1d|-1|1788978600|15.680000305175781|2@1794202097": {
+  "L1": {
+   "alert_ts": 1793850299,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 17.352800331115724,
+   "fill_ts": 1793864700,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1794195899,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 17.894000339508057,
+   "fill_ts": 1794199500,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 18.927200355529784,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
+  }
+ },
  "fib|IRCTC.NS|1d|1|1793298600|468.0|2@1793936892": {
   "L1": {
    "alert_ts": 1793853899,
@@ -17769,7 +18660,7 @@
    "entry": 456.78,
    "fill_ts": 1793861100,
    "filled": true,
-   "half": false,
+   "half": true,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -17785,8 +18676,8 @@
    "fill_ts": 1793936700,
    "filled": true,
    "half": true,
-   "outcome": "open",
-   "r1": false,
+   "outcome": "1R",
+   "r1": true,
    "r2": false,
    "resolved": false,
    "sl": false
@@ -17808,7 +18699,7 @@
    "entry": 456.5160040283203,
    "fill_ts": 1793861100,
    "filled": true,
-   "half": false,
+   "half": true,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -17836,6 +18727,45 @@
    "filled": false,
    "outcome": "open",
    "resolved": false
+  }
+ },
+ "fib|IREDA.NS|1w|-1|1776623400|98.77999877929688|2@1794204475": {
+  "L1": {
+   "alert_ts": 1794162599,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 113.76380126953126,
+   "fill_ts": 1794162600,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1794162599,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 118.61150207519532,
+   "fill_ts": 1794162600,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 127.86620361328124,
+   "filled": false,
+   "outcome": "no fill",
+   "resolved": true
   }
  },
  "fib|IREDA.NS|4h|-1|1792381500|98.77999877929688|2@1793078168": {
@@ -18397,8 +19327,8 @@
    "alert_ts": null,
    "entry": 5411.24,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|JSL.NS|1M|1|1743445800|884.0|2@1792731243": {
@@ -19842,8 +20772,8 @@
    "fill_ts": 1792693800,
    "filled": true,
    "half": true,
-   "outcome": "1R",
-   "r1": true,
+   "outcome": "open",
+   "r1": false,
    "r2": false,
    "resolved": false,
    "sl": false
@@ -20243,15 +21173,15 @@
    "alert_ts": 1793594699,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794199500,
    "entry": 1852.2680322265626,
    "fill_ts": null,
    "filled": false,
    "half": false,
-   "outcome": "open",
+   "outcome": "no fill",
    "r1": false,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   }
  },
@@ -20369,23 +21299,31 @@
    "alert_ts": 1793850299,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794203100,
    "entry": 527.5900177001953,
    "fill_ts": 1793850300,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794195899,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1794203100,
    "entry": 547.3720202636719,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1794195900,
+   "filled": true,
+   "half": true,
+   "outcome": "BE",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
   }
  },
  "fib|LICHSGFIN.NS|1d|1|1774204200|598.2000122070312|2@1790826856": {
@@ -20549,23 +21487,31 @@
    "alert_ts": 1793850299,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794203100,
    "entry": 527.6175109863282,
    "fill_ts": 1793850300,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794195899,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1794203100,
    "entry": 547.3890161132813,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1794195900,
+   "filled": true,
+   "half": true,
+   "outcome": "BE",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
   }
  },
  "fib|LICHSGFIN.NS|4h|1|1774251900|598.0|2@1790826856": {
@@ -21949,15 +22895,15 @@
    "alert_ts": 1793763899,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794195900,
    "entry": 3289.15,
    "fill_ts": 1793763900,
    "filled": true,
    "half": true,
-   "outcome": "1R",
+   "outcome": "2R",
    "r1": true,
-   "r2": false,
-   "resolved": false,
+   "r2": true,
+   "resolved": true,
    "sl": false
   },
   "L4": {
@@ -22074,15 +23020,15 @@
    "alert_ts": 1793763899,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794195900,
    "entry": 3289.20009765625,
    "fill_ts": 1793763900,
    "filled": true,
    "half": true,
-   "outcome": "1R",
+   "outcome": "2R",
    "r1": true,
-   "r2": false,
-   "resolved": false,
+   "r2": true,
+   "resolved": true,
    "sl": false
   },
   "L4": {
@@ -23878,6 +24824,45 @@
    "resolved": false
   }
  },
+ "fib|NEARUSD|1d|1|1786406400|6.019|2@1794200911": {
+  "L1": {
+   "alert_ts": 1792828799,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 4.49478,
+   "fill_ts": 1792828800,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793318399,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1793620800,
+   "entry": 4.001650000000001,
+   "fill_ts": 1793318400,
+   "filled": true,
+   "half": true,
+   "outcome": "BE",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 3.0602199999999997,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
+  }
+ },
  "fib|NEARUSD|4h|-1|1791777600|4.527|2@1792088370": {
   "L1": {
    "alert_ts": 1792076399,
@@ -24544,7 +25529,7 @@
    "entry": 239.7864959716797,
    "fill_ts": 1793936700,
    "filled": true,
-   "half": false,
+   "half": true,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -25190,38 +26175,46 @@
    "alert_ts": 1793677499,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794199500,
    "entry": 1675.7260083007814,
    "fill_ts": 1793677500,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L2": {
    "alert_ts": 1793763899,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794199500,
    "entry": 1710.2550109863282,
    "fill_ts": 1793774700,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794199499,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794199500,
    "entry": 1776.1740161132811,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1794199500,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
   }
  },
  "fib|OBEROIRLTY.NS|1d|1|1779042600|1986.0999755859375|2@1790741090": {
@@ -25362,38 +26355,46 @@
    "alert_ts": 1793677499,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794199500,
    "entry": 1675.7260083007814,
    "fill_ts": 1793677500,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L2": {
    "alert_ts": 1793763899,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794199500,
    "entry": 1710.2550109863282,
    "fill_ts": 1793774700,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794199499,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794199500,
    "entry": 1776.1740161132811,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1794199500,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
   }
  },
  "fib|OBEROIRLTY.NS|4h|1|1781149500|1984.9000244140625|2@1790741090": {
@@ -25461,6 +26462,84 @@
   "L4": {
    "alert_ts": null,
    "entry": 0.0275428,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
+  }
+ },
+ "fib|OIL.NS|1d|-1|1793557800|427.70001220703125|2@1794196098": {
+  "L1": {
+   "alert_ts": 1793868299,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 440.1780059814453,
+   "fill_ts": 1793936700,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793936699,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 444.21500396728516,
+   "fill_ts": 1794195900,
+   "filled": true,
+   "half": true,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 451.9220001220703,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
+  }
+ },
+ "fib|OIL.NS|4h|-1|1793605500|427.75|2@1794196098": {
+  "L1": {
+   "alert_ts": 1793868299,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 440.2109979248047,
+   "fill_ts": 1793936700,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793936699,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 444.242497253418,
+   "fill_ts": 1794195900,
+   "filled": true,
+   "half": true,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 451.9389959716797,
    "filled": false,
    "outcome": "open",
    "resolved": false
@@ -26116,11 +27195,19 @@
    "sl": false
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794203099,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794213900,
    "entry": 36659.6,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1794210300,
+   "filled": true,
+   "half": true,
+   "outcome": "2R",
+   "r1": true,
+   "r2": true,
+   "resolved": true,
+   "sl": false
   }
  },
  "fib|PAGEIND.NS|1w|1|1584901800|54349.1015625|2@1792640596": {
@@ -26233,11 +27320,19 @@
    "sl": false
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794210299,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794213900,
    "entry": 426.8370001220703,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1794213900,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
   }
  },
  "fib|PATANJALI.NS|4h|-1|1790135100|336.45001220703125|2@1793332054": {
@@ -27077,6 +28172,45 @@
    "sl": true
   }
  },
+ "fib|PNBHOUSING.NS|1d|-1|1793212200|1052.699951171875|2@1794204475": {
+  "L1": {
+   "alert_ts": 1793850299,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 1095.063984375,
+   "fill_ts": 1793850300,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793853899,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1794195900,
+   "entry": 1108.7699951171876,
+   "fill_ts": 1793868300,
+   "filled": true,
+   "half": true,
+   "outcome": "1R",
+   "r1": true,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 1134.936015625,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
+  }
+ },
  "fib|PNBHOUSING.NS|1d|1|1790533800|1224.800048828125|2@1792554808": {
   "L1": {
    "alert_ts": 1792050299,
@@ -27143,8 +28277,8 @@
   "L2": {
    "alert_ts": 1793853899,
    "ambiguous": false,
-   "be": false,
-   "end_ts": null,
+   "be": true,
+   "end_ts": 1794195900,
    "entry": 1107.779962158203,
    "fill_ts": 1793868300,
    "filled": true,
@@ -27152,15 +28286,15 @@
    "outcome": "1R",
    "r1": true,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   },
   "L4": {
    "alert_ts": null,
    "entry": 1133.4839672851563,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|PNBHOUSING.NS|4h|1|1790567100|1224.800048828125|2@1792554808": {
@@ -27284,8 +28418,8 @@
    "alert_ts": null,
    "entry": 1703.236015625,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|POONAWALLA.NS|1M|-1|1759257000|361.20001220703125|2@1793593126": {
@@ -27703,13 +28837,13 @@
    "sl": false
   },
   "L4": {
-   "alert_ts": 1794076199,
+   "alert_ts": 1794162599,
    "ambiguous": false,
    "be": false,
    "end_ts": null,
    "entry": 248.19599700927733,
-   "fill_ts": null,
-   "filled": false,
+   "fill_ts": 1794162600,
+   "filled": true,
    "half": false,
    "outcome": "open",
    "r1": false,
@@ -28019,8 +29153,8 @@
   "L2": {
    "alert_ts": 1793853899,
    "ambiguous": false,
-   "be": false,
-   "end_ts": null,
+   "be": true,
+   "end_ts": 1794195900,
    "entry": 879.6,
    "fill_ts": 1793857500,
    "filled": true,
@@ -28028,15 +29162,15 @@
    "outcome": "1R",
    "r1": true,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   },
   "L4": {
    "alert_ts": null,
    "entry": 858.18,
    "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "outcome": "not reached",
+   "resolved": true
   }
  },
  "fib|PRESTIGE.NS|1d|1|1775068200|1741.5|2@1792730046": {
@@ -28577,6 +29711,53 @@
    "resolved": true
   }
  },
+ "fib|QQQXUSD|4h|-1|1793793600|640.08|2@1794235378": {
+  "L1": {
+   "alert_ts": 1793930399,
+   "ambiguous": false,
+   "be": true,
+   "end_ts": 1794189600,
+   "entry": 661.3436,
+   "fill_ts": 1793973600,
+   "filled": true,
+   "half": true,
+   "outcome": "BE",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1793973599,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794045600,
+   "entry": 668.2230000000001,
+   "fill_ts": null,
+   "filled": false,
+   "half": false,
+   "outcome": "no fill",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": 1794236399,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 681.3564,
+   "fill_ts": null,
+   "filled": false,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  }
+ },
  "fib|RADICO.NS|1d|1|1779993000|4747.0|2@1792738373": {
   "L1": {
    "alert_ts": 1789461899,
@@ -28707,16 +29888,16 @@
    "alert_ts": 1793850299,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794213900,
    "entry": 293.2339959716797,
    "fill_ts": 1793850300,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L2": {
    "alert_ts": 1793850299,
@@ -28734,11 +29915,19 @@
    "sl": false
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794195899,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794213900,
    "entry": 303.6659979248047,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1794213900,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
   }
  },
  "fib|RECLTD.NS|4h|-1|1791963900|283.70001220703125|2@1793264464": {
@@ -30037,7 +31226,7 @@
    "alert_ts": 1793905199,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794225600,
    "entry": 0.0407052,
    "fill_ts": 1793934000,
    "filled": true,
@@ -30045,7 +31234,7 @@
    "outcome": "1R",
    "r1": true,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   },
   "L2": {
@@ -30670,8 +31859,8 @@
   "L1": {
    "alert_ts": 1793923199,
    "ambiguous": false,
-   "be": false,
-   "end_ts": null,
+   "be": true,
+   "end_ts": 1794225600,
    "entry": 221.5112,
    "fill_ts": 1793955600,
    "filled": true,
@@ -30679,7 +31868,7 @@
    "outcome": "1R",
    "r1": true,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   },
   "L2": {
@@ -30823,7 +32012,7 @@
    "entry": 360.293,
    "fill_ts": 1793880000,
    "filled": true,
-   "half": false,
+   "half": true,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -31016,6 +32205,45 @@
    "r2": false,
    "resolved": true,
    "sl": false
+  }
+ },
+ "fib|TSLAXUSD|4h|-1|1793620800|335.92|2@1794235378": {
+  "L1": {
+   "alert_ts": 1793977199,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794268800,
+   "entry": 362.6984,
+   "fill_ts": 1793977200,
+   "filled": true,
+   "half": false,
+   "outcome": "timeout",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1794232799,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": null,
+   "entry": 371.362,
+   "fill_ts": 1794232800,
+   "filled": true,
+   "half": false,
+   "outcome": "open",
+   "r1": false,
+   "r2": false,
+   "resolved": false,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 387.90160000000003,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
   }
  },
  "fib|TSLAXUSD|4h|1|1792656000|413.2|2@1793367216": {
