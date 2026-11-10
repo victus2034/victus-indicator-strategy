@@ -160,6 +160,14 @@ def main(rebuild, results, live, cutoff):
             row[m] = {"result": "no stop"} if stop is None else ({"result": "no candles"} if not q else walk(rec, stop, q))
         rows.append(row)
     (OUT / "result.json").write_text(json.dumps(rows, indent=1))
+    if "--dump" in sys.argv:
+        # Delta's candles as read, for replaying the journal itself on them offline.
+        dump = OUT / "candles"
+        dump.mkdir(exist_ok=True)
+        for sym in cache:
+            for rm, rn in ((1440, "1d"), (60, "1h"), (30, "30m"), (15, "15m")):
+                rows_ = delta(sym, rm, rn, SINCE - (LOOKBACK + 5) * 86400 if rn == "1d" else SINCE - 3 * 86400, time.time())
+                (dump / f"{sym.replace('/', '_').replace(':', '_')}_{rn}.json").write_text(json.dumps(rows_))
     lines = ["# Journal SL check, CRYPTO 1D fibs, 10 Oct - 10 Nov 2026 (Delta 1d + 15m)", ""]
     lines.append("| SL | closed | W / L | total R | % price move | avg stop % (winners) | avg stop % (losers) | open | waiting / no fill / no stop |")
     lines.append("|---|---|---|---|---|---|---|---|---|")
@@ -186,4 +194,4 @@ def main(rebuild, results, live, cutoff):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3], float(sys.argv[4]))
+    main(sys.argv[1], sys.argv[2], sys.argv[3], float(sys.argv[4]))  # --dump: also save the candles

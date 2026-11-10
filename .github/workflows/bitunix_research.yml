@@ -136,7 +136,7 @@ jobs:
                        head -3 research/out/coindcx_demo/replay_*.txt ;;
             journal-sl) git fetch --depth 1 origin scanner-runtime-state
                        mkdir -p /tmp/rt && git archive FETCH_HEAD | tar -x -C /tmp/rt
-                       python research/journal_sl_verify.py /tmp/rt/fibtl_rebuild_records.jsonl /tmp/rt/fibtl_rebuild_results.json /tmp/rt/fib_trendline_alert_records.jsonl 1794078474 ;;
+                       python research/journal_sl_verify.py /tmp/rt/fibtl_rebuild_records.jsonl /tmp/rt/fibtl_rebuild_results.json /tmp/rt/fib_trendline_alert_records.jsonl 1794078474 --dump ;;
             journal-verify) git fetch --depth 1 origin scanner-runtime-state
                        git show FETCH_HEAD:fib_trendline_alert_records.jsonl > /tmp/fib_records.jsonl
                        git show FETCH_HEAD:fibtl_rebuild_records.jsonl > /tmp/fibtl_rebuild.jsonl
