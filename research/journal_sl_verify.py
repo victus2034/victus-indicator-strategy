@@ -61,6 +61,14 @@ def delta(sym, res_min, res, start, end):
     return [out[k] for k in sorted(out)]
 
 
+def delta_symbol(sym):
+    """Delta's name: old US stock alerts were recorded as 'MRVL/USDT:USDT'; Delta lists them
+    as bStocks ('MRVLBUSD'), the name the journal reads them by."""
+    if "/" in sym:
+        return sym.split("/")[0].upper() + "BUSD"
+    return sym
+
+
 def candle_stop(rec, days, mode):
     p = rec["plan"]
     e, s, t0 = p["entry"], (-1 if p["side"] == "short" else 1), rec["sent_ts"]
@@ -148,8 +156,9 @@ def main(rebuild, results, live, cutoff):
     for rec in recs:
         sym = rec["symbol"]
         if sym not in cache:
-            cache[sym] = (delta(sym, 1440, "1d", SINCE - (LOOKBACK + 5) * 86400, NOW),
-                          delta(sym, 15, "15m", SINCE - 86400, NOW))
+            dsym = delta_symbol(sym)
+            cache[sym] = (delta(dsym, 1440, "1d", SINCE - (LOOKBACK + 5) * 86400, NOW),
+                          delta(dsym, 15, "15m", SINCE - 86400, NOW))
         days, q = cache[sym]
         row = {"id": rec["id"], "symbol": sym, "level": rec.get("level"), "side": rec["plan"]["side"],
                "entry": rec["plan"]["entry"], "sent": datetime.fromtimestamp(rec["sent_ts"], IST).strftime("%m-%d %H:%M")}
@@ -168,8 +177,8 @@ def main(rebuild, results, live, cutoff):
             now = time.time()
             back = {"1d": SINCE - (LOOKBACK + 5) * 86400, "5m": now - 9 * 86400, "1m": now - 3 * 86400}
             for rm, rn in ((1440, "1d"), (60, "1h"), (30, "30m"), (15, "15m"), (5, "5m"), (1, "1m")):
-                rows_ = delta(sym, rm, rn, back.get(rn, SINCE - 3 * 86400), now)
-                (dump / f"{sym.replace('/', '_').replace(':', '_')}_{rn}.json").write_text(json.dumps(rows_))
+                rows_ = delta(delta_symbol(sym), rm, rn, back.get(rn, SINCE - 3 * 86400), now)
+                (dump / f"{delta_symbol(sym)}_{rn}.json").write_text(json.dumps(rows_))
     lines = ["# Journal SL check, CRYPTO 1D fibs, 10 Oct - 10 Nov 2026 (Delta 1d + 15m)", ""]
     lines.append("| SL | closed | W / L | total R | % price move | avg stop % (winners) | avg stop % (losers) | open | waiting / no fill / no stop |")
     lines.append("|---|---|---|---|---|---|---|---|---|")
