@@ -2,10 +2,10 @@
 
 | SL | closed | W / L | total R | % price move | avg stop % (winners) | avg stop % (losers) | open | waiting / no fill / no stop |
 |---|---|---|---|---|---|---|---|---|
-| alert | 60 | 31 / 29 | +0.89R | -28.36% | 9.03% | 9.38% | 7 | 11 |
-| wick | 65 | 34 / 31 | +9.60R | +31.17% | 4.49% | 4.67% | 1 | 12 |
-| body | 63 | 35 / 28 | +14.59R | -9.31% | 4.40% | 6.48% | 3 | 12 |
-| near | 65 | 35 / 30 | +14.55R | +22.35% | 3.15% | 4.01% | 1 | 12 |
+| alert | 63 | 32 / 31 | -0.40R | -39.34% | 9.02% | 9.33% | 7 | 8 |
+| wick | 68 | 35 / 33 | +10.63R | +31.61% | 4.40% | 4.51% | 1 | 9 |
+| body | 66 | 37 / 29 | +15.66R | -4.41% | 4.35% | 6.40% | 3 | 9 |
+| near | 68 | 37 / 31 | +17.30R | +25.45% | 3.05% | 3.96% | 1 | 9 |
 
 Per alert: result R (stop %, % price move)
 
@@ -26,13 +26,13 @@ Per alert: result R (stop %, % price move)
 - 10-15 05:30 FILUSD L2 long entry 1.04218: alert Trail TP +1.48R (6.37%, +9.42%) | wick Trail TP +2.22R (5.23%, +11.62%) | body SL shift +0.68R (1.95%, +1.33%) | near SL shift +0.68R (1.95%, +1.33%)
 - 10-15 05:30 AAVEUSD L3 long entry 146.719: alert SL shift +0.73R (6.97%, +5.10%) | wick Trail TP +2.16R (1.51%, +3.27%) | body SL shift +0.72R (5.00%, +3.62%) | near Trail TP +2.16R (1.51%, +3.27%)
 - 10-15 05:30 RLCUSD L3 long entry 0.80293: alert SL shift +0.74R (21.33%, +15.85%) | wick Trail TP +1.48R (9.13%, +13.56%) | body Trail TP +1.48R (8.83%, +13.11%) | near Trail TP +1.48R (8.83%, +13.11%)
-- 10-15 05:30 MRVL/USDT:USDT L2 long entry 236.846: alert no candles | wick no stop | body no stop | near no stop
+- 10-15 05:30 MRVL/USDT:USDT L2 long entry 236.846: alert SL -1.02R (7.71%, -7.84%) | wick SL -1.07R (1.82%, -1.95%) | body SL shift +0.63R (1.13%, +0.71%) | near SL shift +0.63R (1.13%, +0.71%)
 - 10-15 17:30 BTCUSD L4 long entry 79149.1: alert SL -1.06R (2.17%, -2.30%) | wick SL -1.04R (3.65%, -3.78%) | body SL -1.04R (3.47%, -3.60%) | near SL -1.04R (3.47%, -3.60%)
 - 10-15 17:30 NEARUSD L1 long entry 4.49478: alert SL -1.01R (13.71%, -13.84%) | wick SL -1.13R (1.04%, -1.17%) | body SL -1.04R (3.58%, -3.71%) | near SL -1.13R (1.04%, -1.17%)
 - 10-15 17:30 SUIUSD L3 long entry 0.95305: alert SL shift +0.73R (8.99%, +6.61%) | wick Trail TP +1.42R (1.71%, +2.42%) | body SL shift +0.73R (5.68%, +4.13%) | near Trail TP +1.42R (1.71%, +2.42%)
 - 10-16 13:30 BTWUSD L2 long entry 1.63245: alert SL shift +0.74R (19.46%, +14.46%) | wick SL -1.15R (0.90%, -1.04%) | body Trail TP +1.69R (2.37%, +4.02%) | near SL -1.15R (0.90%, -1.04%)
 - 10-16 21:30 STRKUSD L3 long entry 0.071219: alert SL -1.01R (19.39%, -19.51%) | wick SL -1.04R (3.30%, -3.43%) | body SL -1.01R (21.97%, -22.09%) | near SL -1.04R (3.30%, -3.43%)
-- 10-18 05:30 MRVL/USDT:USDT L3 long entry 222.524: alert no candles | wick no stop | body no stop | near no stop
+- 10-18 05:30 MRVL/USDT:USDT L3 long entry 222.524: alert SL shift +0.73R (8.85%, +6.50%) | wick Trail TP +3.16R (1.57%, +4.95%) | body Trail TP +1.48R (5.81%, +8.58%) | near Trail TP +3.16R (1.57%, +4.95%)
 - 10-18 17:30 STRKUSD L4 long entry 0.0601728: alert SL -1.01R (22.95%, -23.07%) | wick SL -1.02R (8.11%, -8.24%) | body SL -1.02R (7.65%, -7.78%) | near SL -1.02R (7.65%, -7.78%)
 - 10-18 21:30 FILUSD L3 long entry 0.990115: alert SL -1.02R (7.23%, -7.36%) | wick Trail TP +1.35R (0.90%, +1.22%) | body SL -1.02R (5.45%, -5.58%) | near Trail TP +1.35R (0.90%, +1.22%)
 - 10-19 17:30 METAXUSD L1 long entry 692.359: alert SL shift +0.72R (5.20%, +3.76%) | wick SL shift +0.70R (2.73%, +1.91%) | body SL shift +0.70R (2.65%, +1.86%) | near SL shift +0.70R (2.65%, +1.86%)
@@ -67,7 +67,7 @@ Per alert: result R (stop %, % price move)
 - 10-30 05:30 BNBUSD L2 long entry 687.663: alert SL shift +0.72R (5.07%, +3.67%) | wick Trail TP +1.40R (1.34%, +1.88%) | body SL shift +0.72R (4.79%, +3.46%) | near Trail TP +1.40R (1.34%, +1.88%)
 - 10-30 05:30 1000PEPEUSD L4 long entry 0.00433443: alert Trail TP +1.48R (6.50%, +9.61%) | wick Trail TP +4.17R (1.62%, +6.76%) | body Trail TP +5.14R (1.21%, +6.24%) | near Trail TP +5.14R (1.21%, +6.24%)
 - 10-30 05:30 ADAUSD L4 long entry 0.187196: alert open (10.61%) | wick SL shift +0.70R (2.78%, +1.95%) | body SL shift +0.73R (6.62%, +4.83%) | near SL shift +0.70R (2.78%, +1.95%)
-- 10-30 05:30 MRVL/USDT:USDT L4 long entry 206.771: alert no candles | wick no stop | body no stop | near no stop
+- 10-30 05:30 MRVL/USDT:USDT L4 long entry 206.771: alert SL -1.01R (9.52%, -9.65%) | wick SL -1.05R (2.43%, -2.56%) | body SL -1.03R (4.27%, -4.40%) | near SL -1.05R (2.43%, -2.56%)
 - 10-31 05:30 SOLUSD L2 long entry 95.747: alert SL -1.01R (8.65%, -8.78%) | wick SL -1.04R (3.56%, -3.69%) | body SL -1.07R (1.91%, -2.04%) | near SL -1.07R (1.91%, -2.04%)
 - 10-31 05:30 HYPEUSD L1 long entry 89.4055: alert SL -1.04R (3.49%, -3.62%) | wick SL -1.15R (0.87%, -1.00%) | body SL -1.01R (9.63%, -9.76%) | near SL -1.15R (0.87%, -1.00%)
 - 10-31 13:30 HYPEUSD L2 long entry 86.9065: alert SL -1.04R (3.33%, -3.46%) | wick SL -1.01R (10.04%, -10.17%) | body SL -1.02R (7.03%, -7.16%) | near SL -1.02R (7.03%, -7.16%)
