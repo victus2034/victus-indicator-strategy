@@ -165,8 +165,10 @@ def main(rebuild, results, live, cutoff):
         dump = OUT / "candles"
         dump.mkdir(exist_ok=True)
         for sym in cache:
-            for rm, rn in ((1440, "1d"), (60, "1h"), (30, "30m"), (15, "15m")):
-                rows_ = delta(sym, rm, rn, SINCE - (LOOKBACK + 5) * 86400 if rn == "1d" else SINCE - 3 * 86400, time.time())
+            now = time.time()
+            back = {"1d": SINCE - (LOOKBACK + 5) * 86400, "5m": now - 9 * 86400, "1m": now - 3 * 86400}
+            for rm, rn in ((1440, "1d"), (60, "1h"), (30, "30m"), (15, "15m"), (5, "5m"), (1, "1m")):
+                rows_ = delta(sym, rm, rn, back.get(rn, SINCE - 3 * 86400), now)
                 (dump / f"{sym.replace('/', '_').replace(':', '_')}_{rn}.json").write_text(json.dumps(rows_))
     lines = ["# Journal SL check, CRYPTO 1D fibs, 10 Oct - 10 Nov 2026 (Delta 1d + 15m)", ""]
     lines.append("| SL | closed | W / L | total R | % price move | avg stop % (winners) | avg stop % (losers) | open | waiting / no fill / no stop |")
