@@ -78,6 +78,7 @@ FIB_L4 = False
 FIB_REPEAT_WAIT = 0
 # Research hook (lakky, 2026-10-20): {timeframe: ("L1".."L4")} - which fib levels alert; overrides ALERT_ZONES and FIB_L4.
 FIB_LEVELS = None
+FIB_VOID_LEVELS = ()     # research (lakky, 2026-11-10): these levels send nothing when the fib's extreme candle or the next one already reached them
 FIB_SL_RULE = None      # per-level stop rule for FIB_LEVELS legs; None = the live per-timeframe rule (sl_rule_for)
 
 
@@ -249,6 +250,10 @@ def replay(market, symbol, tf, base, evalc, now):
                     hi_band = zone["entry"] * (1 + band) if d == 1 else zone["entry"]
                     ref_hi = ref_lo = zone["entry"]
                 entry = zone["entry"]
+                if leg in FIB_VOID_LEVELS and any(
+                        j < i and ((lows[j] <= entry) if d == 1 else (highs[j] >= entry))
+                        for j in (s["Et"], s["Et"] + 1)):
+                    continue
                 if key in fired:
                     if not FIB_REARM:
                         continue
