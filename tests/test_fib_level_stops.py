@@ -90,8 +90,9 @@ class RulePerTimeframe(unittest.TestCase):
         bodies = BodyStops.bodies(None)
         body = fts.fib_level_stops(d, base, top, "body", bodies)
         nxt = fts.fib_level_stops(d, base, top, "next")
-        self.assertEqual({k: z["sl"] for k, z in fts.fib_legs(d, base, top, "1w", bodies=bodies)}, body)
-        self.assertEqual({k: z["sl"] for k, z in fts.fib_legs(d, base, top, "1d", bodies=bodies)}, nxt)
+        live = ("L2", "L3", "L4")      # L1 does not alert (2026-11-10)
+        self.assertEqual({k: z["sl"] for k, z in fts.fib_legs(d, base, top, "1w", bodies=bodies)}, {k: body[k] for k in live})
+        self.assertEqual({k: z["sl"] for k, z in fts.fib_legs(d, base, top, "1d", bodies=bodies)}, {k: nxt[k] for k in live})
 
 
 if __name__ == "__main__":

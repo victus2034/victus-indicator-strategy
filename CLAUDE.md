@@ -487,6 +487,7 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   No repeats - the "again after 4h if touched" rule was backtested and made it worse (`research/fib_l3_l4_backtest.py`,
   `fib_levels_all_backtest.py`, parts `fib-l3l4`, `fib-levels-all`). Sep 1 - Oct 20, per trade: crypto 4H -0.03R -> -0.14R,
   1D +0.42R -> +0.07R, NSE worse at every level. BTW's 20 Oct drop to L4 had no alert because L3 had alerted on 16 Oct (one per zone).
+- **L1 alerts are off (2026-11-10, lakky: "ignore l1 and include l2-l4"), crypto and NSE.** `FIB_ALERT_LEVELS` is now 4H L2-L4 and 1D/1W/1M L2-L4. Sep 1 - Nov 10 per trade R / %: crypto 1D+ -0.057 / +0.10 with L1 -> +0.003 / +0.67 without, NSE 1D+ -0.182 / -0.40 -> -0.173 / -0.39 (`research/fib_l1_void_backtest.py`, part `fib-l1-void`). His "no alert when the extreme candle or the next reached the level" idea was tested too (L1 only, `fib_trendline_backtest.FIB_VOID_LEVELS`): small gain, not shipped. Old L1 records still score. No `SEED_VERSION` bump (alerts only removed).
 - **1W / 1M alert from 3% away (2026-10-21, lakky: "help me to get ready for big timeframe trades"), crypto and NSE.**
   Fibs, trendlines and 1W/1M S/R zones use `config.alert_band_pct(tf, ...)`: `EARLY_ALERT_BAND_PCT` (3%) on
   `EARLY_ALERT_TIMEFRAMES` (1w, 1M), else 0.75% (fib/TL) / `MAX_DISTANCE_PCT` (zones; re-arm at 3% x `REARM_FACTOR`).
