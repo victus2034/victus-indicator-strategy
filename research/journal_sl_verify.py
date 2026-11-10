@@ -152,7 +152,7 @@ def main(rebuild, results, live, cutoff):
                           delta(sym, 15, "15m", SINCE - 86400, NOW))
         days, q = cache[sym]
         row = {"id": rec["id"], "symbol": sym, "level": rec.get("level"), "side": rec["plan"]["side"],
-               "entry": rec["plan"]["entry"], "alert": datetime.fromtimestamp(rec["sent_ts"], IST).strftime("%m-%d %H:%M")}
+               "entry": rec["plan"]["entry"], "sent": datetime.fromtimestamp(rec["sent_ts"], IST).strftime("%m-%d %H:%M")}
         if not q:
             row["none"] = "no Delta candles"
         for m in MODES:
@@ -179,7 +179,7 @@ def main(rebuild, results, live, cutoff):
             x = r[m]
             cells.append(f"{m} {x['result']}" + (f" {x['r']:+.2f}R ({x['risk']:.2f}%, {x['r'] * x['risk']:+.2f}%)" if "r" in x else
                          (f" ({x['risk']:.2f}%)" if "risk" in x else "")))
-        lines.append(f"- {r['alert']} {r['symbol']} {r['level']} {r['side']} entry {r['entry']:.6g}: " + " | ".join(cells))
+        lines.append(f"- {r['sent']} {r['symbol']} {r['level']} {r['side']} entry {r['entry']:.6g}: " + " | ".join(cells))
     text = "\n".join(lines)
     (OUT / "RESULT.md").write_text(text)
     print(text)
