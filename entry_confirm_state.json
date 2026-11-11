@@ -672,7 +672,7 @@
   },
   "BIOCON.NS|1d|short|362.175|379.878": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "BIOCON.NS|1d|short|376.337|392.753": {
@@ -686,7 +686,7 @@
   "BIOCON.NS|1w|short|362.175|370.7": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BIOCON.NS|1w|short|376.337|380.65": {
     "reached_entry": false,
@@ -829,12 +829,12 @@
   "CDSL.NS|1w|short|1358.58|1388.9": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "CDSL.NS|1w|short|1359.07|1390": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "CEMPRO.NS|1M|long|1097.36|533.353": {
     "reached_entry": false,
@@ -986,6 +986,10 @@
     "stage": 2,
     "stopped_out": false
   },
+  "CONCOR.NS|1w|short|467.003|484.782": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "COROMANDEL.NS|1M|long|1613.65|1337.33": {
     "reached_entry": false,
     "stopped_out": false
@@ -1026,6 +1030,10 @@
   "COROMANDEL.NS|1w|short|1914.44|1929": {
     "reached_entry": false,
     "stage": 1,
+    "stopped_out": false
+  },
+  "COROMANDEL.NS|1w|short|1967.11|1996.1": {
+    "reached_entry": false,
     "stopped_out": false
   },
   "CPPLUS.NS|1d|short|3959.54|4097.13": {
@@ -1258,8 +1266,9 @@
     "stage": 3,
     "stopped_out": true
   },
-  "EIHOTEL.NS|1d|short|316.567|320": {
+  "EIHOTEL.NS|1d|short|316.289|320": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "EIHOTEL.NS|1w|long|290.315|286.45": {
@@ -1392,6 +1401,11 @@
   },
   "FACT.NS|1M|long|689.907|427.553": {
     "reached_entry": false,
+    "stopped_out": false
+  },
+  "FACT.NS|1d|short|772.914|795": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "FACT.NS|1w|long|710.167|660.25": {
@@ -1531,7 +1545,7 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "GILLETTE.NS|1d|short|7538.74|7639": {
+  "GILLETTE.NS|1d|short|7506.21|7574.5": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -1867,7 +1881,7 @@
   },
   "IDBI.NS|1M|short|80.5158|82.2": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "IDBI.NS|1w|short|80.5158|100.452": {
@@ -2320,7 +2334,7 @@
   "KARURVYSYA.NS|1d|short|368.802|377.698": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "KARURVYSYA.NS|1w|long|326.547|260.876": {
     "reached_entry": false,
@@ -3094,8 +3108,8 @@
     "stopped_out": false
   },
   "POLICYBZR.NS|1d|short|975.84|1000.04": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "POLYMED.NS|1d|short|1556.71|1619.48": {
@@ -3169,8 +3183,8 @@
     "stopped_out": false
   },
   "PREMIERENE.NS|1M|short|907.52|937.95": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "PREMIERENE.NS|1d|long|869.92|859.031": {
@@ -3322,6 +3336,11 @@
     "stage": 3,
     "stopped_out": false
   },
+  "RVNL.NS|1d|short|210.255|218.354": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "SBICARD.NS|1d|short|589.227|609.111": {
     "reached_entry": true,
     "stage": 2,
@@ -3408,8 +3427,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794370291.496483,
-  "_last_check|nse": 1794370291.496483,
+  "_last_check|crypto": 1794370606.057223,
+  "_last_check|nse": 1794370606.057223,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4032,6 +4051,7 @@
   "_level_ready|EIHOTEL.NS|1d|long|282.424|280.3": 1792986387.062464,
   "_level_ready|EIHOTEL.NS|1d|long|298.894|296.65": 1792555315.989515,
   "_level_ready|EIHOTEL.NS|1d|long|307.87|296.65": 1794197807.568358,
+  "_level_ready|EIHOTEL.NS|1d|short|316.289|320": 1794370606.057223,
   "_level_ready|EIHOTEL.NS|1w|long|288.81|281.59": 1791524496.136013,
   "_level_ready|EIHOTEL.NS|1w|long|288.81|286.45": 1791952313.055178,
   "_level_ready|EIHOTEL.NS|1w|long|290.315|286.45": 1793331989.35983,
@@ -4091,6 +4111,7 @@
   "_level_ready|EXIDEIND.NS|1w|short|385.685|394.25": 1794282375.833969,
   "_level_ready|FACT.NS|1M|long|689.907|427.553": 1792641484.218837,
   "_level_ready|FACT.NS|1d|long|710.167|669": 1792556798.737244,
+  "_level_ready|FACT.NS|1d|short|772.914|795": 1794370606.057223,
   "_level_ready|FACT.NS|1w|long|710.167|660.25": 1792556798.737244,
   "_level_ready|FACT.NS|1w|long|738.742|720.274": 1791517599.357562,
   "_level_ready|FEDERALBNK.NS|1d|long|329.13|317.069": 1793764008.797417,
@@ -4946,6 +4967,7 @@
   "_level_ready|RVNL.NS|1d|long|190.352|187.497": 1791517599.357562,
   "_level_ready|RVNL.NS|1d|short|197.886|205.985": 1794206776.032862,
   "_level_ready|RVNL.NS|1d|short|204.365|211.875": 1794368805.895201,
+  "_level_ready|RVNL.NS|1d|short|210.255|218.354": 1794370606.057223,
   "_level_ready|SAMSUNG/USDT:USDT|30m|short|185.91|187.322": 1789532163.790065,
   "_level_ready|SBICARD.NS|1d|short|589.227|609.111": 1794282375.833969,
   "_level_ready|SLVONUSD|30m|long|53.71|53.4225": 1791439319.318217,
@@ -5416,7 +5438,7 @@
   "_ready|DOGEUSD|30m": 1791378118.591583,
   "_ready|DOGEUSD|4h": 1790607384.010239,
   "_ready|DOSUSD|1d": 1792120004.566349,
-  "_ready|EIHOTEL.NS|1d": 1794197807.568358,
+  "_ready|EIHOTEL.NS|1d": 1794370606.057223,
   "_ready|EIHOTEL.NS|1w": 1794282375.833969,
   "_ready|ELGIEQUIP.NS|1d": 1794282375.833969,
   "_ready|ELGIEQUIP.NS|1w": 1793936864.300001,
@@ -5441,7 +5463,7 @@
   "_ready|EXIDEIND.NS|1d": 1794204412.351887,
   "_ready|EXIDEIND.NS|1w": 1794282375.833969,
   "_ready|FACT.NS|1M": 1792641484.218837,
-  "_ready|FACT.NS|1d": 1792556798.737244,
+  "_ready|FACT.NS|1d": 1794370606.057223,
   "_ready|FACT.NS|1w": 1792556798.737244,
   "_ready|FEDERALBNK.NS|1d": 1793764008.797417,
   "_ready|FILUSD|1d": 1792832798.455375,
@@ -5739,7 +5761,7 @@
   "_ready|RRKABEL.NS|1M": 1794196012.334544,
   "_ready|RRKABEL.NS|1d": 1792129295.649117,
   "_ready|RRKABEL.NS|1w": 1793946409.862134,
-  "_ready|RVNL.NS|1d": 1794368805.895201,
+  "_ready|RVNL.NS|1d": 1794370606.057223,
   "_ready|SAMSUNG/USDT:USDT|30m": 1789532163.790065,
   "_ready|SBICARD.NS|1d": 1794282375.833969,
   "_ready|SLVONUSD|30m": 1791439319.318217,
