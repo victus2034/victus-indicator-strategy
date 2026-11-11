@@ -764,6 +764,7 @@
   },
   "CAPLIPOINT.NS|1d|short|2542.41|2646.17": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CAPLIPOINT.NS|1w|long|2170.67|1965.83": {
@@ -1409,6 +1410,10 @@
     "stopped_out": false
   },
   "FACT.NS|1w|long|710.167|660.25": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "FEDERALBNK.NS|1d|short|352.237|355.5": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -2309,6 +2314,10 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "KAJARIACER.NS|1d|long|1179.64|1160.53": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "KAJARIACER.NS|1d|short|1205.38|1229.86": {
     "reached_entry": true,
     "stage": 2,
@@ -2757,7 +2766,7 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "NAUKRI.NS|1d|short|1225.73|1235.2": {
+  "NAUKRI.NS|1d|short|1215.7|1228.5": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -3034,6 +3043,7 @@
   },
   "PFOCUS.NS|1w|long|271.12|173.125": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PHOENIXLTD.NS|1w|long|1782.49|1685.66": {
@@ -3070,7 +3080,7 @@
   },
   "PIRAMALFIN.NS|1w|short|2081.06|2156.02": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "PIRAMALFIN.NS|1w|short|2141.03|2216": {
@@ -3097,11 +3107,12 @@
   },
   "PNBHOUSING.NS|1d|short|1121.23|1138.36": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "PNBHOUSING.NS|1d|short|1134.94|1152.07": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PNBHOUSING.NS|1w|long|1056.43|884.35": {
@@ -3254,7 +3265,7 @@
   "RBLBANK.NS|1d|short|379.522|391.131": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "RBLBANK.NS|1d|short|388.627|401.147": {
     "reached_entry": true,
@@ -3428,8 +3439,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794370911.878806,
-  "_last_check|nse": 1794370911.878806,
+  "_last_check|crypto": 1794371172.429046,
+  "_last_check|nse": 1794371172.429046,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3855,6 +3866,7 @@
   "_level_ready|CAPLIPOINT.NS|1M|long|2170.67|1965.83": 1792641104.661578,
   "_level_ready|CAPLIPOINT.NS|1d|long|2558|2519.63": 1791517599.357562,
   "_level_ready|CAPLIPOINT.NS|1d|short|2452.89|2564.79": 1793852212.98242,
+  "_level_ready|CAPLIPOINT.NS|1d|short|2542.41|2646.17": 1794371172.429046,
   "_level_ready|CAPLIPOINT.NS|1w|long|2170.67|1965.83": 1792641104.661578,
   "_level_ready|CAPUSD|1d|long|0.078786|0.068105": 1791990399.414519,
   "_level_ready|CARBORUNIV.NS|1M|long|1187.12|1023.61": 1791786682.799464,
@@ -4828,7 +4840,7 @@
   "_level_ready|PETRONET.NS|1w|short|326.312|330.85": 1794368805.895201,
   "_level_ready|PFOCUS.NS|1d|long|274.657|252.621": 1792565202.34434,
   "_level_ready|PFOCUS.NS|1d|long|290.683|270.25": 1793855201.745218,
-  "_level_ready|PFOCUS.NS|1w|long|271.12|173.125": 1792727171.150355,
+  "_level_ready|PFOCUS.NS|1w|long|271.12|173.125": 1794371172.429046,
   "_level_ready|PFOCUS.NS|1w|long|271.12|257.161": 1791517599.357562,
   "_level_ready|PHOENIXLTD.NS|1d|short|1890.18|1952.97": 1792989679.891144,
   "_level_ready|PHOENIXLTD.NS|1d|short|1945.7|1952.97": 1793251896.707365,
@@ -4858,6 +4870,7 @@
   "_level_ready|PNBHOUSING.NS|1d|short|1108.77|1124.66": 1794282375.833969,
   "_level_ready|PNBHOUSING.NS|1d|short|1113.52|1136.71": 1793165197.202933,
   "_level_ready|PNBHOUSING.NS|1d|short|1121.23|1138.36": 1794368805.895201,
+  "_level_ready|PNBHOUSING.NS|1d|short|1134.94|1152.07": 1794371172.429046,
   "_level_ready|PNBHOUSING.NS|1w|long|1056.43|884.35": 1793764008.797417,
   "_level_ready|POLICYBZR.NS|1d|long|926.883|910": 1793764008.797417,
   "_level_ready|POLICYBZR.NS|1d|short|975.84|1000.04": 1794369075.310774,
@@ -5366,7 +5379,7 @@
   "_ready|CAMS.NS|1w": 1793764008.797417,
   "_ready|CAP/USDT|30m": 1789361459.428611,
   "_ready|CAPLIPOINT.NS|1M": 1792641104.661578,
-  "_ready|CAPLIPOINT.NS|1d": 1793852212.98242,
+  "_ready|CAPLIPOINT.NS|1d": 1794371172.429046,
   "_ready|CAPLIPOINT.NS|1w": 1792641104.661578,
   "_ready|CAPUSD|1d": 1791990399.414519,
   "_ready|CARBORUNIV.NS|1M": 1793850405.511611,
@@ -5715,14 +5728,14 @@
   "_ready|PETRONET.NS|1d": 1794369405.866023,
   "_ready|PETRONET.NS|1w": 1794368805.895201,
   "_ready|PFOCUS.NS|1d": 1793855201.745218,
-  "_ready|PFOCUS.NS|1w": 1792727171.150355,
+  "_ready|PFOCUS.NS|1w": 1794371172.429046,
   "_ready|PHOENIXLTD.NS|1d": 1793265972.685757,
   "_ready|PHOENIXLTD.NS|1w": 1792733510.483129,
   "_ready|PINELABS.NS|1d": 1792565477.881975,
   "_ready|PIRAMALFIN.NS|1d": 1794282375.833969,
   "_ready|PIRAMALFIN.NS|1w": 1794368805.895201,
   "_ready|PNBHOUSING.NS|1M": 1793764008.797417,
-  "_ready|PNBHOUSING.NS|1d": 1794368805.895201,
+  "_ready|PNBHOUSING.NS|1d": 1794371172.429046,
   "_ready|PNBHOUSING.NS|1w": 1793764008.797417,
   "_ready|POLICYBZR.NS|1d": 1794369075.310774,
   "_ready|POLICYBZR.NS|1w": 1793591209.526473,
