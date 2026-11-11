@@ -140,8 +140,8 @@
     "stopped_out": false
   },
   "AEGISLOG.NS|1M|long|1204.82|873.787": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "AEGISLOG.NS|1d|short|1225.96|1284.9": {
@@ -154,8 +154,8 @@
     "stopped_out": false
   },
   "AEGISLOG.NS|1w|long|1204.82|873.787": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "AEGISVOPAK.NS|1d|short|264.52|277.602": {
@@ -1195,6 +1195,10 @@
     "stage": 3,
     "stopped_out": false
   },
+  "DEEPAKFERT.NS|1d|short|1240.38|1282.25": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "DEEPAKNTR.NS|1d|short|1601.85|1615": {
     "reached_entry": false,
     "stopped_out": false
@@ -1490,7 +1494,8 @@
     "stopped_out": true
   },
   "FORCEMOT.NS|1w|short|19674.4|19975": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "FORTIS.NS|1M|long|717.84|513.875": {
@@ -2188,8 +2193,8 @@
     "stopped_out": false
   },
   "JKCEMENT.NS|1w|short|5177.3|5247.5": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "JKCEMENT.NS|1w|short|5288.7|5379.5": {
@@ -3347,7 +3352,7 @@
   },
   "RVNL.NS|1d|short|210.255|218.354": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "SBICARD.NS|1d|short|589.227|609.111": {
@@ -3436,8 +3441,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794373303.189738,
-  "_last_check|nse": 1794373303.189738,
+  "_last_check|crypto": 1794373606.333806,
+  "_last_check|nse": 1794373606.333806,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4154,6 +4159,7 @@
   "_level_ready|FORCEMOT.NS|1d|long|17303.8|12476.6": 1793159201.504703,
   "_level_ready|FORCEMOT.NS|1d|short|17230|17388": 1792036000.300237,
   "_level_ready|FORCEMOT.NS|1d|short|19136|19350": 1794368805.895201,
+  "_level_ready|FORCEMOT.NS|1w|short|19674.4|19975": 1794373606.333806,
   "_level_ready|FORTIS.NS|1M|long|717.84|513.875": 1792727505.027921,
   "_level_ready|FORTIS.NS|1d|short|820.986|833": 1793867517.446432,
   "_level_ready|FSL.NS|1d|long|278.945|245.719": 1792641484.218837,
@@ -5491,6 +5497,7 @@
   "_ready|FLUOROCHEM.NS|1d": 1794282375.833969,
   "_ready|FLUOROCHEM.NS|1w": 1793331989.35983,
   "_ready|FORCEMOT.NS|1d": 1794368805.895201,
+  "_ready|FORCEMOT.NS|1w": 1794373606.333806,
   "_ready|FORTIS.NS|1M": 1792727505.027921,
   "_ready|FORTIS.NS|1d": 1793867517.446432,
   "_ready|FSL.NS|1d": 1792641484.218837,
