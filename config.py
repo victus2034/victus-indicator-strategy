@@ -518,10 +518,14 @@ FIB_ALERT_ZONES = (2,)
 # a trade, 1D +0.42R -> +0.07R; NSE worse; L4 and 1W/1M L1-L2 the weakest. Empty = L3 only.
 FIB_ALERT_LEVELS = {
     "4h": ("L2", "L3", "L4"),
-    "1d": ("L1", "L2", "L3", "L4"),
-    "1w": ("L1", "L2", "L3", "L4"),
-    "1M": ("L1", "L2", "L3", "L4"),
+    "1d": ("L2", "L3", "L4"),
+    "1w": ("L2", "L3", "L4"),
+    "1M": ("L2", "L3", "L4"),
 }
+# L1 alerts are off everywhere (lakky, 2026-11-10: "ignore l1 and include l2-l4"). Sep 1 - Nov 10 replay
+# (research/fib_l1_void_backtest.py, part fib-l1-void), per trade R / %: crypto 1D+ -0.057 / +0.10 with L1
+# -> +0.003 / +0.67 without; NSE 1D+ -0.182 / -0.40 -> -0.173 / -0.39. L1 alone: crypto -0.17R, NSE -0.20R.
+# Put "L1" back in a tuple to alert on it again; nothing else reads it.
 # Fib stop = the support/resistance zone rule (Lakky, 2026-10-08, Notion 20):
 # ZONE_SL_HEIGHT_PCT (25%) of the fib box's height beyond its far edge, in place
 # of the inner fib's 0.55 line inside the box. Sep 1 - Oct 8, deeper zone only
