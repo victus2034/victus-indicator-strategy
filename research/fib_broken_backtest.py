@@ -9,6 +9,8 @@ last level and again a candle is formed below the previous candle low", and mayb
   two    a candle CLOSES past L4 (0.66), then the next candle trades past that candle's low / high
   c77    a candle closes past 0.77
   w77    a wick past 0.77
+  his    research/fib_engine_nested.py: base = the last pullback low, broken = the 2-candle rule, a broken
+         fib steps back to the older base (twice at most) before it flips (lakky's BTC / UNI drawings)
 
 A fib still dies when price takes out its base / top. Live levels (L2-L4), each once, 2R + BE,
 net after fees; Sep 1 to now; trades filled within 15 min of US CPI / PPI / FOMC left out.
@@ -32,6 +34,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import config  # noqa: E402
 import fib_engine  # noqa: E402
+import fib_engine_nested  # noqa: E402
 import fib_trendline_backtest as fbt  # noqa: E402
 from fib_entry_touched_backtest import replay_all  # noqa: E402
 from fib_touched_before_backtest import row  # noqa: E402
@@ -58,6 +61,8 @@ def variant(rule):
     """The live engine with only the stop-kill condition changed."""
     if rule == "live":
         return LIVE_RUN
+    if rule == "his":
+        return lambda *a, **k: fib_engine_nested.run(*a, c=HOLD["c"], **k)
     s = inspect.getsource(fib_engine)
     for old, new in (("(not fresh and l[i] < E - KILL * (E - O))", f"(not fresh and ({BUY[rule]}))"),
                      ("(not fresh and h[i] > E + KILL * (O - E))", f"(not fresh and ({SELL[rule]}))")):
@@ -86,6 +91,7 @@ def replay(market, symbol, tf, base, evalc, now):
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--since", default="2026-09-01")
+    parser.add_argument("--rules", default="live,two,c77,w77,his")
     args = parser.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     fbt.TIMEFRAMES = list(config.FIB_TL_TIMEFRAMES)
@@ -95,7 +101,7 @@ def main() -> None:
     runs = {}
     fbt.replay = replay
     try:
-        for rule in ("live", "two", "c77", "w77"):
+        for rule in args.rules.split(","):
             RULE["name"] = rule
             fib_engine.run = variant(rule)
             runs[rule] = [t for t in replay_all(now) if t["alert_ts"] >= since and not news(t["result"].get("fill_ts"))]
@@ -115,7 +121,8 @@ def main() -> None:
     df.to_csv(OUT / "summary.csv", index=False)
     text = [f"# When is a fib broken ({args.since} to now)", "",
             "live = wick past the stop (0.6875); two = a close past L4, then the next candle past that candle's "
-            "low / high; c77 = a close past 0.77; w77 = a wick past 0.77. Live levels (L2-L4), each once, 2R + BE, "
+            "low / high; c77 = a close past 0.77; w77 = a wick past 0.77; his = fib_engine_nested (last pullback low as "
+            "base, 2-candle rule, step back to the older base before a flip). Live levels (L2-L4), each once, 2R + BE, "
             "net after fees, R and % per trade. Crypto on Delta candles. Entries filled within 15 min of US "
             "CPI/PPI/FOMC left out.", "", df.to_markdown(index=False), ""]
     (OUT / "FIB_BROKEN.md").write_text("\n".join(text))

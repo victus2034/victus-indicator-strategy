@@ -113,7 +113,7 @@ jobs:
             fib-levels-all) PYTHONPATH=research python research/fib_levels_all_backtest.py --since 2026-09-01 ;;
             fib-level-sl) PYTHONPATH=research python research/fib_level_sl_backtest.py --since 2026-09-01 ;;
             fib-l1-void) PYTHONPATH=research python research/fib_l1_void_backtest.py --since 2026-09-01 ;;
-            fib-broken) PYTHONPATH=research python research/fib_broken_backtest.py --since 2026-09-01 ;;
+            fib-broken) PYTHONPATH=research python research/fib_broken_backtest.py --since 2026-09-01 --rules live,two,his ;;
             fib-sl-trace) python research/fib_sl_trace.py HYPEUSD:1d ENAUSD:4h ;;
             fib-l3l4) PYTHONPATH=research python research/fib_l3_l4_backtest.py --since 2026-09-01 ;;
             fib-rearm) PYTHONPATH=research python research/fib_rearm_backtest.py --since 2026-09-01 ;;
