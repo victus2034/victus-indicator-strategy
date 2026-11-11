@@ -156,7 +156,7 @@ class DeeperZoneOnlyTests(unittest.TestCase):
 
 
 class FibLevelAlertTests(unittest.TestCase):
-    """lakky, 2026-10-20: every fib level alerts - L1-L4 on 1D and up, L2-L4 on 4H - once each."""
+    """lakky, 2026-10-20: every fib level alerts once each; L1 is off everywhere since 2026-11-10 (L2-L4 on every timeframe)."""
 
     def levels(self, d, price, tf="4h"):
         base, top = (90.0, 110.0) if d == 1 else (110.0, 90.0)
@@ -172,15 +172,19 @@ class FibLevelAlertTests(unittest.TestCase):
 
     def test_a_buy_alerts_each_level_on_its_approach(self):
         e = self.edges(1)
-        self.assertEqual(list(self.levels(1, e["L1"] * 1.004, "1d")), ["L1"])
+        self.assertEqual(self.levels(1, e["L1"] * 1.004, "1d"), {})
         self.assertEqual(list(self.levels(1, e["L2"] * 1.004, "1d")), ["L2"])
         self.assertEqual(list(self.levels(1, e["L3"] * 1.004, "1d")), ["L3"])
         self.assertEqual(list(self.levels(1, e["L4"] * 1.004, "1d")), ["L4"])
 
     def test_a_sell_mirrors_it(self):
         e = self.edges(-1)
-        for level in ("L1", "L2", "L3", "L4"):
+        self.assertEqual(self.levels(-1, e["L1"] * 0.996, "1d"), {})
+        for level in ("L2", "L3", "L4"):
             self.assertEqual(list(self.levels(-1, e[level] * 0.996, "1d")), [level], level)
+
+    def test_no_timeframe_alerts_l1(self):
+        self.assertTrue(all("L1" not in lv for lv in fts.FIB_ALERT_LEVELS.values()))
 
     def test_4h_has_no_l1(self):
         e = self.edges(1)
@@ -195,7 +199,7 @@ class FibLevelAlertTests(unittest.TestCase):
             z = self.levels(1, e[level] * 1.004, "1d")[level]
             self.assertAlmostEqual(z["plan"]["entry"], e[level])
             self.assertAlmostEqual(z["plan"]["sl"], stops[level])
-        self.assertAlmostEqual(self.levels(1, e["L1"] * 1.004, "1d")["L1"]["plan"]["entry"], e["L1"])
+        self.assertAlmostEqual(self.levels(1, e["L3"] * 1.004, "1d")["L3"]["plan"]["entry"], e["L3"])
 
     def test_l3_keeps_its_old_key_and_the_others_get_the_level(self):
         e = self.edges(1)
