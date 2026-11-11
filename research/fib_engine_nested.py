@@ -29,6 +29,7 @@ BASE_N = 3
 STEPS = 2        # how many older bases a broken fib may step back to before it flips
 REBOUND = 0          # share of the pullback price must take back for a new fib from its low (0 = off)
 MIN_GAP = 0      # an older base must be lower by this share of the fib's range, or it is the same low
+LOOKBACK = 490   # candles back the engine looks for a swing (the Pine script keeps 500 candles)
 TURN = False     # research switch: a reversed pullback becomes the opposite fib
 CLOSES = {"c": []}
 
@@ -57,7 +58,7 @@ def run(ist, h, l, N=10, restart=None, c=None, base_n=None, steps=None, turn_on=
         return h[j] > max(h[a:j]) and h[j] >= max(h[j + 1:b + 1])
 
     def newest(a, b, i, s):
-        for j in range(b - 1, a - 1, -1):
+        for j in range(b - 1, max(a, i - LOOKBACK) - 1, -1):
             if swing(j, i, s):
                 return j
         return None
@@ -98,8 +99,9 @@ def run(ist, h, l, N=10, restart=None, c=None, base_n=None, steps=None, turn_on=
             if hit or two:
                 ended = True
                 cur, found = O - s * MIN_GAP * abs(E - O), None
-                for j in (range(Ot - 1, T0 - 1, -1) if used < max_steps else ()):
-                    if (j == T0 or swing(j, i, s)) and past(cur, y[j]):
+                first = max(T0, i - LOOKBACK)
+                for j in (range(Ot - 1, first - 1, -1) if used < max_steps else ()):
+                    if (j == first or swing(j, i, s)) and past(cur, y[j]):
                         if not past(y[j], y[i]):
                             found = j
                             break
