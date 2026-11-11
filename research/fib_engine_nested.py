@@ -27,6 +27,8 @@ Down fibs are the mirror. `run(..., c=closes)`; without `c` the closes come from
 ZONE1 = 0.66
 BASE_N = 3
 STEPS = 2        # how many older bases a broken fib may step back to before it flips
+REBOUND = 0          # share of the pullback price must take back for a new fib from its low (0 = off)
+MIN_GAP = 0      # an older base must be lower by this share of the fib's range, or it is the same low
 TURN = False     # research switch: a reversed pullback becomes the opposite fib
 CLOSES = {"c": []}
 
@@ -68,7 +70,15 @@ def run(ist, h, l, N=10, restart=None, c=None, base_n=None, steps=None, turn_on=
         past = (lambda p, q: p > q) if up else (lambda p, q: p < q)
         turn = (turn_on and R is not None and i - Rb >= B and swing(Rb, i, s)
                 and abs(E - R) >= (1 - ZONE1) * abs(E - O) and not past(x[i], E) and not past(R, y[i]))
-        if turn:
+        back = (REBOUND and R is not None and not past(x[i], E) and not past(R, y[i])
+                and past(x[i], R + s * REBOUND * abs(E - R)) and abs(E - R) >= (1 - ZONE1) * abs(E - O))
+        if back:
+            # the pullback is over: price took back REBOUND of it. New fib from the pullback low
+            # (lakky: "if it go to the up trend from the 30 oct then 30 oct will be new low";
+            # HYPE 1D 74.411 (24 Oct) -> 97.13 (29 Oct), under the 23 Sep top).
+            log.append((ist[i], "pullback %g (%s) taken back, new %s fib from it" % (R, ist[Rb], "up" if up else "down")))
+            O, Ot, E, Et, fresh, ended, used = R, Rb, x[i], i, False, True, 0
+        elif turn:
             j = newest(Ot + 1, Rb, i, -s)
             no, nt = (x[j], j) if j is not None else (E, Et)
             log.append((ist[i], "%s %g (%s) has reversed: %s fib from %g (%s)"
@@ -87,7 +97,7 @@ def run(ist, h, l, N=10, restart=None, c=None, base_n=None, steps=None, turn_on=
             two = not fresh and past(L4, c[i - 1]) and past(y[i - 1], y[i])
             if hit or two:
                 ended = True
-                cur, found = O, None
+                cur, found = O - s * MIN_GAP * abs(E - O), None
                 for j in (range(Ot - 1, T0 - 1, -1) if used < max_steps else ()):
                     if (j == T0 or swing(j, i, s)) and past(cur, y[j]):
                         if not past(y[j], y[i]):
