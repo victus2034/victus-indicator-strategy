@@ -69,6 +69,7 @@
   },
   "AARTIIND.NS|1d|short|489.061|495": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "AARTIIND.NS|1w|long|410.708|404.831": {
@@ -408,11 +409,6 @@
   "ASAHIINDIA.NS|1w|long|904.952|732.175": {
     "reached_entry": false,
     "stopped_out": false
-  },
-  "ASTERDM.NS|1d|short|701.9|720.005": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
   },
   "ASTERDM.NS|1w|long|620.85|603.8": {
     "reached_entry": false,
@@ -1017,13 +1013,13 @@
   },
   "CONCOR.NS|1d|short|451.663|470.837": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "CONCOR.NS|1w|short|451.663|460.4": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "CONCOR.NS|1w|short|467.003|484.782": {
     "reached_entry": false,
@@ -2522,6 +2518,10 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "LICHSGFIN.NS|1M|short|583.969|595": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "LICHSGFIN.NS|1d|short|537.01|549.963": {
     "reached_entry": true,
     "stage": 3,
@@ -2530,16 +2530,16 @@
   "LICHSGFIN.NS|1d|short|567.464|572.5": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "LICHSGFIN.NS|1d|short|569.312|574.7": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "LICHSGFIN.NS|1d|short|569.5|574.7": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "LICHSGFIN.NS|1w|long|488.397|483": {
@@ -2548,7 +2548,11 @@
   },
   "LICHSGFIN.NS|1w|short|568.995|574.7": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
+    "stopped_out": false
+  },
+  "LICHSGFIN.NS|1w|short|583.969|594.55": {
+    "reached_entry": false,
     "stopped_out": false
   },
   "LINDEINDIA.NS|1M|long|5644.73|3380.39": {
@@ -2702,6 +2706,11 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "MFSL.NS|1d|short|1315.13|1372.77": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "MOTILALOFS.NS|1M|short|1155.59|1240.85": {
     "reached_entry": true,
     "stage": 2,
@@ -2777,6 +2786,10 @@
     "stopped_out": false
   },
   "NAM-INDIA.NS|1M|long|904.816|532.087": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "NAM-INDIA.NS|1d|short|1137.61|1190.95": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -3496,8 +3509,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794376924.221096,
-  "_last_check|nse": 1794376924.221096,
+  "_last_check|crypto": 1794377204.421422,
+  "_last_check|nse": 1794377204.421422,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3530,6 +3543,7 @@
   "_level_ready|AARTIIND.NS|1M|short|484.658|507.5": 1794372107.522538,
   "_level_ready|AARTIIND.NS|1d|short|449.379|461.665": 1793781403.105803,
   "_level_ready|AARTIIND.NS|1d|short|459.208|470.6": 1793850405.511611,
+  "_level_ready|AARTIIND.NS|1d|short|489.061|495": 1794377204.421422,
   "_level_ready|AARTIIND.NS|1w|long|434.215|404.831": 1793937114.247749,
   "_level_ready|AARTIIND.NS|1w|long|479.092|468.514": 1791517890.620179,
   "_level_ready|AAVEUSD|1M|long|207.164|158.995": 1791524496.136013,
@@ -4697,6 +4711,7 @@
   "_level_ready|METAXUSD|30m|short|746.85|747.725": 1791267698.622435,
   "_level_ready|METAXUSD|4h|long|725.95|722.263": 1791380798.231245,
   "_level_ready|MFSL.NS|1M|long|1181.13|1003.29": 1793764008.797417,
+  "_level_ready|MFSL.NS|1d|short|1315.13|1372.77": 1794377204.421422,
   "_level_ready|MOTILALOFS.NS|1M|short|1155.59|1240.85": 1794196905.696003,
   "_level_ready|MOTILALOFS.NS|1d|long|1029.91|1021.02": 1792389724.420896,
   "_level_ready|MOTILALOFS.NS|1d|short|1031.21|1062.3": 1792554711.035895,
@@ -5325,7 +5340,7 @@
   "_ready|AADHARHFC.NS|1M": 1793946110.358795,
   "_ready|AADHARHFC.NS|1d": 1793937114.247749,
   "_ready|AARTIIND.NS|1M": 1794372107.522538,
-  "_ready|AARTIIND.NS|1d": 1793850405.511611,
+  "_ready|AARTIIND.NS|1d": 1794377204.421422,
   "_ready|AARTIIND.NS|1w": 1793937114.247749,
   "_ready|AAVEUSD|1M": 1791524496.136013,
   "_ready|AAVEUSD|1d": 1793509005.4382,
@@ -5730,6 +5745,7 @@
   "_ready|METAXUSD|30m": 1791431198.043723,
   "_ready|METAXUSD|4h": 1791380798.231245,
   "_ready|MFSL.NS|1M": 1793764008.797417,
+  "_ready|MFSL.NS|1d": 1794377204.421422,
   "_ready|MNT/USDT|30m": 1789480563.544585,
   "_ready|MOTILALOFS.NS|1M": 1794196905.696003,
   "_ready|MOTILALOFS.NS|1d": 1793937114.247749,
