@@ -1570,6 +1570,7 @@
   },
   "GILLETTE.NS|1d|short|7506.21|7574.5": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "GILLETTE.NS|1d|short|7568.07|7768.7": {
@@ -1800,6 +1801,7 @@
   },
   "HINDPETRO.NS|1M|short|402.713|421.1": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "HINDPETRO.NS|1d|short|366.794|370": {
@@ -1823,6 +1825,7 @@
   },
   "HINDPETRO.NS|1w|short|402.713|409.25": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "HONAUT.NS|1w|long|31413.5|30993.4": {
@@ -1886,11 +1889,12 @@
   },
   "ICICIGI.NS|1d|short|1672.15|1706.94": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ICICIGI.NS|1d|short|1699.98|1734.77": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ICICIGI.NS|1w|short|1642.6|1866.95": {
@@ -2219,7 +2223,7 @@
   "JKCEMENT.NS|1w|short|5177.3|5247.5": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "JKCEMENT.NS|1w|short|5288.7|5379.5": {
     "reached_entry": false,
@@ -2703,8 +2707,8 @@
     "stopped_out": false
   },
   "MFSL.NS|1d|short|1315.13|1372.77": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "MOTILALOFS.NS|1M|short|1155.59|1240.85": {
@@ -3146,6 +3150,7 @@
   },
   "PIRAMALFIN.NS|1w|short|2141.03|2216": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PNBHOUSING.NS|1M|long|1047.65|880.194": {
@@ -3191,7 +3196,8 @@
     "stopped_out": false
   },
   "POLYMED.NS|1d|short|1652.58|1715.34": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "POONAWALLA.NS|1M|short|476.26|482.95": {
@@ -3505,8 +3511,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794378394.196224,
-  "_last_check|nse": 1794378394.196224,
+  "_last_check|crypto": 1794378717.712424,
+  "_last_check|nse": 1794378717.712424,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4251,6 +4257,7 @@
   "_level_ready|GICRE.NS|1d|short|343.937|351.424": 1794209517.424473,
   "_level_ready|GILLETTE.NS|1d|short|7218.19|7326.47": 1791517599.357562,
   "_level_ready|GILLETTE.NS|1d|short|7394.99|7941.78": 1793688105.721091,
+  "_level_ready|GILLETTE.NS|1d|short|7506.21|7574.5": 1794378717.712424,
   "_level_ready|GILLETTE.NS|1d|short|7538.74|7639": 1793850405.511611,
   "_level_ready|GILLETTE.NS|1w|short|7138.76|7307": 1793677604.261117,
   "_level_ready|GILLETTE.NS|1w|short|7138.76|7317.22": 1791517599.357562,
@@ -4339,12 +4346,14 @@
   "_level_ready|HINDCOPPER.NS|1M|long|443.123|363.892": 1792396916.10282,
   "_level_ready|HINDCOPPER.NS|1d|long|450.364|445.7": 1792382520.989817,
   "_level_ready|HINDCOPPER.NS|1w|long|443.123|363.892": 1792396916.10282,
+  "_level_ready|HINDPETRO.NS|1M|short|402.713|421.1": 1794378717.712424,
   "_level_ready|HINDPETRO.NS|1d|long|330.909|325": 1792036000.300237,
   "_level_ready|HINDPETRO.NS|1d|long|331.458|326.486": 1791517599.357562,
   "_level_ready|HINDPETRO.NS|1d|short|347.818|351": 1792468002.381626,
   "_level_ready|HINDPETRO.NS|1w|long|330.785|322.516": 1791517599.357562,
   "_level_ready|HINDPETRO.NS|1w|long|330.785|326": 1792986387.062464,
   "_level_ready|HINDPETRO.NS|1w|short|349.977|354": 1793591772.925076,
+  "_level_ready|HINDPETRO.NS|1w|short|402.713|409.25": 1794378717.712424,
   "_level_ready|HONAUT.NS|1w|long|31413.5|30993.4": 1793072802.908836,
   "_level_ready|HSCL.NS|1M|long|550.118|274.794": 1793943106.438875,
   "_level_ready|HSCL.NS|1d|long|633.489|624.2": 1792382169.501553,
@@ -4399,6 +4408,7 @@
   "_level_ready|ICICIGI.NS|1d|long|1622.69|1536.51": 1792727171.150355,
   "_level_ready|ICICIGI.NS|1d|short|1619.02|1653.81": 1793937978.189416,
   "_level_ready|ICICIGI.NS|1d|short|1646.85|1679.11": 1794196012.334544,
+  "_level_ready|ICICIGI.NS|1d|short|1699.98|1734.77": 1794378717.712424,
   "_level_ready|ICICIGI.NS|1w|short|1642.6|1866.95": 1794196012.334544,
   "_level_ready|ICICIPRULI.NS|1d|long|439.153|435.2": 1792468002.381626,
   "_level_ready|IDBI.NS|1M|short|80.5158|82.2": 1794368805.895201,
@@ -4941,7 +4951,7 @@
   "_level_ready|PIRAMALFIN.NS|1w|long|1937.93|1840.82": 1791519091.189259,
   "_level_ready|PIRAMALFIN.NS|1w|short|2026.54|2156.02": 1793851315.776468,
   "_level_ready|PIRAMALFIN.NS|1w|short|2081.06|2156.02": 1794368805.895201,
-  "_level_ready|PIRAMALFIN.NS|1w|short|2141.03|2216": 1794196012.334544,
+  "_level_ready|PIRAMALFIN.NS|1w|short|2141.03|2216": 1794378717.712424,
   "_level_ready|PNBHOUSING.NS|1M|long|1047.65|880.194": 1793685978.359785,
   "_level_ready|PNBHOUSING.NS|1M|long|1056.43|1040": 1793764008.797417,
   "_level_ready|PNBHOUSING.NS|1d|long|1082.48|1073.4": 1793334680.412542,
@@ -4960,7 +4970,7 @@
   "_level_ready|POLYMED.NS|1d|long|1556.15|1532.8": 1791518507.451007,
   "_level_ready|POLYMED.NS|1d|short|1556.71|1619.48": 1793779307.13118,
   "_level_ready|POLYMED.NS|1d|short|1606.92|1665.13": 1794196905.696003,
-  "_level_ready|POLYMED.NS|1d|short|1652.58|1715.34": 1793855810.926895,
+  "_level_ready|POLYMED.NS|1d|short|1652.58|1715.34": 1794378717.712424,
   "_level_ready|POONAWALLA.NS|1M|short|476.26|482.95": 1794282375.833969,
   "_level_ready|POONAWALLA.NS|1d|long|418.279|414.378": 1792729917.454067,
   "_level_ready|POONAWALLA.NS|1d|long|433.882|414.378": 1792122403.256656,
@@ -5583,7 +5593,7 @@
   "_ready|GESHIP.NS|1d": 1793850672.171397,
   "_ready|GESHIP.NS|1w": 1793867200.497059,
   "_ready|GICRE.NS|1d": 1794368805.895201,
-  "_ready|GILLETTE.NS|1d": 1793850405.511611,
+  "_ready|GILLETTE.NS|1d": 1794378717.712424,
   "_ready|GILLETTE.NS|1w": 1794368805.895201,
   "_ready|GLAND.NS|1M": 1793936864.300001,
   "_ready|GLAND.NS|1d": 1793166102.188457,
@@ -5617,8 +5627,9 @@
   "_ready|HINDCOPPER.NS|1M": 1792396916.10282,
   "_ready|HINDCOPPER.NS|1d": 1792382520.989817,
   "_ready|HINDCOPPER.NS|1w": 1792396916.10282,
+  "_ready|HINDPETRO.NS|1M": 1794378717.712424,
   "_ready|HINDPETRO.NS|1d": 1792468002.381626,
-  "_ready|HINDPETRO.NS|1w": 1793591772.925076,
+  "_ready|HINDPETRO.NS|1w": 1794378717.712424,
   "_ready|HOME/USDT|30m": 1789449947.639194,
   "_ready|HOME/USDT|4h": 1789449947.639194,
   "_ready|HONAUT.NS|1w": 1793072802.908836,
@@ -5633,7 +5644,7 @@
   "_ready|HYPEUSD|1d": 1793759515.970888,
   "_ready|HYPEUSD|1w": 1794325309.594481,
   "_ready|HYPEUSD|30m": 1791297105.637443,
-  "_ready|ICICIGI.NS|1d": 1794196012.334544,
+  "_ready|ICICIGI.NS|1d": 1794378717.712424,
   "_ready|ICICIGI.NS|1w": 1794196012.334544,
   "_ready|ICICIPRULI.NS|1d": 1792468002.381626,
   "_ready|ICP/USDT|30m": 1789439750.580446,
@@ -5825,13 +5836,13 @@
   "_ready|PHOENIXLTD.NS|1w": 1792733510.483129,
   "_ready|PINELABS.NS|1d": 1792565477.881975,
   "_ready|PIRAMALFIN.NS|1d": 1794282375.833969,
-  "_ready|PIRAMALFIN.NS|1w": 1794368805.895201,
+  "_ready|PIRAMALFIN.NS|1w": 1794378717.712424,
   "_ready|PNBHOUSING.NS|1M": 1793764008.797417,
   "_ready|PNBHOUSING.NS|1d": 1794371172.429046,
   "_ready|PNBHOUSING.NS|1w": 1793764008.797417,
   "_ready|POLICYBZR.NS|1d": 1794375120.419706,
   "_ready|POLICYBZR.NS|1w": 1793591209.526473,
-  "_ready|POLYMED.NS|1d": 1794196905.696003,
+  "_ready|POLYMED.NS|1d": 1794378717.712424,
   "_ready|POONAWALLA.NS|1M": 1794282375.833969,
   "_ready|POONAWALLA.NS|1d": 1794196012.334544,
   "_ready|POONAWALLA.NS|1w": 1794282375.833969,
