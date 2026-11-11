@@ -45,6 +45,10 @@
     "stage": 3,
     "stopped_out": true
   },
+  "360ONE.NS|1w|short|1217.75|1228": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "3MINDIA.NS|1M|long|30437.5|30120": {
     "reached_entry": true,
     "stage": 3,
@@ -103,6 +107,7 @@
   },
   "ABSLAMC.NS|1d|short|908.076|951.581": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ABSLAMC.NS|1w|long|822.149|815": {
@@ -1058,6 +1063,10 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "COROMANDEL.NS|1w|short|1972.92|1990": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "CPPLUS.NS|1d|short|4069.62|4197.2": {
     "reached_entry": true,
     "stage": 3,
@@ -1298,11 +1307,12 @@
   },
   "ELGIEQUIP.NS|1d|short|554.07|574.764": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ELGIEQUIP.NS|1d|short|570.625|589.814": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ELGIEQUIP.NS|1w|short|536.303|674.591": {
@@ -1741,6 +1751,7 @@
   },
   "HDBFS.NS|1d|short|568.253|598.221": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "HEXT.NS|1w|short|538.767|550.25": {
@@ -3141,11 +3152,6 @@
     "stage": 1,
     "stopped_out": false
   },
-  "POLYMED.NS|1d|short|1556.71|1619.48": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "POLYMED.NS|1d|short|1606.92|1665.13": {
     "reached_entry": true,
     "stage": 3,
@@ -3465,8 +3471,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794375120.419706,
-  "_last_check|nse": 1794375120.419706,
+  "_last_check|crypto": 1794375375.91362,
+  "_last_check|nse": 1794375375.91362,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -3530,6 +3536,7 @@
   "_level_ready|ABSLAMC.NS|1M|long|811.845|785": 1793691703.653116,
   "_level_ready|ABSLAMC.NS|1d|long|949.681|942.5": 1792554711.035895,
   "_level_ready|ABSLAMC.NS|1d|short|1001.8|1010.43": 1791517599.357562,
+  "_level_ready|ABSLAMC.NS|1d|short|908.076|951.581": 1794375375.91362,
   "_level_ready|ABSLAMC.NS|1w|long|822.149|815": 1793677604.261117,
   "_level_ready|ABSLAMC.NS|1w|long|883.746|869.531": 1794282375.833969,
   "_level_ready|ABSLAMC.NS|1w|long|923.844|906.3": 1792640801.869234,
@@ -4101,7 +4108,7 @@
   "_level_ready|ELGIEQUIP.NS|1d|long|566.104|560.15": 1792122403.256656,
   "_level_ready|ELGIEQUIP.NS|1d|long|566.161|560.15": 1792381599.217228,
   "_level_ready|ELGIEQUIP.NS|1d|short|554.07|574.764": 1794282375.833969,
-  "_level_ready|ELGIEQUIP.NS|1d|short|570.625|589.814": 1793948180.758643,
+  "_level_ready|ELGIEQUIP.NS|1d|short|570.625|589.814": 1794375375.91362,
   "_level_ready|ELGIEQUIP.NS|1w|short|536.303|674.591": 1793936864.300001,
   "_level_ready|EMCURE.NS|1d|short|1846.8|1980.48": 1793078207.678618,
   "_level_ready|EMCURE.NS|1d|short|1889.11|1980.48": 1793343104.041192,
@@ -4282,6 +4289,7 @@
   "_level_ready|HBLENGINE.NS|1w|long|727.65|692.159": 1791517599.357562,
   "_level_ready|HBLENGINE.NS|1w|short|786.06|962.938": 1793159201.504703,
   "_level_ready|HBLENGINE.NS|1w|short|842.05|875": 1793850405.511611,
+  "_level_ready|HDBFS.NS|1d|short|568.253|598.221": 1794375375.91362,
   "_level_ready|HEXT.NS|1d|short|568.993|574.5": 1791949569.774586,
   "_level_ready|HEXT.NS|1d|short|571.063|579.629": 1791519091.189259,
   "_level_ready|HEXT.NS|1d|short|589.785|637.181": 1792555573.527481,
@@ -5299,7 +5307,7 @@
   "_ready|ABBOTINDIA.NS|1w": 1794282375.833969,
   "_ready|ABDL.NS|1d": 1792986985.751506,
   "_ready|ABSLAMC.NS|1M": 1793691703.653116,
-  "_ready|ABSLAMC.NS|1d": 1792554711.035895,
+  "_ready|ABSLAMC.NS|1d": 1794375375.91362,
   "_ready|ABSLAMC.NS|1w": 1794282375.833969,
   "_ready|ACC.NS|1M": 1793936864.300001,
   "_ready|ACC.NS|1d": 1794282375.833969,
@@ -5491,7 +5499,7 @@
   "_ready|DOSUSD|1d": 1792120004.566349,
   "_ready|EIHOTEL.NS|1d": 1794370606.057223,
   "_ready|EIHOTEL.NS|1w": 1794282375.833969,
-  "_ready|ELGIEQUIP.NS|1d": 1794282375.833969,
+  "_ready|ELGIEQUIP.NS|1d": 1794375375.91362,
   "_ready|ELGIEQUIP.NS|1w": 1793936864.300001,
   "_ready|EMCURE.NS|1d": 1793678202.474602,
   "_ready|EMCURE.NS|1w": 1792731077.628348,
@@ -5559,6 +5567,7 @@
   "_ready|HBLENGINE.NS|1M": 1793850405.511611,
   "_ready|HBLENGINE.NS|1d": 1793591209.526473,
   "_ready|HBLENGINE.NS|1w": 1793850405.511611,
+  "_ready|HDBFS.NS|1d": 1794375375.91362,
   "_ready|HEXT.NS|1d": 1792555573.527481,
   "_ready|HEXT.NS|1w": 1793245588.963685,
   "_ready|HFCL.NS|1M": 1794368805.895201,
