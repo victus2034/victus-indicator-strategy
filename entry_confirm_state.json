@@ -490,7 +490,7 @@
   },
   "BAJAJHFL.NS|1w|short|81.5277|82.92": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "BALKRISIND.NS|1M|short|2444.2|2554.8": {
@@ -536,7 +536,7 @@
   "BANDHANBNK.NS|1d|short|165.88|172.167": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BANDHANBNK.NS|1w|long|140.92|139.84": {
     "reached_entry": false,
@@ -1415,6 +1415,7 @@
   },
   "FEDERALBNK.NS|1d|short|352.237|355.5": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "FINCABLES.NS|1M|long|1059.54|949.925": {
@@ -1469,11 +1470,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "FLUOROCHEM.NS|1d|short|4547.7|4600": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "FLUOROCHEM.NS|1d|short|4756.55|4819.9": {
     "reached_entry": false,
     "stopped_out": false
@@ -1488,7 +1484,7 @@
   },
   "FORCEMOT.NS|1d|short|19125.2|19350": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "FORCEMOT.NS|1w|short|19674.4|19975": {
@@ -2958,11 +2954,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "PAGEIND.NS|1d|short|36075.5|36805.6": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "PAGEIND.NS|1d|short|36659.6|37389.7": {
     "reached_entry": true,
     "stage": 2,
@@ -3111,8 +3102,8 @@
     "stopped_out": false
   },
   "PNBHOUSING.NS|1d|short|1134.94|1152.07": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "PNBHOUSING.NS|1w|long|1056.43|884.35": {
@@ -3121,7 +3112,7 @@
   },
   "POLICYBZR.NS|1d|short|975.84|1000.04": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "POLYMED.NS|1d|short|1556.71|1619.48": {
@@ -3164,7 +3155,7 @@
   "POONAWALLA.NS|1w|short|476.26|484": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "POONAWALLA.NS|1w|short|494.616|499": {
     "reached_entry": false,
@@ -3439,8 +3430,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794371172.429046,
-  "_last_check|nse": 1794371172.429046,
+  "_last_check|crypto": 1794371517.469453,
+  "_last_check|nse": 1794371517.469453,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4129,6 +4120,7 @@
   "_level_ready|FACT.NS|1w|long|738.742|720.274": 1791517599.357562,
   "_level_ready|FEDERALBNK.NS|1d|long|329.13|317.069": 1793764008.797417,
   "_level_ready|FEDERALBNK.NS|1d|long|339.536|306.663": 1792986387.062464,
+  "_level_ready|FEDERALBNK.NS|1d|short|352.237|355.5": 1794371517.469453,
   "_level_ready|FILUSD|1d|long|0.932838|0.918519": 1792832798.455375,
   "_level_ready|FILUSD|1d|long|0.990115|0.918519": 1792656712.027939,
   "_level_ready|FINCABLES.NS|1M|long|1059.54|949.925": 1792986387.062464,
@@ -5479,7 +5471,7 @@
   "_ready|FACT.NS|1M": 1792641484.218837,
   "_ready|FACT.NS|1d": 1794370606.057223,
   "_ready|FACT.NS|1w": 1792556798.737244,
-  "_ready|FEDERALBNK.NS|1d": 1793764008.797417,
+  "_ready|FEDERALBNK.NS|1d": 1794371517.469453,
   "_ready|FILUSD|1d": 1792832798.455375,
   "_ready|FINCABLES.NS|1M": 1794368805.895201,
   "_ready|FINCABLES.NS|1d": 1793850405.511611,
