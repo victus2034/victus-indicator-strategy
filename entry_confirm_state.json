@@ -1758,8 +1758,8 @@
     "stopped_out": false
   },
   "HDBFS.NS|1d|short|568.253|598.221": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "HEXT.NS|1w|short|538.767|550.25": {
@@ -2294,6 +2294,11 @@
   "JUBLFOOD.NS|1M|long|454.928|339.159": {
     "reached_entry": true,
     "stage": 2,
+    "stopped_out": false
+  },
+  "JUBLFOOD.NS|1d|short|442.017|459.899": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "JUBLFOOD.NS|1d|short|456.322|472.904": {
@@ -3346,8 +3351,8 @@
     "stopped_out": true
   },
   "RECLTD.NS|1d|short|314.812|328.122": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "RECLTD.NS|1w|long|282.453|266.972": {
@@ -3509,8 +3514,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794377816.898086,
-  "_last_check|nse": 1794377816.898086,
+  "_last_check|crypto": 1794378097.787287,
+  "_last_check|nse": 1794378097.787287,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
   "_level_ready|1000PEPEUSD|1d|short|0.00458778|0.00482533": 1792569717.634299,
@@ -4515,6 +4520,7 @@
   "_level_ready|JSWINFRA.NS|1w|long|311.564|277.82": 1792986387.062464,
   "_level_ready|JUBLFOOD.NS|1M|long|454.928|339.159": 1791776795.761218,
   "_level_ready|JUBLFOOD.NS|1M|long|454.928|413.251": 1791517599.357562,
+  "_level_ready|JUBLFOOD.NS|1d|short|442.017|459.899": 1794378097.787287,
   "_level_ready|JUBLFOOD.NS|1d|short|456.322|472.904": 1793936864.300001,
   "_level_ready|JUBLFOOD.NS|1w|long|415.108|408.55": 1793162809.242492,
   "_level_ready|JYOTICNC.NS|1M|short|995.99|1026": 1793693496.869111,
@@ -5681,7 +5687,7 @@
   "_ready|JSWINFRA.NS|1d": 1794368805.895201,
   "_ready|JSWINFRA.NS|1w": 1792986387.062464,
   "_ready|JUBLFOOD.NS|1M": 1791776795.761218,
-  "_ready|JUBLFOOD.NS|1d": 1793936864.300001,
+  "_ready|JUBLFOOD.NS|1d": 1794378097.787287,
   "_ready|JUBLFOOD.NS|1w": 1793162809.242492,
   "_ready|JYOTICNC.NS|1M": 1793693496.869111,
   "_ready|JYOTICNC.NS|1d": 1794201973.604181,
