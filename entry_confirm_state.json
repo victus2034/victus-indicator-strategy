@@ -2,7 +2,7 @@
   "1000PEPEUSD|1d|long|0.00499027|0.00470846": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "1000PEPEUSD|1d|short|0.00502491|0.0051403": {
     "reached_entry": true,
@@ -145,7 +145,8 @@
     "stopped_out": true
   },
   "UNIUSD|1w|long|6.19885|5.01181": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "UNIUSD|1w|long|7.06215|5.01181": {
@@ -186,7 +187,7 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794425211.322371,
+  "_last_check|crypto": 1794450695.257074,
   "_last_check|nse": 1794389812.503451,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
@@ -1935,6 +1936,7 @@
   "_level_ready|UNIUSD|1d|long|6.6691|5.59962": 1792917398.266249,
   "_level_ready|UNIUSD|1d|long|6.71476|6.612": 1794206776.032862,
   "_level_ready|UNIUSD|1d|long|7.4469|6.4552": 1793875289.863076,
+  "_level_ready|UNIUSD|1w|long|6.19885|5.01181": 1794450695.257074,
   "_level_ready|UNIUSD|1w|long|7.06215|5.01181": 1792650709.989892,
   "_level_ready|UNIUSD|1w|short|7.79255|8.28661": 1791454600.819574,
   "_level_ready|UNIUSD|1w|short|7.7986|9.16975": 1791736311.389518,
@@ -2604,7 +2606,7 @@
   "_ready|TSLAXUSD|4h": 1791284789.259019,
   "_ready|UB/USDT|30m": 1789320957.820623,
   "_ready|UNIUSD|1d": 1794206776.032862,
-  "_ready|UNIUSD|1w": 1792650709.989892,
+  "_ready|UNIUSD|1w": 1794450695.257074,
   "_ready|UNIUSD|30m": 1791439895.553373,
   "_ready|US/USDT|30m": 1789306268.896163,
   "_ready|VELVETUSD|30m": 1791286895.982913,
