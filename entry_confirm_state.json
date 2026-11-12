@@ -634,11 +634,12 @@
   },
   "BHARTIHEXA.NS|1M|long|1611.61|1560": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "BHARTIHEXA.NS|1d|long|1579.09|1528.12": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "BHARTIHEXA.NS|1d|long|1623.07|1568.1": {
@@ -656,10 +657,12 @@
   },
   "BHARTIHEXA.NS|1w|long|1579.09|1528.12": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "BHARTIHEXA.NS|1w|long|1581.16|1534.92": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "BHARTIHEXA.NS|1w|long|1623.07|1610": {
@@ -768,6 +771,10 @@
     "stopped_out": false
   },
   "CAPLIPOINT.NS|1w|long|2170.67|1965.83": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "CAPLIPOINT.NS|1w|long|2319.64|2222": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -909,8 +916,9 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "CHOLAHLDNG.NS|1d|short|1500.77|1525.6": {
+  "CHOLAHLDNG.NS|1d|short|1493.16|1510": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CHOLAHLDNG.NS|1d|short|1513.31|1525.6": {
@@ -2296,7 +2304,7 @@
   },
   "KIMS.NS|1w|short|724.053|736.25": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "KIMS.NS|1w|short|746.377|760": {
@@ -2905,11 +2913,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "PATANJALI.NS|1d|short|410.398|430.947": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "PATANJALI.NS|1d|short|426.837|447.386": {
     "reached_entry": true,
     "stage": 2,
@@ -3371,8 +3374,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794472307.196343,
-  "_last_check|nse": 1794472307.196343,
+  "_last_check|crypto": 1794472589.478065,
+  "_last_check|nse": 1794472589.478065,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -3698,9 +3701,11 @@
   "_level_ready|BERGEPAINT.NS|1w|short|483.532|526.9": 1794460310.607527,
   "_level_ready|BERGEPAINT.NS|1w|short|497.26|513.172": 1793936864.300001,
   "_level_ready|BHARTIHEXA.NS|1M|long|1611.61|1560": 1794455172.242815,
+  "_level_ready|BHARTIHEXA.NS|1d|long|1579.09|1528.12": 1794472589.478065,
   "_level_ready|BHARTIHEXA.NS|1d|long|1602.5|1489.91": 1791776795.761218,
   "_level_ready|BHARTIHEXA.NS|1d|long|1623.07|1568.1": 1794455172.242815,
   "_level_ready|BHARTIHEXA.NS|1d|short|1669.63|1704.8": 1793073720.089694,
+  "_level_ready|BHARTIHEXA.NS|1w|long|1581.16|1534.92": 1794472589.478065,
   "_level_ready|BHARTIHEXA.NS|1w|long|1602.5|1489.91": 1791776795.761218,
   "_level_ready|BHARTIHEXA.NS|1w|long|1623.07|1610": 1794455172.242815,
   "_level_ready|BHARTIHEXA.NS|1w|short|1657.98|1678.7": 1794282375.833969,
@@ -3890,6 +3895,7 @@
   "_level_ready|CHOLAHLDNG.NS|1d|short|1374.62|1413.7": 1793591507.862065,
   "_level_ready|CHOLAHLDNG.NS|1d|short|1391.58|1414.2": 1793764008.797417,
   "_level_ready|CHOLAHLDNG.NS|1d|short|1405.27|1447.42": 1793677604.261117,
+  "_level_ready|CHOLAHLDNG.NS|1d|short|1493.16|1510": 1794472589.478065,
   "_level_ready|CHOLAHLDNG.NS|1d|short|1500.77|1525.6": 1793938311.903426,
   "_level_ready|CHOLAHLDNG.NS|1w|short|1494.64|1516.7": 1794472004.709899,
   "_level_ready|COCHINSHIP.NS|1M|long|1105.66|1027.59": 1793092890.154464,
@@ -5369,8 +5375,8 @@
   "_ready|BERGEPAINT.NS|1d": 1793764008.797417,
   "_ready|BERGEPAINT.NS|1w": 1794460310.607527,
   "_ready|BHARTIHEXA.NS|1M": 1794455172.242815,
-  "_ready|BHARTIHEXA.NS|1d": 1794455172.242815,
-  "_ready|BHARTIHEXA.NS|1w": 1794455172.242815,
+  "_ready|BHARTIHEXA.NS|1d": 1794472589.478065,
+  "_ready|BHARTIHEXA.NS|1w": 1794472589.478065,
   "_ready|BIOCON.NS|1M": 1793159201.504703,
   "_ready|BIOCON.NS|1d": 1794197505.208611,
   "_ready|BIOCON.NS|1w": 1794197505.208611,
@@ -5420,7 +5426,7 @@
   "_ready|CHENNPETRO.NS|1d": 1794459409.251753,
   "_ready|CHOICEIN.NS|1d": 1794455775.002683,
   "_ready|CHOLAHLDNG.NS|1M": 1792730195.441606,
-  "_ready|CHOLAHLDNG.NS|1d": 1794282375.833969,
+  "_ready|CHOLAHLDNG.NS|1d": 1794472589.478065,
   "_ready|CHOLAHLDNG.NS|1w": 1794472004.709899,
   "_ready|CL/USDT|30m": 1789488077.641078,
   "_ready|CL/USDT|4h": 1788921063.531614,
