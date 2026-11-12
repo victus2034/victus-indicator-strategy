@@ -1,0 +1,63 @@
+BTCUSD: 48 rows
+ETHUSD: 19 rows
+ZECUSD: 56 rows
+SOLUSD: 20 rows
+XRPUSD: 24 rows
+NEARUSD: 32 rows
+HYPEUSD: 90 rows
+DOGEUSD: 24 rows
+SUIUSD: 46 rows
+UNIUSD: 48 rows
+BNBUSD: 28 rows
+ENAUSD: 0 rows
+1000PEPEUSD: 56 rows
+WLDUSD: 44 rows
+ADAUSD: 31 rows
+LINKUSD: 26 rows
+# Inner-fib SL, scored like the journal (crypto 1D fibs, L2-L4)
+
+Exit 1.5R, SL shift at +1R to +0.75R, Trail TP +0.5R with the SL 0.25R behind, hold till TP / SL, fees 0.0826%, stop slip 0.05%, limit entry filled within 20 days, Bitunix 1h candles, all 16 crypto coins. live = the alert's stop, wb = wick or body 0.75% past entry, in2 / in3 = the inner fib's 2nd / 3rd line. Fills within 15 min of US CPI/PPI/FOMC left out.
+
+## Last 1 month (as on his screen)
+
+| SL | Trades | Won | Total R | R/trade | %/trade | Profit factor | Max DD | Median stop | Still open |
+|---|---|---|---|---|---|---|---|---|---|
+| live | 19 | 47% | -3.0R | -0.16R | -0.62% | 0.71 | -6.0R | 5.18% | 8 |
+| wb | 24 | 54% | +0.1R | +0.01R | -0.30% | 1.01 | -8.0R | 2.09% | 3 |
+| in2 | 25 | 64% | +6.0R | +0.24R | +1.17% | 1.62 | -3.9R | 2.88% | 1 |
+| in3 | 23 | 52% | -1.4R | -0.06R | +0.21% | 0.88 | -4.0R | 3.23% | 3 |
+
+## Sep 1 to now
+
+| SL | Trades | Won | Total R | R/trade | %/trade | Profit factor | Max DD | Median stop | Still open |
+|---|---|---|---|---|---|---|---|---|---|
+| live | 51 | 53% | +2.5R | +0.05R | +0.68% | 1.10 | -7.4R | 6.28% | 8 |
+| wb | 56 | 46% | -6.2R | -0.11R | -0.47% | 0.81 | -13.2R | 2.79% | 3 |
+| in2 | 56 | 59% | +9.1R | +0.16R | +0.52% | 1.37 | -4.0R | 2.70% | 1 |
+| in3 | 54 | 59% | +8.3R | +0.15R | +0.46% | 1.36 | -4.0R | 3.23% | 3 |
+
+## 2026-06-01 to now
+
+| SL | Trades | Won | Total R | R/trade | %/trade | Profit factor | Max DD | Median stop | Still open |
+|---|---|---|---|---|---|---|---|---|---|
+| live | 137 | 53% | -0.9R | -0.01R | +0.37% | 0.99 | -16.7R | 5.92% | 8 |
+| wb | 142 | 48% | -8.6R | -0.06R | +0.11% | 0.89 | -22.3R | 2.56% | 3 |
+| in2 | 135 | 50% | -5.9R | -0.04R | +0.09% | 0.92 | -22.3R | 2.22% | 1 |
+| in3 | 135 | 52% | -1.3R | -0.01R | +0.13% | 0.98 | -19.2R | 2.72% | 3 |
+
+## By level, Sep 1 to now
+
+| SL | Trades | Won | Total R | R/trade | %/trade | Profit factor | Max DD | Median stop | Still open |
+|---|---|---|---|---|---|---|---|---|---|
+| L2 live | 22 | 50% | +0.5R | +0.02R | +0.80% | 1.04 | -4.4R | 7.48% | 1 |
+| L2 wb | 22 | 41% | -4.5R | -0.20R | -1.20% | 0.68 | -6.1R | 2.05% | 1 |
+| L2 in2 | 22 | 64% | +7.8R | +0.36R | +0.84% | 1.93 | -2.1R | 2.76% | 0 |
+| L2 in3 | 22 | 64% | +4.3R | +0.20R | +0.67% | 1.52 | -2.1R | 3.37% | 0 |
+| L3 live | 18 | 56% | +1.3R | +0.07R | +0.11% | 1.16 | -3.1R | 7.12% | 5 |
+| L3 wb | 22 | 50% | -1.9R | -0.09R | -0.31% | 0.84 | -6.1R | 3.02% | 1 |
+| L3 in2 | 21 | 52% | +0.2R | +0.01R | +0.24% | 1.02 | -4.6R | 2.70% | 1 |
+| L3 in3 | 20 | 45% | -1.5R | -0.08R | -0.35% | 0.87 | -5.6R | 3.31% | 2 |
+| L4 live | 11 | 55% | +0.7R | +0.06R | +1.34% | 1.13 | -3.1R | 5.73% | 2 |
+| L4 wb | 12 | 50% | +0.2R | +0.02R | +0.58% | 1.03 | -3.1R | 3.49% | 1 |
+| L4 in2 | 13 | 62% | +1.1R | +0.08R | +0.43% | 1.20 | -2.2R | 2.35% | 0 |
+| L4 in3 | 12 | 75% | +5.5R | +0.46R | +1.46% | 2.70 | -2.2R | 2.87% | 1 |
