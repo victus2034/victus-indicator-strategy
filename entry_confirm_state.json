@@ -578,10 +578,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "BELRISE.NS|1d|short|227.24|235.502": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "BELRISE.NS|1w|long|188.708|146.753": {
     "reached_entry": false,
     "stopped_out": false
@@ -1215,7 +1211,7 @@
   },
   "DELHIVERY.NS|1w|short|436.357|450.7": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "DELHIVERY.NS|1w|short|452.292|457.9": {
@@ -1802,8 +1798,8 @@
     "stopped_out": false
   },
   "ICICIGI.NS|1M|short|1721.89|1763.2": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ICICIGI.NS|1d|short|1646.85|1679.11": {
@@ -2237,11 +2233,6 @@
   },
   "KAJARIACER.NS|1d|long|1179.64|1160.53": {
     "reached_entry": false,
-    "stopped_out": false
-  },
-  "KAJARIACER.NS|1d|short|1205.38|1229.86": {
-    "reached_entry": false,
-    "stage": 1,
     "stopped_out": false
   },
   "KAJARIACER.NS|1w|short|1127.7|1150.3": {
@@ -2839,7 +2830,7 @@
   "OBEROIRLTY.NS|1d|short|1772.41|1789": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "OBEROIRLTY.NS|1d|short|1776.17|1819.34": {
     "reached_entry": true,
@@ -2871,6 +2862,7 @@
   },
   "OBEROIRLTY.NS|1w|short|1798.4|1821.2": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "OBEROIRLTY.NS|1w|short|1844.29|1858.5": {
@@ -2892,8 +2884,8 @@
     "stopped_out": false
   },
   "OLAELEC.NS|1w|short|36.84|37.47": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ONESOURCE.NS|1M|long|1530.44|1480.7": {
@@ -3407,8 +3399,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794457590.121516,
-  "_last_check|nse": 1794457590.121516,
+  "_last_check|crypto": 1794457918.913008,
+  "_last_check|nse": 1794457918.913008,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -4812,7 +4804,7 @@
   "_level_ready|OBEROIRLTY.NS|1w|long|1593.47|1577.11": 1793245588.963685,
   "_level_ready|OBEROIRLTY.NS|1w|long|1658.9|1577.11": 1793764008.797417,
   "_level_ready|OBEROIRLTY.NS|1w|short|1756.69|1775": 1794455172.242815,
-  "_level_ready|OBEROIRLTY.NS|1w|short|1798.4|1821.2": 1794203508.286905,
+  "_level_ready|OBEROIRLTY.NS|1w|short|1798.4|1821.2": 1794457918.913008,
   "_level_ready|OGNUSD|1d|long|0.031879|0.0264587": 1791981396.099046,
   "_level_ready|OIL.NS|1d|long|441.389|438.05": 1792986700.301796,
   "_level_ready|OIL.NS|1d|long|443.186|438.05": 1793850405.511611,
@@ -5757,7 +5749,7 @@
   "_ready|O/USDT|30m": 1789481164.028485,
   "_ready|OBEROIRLTY.NS|1M": 1793591209.526473,
   "_ready|OBEROIRLTY.NS|1d": 1794456710.974896,
-  "_ready|OBEROIRLTY.NS|1w": 1794455172.242815,
+  "_ready|OBEROIRLTY.NS|1w": 1794457918.913008,
   "_ready|OGNUSD|1d": 1791981396.099046,
   "_ready|OIL.NS|1d": 1794455172.242815,
   "_ready|OLAELEC.NS|1d": 1793245891.21936,
