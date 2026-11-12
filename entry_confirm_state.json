@@ -465,6 +465,7 @@
   },
   "AUBANK.NS|1w|short|979.65|989.4": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "BAJAJHFL.NS|1d|long|79.4875|78.4219": {
@@ -530,11 +531,12 @@
   },
   "BANDHANBNK.NS|1d|short|174.871|176.73": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "BANDHANBNK.NS|1d|short|176.235|183.015": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "BANDHANBNK.NS|1w|long|140.92|139.84": {
@@ -543,6 +545,7 @@
   },
   "BANDHANBNK.NS|1w|short|177.066|181.15": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "BANKINDIA.NS|1d|short|144.253|145.5": {
@@ -1220,7 +1223,7 @@
   },
   "DIXON.NS|1d|short|12802.4|13192.1": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "DIXON.NS|1w|long|10993.3|10871": {
@@ -1510,6 +1513,7 @@
   },
   "GILLETTE.NS|1d|short|7506.21|7574.5": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "GILLETTE.NS|1w|short|7394.99|7941.78": {
@@ -1803,7 +1807,7 @@
   },
   "ICICIGI.NS|1d|short|1699.98|1734.77": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ICICIGI.NS|1w|short|1642.6|1866.95": {
@@ -1832,7 +1836,7 @@
   },
   "IDFCFIRSTB.NS|1d|short|80.5695|83.3319": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "IDFCFIRSTB.NS|1w|long|68.8002|67.9331": {
@@ -1927,8 +1931,8 @@
     "stopped_out": false
   },
   "INDUSINDBK.NS|1d|short|912.619|947.042": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "IOB.NS|1d|short|30.9848|31.5": {
@@ -2818,11 +2822,12 @@
   },
   "OBEROIRLTY.NS|1d|short|1741.65|1784.81": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "OBEROIRLTY.NS|1d|short|1776.17|1819.34": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "OBEROIRLTY.NS|1d|short|1779.54|1793.7": {
@@ -2849,7 +2854,7 @@
   },
   "OBEROIRLTY.NS|1w|short|1756.69|1775": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "OBEROIRLTY.NS|1w|short|1798.4|1821.2": {
@@ -2991,11 +2996,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "PIRAMALFIN.NS|1d|short|2041.7|2095.36": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "PIRAMALFIN.NS|1w|short|1966.57|2023.3": {
     "reached_entry": true,
     "stage": 3,
@@ -3048,8 +3048,8 @@
     "stopped_out": false
   },
   "POLICYBZR.NS|1d|short|995.2|1017.64": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "POLYMED.NS|1d|short|1606.92|1665.13": {
@@ -3081,6 +3081,7 @@
   },
   "POONAWALLA.NS|1M|short|499.272|528.037": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "POONAWALLA.NS|1w|long|409.879|400": {
@@ -3104,11 +3105,12 @@
   },
   "POONAWALLA.NS|1w|short|494.616|499": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "POONAWALLA.NS|1w|short|499.272|528.037": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PPLPHARMA.NS|1M|short|228.88|235": {
@@ -3230,11 +3232,6 @@
   "RECLTD.NS|1M|long|276.637|260.913": {
     "reached_entry": false,
     "stopped_out": false
-  },
-  "RECLTD.NS|1d|short|296.425|299": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
   },
   "RECLTD.NS|1d|short|314.812|328.122": {
     "reached_entry": false,
@@ -3392,8 +3389,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794456393.900999,
-  "_last_check|nse": 1794456393.900999,
+  "_last_check|crypto": 1794456710.974896,
+  "_last_check|nse": 1794456710.974896,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -3610,6 +3607,7 @@
   "_level_ready|AUBANK.NS|1w|long|971.183|960": 1792397814.233469,
   "_level_ready|AUBANK.NS|1w|long|972.253|929.291": 1792468002.381626,
   "_level_ready|AUBANK.NS|1w|short|946.76|987.872": 1793858809.664081,
+  "_level_ready|AUBANK.NS|1w|short|979.65|989.4": 1794456710.974896,
   "_level_ready|AVAXUSD|1d|long|8.52495|7.65444": 1793244712.068625,
   "_level_ready|AVAXUSD|1d|long|8.56479|8.203": 1793241675.01791,
   "_level_ready|AVAXUSD|1d|long|9.15805|7.65444": 1792656712.027939,
@@ -3655,6 +3653,7 @@
   "_level_ready|BANDHANBNK.NS|1d|short|160.455|167.236": 1793937978.189416,
   "_level_ready|BANDHANBNK.NS|1d|short|165.88|172.167": 1794196012.334544,
   "_level_ready|BANDHANBNK.NS|1d|short|174.871|176.73": 1794455482.704998,
+  "_level_ready|BANDHANBNK.NS|1w|short|177.066|181.15": 1794456710.974896,
   "_level_ready|BANKINDIA.NS|1d|long|131.989|130.25": 1793697708.304598,
   "_level_ready|BANKINDIA.NS|1d|short|129.369|135.224": 1793073108.145997,
   "_level_ready|BANKINDIA.NS|1d|short|131.223|135.224": 1793159201.504703,
@@ -4154,7 +4153,7 @@
   "_level_ready|GICRE.NS|1d|short|343.937|351.424": 1794209517.424473,
   "_level_ready|GILLETTE.NS|1d|short|7218.19|7326.47": 1791517599.357562,
   "_level_ready|GILLETTE.NS|1d|short|7394.99|7941.78": 1793688105.721091,
-  "_level_ready|GILLETTE.NS|1d|short|7506.21|7574.5": 1794378717.712424,
+  "_level_ready|GILLETTE.NS|1d|short|7506.21|7574.5": 1794456710.974896,
   "_level_ready|GILLETTE.NS|1d|short|7538.74|7639": 1793850405.511611,
   "_level_ready|GILLETTE.NS|1w|short|7138.76|7307": 1793677604.261117,
   "_level_ready|GILLETTE.NS|1w|short|7138.76|7317.22": 1791517599.357562,
@@ -4785,7 +4784,7 @@
   "_level_ready|OBEROIRLTY.NS|1d|short|1675.73|1718.89": 1793679094.42107,
   "_level_ready|OBEROIRLTY.NS|1d|short|1710.26|1750.28": 1793765478.34057,
   "_level_ready|OBEROIRLTY.NS|1d|short|1741.65|1784.81": 1794196012.334544,
-  "_level_ready|OBEROIRLTY.NS|1d|short|1776.17|1819.34": 1794282375.833969,
+  "_level_ready|OBEROIRLTY.NS|1d|short|1776.17|1819.34": 1794456710.974896,
   "_level_ready|OBEROIRLTY.NS|1d|short|1779.54|1793.7": 1794368805.895201,
   "_level_ready|OBEROIRLTY.NS|1w|long|1593.47|1577.11": 1793245588.963685,
   "_level_ready|OBEROIRLTY.NS|1w|long|1658.9|1577.11": 1793764008.797417,
@@ -4884,6 +4883,7 @@
   "_level_ready|POLYMED.NS|1d|short|1606.92|1665.13": 1794196905.696003,
   "_level_ready|POLYMED.NS|1d|short|1652.58|1715.34": 1794378717.712424,
   "_level_ready|POONAWALLA.NS|1M|short|476.26|482.95": 1794282375.833969,
+  "_level_ready|POONAWALLA.NS|1M|short|499.272|528.037": 1794456710.974896,
   "_level_ready|POONAWALLA.NS|1d|long|418.279|414.378": 1792729917.454067,
   "_level_ready|POONAWALLA.NS|1d|long|433.882|414.378": 1792122403.256656,
   "_level_ready|POONAWALLA.NS|1d|long|435.877|430": 1792560997.470601,
@@ -5336,7 +5336,7 @@
   "_ready|ATUL.NS|1d": 1792734108.77975,
   "_ready|AUBANK.NS|1M": 1794196012.334544,
   "_ready|AUBANK.NS|1d": 1794369075.310774,
-  "_ready|AUBANK.NS|1w": 1794368805.895201,
+  "_ready|AUBANK.NS|1w": 1794456710.974896,
   "_ready|AVAXUSD|1d": 1793244712.068625,
   "_ready|AVAXUSD|1w": 1791736311.389518,
   "_ready|AVAXUSD|30m": 1791212768.155908,
@@ -5348,6 +5348,7 @@
   "_ready|BALKRISIND.NS|1d": 1793764604.922956,
   "_ready|BALKRISIND.NS|1w": 1794368805.895201,
   "_ready|BANDHANBNK.NS|1d": 1794455482.704998,
+  "_ready|BANDHANBNK.NS|1w": 1794456710.974896,
   "_ready|BANKINDIA.NS|1d": 1794282375.833969,
   "_ready|BANKINDIA.NS|1w": 1793159201.504703,
   "_ready|BCHUSD|30m": 1791429995.770346,
@@ -5510,7 +5511,7 @@
   "_ready|GESHIP.NS|1d": 1793850672.171397,
   "_ready|GESHIP.NS|1w": 1793867200.497059,
   "_ready|GICRE.NS|1d": 1794455172.242815,
-  "_ready|GILLETTE.NS|1d": 1794378717.712424,
+  "_ready|GILLETTE.NS|1d": 1794456710.974896,
   "_ready|GILLETTE.NS|1w": 1794455172.242815,
   "_ready|GLAND.NS|1M": 1793936864.300001,
   "_ready|GLAND.NS|1d": 1793166102.188457,
@@ -5731,7 +5732,7 @@
   "_ready|NVDAXUSD|4h": 1791254797.771908,
   "_ready|O/USDT|30m": 1789481164.028485,
   "_ready|OBEROIRLTY.NS|1M": 1793591209.526473,
-  "_ready|OBEROIRLTY.NS|1d": 1794368805.895201,
+  "_ready|OBEROIRLTY.NS|1d": 1794456710.974896,
   "_ready|OBEROIRLTY.NS|1w": 1794455172.242815,
   "_ready|OGNUSD|1d": 1791981396.099046,
   "_ready|OIL.NS|1d": 1794455172.242815,
@@ -5762,7 +5763,7 @@
   "_ready|POLICYBZR.NS|1d": 1794456393.900999,
   "_ready|POLICYBZR.NS|1w": 1793591209.526473,
   "_ready|POLYMED.NS|1d": 1794378717.712424,
-  "_ready|POONAWALLA.NS|1M": 1794282375.833969,
+  "_ready|POONAWALLA.NS|1M": 1794456710.974896,
   "_ready|POONAWALLA.NS|1d": 1794196012.334544,
   "_ready|POONAWALLA.NS|1w": 1794455172.242815,
   "_ready|PPLPHARMA.NS|1M": 1794455172.242815,
