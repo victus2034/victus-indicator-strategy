@@ -449,6 +449,11 @@
     "stage": 3,
     "stopped_out": false
   },
+  "AUBANK.NS|1d|short|979.65|1017.77": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "AUBANK.NS|1w|long|937.883|929.291": {
     "reached_entry": false,
     "stopped_out": false
@@ -532,7 +537,7 @@
   "BANDHANBNK.NS|1d|short|174.871|176.73": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BANDHANBNK.NS|1d|short|176.235|183.015": {
     "reached_entry": true,
@@ -544,8 +549,8 @@
     "stopped_out": false
   },
   "BANDHANBNK.NS|1w|short|177.066|181.15": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "BANKINDIA.NS|1d|short|144.253|145.5": {
@@ -1178,6 +1183,10 @@
     "stage": 3,
     "stopped_out": true
   },
+  "DEEPAKNTR.NS|1d|short|1635.71|1696.49": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "DEEPAKNTR.NS|1w|long|1490.09|1473.09": {
     "reached_entry": false,
     "stopped_out": false
@@ -1267,6 +1276,7 @@
   },
   "ELGIEQUIP.NS|1w|short|580.078|591.75": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "EMCURE.NS|1M|long|1688.72|1267.66": {
@@ -1623,7 +1633,12 @@
   },
   "GRANULES.NS|1d|short|805.69|818.211": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
+    "stopped_out": false
+  },
+  "GRANULES.NS|1d|short|815.51|829.013": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "GRANULES.NS|1w|long|753.089|736.2": {
@@ -2286,6 +2301,11 @@
     "stage": 2,
     "stopped_out": false
   },
+  "KEI.NS|1d|short|4182.73|4454": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
   "KEI.NS|1w|long|3605.5|3509.94": {
     "reached_entry": false,
     "stopped_out": false
@@ -2591,7 +2611,7 @@
   },
   "MOTILALOFS.NS|1w|short|1157.29|1266.45": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "MPHASIS.NS|1d|long|2396.9|2307.9": {
@@ -2825,13 +2845,14 @@
     "stage": 3,
     "stopped_out": false
   },
-  "OBEROIRLTY.NS|1d|short|1776.17|1819.34": {
-    "reached_entry": false,
-    "stage": 1,
+  "OBEROIRLTY.NS|1d|short|1772.41|1789": {
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
-  "OBEROIRLTY.NS|1d|short|1779.54|1793.7": {
-    "reached_entry": false,
+  "OBEROIRLTY.NS|1d|short|1776.17|1819.34": {
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "OBEROIRLTY.NS|1w|long|1593.47|1577.11": {
@@ -2855,7 +2876,7 @@
   "OBEROIRLTY.NS|1w|short|1756.69|1775": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "OBEROIRLTY.NS|1w|short|1798.4|1821.2": {
     "reached_entry": false,
@@ -2879,7 +2900,7 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "OLAELEC.NS|1w|short|37.395|38.21": {
+  "OLAELEC.NS|1w|short|36.84|37.47": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -3235,6 +3256,7 @@
   },
   "RECLTD.NS|1d|short|314.812|328.122": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "RECLTD.NS|1w|long|282.453|266.972": {
@@ -3389,8 +3411,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794456710.974896,
-  "_last_check|nse": 1794456710.974896,
+  "_last_check|crypto": 1794456993.186632,
+  "_last_check|nse": 1794456993.186632,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -3603,6 +3625,7 @@
   "_level_ready|AUBANK.NS|1d|long|987.634|974.2": 1791949569.774586,
   "_level_ready|AUBANK.NS|1d|long|987.9|973.081": 1791517599.357562,
   "_level_ready|AUBANK.NS|1d|short|946.76|987.872": 1794369075.310774,
+  "_level_ready|AUBANK.NS|1d|short|979.65|1017.77": 1794456993.186632,
   "_level_ready|AUBANK.NS|1w|long|937.883|929.291": 1794368805.895201,
   "_level_ready|AUBANK.NS|1w|long|971.183|960": 1792397814.233469,
   "_level_ready|AUBANK.NS|1w|long|972.253|929.291": 1792468002.381626,
@@ -4045,6 +4068,7 @@
   "_level_ready|ELGIEQUIP.NS|1d|short|554.07|574.764": 1794282375.833969,
   "_level_ready|ELGIEQUIP.NS|1d|short|570.625|589.814": 1794455172.242815,
   "_level_ready|ELGIEQUIP.NS|1w|short|536.303|674.591": 1793936864.300001,
+  "_level_ready|ELGIEQUIP.NS|1w|short|580.078|591.75": 1794456993.186632,
   "_level_ready|EMCURE.NS|1d|short|1846.8|1980.48": 1793078207.678618,
   "_level_ready|EMCURE.NS|1d|short|1889.11|1980.48": 1793343104.041192,
   "_level_ready|EMCURE.NS|1d|short|1927.58|1980.48": 1793678202.474602,
@@ -4462,6 +4486,7 @@
   "_level_ready|KAYNES.NS|1d|short|3465.21|3510": 1794456393.900999,
   "_level_ready|KEI.NS|1M|long|4335.25|3509.94": 1792558293.591918,
   "_level_ready|KEI.NS|1d|long|3755.9|3712.2": 1792728109.90404,
+  "_level_ready|KEI.NS|1d|short|4182.73|4454": 1794456993.186632,
   "_level_ready|KEI.NS|1w|long|4335.25|3509.94": 1792558293.591918,
   "_level_ready|KIMS.NS|1d|short|724.053|751.959": 1794196012.334544,
   "_level_ready|KIMS.NS|1w|long|658.066|651.2": 1792986387.062464,
@@ -4950,7 +4975,7 @@
   "_level_ready|RECLTD.NS|1d|long|283.508|279.2": 1793349100.9287,
   "_level_ready|RECLTD.NS|1d|long|283.933|279.2": 1793159201.504703,
   "_level_ready|RECLTD.NS|1d|short|296.425|299": 1793937726.224563,
-  "_level_ready|RECLTD.NS|1d|short|314.812|328.122": 1794375698.2906,
+  "_level_ready|RECLTD.NS|1d|short|314.812|328.122": 1794456993.186632,
   "_level_ready|RECLTD.NS|1w|long|282.453|266.972": 1793764008.797417,
   "_level_ready|REDINGTON.NS|1M|long|316.814|287.72": 1793591209.526473,
   "_level_ready|REDINGTON.NS|1M|long|341.915|262.619": 1793333172.618426,
@@ -5335,7 +5360,7 @@
   "_ready|ATUL.NS|1M": 1793764604.922956,
   "_ready|ATUL.NS|1d": 1792734108.77975,
   "_ready|AUBANK.NS|1M": 1794196012.334544,
-  "_ready|AUBANK.NS|1d": 1794369075.310774,
+  "_ready|AUBANK.NS|1d": 1794456993.186632,
   "_ready|AUBANK.NS|1w": 1794456710.974896,
   "_ready|AVAXUSD|1d": 1793244712.068625,
   "_ready|AVAXUSD|1w": 1791736311.389518,
@@ -5469,7 +5494,7 @@
   "_ready|EIHOTEL.NS|1d": 1794370606.057223,
   "_ready|EIHOTEL.NS|1w": 1794282375.833969,
   "_ready|ELGIEQUIP.NS|1d": 1794455172.242815,
-  "_ready|ELGIEQUIP.NS|1w": 1793936864.300001,
+  "_ready|ELGIEQUIP.NS|1w": 1794456993.186632,
   "_ready|EMCURE.NS|1d": 1793678202.474602,
   "_ready|EMCURE.NS|1w": 1792731077.628348,
   "_ready|EMMVEE.NS|1w": 1794455172.242815,
@@ -5622,7 +5647,7 @@
   "_ready|KARURVYSYA.NS|1w": 1792986985.751506,
   "_ready|KAYNES.NS|1d": 1794456393.900999,
   "_ready|KEI.NS|1M": 1792558293.591918,
-  "_ready|KEI.NS|1d": 1792728109.90404,
+  "_ready|KEI.NS|1d": 1794456993.186632,
   "_ready|KEI.NS|1w": 1792558293.591918,
   "_ready|KGEN/USDT|30m": 1789463159.791482,
   "_ready|KIMS.NS|1d": 1794196012.334544,
@@ -5786,7 +5811,7 @@
   "_ready|RBLBANK.NS|1d": 1794369720.135555,
   "_ready|RE/USDT|30m": 1789390557.764438,
   "_ready|RE/USDT|4h": 1788948356.002419,
-  "_ready|RECLTD.NS|1d": 1794375698.2906,
+  "_ready|RECLTD.NS|1d": 1794456993.186632,
   "_ready|RECLTD.NS|1w": 1793764008.797417,
   "_ready|REDINGTON.NS|1M": 1793591209.526473,
   "_ready|REDINGTON.NS|1d": 1794215496.447523,
