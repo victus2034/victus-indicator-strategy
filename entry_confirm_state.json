@@ -791,6 +791,7 @@
   },
   "CASTROLIND.NS|1d|long|190.205|188.309": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CASTROLIND.NS|1d|long|191.584|189.826": {
@@ -860,7 +861,7 @@
   "CGCL.NS|1d|short|243.837|248.409": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "CGCL.NS|1d|short|247.495|252.067": {
     "reached_entry": true,
@@ -2461,11 +2462,11 @@
   "LTF.NS|1w|short|266.396|281.439": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "LTF.NS|1w|short|278.43|282.75": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "LTF.NS|1w|short|289.37|304.413": {
@@ -2594,6 +2595,7 @@
   },
   "MFSL.NS|1d|short|1361.24|1414.69": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "MOTILALOFS.NS|1M|short|1155.59|1240.85": {
@@ -2857,6 +2859,7 @@
   },
   "OBEROIRLTY.NS|1d|short|1836.22|1854.9": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "OBEROIRLTY.NS|1w|long|1593.47|1577.11": {
@@ -3413,8 +3416,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794461192.11203,
-  "_last_check|nse": 1794461192.11203,
+  "_last_check|crypto": 1794461517.152014,
+  "_last_check|nse": 1794461517.152014,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -3869,7 +3872,7 @@
   "_level_ready|CARBORUNIV.NS|1w|short|1117.04|1169.51": 1793852802.047467,
   "_level_ready|CARBORUNIV.NS|1w|short|1159.02|1175": 1793679396.23429,
   "_level_ready|CASTROLIND.NS|1d|long|185.367|183.95": 1793076691.324433,
-  "_level_ready|CASTROLIND.NS|1d|long|190.205|188.309": 1794368805.895201,
+  "_level_ready|CASTROLIND.NS|1d|long|190.205|188.309": 1794461517.152014,
   "_level_ready|CASTROLIND.NS|1d|long|191.584|189.826": 1794455172.242815,
   "_level_ready|CASTROLIND.NS|1d|long|192.785|190.131": 1791949569.774586,
   "_level_ready|CASTROLIND.NS|1d|long|193.101|191.205": 1793936864.300001,
@@ -4659,6 +4662,7 @@
   "_level_ready|METAXUSD|4h|long|725.95|722.263": 1791380798.231245,
   "_level_ready|MFSL.NS|1M|long|1181.13|1003.29": 1793764008.797417,
   "_level_ready|MFSL.NS|1d|short|1315.13|1372.77": 1794377204.421422,
+  "_level_ready|MFSL.NS|1d|short|1361.24|1414.69": 1794461517.152014,
   "_level_ready|MOTILALOFS.NS|1M|short|1155.59|1240.85": 1794196905.696003,
   "_level_ready|MOTILALOFS.NS|1d|long|1029.91|1021.02": 1792389724.420896,
   "_level_ready|MOTILALOFS.NS|1d|short|1031.21|1062.3": 1792554711.035895,
@@ -4823,6 +4827,7 @@
   "_level_ready|OBEROIRLTY.NS|1d|short|1741.65|1784.81": 1794196012.334544,
   "_level_ready|OBEROIRLTY.NS|1d|short|1776.17|1819.34": 1794456710.974896,
   "_level_ready|OBEROIRLTY.NS|1d|short|1779.54|1793.7": 1794368805.895201,
+  "_level_ready|OBEROIRLTY.NS|1d|short|1836.22|1854.9": 1794461517.152014,
   "_level_ready|OBEROIRLTY.NS|1w|long|1593.47|1577.11": 1793245588.963685,
   "_level_ready|OBEROIRLTY.NS|1w|long|1658.9|1577.11": 1793764008.797417,
   "_level_ready|OBEROIRLTY.NS|1w|short|1756.69|1775": 1794455172.242815,
@@ -5438,7 +5443,7 @@
   "_ready|CARBORUNIV.NS|1M": 1793850405.511611,
   "_ready|CARBORUNIV.NS|1d": 1794381107.397659,
   "_ready|CARBORUNIV.NS|1w": 1793852802.047467,
-  "_ready|CASTROLIND.NS|1d": 1794455172.242815,
+  "_ready|CASTROLIND.NS|1d": 1794461517.152014,
   "_ready|CASTROLIND.NS|1w": 1794455172.242815,
   "_ready|CDSL.NS|1d": 1794455482.704998,
   "_ready|CDSL.NS|1w": 1794455482.704998,
@@ -5711,7 +5716,7 @@
   "_ready|METAXUSD|30m": 1791431198.043723,
   "_ready|METAXUSD|4h": 1791380798.231245,
   "_ready|MFSL.NS|1M": 1793764008.797417,
-  "_ready|MFSL.NS|1d": 1794377204.421422,
+  "_ready|MFSL.NS|1d": 1794461517.152014,
   "_ready|MNT/USDT|30m": 1789480563.544585,
   "_ready|MOTILALOFS.NS|1M": 1794196905.696003,
   "_ready|MOTILALOFS.NS|1d": 1793937114.247749,
@@ -5771,7 +5776,7 @@
   "_ready|NVDAXUSD|4h": 1791254797.771908,
   "_ready|O/USDT|30m": 1789481164.028485,
   "_ready|OBEROIRLTY.NS|1M": 1793591209.526473,
-  "_ready|OBEROIRLTY.NS|1d": 1794456710.974896,
+  "_ready|OBEROIRLTY.NS|1d": 1794461517.152014,
   "_ready|OBEROIRLTY.NS|1w": 1794457918.913008,
   "_ready|OGNUSD|1d": 1791981396.099046,
   "_ready|OIL.NS|1d": 1794455172.242815,
