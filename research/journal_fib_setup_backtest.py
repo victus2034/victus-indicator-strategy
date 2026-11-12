@@ -53,6 +53,7 @@ OUT = Path(__file__).resolve().parent / "out" / "journal_fib_setup"
 DELTA = "https://api.india.delta.exchange"
 
 LEVELS = ("L2", "L3", "L4")
+NEW = "journal v.184 way (rebuilt rows fill only after the band candle)"
 TARGET, SHIFT_AT, SHIFT_TO, STEP, GAP = 1.5, 1.0, 0.75, 0.25, 0.5
 FEE, SLIP = 0.0826, 0.05
 FILL_SECONDS = 20 * 86400
@@ -86,15 +87,23 @@ def wick_body_stop(daily, t0, entry, s):
     return max(found, key=lambda x: x[0]) if s > 0 else min(found, key=lambda x: x[0])
 
 
-def walk(entry, stop0, s, bars, t0, alert_candle):
+def walk(entry, stop0, s, bars, t0, alert_candle, band=None):
     """bars = [ts, h, l, c, seconds], oldest first. alert_candle True: the candle the alert
     was sent inside can fill (the journal's way); False: only candles opening at / after t0."""
     risk = abs(entry - stop0) / entry * 100
     bars = [b for b in bars if (b[0] + b[4] > t0 if alert_candle else b[0] >= t0)]
     mv = lambda px: s * (px - entry) / entry * 100 / risk
     hit = lambda b, lvl: (b[2] <= lvl) if s > 0 else (b[1] >= lvl)
-    fi = next((i for i, b in enumerate(bars) if b[0] < t0 + FILL_SECONDS and hit(b, entry)), None)
     res = {"risk_pct": risk}
+    start = 0
+    if band is not None:
+        # journal v.184, rebuilt rows: fills count only after the first candle that reaches the alert band
+        edge = entry * (1 + s * band)
+        bi = next((i for i, b in enumerate(bars) if ((b[2] <= edge) if s > 0 else (b[1] >= edge))), None)
+        start = len(bars) if bi is None else bi + 1
+        if bi is not None:
+            res["band_bar"] = bars[bi][:4]
+    fi = next((i for i, b in enumerate(bars) if i >= start and b[0] < t0 + FILL_SECONDS and hit(b, entry)), None)
     if fi is None:
         seen = bars[-1][0] + bars[-1][4] if bars else 0
         return {**res, "outcome": "waiting" if seen < t0 + FILL_SECONDS else "no fill"}
@@ -208,8 +217,8 @@ def load(path):
 
 
 def delta_name(symbol):
-    if "/" in symbol:                       # an old ccxt-named record (MRVL/USDT:USDT)
-        return None
+    if "/" in symbol:                       # an old ccxt-named record (MRVL/USDT:USDT): Delta's bStock name
+        return symbol.split("/")[0] + "BUSD"
     return scanner.delta_contract(symbol) or symbol
 
 
@@ -243,7 +252,7 @@ def journal(state, since, now):
             cache[sym] = got
         return cache[sym]
 
-    ways = {"journal way (Delta 15m then 1h, alert candle counts)": [], "Delta 15m, after the alert only": [],
+    ways = {"journal way (Delta 15m then 1h, alert candle counts)": [], NEW: [], "Delta 15m, after the alert only": [],
             "Bitunix 5m, after the alert only": []}
     skipped = []
     for rec in recs:
@@ -266,6 +275,7 @@ def journal(state, since, now):
             cut = (t0 + 1800 * 900) // 3600 * 3600
             mixed = [b for b in m15 if b[0] < cut] + [[b[0], b[2], b[3], b[4], 3600] for b in c["1h"] if b[0] >= cut]
         ways["journal way (Delta 15m then 1h, alert candle counts)"].append({**base, **walk(p["entry"], stop, s, mixed, t0, True)})
+        ways[NEW].append({**base, **walk(p["entry"], stop, s, mixed, t0, True, 0.0075 if rec.get("rebuild") else None)})
         ways["Delta 15m, after the alert only"].append({**base, **walk(p["entry"], stop, s, m15, t0, False)})
         if c["b5"]:
             ways["Bitunix 5m, after the alert only"].append({**base, **walk(p["entry"], stop, s, c["b5"], t0, False)})
@@ -275,7 +285,18 @@ def journal(state, since, now):
             "His screen: 57 alerts, 54 filled, 27W / 23L, +11.83R, +0.24R a trade, PF 1.49, max DD -7.43R.",
             f"Alerts found: {len(recs)} (rebuild before {ist(cutoff)}, live after), {len(skipped)} left out.", "", HEAD]
     text += [line(name, rows) for name, rows in ways.items()]
-    text += ["", "Left out:"] + (skipped or ["none"])
+    old = {t["id"]: t for t in ways["journal way (Delta 15m then 1h, alert candle counts)"]}
+    text += ["", "## Changed by v.184 (old -> new)", "```"]
+    for t in ways[NEW]:
+        o = old[t["id"]]
+        if (o.get("fill_ts"), o.get("outcome")) != (t.get("fill_ts"), t.get("outcome")):
+            fr = lambda x: "-" if x.get("r") is None else f"{x['r']:+.2f}R"
+            bb = t.get("band_bar")
+            text.append(f"{ist(t['alert_ts'])} {t['symbol']:12} {t['level']} {t['side']:5} entry {t['entry']:.6g} sl {t['sl']:.6g} | "
+                        f"band candle {ist(bb[0]) if bb else '-'} h {bb[1] if bb else '-'} l {bb[2] if bb else '-'} | "
+                        f"old fill {ist(o['fill_ts']) if o.get('fill_ts') else '-'} {o['outcome']} {fr(o)} -> "
+                        f"new fill {ist(t['fill_ts']) if t.get('fill_ts') else '-'} {t['outcome']} {fr(t)}")
+    text += ["```", "", "Left out:"] + (skipped or ["none"])
     for name, rows in ways.items():
         text += ["", f"## {name}", "```"] + [detail(t) for t in rows] + ["```"]
     (out / "result.json").write_text(json.dumps(ways, indent=0))
@@ -381,7 +402,7 @@ if __name__ == "__main__":
     ap.add_argument("--since", default="2026-09-01")
     ap.add_argument("--tag", default="")
     ap.add_argument("--from-ist", default="2026-10-12T00:00")
-    ap.add_argument("--to-ist", default="2026-11-12T15:27")       # his screenshot
+    ap.add_argument("--to-ist", default="2026-11-12T21:26")       # his v.184 screenshot (15:27 for the first one)
     a = ap.parse_args()
     if a.job == "journal":
         journal(a.state, datetime.fromisoformat(a.from_ist).replace(tzinfo=IST).timestamp(),
