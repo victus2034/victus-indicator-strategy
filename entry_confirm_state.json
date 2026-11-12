@@ -1260,6 +1260,7 @@
   },
   "ELGIEQUIP.NS|1d|short|585.675|606.369": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ELGIEQUIP.NS|1w|short|536.303|674.591": {
@@ -2802,6 +2803,10 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "NHPC.NS|1d|long|76.897|75.0177": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "NHPC.NS|1w|short|78.5317|79.5": {
     "reached_entry": false,
     "stage": 1,
@@ -3078,11 +3083,12 @@
   },
   "POLYMED.NS|1d|short|1652.58|1715.34": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "POLYMED.NS|1d|short|1687.19|1724.4": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "POLYMED.NS|1w|short|1708.13|1724.4": {
@@ -3409,8 +3415,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794459409.251753,
-  "_last_check|nse": 1794459409.251753,
+  "_last_check|crypto": 1794459692.715119,
+  "_last_check|nse": 1794459692.715119,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -4069,6 +4075,7 @@
   "_level_ready|ELGIEQUIP.NS|1d|long|566.161|560.15": 1792381599.217228,
   "_level_ready|ELGIEQUIP.NS|1d|short|554.07|574.764": 1794282375.833969,
   "_level_ready|ELGIEQUIP.NS|1d|short|570.625|589.814": 1794455172.242815,
+  "_level_ready|ELGIEQUIP.NS|1d|short|585.675|606.369": 1794459692.715119,
   "_level_ready|ELGIEQUIP.NS|1w|short|536.303|674.591": 1793936864.300001,
   "_level_ready|ELGIEQUIP.NS|1w|short|580.078|591.75": 1794456993.186632,
   "_level_ready|EMCURE.NS|1d|short|1846.8|1980.48": 1793078207.678618,
@@ -4914,6 +4921,7 @@
   "_level_ready|POLYMED.NS|1d|short|1556.71|1619.48": 1793779307.13118,
   "_level_ready|POLYMED.NS|1d|short|1606.92|1665.13": 1794196905.696003,
   "_level_ready|POLYMED.NS|1d|short|1652.58|1715.34": 1794378717.712424,
+  "_level_ready|POLYMED.NS|1d|short|1687.19|1724.4": 1794459692.715119,
   "_level_ready|POONAWALLA.NS|1M|short|476.26|482.95": 1794282375.833969,
   "_level_ready|POONAWALLA.NS|1M|short|499.272|528.037": 1794456710.974896,
   "_level_ready|POONAWALLA.NS|1d|long|418.279|414.378": 1792729917.454067,
@@ -5500,7 +5508,7 @@
   "_ready|DOSUSD|1d": 1792120004.566349,
   "_ready|EIHOTEL.NS|1d": 1794370606.057223,
   "_ready|EIHOTEL.NS|1w": 1794282375.833969,
-  "_ready|ELGIEQUIP.NS|1d": 1794455172.242815,
+  "_ready|ELGIEQUIP.NS|1d": 1794459692.715119,
   "_ready|ELGIEQUIP.NS|1w": 1794456993.186632,
   "_ready|EMCURE.NS|1d": 1793678202.474602,
   "_ready|EMCURE.NS|1w": 1792731077.628348,
@@ -5795,7 +5803,7 @@
   "_ready|PNBHOUSING.NS|1w": 1793764008.797417,
   "_ready|POLICYBZR.NS|1d": 1794456393.900999,
   "_ready|POLICYBZR.NS|1w": 1793591209.526473,
-  "_ready|POLYMED.NS|1d": 1794378717.712424,
+  "_ready|POLYMED.NS|1d": 1794459692.715119,
   "_ready|POONAWALLA.NS|1M": 1794456710.974896,
   "_ready|POONAWALLA.NS|1d": 1794196012.334544,
   "_ready|POONAWALLA.NS|1w": 1794455172.242815,
