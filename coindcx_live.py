@@ -397,7 +397,33 @@ def post(state):
         state["events"] = []
 
 
-def run_tick(now=None, dry_run=False):
+RECORDS_URL = ("https://raw.githubusercontent.com/victus2034/victus-indicator-strategy/"
+               "scanner-runtime-state/fib_trendline_alert_records.jsonl")
+
+
+def remote_records(url=RECORDS_URL):
+    """The alert records from the runtime-state branch, for a machine that is not the
+    GitHub runner (CoinDCX keys need a fixed IP). GITHUB_TOKEN is sent when set (a
+    private repo); a failed read gives [] - nothing new is placed, open trades still managed."""
+    headers = {"Authorization": f"token {os.environ['GITHUB_TOKEN']}"} if os.getenv("GITHUB_TOKEN") else {}
+    try:
+        r = requests.get(url, headers=headers, timeout=30)
+        r.raise_for_status()
+    except requests.RequestException as error:
+        print(f"coindcx live: alert records unavailable: {str(error)[:120]}")
+        return []
+    out = []
+    for line in r.text.splitlines():
+        try:
+            row = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(row, dict):
+            out.append(row)
+    return out
+
+
+def run_tick(now=None, dry_run=False, remote=False):
     now = int(time.time()) if now is None else int(now)
     if not config.COINDCX_LIVE_ENABLED:
         print("coindcx live is off (repository variable VICTUS_COINDCX_LIVE)")
@@ -410,7 +436,7 @@ def run_tick(now=None, dry_run=False):
         note(state, f"started: trades 1D TL alerts until {datetime.fromtimestamp(state['until_ts'], scanner.IST):%d %b %H:%M IST}, "
                     f"risk {config.COINDCX_LIVE_RISK:g} USDT a trade"
                     + ("" if isinstance(ex, CoinDCX) else " (DRY RUN: no API key)"), now)
-    tick(state, ex, demo.load_records(), now)
+    tick(state, ex, remote_records() if remote else demo.load_records(), now)
     if not dry_run:
         post(state)
         save_state(state)
@@ -422,9 +448,11 @@ def main(argv=None):
     ap.add_argument("--tick", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--report", action="store_true")
+    ap.add_argument("--remote", action="store_true",
+                    help="read the alerts from GitHub (a PC or server with the key's fixed IP)")
     a = ap.parse_args(argv)
     if a.tick:
-        run_tick(dry_run=a.dry_run)
+        run_tick(dry_run=a.dry_run, remote=a.remote)
     if a.report:
         state = load_state()
         print(json.dumps(state, indent=1) if state else "coindcx live: no state yet")

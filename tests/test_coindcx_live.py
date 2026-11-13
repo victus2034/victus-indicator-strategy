@@ -206,3 +206,16 @@ class Signing(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class RemoteRecords(unittest.TestCase):
+    def test_reads_lines_and_survives_failure(self):
+        class R:
+            text = '{"id": "a"}\nnot json\n{"id": "b"}\n'
+
+            def raise_for_status(self):
+                pass
+        with patch.object(live.requests, "get", return_value=R()):
+            self.assertEqual([r["id"] for r in live.remote_records()], ["a", "b"])
+        with patch.object(live.requests, "get", side_effect=live.requests.ConnectionError("down")):
+            self.assertEqual(live.remote_records(), [])
