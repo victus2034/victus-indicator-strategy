@@ -96,8 +96,7 @@ jobs:
             fib_trendline_alert_records.jsonl \
             entry_confirm_state.json \
             paper_trading_state.json \
-            coindcx_demo_state.json \
-            coindcx_live_state.json
+            coindcx_demo_state.json
 
       - name: Send entry confirmation pings
         env:
@@ -179,28 +178,6 @@ jobs:
           fi
           python coindcx_demo.py --tick "${EXTRA_ARGS[@]}"
 
-      # CoinDCX LIVE account (lakky, 2026-11-13): REAL orders for 1D crypto trendline
-      # alerts. Off unless the repository variable VICTUS_COINDCX_LIVE is 1 and the
-      # COINDCX_API_KEY / COINDCX_API_SECRET secrets exist (no key = dry run).
-      - name: Advance CoinDCX live account
-        env:
-          VICTUS_COINDCX_LIVE: ${{ vars.VICTUS_COINDCX_LIVE }}
-          VICTUS_COINDCX_MARGIN_CCY: ${{ vars.VICTUS_COINDCX_MARGIN_CCY }}
-          VICTUS_COINDCX_LIVE_RISK: ${{ vars.VICTUS_COINDCX_LIVE_RISK }}
-          VICTUS_COINDCX_LIVE_MAX_LOSS: ${{ vars.VICTUS_COINDCX_LIVE_MAX_LOSS }}
-          VICTUS_COINDCX_LIVE_BTC_FILTER: ${{ vars.VICTUS_COINDCX_LIVE_BTC_FILTER }}
-          COINDCX_API_KEY: ${{ secrets.COINDCX_API_KEY }}
-          COINDCX_API_SECRET: ${{ secrets.COINDCX_API_SECRET }}
-          DISCORD_COINDCX_DEMO_WEBHOOK_URL: ${{ secrets.DISCORD_COINDCX_DEMO_WEBHOOK_URL }}
-          DISCORD_ENTRY_CONFIRM_CRYPTO_WEBHOOK_URL: ${{ secrets.DISCORD_ENTRY_CONFIRM_CRYPTO_WEBHOOK_URL }}
-          INPUT_DRY_RUN: ${{ github.event.inputs.dry_run }}
-        run: |
-          EXTRA_ARGS=()
-          if [ "$INPUT_DRY_RUN" = "true" ]; then
-            EXTRA_ARGS+=(--dry-run)
-          fi
-          python coindcx_live.py --tick "${EXTRA_ARGS[@]}"
-
       # always(): alerts already sent are recorded even if a later step failed or
       # timed out. Never after a failed restore - there is nothing safe to save.
       - name: Persist runtime state
@@ -209,8 +186,7 @@ jobs:
           bash .github/scripts/persist_runtime_state.sh \
             entry_confirm_state.json \
             paper_trading_state.json \
-            coindcx_demo_state.json \
-            coindcx_live_state.json
+            coindcx_demo_state.json
 
       - name: Notify on failure
         if: failure()

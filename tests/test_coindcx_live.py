@@ -102,8 +102,8 @@ class Rules(unittest.TestCase):
         self.assertTrue(live.eligible(record(broken=True), s, NOW))
         self.assertFalse(live.eligible(record(kind="fib"), s, NOW))
         self.assertFalse(live.eligible(record(tf="4h"), s, NOW))
-        self.assertFalse(live.eligible(record(sent=NOW - 3 * 3600), s, NOW))       # too old: never chase
-        self.assertFalse(live.eligible(record(sent=NOW - 2 * 3600 - 7200), s, NOW))
+        self.assertFalse(live.eligible(record(sent=NOW - 7 * 3600), s, NOW))       # too old: never chase
+        self.assertFalse(live.eligible(record(sent=NOW - 6 * 3600 - 60), s, NOW))
         self.assertFalse(live.eligible(record(symbol="XAUTUSD"), s, NOW))
         late = dict(s, until_ts=NOW - 700)
         self.assertFalse(live.eligible(record(), late, NOW))                        # the week is over

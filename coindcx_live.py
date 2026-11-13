@@ -13,7 +13,12 @@ COINDCX_API_KEY / COINDCX_API_SECRET (a futures-trading key, NO withdrawal permi
 NOT bound to an IP - GitHub's runners change IP). With the flag on and no key it runs
 as a dry run: it prints the orders it would place and sends nothing to CoinDCX.
 
-What it does every tick (entry_confirm.yml, every ~5 minutes):
+Where it runs: CoinDCX locks every API key to one IPv4 address, so not on GitHub's
+runners. victus2034/trading-journal's coindcx-live.yml runs it on lakky's AWS Lightsail
+server (self-hosted runner "aws", static IP, the same key the CoinDCX import uses), with
+--remote (alerts read from this repo's runtime-state branch), every ~2 minutes.
+
+What it does every tick:
   1. a new 1D crypto trendline alert (touch or break, sent in the last
      COINDCX_LIVE_MAX_ALERT_AGE seconds, inside the live window) becomes an order:
      - stop = the wick-or-body rule on Bitunix daily candles closed before the alert;
@@ -67,6 +72,10 @@ class CoinDCX:
     compact JSON body with the secret, in X-AUTH-SIGNATURE; the key in X-AUTH-APIKEY)."""
 
     def __init__(self, key, secret, session=None):
+        # The key is locked to the server's IPv4 address: never reach CoinDCX over IPv6.
+        import socket
+        import urllib3.util.connection
+        urllib3.util.connection.allowed_gai_family = lambda: socket.AF_INET
         self.key, self.secret = key, secret.encode()
         self.http = session or requests.Session()
 

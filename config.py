@@ -648,6 +648,6 @@ COINDCX_LIVE_MAX_LOSS = env_float("VICTUS_COINDCX_LIVE_MAX_LOSS", 10.0)   # kill
 COINDCX_LIVE_DAYS = env_float("VICTUS_COINDCX_LIVE_DAYS", 7)
 COINDCX_LIVE_SL_GAP_PCT = env_float("VICTUS_COINDCX_LIVE_SL_GAP_PCT", 0.75)
 # An alert older than this when first seen is not traded (a late tick never chases).
-COINDCX_LIVE_MAX_ALERT_AGE = 2 * 3600
+COINDCX_LIVE_MAX_ALERT_AGE = 6 * 3600     # GitHub's schedule can skip a few hours
 # "": every BTC day. "so_far": only while BTC's move from today's 00:00 UTC open is within 1.5%.
 COINDCX_LIVE_BTC_FILTER = os.getenv("VICTUS_COINDCX_LIVE_BTC_FILTER", "")
