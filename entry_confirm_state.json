@@ -159,6 +159,7 @@
   },
   "AEGISVOPAK.NS|1d|short|286.066|300.174": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "AEGISVOPAK.NS|1w|long|231.328|208.922": {
@@ -789,11 +790,12 @@
   },
   "CASTROLIND.NS|1d|long|188.689|186.792": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CASTROLIND.NS|1d|long|190.205|188.309": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "CASTROLIND.NS|1w|long|192.979|190.522": {
@@ -1830,11 +1832,6 @@
   },
   "IFCI.NS|1w|long|60.442|58.4813": {
     "reached_entry": false,
-    "stopped_out": false
-  },
-  "IGL.NS|1d|short|142.62|149.491": {
-    "reached_entry": true,
-    "stage": 2,
     "stopped_out": false
   },
   "IGL.NS|1d|short|146.85|148.65": {
@@ -3330,8 +3327,8 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794547574.136351,
-  "_last_check|nse": 1794547574.136351,
+  "_last_check|crypto": 1794547889.141418,
+  "_last_check|nse": 1794547889.141418,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -3432,6 +3429,7 @@
   "_level_ready|AEGISLOG.NS|1w|long|1204.82|873.787": 1794372991.04651,
   "_level_ready|AEGISVOPAK.NS|1d|long|234.767|232.5": 1793331989.35983,
   "_level_ready|AEGISVOPAK.NS|1d|short|264.52|277.602": 1794369075.310774,
+  "_level_ready|AEGISVOPAK.NS|1d|short|286.066|300.174": 1794547889.141418,
   "_level_ready|AEGISVOPAK.NS|1w|long|231.328|208.922": 1793936864.300001,
   "_level_ready|AEGISVOPAK.NS|1w|long|247.623|208.922": 1792727505.027921,
   "_level_ready|AFFLE.NS|1M|long|1460.23|1278.81": 1791776795.761218,
@@ -3796,6 +3794,7 @@
   "_level_ready|CARBORUNIV.NS|1w|short|1117.04|1169.51": 1793852802.047467,
   "_level_ready|CARBORUNIV.NS|1w|short|1159.02|1175": 1793679396.23429,
   "_level_ready|CASTROLIND.NS|1d|long|185.367|183.95": 1793076691.324433,
+  "_level_ready|CASTROLIND.NS|1d|long|188.689|186.792": 1794547889.141418,
   "_level_ready|CASTROLIND.NS|1d|long|190.205|188.309": 1794461517.152014,
   "_level_ready|CASTROLIND.NS|1d|long|191.584|189.826": 1794541608.650168,
   "_level_ready|CASTROLIND.NS|1d|long|192.785|190.131": 1791949569.774586,
@@ -5275,7 +5274,7 @@
   "_ready|AEGISLOG.NS|1M": 1794372991.04651,
   "_ready|AEGISLOG.NS|1d": 1794455775.002683,
   "_ready|AEGISLOG.NS|1w": 1794372991.04651,
-  "_ready|AEGISVOPAK.NS|1d": 1794369075.310774,
+  "_ready|AEGISVOPAK.NS|1d": 1794547889.141418,
   "_ready|AEGISVOPAK.NS|1w": 1793936864.300001,
   "_ready|AERO/USDT|30m": 1789444875.534929,
   "_ready|AFFLE.NS|1M": 1793764008.797417,
@@ -5387,7 +5386,7 @@
   "_ready|CARBORUNIV.NS|1M": 1793850405.511611,
   "_ready|CARBORUNIV.NS|1d": 1794381107.397659,
   "_ready|CARBORUNIV.NS|1w": 1793852802.047467,
-  "_ready|CASTROLIND.NS|1d": 1794541608.650168,
+  "_ready|CASTROLIND.NS|1d": 1794547889.141418,
   "_ready|CASTROLIND.NS|1w": 1794455172.242815,
   "_ready|CDSL.NS|1d": 1794455482.704998,
   "_ready|CDSL.NS|1w": 1794455482.704998,
