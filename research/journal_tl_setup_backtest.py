@@ -62,6 +62,17 @@ def side_on(days, ts, back=0):
     return None if pct is None else abs(pct) <= SIDE_PCT
 
 
+def side_so_far(b15, ts):
+    """Live-usable: BTC from today's UTC open to the last 15m close before ts is within +-1.5%."""
+    import bisect
+    day = ts - ts % DAY
+    i = bisect.bisect_left(b15, [day])
+    j = bisect.bisect_left(b15, [ts - 900 + 1]) - 1     # last candle closed by ts
+    if i >= len(b15) or b15[i][0] != day or j < i:
+        return None if i >= len(b15) or b15[i][0] != day else True
+    return abs(b15[j][4] - b15[i][1]) / b15[i][1] * 100 <= SIDE_PCT
+
+
 # ----------------------------------------------------------------- job 1: the journal's month
 
 def journal(state, since, now):
@@ -208,8 +219,10 @@ def replay(since_text, tag):
     got.sort(key=lambda t: t["alert_ts"])
     btc = fbt._cached(f"jt_btc_1d_{since // DAY}", lambda: bitunix_candles("BTCUSD", "1d", since - 10 * DAY, now))
     days = btc_days(btc)
+    b15 = fbt._cached(f"jt_btc_15m_{since // DAY}", lambda: bitunix_candles("BTCUSD", "15m", since - 2 * DAY, now))
     for t in got:
         t["same"], t["prev"] = side_on(days, t["alert_ts"]), side_on(days, t["alert_ts"], 1)
+        t["sofar"] = side_so_far(b15, t["alert_ts"])
     wb = [t for t in got if t["outcome"] != "no stop" and not t.get("news")]
     own = [{**t, **{k: t["own"].get(k) for k in ("r", "risk_pct", "outcome", "fill_ts")}, "sl": t["alert_sl"]}
            for t in got if not t["own"].get("news")]
@@ -218,6 +231,7 @@ def replay(since_text, tag):
     nostop = sum(1 for t in got if t["outcome"] == "no stop")
     same = lambda rows: [t for t in rows if t["same"]]
     prev = lambda rows: [t for t in rows if t["prev"]]
+    sofar = lambda rows: [t for t in rows if t.get("sofar")]
     kind = lambda rows, k: [t for t in rows if t["level"] == k]
     text = [f"# Journal 1D trendline setup, replayed under today's rules - {since_text} to {ist(now)[:10]}", "",
             "TL touch + TL BROKEN, 1D crypto watchlist (16 crypto + xStocks + XAUT/SLVON). Exit 1.5R, SL shift +1R -> +0.75R, "
@@ -228,17 +242,20 @@ def replay(since_text, tag):
             f"## His setup (SL wick or body {jfs.SL_GAP_PCT:g}%)", "", HEAD,
             line("All days", wb), line("BTC sideways same day (journal, look-ahead)", same(wb)),
             line("BTC sideways previous day (bot can use)", prev(wb)),
+            line("BTC sideways so far today (bot can use)", sofar(wb)),
+            line("touch, sideways so far today", sofar(kind(wb, "touch"))), line("break, sideways so far today", sofar(kind(wb, "BR"))),
             line("touch, all days", kind(wb, "touch")), line("break, all days", kind(wb, "BR")),
             line("touch, sideways same day", same(kind(wb, "touch"))), line("break, sideways same day", same(kind(wb, "BR"))),
             line("touch, sideways prev day", prev(kind(wb, "touch"))), line("break, sideways prev day", prev(kind(wb, "BR"))),
             "", "## Same alerts, the alert's own SL", "", HEAD,
             line("All days", own), line("BTC sideways same day", same(own)), line("BTC sideways previous day", prev(own)),
+            line("BTC sideways so far today", sofar(own)),
             line("touch, all days", kind(own, "touch")), line("break, all days", kind(own, "BR")),
             line("break, sideways prev day", prev(kind(own, "BR"))),
             "", "## Coins (his setup)", "", HEAD]
     for name, rows in (("All", wb), (f"{len(crypto)} crypto only", [t for t in wb if t["symbol"] in crypto]),
                        ("Top 3 BTC/ETH/ZEC", [t for t in wb if t["symbol"] in TOP3])):
-        text += [line(f"{name}, all days", rows), line(f"{name}, sideways same day", same(rows)),
+        text += [line(f"{name}, all days", rows), line(f"{name}, sideways same day", same(rows)), line(f"{name}, sideways so far today", sofar(rows)),
                  line(f"{name}, sideways prev day", prev(rows))]
     text += ["", "## By month (his setup, all days / sideways prev day)", "", HEAD]
     for m in sorted({ist(t["alert_ts"])[:7] for t in wb}):
