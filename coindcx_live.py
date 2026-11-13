@@ -315,7 +315,7 @@ def place(state, ex, record, now, daily=daily_candles, price_now=last_price, btc
                  checked_until=int(now) // 60 * 60)
     p = scanner.price_text
     note(state, f"🟢 **{head}** · {'market' if broken else 'limit ' + p(price)} · qty {qty:g} · SL {p(sl)} ({stop_pct:.2f}%) · "
-                f"risk {risk:.2f} {config.COINDCX_LIVE_MARGIN_CCY} · {int(lev)}x", now)
+                f"risk {risk:.2f} USDT · {int(lev)}x", now)
     return order
 
 
@@ -351,7 +351,7 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                 o.update(status="closed", exit_ts=int(now), r=round(r, 3), pnl=round(money, 4),
                          exit_why=o.get("stop_why") or "SL")
                 note(state, f"{'✅' if r > 0 else '🛑'} **{head}** closed at {o['exit_why']} ≈ {r:+.2f}R "
-                            f"({money:+.2f} {config.COINDCX_LIVE_MARGIN_CCY}) · total {state['realized']:+.2f}", now)
+                            f"({money:+.2f} USDT) · total {state['realized']:+.2f}", now)
                 continue
             before = o.get("stop_r")
             for c in candles(o["symbol"], o["checked_until"], now):
@@ -408,7 +408,7 @@ def run_tick(now=None, dry_run=False):
     if state is None:
         state = new_state(now)
         note(state, f"started: trades 1D TL alerts until {datetime.fromtimestamp(state['until_ts'], scanner.IST):%d %b %H:%M IST}, "
-                    f"risk {config.COINDCX_LIVE_RISK:g} {config.COINDCX_LIVE_MARGIN_CCY} a trade"
+                    f"risk {config.COINDCX_LIVE_RISK:g} USDT a trade"
                     + ("" if isinstance(ex, CoinDCX) else " (DRY RUN: no API key)"), now)
     tick(state, ex, demo.load_records(), now)
     if not dry_run:

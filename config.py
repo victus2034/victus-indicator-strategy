@@ -641,10 +641,10 @@ COINDCX_DEMO_ROUND_TRIP_COST_PCT = env_float("VICTUS_COINDCX_DEMO_COST_PCT", 0.0
 # COINDCX_API_SECRET secrets are set (flag without a key = dry run). Exits reuse COINDCX_DEMO_*.
 COINDCX_LIVE_ENABLED = env_flag("VICTUS_COINDCX_LIVE", False)
 COINDCX_LIVE_MARGIN_CCY = os.getenv("VICTUS_COINDCX_MARGIN_CCY", "USDT") or "USDT"
-COINDCX_LIVE_RISK = env_float("VICTUS_COINDCX_LIVE_RISK", 1.0)            # in COINDCX_LIVE_MARGIN_CCY
+COINDCX_LIVE_RISK = env_float("VICTUS_COINDCX_LIVE_RISK", 1.0)            # USDT of price move to the stop (about Rs 90)
 COINDCX_LIVE_MAX_LEVERAGE = env_float("VICTUS_COINDCX_LIVE_MAX_LEVERAGE", 20.0)
 COINDCX_LIVE_MAX_OPEN = int(env_float("VICTUS_COINDCX_LIVE_MAX_OPEN", 5))
-COINDCX_LIVE_MAX_LOSS = env_float("VICTUS_COINDCX_LIVE_MAX_LOSS", 10.0)   # kill switch, same currency
+COINDCX_LIVE_MAX_LOSS = env_float("VICTUS_COINDCX_LIVE_MAX_LOSS", 10.0)   # kill switch, USDT
 COINDCX_LIVE_DAYS = env_float("VICTUS_COINDCX_LIVE_DAYS", 7)
 COINDCX_LIVE_SL_GAP_PCT = env_float("VICTUS_COINDCX_LIVE_SL_GAP_PCT", 0.75)
 # An alert older than this when first seen is not traded (a late tick never chases).
