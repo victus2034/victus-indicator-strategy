@@ -37,6 +37,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import bitunix_data  # noqa: E402
+import journal_fib_setup_backtest as jfs  # noqa: E402
 import config  # noqa: E402
 import fib_trendline_backtest as fbt  # noqa: E402
 import scanner  # noqa: E402
@@ -224,7 +225,7 @@ def replay(since_text, tag):
             "Bitunix 15m (XAUT / SLVON Delta). BTC sideways = Bitunix BTC daily (UTC) close within 1.5% of open. "
             f"{news} fills within 15 min of US CPI / PPI / FOMC left out; {nostop} alerts with no wick/body 0.75% past entry left out."
             + (f" FAILED symbols: {', '.join(failed)}." if failed else ""), "",
-            "## His setup (SL wick or body 0.75%)", "", HEAD,
+            f"## His setup (SL wick or body {jfs.SL_GAP_PCT:g}%)", "", HEAD,
             line("All days", wb), line("BTC sideways same day (journal, look-ahead)", same(wb)),
             line("BTC sideways previous day (bot can use)", prev(wb)),
             line("touch, all days", kind(wb, "touch")), line("break, all days", kind(wb, "BR")),
@@ -262,11 +263,13 @@ if __name__ == "__main__":
     ap.add_argument("state", nargs="?")
     ap.add_argument("--since", default="2026-09-01")
     ap.add_argument("--tag", default="")
+    ap.add_argument("--gap", type=float, default=0.75, help="wick/body SL at least this %% past entry")
     ap.add_argument("--from-ist", default="2026-10-13T00:00")
     ap.add_argument("--to-ist", default="2026-11-13T13:03")       # his screenshot
     a = ap.parse_args()
+    jfs.SL_GAP_PCT = a.gap          # wick_body_stop reads it at call time
     if a.job == "journal":
         journal(a.state, datetime.fromisoformat(a.from_ist).replace(tzinfo=IST).timestamp(),
                 datetime.fromisoformat(a.to_ist).replace(tzinfo=IST).timestamp())
     else:
-        replay(a.since, a.tag or a.since)
+        replay(a.since, (a.tag or a.since) + ("" if a.gap == 0.75 else f"_gap{a.gap:g}"))
