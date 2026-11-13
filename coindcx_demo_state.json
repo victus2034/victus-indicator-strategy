@@ -34,7 +34,7 @@
   "fib|BNBUSD|1d|1|1782864000|810.67|2@1794483487": {
    "best_r": 0.04822322363935688,
    "capped": false,
-   "checked_until": 1794538320,
+   "checked_until": 1794538560,
    "entry": 660.3275,
    "fill_ts": 1794486420,
    "id": "fib|BNBUSD|1d|1|1782864000|810.67|2@1794483487",
@@ -59,7 +59,7 @@
   "fib|ETHUSD|1d|1|1780704000|2806.58|2@1794206892": {
    "best_r": 0.340772823933298,
    "capped": false,
-   "checked_until": 1794538320,
+   "checked_until": 1794538560,
    "entry": 2090.1555,
    "fill_ts": 1794208320,
    "id": "fib|ETHUSD|1d|1|1780704000|2806.58|2@1794206892",
@@ -84,7 +84,7 @@
   "fib|NEARUSD|1d|1|1786406400|6.019|2@1794200911": {
    "best_r": 0.42284995842881273,
    "capped": false,
-   "checked_until": 1794538320,
+   "checked_until": 1794538560,
    "entry": 3.5533499999999996,
    "fill_ts": 1794203880,
    "id": "fib|NEARUSD|1d|1|1786406400|6.019|2@1794200911",
@@ -109,7 +109,7 @@
   "fib|SOLUSD|1d|1|1780704000|124.97|2|L4@1794317604": {
    "best_r": 0.4132933897023824,
    "capped": false,
-   "checked_until": 1794538320,
+   "checked_until": 1794538560,
    "entry": 82.1096,
    "fill_ts": 1794325380,
    "id": "fib|SOLUSD|1d|1|1780704000|124.97|2|L4@1794317604",
@@ -130,6 +130,30 @@
    "tf": "1D",
    "tgt_r": 1.5,
    "tp": 95.503475
+  },
+  "fib|UNIUSD|1d|1|1786665600|10.947|2|L4@1794538381": {
+   "best_r": 0.0,
+   "capped": false,
+   "checked_until": 1794538560,
+   "entry": 5.81352,
+   "id": "fib|UNIUSD|1d|1|1786665600|10.947|2|L4@1794538381",
+   "level": "L4",
+   "leverage": 0.442,
+   "margin": 20.38,
+   "pair": "B-UNI_USDT",
+   "placed_ts": 1794538381,
+   "position": 407.69,
+   "risk": 75.0,
+   "sent_ts": 1794538381,
+   "side": "long",
+   "sl": 4.744045,
+   "status": "pending",
+   "stop_pct": 18.396341631232023,
+   "stop_r": null,
+   "symbol": "UNIUSD",
+   "tf": "1D",
+   "tgt_r": 1.5,
+   "tp": 7.4177325
   }
  },
  "start_balance": 1000.0,
