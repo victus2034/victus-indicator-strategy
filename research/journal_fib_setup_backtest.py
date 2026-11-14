@@ -349,8 +349,8 @@ def replay(since_text, tag):
             "fill_ts": t["own"]["fill_ts"]} for t in got
            if not (t["own"]["fill_ts"] is not None and news_overlap(t["own"]["fill_ts"], t["own"]["fill_ts"] + 900))]
     text = [f"# Journal 1D fib setup, replayed under today's rules - {since_text} to {ist(now)[:10]}", "",
-            "L2-L4, SL = wick or body 0.75%+ past entry (daily candles before the alert), exit 1.5R, SL shift +1R -> +0.75R, "
-            "Trail TP +0.25R / 0.5R behind, held till TP / SL, fill within 20 days, fees 0.0826%, stop slip 0.05%. "
+            "L2-L4, SL = wick or body 0.75%+ past entry (daily candles before the alert), exit 1.5R, "
+            f"SL shift +1R -> +{SHIFT_TO:g}R, Trail TP +{STEP:g}R / {GAP:g}R behind, held till TP / SL, fill within 20 days, fees 0.0826%, stop slip 0.05%. "
             f"15m candles (Bitunix; XAUT / SLVON Delta). {news} fills within 15 min of US CPI / PPI / FOMC left out; "
             f"{sum(1 for t in got if t['outcome'] == 'no stop')} alerts with no candle that far left out."
             + (f" FAILED symbols: {', '.join(failed)}." if failed else ""), "", HEAD,
@@ -380,11 +380,15 @@ if __name__ == "__main__":
     ap.add_argument("state", nargs="?")
     ap.add_argument("--since", default="2026-09-01")
     ap.add_argument("--tag", default="")
+    ap.add_argument("--shift-to", type=float, default=0.75, help="SL shift: at +1R the stop goes to +this R")
+    ap.add_argument("--step", type=float, default=0.25, help="Trail TP step in R (stop stays 0.5R behind)")
     ap.add_argument("--from-ist", default="2026-10-12T00:00")
     ap.add_argument("--to-ist", default="2026-11-12T15:27")       # his screenshot
     a = ap.parse_args()
+    SHIFT_TO, STEP = a.shift_to, a.step               # walk reads them at call time
+    rules = "" if (a.shift_to, a.step) == (0.75, 0.25) else f"_shift{a.shift_to:g}_step{a.step:g}"
     if a.job == "journal":
         journal(a.state, datetime.fromisoformat(a.from_ist).replace(tzinfo=IST).timestamp(),
                 datetime.fromisoformat(a.to_ist).replace(tzinfo=IST).timestamp())
     else:
-        replay(a.since, a.tag or a.since)
+        replay(a.since, (a.tag or a.since) + rules)

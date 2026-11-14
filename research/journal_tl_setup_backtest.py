@@ -234,8 +234,8 @@ def replay(since_text, tag):
     sofar = lambda rows: [t for t in rows if t.get("sofar")]
     kind = lambda rows, k: [t for t in rows if t["level"] == k]
     text = [f"# Journal 1D trendline setup, replayed under today's rules - {since_text} to {ist(now)[:10]}", "",
-            "TL touch + TL BROKEN, 1D crypto watchlist (16 crypto + xStocks + XAUT/SLVON). Exit 1.5R, SL shift +1R -> +0.75R, "
-            "Trail TP +0.25R / 0.5R behind, held till TP / SL, fill within 20 days, fees 0.0826%, stop slip 0.05%. "
+            "TL touch + TL BROKEN, 1D crypto watchlist (16 crypto + xStocks + XAUT/SLVON). "
+            f"Exit 1.5R, SL shift +1R -> +{jfs.SHIFT_TO:g}R, Trail TP +{jfs.STEP:g}R / {jfs.GAP:g}R behind, held till TP / SL, fill within 20 days, fees 0.0826%, stop slip 0.05%. "
             "Bitunix 15m (XAUT / SLVON Delta). BTC sideways = Bitunix BTC daily (UTC) close within 1.5% of open. "
             f"{news} fills within 15 min of US CPI / PPI / FOMC left out; {nostop} alerts with no wick/body 0.75% past entry left out."
             + (f" FAILED symbols: {', '.join(failed)}." if failed else ""), "",
@@ -281,12 +281,16 @@ if __name__ == "__main__":
     ap.add_argument("--since", default="2026-09-01")
     ap.add_argument("--tag", default="")
     ap.add_argument("--gap", type=float, default=0.75, help="wick/body SL at least this %% past entry")
+    ap.add_argument("--shift-to", type=float, default=0.75, help="SL shift: at +1R the stop goes to +this R")
+    ap.add_argument("--step", type=float, default=0.25, help="Trail TP step in R (stop stays 0.5R behind)")
     ap.add_argument("--from-ist", default="2026-10-13T00:00")
     ap.add_argument("--to-ist", default="2026-11-13T13:03")       # his screenshot
     a = ap.parse_args()
     jfs.SL_GAP_PCT = a.gap          # wick_body_stop reads it at call time
+    jfs.SHIFT_TO, jfs.STEP = a.shift_to, a.step      # walk reads them at call time
+    rules = "" if (a.shift_to, a.step) == (0.75, 0.25) else f"_shift{a.shift_to:g}_step{a.step:g}"
     if a.job == "journal":
         journal(a.state, datetime.fromisoformat(a.from_ist).replace(tzinfo=IST).timestamp(),
                 datetime.fromisoformat(a.to_ist).replace(tzinfo=IST).timestamp())
     else:
-        replay(a.since, (a.tag or a.since) + ("" if a.gap == 0.75 else f"_gap{a.gap:g}"))
+        replay(a.since, (a.tag or a.since) + ("" if a.gap == 0.75 else f"_gap{a.gap:g}") + rules)
