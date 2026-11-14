@@ -41,7 +41,7 @@ what was checked, what's next.
 
 All in `config.py`, which **is tracked in git**:
 
-- `WATCHLIST` — the 21 symbols scanned: 16 crypto, 3 xStocks (TSLA, SNDK, QQQ), XAUT + SLVON (64 on
+- `WATCHLIST` — the 27 symbols scanned: 22 crypto, 3 xStocks (TSLA, SNDK, QQQ), XAUT + SLVON (64 on
   2026-09-01, cut on Delta volume and again when CoinSwitch was dropped; 27 crypto added
   2026-10-13 (lakky): every CoinDCX USDT future with 24h volume >= 100M USDT that Bitunix
   lists, commodities left out - `research/coindcx_volume_probe.py`, part `coindcx`; same day
@@ -54,8 +54,12 @@ All in `config.py`, which **is tracked in git**:
   at 10x the median traded value, listed 90+ days) - `research/coin_list_review.py`, part `coin-list`;
   removed QNT, RLC, STRK, BTW (pump/dump), FIL, AVAX, TAO, AAVE, ONDO (under 100M); xStocks need 1M+ USD a
   day on Delta: SOXL (pump/dump), META, NVDA, MRVL removed, QQQ (QQQXUSD) added. A 7-day move alone is not
-  a fail: ZEC/NEAR/ENA ran 76-97% in a week as steady trends)
-- `DELTA_LISTED_SYMBOLS` — the 21 watchlist symbols Delta India lists. `WATCHLIST` equals it
+  a fail: ZEC/NEAR/ENA ran 76-97% in a week as steady trends. **2026-11-14 (lakky): top 30 on both brokers** -
+  the market's top 30 by 30-day CoinDCX volume that Delta lists (`research/top30_brokers.py`, part `top30`) holds
+  all 16; of the other 14 lakky added the 6 with a Bitunix perp and no pump/dump chart: AVAX, INJ, FIL, AAVE, TAO,
+  ARB (82-115M a day). JCT, AKE, IRYS, BTW, AIN, INIT, TRUMP (pump/dump) and PUMP (no Bitunix) stay out. The live
+  CoinDCX bot trades their 1D TL alerts too; the fib/TL history from 1 Jun was rebuilt (part `fibtl-rebuild-apply`))
+- `DELTA_LISTED_SYMBOLS` — the 27 watchlist symbols Delta India lists. `WATCHLIST` equals it
   plus `NOT_DELTA_LISTED_CRYPTO` (empty since 2026-10-16; such coins grade their daily backtest
   on the ccxt fallback venues). `entry_confirm.py` used to tag
   each ping with the venue ("Delta"); dropped 2026-10-08 (lakky) - its crypto prices come

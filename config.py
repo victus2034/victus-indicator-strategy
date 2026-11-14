@@ -47,6 +47,13 @@ CRYPTO_WATCHLIST = [
     # part coin-list; research/out/coin_list/). Removed 9: QNT, RLC, STRK, BTW
     # (pump/dump and low volume), FIL, AVAX, TAO, AAVE, ONDO (under 100M).
     # No adds: PUMP has no Bitunix perp; JCT, AKE, AIN are pump/dump charts.
+    # 2026-11-14 (lakky, "make sure top30 cryptos are available in coindcx and
+    # delta"): the market's top 30 by 30-day CoinDCX volume that Delta lists too
+    # (research/top30_brokers.py, part top30; research/out/top30/). The scanner's
+    # 16 are all in it; of the other 14 lakky took the 6 with a Bitunix perp and
+    # no pump/dump chart: AVAX, INJ, FIL, AAVE, TAO, ARB (82-115M a day, so under
+    # the 100M rule above for all but AVAX). Left out: JCT, AKE, IRYS, BTW, AIN,
+    # INIT, TRUMP (pump/dump charts) and PUMP (no Bitunix perp).
     "BTCUSD",
     "ETHUSD",
     "ZECUSD",
@@ -63,6 +70,12 @@ CRYPTO_WATCHLIST = [
     "WLDUSD",
     "ADAUSD",
     "LINKUSD",
+    "AVAXUSD",
+    "INJUSD",
+    "FILUSD",
+    "AAVEUSD",
+    "TAOUSD",
+    "ARBUSD",
 ]
 
 # Crypto Bitunix lists but Delta does not. The 2026-10-13 six (W, OGN, DOS,
@@ -119,6 +132,8 @@ DELTA_LISTED_SYMBOLS = {
     # 2026-10-13 CoinDCX 100M+ additions that Delta lists too (/v2/products).
     "NEARUSD", "SUIUSD", "ENAUSD", "WLDUSD",
     "1000PEPEUSD", "ADAUSD",
+    # 2026-11-14 top-30 additions; all six are live Delta perps (part top30).
+    "AVAXUSD", "INJUSD", "FILUSD", "AAVEUSD", "TAOUSD", "ARBUSD",
 }
 
 DELTA_API_BASE_URL = "https://api.india.delta.exchange"
