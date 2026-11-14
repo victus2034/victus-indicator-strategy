@@ -1,5 +1,5 @@
 {
- "balance": 770.4436,
+ "balance": 694.5666,
  "orders": {
   "fib|1000PEPEUSD|1d|1|1791417600|0.0056871|1|L1@1794387773": {
    "balance_after": 923.2764,
@@ -64,7 +64,7 @@
   "fib|BNBUSD|1d|1|1782864000|810.67|2|L4@1794542012": {
    "best_r": 0.5308146399055503,
    "capped": false,
-   "checked_until": 1794669960,
+   "checked_until": 1794670320,
    "entry": 630.259,
    "fill_ts": 1794549300,
    "id": "fib|BNBUSD|1d|1|1782864000|810.67|2|L4@1794542012",
@@ -119,7 +119,7 @@
   "fib|NEARUSD|1d|1|1786406400|6.019|2@1794200911": {
    "best_r": 0.42284995842881273,
    "capped": false,
-   "checked_until": 1794669960,
+   "checked_until": 1794670320,
    "entry": 3.5533499999999996,
    "fill_ts": 1794203880,
    "id": "fib|NEARUSD|1d|1|1786406400|6.019|2@1794200911",
@@ -142,10 +142,13 @@
    "tp": 4.47796875
   },
   "fib|SOLUSD|1d|1|1780704000|124.97|2|L4@1794317604": {
+   "balance_after": 694.5666,
    "best_r": 0.4132933897023824,
    "capped": false,
-   "checked_until": 1794669960,
+   "checked_until": 1794670260,
    "entry": 82.1096,
+   "exit_ts": 1794670200,
+   "exit_why": "SL",
    "fill_ts": 1794325380,
    "id": "fib|SOLUSD|1d|1|1780704000|124.97|2|L4@1794317604",
    "level": "L4",
@@ -153,12 +156,14 @@
    "margin": 34.48,
    "pair": "B-SOL_USDT",
    "placed_ts": 1794317604,
+   "pnl": -75.877,
    "position": 689.67,
+   "r": -1.0117,
    "risk": 75.0,
    "sent_ts": 1794317604,
    "side": "long",
    "sl": 73.18035,
-   "status": "open",
+   "status": "lost",
    "stop_pct": 10.87479417753831,
    "stop_r": null,
    "symbol": "SOLUSD",
@@ -169,7 +174,7 @@
   "fib|UNIUSD|1d|1|1786665600|10.947|2|L4@1794538381": {
    "best_r": 0.195871806260081,
    "capped": false,
-   "checked_until": 1794669960,
+   "checked_until": 1794670320,
    "entry": 5.81352,
    "fill_ts": 1794541620,
    "id": "fib|UNIUSD|1d|1|1786665600|10.947|2|L4@1794538381",
@@ -194,7 +199,7 @@
   "fib|ZECUSD|1d|1|1785283200|1698.46|2|L4@1794546202": {
    "best_r": 0.11243529511261198,
    "capped": false,
-   "checked_until": 1794669960,
+   "checked_until": 1794670320,
    "entry": 875.4928,
    "fill_ts": 1794662580,
    "id": "fib|ZECUSD|1d|1|1785283200|1698.46|2|L4@1794546202",

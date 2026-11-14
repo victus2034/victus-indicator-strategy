@@ -80,6 +80,7 @@
   },
   "NEARUSD|1w|long|3.1711|2.45912": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "NEARUSD|1w|long|3.6889|3.0287": {
@@ -123,7 +124,7 @@
   "SOLUSD|1d|long|82.1096|73.1804": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "SOLUSD|1w|long|72.1818|71.36": {
     "reached_entry": false,
@@ -202,7 +203,8 @@
     "stopped_out": true
   },
   "ZECUSD|1M|long|865.672|657.475": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ZECUSD|1d|long|875.493|704.041": {
@@ -221,10 +223,11 @@
     "stopped_out": false
   },
   "ZECUSD|1w|long|865.672|657.475": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794670003.541043,
+  "_last_check|crypto": 1794670310.127171,
   "_last_check|nse": 1794562591.035147,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
@@ -1589,6 +1592,7 @@
   "_level_ready|NEARUSD|1d|long|3.55335|2.93694": 1794201703.869096,
   "_level_ready|NEARUSD|1d|long|4.00165|3.43007": 1793635319.814049,
   "_level_ready|NEARUSD|1d|long|4.49478|2.93694": 1792832197.224494,
+  "_level_ready|NEARUSD|1w|long|3.1711|2.45912": 1794670310.127171,
   "_level_ready|NEARUSD|1w|long|3.6889|3.0287": 1793761585.020958,
   "_level_ready|NETWEB.NS|1M|long|4262.11|2677": 1793335905.417667,
   "_level_ready|NETWEB.NS|1d|long|4557.7|4520.3": 1792641484.218837,
@@ -2133,6 +2137,7 @@
   "_level_ready|XRPUSD|4h|short|1.4808|1.49493": 1789983964.89935,
   "_level_ready|ZECUSD|1M|long|1126.31|1043.02": 1791474400.00058,
   "_level_ready|ZECUSD|1M|long|1183.65|975.449": 1793640723.949663,
+  "_level_ready|ZECUSD|1M|long|865.672|657.475": 1794670310.127171,
   "_level_ready|ZECUSD|1d|long|1137.35|841.202": 1792834902.305949,
   "_level_ready|ZECUSD|1d|long|1183.65|1108.69": 1791471990.567377,
   "_level_ready|ZECUSD|1d|long|1184.99|1151.76": 1793640723.949663,
@@ -2140,6 +2145,7 @@
   "_level_ready|ZECUSD|1d|long|875.493|704.041": 1794661589.105586,
   "_level_ready|ZECUSD|1w|long|1183.65|1108.69": 1791471990.567377,
   "_level_ready|ZECUSD|1w|long|1183.65|657.475": 1792982803.899171,
+  "_level_ready|ZECUSD|1w|long|865.672|657.475": 1794670310.127171,
   "_level_ready|ZECUSD|30m|long|1293.45|1280.61": 1791215470.422682,
   "_level_ready|ZECUSD|30m|long|1295.36|1286.9": 1791432082.857584,
   "_level_ready|ZECUSD|30m|long|1390.64|1377.34": 1790752591.242914,
@@ -2606,7 +2612,7 @@
   "_ready|NBCC.NS|1d": 1794376602.579476,
   "_ready|NBCC.NS|1w": 1792557094.347878,
   "_ready|NEARUSD|1d": 1794201703.869096,
-  "_ready|NEARUSD|1w": 1793761585.020958,
+  "_ready|NEARUSD|1w": 1794670310.127171,
   "_ready|NETWEB.NS|1M": 1793335905.417667,
   "_ready|NETWEB.NS|1d": 1794546089.634115,
   "_ready|NETWEB.NS|1w": 1794455172.242815,
@@ -2744,9 +2750,9 @@
   "_ready|XRPUSD|4h": 1789983964.89935,
   "_ready|ZAMA/USDT|30m": 1789225271.699613,
   "_ready|ZAMA/USDT|4h": 1789458964.864873,
-  "_ready|ZECUSD|1M": 1793640723.949663,
+  "_ready|ZECUSD|1M": 1794670310.127171,
   "_ready|ZECUSD|1d": 1794661589.105586,
-  "_ready|ZECUSD|1w": 1792982803.899171,
+  "_ready|ZECUSD|1w": 1794670310.127171,
   "_ready|ZECUSD|30m": 1791432082.857584,
   "_ready|ZIL/USDT|30m": 1789230352.789374,
   "_ready|ZIL/USDT|4h": 1788885653.347347,
