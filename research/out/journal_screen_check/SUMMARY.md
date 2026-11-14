@@ -1,0 +1,122 @@
+# Journal screens re-played - CRYPTO 1D, CoinDCX coins, 01 Jun to 14 Nov 2026 21:15 IST
+
+Alerts: the journal's own set (rebuild before 08 Nov 00:37 IST, live after; news-window rows out), crypto 1D on CoinDCX coins, fib L2-L4. Played by the journal's retest (tools/signals-retest.py) on Delta 15m; SL wick or body from Delta 1d. Max DD in alert order.
+
+Screen = his settings: SL shift +1R -> +0.5R, Trail TP +0.5R / 0.5R behind. Bot = live CoinDCX bot / demo exits: SL shift +1R -> +0.75R, Trail TP +0.25R / 0.5R behind. Both: exit 1.5R, SL wick or body 0.75%, till TP / SL, fees 0.0826%, stops slip 0.05%.
+
+Coins with no Delta 15m candles: none.
+
+## Trendline
+
+Journal screen: 466 alerts, 449 filled, 200W / 190L, +3.42R, PF 1.02, max DD -37.78R
+
+| Set | Alerts | Filled | W / L | Win % | Total R | R / trade | PF | Max DD |
+|---|---|---|---|---|---|---|---|---|
+| Screen, 25 coins (his screen) | 466 | 393 | 200W / 190L | 51% | +3.42R | +0.009R | 1.02 | -37.78R |
+| Screen, today's 16 coins | 303 | 285 | 147W / 135L | 52% | +14.06R | +0.050R | 1.10 | -16.84R |
+| Screen, 9 dropped coins | 163 | 108 | 53W / 55L | 49% | -10.64R | -0.099R | 0.82 | -24.55R |
+| Bot exits, 25 coins | 466 | 393 | 200W / 190L | 51% | +0.17R | +0.000R | 1.00 | -36.77R |
+| Bot exits, today's 16 coins (what the bot can trade) | 303 | 285 | 147W / 135L | 52% | +7.31R | +0.026R | 1.05 | -18.54R |
+| Screen, 16 coins, touch | 184 | 166 | 66W / 99L | 40% | -34.03R | -0.206R | 0.69 | -39.68R |
+| Bot exits, 16 coins, touch | 184 | 166 | 66W / 99L | 40% | -36.28R | -0.220R | 0.67 | -39.97R |
+| Screen, 16 coins, break | 119 | 119 | 81W / 36L | 69% | +48.09R | +0.411R | 2.29 | -7.31R |
+| Bot exits, 16 coins, break | 119 | 119 | 81W / 36L | 69% | +43.59R | +0.373R | 2.17 | -7.31R |
+
+By month (screen, 16 coins)
+
+| Set | Alerts | Filled | W / L | Win % | Total R | R / trade | PF | Max DD |
+|---|---|---|---|---|---|---|---|---|
+| 2026-06 | 64 | 54 | 31W / 23L | 57% | +13.32R | +0.247R | 1.54 | -9.47R |
+| 2026-07 | 55 | 53 | 27W / 26L | 51% | -2.94R | -0.055R | 0.90 | -10.88R |
+| 2026-08 | 57 | 56 | 27W / 29L | 48% | +0.60R | +0.011R | 1.02 | -7.46R |
+| 2026-09 | 55 | 55 | 27W / 28L | 49% | +0.39R | +0.007R | 1.01 | -8.45R |
+| 2026-10 | 53 | 49 | 26W / 22L | 54% | -0.52R | -0.011R | 0.98 | -7.46R |
+| 2026-11 | 19 | 18 | 9W / 7L | 56% | +3.20R | +0.200R | 1.42 | -2.06R |
+
+By coin (screen, 25 coins; * = dropped 8 Nov)
+
+| Set | Alerts | Filled | W / L | Win % | Total R | R / trade | PF | Max DD |
+|---|---|---|---|---|---|---|---|---|
+| NEARUSD | 21 | 19 | 13W / 6L | 68% | +8.63R | +0.454R | 2.35 | -2.10R |
+| ETHUSD | 20 | 18 | 12W / 6L | 67% | +6.67R | +0.371R | 1.99 | -2.34R |
+| ENAUSD | 17 | 16 | 11W / 4L | 73% | +6.62R | +0.441R | 2.54 | -3.17R |
+| SOLUSD | 17 | 15 | 9W / 6L | 60% | +6.09R | +0.406R | 1.96 | -2.12R |
+| BNBUSD | 17 | 16 | 9W / 7L | 56% | +3.26R | +0.204R | 1.43 | -2.74R |
+| WLDUSD | 20 | 20 | 10W / 10L | 50% | +1.61R | +0.080R | 1.15 | -4.23R |
+| AAVEUSD * | 22 | 21 | 13W / 8L | 62% | +0.79R | +0.038R | 1.09 | -2.65R |
+| 1000PEPEUSD | 26 | 24 | 12W / 12L | 50% | +0.58R | +0.024R | 1.05 | -5.96R |
+| ZECUSD | 13 | 12 | 5W / 7L | 42% | +0.08R | +0.006R | 1.01 | -4.60R |
+| QNTUSD * | 22 | 0 | 0W / 0L | 0% | +0.00R | +0.000R | inf | 0.00R |
+| RLCUSD * | 25 | 0 | 0W / 0L | 0% | +0.00R | +0.000R | inf | 0.00R |
+| BTWUSD * | 5 | 0 | 0W / 0L | 0% | +0.00R | +0.000R | inf | 0.00R |
+| LINKUSD | 21 | 21 | 11W / 10L | 52% | -0.05R | -0.003R | 1.00 | -6.82R |
+| ADAUSD | 21 | 21 | 12W / 9L | 57% | -0.23R | -0.011R | 0.98 | -3.73R |
+| STRKUSD * | 11 | 11 | 5W / 6L | 45% | -0.74R | -0.068R | 0.88 | -6.03R |
+| TAOUSD * | 17 | 17 | 8W / 9L | 47% | -1.11R | -0.065R | 0.89 | -6.49R |
+| SUIUSD | 18 | 17 | 8W / 9L | 47% | -1.43R | -0.084R | 0.85 | -6.60R |
+| XRPUSD | 24 | 23 | 12W / 11L | 52% | -1.57R | -0.068R | 0.87 | -5.06R |
+| ONDOUSD * | 29 | 29 | 16W / 13L | 55% | -1.78R | -0.061R | 0.87 | -6.68R |
+| DOGEUSD | 15 | 13 | 5W / 8L | 38% | -2.21R | -0.170R | 0.74 | -7.97R |
+| AVAXUSD * | 13 | 12 | 4W / 8L | 33% | -2.79R | -0.232R | 0.68 | -5.46R |
+| HYPEUSD | 17 | 17 | 5W / 10L | 33% | -3.04R | -0.203R | 0.72 | -6.04R |
+| FILUSD * | 19 | 18 | 7W / 11L | 39% | -5.01R | -0.279R | 0.57 | -7.49R |
+| UNIUSD | 14 | 14 | 5W / 9L | 36% | -5.40R | -0.385R | 0.44 | -8.19R |
+| BTCUSD | 22 | 19 | 8W / 11L | 42% | -5.55R | -0.292R | 0.54 | -6.75R |
+
+## Fib
+
+Journal screen: 284 alerts, 269 filled, 119W / 125L, +10.65R, PF 1.08, max DD -26.51R
+
+| Set | Alerts | Filled | W / L | Win % | Total R | R / trade | PF | Max DD |
+|---|---|---|---|---|---|---|---|---|
+| Screen, 25 coins (his screen) | 284 | 245 | 119W / 125L | 49% | +10.65R | +0.044R | 1.08 | -26.51R |
+| Screen, today's 16 coins | 159 | 153 | 75W / 77L | 49% | -6.99R | -0.046R | 0.92 | -20.98R |
+| Screen, 9 dropped coins | 125 | 92 | 44W / 48L | 48% | +17.65R | +0.192R | 1.34 | -12.34R |
+| Bot exits, 25 coins | 284 | 245 | 119W / 125L | 49% | +14.15R | +0.058R | 1.11 | -25.70R |
+| Bot exits, today's 16 coins (what the bot can trade) | 159 | 153 | 75W / 77L | 49% | -5.24R | -0.034R | 0.94 | -20.23R |
+| Demo rule (alert's SL, bot exits), 16 coins | 159 | 153 | 76W / 73L | 51% | -1.99R | -0.013R | 0.97 | -18.78R |
+| Screen, 16 coins, L2 | 63 | 60 | 28W / 32L | 47% | -6.50R | -0.108R | 0.81 | -9.61R |
+| Screen, 16 coins, L3 | 55 | 54 | 27W / 27L | 50% | +1.12R | +0.021R | 1.04 | -6.62R |
+| Screen, 16 coins, L4 | 41 | 39 | 20W / 18L | 53% | -1.61R | -0.042R | 0.92 | -7.94R |
+
+By month (screen, 16 coins)
+
+| Set | Alerts | Filled | W / L | Win % | Total R | R / trade | PF | Max DD |
+|---|---|---|---|---|---|---|---|---|
+| 2026-06 | 34 | 34 | 18W / 16L | 53% | +1.00R | +0.029R | 1.06 | -6.38R |
+| 2026-07 | 25 | 23 | 16W / 7L | 70% | +8.56R | +0.372R | 2.13 | -3.57R |
+| 2026-08 | 32 | 30 | 8W / 22L | 27% | -16.48R | -0.549R | 0.31 | -19.81R |
+| 2026-09 | 19 | 19 | 11W / 8L | 58% | +5.93R | +0.312R | 1.69 | -2.98R |
+| 2026-10 | 35 | 35 | 15W / 20L | 43% | -5.81R | -0.166R | 0.73 | -7.58R |
+| 2026-11 | 14 | 12 | 7W / 4L | 64% | -0.20R | -0.018R | 0.95 | -3.22R |
+
+By coin (screen, 25 coins; * = dropped 8 Nov)
+
+| Set | Alerts | Filled | W / L | Win % | Total R | R / trade | PF | Max DD |
+|---|---|---|---|---|---|---|---|---|
+| STRKUSD * | 24 | 24 | 8W / 16L | 33% | +10.83R | +0.451R | 1.63 | -9.04R |
+| AAVEUSD * | 8 | 8 | 7W / 1L | 88% | +9.94R | +1.242R | 10.43 | -1.05R |
+| BTCUSD | 12 | 8 | 7W / 1L | 88% | +7.28R | +0.910R | 8.01 | -1.04R |
+| ONDOUSD * | 5 | 5 | 5W / 0L | 100% | +5.31R | +1.061R | inf | 0.00R |
+| ZECUSD | 15 | 15 | 10W / 4L | 71% | +3.38R | +0.241R | 1.81 | -4.18R |
+| TAOUSD * | 14 | 14 | 8W / 6L | 57% | +3.27R | +0.234R | 1.49 | -2.61R |
+| HYPEUSD | 22 | 21 | 13W / 8L | 62% | +3.10R | +0.148R | 1.36 | -4.38R |
+| LINKUSD | 7 | 7 | 4W / 3L | 57% | +2.33R | +0.333R | 1.71 | -2.25R |
+| BTWUSD * | 16 | 5 | 3W / 2L | 60% | +2.13R | +0.426R | 1.95 | -1.77R |
+| WLDUSD | 11 | 11 | 6W / 5L | 55% | +1.38R | +0.126R | 1.26 | -4.30R |
+| DOGEUSD | 6 | 5 | 3W / 2L | 60% | +1.26R | +0.252R | 1.59 | -2.13R |
+| NEARUSD | 8 | 8 | 5W / 3L | 62% | +0.15R | +0.019R | 1.05 | -1.59R |
+| QNTUSD * | 15 | 0 | 0W / 0L | 0% | +0.00R | +0.000R | inf | 0.00R |
+| ADAUSD | 7 | 7 | 3W / 4L | 43% | -0.01R | -0.001R | 1.00 | -3.27R |
+| RLCUSD * | 6 | 2 | 1W / 1L | 50% | -0.54R | -0.270R | 0.47 | -1.01R |
+| ENAUSD | 6 | 6 | 2W / 4L | 33% | -1.25R | -0.209R | 0.70 | -2.74R |
+| 1000PEPEUSD | 14 | 14 | 6W / 8L | 43% | -1.33R | -0.095R | 0.84 | -4.39R |
+| ETHUSD | 5 | 5 | 2W / 3L | 40% | -1.35R | -0.270R | 0.58 | -3.22R |
+| BNBUSD | 9 | 9 | 3W / 6L | 33% | -2.26R | -0.251R | 0.65 | -4.17R |
+| XRPUSD | 6 | 6 | 2W / 4L | 33% | -2.42R | -0.403R | 0.44 | -2.75R |
+| SOLUSD | 5 | 5 | 1W / 4L | 20% | -3.77R | -0.754R | 0.10 | -3.77R |
+| AVAXUSD * | 5 | 4 | 0W / 4L | 0% | -4.22R | -1.056R | 0.00 | -4.22R |
+| SUIUSD | 12 | 12 | 5W / 7L | 42% | -4.60R | -0.384R | 0.41 | -6.03R |
+| UNIUSD | 14 | 14 | 3W / 11L | 21% | -8.87R | -0.633R | 0.25 | -8.87R |
+| FILUSD * | 32 | 30 | 12W / 18L | 40% | -9.06R | -0.302R | 0.53 | -13.00R |
+

@@ -1,0 +1,114 @@
+[
+ {
+  "tgt": "1.5R",
+  "sl": {
+   "mode": "near",
+   "gap": 0.75
+  },
+  "stop": {
+   "mode": "shift",
+   "shAt": 1,
+   "shTo": 0.5
+  },
+  "trail": {
+   "on": true,
+   "step": 0.5,
+   "gap": 0.5
+  },
+  "hold": "tp",
+  "name": "tl_screen",
+  "kind": "trendline",
+  "chan": "CRYPTO 1D",
+  "from": "2000-01-01",
+  "to": "2100-01-01"
+ },
+ {
+  "tgt": "1.5R",
+  "sl": {
+   "mode": "near",
+   "gap": 0.75
+  },
+  "stop": {
+   "mode": "shift",
+   "shAt": 1,
+   "shTo": 0.75
+  },
+  "trail": {
+   "on": true,
+   "step": 0.25,
+   "gap": 0.5
+  },
+  "hold": "tp",
+  "name": "tl_bot",
+  "kind": "trendline",
+  "chan": "CRYPTO 1D",
+  "from": "2000-01-01",
+  "to": "2100-01-01"
+ },
+ {
+  "tgt": "1.5R",
+  "sl": {
+   "mode": "near",
+   "gap": 0.75
+  },
+  "stop": {
+   "mode": "shift",
+   "shAt": 1,
+   "shTo": 0.5
+  },
+  "trail": {
+   "on": true,
+   "step": 0.5,
+   "gap": 0.5
+  },
+  "hold": "tp",
+  "name": "fib_screen",
+  "kind": "fib",
+  "chan": "CRYPTO 1D",
+  "from": "2000-01-01",
+  "to": "2100-01-01"
+ },
+ {
+  "tgt": "1.5R",
+  "sl": {
+   "mode": "near",
+   "gap": 0.75
+  },
+  "stop": {
+   "mode": "shift",
+   "shAt": 1,
+   "shTo": 0.75
+  },
+  "trail": {
+   "on": true,
+   "step": 0.25,
+   "gap": 0.5
+  },
+  "hold": "tp",
+  "name": "fib_bot",
+  "kind": "fib",
+  "chan": "CRYPTO 1D",
+  "from": "2000-01-01",
+  "to": "2100-01-01"
+ },
+ {
+  "tgt": "1.5R",
+  "sl": {},
+  "stop": {
+   "mode": "shift",
+   "shAt": 1,
+   "shTo": 0.75
+  },
+  "trail": {
+   "on": true,
+   "step": 0.25,
+   "gap": 0.5
+  },
+  "hold": "tp",
+  "name": "fib_demo",
+  "kind": "fib",
+  "chan": "CRYPTO 1D",
+  "from": "2000-01-01",
+  "to": "2100-01-01"
+ }
+]
