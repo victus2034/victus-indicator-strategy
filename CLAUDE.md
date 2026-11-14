@@ -341,6 +341,14 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   (`COINDCX_DEMO_TARGET_R` / `TRAIL_*` / `SHIFT_*` / `FILL_DAYS`). Same walk as the journal's tgtScore, also in
   `research/coindcx_strategy_backtest.py` (part `coindcx-strategy`; top 3 / top 5 CoinDCX-volume coins vs all).
   Real money needs his explicit go plus a live order path (API key secret, IP whitelist, CoinDCX fees).
+- **CoinDCX LIVE (real orders): `coindcx_live.py`.** Built 2026-11-13 for lakky's 1D crypto TL setup (one week, PR #89):
+  touches + breaks, wick-or-body SL, the demo's exits, risk `COINDCX_LIVE_RISK` USDT, max 5 open, one per coin, kill
+  switch `COINDCX_LIVE_MAX_LOSS`, a 7-day window (`until_ts` in its state). Runs NOT here but on lakky's AWS server
+  (CoinDCX locks the key to one IPv4): victus2034/trading-journal's `coindcx-live.yml` checks out this repo's MAIN every
+  ~25 min, so a merge here is live at once. **Fibs (2026-11-14, lakky "Start building live mode" for the fib demo):**
+  `COINDCX_LIVE_KINDS` (`VICTUS_COINDCX_LIVE_KINDS`, empty = `trendline`) - with `fib` listed, 1D crypto fib alerts
+  (`COINDCX_DEMO_LEVELS`) go in the demo's way: limit at the alert's entry, the alert's own SL (skipped if price is
+  already through it), same limits as the trendlines. Off until lakky's final go. Orders without `kind` are trendlines.
 - Each channel seeds silently per market on its first pass with a webhook, so adding a webhook
   never dumps a backlog. Deleting the state file re-seeds rather than bursting.
 - `python fib_trendline_scanner.py --dry-run [--force-nse]` prints what would alert, sends nothing.

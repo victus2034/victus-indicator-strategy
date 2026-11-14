@@ -1,4 +1,4 @@
-"""CoinDCX LIVE account: 1D crypto trendline alerts as REAL futures orders.
+"""CoinDCX LIVE account: 1D crypto trendline (and, once switched on, fib) alerts as REAL futures orders.
 
 lakky, 2026-11-13 (decision card "Run this TL setup on CoinDCX for a week: real money or
 demo?" -> "Real money, full setup as on screen"). His journal Signals setup:
@@ -17,6 +17,12 @@ Where it runs: CoinDCX locks every API key to one IPv4 address, so not on GitHub
 runners. victus2034/trading-journal's coindcx-live.yml runs it on lakky's AWS Lightsail
 server (self-hosted runner "aws", static IP, the same key the CoinDCX import uses), with
 --remote (alerts read from this repo's runtime-state branch), every ~2 minutes.
+
+Fibs (lakky, 2026-11-14, "Start building live mode" for the CoinDCX fib demo): with
+VICTUS_COINDCX_LIVE_KINDS holding "fib", every 1D crypto fib alert (levels
+COINDCX_DEMO_LEVELS) is traded the demo's way - a limit at the alert's entry, the alert's
+own SL (no wick-or-body rule) - then filled, stopped and trailed like the trendlines. An
+alert sent with price already through its SL is skipped. Default: trendlines only.
 
 What it does every tick:
   1. a new 1D crypto trendline alert (touch or break, sent in the last
@@ -178,7 +184,10 @@ def eligible(record, state, now):
         return False
     try:
         sent = float(record["sent_ts"])
-        return (record.get("kind") == "trendline" and record.get("market") == "crypto"
+        kind = record.get("kind")
+        return (kind in ("trendline", "fib") and kind in config.COINDCX_LIVE_KINDS
+                and (kind != "fib" or (record.get("level") or "L3") in config.COINDCX_DEMO_LEVELS)
+                and record.get("market") == "crypto"
                 and str(record.get("tf", "")).lower() == "1d"
                 and record.get("symbol") in config.CRYPTO_WATCHLIST
                 and record["plan"].get("side") in ("long", "short")
@@ -272,14 +281,27 @@ def minute_candles(symbol, start, end):
 
 # ---------------------------------------------------------------- the tick
 
+def head_of(order):
+    """BTC FIB L3 BUY / BTC TL BR SELL / BTC TL BUY."""
+    if order.get("kind") == "fib":
+        name = f"FIB {order.get('level') or 'L3'}"
+    else:
+        name = "TL BR" if order.get("broken") else "TL"
+    return f"{demo.coin(order['symbol'])} {name} {'BUY' if order['side'] == 'long' else 'SELL'}"
+
+
 def place(state, ex, record, now, daily=daily_candles, price_now=last_price, btc_move=btc_move_today):
     plan, symbol = record["plan"], record["symbol"]
     side = plan["side"]
-    broken = bool(record.get("broken"))
+    fib = record.get("kind") == "fib"
+    broken = bool(record.get("broken")) and not fib
     pair = demo.coindcx_pair(symbol)
-    head = f"{demo.coin(symbol)} {'TL BR' if broken else 'TL'} {'BUY' if side == 'long' else 'SELL'}"
     order = {"id": record["id"], "symbol": symbol, "pair": pair, "side": side, "broken": broken,
-             "sent_ts": int(float(record["sent_ts"])), "placed_ts": int(now), "status": "skipped"}
+             "kind": "fib" if fib else "trendline", "sent_ts": int(float(record["sent_ts"])),
+             "placed_ts": int(now), "status": "skipped"}
+    if fib:
+        order["level"] = record.get("level") or "L3"
+    head = head_of(order)
     state["orders"][record["id"]] = order
     active = [o for o in state["orders"].values() if o["status"] in ACTIVE]
     if state["realized"] <= -config.COINDCX_LIVE_MAX_LOSS:
@@ -297,7 +319,20 @@ def place(state, ex, record, now, daily=daily_candles, price_now=last_price, btc
         return order
     try:
         entry = price_now(symbol) if broken else float(plan["entry"])
-        sl = wick_body_stop(daily(symbol, now), order["sent_ts"], entry, side)
+        if fib:
+            # the demo's fib trade: the alert's own stop; none once price is already through it
+            sl = float(plan["sl"])
+            if (sl >= entry) if side == "long" else (sl <= entry):
+                order["reason"] = "stop on the wrong side of the entry"
+            else:
+                now_px = price_now(symbol)
+                if (now_px <= sl) if side == "long" else (now_px >= sl):
+                    order["reason"] = f"price {scanner.price_text(now_px)} already through the stop"
+            if order.get("reason"):
+                note(state, f"⏭️ {head} skipped: {order['reason']}", now)
+                return order
+        else:
+            sl = wick_body_stop(daily(symbol, now), order["sent_ts"], entry, side)
         if sl is None:
             order["reason"] = "no wick or body 0.75% past entry"
             note(state, f"⏭️ {head} skipped: {order['reason']}", now)
@@ -335,7 +370,7 @@ def stop_level(order):
 def manage(state, ex, now, positions, open_ids, candles=minute_candles):
     p = scanner.price_text
     for o in [o for o in state["orders"].values() if o["status"] in ACTIVE]:
-        head = f"{demo.coin(o['symbol'])} {'TL BR' if o.get('broken') else 'TL'} {'BUY' if o['side'] == 'long' else 'SELL'}"
+        head = head_of(o)
         pos = positions.get(o["pair"])
         held = pos is not None and float(pos.get("active_pos") or 0) != 0
         try:
@@ -398,10 +433,15 @@ def tick(state, ex, records, now, **hooks):
     return state
 
 
+def kinds_text():
+    names = {"fib": "fibs", "trendline": "trendlines"}
+    return " + ".join(names.get(k, k) for k in config.COINDCX_LIVE_KINDS)
+
+
 def post(state):
     if not state["events"]:
         return
-    text = "**CoinDCX LIVE · 1D trendlines · REAL orders**\n" + "\n".join(e["text"] for e in state["events"])
+    text = f"**CoinDCX LIVE · 1D {kinds_text()} · REAL orders**\n" + "\n".join(e["text"] for e in state["events"])
     if demo.send(text) is not False:
         state["events"] = []
 
@@ -442,7 +482,7 @@ def run_tick(now=None, dry_run=False, remote=False):
     state = load_state()
     if state is None:
         state = new_state(now)
-        note(state, f"started: trades 1D TL alerts until {datetime.fromtimestamp(state['until_ts'], scanner.IST):%d %b %H:%M IST}, "
+        note(state, f"started: trades 1D {kinds_text()} alerts until {datetime.fromtimestamp(state['until_ts'], scanner.IST):%d %b %H:%M IST}, "
                     f"risk {config.COINDCX_LIVE_RISK:g} USDT a trade"
                     + ("" if isinstance(ex, CoinDCX) else " (DRY RUN: no API key)"), now)
     tick(state, ex, remote_records() if remote else demo.load_records(), now)

@@ -180,6 +180,94 @@ class Flow(unittest.TestCase):
         self.assertEqual(s["orders"], {})
 
 
+def fib_record(symbol="ETHUSD", side="long", entry=100.0, sl=91.0, level="L3", sent=NOW - 600):
+    return {"market": "crypto", "symbol": symbol, "tf": "1d", "kind": "fib", "level": level,
+            "plan": {"side": side, "entry": entry, "sl": sl}, "id": f"fib|{symbol}|1d|{level}@{sent}", "sent_ts": sent}
+
+
+class Fibs(unittest.TestCase):
+    """lakky, 2026-11-14: "Start building live mode" for the 1D fib demo - off until switched on."""
+
+    def setUp(self):
+        on = patch.object(config, "COINDCX_LIVE_KINDS", ("trendline", "fib"))
+        on.start()
+        self.addCleanup(on.stop)
+
+    def test_off_unless_listed(self):
+        s = state()
+        self.assertTrue(live.eligible(fib_record(), s, NOW))
+        with patch.object(config, "COINDCX_LIVE_KINDS", ("trendline",)):
+            self.assertFalse(live.eligible(fib_record(), s, NOW))
+            self.assertTrue(live.eligible(record(), s, NOW))
+        with patch.object(config, "COINDCX_LIVE_KINDS", ("fib",)):
+            self.assertTrue(live.eligible(fib_record(), s, NOW))
+            self.assertFalse(live.eligible(record(), s, NOW))
+            self.assertFalse(live.eligible(record(broken=True), s, NOW))
+        with patch.object(config, "COINDCX_DEMO_LEVELS", ("L2", "L3", "L4")):
+            self.assertFalse(live.eligible(fib_record(level="L1"), s, NOW))
+            self.assertTrue(live.eligible(fib_record(level="L4"), s, NOW))
+        self.assertFalse(live.eligible(dict(fib_record(), tf="4h"), s, NOW))
+        self.assertFalse(live.eligible(fib_record(sent=NOW - 7 * 3600), s, NOW))
+
+    def test_limit_at_entry_with_the_alerts_own_stop(self):
+        ex, s = FakeExchange(), state()
+        live.tick(s, ex, [fib_record()], NOW, **HOOKS)
+        o = s["orders"][fib_record()["id"]]
+        self.assertEqual((o["status"], o["kind"], o["level"]), ("pending", "fib", "L3"))
+        self.assertEqual(ex.orders[0]["type"], "limit_order")
+        self.assertEqual((ex.orders[0]["pair"], ex.orders[0]["side"], ex.orders[0]["price"]), ("B-ETH_USDT", "buy", 100.0))
+        self.assertEqual(o["sl"], 91.0)                                 # not the wick-or-body 97
+        self.assertAlmostEqual(ex.orders[0]["qty"], 0.111)              # risk 1 / 9 a unit, step 0.001
+        self.assertIn("ETH FIB L3 BUY", s["events"][-1]["text"])
+        # filled -> the exchange stop at the alert's SL; +1R (109) -> stop to +0.75R (106.75)
+        ex.pos["B-ETH_USDT"] = {"id": "p9", "pair": "B-ETH_USDT", "active_pos": 0.111, "avg_price": 100.0}
+        live.tick(s, ex, [], NOW + 300, candles=lambda *a: [])
+        self.assertEqual(ex.stops[-1], ("p9", 91.0))
+        self.assertIn("ETH FIB L3 BUY", s["events"][-1]["text"])
+        ex.pos["B-ETH_USDT"]["stop_loss_trigger"] = 91.0
+        bars = [[NOW + 300, 100, 109.2, 100, 108]]
+        live.tick(s, ex, [], NOW + 600, candles=lambda sym, a, b: [c for c in bars if a <= c[0] < b])
+        self.assertAlmostEqual(o["stop_r"], 0.75)
+        self.assertEqual(ex.stops[-1], ("p9", 106.75))
+
+    def test_short_fib(self):
+        ex, s = FakeExchange(), state()
+        live.tick(s, ex, [fib_record(side="short", entry=100.0, sl=106.0, level="L4")], NOW, **HOOKS)
+        self.assertEqual((ex.orders[0]["side"], ex.orders[0]["type"], ex.orders[0]["price"]), ("sell", "limit_order", 100.0))
+        self.assertEqual(next(iter(s["orders"].values()))["sl"], 106.0)
+
+    def test_skipped_when_price_is_already_through_the_stop(self):
+        ex, s = FakeExchange(), state()
+        live.tick(s, ex, [fib_record()], NOW, **dict(HOOKS, price_now=lambda sym: 90.5))
+        self.assertEqual(ex.orders, [])
+        self.assertIn("already through the stop", next(iter(s["orders"].values()))["reason"])
+        ex2, s2 = FakeExchange(), state()
+        live.tick(s2, ex2, [fib_record(sl=101.0)], NOW, **HOOKS)
+        self.assertEqual(ex2.orders, [])
+        self.assertIn("wrong side", next(iter(s2["orders"].values()))["reason"])
+
+    def test_fib_and_trendline_share_the_limits(self):
+        ex, s = FakeExchange(), state()
+        live.tick(s, ex, [record("ETHUSD"), fib_record("ETHUSD", sent=NOW - 500)], NOW, **HOOKS)
+        self.assertEqual(len(ex.orders), 1)
+        self.assertIn("already", s["orders"][fib_record("ETHUSD", sent=NOW - 500)["id"]]["reason"])
+
+    def test_orders_from_before_keep_their_trendline_name(self):
+        old = {"symbol": "HYPEUSD", "side": "long", "broken": False}
+        self.assertEqual(live.head_of(old), "HYPE TL BUY")
+        self.assertEqual(live.head_of(dict(old, broken=True)), "HYPE TL BR BUY")
+        self.assertEqual(live.head_of(dict(old, kind="fib", level="L2")), "HYPE FIB L2 BUY")
+
+
+class DefaultKinds(unittest.TestCase):
+    def test_trendlines_only_unless_set(self):
+        import os
+        if os.getenv("VICTUS_COINDCX_LIVE_KINDS"):
+            self.skipTest("set in this environment")
+        self.assertEqual(config.COINDCX_LIVE_KINDS, ("trendline",))
+        self.assertEqual(live.kinds_text(), "trendlines")
+
+
 class Signing(unittest.TestCase):
     def test_hmac_of_compact_json(self):
         sent = {}
