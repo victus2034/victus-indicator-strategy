@@ -1,5 +1,5 @@
 {
- "balance": 847.1533,
+ "balance": 770.4436,
  "orders": {
   "fib|1000PEPEUSD|1d|1|1791417600|0.0056871|1|L1@1794387773": {
    "balance_after": 923.2764,
@@ -32,10 +32,13 @@
    "tp": 0.005412979374999998
   },
   "fib|BNBUSD|1d|1|1782864000|810.67|2@1794483487": {
+   "balance_after": 770.4436,
    "best_r": 0.04822322363935688,
    "capped": false,
-   "checked_until": 1794601560,
+   "checked_until": 1794623340,
    "entry": 660.3275,
+   "exit_ts": 1794623280,
+   "exit_why": "SL",
    "fill_ts": 1794486420,
    "id": "fib|BNBUSD|1d|1|1782864000|810.67|2@1794483487",
    "level": "L3",
@@ -43,12 +46,14 @@
    "margin": 65.88,
    "pair": "B-BNB_USDT",
    "placed_ts": 1794483487,
+   "pnl": -76.7097,
    "position": 1317.65,
+   "r": -1.0228,
    "risk": 75.0,
    "sent_ts": 1794483487,
    "side": "long",
    "sl": 622.741875,
-   "status": "open",
+   "status": "lost",
    "stop_pct": 5.691967243526877,
    "stop_r": null,
    "symbol": "BNBUSD",
@@ -59,7 +64,7 @@
   "fib|BNBUSD|1d|1|1782864000|810.67|2|L4@1794542012": {
    "best_r": 0.5308146399055503,
    "capped": false,
-   "checked_until": 1794601560,
+   "checked_until": 1794623520,
    "entry": 630.259,
    "fill_ts": 1794549300,
    "id": "fib|BNBUSD|1d|1|1782864000|810.67|2|L4@1794542012",
@@ -114,7 +119,7 @@
   "fib|NEARUSD|1d|1|1786406400|6.019|2@1794200911": {
    "best_r": 0.42284995842881273,
    "capped": false,
-   "checked_until": 1794601560,
+   "checked_until": 1794623520,
    "entry": 3.5533499999999996,
    "fill_ts": 1794203880,
    "id": "fib|NEARUSD|1d|1|1786406400|6.019|2@1794200911",
@@ -139,7 +144,7 @@
   "fib|SOLUSD|1d|1|1780704000|124.97|2|L4@1794317604": {
    "best_r": 0.4132933897023824,
    "capped": false,
-   "checked_until": 1794601560,
+   "checked_until": 1794623520,
    "entry": 82.1096,
    "fill_ts": 1794325380,
    "id": "fib|SOLUSD|1d|1|1780704000|124.97|2|L4@1794317604",
@@ -164,7 +169,7 @@
   "fib|UNIUSD|1d|1|1786665600|10.947|2|L4@1794538381": {
    "best_r": 0.195871806260081,
    "capped": false,
-   "checked_until": 1794601560,
+   "checked_until": 1794623520,
    "entry": 5.81352,
    "fill_ts": 1794541620,
    "id": "fib|UNIUSD|1d|1|1786665600|10.947|2|L4@1794538381",
@@ -189,7 +194,7 @@
   "fib|ZECUSD|1d|1|1785283200|1698.46|2|L4@1794546202": {
    "best_r": 0.0,
    "capped": false,
-   "checked_until": 1794601560,
+   "checked_until": 1794623520,
    "entry": 875.4928,
    "id": "fib|ZECUSD|1d|1|1785283200|1698.46|2|L4@1794546202",
    "level": "L4",
