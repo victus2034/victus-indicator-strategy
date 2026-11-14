@@ -17,7 +17,7 @@ class CryptoConfigTests(unittest.TestCase):
         with patch.dict(os.environ, {}, clear=True):
             import config
 
-            self.assertEqual(len(config.CRYPTO_WATCHLIST), 16)
+            self.assertEqual(len(config.CRYPTO_WATCHLIST), 22)
             self.assertLessEqual(len(config.CRYPTO_WATCHLIST), 100)
             self.assertEqual(
                 config.WATCHLIST,
@@ -41,11 +41,24 @@ class CryptoConfigTests(unittest.TestCase):
         with patch.dict(os.environ, {}, clear=True):
             import config
 
-            for symbol in ("QNTUSD", "RLCUSD", "STRKUSD", "BTWUSD", "FILUSD", "AVAXUSD",
-                           "TAOUSD", "AAVEUSD", "ONDOUSD", "SOXLBUSD", "METAXUSD",
+            # FIL, AVAX, TAO and AAVE came back on 2026-11-14 (next test).
+            for symbol in ("QNTUSD", "RLCUSD", "STRKUSD", "BTWUSD", "ONDOUSD", "SOXLBUSD", "METAXUSD",
                            "NVDAXUSD", "MRVL/USDT:USDT"):
                 self.assertNotIn(symbol, config.WATCHLIST)
                 self.assertNotIn(symbol, config.DELTA_LISTED_SYMBOLS)
+
+    def test_top30_additions_2026_11_14(self):
+        # lakky, 2026-11-14: the top 30 by volume on both CoinDCX and Delta, Bitunix perp, no pump/dump
+        # chart (research/top30_brokers.py). Delta lists all six, so they are not NOT_DELTA_LISTED.
+        with patch.dict(os.environ, {}, clear=True):
+            import config
+
+            for symbol in ("AVAXUSD", "INJUSD", "FILUSD", "AAVEUSD", "TAOUSD", "ARBUSD"):
+                self.assertIn(symbol, config.CRYPTO_WATCHLIST)
+                self.assertIn(symbol, config.DELTA_LISTED_SYMBOLS)
+                self.assertIn(symbol, config.BITUNIX_SYMBOLS)
+            for symbol in ("JCTUSD", "AKEUSD", "IRYSUSD", "BTWUSD", "AINUSD", "INITUSD", "TRUMPUSD", "PUMPUSD"):
+                self.assertNotIn(symbol, config.WATCHLIST)
 
     def test_non_delta_xstock_symbols_are_gone(self):
         # 2026-09-16: none of these five is listed on Delta, where Shiva trades.
