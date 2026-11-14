@@ -1,5 +1,5 @@
 {
- "balance": 694.5666,
+ "balance": 617.9365,
  "orders": {
   "fib|1000PEPEUSD|1d|1|1791417600|0.0056871|1|L1@1794387773": {
    "balance_after": 923.2764,
@@ -62,10 +62,13 @@
    "tp": 716.7059374999999
   },
   "fib|BNBUSD|1d|1|1782864000|810.67|2|L4@1794542012": {
+   "balance_after": 617.9365,
    "best_r": 0.5308146399055503,
    "capped": false,
-   "checked_until": 1794672360,
+   "checked_until": 1794672660,
    "entry": 630.259,
+   "exit_ts": 1794672600,
+   "exit_why": "SL",
    "fill_ts": 1794549300,
    "id": "fib|BNBUSD|1d|1|1782864000|810.67|2|L4@1794542012",
    "level": "L4",
@@ -73,12 +76,14 @@
    "margin": 62.88,
    "pair": "B-BNB_USDT",
    "placed_ts": 1794542012,
+   "pnl": -76.6301,
    "position": 1257.65,
+   "r": -1.0217,
    "risk": 75.0,
    "sent_ts": 1794542012,
    "side": "long",
    "sl": 592.6733750000001,
-   "status": "open",
+   "status": "lost",
    "stop_pct": 5.963520552661674,
    "stop_r": null,
    "symbol": "BNBUSD",
@@ -119,7 +124,7 @@
   "fib|NEARUSD|1d|1|1786406400|6.019|2@1794200911": {
    "best_r": 0.42284995842881273,
    "capped": false,
-   "checked_until": 1794672360,
+   "checked_until": 1794672660,
    "entry": 3.5533499999999996,
    "fill_ts": 1794203880,
    "id": "fib|NEARUSD|1d|1|1786406400|6.019|2@1794200911",
@@ -174,7 +179,7 @@
   "fib|UNIUSD|1d|1|1786665600|10.947|2|L4@1794538381": {
    "best_r": 0.195871806260081,
    "capped": false,
-   "checked_until": 1794672360,
+   "checked_until": 1794672660,
    "entry": 5.81352,
    "fill_ts": 1794541620,
    "id": "fib|UNIUSD|1d|1|1786665600|10.947|2|L4@1794538381",
@@ -199,7 +204,7 @@
   "fib|ZECUSD|1d|1|1785283200|1698.46|2|L4@1794546202": {
    "best_r": 0.11243529511261198,
    "capped": false,
-   "checked_until": 1794672360,
+   "checked_until": 1794672660,
    "entry": 875.4928,
    "fill_ts": 1794662580,
    "id": "fib|ZECUSD|1d|1|1785283200|1698.46|2|L4@1794546202",
