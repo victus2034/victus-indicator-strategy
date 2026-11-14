@@ -651,3 +651,9 @@ COINDCX_LIVE_SL_GAP_PCT = env_float("VICTUS_COINDCX_LIVE_SL_GAP_PCT", 0.75)
 COINDCX_LIVE_MAX_ALERT_AGE = 6 * 3600     # GitHub's schedule can skip a few hours
 # "": every BTC day. "so_far": only while BTC's move from today's 00:00 UTC open is within 1.5%.
 COINDCX_LIVE_BTC_FILTER = os.getenv("VICTUS_COINDCX_LIVE_BTC_FILTER", "")
+# Which 1D crypto alerts it trades: "trendline" (touches + breaks, wick-or-body SL, the 13 Nov
+# week) and / or "fib" (lakky, 2026-11-14: "Start building live mode" for the CoinDCX fib demo -
+# the demo's rules: a limit at the alert's entry, the alert's own SL, levels COINDCX_DEMO_LEVELS).
+# Empty / unset = "trendline" only, so the running TL bot is unchanged until this is set.
+COINDCX_LIVE_KINDS = tuple(
+    kind.strip() for kind in (os.getenv("VICTUS_COINDCX_LIVE_KINDS", "") or "trendline").split(",") if kind.strip())
