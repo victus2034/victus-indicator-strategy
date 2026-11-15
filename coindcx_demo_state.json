@@ -1,5 +1,5 @@
 {
- "balance": 617.9365,
+ "balance": 466.8976,
  "orders": {
   "fib|1000PEPEUSD|1d|1|1791417600|0.0056871|1|L1@1794387773": {
    "balance_after": 923.2764,
@@ -122,10 +122,13 @@
    "tp": 2358.8146874999993
   },
   "fib|NEARUSD|1d|1|1786406400|6.019|2@1794200911": {
+   "balance_after": 542.4007,
    "best_r": 0.42284995842881273,
    "capped": false,
-   "checked_until": 1794687960,
+   "checked_until": 1794689700,
    "entry": 3.5533499999999996,
+   "exit_ts": 1794689640,
+   "exit_why": "SL",
    "fill_ts": 1794203880,
    "id": "fib|NEARUSD|1d|1|1786406400|6.019|2@1794200911",
    "level": "L3",
@@ -133,12 +136,14 @@
    "margin": 21.62,
    "pair": "B-NEAR_USDT",
    "placed_ts": 1794200911,
+   "pnl": -75.5358,
    "position": 432.34,
+   "r": -1.0071,
    "risk": 75.0,
    "sent_ts": 1794200911,
    "side": "long",
    "sl": 2.9369374999999995,
-   "status": "open",
+   "status": "lost",
    "stop_pct": 17.347362348206623,
    "stop_r": null,
    "symbol": "NEARUSD",
@@ -147,9 +152,9 @@
    "tp": 4.47796875
   },
   "fib|NEARUSD|1d|1|1786406400|6.019|2|L4@1794673984": {
-   "best_r": 0.002887676677549719,
+   "best_r": 0.13429318840873625,
    "capped": false,
-   "checked_until": 1794687960,
+   "checked_until": 1794709920,
    "entry": 3.0602199999999997,
    "fill_ts": 1794687240,
    "id": "fib|NEARUSD|1d|1|1786406400|6.019|2|L4@1794673984",
@@ -202,10 +207,13 @@
    "tp": 95.503475
   },
   "fib|UNIUSD|1d|1|1786665600|10.947|2|L4@1794538381": {
+   "balance_after": 466.8976,
    "best_r": 0.195871806260081,
    "capped": false,
-   "checked_until": 1794687960,
+   "checked_until": 1794689700,
    "entry": 5.81352,
+   "exit_ts": 1794689640,
+   "exit_why": "SL",
    "fill_ts": 1794541620,
    "id": "fib|UNIUSD|1d|1|1786665600|10.947|2|L4@1794538381",
    "level": "L4",
@@ -213,12 +221,14 @@
    "margin": 20.38,
    "pair": "B-UNI_USDT",
    "placed_ts": 1794538381,
+   "pnl": -75.5031,
    "position": 407.69,
+   "r": -1.0067,
    "risk": 75.0,
    "sent_ts": 1794538381,
    "side": "long",
    "sl": 4.744045,
-   "status": "open",
+   "status": "lost",
    "stop_pct": 18.396341631232023,
    "stop_r": null,
    "symbol": "UNIUSD",
@@ -227,9 +237,9 @@
    "tp": 7.4177325
   },
   "fib|ZECUSD|1d|1|1785283200|1698.46|2|L4@1794546202": {
-   "best_r": 0.11243529511261198,
+   "best_r": 0.15559618900971978,
    "capped": false,
-   "checked_until": 1794687960,
+   "checked_until": 1794709920,
    "entry": 875.4928,
    "fill_ts": 1794662580,
    "id": "fib|ZECUSD|1d|1|1785283200|1698.46|2|L4@1794546202",

@@ -31,7 +31,7 @@
   },
   "BTCUSD|1M|long|65280.4|61203.4": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "BTCUSD|1M|long|76355.4|71362.9": {
@@ -66,11 +66,12 @@
   },
   "HYPEUSD|1d|long|67.946|58.505": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "HYPEUSD|1w|long|63.1174|59.709": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "HYPEUSD|1w|long|71.6442|67.306": {
@@ -83,8 +84,8 @@
     "stopped_out": false
   },
   "NEARUSD|1d|long|3.06022|2.44381": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "NEARUSD|1w|long|3.1711|2.45912": {
@@ -95,7 +96,7 @@
   "NEARUSD|1w|long|3.6889|3.0287": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "NEARUSD|1w|long|4.25848|3.54651": {
     "reached_entry": true,
@@ -133,7 +134,7 @@
   "SOLUSD|1w|long|72.1818|71.36": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "TAOUSD|1w|short|277.335|415.206": {
     "reached_entry": false,
@@ -171,7 +172,7 @@
   "UNIUSD|1d|long|5.81352|4.74404": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "UNIUSD|1w|long|5.24922|4.525": {
     "reached_entry": true,
@@ -197,9 +198,9 @@
     "stopped_out": false
   },
   "XRPUSD|1d|long|0.943743|0.8924": {
-    "reached_entry": false,
-    "stage": 1,
-    "stopped_out": false
+    "reached_entry": true,
+    "stage": 3,
+    "stopped_out": true
   },
   "XRPUSD|1w|long|1.05508|0.9928": {
     "reached_entry": true,
@@ -209,7 +210,7 @@
   "ZECUSD|1M|long|1017.09|824.033": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "ZECUSD|1M|long|1183.65|975.449": {
     "reached_entry": true,
@@ -229,7 +230,7 @@
   "ZECUSD|1w|long|1017.09|824.033": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "ZECUSD|1w|long|1183.65|657.475": {
     "reached_entry": true,
@@ -241,7 +242,7 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794684405.519054,
+  "_last_check|crypto": 1794709907.737462,
   "_last_check|nse": 1794562591.035147,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
