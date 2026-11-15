@@ -2187,15 +2187,15 @@
    "alert_ts": 1794549599,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794661200,
    "entry": 0.17096599999999998,
    "fill_ts": 1794549600,
    "filled": true,
    "half": true,
-   "outcome": "1R",
+   "outcome": "2R",
    "r1": true,
-   "r2": false,
-   "resolved": false,
+   "r2": true,
+   "resolved": true,
    "sl": false
   },
   "L2": {
@@ -2217,15 +2217,15 @@
    "alert_ts": 1794574799,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794646800,
    "entry": 0.175734,
    "fill_ts": null,
    "filled": false,
    "half": false,
-   "outcome": "open",
+   "outcome": "no fill",
    "r1": false,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   }
  },
@@ -3302,8 +3302,8 @@
    "fill_ts": 1794162600,
    "filled": true,
    "half": true,
-   "outcome": "open",
-   "r1": false,
+   "outcome": "1R",
+   "r1": true,
    "r2": false,
    "resolved": false,
    "sl": false
@@ -16250,7 +16250,7 @@
    "entry": 2693.570031738281,
    "fill_ts": 1794162600,
    "filled": true,
-   "half": false,
+   "half": true,
    "outcome": "open",
    "r1": false,
    "r2": false,
@@ -26810,11 +26810,19 @@
    "sl": false
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794671999,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794686400,
    "entry": 3.0602199999999997,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1794686400,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
   }
  },
  "fib|NEARUSD|1w|1|1769990400|6.019|2@1794545005": {
@@ -26947,15 +26955,15 @@
    "alert_ts": 1794549599,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794682800,
    "entry": 3.44902,
    "fill_ts": 1794549600,
    "filled": true,
    "half": true,
-   "outcome": "open",
-   "r1": false,
-   "r2": false,
-   "resolved": false,
+   "outcome": "2R",
+   "r1": true,
+   "r2": true,
+   "resolved": true,
    "sl": false
   },
   "L2": {
@@ -26977,15 +26985,15 @@
    "alert_ts": 1794574799,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794646800,
    "entry": 3.62598,
    "fill_ts": null,
    "filled": false,
    "half": false,
-   "outcome": "open",
+   "outcome": "no fill",
    "r1": false,
    "r2": false,
-   "resolved": false,
+   "resolved": true,
    "sl": false
   }
  },
@@ -32048,6 +32056,45 @@
    "sl": false
   }
  },
+ "fib|QQQXUSD|4h|1|1793908800|696.31|2@1794673701": {
+  "L1": {
+   "alert_ts": 1794437999,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794510000,
+   "entry": 677.1918,
+   "fill_ts": null,
+   "filled": false,
+   "half": false,
+   "outcome": "no fill",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L2": {
+   "alert_ts": 1794581999,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794654000,
+   "entry": 671.0065,
+   "fill_ts": null,
+   "filled": false,
+   "half": false,
+   "outcome": "no fill",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": false
+  },
+  "L4": {
+   "alert_ts": null,
+   "entry": 659.1982,
+   "filled": false,
+   "outcome": "open",
+   "resolved": false
+  }
+ },
  "fib|RADICO.NS|1d|1|1779993000|4747.0|2@1792738373": {
   "L1": {
    "alert_ts": 1789461899,
@@ -34925,38 +34972,46 @@
    "alert_ts": 1791331199,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794614400,
    "entry": 8.01178,
    "fill_ts": 1791331200,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L2": {
    "alert_ts": 1791417599,
    "ambiguous": false,
    "be": false,
-   "end_ts": null,
+   "end_ts": 1794614400,
    "entry": 7.06215,
    "fill_ts": 1791417600,
    "filled": true,
    "half": false,
-   "outcome": "open",
+   "outcome": "SL",
    "r1": false,
    "r2": false,
-   "resolved": false,
-   "sl": false
+   "resolved": true,
+   "sl": true
   },
   "L4": {
-   "alert_ts": null,
+   "alert_ts": 1794614399,
+   "ambiguous": false,
+   "be": false,
+   "end_ts": 1794614400,
    "entry": 5.249219999999999,
-   "filled": false,
-   "outcome": "open",
-   "resolved": false
+   "fill_ts": 1794614400,
+   "filled": true,
+   "half": false,
+   "outcome": "SL",
+   "r1": false,
+   "r2": false,
+   "resolved": true,
+   "sl": true
   }
  },
  "fib|UNIUSD|4h|-1|1792540800|6.504|2@1793027568": {
