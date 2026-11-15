@@ -119,7 +119,7 @@ class Flow(unittest.TestCase):
         self.assertEqual(ex.orders[0]["price"], 100.0)
         self.assertEqual(o["sl"], 97.0)
         self.assertAlmostEqual(ex.orders[0]["qty"], 0.333)                         # risk 1 / 3 a unit
-        self.assertEqual(ex.orders[0]["lev"], 20)
+        self.assertEqual(ex.orders[0]["lev"], 20)                                  # stop 3%: 20x liquidates ~4.5% away
         # filled: the position shows up, the exchange stop goes in
         ex.pos["B-BTC_USDT"] = {"id": "p1", "pair": "B-BTC_USDT", "active_pos": 0.333, "avg_price": 100.0}
         live.tick(s, ex, [], NOW + 300, candles=lambda *a: [])
@@ -178,6 +178,46 @@ class Flow(unittest.TestCase):
         live.tick(s, ex, [record()], NOW, **HOOKS)
         self.assertEqual(ex.orders, [])
         self.assertEqual(s["orders"], {})
+
+
+class Safety(unittest.TestCase):
+    def test_leverage_keeps_liquidation_past_the_stop(self):
+        ex, s = FakeExchange(), state()
+        far = dict(HOOKS, daily=lambda sym, now: daily(lows=(88.0, 99.5, 99.8)))    # stop 12% away
+        live.tick(s, ex, [record()], NOW, **far)
+        self.assertEqual(s["orders"][record()["id"]]["sl"], 88.0)
+        self.assertEqual(ex.orders[0]["lev"], 5)                                    # 70 / 12
+
+    def test_stop_goes_in_when_there_is_nothing_to_cancel(self):
+        calls = []
+
+        class C(live.CoinDCX):
+            def post(self, path, body):
+                calls.append(path.rsplit("/", 1)[-1])
+                if path.endswith("cancel_all_open_orders_for_position"):
+                    raise RuntimeError('CoinDCX x: HTTP 422 {"message":"No open orders found for this position"}')
+                return {"ok": 1}
+        C("k", "s").set_stop("p1", 97.0)
+        self.assertEqual(calls, ["cancel_all_open_orders_for_position", "create_tpsl"])
+
+    def test_other_cancel_errors_still_raise(self):
+        class C(live.CoinDCX):
+            def post(self, path, body):
+                raise RuntimeError("CoinDCX x: HTTP 500 down")
+        with self.assertRaises(RuntimeError):
+            C("k", "s").set_stop("p1", 97.0)
+
+    def test_a_failing_stop_is_reported_once(self):
+        class NoStop(FakeExchange):
+            def set_stop(self, pid, stop):
+                raise RuntimeError("HTTP 400 bad stop")
+        ex, s = NoStop(), state()
+        live.tick(s, ex, [record()], NOW, **HOOKS)
+        ex.pos["B-BTC_USDT"] = {"id": "p1", "pair": "B-BTC_USDT", "active_pos": 0.333, "avg_price": 100.0}
+        s["events"] = []
+        for i in (1, 2, 3):
+            live.tick(s, ex, [], NOW + 300 * i, candles=lambda *a: [])
+        self.assertEqual(sum("manage FAILED" in e["text"] for e in s["events"]), 1)
 
 
 class Signing(unittest.TestCase):

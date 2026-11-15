@@ -26,7 +26,8 @@ What it does every tick:
      - touch: limit at the line's price; break: market
      - quantity = COINDCX_LIVE_RISK / stop distance, rounded down to the instrument's
        step; under the minimum -> the minimum if that risks <= 2x the plan, else skipped
-     - leverage = min(COINDCX_LIVE_MAX_LEVERAGE, the instrument's max)
+     - leverage = min(COINDCX_LIVE_MAX_LEVERAGE, the instrument's max, 70 / stop %) so the stop
+       is always closer than the liquidation price
      - skipped while that coin already has a bot order or position, at
        COINDCX_LIVE_MAX_OPEN active trades, or once the loss so far reaches
        COINDCX_LIVE_MAX_LOSS (kill switch)
@@ -119,7 +120,11 @@ class CoinDCX:
         return {p["pair"]: p for p in (got if isinstance(got, list) else []) if p.get("pair")}
 
     def set_stop(self, position_id, stop):
-        self.post("/exchange/v1/derivatives/futures/positions/cancel_all_open_orders_for_position", {"id": position_id})
+        try:        # 422 "No open orders found" when there is no stop yet: that used to stop the stop going in
+            self.post("/exchange/v1/derivatives/futures/positions/cancel_all_open_orders_for_position", {"id": position_id})
+        except RuntimeError as error:
+            if "422" not in str(error):
+                raise
         return self.post("/exchange/v1/derivatives/futures/positions/create_tpsl", {
             "id": position_id, "stop_loss": {"stop_price": stop, "order_type": "stop_market"}})
 
@@ -148,6 +153,9 @@ class DryRun:
 
 
 # ---------------------------------------------------------------- the rules
+
+LIQUIDATION_ROOM = 70.0     # leverage x stop % stays under this, so the stop is hit before liquidation
+
 
 def wick_body_stop(daily, t0, entry, side, gap_pct=None):
     """His "Wick or body" SL: walking back from the newest daily candle closed before t0,
@@ -310,6 +318,9 @@ def place(state, ex, record, now, daily=daily_candles, price_now=last_price, btc
             return order
         lev = min(config.COINDCX_LIVE_MAX_LEVERAGE, float(ins.get("max_leverage_long" if side == "long" else "max_leverage_short")
                                                            or ins.get("max_leverage") or config.COINDCX_LIVE_MAX_LEVERAGE))
+        # liquidation must sit past the stop: at 20x a position is liquidated ~4.5% away, and both
+        # HYPE trades of 14-15 Nov (stops 14% and 8% away) were closed by liquidation, not the stop
+        lev = max(1, min(lev, int(LIQUIDATION_ROOM / (abs(entry - sl) / entry * 100))))
         tick_size = float(ins.get("price_increment") or 0)
         price = step_round(entry, tick_size) if tick_size else entry
         got = ex.create_order(pair, "buy" if side == "long" else "sell",
@@ -376,7 +387,14 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                 ex.set_stop(o["position_id"], stop_level(o))      # the exchange stop went missing
                 note(state, f"🔁 **{head}** stop re-placed at {p(stop_level(o))}", now)
         except Exception as error:  # noqa: BLE001
-            note(state, f"⚠️ **{head}** manage FAILED: {str(error)[:160]}", now)
+            text = str(error)[:160]
+            if o.get("last_error") != text:                # once per error, not every tick
+                note(state, f"⚠️ **{head}** manage FAILED: {text}", now)
+            else:
+                print(f"coindcx live: {head} manage still failing: {text}")
+            o["last_error"] = text
+        else:
+            o.pop("last_error", None)
 
 
 def tick(state, ex, records, now, **hooks):
