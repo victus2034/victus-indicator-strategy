@@ -554,5 +554,12 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   chased. Breaks are unchanged. `VICTUS_COINDCX_LIVE_TOUCH_ENTRY=limit` is the old way. Backtest
   (`research/tl_lower_tf_entry_backtest.py`, part `tl-lower-tf`, night included): touches Jan 2025 - now -0.21R ->
   0.00R a trade, Sep 1 - now -0.30R -> -0.19R.
+- **CoinDCX live: Delta-listed coins trade on Delta India (2026-11-16, lakky: "in delta fees is very less").**
+  `delta_live.Delta` gives the bot's five calls on Delta (whole contracts, tick-rounded prices, leverage per order,
+  the stop a reduce-only stop-market order, a moved stop placed before the old one is cancelled); `coindcx_live.Router`
+  sends a `DELTA:` pair / `product:order` id there. New trades on a `DELTA_LISTED_SYMBOLS` coin go to Delta once
+  `DELTA_API_KEY` / `DELTA_API_SECRET` reach the bot (`VICTUS_LIVE_DELTA=0` = all CoinDCX); open CoinDCX trades stay
+  there. A missing position / order is booked only after `LIVE_GONE_GRACE_SECONDS` (Delta's position list lags a fill).
+  `python delta_live.py --self-test XRPUSD` (AWS runner) does one real 1-contract buy, stop, stop move, close.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.
