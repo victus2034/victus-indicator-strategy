@@ -531,6 +531,11 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   `save_state`, and a two-message digest re-posted its first half whenever the second failed. With no channel set
   up the events are dropped, not piled up in the state. An empty account takes no orders ("account empty"), and an
   alert id on file twice is one order. `tests/test_weekly_audit_2026_11_08.py`.
+- **CoinDCX live orders (weekly audit, 2026-11-15).** `coindcx_live.py`: every stop goes out on the instrument's
+  price step, rounded away from price (`stop_level`; the first stop was sent unrounded); a fill moves entry, stop % and
+  risk to the price filled (`rebase_on_fill`, market breaks slip); an order with no id returned is an error, not
+  pending; no API key = dry run, nothing saved or posted (keyless "dry-" orders used to block their coin for 20 days,
+  and are dropped on load). `tests/test_weekly_audit_2026_11_15.py`.
 - **Crypto fib / trendline scan runs all night (2026-11-15, lakky: "all my trades will be 24*7").** XRP's lower 1D
   line was touched 15 Nov 03:15 IST with the scanner asleep (01:00-08:00 IST), so the CoinDCX bot had no trade, and the
   05:30 IST daily-close breaks went out at 08:13. `config.FIB_TL_CRYPTO_NIGHT` (`VICTUS_FIB_TL_CRYPTO_NIGHT=0` = old

@@ -130,7 +130,7 @@ class Flow(unittest.TestCase):
         bars = [[NOW + 300, 100, 103.1, 100, 102.5]]
         live.tick(s, ex, [], NOW + 600, candles=lambda sym, a, b: [c for c in bars if a <= c[0] < b])
         self.assertAlmostEqual(o["stop_r"], 0.75)
-        self.assertEqual(ex.stops[-1], ("p1", 102.25))
+        self.assertEqual(ex.stops[-1], ("p1", 102.2))                         # on the 0.1 price step, away from price
         # stopped out: the position is gone
         del ex.pos["B-BTC_USDT"]
         live.tick(s, ex, [], NOW + 900, candles=lambda *a: [])
