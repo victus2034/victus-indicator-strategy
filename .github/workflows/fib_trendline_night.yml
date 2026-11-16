@@ -1,0 +1,44 @@
+name: Victus Fib + Trendline Night Driver
+
+# cron-job.org dispatches the 30m scanner (and with it the fib/trendline scan) only
+# 08:00-01:00 IST. Since 2026-11-15 (lakky) the crypto fib/trendline scan runs through the
+# night as well - the CoinDCX bot trades its alerts - so this job dispatches that scan
+# every 5 minutes from 00:30 to 08:05 IST and then starts its own next run. The fib scan
+# starts it (its last step), the schedule below is only a second way in: GitHub's
+# scheduler honours a fraction of its slots.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "10,40 19-23 * * *"
+    - cron: "10,40 0-2 * * *"
+
+permissions:
+  actions: write
+
+concurrency:
+  group: victus-fib-trendline-night
+  cancel-in-progress: false
+
+jobs:
+  drive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Dispatch the fib/trendline scan every 5 minutes while it is night
+        run: |
+          night() { m=$(( 10#$(TZ=Asia/Kolkata date +%H) * 60 + 10#$(TZ=Asia/Kolkata date +%M) )); [ "$m" -ge 30 ] && [ "$m" -lt 485 ]; }
+          dispatch() {
+            curl -sS -o /dev/null -w "$1: HTTP %{http_code}\n" -X POST \
+              -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/$1/dispatches" \
+              -d '{"ref":"main"}' || true
+          }
+          if ! night; then echo "day: cron-job.org drives the scan"; exit 0; fi
+          end=$((SECONDS + 25 * 60))
+          while [ $SECONDS -lt $end ] && night; do
+            dispatch fib_trendline_scan.yml
+            sleep 300
+          done
+          if night; then dispatch fib_trendline_night.yml; fi
