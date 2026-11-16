@@ -430,6 +430,12 @@ STALE_BARS_ALLOWED = env_int("VICTUS_STALE_BARS_ALLOWED", 4)
 # earlier than the start hour on the clock.
 CRYPTO_ALERT_START = datetime_time(8, 0)
 CRYPTO_ALERT_END = datetime_time(1, 0)
+# Fib / trendline / 1D+ zone alerts run through the night too (lakky, 2026-11-15: the CoinDCX
+# bot trades them, and XRP's lower 1D line was touched at 03:15 IST with the scanner asleep).
+# Outside the window above they are recorded - the bot and the journal read the records -
+# but not posted: the Discord alert channels stay quiet at night. The 4H zone scanner keeps
+# its hold. VICTUS_FIB_TL_CRYPTO_NIGHT=0 brings the old hold back.
+FIB_TL_CRYPTO_NIGHT = env_flag("VICTUS_FIB_TL_CRYPTO_NIGHT", True)
 
 SCAN_SLEEP = 300
 SCAN_WORKERS = 8

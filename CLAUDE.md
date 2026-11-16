@@ -531,5 +531,14 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   `save_state`, and a two-message digest re-posted its first half whenever the second failed. With no channel set
   up the events are dropped, not piled up in the state. An empty account takes no orders ("account empty"), and an
   alert id on file twice is one order. `tests/test_weekly_audit_2026_11_08.py`.
+- **Crypto fib / trendline scan runs all night (2026-11-15, lakky: "all my trades will be 24*7").** XRP's lower 1D
+  line was touched 15 Nov 03:15 IST with the scanner asleep (01:00-08:00 IST), so the CoinDCX bot had no trade, and the
+  05:30 IST daily-close breaks went out at 08:13. `config.FIB_TL_CRYPTO_NIGHT` (`VICTUS_FIB_TL_CRYPTO_NIGHT=0` = old
+  hold): outside the alert window fib / TL / 1D+ zone alerts are recorded (bot, journal, entry confirm read the records)
+  and marked sent, **not posted** - his pick, "night alerts silent". cron-job.org stops at night, so
+  `fib_trendline_night.yml` dispatches the fib scan every 5 min 00:30-08:05 IST and re-dispatches itself; the fib scan's
+  last step starts it. The replay has no night hold any more (`fib_trendline_backtest.crypto_held`). The 4H zone scanner
+  keeps its hold. `tests/test_fib_tl_night.py`; `research/tl_touch_trace.py` (part `tl-touch`),
+  `research/tl_lower_tf_entry_backtest.py` (part `tl-lower-tf`: lower-timeframe entry on 1D lines, asleep vs awake).
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

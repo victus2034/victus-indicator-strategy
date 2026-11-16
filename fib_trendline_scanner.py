@@ -46,6 +46,7 @@ from pathlib import Path
 import requests
 
 import bitunix_data
+import config
 import fib_engine
 import fib_trendline_trades as trades
 import scanner
@@ -1046,7 +1047,10 @@ def run_once(dry_run=False, force_nse=False):
         del attempts[key]
     configured = {(channel, market): bool(webhook_url(channel, market))
                   for channel in CHANNELS for market in (CRYPTO, NSE)}
-    awake = {CRYPTO: scanner.in_alert_window(), NSE: True}   # NSE only scans in session
+    in_window = scanner.in_alert_window()
+    # Night (01:00-08:00 IST): crypto still scans and records, Discord stays quiet (lakky, 2026-11-15).
+    quiet = {CRYPTO: config.FIB_TL_CRYPTO_NIGHT and not in_window, NSE: False}
+    awake = {CRYPTO: in_window or config.FIB_TL_CRYPTO_NIGHT, NSE: True}   # NSE only scans in session
     last_scans = state.get(LAST_SCAN_KEY)
     if not isinstance(last_scans, dict):
         last_scans = {}
@@ -1084,6 +1088,15 @@ def run_once(dry_run=False, force_nse=False):
                         continue
                     if not awake[market]:
                         continue             # held - it alerts later if it is still true
+                    if quiet[market]:
+                        # recorded for the bot and the journal, never posted - not later either
+                        print(f"[{channel}, night - not posted] {message}\n")
+                        mark_sent(state, key, now)
+                        if record:
+                            append_record(record, key, now)
+                        counts[tally] = counts.get(tally, 0) + 1
+                        save_state(state, now)
+                        continue
                     if now - attempts.get(key, 0) < RETRY_BACKOFF_SECONDS:
                         continue             # the last send failed: wait out the backoff
                     ready.append((channel, key, message, record))
@@ -1122,6 +1135,8 @@ def run_once(dry_run=False, force_nse=False):
                  if any(m == market for _, m in seeding) else ""))
     if not awake[CRYPTO]:
         print("Crypto: outside the alert window, holding")
+    elif quiet[CRYPTO]:
+        print("Crypto: night pass - alerts recorded, Discord quiet")
     for (channel, market), ok in configured.items():
         if not ok and market in markets:
             print(f"{webhook_env(channel, market)} is not configured - {MARKET_LABEL[market]} {channel} alerts off.")
