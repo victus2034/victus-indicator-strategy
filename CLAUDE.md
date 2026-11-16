@@ -559,7 +559,7 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   the stop a reduce-only stop-market order, a moved stop placed before the old one is cancelled); `coindcx_live.Router`
   sends a `DELTA:` pair / `product:order` id there. New trades on a `DELTA_LISTED_SYMBOLS` coin go to Delta once
   `DELTA_API_KEY` / `DELTA_API_SECRET` reach the bot (`VICTUS_LIVE_DELTA=0` = all CoinDCX); open CoinDCX trades stay
-  there. A missing position / order is booked only after `LIVE_GONE_GRACE_SECONDS` (Delta's position list lags a fill).
+  there; an order Delta refuses (e.g. wallet too small) goes to CoinDCX. A missing position / order is booked only after `LIVE_GONE_GRACE_SECONDS` (Delta's position list lags a fill).
   `python delta_live.py --self-test XRPUSD` (AWS runner) does one real 1-contract buy, stop, stop move, close.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

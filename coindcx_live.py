@@ -391,6 +391,11 @@ def submit(state, ex, order, head, entry, market, now, daily=daily_candles, pric
         got = ex.create_order(pair, "buy" if side == "long" else "sell",
                               "market_order" if broken else "limit_order", qty, int(lev), None if broken else price)
     except Exception as error:  # noqa: BLE001 - one alert must not stop the rest
+        if pair.startswith(delta_live.PREFIX):
+            # Delta refused (e.g. too little margin in the Delta wallet): the trade goes to CoinDCX instead
+            order["pair"] = demo.coindcx_pair(symbol)
+            note(state, f"↪️ {head} Delta refused ({str(error)[:120]}), sent to CoinDCX", now)
+            return submit(state, ex, order, head, entry, market, now, daily=daily, price_now=price_now)
         order.update(status="error", reason=str(error)[:200])
         note(state, f"⚠️ {head} order FAILED: {order['reason']}", now)
         return order
