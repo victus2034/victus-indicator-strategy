@@ -75,6 +75,7 @@
   },
   "ABBOTINDIA.NS|1d|long|25910|25525": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ABBOTINDIA.NS|1w|short|26493.2|26705": {
@@ -1572,8 +1573,8 @@
     "stopped_out": true
   },
   "HAVELLS.NS|1w|short|1172.89|1216.31": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "HAVELLS.NS|1w|short|1207.63|1222.9": {
@@ -2433,6 +2434,10 @@
     "stage": 2,
     "stopped_out": false
   },
+  "MFSL.NS|1w|short|1470.12|1551.3": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "MOTILALOFS.NS|1M|short|1155.59|1240.85": {
     "reached_entry": true,
     "stage": 3,
@@ -2968,6 +2973,11 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "PREMIERENE.NS|1d|long|835.396|825.05": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
   "PREMIERENE.NS|1d|long|857.885|843.757": {
     "reached_entry": true,
     "stage": 3,
@@ -3256,8 +3266,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794811308.74601,
-  "_last_check|nse": 1794811308.74601,
+  "_last_check|crypto": 1794811583.855592,
+  "_last_check|nse": 1794811583.855592,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -3312,6 +3322,7 @@
   "_level_ready|AAVEUSD|30m|short|182.36|183.685": 1791081979.673311,
   "_level_ready|ABBOTINDIA.NS|1M|long|25775.9|24141.8": 1791517599.357562,
   "_level_ready|ABBOTINDIA.NS|1d|long|25131|24868.7": 1793073108.145997,
+  "_level_ready|ABBOTINDIA.NS|1d|long|25910|25525": 1794811583.855592,
   "_level_ready|ABBOTINDIA.NS|1d|long|26190|25833": 1794455172.242815,
   "_level_ready|ABBOTINDIA.NS|1d|long|26478.2|26097.3": 1794368805.895201,
   "_level_ready|ABBOTINDIA.NS|1d|long|26498|26113": 1794196012.334544,
@@ -4853,6 +4864,7 @@
   "_level_ready|PPLPHARMA.NS|1w|short|228.88|253.025": 1793163721.172195,
   "_level_ready|PPLPHARMA.NS|1w|short|248.196|253.95": 1794801725.491212,
   "_level_ready|PREMIERENE.NS|1M|short|907.52|937.95": 1794548507.365967,
+  "_level_ready|PREMIERENE.NS|1d|long|835.396|825.05": 1794811583.855592,
   "_level_ready|PREMIERENE.NS|1d|long|857.885|843.757": 1794805602.515523,
   "_level_ready|PREMIERENE.NS|1d|long|869.188|855.059": 1794803188.782848,
   "_level_ready|PREMIERENE.NS|1d|long|869.92|859.031": 1793862119.433316,
@@ -5229,7 +5241,7 @@
   "_ready|AAVEUSD|30m": 1791190567.107418,
   "_ready|AAVEUSD|4h": 1789057560.102114,
   "_ready|ABBOTINDIA.NS|1M": 1791517599.357562,
-  "_ready|ABBOTINDIA.NS|1d": 1794455172.242815,
+  "_ready|ABBOTINDIA.NS|1d": 1794811583.855592,
   "_ready|ABBOTINDIA.NS|1w": 1794801374.168667,
   "_ready|ABDL.NS|1d": 1792986985.751506,
   "_ready|ABSLAMC.NS|1M": 1793691703.653116,
@@ -5734,7 +5746,7 @@
   "_ready|PPLPHARMA.NS|1d": 1793169409.13753,
   "_ready|PPLPHARMA.NS|1w": 1794801725.491212,
   "_ready|PREMIERENE.NS|1M": 1794548507.365967,
-  "_ready|PREMIERENE.NS|1d": 1794805602.515523,
+  "_ready|PREMIERENE.NS|1d": 1794811583.855592,
   "_ready|PREMIERENE.NS|1w": 1794801725.491212,
   "_ready|PRESTIGE.NS|1d": 1793680606.357613,
   "_ready|PRESTIGE.NS|1w": 1793591209.526473,
