@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: write
+  actions: write      # starts the night driver (last step)
 
 concurrency:
   group: victus-fib-trendline
@@ -84,6 +85,21 @@ jobs:
       - name: Persist runtime state
         if: always()
         run: bash .github/scripts/persist_runtime_state.sh fib_trendline_state.json fib_trendline_alert_records.jsonl fib_trendline_results.json fib_level_results.json
+
+      # 00:30-08:05 IST cron-job.org is off: the night driver keeps this scan going
+      # (fib_trendline_night.yml). Its concurrency group keeps one running and one waiting.
+      - name: Start the night driver
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          m=$(( 10#$(TZ=Asia/Kolkata date +%H) * 60 + 10#$(TZ=Asia/Kolkata date +%M) ))
+          if [ "$m" -ge 30 ] && [ "$m" -lt 485 ]; then
+            curl -sS -o /dev/null -w 'night driver: HTTP %{http_code}\n' -X POST \
+              -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/fib_trendline_night.yml/dispatches" \
+              -d '{"ref":"main"}' || true
+          fi
 
       - name: Notify on failure
         if: failure()
