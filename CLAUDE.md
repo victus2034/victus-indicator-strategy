@@ -545,5 +545,14 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   last step starts it. The replay has no night hold any more (`fib_trendline_backtest.crypto_held`). The 4H zone scanner
   keeps its hold. `tests/test_fib_tl_night.py`; `research/tl_touch_trace.py` (part `tl-touch`),
   `research/tl_lower_tf_entry_backtest.py` (part `tl-lower-tf`: lower-timeframe entry on 1D lines, asleep vs awake).
+- **CoinDCX live: 1D TL touches enter on a 1h confirm (2026-11-16, lakky: "for more clear entry go with lower
+  timeframe for entry accuracy only", decision card "1h confirm entry").** A touch alert no longer places a limit at
+  the line: the order waits (`status` "waiting", counts against no limit) for a closed 1h candle that trades the line
+  at its own hour and closes back on the trade's side, then goes in at market with his wick/body stop from candles
+  closed before then (`coindcx_live.confirm_waiting`; the line comes from the record's `from` / `to`). The wait ends
+  on a daily close through the line or after `COINDCX_DEMO_FILL_DAYS`; a confirm seen more than 15 min late is not
+  chased. Breaks are unchanged. `VICTUS_COINDCX_LIVE_TOUCH_ENTRY=limit` is the old way. Backtest
+  (`research/tl_lower_tf_entry_backtest.py`, part `tl-lower-tf`, night included): touches Jan 2025 - now -0.21R ->
+  0.00R a trade, Sep 1 - now -0.30R -> -0.19R.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

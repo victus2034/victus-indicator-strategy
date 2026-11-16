@@ -23,7 +23,11 @@ What it does every tick:
      COINDCX_LIVE_MAX_ALERT_AGE seconds, inside the live window) becomes an order:
      - stop = the wick-or-body rule on Bitunix daily candles closed before the alert;
        none 0.75% away -> skipped
-     - touch: limit at the line's price; break: market
+     - touch: no order yet - it waits for a closed 1h candle that trades the line (at the
+       line's price at that hour) and closes back on the trade's side, then enters at
+       market (lakky, 2026-11-16; COINDCX_LIVE_TOUCH_ENTRY=limit is the old limit at the
+       line). The wait ends when a daily candle closes through the line or after
+       COINDCX_DEMO_FILL_DAYS days. break: market
      - quantity = COINDCX_LIVE_RISK / stop distance, rounded down to the instrument's
        step; under the minimum -> the minimum if that risks <= 2x the plan, else skipped
      - leverage = min(COINDCX_LIVE_MAX_LEVERAGE, the instrument's max, 70 / stop %) so the stop
@@ -289,31 +293,52 @@ def place(state, ex, record, now, daily=daily_candles, price_now=last_price, btc
     order = {"id": record["id"], "symbol": symbol, "pair": pair, "side": side, "broken": broken,
              "sent_ts": int(float(record["sent_ts"])), "placed_ts": int(now), "status": "skipped"}
     state["orders"][record["id"]] = order
-    active = [o for o in state["orders"].values() if o["status"] in ACTIVE]
-    if state["realized"] <= -config.COINDCX_LIVE_MAX_LOSS:
-        order["reason"] = f"kill switch: loss so far {state['realized']:.2f}"
-    elif len(active) >= config.COINDCX_LIVE_MAX_OPEN:
-        order["reason"] = f"{len(active)} trades already active"
-    elif any(o["pair"] == pair for o in active):
-        order["reason"] = "this coin already has a bot trade"
-    elif config.COINDCX_LIVE_BTC_FILTER == "so_far":
-        move = btc_move(now)
-        if move is None or abs(move) > 1.5:
-            order["reason"] = "BTC not sideways today" + ("" if move is None else f" ({move:+.2f}% since 05:30 IST)")
+    order["reason"] = blocked(state, order, now, btc_move)
+    if order["reason"] is None:
+        del order["reason"]
     if order.get("reason"):
         note(state, f"⏭️ {head} skipped: {order['reason']}", now)
         return order
+    line = None if broken or config.COINDCX_LIVE_TOUCH_ENTRY != "confirm_1h" else line_points(record)
+    if line:
+        # counts against no limit while it waits; the limits are checked when it confirms
+        order.update(status="waiting", line=line, plan_entry=float(plan["entry"]),
+                     checked_hour=-(-order["sent_ts"] // 3600) * 3600)
+        note(state, f"⏳ {head} near the line {scanner.price_text(line_at(line, now))}: waiting for a 1h candle to hold it", now)
+        return order
+    return submit(state, ex, order, head, float(plan["entry"]), broken, now, daily, price_now)
+
+
+def blocked(state, order, now, btc_move=btc_move_today):
+    """Why a new order may not go in now, or None."""
+    active = [o for o in state["orders"].values() if o["status"] in ACTIVE and o is not order]
+    if state["realized"] <= -config.COINDCX_LIVE_MAX_LOSS:
+        return f"kill switch: loss so far {state['realized']:.2f}"
+    if len(active) >= config.COINDCX_LIVE_MAX_OPEN:
+        return f"{len(active)} trades already active"
+    if any(o["pair"] == order["pair"] for o in active):
+        return "this coin already has a bot trade"
+    if config.COINDCX_LIVE_BTC_FILTER == "so_far":
+        move = btc_move(now)
+        if move is None or abs(move) > 1.5:
+            return "BTC not sideways today" + ("" if move is None else f" ({move:+.2f}% since 05:30 IST)")
+    return None
+
+
+def submit(state, ex, order, head, entry, market, now, daily=daily_candles, price_now=last_price):
+    """Size and send one order: a market order at the price now, or a limit at `entry`."""
+    symbol, side, pair, broken = order["symbol"], order["side"], order["pair"], market
     try:
-        entry = price_now(symbol) if broken else float(plan["entry"])
-        sl = wick_body_stop(daily(symbol, now), order["sent_ts"], entry, side)
+        entry = price_now(symbol) if market else entry
+        sl = wick_body_stop(daily(symbol, now), int(now) if order.get("line") else order["sent_ts"], entry, side)
         if sl is None:
-            order["reason"] = "no wick or body 0.75% past entry"
+            order.update(status="skipped", reason="no wick or body 0.75% past entry")
             note(state, f"⏭️ {head} skipped: {order['reason']}", now)
             return order
         ins = ex.instrument(pair)
         qty, risk = quantity(entry, sl, ins)
         if not qty:
-            order["reason"] = risk
+            order.update(status="skipped", reason=risk)
             note(state, f"⏭️ {head} skipped: {risk}", now)
             return order
         lev = min(config.COINDCX_LIVE_MAX_LEVERAGE, float(ins.get("max_leverage_long" if side == "long" else "max_leverage_short")
@@ -342,6 +367,70 @@ def place(state, ex, record, now, daily=daily_candles, price_now=last_price, btc
     note(state, f"🟢 **{head}** · {'market' if broken else 'limit ' + p(price)} · qty {qty:g} · SL {p(sl)} ({stop_pct:.2f}%) · "
                 f"risk {risk:.2f} USDT · {int(lev)}x", now)
     return order
+
+
+def line_points(record):
+    """[t1, y1, t2, y2] of a touch record's line (its `from` / `to`: price, "YYYY-MM-DD HH:MM" IST), or None."""
+    try:
+        out = []
+        for price, stamp in (record["from"], record["to"]):
+            out += [int(datetime.strptime(stamp, "%Y-%m-%d %H:%M").replace(tzinfo=scanner.IST).timestamp()), float(price)]
+        return out if out[2] > out[0] and out[1] > 0 and out[3] > 0 else None
+    except (KeyError, TypeError, ValueError):
+        return None
+
+
+def line_at(line, ts):
+    t1, y1, t2, y2 = line
+    return y1 + (y2 - y1) * (ts - t1) / (t2 - t1)
+
+
+def hour_candles(symbol, start, end):
+    return demo.fetch_candles(symbol, start, end, "1h")
+
+
+CONFIRM_FRESH_SECONDS = 15 * 60     # a confirming candle seen later than this is not chased
+
+
+def confirm_waiting(state, ex, now, hourly=hour_candles, daily=daily_candles, price_now=last_price, btc_move=btc_move_today):
+    """Touch alerts waiting for their 1h candle (research/tl_lower_tf_entry_backtest.py, "confirm 1h, SL day":
+    Jan 2025 - Nov 2026 touches -0.21R -> 0.00R a trade, Sep 1 - now -0.30R -> -0.19R)."""
+    p = scanner.price_text
+    for o in [o for o in state["orders"].values() if o["status"] == "waiting"]:
+        head = f"{demo.coin(o['symbol'])} TL {'BUY' if o['side'] == 'long' else 'SELL'}"
+        sign = 1 if o["side"] == "long" else -1
+        try:
+            if now >= o["sent_ts"] + config.COINDCX_DEMO_FILL_DAYS * DAY:
+                o.update(status="cancelled", exit_ts=int(now), reason=f"no 1h confirm in {config.COINDCX_DEMO_FILL_DAYS} days")
+                note(state, f"⌛ {head} wait over: {o['reason']}", now)
+                continue
+            for c in hourly(o["symbol"], o["checked_hour"], now):
+                end = int(c[0]) + 3600
+                if c[0] < o["checked_hour"] or end > now:
+                    continue
+                o["checked_hour"] = end
+                touched = sign * (line_at(o["line"], c[0]) - (c[3] if sign > 0 else c[2])) >= 0
+                held = sign * (c[4] - line_at(o["line"], end)) > 0
+                if touched and held:
+                    if now - end > CONFIRM_FRESH_SECONDS:
+                        o.update(status="cancelled", exit_ts=int(now), reason="1h confirm candle seen too late")
+                        note(state, f"⏭️ {head} skipped: {o['reason']}", now)
+                        break
+                    why = blocked(state, o, now, btc_move)
+                    if why:
+                        o.update(status="skipped", reason=why)
+                        note(state, f"⏭️ {head} confirmed but skipped: {why}", now)
+                        break
+                    note(state, f"🕐 {head} 1h candle held the line {p(line_at(o['line'], end))} (close {p(c[4])})", now)
+                    submit(state, ex, o, head, o["plan_entry"], True, now, daily, price_now)
+                    break
+                day_open = end - DAY
+                if end % DAY == 0 and sign * (c[4] - line_at(o["line"], day_open)) < 0:
+                    o.update(status="cancelled", exit_ts=int(now), reason="daily close through the line")
+                    note(state, f"⏭️ {head} wait over: {o['reason']}", now)
+                    break
+        except Exception as error:  # noqa: BLE001 - one coin's candles must not stop the rest
+            print(f"coindcx live: {head} confirm check failed: {str(error)[:160]}")
 
 
 def stop_level(order):
@@ -418,6 +507,7 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
 def tick(state, ex, records, now, **hooks):
     manage_hooks = {k: v for k, v in hooks.items() if k == "candles"}
     place_hooks = {k: v for k, v in hooks.items() if k in ("daily", "price_now", "btc_move")}
+    confirm_hooks = {k: v for k, v in hooks.items() if k in ("hourly", "daily", "price_now", "btc_move")}
     try:
         positions = ex.positions()
         open_ids = {o.get("id") for o in ex.open_orders()}
@@ -425,6 +515,7 @@ def tick(state, ex, records, now, **hooks):
         note(state, f"⚠️ account read FAILED, nothing done: {str(error)[:160]}", now)
         return state
     manage(state, ex, now, positions, open_ids, **manage_hooks)
+    confirm_waiting(state, ex, now, **confirm_hooks)
     fresh = {}
     for r in records:
         if eligible(r, state, now):

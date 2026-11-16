@@ -259,3 +259,73 @@ class RemoteRecords(unittest.TestCase):
             self.assertEqual([r["id"] for r in live.remote_records()], ["a", "b"])
         with patch.object(live.requests, "get", side_effect=live.requests.ConnectionError("down")):
             self.assertEqual(live.remote_records(), [])
+
+
+def touch(side="long", sent=NOW - 600, line=(100.0, 100.0)):
+    """A touch record whose line runs flat (or sloped) at `line` prices, anchored well before NOW."""
+    r = record(side=side, entry=line[1], sl=97.0 if side == "long" else 103.0, sent=sent)
+    stamp = lambda ts: live.datetime.fromtimestamp(ts, live.scanner.IST).strftime("%Y-%m-%d %H:%M")
+    r["from"], r["to"] = [line[0], stamp(NOW - 40 * DAY)], [line[1], stamp(NOW - 20 * DAY)]
+    return r
+
+
+class ConfirmEntry(unittest.TestCase):
+    """Touch alerts wait for a closed 1h candle that trades the line and closes back (lakky, 2026-11-16)."""
+
+    def run_hours(self, bars, rec=None, now=None):
+        ex, s = FakeExchange(), state()
+        rec = rec or touch()
+        live.tick(s, ex, [rec], NOW, **HOOKS, hourly=lambda *a: [])
+        o = s["orders"][rec["id"]]
+        live.tick(s, ex, [], now or NOW + 3 * 3600 + 60, **HOOKS, candles=lambda *a: [],
+                  hourly=lambda sym, a, b: [c for c in bars if a <= c[0] < b])
+        return ex, s, o
+
+    def test_waits_then_enters_at_market_on_a_held_hour(self):
+        h = NOW - NOW % 3600 + 3600                          # first full hour after the alert
+        bars = [[h, 100.5, 100.8, 100.2, 100.4],             # never reached the line: wait
+                [h + 3600, 100.4, 100.6, 99.6, 99.8],         # through the line, closed under: wait
+                [h + 7200, 99.8, 100.9, 99.7, 100.6]]         # traded the line, closed above: enter
+        ex, s, o = self.run_hours(bars, now=h + 3 * 3600 + 60)
+        self.assertEqual(len(ex.orders), 1)
+        self.assertEqual(ex.orders[0]["type"], "market_order")
+        self.assertEqual(o["status"], "pending")
+        self.assertEqual(o["sl"], 97.0)
+
+    def test_nothing_sent_while_waiting(self):
+        ex, s = FakeExchange(), state()
+        live.tick(s, ex, [touch()], NOW, **HOOKS, hourly=lambda *a: [])
+        self.assertEqual(ex.orders, [])
+        self.assertEqual(s["orders"][touch()["id"]]["status"], "waiting")
+
+    def test_short_mirrors(self):
+        h = NOW - NOW % 3600 + 3600
+        bars = [[h, 99.5, 100.3, 99.4, 99.6]]                 # wick above a resistance at 100, closed under
+        ex, s, o = self.run_hours(bars, rec=touch(side="short"), now=h + 3600 + 60)
+        self.assertEqual(ex.orders[0]["side"], "sell")
+
+    def test_daily_close_through_the_line_ends_the_wait(self):
+        end = NOW - NOW % DAY + DAY
+        bars = [[end - 3600, 99.9, 100.0, 98.0, 98.5]]        # last hour of the day closes under the line
+        ex, s, o = self.run_hours(bars, now=end + 60)
+        self.assertEqual(ex.orders, [])
+        self.assertEqual(o["status"], "cancelled")
+        self.assertIn("daily close", o["reason"])
+
+    def test_a_late_confirm_is_not_chased(self):
+        h = NOW - NOW % 3600 + 3600
+        bars = [[h, 99.8, 100.9, 99.7, 100.6]]
+        ex, s, o = self.run_hours(bars, now=h + 3600 + 3600)
+        self.assertEqual(ex.orders, [])
+        self.assertIn("too late", o["reason"])
+
+    def test_limit_mode_keeps_the_old_order(self):
+        with patch.object(config, "COINDCX_LIVE_TOUCH_ENTRY", "limit"):
+            ex, s = FakeExchange(), state()
+            live.tick(s, ex, [touch()], NOW, **HOOKS)
+            self.assertEqual(ex.orders[0]["type"], "limit_order")
+
+    def test_a_record_without_its_line_keeps_the_limit(self):
+        ex, s = FakeExchange(), state()
+        live.tick(s, ex, [record()], NOW, **HOOKS)
+        self.assertEqual(ex.orders[0]["type"], "limit_order")

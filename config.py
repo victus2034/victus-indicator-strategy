@@ -672,3 +672,6 @@ COINDCX_LIVE_SL_GAP_PCT = env_float("VICTUS_COINDCX_LIVE_SL_GAP_PCT", 0.75)
 COINDCX_LIVE_MAX_ALERT_AGE = 6 * 3600     # GitHub's schedule can skip a few hours
 # "": every BTC day. "so_far": only while BTC's move from today's 00:00 UTC open is within 1.5%.
 COINDCX_LIVE_BTC_FILTER = os.getenv("VICTUS_COINDCX_LIVE_BTC_FILTER", "")
+# Touch alerts: "confirm_1h" (lakky, 2026-11-16) waits for a closed 1h candle that trades the line and
+# closes back, then enters at market; "limit" is the old limit order at the line's price.
+COINDCX_LIVE_TOUCH_ENTRY = os.getenv("VICTUS_COINDCX_LIVE_TOUCH_ENTRY", "confirm_1h") or "confirm_1h"
