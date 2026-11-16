@@ -459,3 +459,20 @@ class DeltaVenue(unittest.TestCase):
         self.assertEqual(o["status"], "open")
         live.tick(s, r, [], NOW + 480, candles=lambda *a: [])
         self.assertEqual((o["status"], o["exit_why"]), ("closed", "SL"))
+
+    def test_delta_refusal_falls_back_to_coindcx(self):
+        s = state()
+        dcx = FakeExchange()
+        r = live.Router(dcx, self.delta)
+        def broke(*a, **k):
+            raise RuntimeError("Delta POST /v2/orders: HTTP 400 insufficient_margin")
+        self.delta.create_order = broke
+        with patch.dict("os.environ", {"DELTA_API_KEY": "k", "DELTA_API_SECRET": "s"}):
+            live.tick(s, r, [record(symbol="XRPUSD", entry=2.0, sl=1.9, broken=True)], NOW, **{
+                **HOOKS, "price_now": lambda sym: 2.0,
+                "daily": lambda sym, now: [[c[0], c[1] / 50, c[2] / 50, c[3] / 50, c[4] / 50] for c in daily()]})
+        o = next(iter(s["orders"].values()))
+        self.assertEqual(o["status"], "pending")
+        self.assertNotIn("DELTA", o["pair"])
+        self.assertEqual(len(dcx.orders), 1)
+        self.assertTrue(any("sent to CoinDCX" in e["text"] for e in s["events"]))
