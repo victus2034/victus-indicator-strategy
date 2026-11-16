@@ -1807,15 +1807,21 @@
   "IGL.NS|1d|short|145.987|147.41": {
     "reached_entry": true,
     "stage": 3,
+    "stopped_out": true
+  },
+  "IGL.NS|1d|short|148.117|154.488": {
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "IGL.NS|1w|short|146.62|147.9": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
+    "stopped_out": true
   },
   "IGL.NS|1w|short|148.117|149.99": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "IIFL.NS|1M|long|513.66|412.675": {
@@ -3288,8 +3294,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794820312.080532,
-  "_last_check|nse": 1794820312.080532,
+  "_last_check|crypto": 1794820595.106226,
+  "_last_check|nse": 1794820595.106226,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -4286,6 +4292,7 @@
   "_level_ready|IFCI.NS|1w|long|68.285|64.7557": 1791517599.357562,
   "_level_ready|IGL.NS|1d|short|142.62|149.491": 1794541608.650168,
   "_level_ready|IGL.NS|1d|short|145.987|147.41": 1794814576.36511,
+  "_level_ready|IGL.NS|1d|short|148.117|154.488": 1794820595.106226,
   "_level_ready|IGL.NS|1w|short|146.62|147.9": 1794819396.490613,
   "_level_ready|IIFL.NS|1M|long|513.66|412.675": 1792986985.751506,
   "_level_ready|IIFL.NS|1M|long|560.432|412.675": 1793677604.261117,
@@ -5577,7 +5584,7 @@
   "_ready|IDFCFIRSTB.NS|1w": 1793938311.903426,
   "_ready|IFCI.NS|1M": 1794800793.028569,
   "_ready|IFCI.NS|1w": 1794800793.028569,
-  "_ready|IGL.NS|1d": 1794814576.36511,
+  "_ready|IGL.NS|1d": 1794820595.106226,
   "_ready|IGL.NS|1w": 1794819396.490613,
   "_ready|IIFL.NS|1M": 1793677604.261117,
   "_ready|IIFL.NS|1d": 1793937114.247749,
