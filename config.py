@@ -675,3 +675,9 @@ COINDCX_LIVE_BTC_FILTER = os.getenv("VICTUS_COINDCX_LIVE_BTC_FILTER", "")
 # Touch alerts: "confirm_1h" (lakky, 2026-11-16) waits for a closed 1h candle that trades the line and
 # closes back, then enters at market; "limit" is the old limit order at the line's price.
 COINDCX_LIVE_TOUCH_ENTRY = os.getenv("VICTUS_COINDCX_LIVE_TOUCH_ENTRY", "confirm_1h") or "confirm_1h"
+# Delta-listed coins trade on Delta India (lakky, 2026-11-15: lower fees) once DELTA_API_KEY /
+# DELTA_API_SECRET reach the bot; VICTUS_LIVE_DELTA=0 keeps everything on CoinDCX.
+LIVE_DELTA = env_flag("VICTUS_LIVE_DELTA", True)
+# A position or order seen missing is only booked as gone when it is still missing this long after
+# (Delta's positions can lag ~10 s behind a fill; one tick later is enough).
+LIVE_GONE_GRACE_SECONDS = 60

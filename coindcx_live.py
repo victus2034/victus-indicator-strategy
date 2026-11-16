@@ -62,6 +62,7 @@ import requests
 import bitunix_data
 import coindcx_demo as demo
 import config
+import delta_live
 import scanner
 
 BASE = "https://api.coindcx.com"
@@ -131,6 +132,45 @@ class CoinDCX:
                 raise
         return self.post("/exchange/v1/derivatives/futures/positions/create_tpsl", {
             "id": position_id, "stop_loss": {"stop_price": stop, "order_type": "stop_market"}})
+
+
+class Router:
+    """CoinDCX and Delta as one exchange: a "DELTA:" pair (or an order id "product:order") goes to Delta."""
+
+    def __init__(self, coindcx, delta):
+        self.dcx, self.delta = coindcx, delta
+
+    def venue(self, pair_or_id):
+        return self.delta if str(pair_or_id).startswith(delta_live.PREFIX) or ":" in str(pair_or_id) else self.dcx
+
+    def instrument(self, pair):
+        return self.venue(pair).instrument(pair)
+
+    def create_order(self, pair, *args, **kwargs):
+        return self.venue(pair).create_order(pair, *args, **kwargs)
+
+    def cancel(self, order_id):
+        return self.venue(order_id).cancel(order_id)
+
+    def open_orders(self):
+        return self.dcx.open_orders() + self.delta.open_orders()
+
+    def positions(self):
+        return {**self.dcx.positions(), **self.delta.positions()}
+
+    def set_stop(self, position_id, stop):
+        return self.venue(position_id).set_stop(position_id, stop)
+
+
+def venue_pair(symbol):
+    """Where a new trade goes: Delta for a Delta-listed coin when the Delta key is set, else CoinDCX."""
+    if delta_on() and symbol in config.DELTA_LISTED_SYMBOLS:
+        return delta_live.pair_for(symbol)
+    return demo.coindcx_pair(symbol)
+
+
+def delta_on():
+    return config.LIVE_DELTA and bool(os.getenv("DELTA_API_KEY") and os.getenv("DELTA_API_SECRET"))
 
 
 class DryRun:
@@ -288,7 +328,7 @@ def place(state, ex, record, now, daily=daily_candles, price_now=last_price, btc
     plan, symbol = record["plan"], record["symbol"]
     side = plan["side"]
     broken = bool(record.get("broken"))
-    pair = demo.coindcx_pair(symbol)
+    pair = venue_pair(symbol)
     head = f"{demo.coin(symbol)} {'TL BR' if broken else 'TL'} {'BUY' if side == 'long' else 'SELL'}"
     order = {"id": record["id"], "symbol": symbol, "pair": pair, "side": side, "broken": broken,
              "sent_ts": int(float(record["sent_ts"])), "placed_ts": int(now), "status": "skipped"}
@@ -316,7 +356,7 @@ def blocked(state, order, now, btc_move=btc_move_today):
         return f"kill switch: loss so far {state['realized']:.2f}"
     if len(active) >= config.COINDCX_LIVE_MAX_OPEN:
         return f"{len(active)} trades already active"
-    if any(o["pair"] == order["pair"] for o in active):
+    if any(o["symbol"] == order["symbol"] for o in active):
         return "this coin already has a bot trade"
     if config.COINDCX_LIVE_BTC_FILTER == "so_far":
         move = btc_move(now)
@@ -449,12 +489,21 @@ def rebase_on_fill(order, fill):
                  risk=round(order["qty"] * abs(fill - order["sl"]), 4))
 
 
+def seen_gone(order, now):
+    """True once an order / position has been missing for LIVE_GONE_GRACE_SECONDS: a fill that the
+    exchange's position list has not caught up with yet is not booked as closed."""
+    since = order.setdefault("gone_since", int(now))
+    return now - since >= config.LIVE_GONE_GRACE_SECONDS
+
+
 def manage(state, ex, now, positions, open_ids, candles=minute_candles):
     p = scanner.price_text
     for o in [o for o in state["orders"].values() if o["status"] in ACTIVE]:
         head = f"{demo.coin(o['symbol'])} {'TL BR' if o.get('broken') else 'TL'} {'BUY' if o['side'] == 'long' else 'SELL'}"
         pos = positions.get(o["pair"])
         held = pos is not None and float(pos.get("active_pos") or 0) != 0
+        if held or (o["status"] == "pending" and o.get("exchange_id") in open_ids):
+            o.pop("gone_since", None)
         try:
             if o["status"] == "pending":
                 if held:
@@ -464,6 +513,8 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                     ex.set_stop(o["position_id"], stop_level(o))
                     note(state, f"📥 **{head}** filled at {p(o['fill_price'])} · stop {p(o['sl'])} set", now)
                 elif o.get("exchange_id") not in open_ids and not str(o.get("exchange_id", "")).startswith("dry-"):
+                    if not seen_gone(o, now):
+                        continue
                     o.update(status="closed", exit_ts=int(now), r=None, exit_why="order gone (filled and closed, or cancelled)")
                     note(state, f"❔ **{head}** order no longer open and no position: check CoinDCX", now)
                 elif now >= o["sent_ts"] + config.COINDCX_DEMO_FILL_DAYS * DAY:
@@ -472,6 +523,8 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                     note(state, f"⌛ **{head}** cancelled, no fill in {config.COINDCX_DEMO_FILL_DAYS} days", now)
                 continue
             if not held:
+                if not seen_gone(o, now):
+                    continue
                 r = demo.full_stop_r(o) if o.get("stop_r") is None else demo.moved_stop_r(o, o["stop_r"])
                 money = o["risk"] * r
                 state["realized"] = round(state["realized"] + money, 4)
@@ -577,6 +630,8 @@ def run_tick(now=None, dry_run=False, remote=False):
         dry_run = True      # no key: dry-run orders saved as pending blocked their coins for 20 days
         print("coindcx live: COINDCX_API_KEY / COINDCX_API_SECRET not set - dry run, nothing saved or posted")
     ex = CoinDCX(key, secret) if not dry_run else DryRun()
+    if not dry_run and delta_on():
+        ex = Router(ex, delta_live.Delta(os.environ["DELTA_API_KEY"], os.environ["DELTA_API_SECRET"]))
     state = load_state()
     if state is not None and not dry_run:
         drop_dry_orders(state)
