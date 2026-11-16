@@ -531,5 +531,10 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   `save_state`, and a two-message digest re-posted its first half whenever the second failed. With no channel set
   up the events are dropped, not piled up in the state. An empty account takes no orders ("account empty"), and an
   alert id on file twice is one order. `tests/test_weekly_audit_2026_11_08.py`.
+- **CoinDCX live orders (weekly audit, 2026-11-15).** `coindcx_live.py`: every stop goes out on the instrument's
+  price step, rounded away from price (`stop_level`; the first stop was sent unrounded); a fill moves entry, stop % and
+  risk to the price filled (`rebase_on_fill`, market breaks slip); an order with no id returned is an error, not
+  pending; no API key = dry run, nothing saved or posted (keyless "dry-" orders used to block their coin for 20 days,
+  and are dropped on load). `tests/test_weekly_audit_2026_11_15.py`.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

@@ -329,8 +329,13 @@ def place(state, ex, record, now, daily=daily_candles, price_now=last_price, btc
         order.update(status="error", reason=str(error)[:200])
         note(state, f"⚠️ {head} order FAILED: {order['reason']}", now)
         return order
+    if not isinstance(got, dict) or not got.get("id"):
+        # an order with no id would read as "gone" next tick while it may sit on the book
+        order.update(status="error", reason=f"no order id returned ({str(got)[:120]}): check CoinDCX")
+        note(state, f"⚠️ {head} order UNCONFIRMED: {order['reason']}", now)
+        return order
     stop_pct = abs(entry - sl) / entry * 100
-    order.update(status="pending", exchange_id=got.get("id"), entry=price, sl=sl, qty=qty, risk=round(risk, 4),
+    order.update(status="pending", exchange_id=got.get("id"), entry=price, tick=tick_size, sl=sl, qty=qty, risk=round(risk, 4),
                  leverage=int(lev), stop_pct=stop_pct, best_r=0.0, stop_r=None, tgt_r=config.COINDCX_DEMO_TARGET_R,
                  checked_until=int(now) // 60 * 60)
     p = scanner.price_text
@@ -340,7 +345,19 @@ def place(state, ex, record, now, daily=daily_candles, price_now=last_price, btc
 
 
 def stop_level(order):
-    return demo.stop_price(order)
+    """The stop to send: on the instrument's price step, rounded away from price (a price
+    off the step is refused by CoinDCX; until 16 Nov the first stop was sent unrounded)."""
+    return step_round(demo.stop_price(order), order.get("tick") or 0, up=order["side"] == "short")
+
+
+def rebase_on_fill(order, fill):
+    """Count R from the price actually filled (a market break order fills off the alert's
+    price): entry, stop % and risk follow the fill when it is on the right side of the stop."""
+    sign = 1 if order["side"] == "long" else -1
+    if not fill or sign * (fill - order["sl"]) <= 0 or abs(fill - order["entry"]) < 1e-12:
+        return
+    order.update(plan_entry=order["entry"], entry=fill, stop_pct=abs(fill - order["sl"]) / fill * 100,
+                 risk=round(order["qty"] * abs(fill - order["sl"]), 4))
 
 
 def manage(state, ex, now, positions, open_ids, candles=minute_candles):
@@ -354,7 +371,8 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                 if held:
                     o.update(status="open", fill_ts=int(now), fill_price=float(pos.get("avg_price") or o["entry"]),
                              position_id=pos.get("id"))
-                    ex.set_stop(o["position_id"], step_round(o["sl"], 0))
+                    rebase_on_fill(o, o["fill_price"])
+                    ex.set_stop(o["position_id"], stop_level(o))
                     note(state, f"📥 **{head}** filled at {p(o['fill_price'])} · stop {p(o['sl'])} set", now)
                 elif o.get("exchange_id") not in open_ids and not str(o.get("exchange_id", "")).startswith("dry-"):
                     o.update(status="closed", exit_ts=int(now), r=None, exit_why="order gone (filled and closed, or cancelled)")
@@ -450,14 +468,27 @@ def remote_records(url=RECORDS_URL):
     return out
 
 
+def drop_dry_orders(state):
+    """Orders a keyless run saved ("dry-" ids) never existed on CoinDCX: forget them."""
+    gone = [k for k, o in state["orders"].items() if str(o.get("exchange_id", "")).startswith("dry-")]
+    for k in gone:
+        del state["orders"][k]
+    return gone
+
+
 def run_tick(now=None, dry_run=False, remote=False):
     now = int(time.time()) if now is None else int(now)
     if not config.COINDCX_LIVE_ENABLED:
         print("coindcx live is off (repository variable VICTUS_COINDCX_LIVE)")
         return None
     key, secret = os.getenv("COINDCX_API_KEY", ""), os.getenv("COINDCX_API_SECRET", "")
-    ex = CoinDCX(key, secret) if key and secret and not dry_run else DryRun()
+    if not (key and secret):
+        dry_run = True      # no key: dry-run orders saved as pending blocked their coins for 20 days
+        print("coindcx live: COINDCX_API_KEY / COINDCX_API_SECRET not set - dry run, nothing saved or posted")
+    ex = CoinDCX(key, secret) if not dry_run else DryRun()
     state = load_state()
+    if state is not None and not dry_run:
+        drop_dry_orders(state)
     if state is None:
         state = new_state(now)
         note(state, f"started: trades 1D TL alerts until {datetime.fromtimestamp(state['until_ts'], scanner.IST):%d %b %H:%M IST}, "
