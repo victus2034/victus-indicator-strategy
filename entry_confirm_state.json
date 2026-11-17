@@ -291,6 +291,11 @@
     "stage": 2,
     "stopped_out": false
   },
+  "ANGELONE.NS|1d|short|363.185|379.54": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "ANGELONE.NS|1w|long|291.102|190.431": {
     "reached_entry": false,
     "stopped_out": false
@@ -495,6 +500,7 @@
   },
   "BANDHANBNK.NS|1w|short|177.066|181.15": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "BANKINDIA.NS|1w|long|138.621|134.96": {
@@ -1576,11 +1582,11 @@
   "GRANULES.NS|1d|short|805.69|818.211": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "GRANULES.NS|1d|short|815.51|829.013": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "GRANULES.NS|1d|short|826.312|839.815": {
@@ -1674,10 +1680,18 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "HFCL.NS|1M|long|182.156|153.797": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "HFCL.NS|1M|long|206.624|196.95": {
     "reached_entry": true,
     "stage": 3,
     "stopped_out": true
+  },
+  "HFCL.NS|1w|long|182.156|171.86": {
+    "reached_entry": false,
+    "stopped_out": false
   },
   "HFCL.NS|1w|long|206.624|200": {
     "reached_entry": true,
@@ -1919,7 +1933,7 @@
   "IOB.NS|1w|short|32.0145|32.29": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "IOB.NS|1w|short|32.8355|33.55": {
     "reached_entry": false,
@@ -1930,6 +1944,10 @@
     "stopped_out": false
   },
   "IOB.NS|1w|short|33.7386|34": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "IPCALAB.NS|1d|long|1838.02|1788.03": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -3339,8 +3357,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794891099.711121,
-  "_last_check|nse": 1794891099.711121,
+  "_last_check|crypto": 1794891396.849237,
+  "_last_check|nse": 1794891396.849237,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -3503,6 +3521,7 @@
   "_level_ready|ANGELONE.NS|1d|short|296.981|301.435": 1791517599.357562,
   "_level_ready|ANGELONE.NS|1d|short|305.546|312.16": 1793679995.980126,
   "_level_ready|ANGELONE.NS|1d|short|316.159|321.9": 1793693211.886873,
+  "_level_ready|ANGELONE.NS|1d|short|363.185|379.54": 1794891396.849237,
   "_level_ready|ANGELONE.NS|1w|long|291.102|190.431": 1793677604.261117,
   "_level_ready|ANGELONE.NS|1w|short|355.63|360.45": 1794888428.469677,
   "_level_ready|ANTHEM.NS|1d|long|792.916|784.1": 1792727171.150355,
@@ -3619,7 +3638,7 @@
   "_level_ready|BANDHANBNK.NS|1d|short|160.455|167.236": 1793937978.189416,
   "_level_ready|BANDHANBNK.NS|1d|short|165.88|172.167": 1794196012.334544,
   "_level_ready|BANDHANBNK.NS|1d|short|174.871|176.73": 1794887522.533935,
-  "_level_ready|BANDHANBNK.NS|1w|short|177.066|181.15": 1794456710.974896,
+  "_level_ready|BANDHANBNK.NS|1w|short|177.066|181.15": 1794891396.849237,
   "_level_ready|BANKINDIA.NS|1d|long|131.989|130.25": 1793697708.304598,
   "_level_ready|BANKINDIA.NS|1d|short|129.369|135.224": 1793073108.145997,
   "_level_ready|BANKINDIA.NS|1d|short|131.223|135.224": 1793159201.504703,
@@ -5379,7 +5398,7 @@
   "_ready|ANANTRAJ.NS|1M": 1794282375.833969,
   "_ready|ANANTRAJ.NS|1d": 1791782501.247733,
   "_ready|ANANTRAJ.NS|1w": 1794541608.650168,
-  "_ready|ANGELONE.NS|1d": 1793693211.886873,
+  "_ready|ANGELONE.NS|1d": 1794891396.849237,
   "_ready|ANGELONE.NS|1w": 1794888428.469677,
   "_ready|ANTHEM.NS|1d": 1793936864.300001,
   "_ready|ANTHEM.NS|1w": 1793936864.300001,
@@ -5418,7 +5437,7 @@
   "_ready|BALKRISIND.NS|1d": 1793764604.922956,
   "_ready|BALKRISIND.NS|1w": 1794807697.089428,
   "_ready|BANDHANBNK.NS|1d": 1794887522.533935,
-  "_ready|BANDHANBNK.NS|1w": 1794456710.974896,
+  "_ready|BANDHANBNK.NS|1w": 1794891396.849237,
   "_ready|BANKINDIA.NS|1d": 1794282375.833969,
   "_ready|BANKINDIA.NS|1w": 1793159201.504703,
   "_ready|BCHUSD|30m": 1791429995.770346,
