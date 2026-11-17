@@ -484,6 +484,7 @@
   },
   "BALKRISIND.NS|1w|short|2356.28|2389.9": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "BALKRISIND.NS|1w|short|2445.16|2482": {
@@ -719,10 +720,12 @@
   },
   "CAMS.NS|1M|short|765.089|778.66": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CAMS.NS|1w|short|765.089|778.18": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CAPLIPOINT.NS|1M|long|2170.67|1965.83": {
@@ -1556,7 +1559,7 @@
   },
   "GODREJPROP.NS|1d|short|1856.68|1937.57": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "GODREJPROP.NS|1d|short|1876.43|1905.5": {
@@ -3373,8 +3376,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794893810.58691,
-  "_last_check|nse": 1794893810.58691,
+  "_last_check|crypto": 1794894112.516938,
+  "_last_check|nse": 1794894112.516938,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -3652,7 +3655,7 @@
   "_level_ready|BALKRISIND.NS|1w|short|2166.42|2372.59": 1793677896.558765,
   "_level_ready|BALKRISIND.NS|1w|short|2231.68|2372.59": 1793764308.62811,
   "_level_ready|BALKRISIND.NS|1w|short|2291.01|2320": 1794800793.028569,
-  "_level_ready|BALKRISIND.NS|1w|short|2356.28|2389.9": 1794807697.089428,
+  "_level_ready|BALKRISIND.NS|1w|short|2356.28|2389.9": 1794894112.516938,
   "_level_ready|BANDHANBNK.NS|1d|short|160.455|167.236": 1793937978.189416,
   "_level_ready|BANDHANBNK.NS|1d|short|165.88|172.167": 1794196012.334544,
   "_level_ready|BANDHANBNK.NS|1d|short|174.871|176.73": 1794887522.533935,
@@ -3838,9 +3841,11 @@
   "_level_ready|BTCUSD|4h|short|84660|85365": 1790772077.323224,
   "_level_ready|BTCUSD|4h|short|86875.5|87513.6": 1790915487.078945,
   "_level_ready|BTWUSD|1d|long|1.38329|1.04068": 1793023318.473324,
+  "_level_ready|CAMS.NS|1M|short|765.089|778.66": 1794894112.516938,
   "_level_ready|CAMS.NS|1d|short|693.558|700": 1793764308.62811,
   "_level_ready|CAMS.NS|1w|long|677.285|660.353": 1791517599.357562,
   "_level_ready|CAMS.NS|1w|long|677.285|665.05": 1793764008.797417,
+  "_level_ready|CAMS.NS|1w|short|765.089|778.18": 1794894112.516938,
   "_level_ready|CAPLIPOINT.NS|1M|long|2170.67|1965.83": 1792641104.661578,
   "_level_ready|CAPLIPOINT.NS|1d|long|2558|2519.63": 1791517599.357562,
   "_level_ready|CAPLIPOINT.NS|1d|short|2452.89|2564.79": 1793852212.98242,
@@ -5459,7 +5464,7 @@
   "_ready|BAJAJHFL.NS|1d": 1794368805.895201,
   "_ready|BAJAJHFL.NS|1w": 1794887199.104532,
   "_ready|BALKRISIND.NS|1d": 1793764604.922956,
-  "_ready|BALKRISIND.NS|1w": 1794807697.089428,
+  "_ready|BALKRISIND.NS|1w": 1794894112.516938,
   "_ready|BANDHANBNK.NS|1d": 1794887522.533935,
   "_ready|BANDHANBNK.NS|1w": 1794891396.849237,
   "_ready|BANKINDIA.NS|1d": 1794282375.833969,
@@ -5502,8 +5507,9 @@
   "_ready|BTCUSD|4h": 1791395201.440366,
   "_ready|BTW/USDT|30m": 1789194664.716904,
   "_ready|BTWUSD|1d": 1793023318.473324,
+  "_ready|CAMS.NS|1M": 1794894112.516938,
   "_ready|CAMS.NS|1d": 1793764308.62811,
-  "_ready|CAMS.NS|1w": 1793764008.797417,
+  "_ready|CAMS.NS|1w": 1794894112.516938,
   "_ready|CAP/USDT|30m": 1789361459.428611,
   "_ready|CAPLIPOINT.NS|1M": 1792641104.661578,
   "_ready|CAPLIPOINT.NS|1d": 1794455172.242815,
