@@ -123,7 +123,8 @@
     "stopped_out": false
   },
   "AEGISLOG.NS|1M|long|1204.82|873.787": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "AEGISLOG.NS|1d|short|1273.11|1327.77": {
@@ -135,7 +136,8 @@
     "stopped_out": false
   },
   "AEGISLOG.NS|1w|long|1204.82|873.787": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "AEGISVOPAK.NS|1d|short|286.066|300.174": {
@@ -295,7 +297,7 @@
   },
   "ANGELONE.NS|1w|short|355.63|360.45": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ANTHEM.NS|1w|long|842.497|808.734": {
@@ -628,8 +630,8 @@
     "stopped_out": false
   },
   "BLUESTARCO.NS|1d|short|1659.86|1673": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "BLUESTARCO.NS|1w|long|1462.87|1444": {
@@ -1138,7 +1140,7 @@
   },
   "DELHIVERY.NS|1w|short|452.292|457.9": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "DIXON.NS|1M|long|11680.7|7739.22": {
@@ -1310,6 +1312,7 @@
   },
   "FINCABLES.NS|1M|long|1226.95|949.925": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "FINCABLES.NS|1d|short|1253.48|1310.4": {
@@ -3318,8 +3321,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794889574.624603,
-  "_last_check|nse": 1794889574.624603,
+  "_last_check|crypto": 1794889906.142991,
+  "_last_check|nse": 1794889906.142991,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -3414,13 +3417,13 @@
   "_level_ready|ADAUSD|1d|long|0.21752|0.183225": 1792648310.386821,
   "_level_ready|ADAUSD|1d|long|0.221771|0.2157": 1792171305.168726,
   "_level_ready|AEGISLOG.NS|1M|long|1100.03|978.573": 1793677604.261117,
-  "_level_ready|AEGISLOG.NS|1M|long|1204.82|873.787": 1794372991.04651,
+  "_level_ready|AEGISLOG.NS|1M|long|1204.82|873.787": 1794889906.142991,
   "_level_ready|AEGISLOG.NS|1d|long|1348.08|1332.9": 1792554386.505792,
   "_level_ready|AEGISLOG.NS|1d|long|1370.34|1342.68": 1792381599.217228,
   "_level_ready|AEGISLOG.NS|1d|short|1225.96|1284.9": 1794368805.895201,
   "_level_ready|AEGISLOG.NS|1d|short|1273.11|1327.77": 1794455775.002683,
   "_level_ready|AEGISLOG.NS|1w|long|1100.03|1010": 1793677604.261117,
-  "_level_ready|AEGISLOG.NS|1w|long|1204.82|873.787": 1794372991.04651,
+  "_level_ready|AEGISLOG.NS|1w|long|1204.82|873.787": 1794889906.142991,
   "_level_ready|AEGISVOPAK.NS|1d|long|234.767|232.5": 1793331989.35983,
   "_level_ready|AEGISVOPAK.NS|1d|short|264.52|277.602": 1794369075.310774,
   "_level_ready|AEGISVOPAK.NS|1d|short|286.066|300.174": 1794800793.028569,
@@ -4083,7 +4086,7 @@
   "_level_ready|FILUSD|1d|long|0.990115|0.918519": 1792656712.027939,
   "_level_ready|FINCABLES.NS|1M|long|1059.54|949.925": 1792986387.062464,
   "_level_ready|FINCABLES.NS|1M|long|1139.26|949.925": 1793936864.300001,
-  "_level_ready|FINCABLES.NS|1M|long|1226.95|949.925": 1794368805.895201,
+  "_level_ready|FINCABLES.NS|1M|long|1226.95|949.925": 1794889906.142991,
   "_level_ready|FINCABLES.NS|1d|long|1327.12|1284.16": 1792381903.352906,
   "_level_ready|FINCABLES.NS|1d|long|1435.04|1413.52": 1791517599.357562,
   "_level_ready|FINCABLES.NS|1d|short|1204.38|1265.76": 1793850405.511611,
@@ -5331,9 +5334,9 @@
   "_ready|ACMESOLAR.NS|1w": 1792727171.150355,
   "_ready|ACUTAAS.NS|1d": 1793937726.224563,
   "_ready|ADAUSD|1d": 1792917105.941684,
-  "_ready|AEGISLOG.NS|1M": 1794372991.04651,
+  "_ready|AEGISLOG.NS|1M": 1794889906.142991,
   "_ready|AEGISLOG.NS|1d": 1794455775.002683,
-  "_ready|AEGISLOG.NS|1w": 1794372991.04651,
+  "_ready|AEGISLOG.NS|1w": 1794889906.142991,
   "_ready|AEGISVOPAK.NS|1d": 1794800793.028569,
   "_ready|AEGISVOPAK.NS|1w": 1793936864.300001,
   "_ready|AERO/USDT|30m": 1789444875.534929,
@@ -5544,7 +5547,7 @@
   "_ready|FACT.NS|1w": 1792556798.737244,
   "_ready|FEDERALBNK.NS|1d": 1794371517.469453,
   "_ready|FILUSD|1d": 1792832798.455375,
-  "_ready|FINCABLES.NS|1M": 1794368805.895201,
+  "_ready|FINCABLES.NS|1M": 1794889906.142991,
   "_ready|FINCABLES.NS|1d": 1794888428.469677,
   "_ready|FINCABLES.NS|1w": 1794800793.028569,
   "_ready|FLUOROCHEM.NS|1d": 1794800793.028569,
