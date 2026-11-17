@@ -1,5 +1,5 @@
 {
- "balance": 466.8976,
+ "balance": 576.7298,
  "orders": {
   "fib|1000PEPEUSD|1d|1|1791417600|0.0056871|1|L1@1794387773": {
    "balance_after": 923.2764,
@@ -124,7 +124,7 @@
   "fib|INJUSD|1d|-1|1793836800|6.558|1|L2@1794891803": {
    "best_r": 1.3945705795805363,
    "capped": false,
-   "checked_until": 1794930720,
+   "checked_until": 1794931020,
    "entry": 7.47555,
    "fill_ts": 1794915300,
    "id": "fib|INJUSD|1d|-1|1793836800|6.558|1|L2@1794891803",
@@ -148,10 +148,13 @@
    "tp": 7.085591250000002
   },
   "fib|INJUSD|1d|-1|1793836800|6.558|2@1794917613": {
+   "balance_after": 576.7298,
    "best_r": 2.020419991974666,
    "capped": false,
-   "checked_until": 1794930720,
+   "checked_until": 1794931020,
    "entry": 7.679449999999999,
+   "exit_ts": 1794930960,
+   "exit_why": "Trail TP",
    "fill_ts": 1794918420,
    "id": "fib|INJUSD|1d|-1|1793836800|6.558|2@1794917613",
    "level": "L3",
@@ -159,12 +162,14 @@
    "margin": 102.72,
    "pair": "B-INJ_USDT",
    "placed_ts": 1794917613,
+   "pnl": 109.8322,
    "position": 2054.34,
+   "r": 1.4644,
    "risk": 75.0,
    "sent_ts": 1794917613,
    "side": "short",
    "sl": 7.9598125,
-   "status": "open",
+   "status": "won",
    "stop_pct": 3.6508148370000555,
    "stop_r": 1.5,
    "stop_why": "Trail TP",
@@ -206,7 +211,7 @@
   "fib|NEARUSD|1d|1|1786406400|6.019|2|L4@1794673984": {
    "best_r": 0.40683795348082713,
    "capped": false,
-   "checked_until": 1794930720,
+   "checked_until": 1794931020,
    "entry": 3.0602199999999997,
    "fill_ts": 1794687240,
    "id": "fib|NEARUSD|1d|1|1786406400|6.019|2|L4@1794673984",
@@ -291,7 +296,7 @@
   "fib|ZECUSD|1d|1|1785283200|1698.46|2|L4@1794546202": {
    "best_r": 0.49044306990606695,
    "capped": false,
-   "checked_until": 1794930720,
+   "checked_until": 1794931020,
    "entry": 875.4928,
    "fill_ts": 1794662580,
    "id": "fib|ZECUSD|1d|1|1785283200|1698.46|2|L4@1794546202",
