@@ -719,13 +719,13 @@
     "stopped_out": true
   },
   "CAMS.NS|1M|short|765.089|778.66": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "CAMS.NS|1w|short|765.089|778.18": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "CAPLIPOINT.NS|1M|long|2170.67|1965.83": {
@@ -1264,6 +1264,7 @@
   },
   "ERIS.NS|1w|short|1366.05|1384": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ERIS.NS|1w|short|1373.26|1399": {
@@ -1561,7 +1562,7 @@
   "GODREJPROP.NS|1d|short|1876.43|1905.5": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "GODREJPROP.NS|1w|long|1513.24|1493.8": {
     "reached_entry": false,
@@ -3020,11 +3021,12 @@
   },
   "POONAWALLA.NS|1M|short|499.272|528.037": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "POONAWALLA.NS|1d|short|494.791|499": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "POONAWALLA.NS|1w|long|409.879|400": {
@@ -3048,11 +3050,12 @@
   },
   "POONAWALLA.NS|1w|short|494.616|499": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "POONAWALLA.NS|1w|short|499.272|528.037": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "PPLPHARMA.NS|1M|short|228.88|235": {
@@ -3372,8 +3375,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1794895886.430411,
-  "_last_check|nse": 1794895886.430411,
+  "_last_check|crypto": 1794896224.237521,
+  "_last_check|nse": 1794896224.237521,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -4099,6 +4102,7 @@
   "_level_ready|ERIS.NS|1M|long|1162.71|1095.46": 1791517599.357562,
   "_level_ready|ERIS.NS|1M|long|1162.71|975.894": 1791788502.510202,
   "_level_ready|ERIS.NS|1d|short|1238.14|1258": 1793955718.67303,
+  "_level_ready|ERIS.NS|1w|short|1366.05|1384": 1794896224.237521,
   "_level_ready|ESCORTS.NS|1d|long|2536.09|2470.25": 1793605580.737891,
   "_level_ready|ESCORTS.NS|1d|short|2761.92|2792.76": 1791517599.357562,
   "_level_ready|ETHUSD|1d|long|2090.16|1911.05": 1794208583.591817,
@@ -4979,7 +4983,7 @@
   "_level_ready|POLYMED.NS|1d|short|1702.79|1765.56": 1794467780.221499,
   "_level_ready|POLYMED.NS|1w|short|1708.13|1724.4": 1794467780.221499,
   "_level_ready|POONAWALLA.NS|1M|short|476.26|482.95": 1794282375.833969,
-  "_level_ready|POONAWALLA.NS|1M|short|499.272|528.037": 1794456710.974896,
+  "_level_ready|POONAWALLA.NS|1M|short|499.272|528.037": 1794896224.237521,
   "_level_ready|POONAWALLA.NS|1d|long|418.279|414.378": 1792729917.454067,
   "_level_ready|POONAWALLA.NS|1d|long|433.882|414.378": 1792122403.256656,
   "_level_ready|POONAWALLA.NS|1d|long|435.877|430": 1792560997.470601,
@@ -4995,6 +4999,7 @@
   "_level_ready|POONAWALLA.NS|1w|short|455.34|461.55": 1793591209.526473,
   "_level_ready|POONAWALLA.NS|1w|short|476.26|484": 1794282375.833969,
   "_level_ready|POONAWALLA.NS|1w|short|494.616|499": 1794887522.533935,
+  "_level_ready|POONAWALLA.NS|1w|short|499.272|528.037": 1794896224.237521,
   "_level_ready|PPLPHARMA.NS|1M|short|228.88|235": 1793163721.172195,
   "_level_ready|PPLPHARMA.NS|1M|short|248.196|265": 1794893198.999374,
   "_level_ready|PPLPHARMA.NS|1d|long|191.324|181.172": 1792986387.062464,
@@ -5597,6 +5602,7 @@
   "_ready|ERA/USDT|30m": 1789467666.170572,
   "_ready|ERIS.NS|1M": 1791788502.510202,
   "_ready|ERIS.NS|1d": 1793955718.67303,
+  "_ready|ERIS.NS|1w": 1794896224.237521,
   "_ready|ESCORTS.NS|1d": 1793605580.737891,
   "_ready|ESP/USDT|30m": 1789458664.421898,
   "_ready|ESP/USDT|4h": 1788956755.098613,
@@ -5883,9 +5889,9 @@
   "_ready|POLICYBZR.NS|1w": 1793591209.526473,
   "_ready|POLYMED.NS|1d": 1794887199.104532,
   "_ready|POLYMED.NS|1w": 1794467780.221499,
-  "_ready|POONAWALLA.NS|1M": 1794456710.974896,
+  "_ready|POONAWALLA.NS|1M": 1794896224.237521,
   "_ready|POONAWALLA.NS|1d": 1794887522.533935,
-  "_ready|POONAWALLA.NS|1w": 1794887522.533935,
+  "_ready|POONAWALLA.NS|1w": 1794896224.237521,
   "_ready|PPLPHARMA.NS|1M": 1794893198.999374,
   "_ready|PPLPHARMA.NS|1d": 1793169409.13753,
   "_ready|PPLPHARMA.NS|1w": 1794893198.999374,
