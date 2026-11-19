@@ -1856,8 +1856,8 @@
     "stopped_out": false
   },
   "IOB.NS|1w|short|32.0145|32.29": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "IOB.NS|1w|short|32.8355|33.55": {
@@ -1874,6 +1874,7 @@
   },
   "IPCALAB.NS|1d|long|1838.02|1788.03": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "IPCALAB.NS|1d|long|1845.53|1810": {
@@ -1892,6 +1893,11 @@
   },
   "IRB.NS|1w|short|19.4015|19.64": {
     "reached_entry": false,
+    "stopped_out": false
+  },
+  "IREDA.NS|1d|short|127.866|133.926": {
+    "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "IREDA.NS|1w|short|113.764|115": {
@@ -1916,6 +1922,7 @@
   },
   "IREDA.NS|1w|short|127.866|130": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ITCHOTELS.NS|1M|short|179.569|196.663": {
@@ -1925,7 +1932,7 @@
   },
   "ITCHOTELS.NS|1d|short|183.286|185": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ITCHOTELS.NS|1w|short|165.613|167.79": {
@@ -2471,6 +2478,11 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "MPHASIS.NS|1d|long|2327.1|2231.12": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "MPHASIS.NS|1w|long|2296.36|2210.2": {
     "reached_entry": false,
     "stopped_out": false
@@ -2791,6 +2803,10 @@
     "stopped_out": false
   },
   "PERSISTENT.NS|1M|short|6424.93|6552.5": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "PERSISTENT.NS|1d|long|5754.9|5617.45": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -3221,8 +3237,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1795063914.746642,
-  "_last_check|nse": 1795063914.746642,
+  "_last_check|crypto": 1795064211.522707,
+  "_last_check|nse": 1795064211.522707,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -4319,10 +4335,12 @@
   "_level_ready|IREDA.NS|1d|short|118.612|124.23": 1794802900.57167,
   "_level_ready|IREDA.NS|1d|short|119.33|120.61": 1794282375.833969,
   "_level_ready|IREDA.NS|1d|short|123.019|129.078": 1794888995.870339,
+  "_level_ready|IREDA.NS|1d|short|127.866|133.926": 1795064211.522707,
   "_level_ready|IREDA.NS|1w|short|113.764|115": 1794198126.429793,
   "_level_ready|IREDA.NS|1w|short|118.612|120.38": 1794974204.173171,
   "_level_ready|IREDA.NS|1w|short|122.35|123.99": 1794888428.469677,
   "_level_ready|IREDA.NS|1w|short|123.019|124.25": 1795060306.095923,
+  "_level_ready|IREDA.NS|1w|short|127.866|130": 1795064211.522707,
   "_level_ready|ITCHOTELS.NS|1M|short|179.569|196.663": 1795060306.095923,
   "_level_ready|ITCHOTELS.NS|1d|short|161.837|163.2": 1792654002.860469,
   "_level_ready|ITCHOTELS.NS|1d|short|162.821|176.078": 1793001984.532925,
@@ -4606,6 +4624,7 @@
   "_level_ready|MOTILALOFS.NS|1d|short|978.325|1026.66": 1793245588.963685,
   "_level_ready|MOTILALOFS.NS|1w|long|928.631|763.447": 1793072802.908836,
   "_level_ready|MOTILALOFS.NS|1w|short|1157.29|1266.45": 1794196905.696003,
+  "_level_ready|MPHASIS.NS|1d|long|2327.1|2231.12": 1795064211.522707,
   "_level_ready|MPHASIS.NS|1d|long|2396.9|2307.9": 1794973600.547603,
   "_level_ready|MPHASIS.NS|1d|short|2339.95|2438.93": 1791517599.357562,
   "_level_ready|MPHASIS.NS|1d|short|2428.25|2461.1": 1791863502.097245,
@@ -5616,8 +5635,8 @@
   "_ready|IRB.NS|1d": 1794975110.480531,
   "_ready|IRB.NS|1w": 1794800793.028569,
   "_ready|IRCTC.NS|1d": 1794541608.650168,
-  "_ready|IREDA.NS|1d": 1794888995.870339,
-  "_ready|IREDA.NS|1w": 1795060306.095923,
+  "_ready|IREDA.NS|1d": 1795064211.522707,
+  "_ready|IREDA.NS|1w": 1795064211.522707,
   "_ready|ITCHOTELS.NS|1M": 1795060306.095923,
   "_ready|ITCHOTELS.NS|1d": 1795061823.605872,
   "_ready|ITCHOTELS.NS|1w": 1795060306.095923,
@@ -5705,7 +5724,7 @@
   "_ready|MOTILALOFS.NS|1M": 1794196905.696003,
   "_ready|MOTILALOFS.NS|1d": 1793937114.247749,
   "_ready|MOTILALOFS.NS|1w": 1794196905.696003,
-  "_ready|MPHASIS.NS|1d": 1794973600.547603,
+  "_ready|MPHASIS.NS|1d": 1795064211.522707,
   "_ready|MRF.NS|1M": 1791517599.357562,
   "_ready|MRF.NS|1d": 1795060016.749852,
   "_ready|MRF.NS|1w": 1794455172.242815,
