@@ -506,6 +506,7 @@
   },
   "BANDHANBNK.NS|1w|short|177.066|181.15": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "BANKINDIA.NS|1w|long|138.621|134.96": {
@@ -1214,8 +1215,8 @@
     "stopped_out": false
   },
   "EMMVEE.NS|1w|long|266.197|239.859": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "EMMVEE.NS|1w|short|275.183|279.95": {
@@ -3085,11 +3086,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "RADICO.NS|1d|short|4611.51|4650.6": {
-    "reached_entry": true,
-    "stage": 2,
-    "stopped_out": true
-  },
   "RADICO.NS|1w|long|3983.02|3202.19": {
     "reached_entry": false,
     "stopped_out": false
@@ -3273,8 +3269,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1795080380.463757,
-  "_last_check|nse": 1795080380.463757,
+  "_last_check|crypto": 1795080726.372556,
+  "_last_check|nse": 1795080726.372556,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -3566,7 +3562,7 @@
   "_level_ready|BANDHANBNK.NS|1d|short|160.455|167.236": 1793937978.189416,
   "_level_ready|BANDHANBNK.NS|1d|short|165.88|172.167": 1794196012.334544,
   "_level_ready|BANDHANBNK.NS|1d|short|174.871|176.73": 1794887522.533935,
-  "_level_ready|BANDHANBNK.NS|1w|short|177.066|181.15": 1794891396.849237,
+  "_level_ready|BANDHANBNK.NS|1w|short|177.066|181.15": 1795080726.372556,
   "_level_ready|BANKINDIA.NS|1d|long|131.989|130.25": 1793697708.304598,
   "_level_ready|BANKINDIA.NS|1d|short|129.369|135.224": 1793073108.145997,
   "_level_ready|BANKINDIA.NS|1d|short|131.223|135.224": 1793159201.504703,
@@ -5440,7 +5436,7 @@
   "_ready|BALKRISIND.NS|1d": 1793764604.922956,
   "_ready|BALKRISIND.NS|1w": 1795060016.749852,
   "_ready|BANDHANBNK.NS|1d": 1794887522.533935,
-  "_ready|BANDHANBNK.NS|1w": 1794891396.849237,
+  "_ready|BANDHANBNK.NS|1w": 1795080726.372556,
   "_ready|BANKINDIA.NS|1d": 1794282375.833969,
   "_ready|BANKINDIA.NS|1w": 1793159201.504703,
   "_ready|BCHUSD|30m": 1791429995.770346,
