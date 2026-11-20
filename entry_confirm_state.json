@@ -343,6 +343,11 @@
     "stage": 2,
     "stopped_out": false
   },
+  "APLAPOLLO.NS|1d|long|2057.13|2030.1": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "APLAPOLLO.NS|1d|long|2137.29|2093.54": {
     "reached_entry": true,
     "stage": 3,
@@ -664,7 +669,7 @@
   "BRIGADE.NS|1d|short|559.089|567.9": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BRIGADE.NS|1w|long|530.85|524.5": {
     "reached_entry": false,
@@ -718,7 +723,7 @@
   },
   "CAPLIPOINT.NS|1M|long|2170.67|1965.83": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "CAPLIPOINT.NS|1w|long|2006.8|1856.3": {
@@ -727,7 +732,7 @@
   },
   "CAPLIPOINT.NS|1w|long|2170.67|1965.83": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "CAPLIPOINT.NS|1w|long|2319.64|2222": {
@@ -936,8 +941,9 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "COROMANDEL.NS|1d|short|1983.61|1999.5": {
+  "COROMANDEL.NS|1d|short|1981.32|1999.5": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "COROMANDEL.NS|1w|long|1872.69|1821.33": {
@@ -965,12 +971,13 @@
     "stopped_out": false
   },
   "COROMANDEL.NS|1w|short|1972.92|1990": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "COROMANDEL.NS|1w|short|1982.24|1999.5": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "CRAFTSMAN.NS|1w|long|10112.9|8185.09": {
@@ -1465,6 +1472,7 @@
   },
   "GLAXO.NS|1d|short|2735|2760": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "GLAXO.NS|1w|long|2439.18|2410.79": {
@@ -1589,7 +1597,7 @@
   },
   "HAVELLS.NS|1w|short|1207.63|1222.9": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "HAVELLS.NS|1w|short|1232.1|1244.1": {
@@ -1701,10 +1709,6 @@
     "stopped_out": false
   },
   "HUDCO.NS|1w|long|146.922|138.306": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
-  "HUDCO.NS|1w|long|159.075|155.8": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -1869,6 +1873,11 @@
     "stage": 2,
     "stopped_out": false
   },
+  "INDUSINDBK.NS|1d|short|940.157|972.077": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
   "INJUSD|1d|short|7.47555|7.73552": {
     "reached_entry": true,
     "stage": 3,
@@ -1915,8 +1924,8 @@
     "stopped_out": false
   },
   "IPCALAB.NS|1d|long|1845.53|1810": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "IRB.NS|1d|long|17.2505|16.7706": {
@@ -2247,6 +2256,7 @@
   },
   "KIMS.NS|1w|short|788.997|797.85": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "KIRLOSENG.NS|1M|long|1740.98|1224.28": {
@@ -2376,7 +2386,7 @@
   },
   "LTTS.NS|1w|short|4142.56|4189.75": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "LTTS.NS|1w|short|4255.87|4355.5": {
@@ -3273,8 +3283,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1795147312.648216,
-  "_last_check|nse": 1795147312.648216,
+  "_last_check|crypto": 1795147576.676733,
+  "_last_check|nse": 1795147576.676733,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -3464,6 +3474,7 @@
   "_level_ready|APARINDS.NS|1d|short|15656.1|16408": 1793764008.797417,
   "_level_ready|APARINDS.NS|1d|short|16257.6|16954.8": 1793332287.548648,
   "_level_ready|APARINDS.NS|1w|long|14179.6|8982.1": 1795146417.323549,
+  "_level_ready|APLAPOLLO.NS|1d|long|2057.13|2030.1": 1795147576.676733,
   "_level_ready|APLAPOLLO.NS|1d|long|2169.11|2128.54": 1794973600.547603,
   "_level_ready|APLAPOLLO.NS|1d|short|2046.97|2124.71": 1792986700.301796,
   "_level_ready|APLAPOLLO.NS|1d|short|2274.35|2293.3": 1794800793.028569,
@@ -3878,6 +3889,7 @@
   "_level_ready|COROMANDEL.NS|1d|short|1853.94|1904.65": 1794199615.067583,
   "_level_ready|COROMANDEL.NS|1d|short|1891.07|1942.5": 1794368805.895201,
   "_level_ready|COROMANDEL.NS|1d|short|1894.51|1945.22": 1793936864.300001,
+  "_level_ready|COROMANDEL.NS|1d|short|1981.32|1999.5": 1795147576.676733,
   "_level_ready|COROMANDEL.NS|1d|short|1983.61|1999.5": 1795062411.435254,
   "_level_ready|COROMANDEL.NS|1d|short|1988.19|2004.7": 1794892608.887875,
   "_level_ready|COROMANDEL.NS|1d|short|1997.35|2019.9": 1794541608.650168,
@@ -4159,6 +4171,7 @@
   "_level_ready|GLAXO.NS|1d|long|2552.77|2501.66": 1791517599.357562,
   "_level_ready|GLAXO.NS|1d|short|2608.14|2714.93": 1794196012.334544,
   "_level_ready|GLAXO.NS|1d|short|2693.57|2792.59": 1794541879.273074,
+  "_level_ready|GLAXO.NS|1d|short|2735|2760": 1795147576.676733,
   "_level_ready|GLAXO.NS|1w|long|2439.18|2410.79": 1793159201.504703,
   "_level_ready|GLAXO.NS|1w|long|2638.61|2419.34": 1791776795.761218,
   "_level_ready|GLAXO.NS|1w|short|2608.14|2714.93": 1794196012.334544,
@@ -4353,6 +4366,7 @@
   "_level_ready|IKS.NS|1d|short|1756.88|1806.28": 1793766402.305843,
   "_level_ready|IKS.NS|1w|long|1640.06|1465.93": 1794541879.273074,
   "_level_ready|INDUSINDBK.NS|1d|short|912.619|947.042": 1794455482.704998,
+  "_level_ready|INDUSINDBK.NS|1d|short|940.157|972.077": 1795147576.676733,
   "_level_ready|INJUSD|1d|short|7.47555|7.73552": 1794915409.04046,
   "_level_ready|INJUSD|1d|short|7.67945|7.95981": 1794918399.366113,
   "_level_ready|IOB.NS|1d|long|30.916|30.3142": 1795060016.749852,
@@ -4505,6 +4519,7 @@
   "_level_ready|KIMS.NS|1w|short|724.053|736.25": 1794455172.242815,
   "_level_ready|KIMS.NS|1w|short|746.377|760": 1794802280.367728,
   "_level_ready|KIMS.NS|1w|short|766.672|775.2": 1795060016.749852,
+  "_level_ready|KIMS.NS|1w|short|788.997|797.85": 1795147576.676733,
   "_level_ready|KIRLOSENG.NS|1M|long|1740.98|1224.28": 1793677604.261117,
   "_level_ready|KIRLOSENG.NS|1d|long|1621.39|1596.6": 1794368805.895201,
   "_level_ready|KIRLOSENG.NS|1d|long|1943.25|1910.88": 1792555870.172007,
@@ -5417,7 +5432,7 @@
   "_ready|APARINDS.NS|1M": 1795146417.323549,
   "_ready|APARINDS.NS|1d": 1793764008.797417,
   "_ready|APARINDS.NS|1w": 1795146417.323549,
-  "_ready|APLAPOLLO.NS|1d": 1794973600.547603,
+  "_ready|APLAPOLLO.NS|1d": 1795147576.676733,
   "_ready|APLAPOLLO.NS|1w": 1793072802.908836,
   "_ready|APOLLOTYRE.NS|1M": 1793168791.057776,
   "_ready|APOLLOTYRE.NS|1d": 1794197174.702453,
@@ -5531,7 +5546,7 @@
   "_ready|COLPAL.NS|1w": 1795146697.449561,
   "_ready|CONCOR.NS|1d": 1794544301.527306,
   "_ready|CONCOR.NS|1w": 1794544301.527306,
-  "_ready|COROMANDEL.NS|1d": 1795062411.435254,
+  "_ready|COROMANDEL.NS|1d": 1795147576.676733,
   "_ready|COROMANDEL.NS|1w": 1795146417.323549,
   "_ready|COTI/USDT|30m": 1789452970.13835,
   "_ready|CPPLUS.NS|1d": 1793781403.105803,
@@ -5624,7 +5639,7 @@
   "_ready|GLAND.NS|1d": 1793166102.188457,
   "_ready|GLAND.NS|1w": 1793936864.300001,
   "_ready|GLAXO.NS|1M": 1793936864.300001,
-  "_ready|GLAXO.NS|1d": 1794541879.273074,
+  "_ready|GLAXO.NS|1d": 1795147576.676733,
   "_ready|GLAXO.NS|1w": 1795072018.283668,
   "_ready|GLENMARK.NS|1d": 1793764008.797417,
   "_ready|GLENMARK.NS|1w": 1792986387.062464,
@@ -5690,7 +5705,7 @@
   "_ready|IKS.NS|1M": 1794541879.273074,
   "_ready|IKS.NS|1d": 1795146417.323549,
   "_ready|IKS.NS|1w": 1794541879.273074,
-  "_ready|INDUSINDBK.NS|1d": 1794455482.704998,
+  "_ready|INDUSINDBK.NS|1d": 1795147576.676733,
   "_ready|INJUSD|1d": 1794918399.366113,
   "_ready|IOB.NS|1d": 1795060016.749852,
   "_ready|IOB.NS|1w": 1795146417.323549,
@@ -5736,7 +5751,7 @@
   "_ready|KEI.NS|1w": 1794804716.825271,
   "_ready|KGEN/USDT|30m": 1789463159.791482,
   "_ready|KIMS.NS|1d": 1795060016.749852,
-  "_ready|KIMS.NS|1w": 1795060016.749852,
+  "_ready|KIMS.NS|1w": 1795147576.676733,
   "_ready|KIRLOSENG.NS|1M": 1793677604.261117,
   "_ready|KIRLOSENG.NS|1d": 1794368805.895201,
   "_ready|KIRLOSENG.NS|1w": 1793677604.261117,
