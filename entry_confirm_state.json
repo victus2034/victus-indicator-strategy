@@ -350,7 +350,7 @@
   },
   "APLAPOLLO.NS|1d|long|2057.13|2030.1": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "APLAPOLLO.NS|1d|long|2137.29|2093.54": {
@@ -559,6 +559,7 @@
   },
   "BEML.NS|1M|short|2037.95|2086.9": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "BEML.NS|1M|short|2210.54|2282.6": {
@@ -677,6 +678,11 @@
     "reached_entry": true,
     "stage": 3,
     "stopped_out": true
+  },
+  "BRIGADE.NS|1d|short|581.6|598.237": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
   },
   "BRIGADE.NS|1w|long|530.85|524.5": {
     "reached_entry": false,
@@ -2185,6 +2191,11 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "KALYANKJIL.NS|1d|long|621.912|591.472": {
+    "reached_entry": false,
+    "stage": 1,
+    "stopped_out": false
+  },
   "KALYANKJIL.NS|1w|long|482.898|317.966": {
     "reached_entry": false,
     "stopped_out": false
@@ -2250,8 +2261,8 @@
     "stopped_out": false
   },
   "KIMS.NS|1d|short|788.997|816.903": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "KIMS.NS|1w|long|658.066|651.2": {
@@ -2274,8 +2285,8 @@
     "stopped_out": true
   },
   "KIMS.NS|1w|short|788.997|797.85": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "KIRLOSENG.NS|1M|long|1740.98|1224.28": {
@@ -2686,7 +2697,7 @@
     "stage": 3,
     "stopped_out": false
   },
-  "NAUKRI.NS|1d|short|1205.67|1218": {
+  "NAUKRI.NS|1d|short|1192.29|1203.6": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -3303,8 +3314,8 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1795149093.339774,
-  "_last_check|nse": 1795149093.339774,
+  "_last_check|crypto": 1795149399.062666,
+  "_last_check|nse": 1795149399.062666,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -3644,7 +3655,7 @@
   "_level_ready|BELRISE.NS|1w|long|208.139|146.753": 1793591209.526473,
   "_level_ready|BEML.NS|1M|long|1969.53|1856.78": 1791517599.357562,
   "_level_ready|BEML.NS|1M|short|1991.44|2188": 1794282375.833969,
-  "_level_ready|BEML.NS|1M|short|2037.95|2086.9": 1795060306.095923,
+  "_level_ready|BEML.NS|1M|short|2037.95|2086.9": 1795149399.062666,
   "_level_ready|BEML.NS|1d|long|1822.5|1620.62": 1792986387.062464,
   "_level_ready|BEML.NS|1d|long|1857.42|1794.9": 1792640801.869234,
   "_level_ready|BEML.NS|1d|long|1864.7|1834.7": 1792727505.027921,
@@ -3746,6 +3757,7 @@
   "_level_ready|BRIGADE.NS|1d|short|559.089|567.9": 1795146417.323549,
   "_level_ready|BRIGADE.NS|1d|short|567.872|603.769": 1793086600.75204,
   "_level_ready|BRIGADE.NS|1d|short|569.5|584.927": 1793864200.948365,
+  "_level_ready|BRIGADE.NS|1d|short|581.6|598.237": 1795149399.062666,
   "_level_ready|BRIGADE.NS|1w|long|523.568|518.95": 1793764008.797417,
   "_level_ready|BTCUSD|1M|long|65280.4|61203.4": 1794669394.4963,
   "_level_ready|BTCUSD|1M|long|76355.4|71362.9": 1793368605.402768,
@@ -4512,6 +4524,7 @@
   "_level_ready|KAJARIACER.NS|1w|short|1127.7|1150.3": 1793591772.925076,
   "_level_ready|KALYANKJIL.NS|1d|long|504.095|427.644": 1793332911.198203,
   "_level_ready|KALYANKJIL.NS|1d|long|553.904|547.4": 1792640801.869234,
+  "_level_ready|KALYANKJIL.NS|1d|long|621.912|591.472": 1795149399.062666,
   "_level_ready|KALYANKJIL.NS|1w|long|559.287|524.912": 1791517599.357562,
   "_level_ready|KARURVYSYA.NS|1d|long|347.13|336.212": 1793161918.75218,
   "_level_ready|KARURVYSYA.NS|1d|long|354.201|331.666": 1792727171.150355,
@@ -5499,7 +5512,7 @@
   "_ready|BEAT/USDT|30m": 1791171365.432313,
   "_ready|BELRISE.NS|1d": 1795146697.449561,
   "_ready|BELRISE.NS|1w": 1793591209.526473,
-  "_ready|BEML.NS|1M": 1795060306.095923,
+  "_ready|BEML.NS|1M": 1795149399.062666,
   "_ready|BEML.NS|1d": 1795146417.323549,
   "_ready|BEML.NS|1w": 1793936864.300001,
   "_ready|BERGEPAINT.NS|1d": 1795060016.749852,
@@ -5520,7 +5533,7 @@
   "_ready|BNBUSD|4h": 1790577087.860535,
   "_ready|BOME/USDT|30m": 1789466760.110004,
   "_ready|BRIGADE.NS|1M": 1793764008.797417,
-  "_ready|BRIGADE.NS|1d": 1795146417.323549,
+  "_ready|BRIGADE.NS|1d": 1795149399.062666,
   "_ready|BRIGADE.NS|1w": 1793764008.797417,
   "_ready|BTCUSD|1M": 1794669394.4963,
   "_ready|BTCUSD|1d": 1793846509.486813,
@@ -5764,7 +5777,7 @@
   "_ready|KAJARIACER.NS|1M": 1793764008.797417,
   "_ready|KAJARIACER.NS|1d": 1794973600.547603,
   "_ready|KAJARIACER.NS|1w": 1793591772.925076,
-  "_ready|KALYANKJIL.NS|1d": 1793332911.198203,
+  "_ready|KALYANKJIL.NS|1d": 1795149399.062666,
   "_ready|KALYANKJIL.NS|1w": 1791517599.357562,
   "_ready|KARURVYSYA.NS|1d": 1794282375.833969,
   "_ready|KARURVYSYA.NS|1w": 1792986985.751506,
