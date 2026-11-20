@@ -7,6 +7,10 @@
   "BNBUSD|1M|long|719.149|555.317": {
     "reached_entry": true,
     "stage": 3,
+    "stopped_out": true
+  },
+  "BNBUSD|1w|long|547.501|537.32": {
+    "reached_entry": false,
     "stopped_out": false
   },
   "BTCUSD|1M|long|65280.4|61203.4": {
@@ -50,12 +54,12 @@
   },
   "ENAUSD|1d|long|0.103199|0.09329": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ENAUSD|1d|long|0.103398|0.09329": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "HYPEUSD|1w|long|63.1174|59.709": {
@@ -125,7 +129,8 @@
     "stopped_out": true
   },
   "SUIUSD|1w|long|0.656168|0.635": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "TAOUSD|1w|short|277.335|415.206": {
@@ -168,7 +173,7 @@
   "UNIUSD|1w|long|5.24922|4.525": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "UNIUSD|1w|long|6.19885|5.01181": {
     "reached_entry": true,
@@ -223,7 +228,7 @@
     "stage": 2,
     "stopped_out": false
   },
-  "_last_check|crypto": 1795187797.153039,
+  "_last_check|crypto": 1795188117.381653,
   "_last_check|nse": 1795167410.941145,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
@@ -2146,6 +2151,7 @@
   "_level_ready|SOXLBUSD|4h|short|166.964|168.634": 1790948798.588421,
   "_level_ready|SUIUSD|1d|long|0.95305|0.867387": 1792332704.009245,
   "_level_ready|SUIUSD|1d|long|1.01535|0.867387": 1792561314.210422,
+  "_level_ready|SUIUSD|1w|long|0.656168|0.635": 1795188117.381653,
   "_level_ready|TACUSD|30m|long|0.00148075|0.00146606": 1790566580.565131,
   "_level_ready|TACUSD|30m|long|0.001502|0.00148825": 1791012695.995822,
   "_level_ready|TACUSD|30m|long|0.00152|0.00151625": 1790936482.523706,
@@ -2905,6 +2911,7 @@
   "_ready|SOXLBUSD|4h": 1790948798.588421,
   "_ready|STORJ/USDT|30m": 1788930963.585849,
   "_ready|SUIUSD|1d": 1792561314.210422,
+  "_ready|SUIUSD|1w": 1795188117.381653,
   "_ready|TACUSD|30m": 1791167791.577911,
   "_ready|TACUSD|4h": 1790566885.398299,
   "_ready|TAOUSD|1d": 1793191906.997431,
