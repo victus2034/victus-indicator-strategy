@@ -1,5 +1,5 @@
 {
- "balance": 630.1482,
+ "balance": 554.6779,
  "orders": {
   "fib|1000PEPEUSD|1d|1|1791417600|0.0056871|1|L1@1794387773": {
    "balance_after": 923.2764,
@@ -216,7 +216,7 @@
   "fib|NEARUSD|1d|1|1786406400|6.019|2|L4@1794673984": {
    "best_r": 0.671271267211487,
    "capped": false,
-   "checked_until": 1795229760,
+   "checked_until": 1795230120,
    "entry": 3.0602199999999997,
    "fill_ts": 1794687240,
    "id": "fib|NEARUSD|1d|1|1786406400|6.019|2|L4@1794673984",
@@ -299,10 +299,13 @@
    "tp": 7.4177325
   },
   "fib|ZECUSD|1d|1|1785283200|1698.46|2|L4@1794546202": {
+   "balance_after": 554.6779,
    "best_r": 0.5686576087115015,
    "capped": false,
-   "checked_until": 1795229760,
+   "checked_until": 1795229880,
    "entry": 875.4928,
+   "exit_ts": 1795229820,
+   "exit_why": "SL",
    "fill_ts": 1794662580,
    "id": "fib|ZECUSD|1d|1|1785283200|1698.46|2|L4@1794546202",
    "level": "L4",
@@ -310,12 +313,14 @@
    "margin": 19.15,
    "pair": "B-ZEC_USDT",
    "placed_ts": 1794546202,
+   "pnl": -75.4703,
    "position": 382.98,
+   "r": -1.0063,
    "risk": 75.0,
    "sent_ts": 1794546202,
    "side": "long",
    "sl": 704.0413,
-   "status": "open",
+   "status": "lost",
    "stop_pct": 19.583427756344772,
    "stop_r": null,
    "symbol": "ZECUSD",
