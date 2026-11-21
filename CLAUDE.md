@@ -574,5 +574,11 @@ significant figures (`price_text`); nothing parses the text - records carry the 
 - **CoinDCX / Delta live bot has no end date (2026-11-21, lakky, decision card "Keep trading, no end date").** The 13-20 Nov
   test week ended and new alerts stopped. `COINDCX_LIVE_DAYS` = 0 (default) lifts the state's `until_ts`; N > 0 sets an
   N-day window again. The kill switch (`COINDCX_LIVE_MAX_LOSS`, 10 USDT) still stops new trades.
+- **The journal tags the bot's trades AUTO from its state (2026-11-21, lakky: "trades from auto trades needs to be mark
+  as auto").** The journal (victus2034/journal, v.201) reads `coindcx_live_state.json` from trading-journal and marks a
+  trade AUTO when an order fits it (pair - `DELTA:` = Delta, else CoinDCX - side, `qty`, `placed_ts`, `fill_ts`, `exit_ts`);
+  every other trade is MANUAL. Keep those fields and never drop old orders from `orders`: a device that had not read
+  them yet would show those trades as Manual. A round trip made outside the state (`delta_live.py --self-test`) is
+  Manual unless its closing Delta order is added to the journal's `BOT_TEST_TRADES`.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.
