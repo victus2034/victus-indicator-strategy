@@ -235,7 +235,8 @@ def eligible(record, state, now):
                 and record.get("symbol") in config.CRYPTO_WATCHLIST
                 and record["plan"].get("side") in ("long", "short")
                 and bool(record.get("id")) and record["id"] not in state["orders"]
-                and state["started_ts"] <= sent < state["until_ts"]
+                and state["started_ts"] <= sent
+                and (state.get("until_ts") is None or sent < state["until_ts"])
                 and now - sent <= config.COINDCX_LIVE_MAX_ALERT_AGE)
     except (KeyError, TypeError, ValueError):
         return False
@@ -275,7 +276,7 @@ def quantity(entry, sl, ins, risk=None):
 # ---------------------------------------------------------------- state
 
 def new_state(now):
-    return {"version": 1, "started_ts": int(now), "until_ts": int(now + config.COINDCX_LIVE_DAYS * DAY),
+    return {"version": 1, "started_ts": int(now), "until_ts": int(now + config.COINDCX_LIVE_DAYS * DAY) if config.COINDCX_LIVE_DAYS > 0 else None,
             "orders": {}, "realized": 0.0, "events": []}
 
 
@@ -659,9 +660,15 @@ def run_tick(now=None, dry_run=False, remote=False):
         drop_dry_orders(state)
     if state is None:
         state = new_state(now)
-        note(state, f"started: trades 1D TL alerts until {datetime.fromtimestamp(state['until_ts'], scanner.IST):%d %b %H:%M IST}, "
-                    f"risk {config.COINDCX_LIVE_RISK:g} USDT a trade"
+        until = state.get("until_ts")
+        note(state, "started: trades 1D TL alerts "
+                    + (f"until {datetime.fromtimestamp(until, scanner.IST):%d %b %H:%M IST}, " if until else "with no end date, ")
+                    + f"risk {config.COINDCX_LIVE_RISK:g} USDT a trade"
                     + ("" if isinstance(ex, CoinDCX) else " (DRY RUN: no API key)"), now)
+    if config.COINDCX_LIVE_DAYS <= 0 and state.get("until_ts") is not None:
+        state["until_ts"] = None                         # the test week's end date lifted (lakky, 21 Nov)
+        note(state, "trading on with no end date (kill switch still at "
+                    f"-{config.COINDCX_LIVE_MAX_LOSS:g} USDT, {state['realized']:+.2f} so far)", now)
     tick(state, ex, remote_records() if remote else demo.load_records(), now)
     if not dry_run:
         post(state)

@@ -666,7 +666,9 @@ COINDCX_LIVE_RISK = env_float("VICTUS_COINDCX_LIVE_RISK", 1.0)            # USDT
 COINDCX_LIVE_MAX_LEVERAGE = env_float("VICTUS_COINDCX_LIVE_MAX_LEVERAGE", 20.0)
 COINDCX_LIVE_MAX_OPEN = int(env_float("VICTUS_COINDCX_LIVE_MAX_OPEN", 5))
 COINDCX_LIVE_MAX_LOSS = env_float("VICTUS_COINDCX_LIVE_MAX_LOSS", 10.0)   # kill switch, USDT
-COINDCX_LIVE_DAYS = env_float("VICTUS_COINDCX_LIVE_DAYS", 7)
+# 0 = no end date (lakky, 2026-11-21: "Keep trading, no end date" after the 13-20 Nov test week);
+# N = trade alerts for N days from the first tick. The kill switch (COINDCX_LIVE_MAX_LOSS) still holds.
+COINDCX_LIVE_DAYS = env_float("VICTUS_COINDCX_LIVE_DAYS", 0)
 COINDCX_LIVE_SL_GAP_PCT = env_float("VICTUS_COINDCX_LIVE_SL_GAP_PCT", 0.75)
 # An alert older than this when first seen is not traded (a late tick never chases).
 COINDCX_LIVE_MAX_ALERT_AGE = 6 * 3600     # GitHub's schedule can skip a few hours

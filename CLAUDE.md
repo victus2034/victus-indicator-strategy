@@ -566,5 +566,8 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   refused the unrounded price (422) and the move was only tried once, so the exchange kept the -1R stop for days. Now
   `coindcx_live.ensure_tick` reads a missing step from the instrument, and `stop_sent` (the level the exchange took) is
   compared with the wanted stop every tick: a refused move is sent again until it goes in. `tests/test_coindcx_live.py::StopMoves`.
+- **CoinDCX / Delta live bot has no end date (2026-11-21, lakky, decision card "Keep trading, no end date").** The 13-20 Nov
+  test week ended and new alerts stopped. `COINDCX_LIVE_DAYS` = 0 (default) lifts the state's `until_ts`; N > 0 sets an
+  N-day window again. The kill switch (`COINDCX_LIVE_MAX_LOSS`, 10 USDT) still stops new trades.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

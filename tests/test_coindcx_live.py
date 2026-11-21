@@ -106,7 +106,9 @@ class Rules(unittest.TestCase):
         self.assertFalse(live.eligible(record(sent=NOW - 6 * 3600 - 60), s, NOW))
         self.assertFalse(live.eligible(record(symbol="XAUTUSD"), s, NOW))
         late = dict(s, until_ts=NOW - 700)
-        self.assertFalse(live.eligible(record(), late, NOW))                        # the week is over
+        self.assertFalse(live.eligible(record(), late, NOW))                        # a set end date is kept
+        self.assertTrue(live.eligible(record(), dict(s, until_ts=None), NOW))       # no end date (21 Nov)
+        self.assertIsNone(live.new_state(NOW)["until_ts"])
 
 
 class Flow(unittest.TestCase):
