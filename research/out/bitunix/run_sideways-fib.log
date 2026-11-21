@@ -1,0 +1,186 @@
+BTCUSD: 34 alerts
+ETHUSD: 15 alerts
+ZECUSD: 29 alerts
+SOLUSD: 35 alerts
+XRPUSD: 13 alerts
+NEARUSD: 51 alerts
+HYPEUSD: 72 alerts
+DOGEUSD: 30 alerts
+SUIUSD: 32 alerts
+UNIUSD: 44 alerts
+BNBUSD: 53 alerts
+ENAUSD: 25 alerts
+1000PEPEUSD: 17 alerts
+WLDUSD: 55 alerts
+ADAUSD: 33 alerts
+LINKUSD: 26 alerts
+AVAXUSD: 29 alerts
+INJUSD: 62 alerts
+FILUSD: 77 alerts
+AAVEUSD: 38 alerts
+TAOUSD: 44 alerts
+ARBUSD: 41 alerts
+SLVONUSD: 25 alerts
+XAUTUSD: 18 alerts
+TSLAXUSD: 29 alerts
+SNDKBUSD: 15 alerts
+QQQXUSD: 5 alerts
+# Live-safe sideways filters - 1D fib L2-L4 (journal setup), to 2026-11-21
+
+Filters read only daily candles closed before the alert (btc_sofar: BTC 15m closed before it). Journal exits: wick/body SL 0.75%+, 1.5R + trail 0.25R / 0.5R behind, SL shift +1R -> +0.75R. Fees 0.0826%, stop slip 0.05%. 3 fills within 15 min of US CPI / PPI / FOMC left out.
+
+## Sep 1 - now
+
+| Filter | Trades | Win | R/trade | %/trade | Total R | Max DD |
+|---|---|---|---|---|---|---|
+| all | 149 | 46% | -0.131R | -0.63% | -19.5R | -22.3R |
+| btc_same (look-ahead) | 67 | 55% | +0.049R | +0.52% | +3.3R | -7.5R |
+| btc_sofar | 84 | 54% | +0.014R | +0.23% | +1.2R | -7.6R |
+| btc_prev | 88 | 41% | -0.258R | -0.95% | -22.7R | -25.1R |
+| coin_prev | 48 | 44% | -0.208R | -1.31% | -10.0R | -12.6R |
+| btc_3d | 107 | 43% | -0.199R | -0.66% | -21.3R | -22.1R |
+| coin_3d | 52 | 40% | -0.256R | -0.96% | -13.3R | -13.7R |
+| btc_adx20 | 27 | 26% | -0.596R | -2.44% | -16.1R | -16.8R |
+| coin_adx20 | 31 | 35% | -0.336R | -1.20% | -10.4R | -13.8R |
+| btc_adx25 | 50 | 36% | -0.358R | -1.64% | -17.9R | -21.8R |
+| coin_adx25 | 60 | 35% | -0.387R | -1.39% | -23.2R | -24.7R |
+| btc_er | 93 | 45% | -0.156R | -0.56% | -14.5R | -18.4R |
+| coin_er | 73 | 44% | -0.179R | -0.58% | -13.1R | -15.3R |
+| btc_atr | 13 | 15% | -0.800R | -3.02% | -10.4R | -10.8R |
+| coin_atr | 13 | 46% | -0.193R | -2.03% | -2.5R | -6.4R |
+| btc_slope | 81 | 41% | -0.216R | -0.89% | -17.5R | -22.0R |
+| coin_slope | 96 | 44% | -0.185R | -0.41% | -17.7R | -22.6R |
+| btc_range | 133 | 44% | -0.171R | -0.74% | -22.8R | -24.3R |
+| coin_range | 97 | 38% | -0.278R | -0.99% | -26.9R | -29.9R |
+| btc_adx20+coin_adx20 | 7 | 43% | -0.211R | -1.60% | -1.5R | -3.2R |
+| btc_er+coin_er | 49 | 45% | -0.160R | -0.24% | -7.9R | -10.1R |
+
+### Sep 1 - now, first half of trades (stability check)
+
+| Filter | Trades | Win | R/trade | %/trade | Total R | Max DD |
+|---|---|---|---|---|---|---|
+| all | 74 | 47% | -0.109R | -0.61% | -8.1R | -10.5R |
+| btc_same (look-ahead) | 35 | 54% | +0.030R | +0.74% | +1.1R | -7.5R |
+| btc_sofar | 50 | 50% | -0.072R | -0.49% | -3.6R | -5.9R |
+| btc_prev | 49 | 45% | -0.189R | -0.59% | -9.3R | -10.6R |
+| coin_prev | 21 | 52% | -0.048R | +0.02% | -1.0R | -4.7R |
+| btc_3d | 58 | 47% | -0.141R | -0.53% | -8.2R | -9.9R |
+| coin_3d | 29 | 48% | -0.056R | -0.18% | -1.6R | -3.4R |
+| btc_adx20 | 0 | | | | | |
+| coin_adx20 | 11 | 36% | -0.312R | -1.57% | -3.4R | -5.8R |
+| btc_adx25 | 0 | | | | | |
+| coin_adx25 | 21 | 38% | -0.337R | -1.12% | -7.1R | -8.2R |
+| btc_er | 48 | 50% | -0.106R | -0.50% | -5.1R | -6.5R |
+| coin_er | 35 | 40% | -0.271R | -0.72% | -9.5R | -10.5R |
+| btc_atr | 0 | | | | | |
+| coin_atr | 3 | 67% | +0.348R | +0.02% | +1.0R | -1.0R |
+| btc_slope | 29 | 38% | -0.279R | -1.81% | -8.1R | -12.1R |
+| coin_slope | 46 | 43% | -0.218R | -0.66% | -10.0R | -13.9R |
+| btc_range | 67 | 45% | -0.175R | -0.88% | -11.8R | -14.2R |
+| coin_range | 38 | 39% | -0.238R | -1.22% | -9.0R | -12.0R |
+| btc_adx20+coin_adx20 | 0 | | | | | |
+| btc_er+coin_er | 21 | 38% | -0.347R | -0.32% | -7.3R | -7.3R |
+
+### Sep 1 - now, second half of trades (stability check)
+
+| Filter | Trades | Win | R/trade | %/trade | Total R | Max DD |
+|---|---|---|---|---|---|---|
+| all | 75 | 44% | -0.153R | -0.64% | -11.5R | -21.8R |
+| btc_same (look-ahead) | 32 | 56% | +0.070R | +0.28% | +2.2R | -7.5R |
+| btc_sofar | 34 | 59% | +0.140R | +1.30% | +4.8R | -7.6R |
+| btc_prev | 39 | 36% | -0.345R | -1.41% | -13.5R | -20.5R |
+| coin_prev | 27 | 37% | -0.333R | -2.34% | -9.0R | -12.6R |
+| btc_3d | 49 | 39% | -0.268R | -0.82% | -13.1R | -20.6R |
+| coin_3d | 23 | 30% | -0.510R | -1.94% | -11.7R | -12.3R |
+| btc_adx20 | 27 | 26% | -0.596R | -2.44% | -16.1R | -16.8R |
+| coin_adx20 | 20 | 35% | -0.349R | -1.00% | -7.0R | -9.5R |
+| btc_adx25 | 50 | 36% | -0.358R | -1.64% | -17.9R | -21.8R |
+| coin_adx25 | 39 | 33% | -0.415R | -1.53% | -16.2R | -19.2R |
+| btc_er | 45 | 40% | -0.209R | -0.62% | -9.4R | -18.4R |
+| coin_er | 38 | 47% | -0.094R | -0.45% | -3.6R | -12.0R |
+| btc_atr | 13 | 15% | -0.800R | -3.02% | -10.4R | -10.8R |
+| coin_atr | 10 | 40% | -0.355R | -2.65% | -3.5R | -5.3R |
+| btc_slope | 52 | 42% | -0.180R | -0.37% | -9.4R | -19.8R |
+| coin_slope | 50 | 44% | -0.154R | -0.19% | -7.7R | -15.5R |
+| btc_range | 66 | 44% | -0.167R | -0.60% | -11.0R | -20.1R |
+| coin_range | 59 | 37% | -0.303R | -0.85% | -17.9R | -24.8R |
+| btc_adx20+coin_adx20 | 7 | 43% | -0.211R | -1.60% | -1.5R | -3.2R |
+| btc_er+coin_er | 28 | 50% | -0.020R | -0.18% | -0.6R | -10.1R |
+
+## 2025-01-01 - now
+
+| Filter | Trades | Win | R/trade | %/trade | Total R | Max DD |
+|---|---|---|---|---|---|---|
+| all | 898 | 51% | -0.031R | -0.05% | -28.3R | -49.7R |
+| btc_same (look-ahead) | 403 | 54% | +0.039R | +0.22% | +15.6R | -25.4R |
+| btc_sofar | 530 | 52% | -0.012R | +0.20% | -6.3R | -22.4R |
+| btc_prev | 449 | 49% | -0.091R | -0.45% | -40.8R | -50.0R |
+| coin_prev | 240 | 50% | -0.080R | -0.42% | -19.3R | -23.5R |
+| btc_3d | 557 | 50% | -0.063R | -0.47% | -35.2R | -50.9R |
+| coin_3d | 279 | 47% | -0.140R | -0.55% | -39.0R | -39.0R |
+| btc_adx20 | 349 | 45% | -0.164R | -0.95% | -57.1R | -67.9R |
+| coin_adx20 | 262 | 53% | -0.004R | +0.41% | -1.0R | -29.1R |
+| btc_adx25 | 471 | 47% | -0.097R | -0.60% | -45.5R | -58.5R |
+| coin_adx25 | 443 | 52% | -0.015R | +0.36% | -6.8R | -42.8R |
+| btc_er | 454 | 52% | -0.012R | +0.19% | -5.3R | -29.7R |
+| coin_er | 475 | 53% | +0.014R | -0.21% | +6.8R | -29.2R |
+| btc_atr | 251 | 44% | -0.186R | -0.60% | -46.7R | -49.8R |
+| coin_atr | 237 | 52% | -0.026R | -0.67% | -6.1R | -21.6R |
+| btc_slope | 514 | 50% | -0.030R | +0.13% | -15.4R | -41.9R |
+| coin_slope | 570 | 54% | +0.023R | +0.44% | +13.3R | -45.3R |
+| btc_range | 619 | 49% | -0.072R | -0.36% | -44.6R | -46.0R |
+| coin_range | 556 | 49% | -0.070R | -0.35% | -38.9R | -55.0R |
+| btc_adx20+coin_adx20 | 149 | 48% | -0.101R | -0.39% | -15.0R | -22.7R |
+| btc_er+coin_er | 269 | 54% | +0.028R | -0.14% | +7.6R | -20.1R |
+
+### 2025-01-01 - now, first half of trades (stability check)
+
+| Filter | Trades | Win | R/trade | %/trade | Total R | Max DD |
+|---|---|---|---|---|---|---|
+| all | 455 | 53% | +0.012R | +0.05% | +5.2R | -26.9R |
+| btc_same (look-ahead) | 206 | 59% | +0.132R | +0.24% | +27.2R | -11.7R |
+| btc_sofar | 269 | 52% | +0.005R | +0.17% | +1.4R | -21.5R |
+| btc_prev | 206 | 48% | -0.106R | -0.89% | -21.9R | -31.1R |
+| coin_prev | 88 | 49% | -0.089R | -1.04% | -7.9R | -12.0R |
+| btc_3d | 267 | 50% | -0.077R | -0.89% | -20.5R | -37.1R |
+| coin_3d | 123 | 46% | -0.184R | -1.15% | -22.7R | -23.6R |
+| btc_adx20 | 234 | 48% | -0.072R | -0.87% | -16.9R | -30.6R |
+| coin_adx20 | 144 | 56% | +0.035R | +0.69% | +5.1R | -13.3R |
+| btc_adx25 | 294 | 52% | +0.007R | -0.49% | +2.1R | -24.8R |
+| coin_adx25 | 251 | 57% | +0.076R | +0.90% | +19.1R | -16.4R |
+| btc_er | 253 | 54% | +0.036R | +0.24% | +9.2R | -19.4R |
+| coin_er | 243 | 54% | +0.066R | -0.29% | +16.1R | -18.8R |
+| btc_atr | 112 | 44% | -0.208R | -0.98% | -23.3R | -26.0R |
+| coin_atr | 141 | 52% | -0.003R | -1.21% | -0.4R | -16.2R |
+| btc_slope | 307 | 53% | +0.035R | +0.46% | +10.7R | -20.2R |
+| coin_slope | 299 | 57% | +0.099R | +0.79% | +29.7R | -20.6R |
+| btc_range | 289 | 49% | -0.075R | -0.69% | -21.7R | -27.7R |
+| coin_range | 295 | 53% | +0.016R | -0.37% | +4.7R | -17.8R |
+| btc_adx20+coin_adx20 | 107 | 52% | -0.030R | -0.11% | -3.2R | -12.4R |
+| btc_er+coin_er | 157 | 52% | +0.008R | -0.63% | +1.2R | -20.1R |
+
+### 2025-01-01 - now, second half of trades (stability check)
+
+| Filter | Trades | Win | R/trade | %/trade | Total R | Max DD |
+|---|---|---|---|---|---|---|
+| all | 443 | 49% | -0.076R | -0.15% | -33.5R | -49.7R |
+| btc_same (look-ahead) | 197 | 49% | -0.059R | +0.20% | -11.6R | -23.1R |
+| btc_sofar | 261 | 52% | -0.030R | +0.24% | -7.8R | -21.4R |
+| btc_prev | 243 | 50% | -0.078R | -0.07% | -18.9R | -36.7R |
+| coin_prev | 152 | 50% | -0.075R | -0.06% | -11.4R | -20.4R |
+| btc_3d | 290 | 50% | -0.051R | -0.08% | -14.7R | -37.0R |
+| coin_3d | 156 | 47% | -0.104R | -0.09% | -16.3R | -30.3R |
+| btc_adx20 | 115 | 37% | -0.350R | -1.13% | -40.3R | -46.4R |
+| coin_adx20 | 118 | 49% | -0.052R | +0.06% | -6.1R | -29.1R |
+| btc_adx25 | 177 | 40% | -0.269R | -0.77% | -47.6R | -54.9R |
+| coin_adx25 | 192 | 46% | -0.135R | -0.34% | -26.0R | -42.8R |
+| btc_er | 201 | 49% | -0.072R | +0.11% | -14.5R | -29.7R |
+| coin_er | 232 | 52% | -0.040R | -0.13% | -9.3R | -29.2R |
+| btc_atr | 139 | 45% | -0.168R | -0.29% | -23.4R | -31.7R |
+| coin_atr | 96 | 51% | -0.059R | +0.13% | -5.7R | -18.1R |
+| btc_slope | 207 | 46% | -0.126R | -0.36% | -26.1R | -41.9R |
+| coin_slope | 271 | 50% | -0.061R | +0.04% | -16.4R | -45.3R |
+| btc_range | 330 | 50% | -0.069R | -0.07% | -22.9R | -36.4R |
+| coin_range | 261 | 45% | -0.167R | -0.32% | -43.6R | -55.0R |
+| btc_adx20+coin_adx20 | 42 | 38% | -0.281R | -1.12% | -11.8R | -18.0R |
+| btc_er+coin_er | 112 | 56% | +0.057R | +0.56% | +6.3R | -14.5R |
