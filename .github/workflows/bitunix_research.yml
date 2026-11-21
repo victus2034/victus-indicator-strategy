@@ -158,7 +158,8 @@ jobs:
                        PYTHONPATH=research python research/journal_tl_setup_backtest.py replay --since 2025-01-01 --gap 1 ;;
             tl-lower-tf) PYTHONPATH=research python research/tl_lower_tf_entry_backtest.py --since 2026-09-01 --night
                        PYTHONPATH=research python research/tl_lower_tf_entry_backtest.py --since 2025-01-01 --night ;;
-            xstock-delta) PYTHONPATH=research python research/xstock_delta_backtest.py --since 2026-09-01 ;;
+            xstock-delta) PYTHONPATH=research python research/xstock_delta_backtest.py --since 2026-09-01
+                       PYTHONPATH=research python research/xstock_delta_backtest.py --since 2026-09-01 --min 1e5 --out wide ;;
             tl-touch)  python research/tl_touch_trace.py XRPUSD --day 2026-11-14 --tfs 1d 1w
                        python research/tl_touch_trace.py 1000PEPEUSD --day 2026-11-14 --tfs 1d ;;
             discord-trace) git fetch --shallow-since=2026-10-19 origin scanner-runtime-state

@@ -10,7 +10,7 @@
    the break, 1R) - the scanner's own scoring, Delta fees (CRYPTO_ROUND_TRIP_COST_PCT) and stop slip.
    Trades filled within 15 min of a US CPI / PPI / FOMC release are left out.
 
-    PYTHONPATH=research python research/xstock_delta_backtest.py --since 2026-09-01
+    PYTHONPATH=research python research/xstock_delta_backtest.py --since 2026-09-01 [--min 1e5 --out wide]
 """
 from __future__ import annotations
 
@@ -87,7 +87,11 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--since", default="2026-09-01")
     parser.add_argument("--min", type=float, default=1e6, help="USD a day on Delta, 7d and 30d")
+    parser.add_argument("--out", default="")
     args = parser.parse_args()
+    global OUT
+    if args.out:
+        OUT = OUT / args.out
     OUT.mkdir(parents=True, exist_ok=True)
     fbt.TIMEFRAMES = list(config.FIB_TL_TIMEFRAMES)
     fbt.FIB_LEVELS = config.FIB_ALERT_LEVELS
@@ -98,7 +102,7 @@ def main() -> None:
     vol = pd.DataFrame([{"symbol": s, "base": b, "7d $M/day": round(a7 / 1e6, 2), "30d $M/day": round(a30 / 1e6, 2),
                          "live": s in config.XSTOCK_WATCHLIST, "tested": a7 >= args.min and a30 >= args.min}
                         for b, s, a7, a30 in listed])
-    picked = [s for b, s, a7, a30 in listed if a7 >= args.min and a30 >= args.min]
+    picked = list(dict.fromkeys(s for b, s, a7, a30 in listed if a7 >= args.min and a30 >= args.min))
     print(f"{len(listed)} xStocks on Delta, {len(picked)} with >= {args.min / 1e6:g}M a day: {picked}")
 
     every = []
