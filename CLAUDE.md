@@ -41,7 +41,7 @@ what was checked, what's next.
 
 All in `config.py`, which **is tracked in git**:
 
-- `WATCHLIST` — the 21 symbols scanned: 16 crypto, 3 xStocks (TSLA, SNDK, QQQ), XAUT + SLVON (64 on
+- `WATCHLIST` — the 27 symbols scanned: 22 crypto, 3 xStocks (TSLA, SNDK, QQQ), XAUT + SLVON (64 on
   2026-09-01, cut on Delta volume and again when CoinSwitch was dropped; 27 crypto added
   2026-10-13 (lakky): every CoinDCX USDT future with 24h volume >= 100M USDT that Bitunix
   lists, commodities left out - `research/coindcx_volume_probe.py`, part `coindcx`; same day
@@ -54,8 +54,12 @@ All in `config.py`, which **is tracked in git**:
   at 10x the median traded value, listed 90+ days) - `research/coin_list_review.py`, part `coin-list`;
   removed QNT, RLC, STRK, BTW (pump/dump), FIL, AVAX, TAO, AAVE, ONDO (under 100M); xStocks need 1M+ USD a
   day on Delta: SOXL (pump/dump), META, NVDA, MRVL removed, QQQ (QQQXUSD) added. A 7-day move alone is not
-  a fail: ZEC/NEAR/ENA ran 76-97% in a week as steady trends)
-- `DELTA_LISTED_SYMBOLS` — the 21 watchlist symbols Delta India lists. `WATCHLIST` equals it
+  a fail: ZEC/NEAR/ENA ran 76-97% in a week as steady trends. **2026-11-14 (lakky): top 30 on both brokers** -
+  the market's top 30 by 30-day CoinDCX volume that Delta lists (`research/top30_brokers.py`, part `top30`) holds
+  all 16; of the other 14 lakky added the 6 with a Bitunix perp and no pump/dump chart: AVAX, INJ, FIL, AAVE, TAO,
+  ARB (82-115M a day). JCT, AKE, IRYS, BTW, AIN, INIT, TRUMP (pump/dump) and PUMP (no Bitunix) stay out. The live
+  CoinDCX bot trades their 1D TL alerts too; the fib/TL history from 1 Jun was rebuilt (part `fibtl-rebuild-apply`))
+- `DELTA_LISTED_SYMBOLS` — the 27 watchlist symbols Delta India lists. `WATCHLIST` equals it
   plus `NOT_DELTA_LISTED_CRYPTO` (empty since 2026-10-16; such coins grade their daily backtest
   on the ccxt fallback venues). `entry_confirm.py` used to tag
   each ping with the venue ("Delta"); dropped 2026-10-08 (lakky) - its crypto prices come
@@ -527,5 +531,40 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   `save_state`, and a two-message digest re-posted its first half whenever the second failed. With no channel set
   up the events are dropped, not piled up in the state. An empty account takes no orders ("account empty"), and an
   alert id on file twice is one order. `tests/test_weekly_audit_2026_11_08.py`.
+- **CoinDCX live orders (weekly audit, 2026-11-15).** `coindcx_live.py`: every stop goes out on the instrument's
+  price step, rounded away from price (`stop_level`; the first stop was sent unrounded); a fill moves entry, stop % and
+  risk to the price filled (`rebase_on_fill`, market breaks slip); an order with no id returned is an error, not
+  pending; no API key = dry run, nothing saved or posted (keyless "dry-" orders used to block their coin for 20 days,
+  and are dropped on load). `tests/test_weekly_audit_2026_11_15.py`.
+- **Crypto fib / trendline scan runs all night (2026-11-15, lakky: "all my trades will be 24*7").** XRP's lower 1D
+  line was touched 15 Nov 03:15 IST with the scanner asleep (01:00-08:00 IST), so the CoinDCX bot had no trade, and the
+  05:30 IST daily-close breaks went out at 08:13. `config.FIB_TL_CRYPTO_NIGHT` (`VICTUS_FIB_TL_CRYPTO_NIGHT=0` = old
+  hold): outside the alert window fib / TL / 1D+ zone alerts are recorded (bot, journal, entry confirm read the records)
+  and marked sent, **not posted** - his pick, "night alerts silent". cron-job.org stops at night, so
+  `fib_trendline_night.yml` dispatches the fib scan every 5 min 00:30-08:05 IST and re-dispatches itself; the fib scan's
+  last step starts it. The replay has no night hold any more (`fib_trendline_backtest.crypto_held`). The 4H zone scanner
+  keeps its hold. `tests/test_fib_tl_night.py`; `research/tl_touch_trace.py` (part `tl-touch`),
+  `research/tl_lower_tf_entry_backtest.py` (part `tl-lower-tf`: lower-timeframe entry on 1D lines, asleep vs awake).
+- **CoinDCX live: 1D TL touches enter on a 1h confirm (2026-11-16, lakky: "for more clear entry go with lower
+  timeframe for entry accuracy only", decision card "1h confirm entry").** A touch alert no longer places a limit at
+  the line: the order waits (`status` "waiting", counts against no limit) for a closed 1h candle that trades the line
+  at its own hour and closes back on the trade's side, then goes in at market with his wick/body stop from candles
+  closed before then (`coindcx_live.confirm_waiting`; the line comes from the record's `from` / `to`). The wait ends
+  on a daily close through the line or after `COINDCX_DEMO_FILL_DAYS`; a confirm seen more than 15 min late is not
+  chased. Breaks are unchanged. `VICTUS_COINDCX_LIVE_TOUCH_ENTRY=limit` is the old way. Backtest
+  (`research/tl_lower_tf_entry_backtest.py`, part `tl-lower-tf`, night included): touches Jan 2025 - now -0.21R ->
+  0.00R a trade, Sep 1 - now -0.30R -> -0.19R.
+- **CoinDCX live: Delta-listed coins trade on Delta India (2026-11-16, lakky: "in delta fees is very less").**
+  `delta_live.Delta` gives the bot's five calls on Delta (whole contracts, tick-rounded prices, leverage per order,
+  the stop a reduce-only stop-market order, a moved stop placed before the old one is cancelled); `coindcx_live.Router`
+  sends a `DELTA:` pair / `product:order` id there. New trades on a `DELTA_LISTED_SYMBOLS` coin go to Delta once
+  `DELTA_API_KEY` / `DELTA_API_SECRET` reach the bot (`VICTUS_LIVE_DELTA=0` = all CoinDCX); open CoinDCX trades stay
+  there; an order Delta refuses (e.g. wallet too small) goes to CoinDCX. A missing position / order is booked only after `LIVE_GONE_GRACE_SECONDS` (Delta's position list lags a fill).
+  `python delta_live.py --self-test XRPUSD` (AWS runner) does one real 1-contract buy, stop, stop move, close.
+- **Trail / SL-shift stops are re-sent until the exchange takes them (2026-11-21, lakky: "why trail sl is not place").**
+  SUI's short (opened 15 Nov, before orders stored their price step) moved to +1.5R in the state on 18 Nov, but CoinDCX
+  refused the unrounded price (422) and the move was only tried once, so the exchange kept the -1R stop for days. Now
+  `coindcx_live.ensure_tick` reads a missing step from the instrument, and `stop_sent` (the level the exchange took) is
+  compared with the wanted stop every tick: a refused move is sent again until it goes in. `tests/test_coindcx_live.py::StopMoves`.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

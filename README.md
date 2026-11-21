@@ -16,11 +16,13 @@ Everything runs on GitHub Actions. There is no server.
 
 ## Watchlist
 
-`config.py` holds it. 21 symbols. Since 2026-10-16 crypto is every coin averaging 100M+ USDT a day
+`config.py` holds it. 27 symbols. Since 2026-10-16 crypto is every coin averaging 100M+ USDT a day
 over both the last 7 and the last 30 days on CoinDCX or Delta that Bitunix lists
 (`research/volume_7d_30d_probe.py`, part `volume`). Since 2026-11-08 a coin or xStock with a
 pump/dump chart is left out too: a 40%+ day, a 10x volume day or under 90 days listed
-(`research/coin_list_review.py`, part `coin-list`; xStocks need 1M+ USD a day on Delta). All are on Delta (`DELTA_LISTED_SYMBOLS`):
+(`research/coin_list_review.py`, part `coin-list`; xStocks need 1M+ USD a day on Delta). Since 2026-11-14 the
+market's top 30 by 30-day CoinDCX volume that Delta lists too is covered: AVAX, INJ, FIL, AAVE, TAO and ARB
+were added (Bitunix perp, no pump/dump chart; `research/top30_brokers.py`, part `top30`). All are on Delta (`DELTA_LISTED_SYMBOLS`):
 
 - `CRYPTO_WATCHLIST`: 16 coins (BTC, ETH, SOL, ...)
 - `XSTOCK_WATCHLIST`: 3 tokenised stocks (TSLA, SNDK, QQQ)

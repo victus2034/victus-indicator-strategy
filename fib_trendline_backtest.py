@@ -28,6 +28,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
 
+import config
 import fib_engine
 import fib_trendline_trades as trades
 import scanner
@@ -136,6 +137,8 @@ def crypto_held(ts, seconds):
     A daily candle opens at 05:30 IST but spans the whole day; judging it by its
     open time held every one of them, and silently left 1W and 1M with no alerts.
     """
+    if config.FIB_TL_CRYPTO_NIGHT:
+        return False                 # live since 2026-11-15: the fib/TL scanner runs all night
     start = datetime.fromtimestamp(ts, IST)
     end = datetime.fromtimestamp(ts + seconds, IST)
     return start.date() == end.date() and start.hour >= 1 and (end.hour, end.minute) <= (8, 0)

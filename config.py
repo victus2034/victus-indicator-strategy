@@ -47,6 +47,13 @@ CRYPTO_WATCHLIST = [
     # part coin-list; research/out/coin_list/). Removed 9: QNT, RLC, STRK, BTW
     # (pump/dump and low volume), FIL, AVAX, TAO, AAVE, ONDO (under 100M).
     # No adds: PUMP has no Bitunix perp; JCT, AKE, AIN are pump/dump charts.
+    # 2026-11-14 (lakky, "make sure top30 cryptos are available in coindcx and
+    # delta"): the market's top 30 by 30-day CoinDCX volume that Delta lists too
+    # (research/top30_brokers.py, part top30; research/out/top30/). The scanner's
+    # 16 are all in it; of the other 14 lakky took the 6 with a Bitunix perp and
+    # no pump/dump chart: AVAX, INJ, FIL, AAVE, TAO, ARB (82-115M a day, so under
+    # the 100M rule above for all but AVAX). Left out: JCT, AKE, IRYS, BTW, AIN,
+    # INIT, TRUMP (pump/dump charts) and PUMP (no Bitunix perp).
     "BTCUSD",
     "ETHUSD",
     "ZECUSD",
@@ -63,6 +70,12 @@ CRYPTO_WATCHLIST = [
     "WLDUSD",
     "ADAUSD",
     "LINKUSD",
+    "AVAXUSD",
+    "INJUSD",
+    "FILUSD",
+    "AAVEUSD",
+    "TAOUSD",
+    "ARBUSD",
 ]
 
 # Crypto Bitunix lists but Delta does not. The 2026-10-13 six (W, OGN, DOS,
@@ -119,6 +132,8 @@ DELTA_LISTED_SYMBOLS = {
     # 2026-10-13 CoinDCX 100M+ additions that Delta lists too (/v2/products).
     "NEARUSD", "SUIUSD", "ENAUSD", "WLDUSD",
     "1000PEPEUSD", "ADAUSD",
+    # 2026-11-14 top-30 additions; all six are live Delta perps (part top30).
+    "AVAXUSD", "INJUSD", "FILUSD", "AAVEUSD", "TAOUSD", "ARBUSD",
 }
 
 DELTA_API_BASE_URL = "https://api.india.delta.exchange"
@@ -415,6 +430,12 @@ STALE_BARS_ALLOWED = env_int("VICTUS_STALE_BARS_ALLOWED", 4)
 # earlier than the start hour on the clock.
 CRYPTO_ALERT_START = datetime_time(8, 0)
 CRYPTO_ALERT_END = datetime_time(1, 0)
+# Fib / trendline / 1D+ zone alerts run through the night too (lakky, 2026-11-15: the CoinDCX
+# bot trades them, and XRP's lower 1D line was touched at 03:15 IST with the scanner asleep).
+# Outside the window above they are recorded - the bot and the journal read the records -
+# but not posted: the Discord alert channels stay quiet at night. The 4H zone scanner keeps
+# its hold. VICTUS_FIB_TL_CRYPTO_NIGHT=0 brings the old hold back.
+FIB_TL_CRYPTO_NIGHT = env_flag("VICTUS_FIB_TL_CRYPTO_NIGHT", True)
 
 SCAN_SLEEP = 300
 SCAN_WORKERS = 8
@@ -651,3 +672,12 @@ COINDCX_LIVE_SL_GAP_PCT = env_float("VICTUS_COINDCX_LIVE_SL_GAP_PCT", 0.75)
 COINDCX_LIVE_MAX_ALERT_AGE = 6 * 3600     # GitHub's schedule can skip a few hours
 # "": every BTC day. "so_far": only while BTC's move from today's 00:00 UTC open is within 1.5%.
 COINDCX_LIVE_BTC_FILTER = os.getenv("VICTUS_COINDCX_LIVE_BTC_FILTER", "")
+# Touch alerts: "confirm_1h" (lakky, 2026-11-16) waits for a closed 1h candle that trades the line and
+# closes back, then enters at market; "limit" is the old limit order at the line's price.
+COINDCX_LIVE_TOUCH_ENTRY = os.getenv("VICTUS_COINDCX_LIVE_TOUCH_ENTRY", "confirm_1h") or "confirm_1h"
+# Delta-listed coins trade on Delta India (lakky, 2026-11-15: lower fees) once DELTA_API_KEY /
+# DELTA_API_SECRET reach the bot; VICTUS_LIVE_DELTA=0 keeps everything on CoinDCX.
+LIVE_DELTA = env_flag("VICTUS_LIVE_DELTA", True)
+# A position or order seen missing is only booked as gone when it is still missing this long after
+# (Delta's positions can lag ~10 s behind a fill; one tick later is enough).
+LIVE_GONE_GRACE_SECONDS = 60
