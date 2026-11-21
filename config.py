@@ -672,6 +672,13 @@ COINDCX_LIVE_SL_GAP_PCT = env_float("VICTUS_COINDCX_LIVE_SL_GAP_PCT", 0.75)
 COINDCX_LIVE_MAX_ALERT_AGE = 6 * 3600     # GitHub's schedule can skip a few hours
 # "": every BTC day. "so_far": only while BTC's move from today's 00:00 UTC open is within 1.5%.
 COINDCX_LIVE_BTC_FILTER = os.getenv("VICTUS_COINDCX_LIVE_BTC_FILTER", "")
+# Exits of the live bot (lakky, 2026-11-21, decision card after the journal re-play): SL shift +1R -> +0.5R and
+# Trail TP +0.5R steps (0.5R behind), his journal screen; the paper demo keeps COINDCX_DEMO_* (+0.75R / +0.25R).
+COINDCX_LIVE_SHIFT_TO_R = env_float("VICTUS_COINDCX_LIVE_SHIFT_TO_R", 0.5)
+COINDCX_LIVE_TRAIL_STEP_R = env_float("VICTUS_COINDCX_LIVE_TRAIL_STEP_R", 0.5)
+# Which 1D TL alerts the live bot trades: "break" (TL BROKEN only, lakky 2026-11-21: touches lost -93R since Jan 2025,
+# -34R since Jun; breaks +101R / +48R) or "all" (touches + breaks).
+COINDCX_LIVE_ENTRIES = os.getenv("VICTUS_COINDCX_LIVE_ENTRIES", "break") or "break"
 # Touch alerts: "confirm_1h" (lakky, 2026-11-16) waits for a closed 1h candle that trades the line and
 # closes back, then enters at market; "limit" is the old limit order at the line's price.
 COINDCX_LIVE_TOUCH_ENTRY = os.getenv("VICTUS_COINDCX_LIVE_TOUCH_ENTRY", "confirm_1h") or "confirm_1h"

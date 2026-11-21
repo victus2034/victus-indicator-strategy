@@ -37,7 +37,7 @@ What it does every tick:
        COINDCX_LIVE_MAX_LOSS (kill switch)
   2. a filled order gets an exchange stop-market at its stop (create_tpsl)
   3. an open trade's best move is read from Bitunix 1m candles; the journal's walk
-     (coindcx_demo.apply_best) moves the stop, and the exchange stop is replaced
+     (coindcx_demo.apply_best, with the live exits COINDCX_LIVE_SHIFT_TO_R / TRAIL_STEP_R) moves the stop, and the exchange stop is replaced
   4. a position that is gone is closed in the state (exit = the stop it had)
   5. a limit not filled in COINDCX_DEMO_FILL_DAYS days is cancelled
 Everything that happened is posted to the CoinDCX demo channel, marked LIVE.
@@ -235,6 +235,7 @@ def eligible(record, state, now):
                 and record.get("symbol") in config.CRYPTO_WATCHLIST
                 and record["plan"].get("side") in ("long", "short")
                 and bool(record.get("id")) and record["id"] not in state["orders"]
+                and (bool(record.get("broken")) or config.COINDCX_LIVE_ENTRIES == "all")
                 and state["started_ts"] <= sent < state["until_ts"]
                 and now - sent <= config.COINDCX_LIVE_MAX_ALERT_AGE)
     except (KeyError, TypeError, ValueError):
@@ -553,7 +554,7 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                     break
                 o["checked_until"] = int(c[0]) + 60
                 o["best_r"] = max(o["best_r"], demo.move_r(o, c[2] if o["side"] == "long" else c[3]))
-            demo.apply_best({"unposted": []}, o, now)
+            demo.apply_best({"unposted": []}, o, now, config.COINDCX_LIVE_TRAIL_STEP_R, config.COINDCX_LIVE_SHIFT_TO_R)
             ensure_tick(ex, o)
             want = stop_level(o)
             on_exchange = pos.get("stop_loss_trigger")

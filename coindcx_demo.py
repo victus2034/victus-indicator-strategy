@@ -230,16 +230,17 @@ def raise_stop(state, order, level_r, why, ts):
         state["unposted"].append({"event": "stop", "id": order["id"], "ts": int(ts), "r": order["stop_r"], "why": why})
 
 
-def apply_best(state, order, ts):
+def apply_best(state, order, ts, step_r=None, shift_to=None):
     """Journal Exit at 1.5R + Move SL + Trail TP: each target reached locks the stop at
     max(first target, target - gap) and steps the target up; at +SHIFT_AT R the stop
     goes to +SHIFT_TO R. A stop moved here counts from the next candle."""
-    first, step_r, gap = config.COINDCX_DEMO_TARGET_R, config.COINDCX_DEMO_TRAIL_STEP_R, config.COINDCX_DEMO_TRAIL_GAP_R
+    first, gap = config.COINDCX_DEMO_TARGET_R, config.COINDCX_DEMO_TRAIL_GAP_R
+    step_r = config.COINDCX_DEMO_TRAIL_STEP_R if step_r is None else step_r
     best = order["best_r"]
     while best >= order["tgt_r"] - 1e-9:
         raise_stop(state, order, max(first, order["tgt_r"] - gap), "Trail TP", ts)
         order["tgt_r"] = round(order["tgt_r"] + step_r, 6)
-    at, to = config.COINDCX_DEMO_SHIFT_AT_R, config.COINDCX_DEMO_SHIFT_TO_R
+    at, to = config.COINDCX_DEMO_SHIFT_AT_R, config.COINDCX_DEMO_SHIFT_TO_R if shift_to is None else shift_to
     if at and at < first and best >= at - 1e-9:
         raise_stop(state, order, to, "SL shift", ts)
 

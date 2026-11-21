@@ -566,5 +566,12 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   refused the unrounded price (422) and the move was only tried once, so the exchange kept the -1R stop for days. Now
   `coindcx_live.ensure_tick` reads a missing step from the instrument, and `stop_sent` (the level the exchange took) is
   compared with the wanted stop every tick: a refused move is sent again until it goes in. `tests/test_coindcx_live.py::StopMoves`.
+- **CoinDCX live: breaks only, his exits (2026-11-21, lakky, decision card after the journal re-play).** The live bot now
+  trades TL BROKEN alerts only (`COINDCX_LIVE_ENTRIES`, `VICTUS_COINDCX_LIVE_ENTRIES=all` = touches too) with SL shift
+  +1R -> +0.5R and Trail TP +0.5R steps, 0.5R behind (`COINDCX_LIVE_SHIFT_TO_R` / `COINDCX_LIVE_TRAIL_STEP_R`); the paper
+  demo keeps +0.75R / +0.25R. His journal screens replayed outside the journal (`research/journal_screen_check.py`, parts
+  `journal-screen`, `journal-tl-05`, `journal-fib-05`): journal numbers reproduced exactly; TL touches -34R since Jun and -93R
+  since Jan 2025, breaks +48R / +101R (PF 1.45-2.29); fib 1D on today's 16 coins is negative (-7R), its profit came from the
+  9 dropped coins. The live window (`COINDCX_LIVE_DAYS`, 7) ended 20 Nov 09:05 UTC: a new week needs a new state / his go.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

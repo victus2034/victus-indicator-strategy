@@ -13,6 +13,8 @@ import config
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "research"))
 
 DAY = 86400
+# The touch mechanics below are still in the bot (VICTUS_COINDCX_LIVE_ENTRIES=all); the default is breaks only.
+config.COINDCX_LIVE_ENTRIES = "all"
 NOW = 1_794_000_000 // DAY * DAY + 10 * 3600
 
 
@@ -125,19 +127,19 @@ class Flow(unittest.TestCase):
         live.tick(s, ex, [], NOW + 300, candles=lambda *a: [])
         self.assertEqual(o["status"], "open")
         self.assertEqual(ex.stops[-1], ("p1", 97.0))
-        # +1R (103) trades: stop to +0.75R = 102.25
+        # +1R (103) trades: stop to +0.5R = 101.5 (live exits, 2026-11-21)
         ex.pos["B-BTC_USDT"]["stop_loss_trigger"] = 97.0
         bars = [[NOW + 300, 100, 103.1, 100, 102.5]]
         live.tick(s, ex, [], NOW + 600, candles=lambda sym, a, b: [c for c in bars if a <= c[0] < b])
-        self.assertAlmostEqual(o["stop_r"], 0.75)
-        self.assertEqual(ex.stops[-1], ("p1", 102.2))                         # on the 0.1 price step, away from price
+        self.assertAlmostEqual(o["stop_r"], 0.5)
+        self.assertEqual(ex.stops[-1], ("p1", 101.5))                         # +0.5R, on the 0.1 price step
         # stopped out: the position is gone
         del ex.pos["B-BTC_USDT"]
         live.tick(s, ex, [], NOW + 900, candles=lambda *a: [])
         self.assertEqual(o["status"], "open")                                 # one missing read is not a close
         live.tick(s, ex, [], NOW + 1020, candles=lambda *a: [])
         self.assertEqual(o["status"], "closed")
-        self.assertTrue(0.6 < o["r"] < 0.75)                                       # fees and slip off
+        self.assertTrue(0.4 < o["r"] < 0.5)                                       # fees and slip off
         self.assertAlmostEqual(s["realized"], o["pnl"])
 
     def test_break_is_market(self):
@@ -216,12 +218,12 @@ class StopMoves(unittest.TestCase):
             real(pid, stop)
         ex.set_stop = flaky
         live.tick(s, ex, [], NOW, candles=lambda sym, a, b: [c for c in bars if a <= c[0] < b])
-        self.assertEqual(o["stop_r"], 0.75)
+        self.assertEqual(o["stop_r"], 0.5)
         self.assertEqual(ex.stops, [])                                         # refused
         self.assertIn("422", o["last_error"])
         live.tick(s, ex, [], NOW + 120, candles=lambda *a: [])
-        self.assertEqual(ex.stops, [("p1", 92.5)])                             # +0.75R on the 0.1 step, sent again
-        self.assertEqual(o["stop_sent"], 92.5)
+        self.assertEqual(ex.stops, [("p1", 95.0)])                             # +0.5R on the 0.1 step, sent again
+        self.assertEqual(o["stop_sent"], 95.0)
         live.tick(s, ex, [], NOW + 240, candles=lambda *a: [])
         self.assertEqual(len(ex.stops), 1)                                     # and not again once taken
 
@@ -520,3 +522,44 @@ class DeltaVenue(unittest.TestCase):
         self.assertNotIn("DELTA", o["pair"])
         self.assertEqual(len(dcx.orders), 1)
         self.assertTrue(any("sent to CoinDCX" in e["text"] for e in s["events"]))
+
+
+class BreakOnlyAndLiveExits(unittest.TestCase):
+    """lakky, 2026-11-21 (decision card after the journal re-play): breaks only, SL shift +1R -> +0.5R, trail +0.5R."""
+
+    def test_default_is_breaks_only(self):
+        self.assertEqual(live.config.COINDCX_LIVE_ENTRIES, "all")          # the module sets "all" for the touch tests
+        with patch.object(config, "COINDCX_LIVE_ENTRIES", "break"):
+            s = state()
+            self.assertFalse(live.eligible(record(), s, NOW))              # a touch is left alone
+            self.assertTrue(live.eligible(record(broken=True), s, NOW))    # a break trades
+        with patch.object(config, "COINDCX_LIVE_ENTRIES", "all"):
+            self.assertTrue(live.eligible(record(), state(), NOW))
+
+    def test_shipped_defaults(self):
+        import importlib
+        import os
+        with patch.dict(os.environ, {}, clear=False):
+            for k in ("VICTUS_COINDCX_LIVE_ENTRIES", "VICTUS_COINDCX_LIVE_SHIFT_TO_R", "VICTUS_COINDCX_LIVE_TRAIL_STEP_R"):
+                os.environ.pop(k, None)
+            fresh = importlib.reload(config)
+            try:
+                self.assertEqual((fresh.COINDCX_LIVE_ENTRIES, fresh.COINDCX_LIVE_SHIFT_TO_R, fresh.COINDCX_LIVE_TRAIL_STEP_R),
+                                 ("break", 0.5, 0.5))
+                self.assertEqual((fresh.COINDCX_DEMO_SHIFT_TO_R, fresh.COINDCX_DEMO_TRAIL_STEP_R), (0.75, 0.25))   # demo unchanged
+            finally:
+                config.COINDCX_LIVE_ENTRIES = "all"
+
+    def test_live_exits_differ_from_the_demo(self):
+        import coindcx_demo as demo
+        def order():
+            return {"id": "x", "side": "long", "best_r": 1.0, "stop_r": None, "tgt_r": 1.5}
+        s = {"unposted": []}
+        o = order(); demo.apply_best(s, o, 0)                              # demo: +1R -> stop +0.75R
+        self.assertEqual(o["stop_r"], 0.75)
+        o = order(); demo.apply_best(s, o, 0, 0.5, 0.5)                    # live: +1R -> stop +0.5R
+        self.assertEqual(o["stop_r"], 0.5)
+        o = dict(order(), best_r=2.0); demo.apply_best(s, o, 0, 0.5, 0.5)  # 1.5R hit, target steps +0.5R to 2.0R
+        self.assertEqual((o["stop_r"], o["tgt_r"]), (1.5, 2.5))            # locked 1.5R, then 2.0R reached: stop max(1.5, 2.0-0.5)
+        o = dict(order(), best_r=2.0); demo.apply_best(s, o, 0)            # demo steps 0.25R: 1.5 -> 1.75 -> 2.0 -> 2.25
+        self.assertEqual((o["stop_r"], o["tgt_r"]), (1.5, 2.25))
