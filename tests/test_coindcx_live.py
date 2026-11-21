@@ -35,7 +35,7 @@ def daily(lows=(97.0, 99.5, 99.8), highs=(103.0, 102.0, 101.0)):
 
 class FakeExchange:
     def __init__(self):
-        self.orders, self.stops, self.cancelled = [], [], []
+        self.orders, self.stops, self.cancelled, self.exits = [], [], [], []
         self.pos, self.open = {}, set()
 
     def instrument(self, pair):
@@ -60,6 +60,9 @@ class FakeExchange:
 
     def set_stop(self, pid, stop):
         self.stops.append((pid, round(stop, 6)))
+
+    def exit(self, pid):
+        self.exits.append(pid)
 
 
 def state():
@@ -226,6 +229,43 @@ class StopMoves(unittest.TestCase):
         self.assertEqual(o["stop_sent"], 92.5)
         live.tick(s, ex, [], NOW + 240, candles=lambda *a: [])
         self.assertEqual(len(ex.stops), 1)                                     # and not again once taken
+
+
+class PassedStop(unittest.TestCase):
+    """SUI 21 Nov: the +1.5R stop finally went out, but price was back above it and CoinDCX refused
+    ("Trigger price should be greater than the current price") - after the old stop had been cancelled."""
+
+    def setUp(self):
+        self.s, self.ex, self.o = StopMoves.open_order(StopMoves())
+        self.o.update(stop_r=1.5, best_r=1.6, stop_why="Trail TP", tick=0.1)
+        self.o["stop_sent"] = 110.1                                          # the move never went in
+
+    def test_refused_as_passed_exits_at_market(self):
+        def refuse(pid, stop):
+            raise RuntimeError("CoinDCX create_tpsl: HTTP 422 Trigger price should be greater than the current price")
+        self.ex.set_stop = refuse
+        live.tick(self.s, self.ex, [], NOW, candles=lambda *a: [])
+        self.assertEqual(self.ex.exits, ["p1"])
+        self.assertIn("market", self.s["events"][-1]["text"])
+        del self.ex.pos["B-BTC_USDT"]
+        live.tick(self.s, self.ex, [], NOW + 120, candles=lambda *a: [])
+        live.tick(self.s, self.ex, [], NOW + 240, candles=lambda *a: [])
+        self.assertEqual(self.o["status"], "closed")
+        self.assertIn("market exit", self.o["exit_why"])
+
+    def test_last_close_past_the_stop_exits_without_asking(self):
+        bars = [[NOW - 60, 90, 91, 89, 90.5]]                                  # +1.5R stop for the short is ~85.0
+        live.tick(self.s, self.ex, [], NOW, candles=lambda sym, a, b: [c for c in bars if a <= c[0] < b])
+        self.assertEqual(self.ex.exits, ["p1"])
+        self.assertEqual(self.ex.stops, [])
+        self.assertEqual(self.o["exit_price"], 90.5)
+
+    def test_other_errors_do_not_close(self):
+        def broke(pid, stop):
+            raise RuntimeError("CoinDCX create_tpsl: HTTP 500")
+        self.ex.set_stop = broke
+        live.tick(self.s, self.ex, [], NOW, candles=lambda *a: [])
+        self.assertEqual(self.ex.exits, [])
 
 
 class Safety(unittest.TestCase):
