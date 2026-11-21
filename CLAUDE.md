@@ -566,6 +566,11 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   refused the unrounded price (422) and the move was only tried once, so the exchange kept the -1R stop for days. Now
   `coindcx_live.ensure_tick` reads a missing step from the instrument, and `stop_sent` (the level the exchange took) is
   compared with the wanted stop every tick: a refused move is sent again until it goes in. `tests/test_coindcx_live.py::StopMoves`.
+- **A moved stop that price has already passed exits at market (2026-11-21, SUI).** Once the +1.5R stop finally went
+  out, price was back above it: CoinDCX refused ("Trigger price should be greater than the current price") after its
+  old stop had been cancelled, leaving the position bare. Now a moved stop the last 1m close has passed, or one refused
+  for that reason, closes the position at market (`exit`: CoinDCX `positions/exit`, Delta `close`) and the trade is
+  booked at that close. `tests/test_coindcx_live.py::PassedStop`.
 - **CoinDCX / Delta live bot has no end date (2026-11-21, lakky, decision card "Keep trading, no end date").** The 13-20 Nov
   test week ended and new alerts stopped. `COINDCX_LIVE_DAYS` = 0 (default) lifts the state's `until_ts`; N > 0 sets an
   N-day window again. The kill switch (`COINDCX_LIVE_MAX_LOSS`, 10 USDT) still stops new trades.

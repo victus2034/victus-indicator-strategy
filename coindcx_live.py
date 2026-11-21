@@ -124,6 +124,10 @@ class CoinDCX:
                         {"page": "1", "size": "100", "margin_currency_short_name": [config.COINDCX_LIVE_MARGIN_CCY]})
         return {p["pair"]: p for p in (got if isinstance(got, list) else []) if p.get("pair")}
 
+    def exit(self, position_id):
+        """Close the whole position at market."""
+        return self.post("/exchange/v1/derivatives/futures/positions/exit", {"id": position_id})
+
     def set_stop(self, position_id, stop):
         try:        # 422 "No open orders found" when there is no stop yet: that used to stop the stop going in
             self.post("/exchange/v1/derivatives/futures/positions/cancel_all_open_orders_for_position", {"id": position_id})
@@ -161,6 +165,9 @@ class Router:
     def set_stop(self, position_id, stop):
         return self.venue(position_id).set_stop(position_id, stop)
 
+    def exit(self, position_id):
+        return self.venue(position_id).exit(position_id)
+
 
 def venue_pair(symbol):
     """Where a new trade goes: Delta for a Delta-listed coin when the Delta key is set, else CoinDCX."""
@@ -194,6 +201,9 @@ class DryRun:
 
     def set_stop(self, position_id, stop):
         print(f"coindcx live DRY RUN: stop {position_id} -> {stop}")
+
+    def exit(self, position_id):
+        print(f"coindcx live DRY RUN: exit {position_id} at market")
 
 
 # ---------------------------------------------------------------- the rules
@@ -540,7 +550,10 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
             if not held:
                 if not seen_gone(o, now):
                     continue
-                r = demo.full_stop_r(o) if o.get("stop_r") is None else demo.moved_stop_r(o, o["stop_r"])
+                if o.get("exit_price"):          # closed at market past its moved stop: R at that price, fees off
+                    r = demo.move_r(o, o["exit_price"]) - config.COINDCX_DEMO_ROUND_TRIP_COST_PCT / o["stop_pct"]
+                else:
+                    r = demo.full_stop_r(o) if o.get("stop_r") is None else demo.moved_stop_r(o, o["stop_r"])
                 money = o["risk"] * r
                 state["realized"] = round(state["realized"] + money, 4)
                 o.update(status="closed", exit_ts=int(now), r=round(r, 3), pnl=round(money, 4),
@@ -548,12 +561,13 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                 note(state, f"{'✅' if r > 0 else '🛑'} **{head}** closed at {o['exit_why']} ≈ {r:+.2f}R "
                             f"({money:+.2f} USDT) · total {state['realized']:+.2f}", now)
                 continue
-            before = o.get("stop_r")
+            before, last = o.get("stop_r"), None
             for c in candles(o["symbol"], o["checked_until"], now):
                 if c[0] + 60 > now:
                     break
                 o["checked_until"] = int(c[0]) + 60
                 o["best_r"] = max(o["best_r"], demo.move_r(o, c[2] if o["side"] == "long" else c[3]))
+                last = c[4]
             demo.apply_best({"unposted": []}, o, now)
             ensure_tick(ex, o)
             want = stop_level(o)
@@ -562,7 +576,24 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                 o["stop_sent"] = float(on_exchange)          # orders from before 21 Nov: read what is there
             if want != o.get("stop_sent") or not on_exchange:
                 # a move that failed (SUI 18-21 Nov: 422 off the price step) is sent again every tick until taken
-                ex.set_stop(o.get("position_id") or pos.get("id"), want)
+                pid = o.get("position_id") or pos.get("id")
+                sign = 1 if o["side"] == "long" else -1
+                crossed = last is not None and o.get("stop_r") is not None and sign * (last - want) <= 0
+                try:
+                    if crossed:
+                        raise RuntimeError("Trigger price already passed by the last close")
+                    ex.set_stop(pid, want)
+                except RuntimeError as error:
+                    if "Trigger price" not in str(error) or o.get("stop_r") is None:
+                        raise
+                    # price is already past the moved stop: the trail / shift stop is hit, so the trade
+                    # exits at market (SUI 21 Nov: +1.5R stop refused, price back above it)
+                    ex.exit(pid)
+                    o.update(exit_sent=int(now), exit_price=last if last is not None else want,
+                             stop_why=f"{o.get('stop_why') or 'stop'} passed, market exit")
+                    note(state, f"🔒 **{head}** price already past the {o['stop_r']:+.2f}R stop ({p(want)}): "
+                                f"closed at market", now)
+                    continue
                 o["stop_sent"] = want
                 if o.get("stop_r") != before or o.get("last_error"):
                     note(state, f"🔒 **{head}** stop moved to {o['stop_r']:+.2f}R ({p(want)})" if o.get("stop_r") is not None

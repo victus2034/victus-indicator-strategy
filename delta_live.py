@@ -154,6 +154,9 @@ class Delta:
             self.call("DELETE", "/v2/orders", {"id": int(o["id"]), "product_id": int(p["id"])})
         return got
 
+    def exit(self, pair):
+        return self.close(pair)
+
     def close(self, pair):
         """Market-close the whole position and drop its stops (self-test and manual use)."""
         p = self.product(symbol_of(pair))
