@@ -478,6 +478,13 @@ def confirm_waiting(state, ex, now, hourly=hour_candles, daily=daily_candles, pr
             print(f"coindcx live: {head} confirm check failed: {str(error)[:160]}")
 
 
+def ensure_tick(ex, order):
+    """The instrument's price step on the order (orders placed before 16 Nov have none, and an
+    unrounded stop is refused by CoinDCX)."""
+    if not order.get("tick"):
+        order["tick"] = float(ex.instrument(order["pair"]).get("price_increment") or 0)
+
+
 def stop_level(order):
     """The stop to send: on the instrument's price step, rounded away from price (a price
     off the step is refused by CoinDCX; until 16 Nov the first stop was sent unrounded)."""
@@ -515,7 +522,9 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                     o.update(status="open", fill_ts=int(now), fill_price=float(pos.get("avg_price") or o["entry"]),
                              position_id=pos.get("id"))
                     rebase_on_fill(o, o["fill_price"])
+                    ensure_tick(ex, o)
                     ex.set_stop(o["position_id"], stop_level(o))
+                    o["stop_sent"] = stop_level(o)
                     note(state, f"📥 **{head}** filled at {p(o['fill_price'])} · stop {p(o['sl'])} set", now)
                 elif o.get("exchange_id") not in open_ids and not str(o.get("exchange_id", "")).startswith("dry-"):
                     if not seen_gone(o, now):
@@ -545,12 +554,20 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                 o["checked_until"] = int(c[0]) + 60
                 o["best_r"] = max(o["best_r"], demo.move_r(o, c[2] if o["side"] == "long" else c[3]))
             demo.apply_best({"unposted": []}, o, now)
-            if o.get("stop_r") != before:
-                ex.set_stop(o.get("position_id") or pos.get("id"), stop_level(o))
-                note(state, f"🔒 **{head}** stop moved to {o['stop_r']:+.2f}R ({p(stop_level(o))})", now)
-            elif not pos.get("stop_loss_trigger") and o.get("position_id"):
-                ex.set_stop(o["position_id"], stop_level(o))      # the exchange stop went missing
-                note(state, f"🔁 **{head}** stop re-placed at {p(stop_level(o))}", now)
+            ensure_tick(ex, o)
+            want = stop_level(o)
+            on_exchange = pos.get("stop_loss_trigger")
+            if o.get("stop_sent") is None and on_exchange:
+                o["stop_sent"] = float(on_exchange)          # orders from before 21 Nov: read what is there
+            if want != o.get("stop_sent") or not on_exchange:
+                # a move that failed (SUI 18-21 Nov: 422 off the price step) is sent again every tick until taken
+                ex.set_stop(o.get("position_id") or pos.get("id"), want)
+                o["stop_sent"] = want
+                if o.get("stop_r") != before or o.get("last_error"):
+                    note(state, f"🔒 **{head}** stop moved to {o['stop_r']:+.2f}R ({p(want)})" if o.get("stop_r") is not None
+                          else f"🔒 **{head}** stop set at {p(want)}", now)
+                else:
+                    note(state, f"🔁 **{head}** stop re-placed at {p(want)}", now)
         except Exception as error:  # noqa: BLE001
             text = str(error)[:160]
             if o.get("last_error") != text:                # once per error, not every tick

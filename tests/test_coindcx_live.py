@@ -182,6 +182,50 @@ class Flow(unittest.TestCase):
         self.assertEqual(s["orders"], {})
 
 
+class StopMoves(unittest.TestCase):
+    """SUI 18-21 Nov: a trade from before the price step was stored moved its stop to +1.5R in the
+    state, CoinDCX refused the unrounded price (422) and the exchange kept the -1R stop for days."""
+
+    def open_order(self):
+        o = {"id": "x", "symbol": "BTCUSD", "pair": "B-BTC_USDT", "side": "short", "broken": True, "status": "open",
+             "sent_ts": NOW - DAY, "entry": 100.0, "sl": 110.03, "qty": 0.1, "risk": 1.0, "stop_pct": 10.03,
+             "best_r": 0.0, "stop_r": None, "tgt_r": 1.5, "checked_until": NOW - 120, "position_id": "p1"}
+        s = state()
+        s["orders"]["x"] = o
+        ex = FakeExchange()
+        ex.pos["B-BTC_USDT"] = {"id": "p1", "pair": "B-BTC_USDT", "active_pos": -0.1, "avg_price": 100.0,
+                                "stop_loss_trigger": "110.1"}
+        return s, ex, o
+
+    def test_old_order_gets_its_tick_and_keeps_its_stop(self):
+        s, ex, o = self.open_order()
+        live.tick(s, ex, [], NOW, candles=lambda *a: [])
+        self.assertEqual(o["tick"], 0.1)
+        self.assertEqual(o["stop_sent"], 110.1)
+        self.assertEqual(ex.stops, [])                                         # nothing to move
+
+    def test_refused_move_is_sent_again_until_taken(self):
+        s, ex, o = self.open_order()
+        bars = [[NOW - 60, 100, 100, 88, 89]]                                    # +1.1R for the short
+        refuse = [True]
+        real = ex.set_stop
+
+        def flaky(pid, stop):
+            if refuse.pop() if refuse else False:
+                raise RuntimeError("CoinDCX create_tpsl: HTTP 422 Price should be divisible by 0.1")
+            real(pid, stop)
+        ex.set_stop = flaky
+        live.tick(s, ex, [], NOW, candles=lambda sym, a, b: [c for c in bars if a <= c[0] < b])
+        self.assertEqual(o["stop_r"], 0.75)
+        self.assertEqual(ex.stops, [])                                         # refused
+        self.assertIn("422", o["last_error"])
+        live.tick(s, ex, [], NOW + 120, candles=lambda *a: [])
+        self.assertEqual(ex.stops, [("p1", 92.5)])                             # +0.75R on the 0.1 step, sent again
+        self.assertEqual(o["stop_sent"], 92.5)
+        live.tick(s, ex, [], NOW + 240, candles=lambda *a: [])
+        self.assertEqual(len(ex.stops), 1)                                     # and not again once taken
+
+
 class Safety(unittest.TestCase):
     def test_leverage_keeps_liquidation_past_the_stop(self):
         ex, s = FakeExchange(), state()

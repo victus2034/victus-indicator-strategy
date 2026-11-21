@@ -561,5 +561,10 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   `DELTA_API_KEY` / `DELTA_API_SECRET` reach the bot (`VICTUS_LIVE_DELTA=0` = all CoinDCX); open CoinDCX trades stay
   there; an order Delta refuses (e.g. wallet too small) goes to CoinDCX. A missing position / order is booked only after `LIVE_GONE_GRACE_SECONDS` (Delta's position list lags a fill).
   `python delta_live.py --self-test XRPUSD` (AWS runner) does one real 1-contract buy, stop, stop move, close.
+- **Trail / SL-shift stops are re-sent until the exchange takes them (2026-11-21, lakky: "why trail sl is not place").**
+  SUI's short (opened 15 Nov, before orders stored their price step) moved to +1.5R in the state on 18 Nov, but CoinDCX
+  refused the unrounded price (422) and the move was only tried once, so the exchange kept the -1R stop for days. Now
+  `coindcx_live.ensure_tick` reads a missing step from the instrument, and `stop_sent` (the level the exchange took) is
+  compared with the wanted stop every tick: a refused move is sent again until it goes in. `tests/test_coindcx_live.py::StopMoves`.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.
