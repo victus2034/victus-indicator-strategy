@@ -220,7 +220,7 @@ def wick_body_stop(daily, t0, entry, side, gap_pct=None):
     s = 1 if side == "long" else -1
     edge = entry * (1 - s * gap / 100)
     wick = body = None
-    for c in reversed([c for c in daily if c[0] + DAY <= t0][-300:]):
+    for c in reversed([c for c in daily if c[0] + DAY <= t0 and min(c[1:5]) > 0][-300:]):
         w = c[3] if s > 0 else c[2]
         b = min(c[1], c[4]) if s > 0 else max(c[1], c[4])
         if wick is None and ((w <= edge) if s > 0 else (w >= edge)):
@@ -240,7 +240,9 @@ def eligible(record, state, now):
         return False
     try:
         sent = float(record["sent_ts"])
-        return (record.get("kind") == "trendline" and record.get("market") == "crypto"
+        entry = float(record["plan"]["entry"])          # a record with no usable entry used to crash the tick
+        return (math.isfinite(sent) and math.isfinite(entry) and entry > 0
+                and record.get("kind") == "trendline" and record.get("market") == "crypto"
                 and str(record.get("tf", "")).lower() == "1d"
                 and record.get("symbol") in config.CRYPTO_WATCHLIST
                 and record["plan"].get("side") in ("long", "short")
@@ -290,14 +292,31 @@ def new_state(now):
             "orders": {}, "realized": 0.0, "events": []}
 
 
+class StateUnreadable(RuntimeError):
+    """The state file is there but cannot be read: never start over on top of it."""
+
+
 def load_state(path=None):
+    """The saved state, or None when there is no state file yet (the first tick).
+
+    Weekly audit 2026-11-22: an unreadable file (cut short, a merge-conflict marker) used to
+    read as "no state" - the bot started fresh and saved over it, forgetting every open
+    trade: no trailing stop, the same coin traded twice, the loss so far (kill switch) at 0."""
+    path = path or STATE_FILE
     try:
-        state = json.loads((path or STATE_FILE).read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
         return None
-    if not isinstance(state, dict) or "orders" not in state:
-        return None
+    except OSError as error:
+        raise StateUnreadable(f"{path.name}: {error}") from error
+    try:
+        state = json.loads(text)
+    except json.JSONDecodeError as error:
+        raise StateUnreadable(f"{path.name} is not valid JSON ({error})") from error
+    if not isinstance(state, dict) or not isinstance(state.get("orders"), dict):
+        raise StateUnreadable(f"{path.name} has no orders")
     state.setdefault("events", [])
+    state.setdefault("realized", 0.0)
     return state
 
 
@@ -314,8 +333,9 @@ def note(state, text, now):
 
 
 def daily_candles(symbol, now):
+    """Bitunix daily candles, bad rows dropped: a zero low used to make the wick stop 0 (weekly audit 2026-11-22)."""
     pair = bitunix_data.bitunix_pair(symbol)
-    return bitunix_data.klines(pair, "1d", int(now - 320 * DAY), int(now))
+    return scanner.clean_candles(bitunix_data.klines(pair, "1d", int(now - 320 * DAY), int(now)))
 
 
 def last_price(symbol):
@@ -379,6 +399,7 @@ def blocked(state, order, now, btc_move=btc_move_today):
 def submit(state, ex, order, head, entry, market, now, daily=daily_candles, price_now=last_price):
     """Size and send one order: a market order at the price now, or a limit at `entry`."""
     symbol, side, pair, broken = order["symbol"], order["side"], order["pair"], market
+    sending = False
     try:
         entry = price_now(symbol) if market else entry
         sl = wick_body_stop(daily(symbol, now), int(now) if order.get("line") else order["sent_ts"], entry, side)
@@ -399,9 +420,18 @@ def submit(state, ex, order, head, entry, market, now, daily=daily_candles, pric
         lev = max(1, min(lev, int(LIQUIDATION_ROOM / (abs(entry - sl) / entry * 100))))
         tick_size = float(ins.get("price_increment") or 0)
         price = step_round(entry, tick_size) if tick_size else entry
+        sending = True
         got = ex.create_order(pair, "buy" if side == "long" else "sell",
                               "market_order" if broken else "limit_order", qty, int(lev), None if broken else price)
     except Exception as error:  # noqa: BLE001 - one alert must not stop the rest
+        if sending and isinstance(error, requests.RequestException):
+            # Weekly audit 2026-11-22: the order went out and no answer came back (timeout, dropped
+            # connection), so it may be on the book. It used to be sent to CoinDCX as well when Delta
+            # timed out: two positions, the Delta one with no stop and no bot watching it.
+            venue = "Delta" if pair.startswith(delta_live.PREFIX) else "CoinDCX"
+            order.update(status="error", reason=f"no answer to the order ({str(error)[:120]}): check {venue}")
+            note(state, f"⚠️ {head} order UNCONFIRMED: {order['reason']}", now)
+            return order
         if pair.startswith(delta_live.PREFIX):
             # Delta refused (e.g. too little margin in the Delta wallet): the trade goes to CoinDCX instead
             order["pair"] = demo.coindcx_pair(symbol)
@@ -519,6 +549,9 @@ def seen_gone(order, now):
     return now - since >= config.LIVE_GONE_GRACE_SECONDS
 
 
+EXIT_RETRY_SECONDS = 300     # a market exit is sent again only if the position is still there after this
+
+
 def manage(state, ex, now, positions, open_ids, candles=minute_candles):
     p = scanner.price_text
     for o in [o for o in state["orders"].values() if o["status"] in ACTIVE]:
@@ -546,6 +579,11 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                     ex.cancel(o["exchange_id"])
                     o.update(status="cancelled", exit_ts=int(now))
                     note(state, f"⌛ **{head}** cancelled, no fill in {config.COINDCX_DEMO_FILL_DAYS} days", now)
+                else:
+                    # still waiting to fill: the trade's best move starts from here, not from when it was
+                    # placed (weekly audit 2026-11-22: a limit that filled hours later counted the run-up
+                    # before its fill, and moved its stop to +0.75R / +1.5R the moment it filled)
+                    o["checked_until"] = max(int(o.get("checked_until") or 0), int(now) // 60 * 60)
                 continue
             if not held:
                 if not seen_gone(o, now):
@@ -558,9 +596,12 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                 state["realized"] = round(state["realized"] + money, 4)
                 o.update(status="closed", exit_ts=int(now), r=round(r, 3), pnl=round(money, 4),
                          exit_why=o.get("stop_why") or "SL")
+                o.pop("last_error", None)
                 note(state, f"{'✅' if r > 0 else '🛑'} **{head}** closed at {o['exit_why']} ≈ {r:+.2f}R "
                             f"({money:+.2f} USDT) · total {state['realized']:+.2f}", now)
                 continue
+            if o.get("exit_sent") and now - o["exit_sent"] < EXIT_RETRY_SECONDS:
+                continue                    # closed at market a moment ago: the position list lags
             before, last = o.get("stop_r"), None
             for c in candles(o["symbol"], o["checked_until"], now):
                 if c[0] + 60 > now:
@@ -595,6 +636,10 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                                 f"closed at market", now)
                     continue
                 o["stop_sent"] = want
+                if o.pop("exit_sent", None):
+                    # the market exit sent earlier did not close it and the stop went in after all
+                    o.pop("exit_price", None)
+                    o["stop_why"] = str(o.get("stop_why") or "").replace(" passed, market exit", "") or None
                 if o.get("stop_r") != before or o.get("last_error"):
                     note(state, f"🔒 **{head}** stop moved to {o['stop_r']:+.2f}R ({p(want)})" if o.get("stop_r") is not None
                           else f"🔒 **{head}** stop set at {p(want)}", now)
@@ -619,8 +664,15 @@ def tick(state, ex, records, now, **hooks):
         positions = ex.positions()
         open_ids = {o.get("id") for o in ex.open_orders()}
     except Exception as error:  # noqa: BLE001 - no view of the account: place nothing new either
-        note(state, f"⚠️ account read FAILED, nothing done: {str(error)[:160]}", now)
+        text = str(error)[:160]
+        if state.get("account_error") != text:     # once per error, not every tick (weekly audit 2026-11-22)
+            note(state, f"⚠️ account read FAILED, nothing done: {text}", now)
+        else:
+            print(f"coindcx live: account read still failing: {text}")
+        state["account_error"] = text
         return state
+    if state.pop("account_error", None):
+        note(state, "✅ account read working again", now)
     manage(state, ex, now, positions, open_ids, **manage_hooks)
     confirm_waiting(state, ex, now, **confirm_hooks)
     fresh = {}
@@ -628,16 +680,44 @@ def tick(state, ex, records, now, **hooks):
         if eligible(r, state, now):
             fresh.setdefault(r["id"], r)
     for record in sorted(fresh.values(), key=lambda r: float(r["sent_ts"])):
-        place(state, ex, record, now, **place_hooks)
+        try:
+            place(state, ex, record, now, **place_hooks)
+        except Exception as error:  # noqa: BLE001 - nothing was sent yet (submit catches its own): one bad
+            # record must not stop the tick, or the state of every open trade goes unsaved for hours
+            o = state["orders"].setdefault(record["id"], {"id": record["id"], "symbol": record.get("symbol"),
+                                                          "side": record["plan"].get("side"), "placed_ts": int(now)})
+            o.update(status="error", reason=f"alert unreadable: {str(error)[:160]}")
+            note(state, f"⚠️ {demo.coin(str(record.get('symbol')))} TL alert skipped: {o['reason']}", now)
     return state
 
 
+POST_HEADER = "**CoinDCX LIVE · 1D trendlines · REAL orders**"
+MAX_EVENTS = 200            # Discord down for days: keep the newest lines, not an ever-growing state
+
+
 def post(state):
-    if not state["events"]:
-        return
-    text = "**CoinDCX LIVE · 1D trendlines · REAL orders**\n" + "\n".join(e["text"] for e in state["events"])
-    if demo.send(text) is not False:
-        state["events"] = []
+    """Post the events a Discord message at a time; a message's events are dropped once Discord
+    takes it. Weekly audit 2026-11-22: the whole list was one text that demo.send split, and a
+    failure on the second part kept every event, so the first part was posted again each tick."""
+    events = state["events"]
+    if len(events) > MAX_EVENTS:
+        dropped = len(events) - MAX_EVENTS
+        events[:] = [{"ts": events[-MAX_EVENTS]["ts"], "text": f"({dropped} older lines not posted)"}] + events[-MAX_EVENTS:]
+    while events:
+        part, size = [], len(POST_HEADER) + 1
+        for e in events:
+            line = str(e.get("text", ""))[:1500]
+            if part and size + len(line) + 1 > demo.DISCORD_LIMIT:
+                break
+            part.append(line)
+            size += len(line) + 1
+        result = demo.send(POST_HEADER + "\n" + "\n".join(part))
+        if result is False:
+            return False
+        del events[:len(part)]
+        if result is None:          # no channel set up: nowhere to post
+            events.clear()
+    return True
 
 
 RECORDS_URL = ("https://raw.githubusercontent.com/victus2034/victus-indicator-strategy/"
@@ -686,7 +766,14 @@ def run_tick(now=None, dry_run=False, remote=False):
     ex = CoinDCX(key, secret) if not dry_run else DryRun()
     if not dry_run and delta_on():
         ex = Router(ex, delta_live.Delta(os.environ["DELTA_API_KEY"], os.environ["DELTA_API_SECRET"]))
-    state = load_state()
+    try:
+        state = load_state()
+    except StateUnreadable as error:
+        print(f"coindcx live: STOPPED - state file unreadable, nothing done or saved: {error}")
+        if not dry_run and now % 3600 < 180:          # about once an hour, not every tick
+            demo.send(f"{POST_HEADER}\n⛔ bot STOPPED: state file unreadable ({str(error)[:150]}). "
+                      "Open trades keep their exchange stops but are not trailed. Fix coindcx_live_state.json.")
+        return None
     if state is not None and not dry_run:
         drop_dry_orders(state)
     if state is None:

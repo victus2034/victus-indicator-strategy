@@ -580,5 +580,13 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   every other trade is MANUAL. Keep those fields and never drop old orders from `orders`: a device that had not read
   them yet would show those trades as Manual. A round trip made outside the state (`delta_live.py --self-test`) is
   Manual unless its closing Delta order is added to the journal's `BOT_TEST_TRADES`.
+- **Live bot safety (weekly audit, 2026-11-22).** `coindcx_live.py`: an unreadable state file (cut short, a conflict
+  marker) stops the bot (`StateUnreadable`, nothing saved over it, a Discord line about once an hour) instead of starting
+  fresh and forgetting open trades; an order that went out with no answer (timeout) is `error` "UNCONFIRMED: check ..."
+  and is never re-sent to CoinDCX when Delta timed out (only a refusal falls back); a pending limit's best move starts at
+  its fill, not at placing; the LIVE digest posts a message at a time and drops what Discord took (it re-posted the first
+  half); an account read failure is posted once; a market exit is not re-sent for `EXIT_RETRY_SECONDS`; one bad record
+  no longer stops the tick; daily candles for the wick/body stop are cleaned (a zero low made the stop 0).
+  `scanner.price_text` prints NaN instead of raising. `tests/test_weekly_audit_2026_11_22.py`.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

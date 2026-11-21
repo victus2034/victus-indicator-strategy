@@ -1448,6 +1448,8 @@ def level_places(levels, places):
 
 def price_text(value, places=None):
     """A price at `places` decimals with trailing zeros dropped, keeping at least two."""
+    if not math.isfinite(float(value)):
+        return str(float(value))        # weekly audit 2026-11-22: NaN raised ValueError and lost the message
     places = short_places(value) if places is None else places
     text = f"{float(value):.{places}f}"
     if places > 2:
