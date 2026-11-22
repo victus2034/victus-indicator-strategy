@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       parts:
-        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm tl-break-audit tl-sl fib-sl tl-ex tl-sl-long tl-mkt-trend fib-start bitunix-depth bnb-fib fib-touched fib-entry tl-entry doge-fib fib-kill coindcx magic-fib zone-htf volume qnt-late band-wick risk-warn scores-audit realert trail-fibtl fib-levels fib-levels-apply fib-rearm fib-l3l4 fib-levels-all ec-audit ec-replay early-band discord-audit discord-trace fib-level-sl fib-sl-trace tl-broken tl-broken-long fibtl-rebuild fibtl-rebuild-apply demo-sl demo-sl-dcx coindcx-demo coindcx-strategy journal-verify coin-list top30 journal-setup journal-tl journal-tl-1pct tl-touch tl-lower-tf sideways-tl sideways-fib tl-breaks-only tl-verify)"
+        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm tl-break-audit tl-sl fib-sl tl-ex tl-sl-long tl-mkt-trend fib-start bitunix-depth bnb-fib fib-touched fib-entry tl-entry doge-fib fib-kill coindcx magic-fib zone-htf volume qnt-late band-wick risk-warn scores-audit realert trail-fibtl fib-levels fib-levels-apply fib-rearm fib-l3l4 fib-levels-all ec-audit ec-replay early-band discord-audit discord-trace fib-level-sl fib-sl-trace tl-broken tl-broken-long fibtl-rebuild fibtl-rebuild-apply demo-sl demo-sl-dcx coindcx-demo coindcx-strategy journal-verify coin-list top30 journal-setup journal-tl journal-tl-1pct tl-touch tl-lower-tf sideways-tl sideways-fib tl-breaks-only tl-verify tl-break-ideas)"
         default: "zones-30m zones-4h fib"
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr, xstock, xstock-zones-30m, xstock-zones-4h, xstock-fib, live-audit, uni-trace, bitunix-page, trend-all, tl-confirm, tl-break-audit, tl-sl, fib-sl, tl-ex, tl-sl-long, tl-mkt-trend, fib-start, bitunix-depth, bnb-fib, fib-touched, fib-entry, tl-entry, doge-fib, fib-kill, coindcx, magic-fib, zone-htf, volume, qnt-late, band-wick, risk-warn, scores-audit, realert, trail-fibtl, fib-rearm, fib-l3l4, fib-levels-all, ec-audit, ec-replay, early-band, discord-audit, discord-trace, fib-level-sl, fib-sl-trace, tl-broken, tl-broken-long, demo-sl, demo-sl-dcx, coindcx-demo, coindcx-strategy, journal-verify, coin-list, top30, journal-setup, journal-tl, journal-tl-1pct, tl-touch, tl-lower-tf, sideways-tl, sideways-fib, tl-breaks-only, tl-verify]
+        part: [zones-30m, zones-4h, fib, tl-trace, tl-nse, tl-length, tl-crypto, tl-anchor, tl-quality, chart-vs-bot, bitunix-window, zone-pref-30m, zone-pref-4h, fzp, fpri, fsr, xstock, xstock-zones-30m, xstock-zones-4h, xstock-fib, live-audit, uni-trace, bitunix-page, trend-all, tl-confirm, tl-break-audit, tl-sl, fib-sl, tl-ex, tl-sl-long, tl-mkt-trend, fib-start, bitunix-depth, bnb-fib, fib-touched, fib-entry, tl-entry, doge-fib, fib-kill, coindcx, magic-fib, zone-htf, volume, qnt-late, band-wick, risk-warn, scores-audit, realert, trail-fibtl, fib-rearm, fib-l3l4, fib-levels-all, ec-audit, ec-replay, early-band, discord-audit, discord-trace, fib-level-sl, fib-sl-trace, tl-broken, tl-broken-long, demo-sl, demo-sl-dcx, coindcx-demo, coindcx-strategy, journal-verify, coin-list, top30, journal-setup, journal-tl, journal-tl-1pct, tl-touch, tl-lower-tf, sideways-tl, sideways-fib, tl-breaks-only, tl-verify, tl-break-ideas]
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
@@ -161,6 +161,7 @@ jobs:
             sideways-tl) PYTHONPATH=research python research/sideways_filter_backtest.py --setup tl --since 2025-01-01 ;;
             sideways-fib) PYTHONPATH=research python research/sideways_filter_backtest.py --setup fib --since 2025-01-01 ;;
             tl-breaks-only) PYTHONPATH=research python research/tl_breaks_only_backtest.py --since 2025-01-01 ;;
+            tl-break-ideas) PYTHONPATH=research python research/tl_break_ideas_backtest.py --since 2026-09-01 ;;
             tl-verify) git fetch --depth 1 origin scanner-runtime-state
                        mkdir -p /tmp/rt
                        git archive FETCH_HEAD | tar -x -C /tmp/rt
