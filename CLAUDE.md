@@ -588,5 +588,17 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   half); an account read failure is posted once; a market exit is not re-sent for `EXIT_RETRY_SECONDS`; one bad record
   no longer stops the tick; daily candles for the wick/body stop are cleaned (a zero low made the stop 0).
   `scanner.price_text` prints NaN instead of raising. `tests/test_weekly_audit_2026_11_22.py`.
+- **Live bot trades TL breaks only; kill switch counts from the best point (2026-11-22, lakky, decision card
+  "Breaks only + own SL + kill fix").** `research/live_upgrade_replay.py` (offline, reads
+  `research/out/journal_tl_setup/trades_2025-01-01.json`: the bot's exits, 16 crypto, Jan 2025 - 13 Nov 2026) runs
+  the alerts through the account rules (one trade per coin, 5 open): touch + break -71R and the old 10 USDT
+  loss-from-start switch tripped on 27 Jan 2025; breaks only +69R, 60% wins, max DD 13.2R, worst run 7, 18 of 23
+  months up. `COINDCX_LIVE_TOUCHES` False (a touch still waiting for its 1h candle is called off),
+  `COINDCX_LIVE_MAX_DRAWDOWN_R` 15 (x `COINDCX_LIVE_RISK`, from the realized peak, start = 0; 10R would have tripped
+  in Apr 2026), `COINDCX_LIVE_MAX_LOSS` now 0 = off. The alert's own break SL (candle before the break) is built
+  but not the default (`COINDCX_LIVE_BREAK_SL` "alert"): +0.21R vs +0.18R a trade, but its ~11% stops hold the
+  slots longer - 277 trades / +58R / worst run 11 vs 393 / +69R / 7. A 24h loss cap was tested and left out (noise).
+  The rules line is posted once to Discord when it changes (`state["rules"]`). Tests:
+  `tests/test_live_breaks_only.py`; the older live tests pin the pre-22 Nov rules (`setUpModule`).
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.
