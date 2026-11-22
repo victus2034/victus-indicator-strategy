@@ -550,6 +550,26 @@ def seen_gone(order, now):
 
 
 EXIT_RETRY_SECONDS = 300     # a market exit is sent again only if the position is still there after this
+OFF_STOP_TOLERANCE_PCT = 0.3  # Bitunix vs the exchange's own price: a stop this close counts as reached
+
+
+def stop_reached(order, now, candles=minute_candles):
+    """(True / False, last close) - did price trade to the stop (within OFF_STOP_TOLERANCE_PCT) between the
+    fill and now, on Bitunix 1m? (None, None) when the candles cannot be read: then the old -1R booking stands."""
+    try:
+        start = int(order.get("fill_ts") or order.get("placed_ts") or now)
+        rows = [c for c in candles(order["symbol"], start - start % 60, now) if c[0] < now]
+        if not rows:
+            return None, None
+        level = stop_level(order)
+        pad = level * OFF_STOP_TOLERANCE_PCT / 100
+        if order["side"] == "long":
+            reached = min(c[3] for c in rows) <= level + pad
+        else:
+            reached = max(c[2] for c in rows) >= level - pad
+        return reached, float(rows[-1][4])
+    except Exception:  # noqa: BLE001 - a candle failure must not stop the booking
+        return None, None
 
 
 def manage(state, ex, now, positions, open_ids, candles=minute_candles):
@@ -588,15 +608,30 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
             if not held:
                 if not seen_gone(o, now):
                     continue
+                off_stop = None
                 if o.get("exit_price"):          # closed at market past its moved stop: R at that price, fees off
                     r = demo.move_r(o, o["exit_price"]) - config.COINDCX_DEMO_ROUND_TRIP_COST_PCT / o["stop_pct"]
                 else:
-                    r = demo.full_stop_r(o) if o.get("stop_r") is None else demo.moved_stop_r(o, o["stop_r"])
+                    reached, last = stop_reached(o, now, candles)
+                    if reached is False and last is not None:
+                        # 22 Nov audit: PEPE / XRP / HYPE shorts of 15 Nov were booked -1R "SL" while price never
+                        # came near their stops (liquidation, a hand close, or a stop at the wrong price):
+                        # book them at the price when they vanished and say so, so the total and the kill
+                        # switch follow what really happened
+                        off_stop = last
+                        r = demo.move_r(o, last) - config.COINDCX_DEMO_ROUND_TRIP_COST_PCT / o["stop_pct"]
+                    else:
+                        r = demo.full_stop_r(o) if o.get("stop_r") is None else demo.moved_stop_r(o, o["stop_r"])
                 money = o["risk"] * r
                 state["realized"] = round(state["realized"] + money, 4)
                 o.update(status="closed", exit_ts=int(now), r=round(r, 3), pnl=round(money, 4),
                          exit_why=o.get("stop_why") or "SL")
                 o.pop("last_error", None)
+                if off_stop is not None:
+                    o.update(exit_price=off_stop, exit_why="closed off its stop (liquidated or closed by hand?)")
+                    note(state, f"⚠️ **{head}** position gone but price never reached its stop {p(stop_level(o))} "
+                                f"(last {p(off_stop)}): booked ≈ {r:+.2f}R, check CoinDCX / Delta", now)
+                    continue
                 note(state, f"{'✅' if r > 0 else '🛑'} **{head}** closed at {o['exit_why']} ≈ {r:+.2f}R "
                             f"({money:+.2f} USDT) · total {state['realized']:+.2f}", now)
                 continue

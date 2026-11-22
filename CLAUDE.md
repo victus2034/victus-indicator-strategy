@@ -588,5 +588,11 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   half); an account read failure is posted once; a market exit is not re-sent for `EXIT_RETRY_SECONDS`; one bad record
   no longer stops the tick; daily candles for the wick/body stop are cleaned (a zero low made the stop 0).
   `scanner.price_text` prints NaN instead of raising. `tests/test_weekly_audit_2026_11_22.py`.
+- **A position that vanishes off its stop is not booked -1R (22 Nov audit).** PEPE, XRP and HYPE shorts of 15 Nov were
+  booked "SL" though on Bitunix 1m price never came near their stops (PEPE worst 0.00407 vs SL 0.004406): liquidation,
+  a hand close or a wrong exchange stop all looked like an SL. `coindcx_live.stop_reached` now checks the 1m candles since
+  the fill (`OFF_STOP_TOLERANCE_PCT` 0.3%); not reached = booked at the last close, `exit_why` "closed off its stop" and a
+  ⚠️ line to check the exchange. No candles = the old booking. `research/tl_break_ideas_backtest.py` (part
+  `tl-break-ideas`) holds the check. `tests/test_coindcx_live.py::GoneOffStop`.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.
