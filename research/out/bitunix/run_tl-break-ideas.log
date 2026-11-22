@@ -1,0 +1,102 @@
+BTCUSD: 25 breaks
+ETHUSD: 31 breaks
+ZECUSD: 20 breaks
+SOLUSD: 23 breaks
+XRPUSD: 29 breaks
+NEARUSD: 31 breaks
+HYPEUSD: 29 breaks
+DOGEUSD: 26 breaks
+SUIUSD: 28 breaks
+UNIUSD: 24 breaks
+BNBUSD: 31 breaks
+ENAUSD: 31 breaks
+1000PEPEUSD: 32 breaks
+WLDUSD: 32 breaks
+ADAUSD: 32 breaks
+LINKUSD: 28 breaks
+AVAXUSD: 32 breaks
+INJUSD: 26 breaks
+FILUSD: 24 breaks
+AAVEUSD: 24 breaks
+TAOUSD: 30 breaks
+ARBUSD: 29 breaks
+# TL break ideas - 2026-09-01 to 2026-11-22
+
+22 crypto coins, Bitunix, live bot rules (market at the first 15m open after the break candle, wick/body 0.75% stop on the break's timeframe, 1.5R + SL shift + trail TP, fees 0.0826%, slip 0.05%). 7 fills within 15 min of US CPI / PPI / FOMC left out. Closed trades only.
+
+## 1D (live bot): 87 breaks; retest filled 53 of 87
+
+### All breaks (no slot limit)
+
+| Idea | Trades | Win | R/trade | %/trade | Total R | Max DD | Avg SL |
+|---|---|---|---|---|---|---|---|
+| Today (market at break close) | 82 | 67% | +0.312R | +2.20% | +25.6R | -12.2R | 8.1% |
+| Strong close >= 0.5% past line | 69 | 67% | +0.299R | +2.17% | +20.6R | -10.7R | 9.1% |
+| Strong close >= 1% past line | 61 | 66% | +0.289R | +2.24% | +17.6R | -10.7R | 9.6% |
+| Close in outer 30% of candle | 57 | 67% | +0.304R | +2.73% | +17.3R | -8.2R | 9.3% |
+| Volume >= 1x 20-candle avg | 67 | 64% | +0.268R | +2.27% | +18.0R | -12.9R | 8.8% |
+| Volume >= 1.5x 20-candle avg | 37 | 59% | +0.183R | +1.59% | +6.8R | -7.6R | 10.8% |
+| Stop <= 8% only | 46 | 74% | +0.435R | +2.51% | +20.0R | -6.7R | 4.5% |
+| Retest: limit at line, 3 days | 52 | 60% | +0.286R | +1.87% | +14.9R | -6.0R | 4.9% |
+
+### Live bot slots (1 per coin, max 5)
+
+| Idea | Trades | Win | R/trade | %/trade | Total R | Max DD | Avg SL |
+|---|---|---|---|---|---|---|---|
+| Today (market at break close) | 57 | 77% | +0.511R | +4.04% | +29.1R | -3.1R | 8.0% |
+| Strong close >= 0.5% past line | 48 | 73% | +0.413R | +4.02% | +19.8R | -3.4R | 8.7% |
+| Strong close >= 1% past line | 41 | 73% | +0.446R | +4.54% | +18.3R | -3.1R | 9.3% |
+| Close in outer 30% of candle | 40 | 78% | +0.542R | +5.18% | +21.7R | -3.1R | 9.0% |
+| Volume >= 1x 20-candle avg | 45 | 76% | +0.502R | +4.65% | +22.6R | -3.1R | 8.6% |
+| Volume >= 1.5x 20-candle avg | 28 | 71% | +0.446R | +4.53% | +12.5R | -2.0R | 10.2% |
+| Stop <= 8% only | 41 | 76% | +0.452R | +2.46% | +18.5R | -4.5R | 4.6% |
+| Retest: limit at line, 3 days | 49 | 57% | +0.233R | +1.53% | +11.4R | -8.1R | 4.8% |
+
+## 4H: 530 breaks; retest filled 436 of 530
+
+### All breaks (no slot limit)
+
+| Idea | Trades | Win | R/trade | %/trade | Total R | Max DD | Avg SL |
+|---|---|---|---|---|---|---|---|
+| Today (market at break close) | 528 | 50% | -0.003R | +0.01% | -1.4R | -75.5R | 3.3% |
+| Strong close >= 0.5% past line | 355 | 50% | +0.009R | +0.09% | +3.4R | -45.8R | 4.0% |
+| Strong close >= 1% past line | 248 | 52% | +0.075R | +0.31% | +18.6R | -29.6R | 4.7% |
+| Close in outer 30% of candle | 374 | 51% | +0.050R | +0.14% | +18.8R | -49.1R | 3.8% |
+| Volume >= 1x 20-candle avg | 406 | 50% | -0.034R | -0.02% | -14.0R | -68.5R | 3.9% |
+| Volume >= 1.5x 20-candle avg | 283 | 51% | -0.004R | +0.14% | -1.3R | -41.2R | 4.6% |
+| Stop <= 8% only | 492 | 51% | +0.004R | +0.03% | +2.1R | -69.0R | 2.8% |
+| Retest: limit at line, 3 days | 425 | 48% | -0.055R | -0.02% | -23.3R | -45.4R | 2.1% |
+
+### Live bot slots (1 per coin, max 5)
+
+| Idea | Trades | Win | R/trade | %/trade | Total R | Max DD | Avg SL |
+|---|---|---|---|---|---|---|---|
+| Today (market at break close) | 305 | 53% | +0.048R | +0.10% | +14.6R | -32.6R | 3.1% |
+| Strong close >= 0.5% past line | 225 | 52% | +0.060R | +0.07% | +13.4R | -25.5R | 3.7% |
+| Strong close >= 1% past line | 173 | 54% | +0.127R | +0.19% | +22.0R | -20.8R | 4.4% |
+| Close in outer 30% of candle | 238 | 51% | +0.038R | -0.02% | +9.0R | -30.7R | 3.6% |
+| Volume >= 1x 20-candle avg | 236 | 54% | +0.052R | +0.10% | +12.3R | -26.3R | 3.6% |
+| Volume >= 1.5x 20-candle avg | 171 | 53% | +0.035R | +0.17% | +6.0R | -30.0R | 4.2% |
+| Stop <= 8% only | 312 | 53% | +0.049R | +0.14% | +15.2R | -24.4R | 2.7% |
+| Retest: limit at line, 3 days | 337 | 48% | -0.054R | -0.08% | -18.2R | -38.9R | 2.1% |
+
+## Live bot trades vs replay (coindcx_live_state_2026-11-22.json)
+
+| Coin | Type | Side | Status | Sent (IST) | Entry plan -> fill | Fill vs plan (+ better) | SL | Replay entry / SL | Exit why | R | Price reached SL before exit? |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| HYPEUSD | touch | long | closed  | 11-14 09:02 | 67.946 -> 67.946 | -0.000% | 58.505 (13.89%) x20 |  | SL | -1.009 | NO - worst 65.464 vs SL 58.505 |
+| XRPUSD | touch | long | skipped no wick or body 0.75% past entry | 11-14 22:18 |  ->  |  |  (0.00%) x |  |  |  |  |
+| 1000PEPEUSD | break | short | closed  | 11-15 08:02 | 0.003904 -> 0.00390446430723 | +0.012% | 0.004406 (12.86%) x5 | 0.0038881 / 13.32% | SL | -1.011 | NO - worst 0.0040713 vs SL 0.004406 |
+| ARBUSD | break | short | skipped 5 trades already active | 11-15 08:02 |  ->  |  |  (0.00%) x | 0.12792 / 13.36% |  |  |  |
+| BTCUSD | break | short | skipped min order 0.001 risks 3.63 > 2x plan | 11-15 08:02 |  ->  |  |  (0.00%) x | 64124.10 / 6.47% |  |  |  |
+| HYPEUSD | break | short | closed  | 11-15 08:02 | 66.252 -> 66.227 | -0.038% | 71.696 (8.22%) x20 | 64.351 / 11.41% | SL | -1.017 | NO - worst 68.589 vs SL 71.696 |
+| INJUSD | break | short | open  | 11-15 08:02 | 6.888 -> 6.877 | -0.160% | 8.069 (17.15%) x5 | 6.809 / 18.50% |  |  |  |
+| SUIUSD | break | short | closed  | 11-15 08:02 | 0.7161 -> 0.7157 | -0.056% | 0.7958 (11.13%) x5 | 0.7003 / 13.64% | Trail TP passed, market exit | 1.05 |  |
+| TAOUSD | break | short | skipped 5 trades already active | 11-15 08:02 |  ->  |  |  (0.00%) x | 183.65 / 16.90% |  |  |  |
+| TAOUSD | break | short | skipped 5 trades already active | 11-15 08:02 |  ->  |  |  (0.00%) x | 183.65 / 16.90% |  |  |  |
+| XRPUSD | break | short | closed  | 11-15 08:02 | 0.9475 -> 0.9477 | +0.021% | 1.0105 (6.65%) x10 | 0.9136 / 10.61% | SL | -1.02 | NO - worst 0.9787 vs SL 1.01 |
+| AVAXUSD | touch | long | closed  | 11-17 21:18 | 6.968 -> 6.968 | -0.000% | 6.778 (2.73%) x20 |  | SL shift | 0.701 |  |
+| AVAXUSD | touch | long | skipped this coin already has a bot trade | 11-19 05:35 |  ->  |  |  (0.00%) x |  |  |  |  |
+| ENAUSD | touch | long | closed  | 11-20 03:03 | 0.10519 -> 0.10519 | -0.000% | 0.09329 (11.31%) x6 |  | SL | -1.011 | yes, 11-21 09:01 |
+| ENAUSD | touch | long | skipped this coin already has a bot trade | 11-20 03:28 |  ->  |  |  (0.00%) x |  |  |  |  |
+| 1000PEPEUSD | touch | long | waiting  | 11-21 11:48 |  ->  |  |  (0.00%) x |  |  |  |  |
