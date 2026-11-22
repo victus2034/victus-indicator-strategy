@@ -268,6 +268,38 @@ class PassedStop(unittest.TestCase):
         self.assertEqual(self.ex.exits, [])
 
 
+class GoneOffStop(unittest.TestCase):
+    """22 Nov audit: PEPE / XRP / HYPE shorts of 15 Nov vanished and were booked -1R "SL", but on the
+    candles price never came near their stops (PEPE worst 0.00407 vs SL 0.004406)."""
+
+    def gone(self, bars):
+        s, ex, o = StopMoves.open_order(StopMoves())
+        o["fill_ts"] = NOW - DAY
+        del ex.pos["B-BTC_USDT"]
+        feed = lambda sym, a, b: [c for c in bars if a <= c[0] < b]
+        live.tick(s, ex, [], NOW, candles=feed)
+        live.tick(s, ex, [], NOW + 120, candles=feed)
+        return s, o
+
+    def test_never_near_the_stop_books_the_price_it_vanished_at(self):
+        s, o = self.gone([[NOW - DAY + 60, 100, 104, 99, 103], [NOW - 60, 103, 104, 102, 103.0]])
+        self.assertEqual(o["status"], "closed")
+        self.assertIn("off its stop", o["exit_why"])
+        self.assertEqual(o["exit_price"], 103.0)
+        self.assertAlmostEqual(o["r"], -3 / 10.03 - 0.0826 / 10.03, places=3)    # -0.31R, not -1R
+        self.assertIn("never reached its stop", s["events"][-1]["text"])
+
+    def test_stop_traded_books_the_stop(self):
+        s, o = self.gone([[NOW - DAY + 60, 100, 110.0, 99, 109], [NOW - 60, 109, 109, 108, 108.5]])   # within 0.3%
+        self.assertEqual(o["exit_why"], "SL")
+        self.assertLess(o["r"], -1)
+
+    def test_no_candles_keeps_the_old_booking(self):
+        s, o = self.gone([])
+        self.assertEqual(o["exit_why"], "SL")
+        self.assertLess(o["r"], -1)
+
+
 class Safety(unittest.TestCase):
     def test_leverage_keeps_liquidation_past_the_stop(self):
         ex, s = FakeExchange(), state()
