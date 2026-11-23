@@ -65581,6 +65581,7 @@
     "TSLAXUSD|4h|short|374.1|375.225": "filled",
     "TSLAXUSD|4h|short|384.276|388.119": "filled",
     "TSLAXUSD|4h|short|385.65|387.075": "filled",
+    "TSLAXUSD|4h|short|392.09|395.428": "filled",
     "TSLAXUSD|4h|short|392.272|396.195": "filled",
     "TSLAXUSD|4h|short|403.611|407.647": "filled",
     "TSLAXUSD|4h|short|412.82|413.457": "stop_too_tight",
@@ -66357,6 +66358,24 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
+    },
+    "TSLAXUSD|4h|short|392.09|395.428": {
+      "alert_time": "2026-11-23T21:04:22.915052+05:30",
+      "entry": 392.09,
+      "entry_time": "2026-11-23T21:05:00+05:30",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "rating": 6,
+      "risk": 3.337500000000034,
+      "side": "short",
+      "stop": 395.4275,
+      "stream": "live",
+      "symbol": "TSLAXUSD",
+      "target_1": 388.75249999999994,
+      "target_2": 385.4149999999999,
+      "target_half": 390.42125,
+      "timeframe": "4h"
     }
   }
 }
