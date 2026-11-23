@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       parts:
-        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm tl-break-audit tl-sl fib-sl tl-ex tl-sl-long tl-mkt-trend fib-start bitunix-depth bnb-fib fib-touched fib-entry tl-entry doge-fib fib-kill coindcx magic-fib zone-htf volume qnt-late band-wick risk-warn scores-audit realert trail-fibtl fib-levels fib-levels-apply fib-rearm fib-l3l4 fib-levels-all ec-audit ec-replay early-band discord-audit discord-trace fib-level-sl fib-sl-trace tl-broken tl-broken-long fibtl-rebuild fibtl-rebuild-apply demo-sl demo-sl-dcx coindcx-demo coindcx-strategy journal-verify coin-list top30 journal-setup journal-tl journal-tl-1pct tl-touch tl-lower-tf bot-misses first-reach miss-check)"
+        description: "Which parts to run (any of zones-30m zones-4h fib tl-trace tl-nse tl-length tl-crypto tl-anchor tl-quality chart-vs-bot bitunix-window zone-pref-30m zone-pref-4h fzp fpri fsr xstock xstock-zones-30m xstock-zones-4h xstock-fib live-audit uni-trace bitunix-page trend-all tl-confirm tl-break-audit tl-sl fib-sl tl-ex tl-sl-long tl-mkt-trend fib-start bitunix-depth bnb-fib fib-touched fib-entry tl-entry doge-fib fib-kill coindcx magic-fib zone-htf volume qnt-late band-wick risk-warn scores-audit realert trail-fibtl fib-levels fib-levels-apply fib-rearm fib-l3l4 fib-levels-all ec-audit ec-replay early-band discord-audit discord-trace fib-level-sl fib-sl-trace tl-broken tl-broken-long fibtl-rebuild fibtl-rebuild-apply demo-sl demo-sl-dcx coindcx-demo coindcx-strategy journal-verify coin-list top30 journal-setup journal-tl journal-tl-1pct tl-touch tl-lower-tf bot-misses first-reach miss-check signals-parity)"
         default: "zones-30m zones-4h fib"
 
 permissions:
@@ -273,4 +273,34 @@ jobs:
           git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
           git add research/out/fibtl_rebuild research/out/fibtl_rebuild_run.log
           git commit -m "Fib/TL rebuild report [skip ci]" || exit 0
+          for i in 1 2 3 4 5; do git pull --rebase origin ${GITHUB_REF_NAME} && git push origin HEAD:${GITHUB_REF_NAME} && break; sleep $((i*5)); done
+
+  signals-parity:
+    if: contains(format(' {0} ', inputs.parts), ' signals-parity ')
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Alerts + Delta candles for the journal's Signals audit
+        id: data
+        run: |
+          git fetch --depth 1 origin scanner-runtime-state
+          mkdir -p /tmp/rt && git archive FETCH_HEAD | tar -x -C /tmp/rt
+          rm -rf research/out/signals_parity
+          python research/signals_parity_data.py --state /tmp/rt --out research/out/signals_parity 2>&1 | tee /tmp/signals_parity.log
+          test -s research/out/signals_parity/meta.json
+      - name: Commit to this branch
+        if: always() && steps.data.outcome == 'success'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898341+github-actions[bot]@users.noreply.github.com"
+          git add -A research/out/signals_parity
+          git commit -m "Signals audit data [skip ci]" || exit 0
           for i in 1 2 3 4 5; do git pull --rebase origin ${GITHUB_REF_NAME} && git push origin HEAD:${GITHUB_REF_NAME} && break; sleep $((i*5)); done
