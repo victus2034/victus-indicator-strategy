@@ -1,4 +1,16 @@
-"""CoinDCX LIVE account: 1D crypto trendline alerts as REAL futures orders.
+"""CoinDCX LIVE account: 1D crypto trendline BREAK alerts as REAL futures orders.
+
+Since 2026-11-22 (lakky, decision card "Breaks only + own SL + kill fix"; replay in
+research/live_upgrade_replay.py, Jan 2025 - Nov 2026 under the account rules below):
+  - TL BROKEN alerts only (+0.17R a trade); touches lost -0.22R (0.00R with the 1h confirm), so they
+    are not traded and a touch still waiting for its 1h candle is called off.
+    VICTUS_COINDCX_LIVE_TOUCHES=1 trades touches again, as below.
+  - a break's stop stays the wick-or-body rule. VICTUS_COINDCX_LIVE_BREAK_SL=alert uses the alert's own
+    SL, past the candle before the break candle: better a trade (+0.21R vs +0.18R), but its wider stops
+    hold the 5 slots longer, so fewer trades (277 vs 393) and less in total (+58R vs +69R)
+  - the kill switch counts from the best point: no new trade once the realized P&L is
+    COINDCX_LIVE_MAX_DRAWDOWN_R (15) x COINDCX_LIVE_RISK below its peak (the replay's worst: 13.2R).
+    The loss-from-start rule (10 USDT until then) is off unless VICTUS_COINDCX_LIVE_MAX_LOSS is set.
 
 lakky, 2026-11-13 (decision card "Run this TL setup on CoinDCX for a week: real money or
 demo?" -> "Real money, full setup as on screen"). His journal Signals setup:
@@ -22,7 +34,8 @@ What it does every tick:
   1. a new 1D crypto trendline alert (touch or break, sent in the last
      COINDCX_LIVE_MAX_ALERT_AGE seconds, inside the live window) becomes an order:
      - stop = the wick-or-body rule on Bitunix daily candles closed before the alert;
-       none 0.75% away -> skipped
+       none 0.75% away -> skipped. With BREAK_SL=alert a break uses the alert's own SL when it is at
+       least COINDCX_LIVE_SL_GAP_PCT past the price, else the wick-or-body rule
      - touch: no order yet - it waits for a closed 1h candle that trades the line (at the
        line's price at that hour) and closes back on the trade's side, then enters at
        market (lakky, 2026-11-16; COINDCX_LIVE_TOUCH_ENTRY=limit is the old limit at the
@@ -33,8 +46,7 @@ What it does every tick:
      - leverage = min(COINDCX_LIVE_MAX_LEVERAGE, the instrument's max, 70 / stop %) so the stop
        is always closer than the liquidation price
      - skipped while that coin already has a bot order or position, at
-       COINDCX_LIVE_MAX_OPEN active trades, or once the loss so far reaches
-       COINDCX_LIVE_MAX_LOSS (kill switch)
+       COINDCX_LIVE_MAX_OPEN active trades, or once the kill switch trips (see above)
   2. a filled order gets an exchange stop-market at its stop (create_tpsl)
   3. an open trade's best move is read from Bitunix 1m candles; the journal's walk
      (coindcx_demo.apply_best) moves the stop, and the exchange stop is replaced
@@ -243,6 +255,7 @@ def eligible(record, state, now):
         entry = float(record["plan"]["entry"])          # a record with no usable entry used to crash the tick
         return (math.isfinite(sent) and math.isfinite(entry) and entry > 0
                 and record.get("kind") == "trendline" and record.get("market") == "crypto"
+                and (bool(record.get("broken")) or config.COINDCX_LIVE_TOUCHES)
                 and str(record.get("tf", "")).lower() == "1d"
                 and record.get("symbol") in config.CRYPTO_WATCHLIST
                 and record["plan"].get("side") in ("long", "short")
@@ -363,6 +376,8 @@ def place(state, ex, record, now, daily=daily_candles, price_now=last_price, btc
     head = f"{demo.coin(symbol)} {'TL BR' if broken else 'TL'} {'BUY' if side == 'long' else 'SELL'}"
     order = {"id": record["id"], "symbol": symbol, "pair": pair, "side": side, "broken": broken,
              "sent_ts": int(float(record["sent_ts"])), "placed_ts": int(now), "status": "skipped"}
+    if broken and config.COINDCX_LIVE_BREAK_SL == "alert":
+        order["alert_sl"] = alert_sl(plan)
     state["orders"][record["id"]] = order
     order["reason"] = blocked(state, order, now, btc_move)
     if order["reason"] is None:
@@ -380,10 +395,60 @@ def place(state, ex, record, now, daily=daily_candles, price_now=last_price, btc
     return submit(state, ex, order, head, float(plan["entry"]), broken, now, daily, price_now)
 
 
+def alert_sl(plan):
+    """The alert's own stop as a float, or None when the record has no usable one."""
+    try:
+        sl = float(plan.get("sl"))
+    except (TypeError, ValueError):
+        return None
+    return sl if math.isfinite(sl) and sl > 0 else None
+
+
+def rules_text():
+    """The trading rules in one line: posted once whenever they change (22 Nov: breaks only)."""
+    kinds = "1D TL breaks + touches" if config.COINDCX_LIVE_TOUCHES else "1D TL breaks only"
+    sl = "alert's SL" if config.COINDCX_LIVE_BREAK_SL == "alert" else "wick/body SL"
+    kill = []
+    if config.COINDCX_LIVE_MAX_DRAWDOWN_R > 0:
+        kill.append(f"{config.COINDCX_LIVE_MAX_DRAWDOWN_R:g}R from the best point")
+    if config.COINDCX_LIVE_MAX_LOSS > 0:
+        kill.append(f"{config.COINDCX_LIVE_MAX_LOSS:g} lost from the start")
+    return f"{kinds}, {sl} on breaks, kill switch " + (" or ".join(kill) if kill else "off")
+
+
+def drawdown(state):
+    """How far the realized P&L sits below its best point so far (the start counts as 0), in money:
+    the path is the closed orders' pnl in exit order, the end point state["realized"]."""
+    equity = peak = 0.0
+    closed = [o for o in state["orders"].values() if isinstance(o.get("pnl"), (int, float)) and o.get("exit_ts")]
+    for o in sorted(closed, key=lambda o: o["exit_ts"]):
+        equity += o["pnl"]
+        peak = max(peak, equity)
+    return round(max(peak, state["realized"]) - state["realized"], 4)
+
+
+def break_stop(order, entry, side):
+    """(stop, reason to skip) for a break with the alert's SL. Price already past that stop: the break
+    has failed, no trade (the replay drops those too). Closer than COINDCX_LIVE_SL_GAP_PCT (1 break in
+    500 in the replay; a stop that close is mostly fees) or no alert SL: (None, None), and the caller
+    uses the wick-or-body rule."""
+    sl = order.get("alert_sl")
+    if sl is None:
+        return None, None
+    gap = (1 if side == "long" else -1) * (entry - sl) / entry * 100
+    if gap <= 0:
+        return None, "price already past the alert's stop"
+    return (sl, None) if gap >= config.COINDCX_LIVE_SL_GAP_PCT else (None, None)
+
+
 def blocked(state, order, now, btc_move=btc_move_today):
     """Why a new order may not go in now, or None."""
     active = [o for o in state["orders"].values() if o["status"] in ACTIVE and o is not order]
-    if state["realized"] <= -config.COINDCX_LIVE_MAX_LOSS:
+    dd = drawdown(state)
+    if config.COINDCX_LIVE_MAX_DRAWDOWN_R > 0 and dd >= config.COINDCX_LIVE_MAX_DRAWDOWN_R * config.COINDCX_LIVE_RISK - 1e-9:
+        return (f"kill switch: {dd:.2f} down from the best point "
+                f"(limit {config.COINDCX_LIVE_MAX_DRAWDOWN_R:g}R = {config.COINDCX_LIVE_MAX_DRAWDOWN_R * config.COINDCX_LIVE_RISK:g})")
+    if config.COINDCX_LIVE_MAX_LOSS > 0 and state["realized"] <= -config.COINDCX_LIVE_MAX_LOSS:
         return f"kill switch: loss so far {state['realized']:.2f}"
     if len(active) >= config.COINDCX_LIVE_MAX_OPEN:
         return f"{len(active)} trades already active"
@@ -402,7 +467,13 @@ def submit(state, ex, order, head, entry, market, now, daily=daily_candles, pric
     sending = False
     try:
         entry = price_now(symbol) if market else entry
-        sl = wick_body_stop(daily(symbol, now), int(now) if order.get("line") else order["sent_ts"], entry, side)
+        sl, why = break_stop(order, entry, side) if order.get("broken") else (None, None)
+        if why:
+            order.update(status="skipped", reason=why)
+            note(state, f"⏭️ {head} skipped: {why}", now)
+            return order
+        if sl is None:
+            sl = wick_body_stop(daily(symbol, now), int(now) if order.get("line") else order["sent_ts"], entry, side)
         if sl is None:
             order.update(status="skipped", reason="no wick or body 0.75% past entry")
             note(state, f"⏭️ {head} skipped: {order['reason']}", now)
@@ -486,6 +557,10 @@ def confirm_waiting(state, ex, now, hourly=hour_candles, daily=daily_candles, pr
         head = f"{demo.coin(o['symbol'])} TL {'BUY' if o['side'] == 'long' else 'SELL'}"
         sign = 1 if o["side"] == "long" else -1
         try:
+            if not config.COINDCX_LIVE_TOUCHES:
+                o.update(status="cancelled", exit_ts=int(now), reason="touch trades are off (breaks only since 22 Nov)")
+                note(state, f"⏭️ {head} wait called off: {o['reason']}", now)
+                continue
             if now >= o["sent_ts"] + config.COINDCX_DEMO_FILL_DAYS * DAY:
                 o.update(status="cancelled", exit_ts=int(now), reason=f"no 1h confirm in {config.COINDCX_DEMO_FILL_DAYS} days")
                 note(state, f"⌛ {head} wait over: {o['reason']}", now)
@@ -691,7 +766,7 @@ def tick(state, ex, records, now, **hooks):
     return state
 
 
-POST_HEADER = "**CoinDCX LIVE · 1D trendlines · REAL orders**"
+POST_HEADER = "**CoinDCX LIVE · 1D TL breaks · REAL orders**"
 MAX_EVENTS = 200            # Discord down for days: keep the newest lines, not an ever-growing state
 
 
@@ -779,14 +854,19 @@ def run_tick(now=None, dry_run=False, remote=False):
     if state is None:
         state = new_state(now)
         until = state.get("until_ts")
-        note(state, "started: trades 1D TL alerts "
+        note(state, f"started: trades {rules_text()} "
                     + (f"until {datetime.fromtimestamp(until, scanner.IST):%d %b %H:%M IST}, " if until else "with no end date, ")
                     + f"risk {config.COINDCX_LIVE_RISK:g} USDT a trade"
                     + ("" if isinstance(ex, CoinDCX) else " (DRY RUN: no API key)"), now)
+    if state.get("rules") != rules_text():
+        if state.get("rules") is not None or state["orders"]:
+            note(state, f"⚙️ rules now: {rules_text()} (realized {state['realized']:+.2f}, "
+                        f"{drawdown(state):.2f} below the best point)", now)
+        state["rules"] = rules_text()
     if config.COINDCX_LIVE_DAYS <= 0 and state.get("until_ts") is not None:
         state["until_ts"] = None                         # the test week's end date lifted (lakky, 21 Nov)
-        note(state, "trading on with no end date (kill switch still at "
-                    f"-{config.COINDCX_LIVE_MAX_LOSS:g} USDT, {state['realized']:+.2f} so far)", now)
+        note(state, "trading on with no end date (kill switch still on, "
+                    f"{state['realized']:+.2f} so far)", now)
     tick(state, ex, remote_records() if remote else demo.load_records(), now)
     if not dry_run:
         post(state)

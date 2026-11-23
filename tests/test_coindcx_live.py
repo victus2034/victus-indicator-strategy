@@ -14,6 +14,23 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "research"))
 
 DAY = 86400
 NOW = 1_794_000_000 // DAY * DAY + 10 * 3600
+_PINNED = []
+
+
+def setUpModule():
+    """These tests drive the trade mechanics with touch alerts and the wick-or-body break stop, the
+    rules until 22 Nov (the weekly audit tests import this too). The 22 Nov defaults - breaks only,
+    the alert's SL, the kill switch from the best point - are tested unpinned in
+    tests/test_live_breaks_only.py."""
+    for name, value in (("COINDCX_LIVE_TOUCHES", True), ("COINDCX_LIVE_BREAK_SL", "wick_body"),
+                        ("COINDCX_LIVE_MAX_LOSS", 10.0), ("COINDCX_LIVE_MAX_DRAWDOWN_R", 0.0)):
+        _PINNED.append(patch.object(config, name, value))
+        _PINNED[-1].start()
+
+
+def tearDownModule():
+    while _PINNED:
+        _PINNED.pop().stop()
 
 
 def record(symbol="BTCUSD", side="long", entry=100.0, sl=98.0, sent=NOW - 600, broken=False, kind="trendline", tf="1d"):
