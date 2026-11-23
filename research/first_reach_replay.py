@@ -26,6 +26,8 @@ from fib_trendline_data import CRYPTO, HISTORY_START, bitunix_candles  # noqa: E
 
 IST = timezone(timedelta(hours=5, minutes=30))
 DAY = 86400
+HISTORY = 500       # daily candles per pass (speed); --history 0 = all
+DEBUG = False
 
 
 def ist(ts):
@@ -44,7 +46,7 @@ def run(symbol, start, end, step):
             if now % DAY < step:
                 print(f"  {symbol} {rule} {ist(now)}", flush=True)
             day = now - now % DAY
-            closed = [c for c in daily if c[0] + DAY <= now][-500:]    # speed: lines converge; both rules see the same
+            closed = [c for c in daily if c[0] + DAY <= now][-HISTORY:]
             while i0 < len(fine) and fine[i0][0] < day:
                 i0 += 1
             today = [c for c in fine[i0:] if c[0] + 60 <= now]
@@ -56,6 +58,10 @@ def run(symbol, start, end, step):
             forming = (min(c[3] for c in today), max(c[2] for c in today))
             price = today[-1][4]
             a = fts.analyse(CRYPTO, symbol, "1d", closed, now, price=price, forming=forming, swept=swept)
+            if DEBUG and rule == "new":
+                for t in a["touch"]:
+                    print(f"    {ist(now)} touch {t['key']} lvl {t['level']:.6g} touched={t['touched']} fresh={t['fresh']} "
+                          f"swept={swept} state={state.get(t['key'])} mark={state.get(fts.REACHED_KEY, {}).get(t['key'])}")
             if rule == "old":           # the rule before 23 Nov: nothing touched or through the line is listed
                 a["touch"] = [t for t in a["touch"] if not t.get("touched")]
                 a["fib"] = [z for z in a["fib"] if not z.get("touched")]
@@ -71,8 +77,12 @@ def main():
     ap.add_argument("--start", default="2026-11-13")
     ap.add_argument("--days", type=int, default=10)
     ap.add_argument("--step", type=int, default=10, help="minutes between passes")
+    ap.add_argument("--history", type=int, default=500)
+    ap.add_argument("--debug", action="store_true")
     ap.add_argument("symbols", nargs="*")
     a = ap.parse_args()
+    global HISTORY, DEBUG
+    HISTORY, DEBUG = (a.history or 100000), a.debug
     start = int(datetime.strptime(a.start, "%Y-%m-%d").replace(tzinfo=timezone.utc).timestamp())
     end = min(start + a.days * DAY, int(datetime.now(timezone.utc).timestamp()) - 120)
     totals = {"old": 0, "new": 0}

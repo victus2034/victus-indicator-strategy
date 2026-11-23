@@ -167,7 +167,7 @@ jobs:
             miss-check) git fetch --depth 1 origin scanner-runtime-state; mkdir -p /tmp/rt
                        git show FETCH_HEAD:fib_trendline_alert_records.jsonl > /tmp/rt/fib_trendline_alert_records.jsonl
                        python alert_miss_check.py /tmp/rt --hours 240 --dry-run ;;
-            first-reach) PYTHONPATH=research python research/first_reach_replay.py --start 2026-11-13 --days 11 --step 15 SUIUSD BTCUSD XRPUSD ETHUSD ;;
+            first-reach) PYTHONPATH=research python research/first_reach_replay.py --start 2026-11-21 --days 1 --step 15 --history 0 --debug SUIUSD BTCUSD ;;
             discord-trace) git fetch --shallow-since=2026-10-19 origin scanner-runtime-state
                        python research/discord_alert_trace.py ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
