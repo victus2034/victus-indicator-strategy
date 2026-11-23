@@ -107,7 +107,7 @@ def row(name, trades, **rules):
 def main():
     wick, alert = load()
     breaks = [t for t in wick if t["level"] == "BR"]
-    cap = config.COINDCX_LIVE_MAX_OPEN
+    cap = config.COINDCX_LIVE_MAX_OPEN or 99                     # 0 = no limit (2026-11-23)
     lines = ["# Live bot upgrade replay - breaks only, break stop, kill switch", "",
              f"Source: `{SOURCE.relative_to(ROOT)}` (bot's exits, 16 crypto, 1 Jan 2025 - 13 Nov 2026, fees + stop slip, "
              "fills within 15 min of CPI / PPI / FOMC left out). Account rules as `coindcx_live.py`: one trade per coin, "

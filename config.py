@@ -664,7 +664,9 @@ COINDCX_LIVE_ENABLED = env_flag("VICTUS_COINDCX_LIVE", False)
 COINDCX_LIVE_MARGIN_CCY = os.getenv("VICTUS_COINDCX_MARGIN_CCY", "USDT") or "USDT"
 COINDCX_LIVE_RISK = env_float("VICTUS_COINDCX_LIVE_RISK", 1.0)            # USDT of price move to the stop (about Rs 90)
 COINDCX_LIVE_MAX_LEVERAGE = env_float("VICTUS_COINDCX_LIVE_MAX_LEVERAGE", 20.0)
-COINDCX_LIVE_MAX_OPEN = int(env_float("VICTUS_COINDCX_LIVE_MAX_OPEN", 5))
+# No cap on open trades (lakky, 2026-11-23: "Stop this 5 trade limit"; it skipped ARB +1.49R and TAO on 15 Nov).
+# N > 0 caps it again. One trade per coin and the kill switch still apply.
+COINDCX_LIVE_MAX_OPEN = int(env_float("VICTUS_COINDCX_LIVE_MAX_OPEN", 0))
 # Kill switch (lakky, 2026-11-22, decision card "Breaks only + own SL + kill fix"): no new trade once the
 # realized P&L is COINDCX_LIVE_MAX_DRAWDOWN_R x COINDCX_LIVE_RISK below its best point (0 at the start).
 # Breaks only, Jan 2025 - Nov 2026 under the account rules: max drawdown 13.2R, worst run 7 losses, never

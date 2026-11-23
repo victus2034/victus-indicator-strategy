@@ -46,7 +46,7 @@ What it does every tick:
      - leverage = min(COINDCX_LIVE_MAX_LEVERAGE, the instrument's max, 70 / stop %) so the stop
        is always closer than the liquidation price
      - skipped while that coin already has a bot order or position, at
-       COINDCX_LIVE_MAX_OPEN active trades, or once the kill switch trips (see above)
+       COINDCX_LIVE_MAX_OPEN active trades (0 = no limit, the default since 2026-11-23), or once the kill switch trips (see above)
   2. a filled order gets an exchange stop-market at its stop (create_tpsl)
   3. an open trade's best move is read from Bitunix 1m candles; the journal's walk
      (coindcx_demo.apply_best) moves the stop, and the exchange stop is replaced
@@ -450,7 +450,7 @@ def blocked(state, order, now, btc_move=btc_move_today):
                 f"(limit {config.COINDCX_LIVE_MAX_DRAWDOWN_R:g}R = {config.COINDCX_LIVE_MAX_DRAWDOWN_R * config.COINDCX_LIVE_RISK:g})")
     if config.COINDCX_LIVE_MAX_LOSS > 0 and state["realized"] <= -config.COINDCX_LIVE_MAX_LOSS:
         return f"kill switch: loss so far {state['realized']:.2f}"
-    if len(active) >= config.COINDCX_LIVE_MAX_OPEN:
+    if config.COINDCX_LIVE_MAX_OPEN > 0 and len(active) >= config.COINDCX_LIVE_MAX_OPEN:
         return f"{len(active)} trades already active"
     if any(o["symbol"] == order["symbol"] for o in active):
         return "this coin already has a bot trade"
