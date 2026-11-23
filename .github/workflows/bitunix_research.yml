@@ -161,8 +161,9 @@ jobs:
             bot-misses) git fetch --depth 1 origin scanner-runtime-state
                        mkdir -p /tmp/rt && git archive FETCH_HEAD | tar -x -C /tmp/rt
                        PYTHONPATH=research python research/live_bot_miss_audit.py /tmp/rt ;;
-            tl-touch)  python research/tl_touch_trace.py XRPUSD --day 2026-11-14 --tfs 1d 1w
-                       python research/tl_touch_trace.py 1000PEPEUSD --day 2026-11-14 --tfs 1d ;;
+            tl-touch)  python research/tl_touch_trace.py SUIUSD --day 2026-11-14 --tfs 1d
+                       python research/tl_touch_trace.py SUIUSD --day 2026-11-21 --tfs 1d
+                       python research/tl_touch_trace.py BTCUSD --day 2026-11-21 --tfs 1d ;;
             discord-trace) git fetch --shallow-since=2026-10-19 origin scanner-runtime-state
                        python research/discord_alert_trace.py ;;
           esac 2>&1 | tee research/out/bitunix/run_${{ matrix.part }}.log
