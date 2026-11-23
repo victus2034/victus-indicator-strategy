@@ -279,22 +279,23 @@ def step_round(value, step, up=False):
 def quantity(entry, sl, ins, risk=None):
     """(qty, risk taken) or (0, reason)."""
     risk = config.COINDCX_LIVE_RISK if risk is None else risk
+    cap = config.COINDCX_LIVE_MIN_ORDER_MAX_X
     per_unit = abs(entry - sl)
     step = float(ins.get("quantity_increment") or 0)
     least = float(ins.get("min_quantity") or 0)
     qty = step_round(risk / per_unit, step)
     if least and qty < least:
-        if least * per_unit <= 2 * risk:
+        if least * per_unit <= cap * risk:
             qty = least
         else:
-            return 0, f"min order {least:g} risks {least * per_unit:.2f} > 2x plan"
+            return 0, f"min order {least:g} risks {least * per_unit:.2f} > {cap:g}x plan"
     if qty <= 0:
         return 0, "quantity rounds to 0"
     notional = float(ins.get("min_notional") or 0)
     if notional and qty * entry < notional:
         qty = step_round(notional / entry, step, up=True)
-        if qty * per_unit > 2 * risk:
-            return 0, f"min notional {notional:g} risks {qty * per_unit:.2f} > 2x plan"
+        if qty * per_unit > cap * risk:
+            return 0, f"min notional {notional:g} risks {qty * per_unit:.2f} > {cap:g}x plan"
     return qty, qty * per_unit
 
 

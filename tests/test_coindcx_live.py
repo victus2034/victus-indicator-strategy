@@ -113,8 +113,8 @@ class Rules(unittest.TestCase):
         self.assertEqual(live.quantity(100, 97, ins, risk=1.0)[0], 0.33)          # 1 / 3 rounded down
         self.assertEqual(live.quantity(100, 99.9, {"quantity_increment": 1, "min_quantity": 1}, risk=0.5)[0], 5)
         qty, why = live.quantity(100, 90, {"quantity_increment": 1, "min_quantity": 1}, risk=1.0)
-        self.assertEqual(qty, 0)                                                   # min order risks 10 > 2x
-        self.assertIn("2x", why)
+        self.assertEqual(qty, 0)                                                   # min order risks 10 > 5x
+        self.assertIn("5x", why)
 
     def test_only_fresh_1d_crypto_trendlines(self):
         s = state()

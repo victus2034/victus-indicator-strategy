@@ -221,3 +221,18 @@ class NoOpenCap(unittest.TestCase):
         with patch.object(config, "COINDCX_LIVE_MAX_OPEN", 5):
             self.assertEqual(live.blocked(self.active(5), {"symbol": "BTCUSD"}, NOW, btc_move=lambda now: 0.5),
                              "5 trades already active")
+
+
+class SmallestOrder(unittest.TestCase):
+    """lakky, 2026-11-23: no missed trades - BTC's 0.001 min order (3.63 risk on 15 Nov) trades up to 5x the plan."""
+
+    def test_btc_min_order_now_trades(self):
+        ins = {"quantity_increment": 0.001, "min_quantity": 0.001}
+        qty, risk = live.quantity(95000.0, 98630.0, ins, risk=1.0)      # 15 Nov short: 3.63 a BTC-milli
+        self.assertEqual(qty, 0.001)
+        self.assertAlmostEqual(risk, 3.63)
+
+    def test_still_skipped_past_the_cap(self):
+        qty, why = live.quantity(100, 94, {"quantity_increment": 1, "min_quantity": 1}, risk=1.0)
+        self.assertEqual(qty, 0)                                         # 6 > 5x
+        self.assertIn("5x", why)
