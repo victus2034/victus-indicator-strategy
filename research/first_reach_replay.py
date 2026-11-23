@@ -41,8 +41,10 @@ def run(symbol, start, end, step):
         state, prev = {}, start - step
         i0 = 0
         for now in range(start, end, step):
+            if now % DAY < step:
+                print(f"  {symbol} {rule} {ist(now)}", flush=True)
             day = now - now % DAY
-            closed = [c for c in daily if c[0] + DAY <= now]
+            closed = [c for c in daily if c[0] + DAY <= now][-500:]    # speed: lines converge; both rules see the same
             while i0 < len(fine) and fine[i0][0] < day:
                 i0 += 1
             today = [c for c in fine[i0:] if c[0] + 60 <= now]
