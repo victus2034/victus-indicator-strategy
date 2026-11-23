@@ -446,6 +446,36 @@ def band_price(long_side, price, swept):
     return min(price, swept[0]) if long_side else max(price, swept[1])
 
 
+def swept_reached(long_side, level, swept):
+    """True when price traded to `level` since the previous pass (the swept range)."""
+    if not swept:
+        return False
+    return swept[0] <= level if long_side else swept[1] >= level
+
+
+REACHED_KEY = "__reached__"
+
+
+def first_reach(state, item, now):
+    """True for a level first reached since the last pass, in a candle that had not reached it before.
+
+    lakky, 2026-11-23 ("make sure no ... alerts miss"): SUI and BTC 1D lines of 21 Nov were wicked
+    through within one pass, and the "this candle already reached it" rule (entry_already_touched /
+    line_already_touched) then kept them silent. Such a level alerts once ("touched since the last
+    check"); a level the candle reached on an earlier pass stays silent, as before. The candle each
+    level was seen reached in is kept under REACHED_KEY.
+    """
+    candle = item.get("candle")
+    if candle is None:
+        return False
+    marks = state.setdefault(REACHED_KEY, {})
+    for key in [k for k, v in marks.items() if now - v > 40 * 86400]:
+        del marks[key]
+    first = bool(item.get("fresh")) and marks.get(item["key"]) != candle
+    marks[item["key"]] = candle
+    return first
+
+
 def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=None, swept=None):
     """Everything alertable on one chart right now. Pure - no state, no sends.
 
@@ -464,6 +494,7 @@ def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=No
         return result
 
     times = [c[0] for c in closed]
+    candle_open = candle_close_ts(market, times[-1], tf)     # the candle forming now
     opens = [c[1] for c in closed]
     highs = [c[2] for c in closed]
     lows = [c[3] for c in closed]
@@ -484,11 +515,13 @@ def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=No
         for level, zone in legs:
             distance = fib_distance(d, zone, price)
             reached = fib_distance(d, zone, band_price(d == 1, price, swept))
-            if (distance is not None and in_band(reached, tf)
-                    and not entry_already_touched(d, zone, price, forming)):
+            touched = entry_already_touched(d, zone, price, forming)
+            fresh = swept_reached(d == 1, zone["entry"], swept)
+            if distance is not None and in_band(reached, tf) and (not touched or fresh):
                 result["fib"].append({
                     **zone, "key": fib_level_key(symbol, tf, d, times[live["Ot"]], top, level, zone["zone"]),
                     "level": level, "d": d, "base": base, "top": top, "distance": distance,
+                    "touched": touched, "fresh": fresh, "candle": candle_open,
                     "plan": trades.fib_plan(d, zone),
                 })
 
@@ -505,10 +538,15 @@ def analyse(market, symbol, tf, candles, now, price=None, forming=None, trend=No
             if level <= 0:
                 continue
             distance = line_distance(line.kind, level, price)
-            if in_band(line_distance(line.kind, level, band_price(line.kind == SUPPORT, price, swept)), tf):
+            deepest = line_distance(line.kind, level, band_price(line.kind == SUPPORT, price, swept))
+            fresh = swept_reached(line.kind == SUPPORT, level, swept)
+            # A wick through the line since the last pass is a touch too (lakky, 2026-11-23: SUI / BTC
+            # 21 Nov spiked through their 1D lines between two passes and never alerted).
+            if in_band(deepest, tf) or (fresh and deepest < 0):
                 result["touch"].append({
                     **info, "key": f"tl|{ident}", "level": level, "distance": distance,
-                    "touched": line_already_touched(line.kind, level, forming),
+                    "fresh": fresh, "candle": candle_open,
+                    "touched": line_already_touched(line.kind, level, forming) or deepest < 0,
                     "plan": trades.trendline_plan(line.kind == SUPPORT, level, tf,
                                                   now_bar, opens, highs, lows, closes),
                 })
@@ -577,10 +615,15 @@ def format_fib_alert(market, symbol, tf, price, z, name=None):
     name = name or display(market, symbol)
     return (
         f"{_header(market, tf, f'{name} · FIB {level} · {side}', side)}\n"
-        f"Price {price_text(price)} · {z['distance']:.2f}% away\n"
+        f"Price {price_text(price)} · {away_text(z)}\n"
         f"Entry {price_text(z['entry'])} · SL {price_text(z['sl'])} ({trades.risk_pct(z['plan']):.2f}%)"
         f" · TP {price_text(trades.target_price(z['plan']))} (1R)"
     )
+
+
+def away_text(item):
+    """'0.42% away', or 'touched since the last check' for a level a wick reached between passes."""
+    return "touched since the last check" if item.get("touched") else f"{item['distance']:.2f}% away"
 
 
 def format_touch_alert(market, symbol, tf, price, t, name=None):
@@ -589,7 +632,7 @@ def format_touch_alert(market, symbol, tf, price, t, name=None):
     name = name or display(market, symbol)
     return (
         f"{_header(market, tf, f'{name} · {line} TL · {side}', side)}\n"
-        f"Price {price_text(price)} · {t['distance']:.2f}% away\n"
+        f"Price {price_text(price)} · {away_text(t)}\n"
         f"Entry {price_text(t['level'])} · SL {price_text(t['plan']['sl'])} ({trades.risk_pct(t['plan']):.2f}%)"
         f" · TP {price_text(trades.target_price(t['plan']))} (1R)"
     )
@@ -781,6 +824,8 @@ def plan_alerts(state, market, symbol, tf, analysis, now, last_scan=None):
     title_name = name_with_move(market, symbol, analysis.get("risk"))
     base = {"market": market, "symbol": symbol, "tf": tf, "price": price}
     for z in analysis["fib"]:
+        if z.get("touched") and not first_reach(state, z, now):
+            continue
         if z["key"] not in state:
             record = {**base, "kind": "fib", "plan": z["plan"], "zone": z["zone"],
                       "base": z["base"], "top": z["top"], "levels": fib_levels(z["d"], z["base"], z["top"]),
@@ -810,7 +855,7 @@ def plan_alerts(state, market, symbol, tf, analysis, now, last_scan=None):
             entry["in_band"] = False     # left the band: the next touch may alert
     for t in analysis["touch"]:
         entry = state.get(t["key"])
-        if t.get("touched"):
+        if t.get("touched") and not (first_reach(state, t, now) and not (isinstance(entry, dict) and entry.get("in_band"))):
             if isinstance(entry, dict):
                 entry["seen"] = now      # this candle already reached the line: no alert, band unchanged
             continue

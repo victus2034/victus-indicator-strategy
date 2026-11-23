@@ -1013,8 +1013,11 @@ class WickIntoBandTests(unittest.TestCase):
         got = self.fib(live, swept=(entry * 1.004, live))     # wicked to 0.4% since the last pass
         self.assertEqual(len(got), 1)
         self.assertAlmostEqual(got[0]["distance"], 1.2)        # the message shows the price now
-        # a wick through the entry is a trade already on: the touched rule still blocks it
-        self.assertEqual(self.fib(live, swept=(entry * 0.999, live), forming=(entry * 0.999, live)), [])
+        # a wick through the entry since the last pass: listed as touched, plan_alerts alerts it once
+        # (lakky, 2026-11-23); one the candle reached before this pass is not listed at all
+        got = self.fib(live, swept=(entry * 0.999, live), forming=(entry * 0.999, live))
+        self.assertEqual([(z["touched"], z["fresh"]) for z in got], [(True, True)])
+        self.assertEqual(self.fib(live, swept=(entry * 1.004, live), forming=(entry * 0.999, live)), [])
 
     def test_a_trendline_wick_into_the_band_alerts(self):
         line = mock.Mock(kind=SUPPORT, alive=True, x1=5, x2=30, y1=95.0, y2=98.0)
@@ -1029,7 +1032,9 @@ class WickIntoBandTests(unittest.TestCase):
 
         self.assertEqual(touches(101.5), [])
         self.assertEqual(len(touches(101.5, swept=(100.5, 101.6))), 1)
-        self.assertEqual(touches(101.5, swept=(99.5, 101.6)), [])     # through the line: not a touch
+        got = touches(101.5, swept=(99.5, 101.6))                        # wicked through since the last pass
+        self.assertEqual([(t["touched"], t["fresh"]) for t in got], [(True, True)])   # lakky, 2026-11-23
+        self.assertEqual(touches(99.0), [])                               # through it now, no sweep: not a touch
 
     def test_band_price_takes_the_approach_side_extreme(self):
         self.assertEqual(fts.band_price(True, 101.0, (100.2, 101.4)), 100.2)
@@ -1046,6 +1051,44 @@ class WickIntoBandTests(unittest.TestCase):
         self.assertEqual(fts.swept_since(rows, now - 300), (2, 4))
         self.assertIsNone(fts.swept_since(rows, now))
         self.assertEqual(fts.swept_since(rows, now - 200, 300), (2, 4))
+
+
+class FirstReachTests(unittest.TestCase):
+    """lakky, 2026-11-23 ("make sure no ... alerts miss"): SUI / BTC 1D lines of 21 Nov were wicked through
+    between two passes and never alerted. A level first reached since the last pass alerts once."""
+
+    def touch(self, **kw):
+        return {"key": "tl|X|1d|0|1|2", "kind": SUPPORT, "level": 100.0, "distance": 1.5, "from": (90, "2026-08-06 00:00"),
+                "to": (95, "2026-09-16 00:00"), "plan": {"side": "long", "entry": 100.0, "sl": 99.0},
+                "touched": True, "fresh": True, "candle": 86400 * 10, **kw}
+
+    def plan(self, state, touch=(), fib=(), now=86400 * 10 + 600):
+        return fts.plan_alerts(state, ftd.CRYPTO, "X", "1d",
+                               {"fib": list(fib), "touch": list(touch), "break": [], "price": 101.5}, now)
+
+    def test_a_line_wicked_through_since_the_last_pass_alerts_once(self):
+        state = {}
+        (_, key, text, _), = self.plan(state, [self.touch()])
+        self.assertIn("touched since the last check", text)
+        fts.mark_sent(state, key, 0)
+        self.assertEqual(self.plan(state, [self.touch()], now=86400 * 10 + 900), [])        # same candle
+
+    def test_a_candle_that_reached_the_line_earlier_stays_silent(self):
+        state = {}
+        self.assertEqual(self.plan(state, [self.touch(fresh=False)]), [])                   # reached on an earlier pass
+        self.assertEqual(self.plan(state, [self.touch()], now=86400 * 10 + 900), [])        # wicked again: still silent
+        self.assertEqual(len(self.plan(state, [self.touch(candle=86400 * 11)], now=86400 * 11 + 60)), 1)   # next candle
+
+    def test_a_fib_entry_wicked_through_since_the_last_pass_alerts_once(self):
+        fib = {"key": "fib|X|1d|1|0|110|2", "zone": 2, "low": 96.8, "high": 99.0, "entry": 99.0, "sl": 96.25,
+               "level": "L3", "d": 1, "base": 90.0, "top": 110.0, "distance": 1.2, "touched": True, "fresh": True,
+               "candle": 86400 * 10, "plan": {"side": "long", "entry": 99.0, "sl": 96.25}}
+        state = {}
+        (_, key, text, _), = self.plan(state, fib=[fib])
+        self.assertIn("touched since the last check", text)
+        self.assertEqual(self.plan(state, fib=[{**fib, "key": "fib|X|1d|1|0|110|2|L4"}, fib], now=86400 * 10 + 900)[0][1],
+                         "fib|X|1d|1|0|110|2|L4")
+        self.assertEqual(self.plan(state, fib=[{**fib, "fresh": False}], now=86400 * 10 + 900), [])
 
 
 def test_fib_card_money_line_uses_each_trades_stop():
