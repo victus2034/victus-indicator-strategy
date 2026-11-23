@@ -616,5 +616,13 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   (3) **Daily miss check** `alert_miss_check.py` / `alert_miss_check.yml` (08:45 IST): replays 48h of 1D crypto fib / TL
   alerts (touches + breaks) and posts to `DISCORD_STATUS_WEBHOOK_URL` only when one has no live record (dry run over
   13-23 Nov: the same 9 touches, no fib or break missed).
+- **Live bot Discord: entries and exits only (2026-11-23, lakky: "In discord only punch alerts which is traded as buy
+  or sell entry and exit thats it no other alert").** `coindcx_live.note(..., kind)` tags each line "entry" (a fill:
+  `🟢/🔴 **SUI TL BR SELL** ENTRY price · SL · qty · risk · lev · venue`), "exit" (`✅/🛑 ... EXIT why ≈ price · R (USDT) ·
+  total`), "warn" (order FAILED / UNCONFIRMED, manage FAILED, account read failed, order gone) or "info" (order sent,
+  skips, waits, stop moves, rules, started). `config.COINDCX_LIVE_DISCORD` (`VICTUS_COINDCX_LIVE_DISCORD`): "trades"
+  (default) posts entries and exits, "warnings" adds the warn lines and the hourly bot STOPPED message, "all" = every
+  line as before. `post` drops the rest; every line still prints to the run log. Old events with no kind count as info.
+  `tests/test_live_discord_trades_only.py`; the older live tests pin "all".
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

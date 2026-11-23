@@ -341,9 +341,21 @@ def save_state(state, path=None):
     os.replace(tmp, path)
 
 
-def note(state, text, now):
+def note(state, text, now, kind="info"):
+    """A line for Discord and the run log. kind: "entry" / "exit" (a trade opened / closed), "warn"
+    (a failure that needs a look) or "info"; config.COINDCX_LIVE_DISCORD picks which kinds are posted."""
     print("coindcx live: " + text)
-    state["events"].append({"ts": int(now), "text": text})
+    state["events"].append({"ts": int(now), "text": text, "kind": kind})
+
+
+DISCORD_KINDS = {"trades": {"entry", "exit"}, "warnings": {"entry", "exit", "warn"}}
+
+
+def posted(event):
+    """Whether an event goes to Discord (lakky, 2026-11-23: entries and exits only). Any mode not
+    listed above posts everything; an event with no kind (before 23 Nov) counts as info."""
+    kinds = DISCORD_KINDS.get(config.COINDCX_LIVE_DISCORD)
+    return kinds is None or event.get("kind", "info") in kinds
 
 
 def daily_candles(symbol, now):
@@ -502,7 +514,7 @@ def submit(state, ex, order, head, entry, market, now, daily=daily_candles, pric
             # timed out: two positions, the Delta one with no stop and no bot watching it.
             venue = "Delta" if pair.startswith(delta_live.PREFIX) else "CoinDCX"
             order.update(status="error", reason=f"no answer to the order ({str(error)[:120]}): check {venue}")
-            note(state, f"⚠️ {head} order UNCONFIRMED: {order['reason']}", now)
+            note(state, f"⚠️ {head} order UNCONFIRMED: {order['reason']}", now, "warn")
             return order
         if pair.startswith(delta_live.PREFIX):
             # Delta refused (e.g. too little margin in the Delta wallet): the trade goes to CoinDCX instead
@@ -510,21 +522,42 @@ def submit(state, ex, order, head, entry, market, now, daily=daily_candles, pric
             note(state, f"↪️ {head} Delta refused ({str(error)[:120]}), sent to CoinDCX", now)
             return submit(state, ex, order, head, entry, market, now, daily=daily, price_now=price_now)
         order.update(status="error", reason=str(error)[:200])
-        note(state, f"⚠️ {head} order FAILED: {order['reason']}", now)
+        note(state, f"⚠️ {head} order FAILED: {order['reason']}", now, "warn")
         return order
     if not isinstance(got, dict) or not got.get("id"):
         # an order with no id would read as "gone" next tick while it may sit on the book
         order.update(status="error", reason=f"no order id returned ({str(got)[:120]}): check CoinDCX")
-        note(state, f"⚠️ {head} order UNCONFIRMED: {order['reason']}", now)
+        note(state, f"⚠️ {head} order UNCONFIRMED: {order['reason']}", now, "warn")
         return order
     stop_pct = abs(entry - sl) / entry * 100
     order.update(status="pending", exchange_id=got.get("id"), entry=price, tick=tick_size, sl=sl, qty=qty, risk=round(risk, 4),
                  leverage=int(lev), stop_pct=stop_pct, best_r=0.0, stop_r=None, tgt_r=config.COINDCX_DEMO_TARGET_R,
                  checked_until=int(now) // 60 * 60)
     p = scanner.price_text
-    note(state, f"🟢 **{head}** · {'market' if broken else 'limit ' + p(price)} · qty {qty:g} · SL {p(sl)} ({stop_pct:.2f}%) · "
+    note(state, f"📤 {head} order sent · {'market' if broken else 'limit ' + p(price)} · qty {qty:g} · SL {p(sl)} ({stop_pct:.2f}%) · "
                 f"risk {risk:.2f} USDT · {int(lev)}x", now)
     return order
+
+
+def venue(o):
+    return "Delta" if str(o.get("pair", "")).startswith(delta_live.PREFIX) else "CoinDCX"
+
+
+def entry_line(o, head):
+    """The Discord line for a trade that opened (lakky, 2026-11-23: entries and exits only)."""
+    p = scanner.price_text
+    return (f"{'🟢' if o['side'] == 'long' else '🔴'} **{head}** ENTRY {p(o['fill_price'])} · SL {p(o['sl'])} "
+            f"({float(o.get('stop_pct') or 0):.2f}%) · qty {float(o.get('qty') or 0):g} · "
+            f"risk {float(o.get('risk') or 0):.2f} USDT · {int(o.get('leverage') or 0)}x · {venue(o)}")
+
+
+def exit_line(o, head, realized):
+    """The Discord line for a trade that closed: why, about where, R and USDT, running total."""
+    p = scanner.price_text
+    price = o.get("exit_price") or o.get("stop_sent")
+    at = f" ≈ {p(price)}" if price else ""
+    return (f"{'✅' if o['r'] > 0 else '🛑'} **{head}** EXIT {o['exit_why']}{at} · {o['r']:+.2f}R "
+            f"({o['pnl']:+.2f} USDT) · total {realized:+.2f}")
 
 
 def line_points(record):
@@ -645,12 +678,12 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                     ensure_tick(ex, o)
                     ex.set_stop(o["position_id"], stop_level(o))
                     o["stop_sent"] = stop_level(o)
-                    note(state, f"📥 **{head}** filled at {p(o['fill_price'])} · stop {p(o['sl'])} set", now)
+                    note(state, entry_line(o, head), now, "entry")
                 elif o.get("exchange_id") not in open_ids and not str(o.get("exchange_id", "")).startswith("dry-"):
                     if not seen_gone(o, now):
                         continue
                     o.update(status="closed", exit_ts=int(now), r=None, exit_why="order gone (filled and closed, or cancelled)")
-                    note(state, f"❔ **{head}** order no longer open and no position: check CoinDCX", now)
+                    note(state, f"❔ **{head}** order no longer open and no position: check CoinDCX", now, "warn")
                 elif now >= o["sent_ts"] + config.COINDCX_DEMO_FILL_DAYS * DAY:
                     ex.cancel(o["exchange_id"])
                     o.update(status="cancelled", exit_ts=int(now))
@@ -673,8 +706,7 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                 o.update(status="closed", exit_ts=int(now), r=round(r, 3), pnl=round(money, 4),
                          exit_why=o.get("stop_why") or "SL")
                 o.pop("last_error", None)
-                note(state, f"{'✅' if r > 0 else '🛑'} **{head}** closed at {o['exit_why']} ≈ {r:+.2f}R "
-                            f"({money:+.2f} USDT) · total {state['realized']:+.2f}", now)
+                note(state, exit_line(o, head, state["realized"]), now, "exit")
                 continue
             if o.get("exit_sent") and now - o["exit_sent"] < EXIT_RETRY_SECONDS:
                 continue                    # closed at market a moment ago: the position list lags
@@ -724,7 +756,7 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
         except Exception as error:  # noqa: BLE001
             text = str(error)[:160]
             if o.get("last_error") != text:                # once per error, not every tick
-                note(state, f"⚠️ **{head}** manage FAILED: {text}", now)
+                note(state, f"⚠️ **{head}** manage FAILED: {text}", now, "warn")
             else:
                 print(f"coindcx live: {head} manage still failing: {text}")
             o["last_error"] = text
@@ -742,13 +774,13 @@ def tick(state, ex, records, now, **hooks):
     except Exception as error:  # noqa: BLE001 - no view of the account: place nothing new either
         text = str(error)[:160]
         if state.get("account_error") != text:     # once per error, not every tick (weekly audit 2026-11-22)
-            note(state, f"⚠️ account read FAILED, nothing done: {text}", now)
+            note(state, f"⚠️ account read FAILED, nothing done: {text}", now, "warn")
         else:
             print(f"coindcx live: account read still failing: {text}")
         state["account_error"] = text
         return state
     if state.pop("account_error", None):
-        note(state, "✅ account read working again", now)
+        note(state, "✅ account read working again", now, "warn")
     manage(state, ex, now, positions, open_ids, **manage_hooks)
     confirm_waiting(state, ex, now, **confirm_hooks)
     fresh = {}
@@ -763,7 +795,7 @@ def tick(state, ex, records, now, **hooks):
             o = state["orders"].setdefault(record["id"], {"id": record["id"], "symbol": record.get("symbol"),
                                                           "side": record["plan"].get("side"), "placed_ts": int(now)})
             o.update(status="error", reason=f"alert unreadable: {str(error)[:160]}")
-            note(state, f"⚠️ {demo.coin(str(record.get('symbol')))} TL alert skipped: {o['reason']}", now)
+            note(state, f"⚠️ {demo.coin(str(record.get('symbol')))} TL alert skipped: {o['reason']}", now, "warn")
     return state
 
 
@@ -776,6 +808,7 @@ def post(state):
     takes it. Weekly audit 2026-11-22: the whole list was one text that demo.send split, and a
     failure on the second part kept every event, so the first part was posted again each tick."""
     events = state["events"]
+    events[:] = [e for e in events if posted(e)]       # the rest is in the run log only
     if len(events) > MAX_EVENTS:
         dropped = len(events) - MAX_EVENTS
         events[:] = [{"ts": events[-MAX_EVENTS]["ts"], "text": f"({dropped} older lines not posted)"}] + events[-MAX_EVENTS:]
@@ -846,7 +879,7 @@ def run_tick(now=None, dry_run=False, remote=False):
         state = load_state()
     except StateUnreadable as error:
         print(f"coindcx live: STOPPED - state file unreadable, nothing done or saved: {error}")
-        if not dry_run and now % 3600 < 180:          # about once an hour, not every tick
+        if not dry_run and now % 3600 < 180 and posted({"kind": "warn"}):   # about once an hour, not every tick
             demo.send(f"{POST_HEADER}\n⛔ bot STOPPED: state file unreadable ({str(error)[:150]}). "
                       "Open trades keep their exchange stops but are not trailed. Fix coindcx_live_state.json.")
         return None

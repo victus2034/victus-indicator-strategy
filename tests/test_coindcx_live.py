@@ -21,9 +21,11 @@ def setUpModule():
     """These tests drive the trade mechanics with touch alerts and the wick-or-body break stop, the
     rules until 22 Nov (the weekly audit tests import this too). The 22 Nov defaults - breaks only,
     the alert's SL, the kill switch from the best point - are tested unpinned in
-    tests/test_live_breaks_only.py."""
+    tests/test_live_breaks_only.py; Discord posts every line here (entries and exits only since 23 Nov,
+    tests/test_live_discord_trades_only.py)."""
     for name, value in (("COINDCX_LIVE_TOUCHES", True), ("COINDCX_LIVE_BREAK_SL", "wick_body"),
-                        ("COINDCX_LIVE_MAX_LOSS", 10.0), ("COINDCX_LIVE_MAX_DRAWDOWN_R", 0.0)):
+                        ("COINDCX_LIVE_MAX_LOSS", 10.0), ("COINDCX_LIVE_MAX_DRAWDOWN_R", 0.0),
+                        ("COINDCX_LIVE_DISCORD", "all")):
         _PINNED.append(patch.object(config, name, value))
         _PINNED[-1].start()
 
