@@ -53,7 +53,7 @@
   "AADHARHFC.NS|1M|long|419.813|413.847": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "AADHARHFC.NS|1d|long|416.22|412.35": {
     "reached_entry": true,
@@ -188,6 +188,10 @@
     "stopped_out": true
   },
   "AFFLE.NS|1M|short|1671.87|1791.03": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "AFFLE.NS|1d|short|1638.16|1655": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -742,7 +746,7 @@
   "CAPLIPOINT.NS|1M|long|2170.67|1965.83": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "CAPLIPOINT.NS|1w|long|2006.8|1856.3": {
     "reached_entry": true,
@@ -752,7 +756,7 @@
   "CAPLIPOINT.NS|1w|long|2170.67|1965.83": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "CAPLIPOINT.NS|1w|long|2319.64|2222": {
     "reached_entry": true,
@@ -1334,8 +1338,8 @@
     "stopped_out": false
   },
   "FACT.NS|1w|long|750.98|734.95": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "FINCABLES.NS|1M|long|1059.54|949.925": {
@@ -2931,6 +2935,10 @@
     "stage": 3,
     "stopped_out": true
   },
+  "PERSISTENT.NS|1w|short|6427.02|6551": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "PETRONET.NS|1M|short|302.333|307": {
     "reached_entry": true,
     "stage": 3,
@@ -2957,6 +2965,10 @@
   "PFOCUS.NS|1d|long|257.028|234.993": {
     "reached_entry": true,
     "stage": 2,
+    "stopped_out": false
+  },
+  "PFOCUS.NS|1w|long|240.1|231.72": {
+    "reached_entry": false,
     "stopped_out": false
   },
   "PFOCUS.NS|1w|long|244.051|230.32": {
@@ -3386,8 +3398,8 @@
     "stage": 3,
     "stopped_out": false
   },
-  "_last_check|crypto": 1795408918.90686,
-  "_last_check|nse": 1795408918.90686,
+  "_last_check|crypto": 1795409206.100563,
+  "_last_check|nse": 1795409206.100563,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
