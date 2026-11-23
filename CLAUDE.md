@@ -600,5 +600,9 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   slots longer - 277 trades / +58R / worst run 11 vs 393 / +69R / 7. A 24h loss cap was tested and left out (noise).
   The rules line is posted once to Discord when it changes (`state["rules"]`). Tests:
   `tests/test_live_breaks_only.py`; the older live tests pin the pre-22 Nov rules (`setUpModule`).
+- **No cap on open live trades (2026-11-23, lakky: "Stop this 5 trade limit").** `COINDCX_LIVE_MAX_OPEN` 0 (default) =
+  no limit; N > 0 (`VICTUS_COINDCX_LIVE_MAX_OPEN`) caps it again. One trade per coin and the 15R kill switch stay. The miss
+  audit (`research/live_bot_miss_audit.py`, part `bot-misses`) found the cap skipped ARB (+1.49R) and TAO on 15 Nov;
+  `live_upgrade_replay.py`, breaks only Jan 2025 - Nov 2026: 5 open +69.4R / 393 trades vs no limit +67.0R / 426, same 13.2R max DD.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

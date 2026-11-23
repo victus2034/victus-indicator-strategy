@@ -199,3 +199,25 @@ class RulesNote(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class NoOpenCap(unittest.TestCase):
+    """lakky, 2026-11-23: "Stop this 5 trade limit" - no cap on open trades; one per coin stays."""
+
+    def active(self, n):
+        s = state()
+        for i in range(n):
+            s["orders"][f"o{i}"] = {"id": f"o{i}", "symbol": f"C{i}USD", "status": "open"}
+        return s
+
+    def test_default_has_no_cap(self):
+        self.assertEqual(config.COINDCX_LIVE_MAX_OPEN, 0)
+        s = self.active(8)
+        self.assertIsNone(live.blocked(s, {"symbol": "BTCUSD"}, NOW, btc_move=lambda now: 0.5))
+        self.assertEqual(live.blocked(s, {"symbol": "C3USD"}, NOW, btc_move=lambda now: 0.5),
+                         "this coin already has a bot trade")
+
+    def test_cap_back_with_the_variable(self):
+        with patch.object(config, "COINDCX_LIVE_MAX_OPEN", 5):
+            self.assertEqual(live.blocked(self.active(5), {"symbol": "BTCUSD"}, NOW, btc_move=lambda now: 0.5),
+                             "5 trades already active")
