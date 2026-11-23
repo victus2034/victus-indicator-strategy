@@ -7,6 +7,7 @@ from unittest.mock import patch
 
 import coindcx_live as live
 from tests.test_coindcx_live import HOOKS, NOW, FakeExchange, record, state
+from tests.test_coindcx_live import setUpModule, tearDownModule  # noqa: F401 - pre-22 Nov rules pinned
 
 
 class TickExchange(FakeExchange):

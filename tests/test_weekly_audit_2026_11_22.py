@@ -10,6 +10,7 @@ import requests
 import coindcx_live as live
 import config
 from tests.test_coindcx_live import DAY, HOOKS, NOW, FakeExchange, StopMoves, record, state
+from tests.test_coindcx_live import setUpModule, tearDownModule  # noqa: F401 - pre-22 Nov rules pinned
 
 
 def xrp_daily(sym, now):

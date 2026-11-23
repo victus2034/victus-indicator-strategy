@@ -656,8 +656,8 @@ COINDCX_DEMO_MARGIN_LIMIT = env_flag("VICTUS_COINDCX_DEMO_MARGIN_LIMIT", True)
 COINDCX_DEMO_ROUND_TRIP_COST_PCT = env_float("VICTUS_COINDCX_DEMO_COST_PCT", 0.0826)
 
 # CoinDCX LIVE account (lakky, 2026-11-13: "Real money, full setup as on screen" for a week).
-# coindcx_live.py places REAL CoinDCX futures orders for 1D crypto trendline alerts (touch +
-# break), his journal setup: wick-or-body SL 0.75%, exit 1.5R + trail, SL shift +1R -> +0.75R.
+# coindcx_live.py places REAL CoinDCX / Delta futures orders for 1D crypto trendline alerts: TL BROKEN
+# only since 2026-11-22 (touches were traded 13-22 Nov), exit 1.5R + trail, SL shift +1R -> +0.75R.
 # OFF unless the repository variable VICTUS_COINDCX_LIVE=1 AND the COINDCX_API_KEY /
 # COINDCX_API_SECRET secrets are set (flag without a key = dry run). Exits reuse COINDCX_DEMO_*.
 COINDCX_LIVE_ENABLED = env_flag("VICTUS_COINDCX_LIVE", False)
@@ -665,9 +665,23 @@ COINDCX_LIVE_MARGIN_CCY = os.getenv("VICTUS_COINDCX_MARGIN_CCY", "USDT") or "USD
 COINDCX_LIVE_RISK = env_float("VICTUS_COINDCX_LIVE_RISK", 1.0)            # USDT of price move to the stop (about Rs 90)
 COINDCX_LIVE_MAX_LEVERAGE = env_float("VICTUS_COINDCX_LIVE_MAX_LEVERAGE", 20.0)
 COINDCX_LIVE_MAX_OPEN = int(env_float("VICTUS_COINDCX_LIVE_MAX_OPEN", 5))
-COINDCX_LIVE_MAX_LOSS = env_float("VICTUS_COINDCX_LIVE_MAX_LOSS", 10.0)   # kill switch, USDT
+# Kill switch (lakky, 2026-11-22, decision card "Breaks only + own SL + kill fix"): no new trade once the
+# realized P&L is COINDCX_LIVE_MAX_DRAWDOWN_R x COINDCX_LIVE_RISK below its best point (0 at the start).
+# Breaks only, Jan 2025 - Nov 2026 under the account rules: max drawdown 13.2R, worst run 7 losses, never
+# tripped; 10R from the best point would have stopped it on 31 Mar 2026 (research/live_upgrade_replay.py). The old rule, a loss counted from the start
+# (COINDCX_LIVE_MAX_LOSS, USDT; 10 until 22 Nov), is off unless that variable is set (> 0).
+COINDCX_LIVE_MAX_DRAWDOWN_R = env_float("VICTUS_COINDCX_LIVE_MAX_DRAWDOWN_R", 15.0)
+COINDCX_LIVE_MAX_LOSS = env_float("VICTUS_COINDCX_LIVE_MAX_LOSS", 0.0)
+# Trades: TL BROKEN only (lakky, 2026-11-22). Jan 2025 - Nov 2026 under the bot's rules: breaks +0.17R a
+# trade, touches -0.22R (0.00R with the 1h confirm). VICTUS_COINDCX_LIVE_TOUCHES=1 trades touches again.
+COINDCX_LIVE_TOUCHES = env_flag("VICTUS_COINDCX_LIVE_TOUCHES", False)
+# Break stop: "wick_body" (the touch rule, wick or body 0.75% past entry) or "alert" = the alert's own SL,
+# past the candle before the break candle (lakky, 2026-10-31: "sl is above the previous candle"). "alert"
+# is better a trade (+0.21R vs +0.18R) but its stops are wider (10.7% vs 6.5%), trades last longer and
+# block the 5 slots: 277 trades / +58R / worst run 11 vs 393 / +69R / worst run 7 with "wick_body".
+COINDCX_LIVE_BREAK_SL = os.getenv("VICTUS_COINDCX_LIVE_BREAK_SL", "wick_body") or "wick_body"
 # 0 = no end date (lakky, 2026-11-21: "Keep trading, no end date" after the 13-20 Nov test week);
-# N = trade alerts for N days from the first tick. The kill switch (COINDCX_LIVE_MAX_LOSS) still holds.
+# N = trade alerts for N days from the first tick. The kill switch still holds.
 COINDCX_LIVE_DAYS = env_float("VICTUS_COINDCX_LIVE_DAYS", 0)
 COINDCX_LIVE_SL_GAP_PCT = env_float("VICTUS_COINDCX_LIVE_SL_GAP_PCT", 0.75)
 # An alert older than this when first seen is not traded (a late tick never chases).
