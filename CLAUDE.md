@@ -604,5 +604,17 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   no limit; N > 0 (`VICTUS_COINDCX_LIVE_MAX_OPEN`) caps it again. One trade per coin and the 15R kill switch stay. The miss
   audit (`research/live_bot_miss_audit.py`, part `bot-misses`) found the cap skipped ARB (+1.49R) and TAO on 15 Nov;
   `live_upgrade_replay.py`, breaks only Jan 2025 - Nov 2026: 5 open +69.4R / 393 trades vs no limit +67.0R / 426, same 13.2R max DD.
+- **No missed alerts or trades (2026-11-23, lakky: "Make sure no trade now misses as well as alerts").** Miss audit
+  13-23 Nov (`research/live_bot_miss_audit.py`, part `bot-misses`): misses were the 5-trade cap (lifted, above), BTC's
+  smallest order, TAO / INJ before they joined the list, the night hold before 15 Nov, and SUI / BTC 1D lines on 21 Nov
+  wicked through between two passes. (1) **A level first reached since the last pass alerts once** - fib levels and TL
+  touches, every timeframe, crypto and NSE: `fib_trendline_scanner.first_reach` (the candle each level was seen reached in
+  is kept under `__reached__` in the state, 40 days); the text says `touched since the last check`. A level the candle
+  reached on an earlier pass stays silent as before. Replay on Bitunix 1m (`research/first_reach_replay.py`, part
+  `first-reach`, full history): SUI 21 Nov 09:15 and BTC 09:45 IST alert once each. (2) **Smallest order up to 5x the
+  plan risk** (`COINDCX_LIVE_MIN_ORDER_MAX_X`, lakky's card "Yes, allow up to 5x risk"): BTC's 0.001 (3.6 USDT) trades.
+  (3) **Daily miss check** `alert_miss_check.py` / `alert_miss_check.yml` (08:45 IST): replays 48h of 1D crypto fib / TL
+  alerts (touches + breaks) and posts to `DISCORD_STATUS_WEBHOOK_URL` only when one has no live record (dry run over
+  13-23 Nov: the same 9 touches, no fib or break missed).
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

@@ -664,6 +664,9 @@ COINDCX_LIVE_ENABLED = env_flag("VICTUS_COINDCX_LIVE", False)
 COINDCX_LIVE_MARGIN_CCY = os.getenv("VICTUS_COINDCX_MARGIN_CCY", "USDT") or "USDT"
 COINDCX_LIVE_RISK = env_float("VICTUS_COINDCX_LIVE_RISK", 1.0)            # USDT of price move to the stop (about Rs 90)
 COINDCX_LIVE_MAX_LEVERAGE = env_float("VICTUS_COINDCX_LIVE_MAX_LEVERAGE", 20.0)
+# A coin whose smallest order risks more than the plan still trades up to this many times COINDCX_LIVE_RISK
+# (lakky, 2026-11-23: "make sure no trade now misses"; BTC's 0.001 min risked 3.63 on 15 Nov and was skipped at 2x).
+COINDCX_LIVE_MIN_ORDER_MAX_X = env_float("VICTUS_COINDCX_LIVE_MIN_ORDER_MAX_X", 5.0)
 # No cap on open trades (lakky, 2026-11-23: "Stop this 5 trade limit"; it skipped ARB +1.49R and TAO on 15 Nov).
 # N > 0 caps it again. One trade per coin and the kill switch still apply.
 COINDCX_LIVE_MAX_OPEN = int(env_float("VICTUS_COINDCX_LIVE_MAX_OPEN", 0))

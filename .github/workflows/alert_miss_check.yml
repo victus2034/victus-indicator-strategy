@@ -1,0 +1,35 @@
+name: Alert miss check
+
+# Once a day (lakky, 2026-11-23: "Make sure no trade now misses as well as alerts"): replays the last
+# 48h of 1D crypto fib / trendline alerts (touches and TL BROKEN, the live bot's trades) and posts to the
+# status channel only when the scanner missed one. Read only: no state is changed. alert_miss_check.py.
+on:
+  schedule:
+    - cron: "15 3 * * *"      # 08:45 IST, after the 05:30 IST daily close's breaks went out
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Get the alert records
+        run: |
+          git fetch --depth 1 origin scanner-runtime-state
+          mkdir -p /tmp/rt
+          git show FETCH_HEAD:fib_trendline_alert_records.jsonl > /tmp/rt/fib_trendline_alert_records.jsonl
+      - name: Check
+        env:
+          DISCORD_STATUS_WEBHOOK_URL: ${{ secrets.DISCORD_STATUS_WEBHOOK_URL }}
+        run: python alert_miss_check.py /tmp/rt --hours 48
