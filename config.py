@@ -685,6 +685,11 @@ COINDCX_LIVE_TOUCHES = env_flag("VICTUS_COINDCX_LIVE_TOUCHES", False)
 # is better a trade (+0.21R vs +0.18R) but its stops are wider (10.7% vs 6.5%), trades last longer and
 # block the 5 slots: 277 trades / +58R / worst run 11 vs 393 / +69R / worst run 7 with "wick_body".
 COINDCX_LIVE_BREAK_SL = os.getenv("VICTUS_COINDCX_LIVE_BREAK_SL", "wick_body") or "wick_body"
+# What the live bot posts to Discord (lakky, 2026-11-23: "only ... buy or sell entry and exit thats it no
+# other alert"): "trades" = entries and exits only; "warnings" = those plus failures that need a look
+# (order FAILED / UNCONFIRMED, account read failed, bot STOPPED); "all" = every line, as before 23 Nov.
+# Everything still goes to the run log.
+COINDCX_LIVE_DISCORD = (os.getenv("VICTUS_COINDCX_LIVE_DISCORD", "trades") or "trades").strip().lower()
 # 0 = no end date (lakky, 2026-11-21: "Keep trading, no end date" after the 13-20 Nov test week);
 # N = trade alerts for N days from the first tick. The kill switch still holds.
 COINDCX_LIVE_DAYS = env_float("VICTUS_COINDCX_LIVE_DAYS", 0)
