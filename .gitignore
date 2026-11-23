@@ -41,3 +41,6 @@ crypto_shadow_alerts*.jsonl
 # fib_trendline_backtest.py: data cache and per-trade CSV (the .md summary is kept)
 .fib_tl_bt_cache/
 reports/fib_trendline_backtest_trades.csv
+
+# The journal Signals audit snapshot (part signals-parity): ~9 MB of candles, kept on the branch it ran on, not in main.
+research/out/signals_parity/
