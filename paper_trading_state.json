@@ -63708,6 +63708,33 @@
       "target_half": 9.282718253968254,
       "timeframe": "4h",
       "trade_id": "LINKUSD|4h|short|9.32937|9.42266"
+    },
+    {
+      "alert_time": "2026-11-23T21:04:22.915052+05:30",
+      "cost_r": 0.09703860374531736,
+      "date": "2026-11-23",
+      "entry": 392.09,
+      "entry_time": "2026-11-23T21:05:00+05:30",
+      "exit_price": 392.8,
+      "exit_time": "2026-11-24T03:00:00+05:30",
+      "final_result": "Neither",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "xstock",
+      "net_realized_r": -0.30977268614232983,
+      "outcome": "Neither",
+      "rating": 6,
+      "realized_r": -0.21273408239701247,
+      "risk": 3.337500000000034,
+      "side": "short",
+      "stop": 395.4275,
+      "stream": "live",
+      "symbol": "TSLAXUSD",
+      "target_1": 388.75249999999994,
+      "target_2": 385.4149999999999,
+      "target_half": 390.42125,
+      "timeframe": "4h",
+      "trade_id": "TSLAXUSD|4h|short|392.09|395.428"
     }
   ],
   "handled": {
@@ -66358,24 +66385,6 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
-    },
-    "TSLAXUSD|4h|short|392.09|395.428": {
-      "alert_time": "2026-11-23T21:04:22.915052+05:30",
-      "entry": 392.09,
-      "entry_time": "2026-11-23T21:05:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "xstock",
-      "rating": 6,
-      "risk": 3.337500000000034,
-      "side": "short",
-      "stop": 395.4275,
-      "stream": "live",
-      "symbol": "TSLAXUSD",
-      "target_1": 388.75249999999994,
-      "target_2": 385.4149999999999,
-      "target_half": 390.42125,
-      "timeframe": "4h"
     }
   }
 }
