@@ -624,5 +624,13 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   (default) posts entries and exits, "warnings" adds the warn lines and the hourly bot STOPPED message, "all" = every
   line as before. `post` drops the rest; every line still prints to the run log. Old events with no kind count as info.
   `tests/test_live_discord_trades_only.py`; the older live tests pin "all".
+- **Live bot trades 1D crypto fibs too (2026-11-24, lakky: "no demo go with real account", journal v210 Signals setup).**
+  `COINDCX_LIVE_FIB` (`VICTUS_COINDCX_LIVE_FIB=0` = off): fib alerts at `COINDCX_LIVE_FIB_LEVELS` (L2, L4) only while BTC is
+  flat (`btc_move_at`: last closed Bitunix 15m close at the alert within 1.5% of the 00:00 UTC open, the journal's "BTC flat"),
+  SL = last daily body 1%+ past the alert's entry (`body_stop`), limit 0.05% early (rounded toward the early side),
+  2R + Trail TP (+1R step, 1R behind, never under 2R), SL shift +1R -> +0.25R (per-order `rules`, `apply_best`), market
+  exit 20 days after the fill ("Time exit"). TL breaks keep the demo exits. Replay (`research/journal_v210_fib_backtest.py`,
+  part `journal-v210`, news fills out): Jan 2025 - Nov 2026 306 trades +0.11R / +0.80%, max DD 13.9R; Sep 1 - now 43 trades
+  +0.10R; the demo exits with the same filter did better (+0.14R). `tests/test_live_fib_v210.py`.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.

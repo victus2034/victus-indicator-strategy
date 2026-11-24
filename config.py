@@ -701,6 +701,24 @@ COINDCX_LIVE_BTC_FILTER = os.getenv("VICTUS_COINDCX_LIVE_BTC_FILTER", "")
 # Touch alerts: "confirm_1h" (lakky, 2026-11-16) waits for a closed 1h candle that trades the line and
 # closes back, then enters at market; "limit" is the old limit order at the line's price.
 COINDCX_LIVE_TOUCH_ENTRY = os.getenv("VICTUS_COINDCX_LIVE_TOUCH_ENTRY", "confirm_1h") or "confirm_1h"
+# 1D crypto FIB alerts as real trades (lakky, 2026-11-24: journal v210 Signals setup, "no demo go with real
+# account"). Only L2 / L4, only while BTC is flat (within 1.5% of its 00:00 UTC open at the alert, the journal's
+# "BTC flat"), SL = the last daily body at least 1% past the alert's entry, limit 0.05% early (above the entry
+# for a buy), exit 2R + Trail TP (+1R step, stop 1R behind, never under 2R), SL shift +1R -> +0.25R, closed at
+# market 20 days after the fill. Replay Jan 2025 - Nov 2026 (research/journal_v210_fib_backtest.py, part
+# journal-v210, news fills out): 306 trades, +0.11R / +0.80% a trade, max DD 13.9R. VICTUS_COINDCX_LIVE_FIB=0 = off.
+COINDCX_LIVE_FIB = env_flag("VICTUS_COINDCX_LIVE_FIB", True)
+COINDCX_LIVE_FIB_LEVELS = tuple(
+    level.strip() for level in os.getenv("VICTUS_COINDCX_LIVE_FIB_LEVELS", "L2,L4").split(",") if level.strip())
+COINDCX_LIVE_FIB_BTC_FLAT_PCT = 1.5
+COINDCX_LIVE_FIB_SL_GAP_PCT = 1.0
+COINDCX_LIVE_FIB_EARLY_PCT = 0.05
+COINDCX_LIVE_FIB_TARGET_R = 2.0
+COINDCX_LIVE_FIB_TRAIL_STEP_R = 1.0
+COINDCX_LIVE_FIB_TRAIL_GAP_R = 1.0
+COINDCX_LIVE_FIB_SHIFT_AT_R = 1.0
+COINDCX_LIVE_FIB_SHIFT_TO_R = 0.25
+COINDCX_LIVE_FIB_HOLD_DAYS = 20
 # Delta-listed coins trade on Delta India (lakky, 2026-11-15: lower fees) once DELTA_API_KEY /
 # DELTA_API_SECRET reach the bot; VICTUS_LIVE_DELTA=0 keeps everything on CoinDCX.
 LIVE_DELTA = env_flag("VICTUS_LIVE_DELTA", True)
