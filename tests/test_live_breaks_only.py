@@ -22,7 +22,9 @@ class Defaults(unittest.TestCase):
         self.assertEqual(config.COINDCX_LIVE_BREAK_SL, "wick_body")
         self.assertEqual(config.COINDCX_LIVE_MAX_DRAWDOWN_R, 15.0)
         self.assertEqual(config.COINDCX_LIVE_MAX_LOSS, 0.0)            # the loss-from-start rule is off
-        self.assertEqual(live.rules_text(), "1D TL breaks only, wick/body SL on breaks, kill switch 15R from the best point")
+        self.assertTrue(live.rules_text().startswith("1D TL breaks only, wick/body SL on breaks, kill switch 15R from the best point"))
+        with patch.object(config, "COINDCX_LIVE_FIB", False):          # fib trades (24 Nov) add their own part
+            self.assertEqual(live.rules_text(), "1D TL breaks only, wick/body SL on breaks, kill switch 15R from the best point")
 
     def test_default_break_stop_is_wick_body(self):
         s, ex = state(), FakeExchange()

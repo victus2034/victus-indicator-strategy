@@ -247,6 +247,28 @@ def wick_body_stop(daily, t0, entry, side, gap_pct=None):
     return max(found) if s > 0 else min(found)
 
 
+def body_stop(daily, t0, entry, side, gap_pct=None):
+    """The journal's "Body" SL (v210, fib trades): walking back over the 300 daily candles closed
+    before t0, the first body (open / close) at least gap_pct past the entry, or None."""
+    gap = config.COINDCX_LIVE_FIB_SL_GAP_PCT if gap_pct is None else gap_pct
+    s = 1 if side == "long" else -1
+    edge = entry * (1 - s * gap / 100)
+    for c in reversed([c for c in daily if c[0] + DAY <= t0 and min(c[1:5]) > 0][-300:]):
+        b = min(c[1], c[4]) if s > 0 else max(c[1], c[4])
+        if (b <= edge) if s > 0 else (b >= edge):
+            return b
+    return None
+
+
+def wanted_kind(record):
+    """A 1D TL break (or touch, when on), or a 1D fib at one of COINDCX_LIVE_FIB_LEVELS (when on)."""
+    if record.get("kind") == "trendline":
+        return bool(record.get("broken")) or config.COINDCX_LIVE_TOUCHES
+    if record.get("kind") == "fib":
+        return config.COINDCX_LIVE_FIB and record.get("level") in config.COINDCX_LIVE_FIB_LEVELS
+    return False
+
+
 def eligible(record, state, now):
     if not isinstance(record, dict) or not isinstance(record.get("plan"), dict):
         return False
@@ -254,8 +276,7 @@ def eligible(record, state, now):
         sent = float(record["sent_ts"])
         entry = float(record["plan"]["entry"])          # a record with no usable entry used to crash the tick
         return (math.isfinite(sent) and math.isfinite(entry) and entry > 0
-                and record.get("kind") == "trendline" and record.get("market") == "crypto"
-                and (bool(record.get("broken")) or config.COINDCX_LIVE_TOUCHES)
+                and record.get("market") == "crypto" and wanted_kind(record)
                 and str(record.get("tf", "")).lower() == "1d"
                 and record.get("symbol") in config.CRYPTO_WATCHLIST
                 and record["plan"].get("side") in ("long", "short")
@@ -375,29 +396,81 @@ def btc_move_today(now):
     return (rows[-1][4] - rows[0][1]) / rows[0][1] * 100 if rows and rows[0][0] == day else None
 
 
+def btc_move_at(ts):
+    """The journal's BTC move at an alert: the close of BTC's last 15m candle closed by ts against
+    its 00:00 UTC open (Bitunix 15m), in %, or None. In the first 15 minutes of a day it is 0."""
+    ts = int(ts)
+    day = ts - ts % DAY
+    rows = [r for r in demo.fetch_candles("BTCUSD", day, ts, "15m") if r[0] >= day]
+    if not rows or rows[0][0] != day or not rows[0][1]:
+        return None
+    done = [r for r in rows if r[0] + 900 <= ts]
+    return (done[-1][4] - rows[0][1]) / rows[0][1] * 100 if done else 0.0
+
+
+def head_of(o):
+    """The trade's name in every line: "SUI TL BR SELL", "ETH FIB L2 BUY"."""
+    what = f"FIB {o.get('level') or ''}".strip() if o.get("kind") == "fib" else ("TL BR" if o.get("broken") else "TL")
+    return f"{demo.coin(o['symbol'])} {what} {'BUY' if o['side'] == 'long' else 'SELL'}"
+
+
+def fib_rules():
+    return {"target": config.COINDCX_LIVE_FIB_TARGET_R, "step": config.COINDCX_LIVE_FIB_TRAIL_STEP_R,
+            "gap": config.COINDCX_LIVE_FIB_TRAIL_GAP_R, "shift_at": config.COINDCX_LIVE_FIB_SHIFT_AT_R,
+            "shift_to": config.COINDCX_LIVE_FIB_SHIFT_TO_R, "hold_days": config.COINDCX_LIVE_FIB_HOLD_DAYS}
+
+
+def apply_best(order, ts):
+    """demo.apply_best with the order's own exit rules (fib trades, v210), else the demo's (TL)."""
+    rules = order.get("rules")
+    if not rules:
+        demo.apply_best({"unposted": []}, order, ts)
+        return
+    sink = {"unposted": []}
+    first, best = rules["target"], order["best_r"]
+    while best >= order["tgt_r"] - 1e-9:
+        demo.raise_stop(sink, order, max(first, order["tgt_r"] - rules["gap"]), "Trail TP", ts)
+        order["tgt_r"] = round(order["tgt_r"] + rules["step"], 6)
+    if rules["shift_at"] and rules["shift_at"] < first and best >= rules["shift_at"] - 1e-9:
+        demo.raise_stop(sink, order, rules["shift_to"], "SL shift", ts)
+
+
 def minute_candles(symbol, start, end):
     return demo.fetch_candles(symbol, start, end, "1m")
 
 
 # ---------------------------------------------------------------- the tick
 
-def place(state, ex, record, now, daily=daily_candles, price_now=last_price, btc_move=btc_move_today):
+def place(state, ex, record, now, daily=daily_candles, price_now=last_price, btc_move=btc_move_today, btc_at=btc_move_at):
     plan, symbol = record["plan"], record["symbol"]
     side = plan["side"]
     broken = bool(record.get("broken"))
     pair = venue_pair(symbol)
-    head = f"{demo.coin(symbol)} {'TL BR' if broken else 'TL'} {'BUY' if side == 'long' else 'SELL'}"
     order = {"id": record["id"], "symbol": symbol, "pair": pair, "side": side, "broken": broken,
              "sent_ts": int(float(record["sent_ts"])), "placed_ts": int(now), "status": "skipped"}
+    fib = record.get("kind") == "fib"
+    if fib:
+        order.update(kind="fib", level=record.get("level"), plan_entry=float(plan["entry"]), rules=fib_rules())
+    head = head_of(order)
     if broken and config.COINDCX_LIVE_BREAK_SL == "alert":
         order["alert_sl"] = alert_sl(plan)
     state["orders"][record["id"]] = order
     order["reason"] = blocked(state, order, now, btc_move)
     if order["reason"] is None:
         del order["reason"]
+    if order.get("reason") is None and fib:
+        move = btc_at(order["sent_ts"])
+        if move is None or abs(move) >= config.COINDCX_LIVE_FIB_BTC_FLAT_PCT:
+            order["reason"] = "BTC not flat at the alert" + ("" if move is None else f" ({move:+.2f}% since 05:30 IST)")
+        else:
+            order["btc_move"] = round(move, 3)
     if order.get("reason"):
         note(state, f"⏭️ {head} skipped: {order['reason']}", now)
         return order
+    if fib:
+        s = 1 if side == "long" else -1
+        early = order["plan_entry"] * (1 + s * config.COINDCX_LIVE_FIB_EARLY_PCT / 100)
+        return submit(state, ex, order, head, early, False, now, daily, price_now)
     line = None if broken or config.COINDCX_LIVE_TOUCH_ENTRY != "confirm_1h" else line_points(record)
     if line:
         # counts against no limit while it waits; the limits are checked when it confirms
@@ -426,7 +499,9 @@ def rules_text():
         kill.append(f"{config.COINDCX_LIVE_MAX_DRAWDOWN_R:g}R from the best point")
     if config.COINDCX_LIVE_MAX_LOSS > 0:
         kill.append(f"{config.COINDCX_LIVE_MAX_LOSS:g} lost from the start")
-    return f"{kinds}, {sl} on breaks, kill switch " + (" or ".join(kill) if kill else "off")
+    fib = (f"; 1D fib {'+'.join(config.COINDCX_LIVE_FIB_LEVELS)} when BTC flat, body {config.COINDCX_LIVE_FIB_SL_GAP_PCT:g}% SL, "
+           f"{config.COINDCX_LIVE_FIB_TARGET_R:g}R + trail, {config.COINDCX_LIVE_FIB_HOLD_DAYS}d hold") if config.COINDCX_LIVE_FIB else ""
+    return f"{kinds}, {sl} on breaks, kill switch " + (" or ".join(kill) if kill else "off") + fib
 
 
 def drawdown(state):
@@ -485,6 +560,16 @@ def submit(state, ex, order, head, entry, market, now, daily=daily_candles, pric
             order.update(status="skipped", reason=why)
             note(state, f"⏭️ {head} skipped: {why}", now)
             return order
+        if order.get("kind") == "fib":
+            sl = body_stop(daily(symbol, now), order["sent_ts"], order["plan_entry"], side)
+            if sl is None:
+                order.update(status="skipped", reason=f"no body {config.COINDCX_LIVE_FIB_SL_GAP_PCT:g}% past entry")
+                note(state, f"⏭️ {head} skipped: {order['reason']}", now)
+                return order
+            if (1 if side == "long" else -1) * (price_now(symbol) - sl) <= 0:
+                order.update(status="skipped", reason="price already past the stop")
+                note(state, f"⏭️ {head} skipped: {order['reason']}", now)
+                return order
         if sl is None:
             sl = wick_body_stop(daily(symbol, now), int(now) if order.get("line") else order["sent_ts"], entry, side)
         if sl is None:
@@ -503,7 +588,8 @@ def submit(state, ex, order, head, entry, market, now, daily=daily_candles, pric
         # HYPE trades of 14-15 Nov (stops 14% and 8% away) were closed by liquidation, not the stop
         lev = max(1, min(lev, int(LIQUIDATION_ROOM / (abs(entry - sl) / entry * 100))))
         tick_size = float(ins.get("price_increment") or 0)
-        price = step_round(entry, tick_size) if tick_size else entry
+        # a fib's early limit rounds toward the early side (up for a buy), so the step never takes it back
+        price = step_round(entry, tick_size, up=order.get("kind") == "fib" and side == "long") if tick_size else entry
         sending = True
         got = ex.create_order(pair, "buy" if side == "long" else "sell",
                               "market_order" if broken else "limit_order", qty, int(lev), None if broken else price)
@@ -529,9 +615,10 @@ def submit(state, ex, order, head, entry, market, now, daily=daily_candles, pric
         order.update(status="error", reason=f"no order id returned ({str(got)[:120]}): check CoinDCX")
         note(state, f"⚠️ {head} order UNCONFIRMED: {order['reason']}", now, "warn")
         return order
-    stop_pct = abs(entry - sl) / entry * 100
+    stop_pct = abs(price - sl) / price * 100        # from the price sent (on the step), not the unrounded one
     order.update(status="pending", exchange_id=got.get("id"), entry=price, tick=tick_size, sl=sl, qty=qty, risk=round(risk, 4),
-                 leverage=int(lev), stop_pct=stop_pct, best_r=0.0, stop_r=None, tgt_r=config.COINDCX_DEMO_TARGET_R,
+                 leverage=int(lev), stop_pct=stop_pct, best_r=0.0, stop_r=None,
+                 tgt_r=order["rules"]["target"] if order.get("rules") else config.COINDCX_DEMO_TARGET_R,
                  checked_until=int(now) // 60 * 60)
     p = scanner.price_text
     note(state, f"📤 {head} order sent · {'market' if broken else 'limit ' + p(price)} · qty {qty:g} · SL {p(sl)} ({stop_pct:.2f}%) · "
@@ -664,7 +751,7 @@ EXIT_RETRY_SECONDS = 300     # a market exit is sent again only if the position 
 def manage(state, ex, now, positions, open_ids, candles=minute_candles):
     p = scanner.price_text
     for o in [o for o in state["orders"].values() if o["status"] in ACTIVE]:
-        head = f"{demo.coin(o['symbol'])} {'TL BR' if o.get('broken') else 'TL'} {'BUY' if o['side'] == 'long' else 'SELL'}"
+        head = head_of(o)
         pos = positions.get(o["pair"])
         held = pos is not None and float(pos.get("active_pos") or 0) != 0
         if held or (o["status"] == "pending" and o.get("exchange_id") in open_ids):
@@ -717,7 +804,14 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
                 o["checked_until"] = int(c[0]) + 60
                 o["best_r"] = max(o["best_r"], demo.move_r(o, c[2] if o["side"] == "long" else c[3]))
                 last = c[4]
-            demo.apply_best({"unposted": []}, o, now)
+            apply_best(o, now)
+            hold = (o.get("rules") or {}).get("hold_days")
+            if hold and o.get("fill_ts") and now >= o["fill_ts"] + hold * DAY and last is not None:
+                # Hold 20 candles (journal v210): closed at market after 20 days, whatever the stop
+                ex.exit(o.get("position_id") or pos.get("id"))
+                o.update(exit_sent=int(now), exit_price=last, stop_why="Time exit")
+                note(state, f"⌛ **{head}** {hold} days since the fill: closed at market ≈ {p(last)}", now)
+                continue
             ensure_tick(ex, o)
             want = stop_level(o)
             on_exchange = pos.get("stop_loss_trigger")
@@ -766,7 +860,7 @@ def manage(state, ex, now, positions, open_ids, candles=minute_candles):
 
 def tick(state, ex, records, now, **hooks):
     manage_hooks = {k: v for k, v in hooks.items() if k == "candles"}
-    place_hooks = {k: v for k, v in hooks.items() if k in ("daily", "price_now", "btc_move")}
+    place_hooks = {k: v for k, v in hooks.items() if k in ("daily", "price_now", "btc_move", "btc_at")}
     confirm_hooks = {k: v for k, v in hooks.items() if k in ("hourly", "daily", "price_now", "btc_move")}
     try:
         positions = ex.positions()
@@ -795,11 +889,11 @@ def tick(state, ex, records, now, **hooks):
             o = state["orders"].setdefault(record["id"], {"id": record["id"], "symbol": record.get("symbol"),
                                                           "side": record["plan"].get("side"), "placed_ts": int(now)})
             o.update(status="error", reason=f"alert unreadable: {str(error)[:160]}")
-            note(state, f"⚠️ {demo.coin(str(record.get('symbol')))} TL alert skipped: {o['reason']}", now, "warn")
+            note(state, f"⚠️ {demo.coin(str(record.get('symbol')))} {'FIB' if record.get('kind') == 'fib' else 'TL'} alert skipped: {o['reason']}", now, "warn")
     return state
 
 
-POST_HEADER = "**CoinDCX LIVE · 1D TL breaks · REAL orders**"
+POST_HEADER = "**CoinDCX LIVE · 1D TL breaks + fibs · REAL orders**"
 MAX_EVENTS = 200            # Discord down for days: keep the newest lines, not an ever-growing state
 
 
