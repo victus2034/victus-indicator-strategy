@@ -188,8 +188,11 @@ def venue_pair(symbol):
     return demo.coindcx_pair(symbol)
 
 
+DELTA_DOWN = False      # this tick: Delta refused the account read and holds no trade of ours
+
+
 def delta_on():
-    return config.LIVE_DELTA and bool(os.getenv("DELTA_API_KEY") and os.getenv("DELTA_API_SECRET"))
+    return not DELTA_DOWN and config.LIVE_DELTA and bool(os.getenv("DELTA_API_KEY") and os.getenv("DELTA_API_SECRET"))
 
 
 class DryRun:
@@ -957,6 +960,35 @@ def drop_dry_orders(state):
     return gone
 
 
+def on_delta(order):
+    pair, oid = str(order.get("pair", "")), str(order.get("id", ""))
+    return pair.startswith(delta_live.PREFIX) or ":" in oid
+
+
+def drop_dead_delta(state, ex, now):
+    """Delta down (2026-11-25: its keys took India IPs only and the runner's IP was removed) used to
+    fail every tick's account read, so CoinDCX traded nothing either. With no live trade on Delta the
+    tick runs on CoinDCX alone (Delta-listed coins go there); with one, the failure stays loud."""
+    global DELTA_DOWN
+    DELTA_DOWN = False
+    if not isinstance(ex, Router):
+        return ex
+    try:
+        ex.delta.positions()
+    except Exception as error:      # noqa: BLE001 - any Delta failure
+        if any(o.get("status") in ACTIVE and on_delta(o) for o in state["orders"].values()):
+            return ex
+        DELTA_DOWN = True
+        reason = str(error)[:160]
+        if not state.get("delta_down"):
+            note(state, f"Delta unreachable ({reason}): trading on CoinDCX only until it answers", now, "warn")
+        state["delta_down"] = reason
+        return ex.dcx
+    if state.pop("delta_down", None):
+        note(state, "Delta answers again: Delta-listed coins trade on Delta", now, "warn")
+    return ex
+
+
 def run_tick(now=None, dry_run=False, remote=False):
     now = int(time.time()) if now is None else int(now)
     if not config.COINDCX_LIVE_ENABLED:
@@ -985,7 +1017,7 @@ def run_tick(now=None, dry_run=False, remote=False):
         note(state, f"started: trades {rules_text()} "
                     + (f"until {datetime.fromtimestamp(until, scanner.IST):%d %b %H:%M IST}, " if until else "with no end date, ")
                     + f"risk {config.COINDCX_LIVE_RISK:g} USDT a trade"
-                    + ("" if isinstance(ex, CoinDCX) else " (DRY RUN: no API key)"), now)
+                    + ("" if not dry_run else " (DRY RUN: no API key)"), now)
     if state.get("rules") != rules_text():
         if state.get("rules") is not None or state["orders"]:
             note(state, f"⚙️ rules now: {rules_text()} (realized {state['realized']:+.2f}, "
@@ -995,6 +1027,7 @@ def run_tick(now=None, dry_run=False, remote=False):
         state["until_ts"] = None                         # the test week's end date lifted (lakky, 21 Nov)
         note(state, "trading on with no end date (kill switch still on, "
                     f"{state['realized']:+.2f} so far)", now)
+    ex = drop_dead_delta(state, ex, now)
     tick(state, ex, remote_records() if remote else demo.load_records(), now)
     if not dry_run:
         post(state)
