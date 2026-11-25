@@ -63735,6 +63735,33 @@
       "target_half": 390.42125,
       "timeframe": "4h",
       "trade_id": "TSLAXUSD|4h|short|392.09|395.428"
+    },
+    {
+      "alert_time": "2026-11-25T11:07:23.155186+05:30",
+      "cost_r": 0.096820416,
+      "date": "2026-11-25",
+      "entry": 36.63,
+      "entry_time": "2026-11-25T11:10:00+05:30",
+      "exit_price": 36.299341250000005,
+      "exit_time": "2026-11-25T11:25:00+05:30",
+      "final_result": "SL",
+      "geometry": "wick",
+      "half_r_hit": false,
+      "market": "other",
+      "net_realized_r": -1.1549284159999929,
+      "outcome": "SL",
+      "rating": 6,
+      "realized_r": -1.058107999999993,
+      "risk": 0.3125,
+      "side": "long",
+      "stop": 36.3175,
+      "stream": "live",
+      "symbol": "SLVONUSD",
+      "target_1": 36.9425,
+      "target_2": 37.255,
+      "target_half": 36.78625,
+      "timeframe": "4h",
+      "trade_id": "SLVONUSD|4h|long|36.63|36.3175"
     }
   ],
   "handled": {
@@ -66386,24 +66413,6 @@
       "target_2": 499.74499999999995,
       "target_half": 497.73875,
       "timeframe": "30m"
-    },
-    "SLVONUSD|4h|long|36.63|36.3175": {
-      "alert_time": "2026-11-25T11:07:23.155186+05:30",
-      "entry": 36.63,
-      "entry_time": "2026-11-25T11:10:00+05:30",
-      "geometry": "wick",
-      "half_r_hit": false,
-      "market": "other",
-      "rating": 6,
-      "risk": 0.3125,
-      "side": "long",
-      "stop": 36.3175,
-      "stream": "live",
-      "symbol": "SLVONUSD",
-      "target_1": 36.9425,
-      "target_2": 37.255,
-      "target_half": 36.78625,
-      "timeframe": "4h"
     }
   }
 }
