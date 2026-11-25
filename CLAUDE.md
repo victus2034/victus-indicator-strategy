@@ -632,5 +632,12 @@ significant figures (`price_text`); nothing parses the text - records carry the 
   exit 20 days after the fill ("Time exit"). TL breaks keep the demo exits. Replay (`research/journal_v210_fib_backtest.py`,
   part `journal-v210`, news fills out): Jan 2025 - Nov 2026 306 trades +0.11R / +0.80%, max DD 13.9R; Sep 1 - now 43 trades
   +0.10R; the demo exits with the same filter did better (+0.14R). `tests/test_live_fib_v210.py`.
+- **Delta down = CoinDCX only (2026-11-25, Delta: API keys take India IPs only).** Delta removed the runner's
+  IP (52.64.195.76, Australia) from both keys, so every tick's account read failed (HTTP 401
+  `ip_not_whitelisted_for_api_key`) and the bot traded nothing, CoinDCX included. Now `coindcx_live.drop_dead_delta`
+  probes Delta each tick: when it fails and no pending/open trade is on Delta, the tick runs on CoinDCX alone
+  (`DELTA_DOWN`, Delta-listed coins go to CoinDCX) with one warn line; with a Delta trade live it still fails loudly.
+  The fix is a runner on an India IP (AWS Mumbai ap-south-1 with a static IP, added to both Delta keys and CoinDCX).
+  `tests/test_live_delta_down.py`.
 - There is an astrology component (`astrology_engine.js`, `ASTROLOGY_SETUP.md`) with its
   own agent branches.
