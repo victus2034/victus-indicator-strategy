@@ -433,10 +433,6 @@
     "stage": 2,
     "stopped_out": false
   },
-  "AUBANK.NS|1w|long|937.883|929.291": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "AUBANK.NS|1w|short|1009.55|1018": {
     "reached_entry": true,
     "stage": 3,
@@ -847,7 +843,7 @@
   },
   "CHOLAHLDNG.NS|1d|long|1360.99|1323.01": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "CHOLAHLDNG.NS|1w|long|1226.63|1195": {
@@ -1648,12 +1644,13 @@
   },
   "IFCI.NS|1w|long|57.5913|55": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "IFCI.NS|1w|long|58.4889|57.87": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "IFCI.NS|1w|long|60.442|58.4813": {
     "reached_entry": true,
@@ -2721,11 +2718,6 @@
     "stage": 3,
     "stopped_out": true
   },
-  "PFOCUS.NS|1w|long|271.12|173.125": {
-    "reached_entry": true,
-    "stage": 2,
-    "stopped_out": false
-  },
   "PIRAMALFIN.NS|1d|long|1971.7|1914.38": {
     "reached_entry": false,
     "stage": 1,
@@ -3114,8 +3106,8 @@
     "stage": 3,
     "stopped_out": false
   },
-  "_last_check|crypto": 1795596719.55815,
-  "_last_check|nse": 1795596719.55815,
+  "_last_check|crypto": 1795597010.590573,
+  "_last_check|nse": 1795597010.590573,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -4214,7 +4206,7 @@
   "_level_ready|IDFCFIRSTB.NS|1w|long|72.2685|67.9331": 1793591209.526473,
   "_level_ready|IDFCFIRSTB.NS|1w|long|75.4215|67.9331": 1793938311.903426,
   "_level_ready|IFCI.NS|1M|long|60.442|58.4813": 1795405599.683569,
-  "_level_ready|IFCI.NS|1w|long|57.5913|55": 1793677604.261117,
+  "_level_ready|IFCI.NS|1w|long|57.5913|55": 1795597010.590573,
   "_level_ready|IFCI.NS|1w|long|58.4889|57.87": 1795580219.720524,
   "_level_ready|IFCI.NS|1w|long|60.442|58.4813": 1795405599.683569,
   "_level_ready|IFCI.NS|1w|long|68.285|58.4813": 1792038092.080259,
@@ -5620,7 +5612,7 @@
   "_ready|IDFCFIRSTB.NS|1d": 1795060016.749852,
   "_ready|IDFCFIRSTB.NS|1w": 1793938311.903426,
   "_ready|IFCI.NS|1M": 1795405599.683569,
-  "_ready|IFCI.NS|1w": 1795580219.720524,
+  "_ready|IFCI.NS|1w": 1795597010.590573,
   "_ready|IGL.NS|1d": 1795578414.769854,
   "_ready|IGL.NS|1w": 1795578414.769854,
   "_ready|IIFL.NS|1M": 1793677604.261117,
