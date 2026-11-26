@@ -96,7 +96,7 @@
   "ABSLAMC.NS|1d|short|942.88|983.221": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "ABSLAMC.NS|1d|short|974.52|1018.03": {
     "reached_entry": true,
@@ -230,10 +230,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "AJANTPHARM.NS|1d|long|3228.47|3199.9": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "AJANTPHARM.NS|1d|long|3275.33|3243.4": {
     "reached_entry": false,
     "stopped_out": false
@@ -281,7 +277,8 @@
     "stopped_out": false
   },
   "ANGELONE.NS|1w|short|355.171|379.15": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "ANTHEM.NS|1w|long|896.512|870.279": {
@@ -515,13 +512,9 @@
   "BEML.NS|1M|short|2037.95|2086.9": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "BEML.NS|1M|short|2210.54|2282.6": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
-  "BEML.NS|1d|long|1999.5|1940.38": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -713,8 +706,8 @@
     "stopped_out": true
   },
   "CDSL.NS|1w|short|1436.97|1465": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "CDSL.NS|1w|short|1508.23|1545.8": {
@@ -996,7 +989,7 @@
   },
   "DEEPAKFERT.NS|1w|short|1416.22|1436.3": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "DEEPAKFERT.NS|1w|short|1480.94|1502": {
@@ -1674,7 +1667,7 @@
   },
   "ITCHOTELS.NS|1M|short|179.569|196.663": {
     "reached_entry": true,
-    "stage": 2,
+    "stage": 3,
     "stopped_out": false
   },
   "ITCHOTELS.NS|1M|short|193.244|197.43": {
@@ -1711,6 +1704,7 @@
   },
   "ITI.NS|1w|short|262.55|272.1": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "ITI.NS|1w|short|274.06|277.45": {
@@ -2602,11 +2596,13 @@
     "stopped_out": false
   },
   "PRESTIGE.NS|1d|short|1706.24|1724.3": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "PRESTIGE.NS|1w|short|1708.74|1730.5": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 3,
     "stopped_out": false
   },
   "PWL.NS|1d|short|138.864|140": {
@@ -2834,8 +2830,8 @@
     "stage": 3,
     "stopped_out": false
   },
-  "_last_check|crypto": 1795665375.736619,
-  "_last_check|nse": 1795665375.736619,
+  "_last_check|crypto": 1795665734.55773,
+  "_last_check|nse": 1795665734.55773,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -3020,6 +3016,7 @@
   "_level_ready|ANGELONE.NS|1d|short|316.159|321.9": 1793693211.886873,
   "_level_ready|ANGELONE.NS|1d|short|363.185|379.54": 1794973902.387805,
   "_level_ready|ANGELONE.NS|1w|long|291.102|190.431": 1793677604.261117,
+  "_level_ready|ANGELONE.NS|1w|short|355.171|379.15": 1795665734.55773,
   "_level_ready|ANGELONE.NS|1w|short|355.63|360.45": 1794973600.547603,
   "_level_ready|ANTHEM.NS|1d|long|792.916|784.1": 1792727171.150355,
   "_level_ready|ANTHEM.NS|1d|long|814.467|802.2": 1792554386.505792,
@@ -4032,6 +4029,7 @@
   "_level_ready|ITI.NS|1w|long|238.567|236.5": 1791863195.148749,
   "_level_ready|ITI.NS|1w|long|238.683|236.15": 1792554386.505792,
   "_level_ready|ITI.NS|1w|short|249.891|256.3": 1795060016.749852,
+  "_level_ready|ITI.NS|1w|short|262.55|272.1": 1795665734.55773,
   "_level_ready|ITI.NS|1w|short|274.06|277.45": 1795409517.249739,
   "_level_ready|JINDALSAW.NS|1M|long|228.004|145.752": 1793347903.150723,
   "_level_ready|JINDALSAW.NS|1d|long|268.389|264.363": 1791517890.620179,
@@ -5075,7 +5073,7 @@
   "_ready|ANANTRAJ.NS|1d": 1795664811.011496,
   "_ready|ANANTRAJ.NS|1w": 1794541608.650168,
   "_ready|ANGELONE.NS|1d": 1794973902.387805,
-  "_ready|ANGELONE.NS|1w": 1794973600.547603,
+  "_ready|ANGELONE.NS|1w": 1795665734.55773,
   "_ready|ANTHEM.NS|1d": 1793936864.300001,
   "_ready|ANTHEM.NS|1w": 1793936864.300001,
   "_ready|APARINDS.NS|1M": 1795664811.011496,
@@ -5372,7 +5370,7 @@
   "_ready|ITCHOTELS.NS|1d": 1795491997.102085,
   "_ready|ITCHOTELS.NS|1w": 1795060306.095923,
   "_ready|ITI.NS|1d": 1795491997.102085,
-  "_ready|ITI.NS|1w": 1795409517.249739,
+  "_ready|ITI.NS|1w": 1795665734.55773,
   "_ready|JINDALSAW.NS|1M": 1793347903.150723,
   "_ready|JINDALSAW.NS|1d": 1794899791.030786,
   "_ready|JINDALSAW.NS|1w": 1795146417.323549,
