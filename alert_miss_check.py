@@ -114,6 +114,10 @@ def main(argv=None):
     missed = misses(records, found)
     total = sum(len(v) for v in found.values())
     print(f"replay {total} alerts, {len(records)} live records, {len(missed)} missed")
+    if a.dry_run:
+        for symbol, items in found.items():
+            for kind, side, ts in sorted(items, key=lambda f: f[2]):
+                print(f"  replay {ist(ts)} {symbol} {kind} {side}")
     for ts, symbol, kind, side in missed:
         print(f"  MISSED {ist(ts)} {symbol} {kind} {side}")
     if missed and not a.dry_run:
