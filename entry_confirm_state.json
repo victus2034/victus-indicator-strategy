@@ -448,10 +448,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "BDL.NS|1w|long|1003.33|975.4": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "BDL.NS|1w|short|1146.45|1180": {
     "reached_entry": false,
     "stopped_out": false
@@ -1081,6 +1077,11 @@
     "reached_entry": false,
     "stopped_out": false
   },
+  "ESCORTS.NS|1d|short|2533.96|2570.9": {
+    "reached_entry": true,
+    "stage": 2,
+    "stopped_out": false
+  },
   "ETHUSD|1w|long|1551.98|1514.49": {
     "reached_entry": true,
     "stage": 2,
@@ -1248,6 +1249,10 @@
     "stage": 2,
     "stopped_out": false
   },
+  "GMDCLTD.NS|1d|short|481.15|488.85": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
   "GODFRYPHLP.NS|1M|long|1893.53|1380.16": {
     "reached_entry": true,
     "stage": 2,
@@ -1267,6 +1272,10 @@
     "stopped_out": false
   },
   "GODREJIND.NS|1w|short|1194.15|1209.5": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "GODREJPROP.NS|1w|short|2105.03|2125": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -1530,8 +1539,8 @@
     "stopped_out": false
   },
   "IOB.NS|1w|short|31.1114|31.97": {
-    "reached_entry": false,
-    "stage": 1,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "IOB.NS|1w|short|31.1774|33.9956": {
@@ -1565,6 +1574,14 @@
     "stopped_out": false
   },
   "IRB.NS|1w|short|19.4015|19.64": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "IRCTC.NS|1d|short|465.97|472.212": {
+    "reached_entry": false,
+    "stopped_out": false
+  },
+  "IRCTC.NS|1d|short|467.027|474.6": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -1980,10 +1997,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "MEDANTA.NS|1w|long|1155.92|1139.75": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "MFSL.NS|1M|long|1181.13|1003.29": {
     "reached_entry": false,
     "stopped_out": false
@@ -2346,10 +2359,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "PETRONET.NS|1w|long|278.415|255.741": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "PETRONET.NS|1w|short|326.307|330.85": {
     "reached_entry": true,
     "stage": 3,
@@ -2709,8 +2718,8 @@
     "stage": 3,
     "stopped_out": false
   },
-  "_last_check|crypto": 1795752112.432177,
-  "_last_check|nse": 1795752112.432177,
+  "_last_check|crypto": 1795752413.586823,
+  "_last_check|nse": 1795752413.586823,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -3524,6 +3533,7 @@
   "_level_ready|ERIS.NS|1w|short|1366.05|1384": 1794896224.237521,
   "_level_ready|ERIS.NS|1w|short|1373.26|1399": 1794973600.547603,
   "_level_ready|ESCORTS.NS|1d|long|2536.09|2470.25": 1793605580.737891,
+  "_level_ready|ESCORTS.NS|1d|short|2533.96|2570.9": 1795752413.586823,
   "_level_ready|ESCORTS.NS|1d|short|2761.92|2792.76": 1791517599.357562,
   "_level_ready|ETHUSD|1d|long|1551.64|1521.69": 1795232800.720142,
   "_level_ready|ETHUSD|1d|long|2090.16|1911.05": 1794208583.591817,
@@ -5153,7 +5163,7 @@
   "_ready|ERIS.NS|1M": 1791788502.510202,
   "_ready|ERIS.NS|1d": 1793955718.67303,
   "_ready|ERIS.NS|1w": 1795665982.660831,
-  "_ready|ESCORTS.NS|1d": 1793605580.737891,
+  "_ready|ESCORTS.NS|1d": 1795752413.586823,
   "_ready|ESP/USDT|30m": 1789458664.421898,
   "_ready|ESP/USDT|4h": 1788956755.098613,
   "_ready|ETHUSD|1d": 1795232800.720142,
