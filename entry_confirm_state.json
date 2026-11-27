@@ -297,11 +297,6 @@
     "stage": 3,
     "stopped_out": true
   },
-  "APLAPOLLO.NS|1d|long|2057.13|2030.1": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "APLAPOLLO.NS|1w|long|1500.88|1399.95": {
     "reached_entry": false,
     "stopped_out": false
@@ -827,10 +822,6 @@
     "stopped_out": false
   },
   "COROMANDEL.NS|1M|long|1613.65|1337.33": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
-  "COROMANDEL.NS|1d|short|1981.32|1999.5": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -1534,11 +1525,6 @@
     "stage": 3,
     "stopped_out": true
   },
-  "INDUSINDBK.NS|1d|short|940.157|972.077": {
-    "reached_entry": true,
-    "stage": 3,
-    "stopped_out": true
-  },
   "INDUSINDBK.NS|1d|short|992.731|1027.15": {
     "reached_entry": false,
     "stopped_out": false
@@ -1636,7 +1622,7 @@
   "ITI.NS|1w|short|249.891|256.3": {
     "reached_entry": true,
     "stage": 3,
-    "stopped_out": false
+    "stopped_out": true
   },
   "ITI.NS|1w|short|262.55|272.1": {
     "reached_entry": false,
@@ -2545,6 +2531,7 @@
   },
   "RBLBANK.NS|1d|short|398.643|411.162": {
     "reached_entry": false,
+    "stage": 1,
     "stopped_out": false
   },
   "RBLBANK.NS|1w|long|333.21|234.694": {
@@ -2722,8 +2709,8 @@
     "stage": 3,
     "stopped_out": false
   },
-  "_last_check|crypto": 1795751812.6667,
-  "_last_check|nse": 1795751812.6667,
+  "_last_check|crypto": 1795752112.432177,
+  "_last_check|nse": 1795752112.432177,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -4601,7 +4588,7 @@
   "_level_ready|RBLBANK.NS|1d|long|383.783|377.6": 1792036000.300237,
   "_level_ready|RBLBANK.NS|1d|short|379.522|391.131": 1794282375.833969,
   "_level_ready|RBLBANK.NS|1d|short|388.627|401.147": 1794973600.547603,
-  "_level_ready|RBLBANK.NS|1d|short|398.643|411.162": 1795578414.769854,
+  "_level_ready|RBLBANK.NS|1d|short|398.643|411.162": 1795752112.432177,
   "_level_ready|RECLTD.NS|1d|long|283.225|279.2": 1793764008.797417,
   "_level_ready|RECLTD.NS|1d|long|283.508|279.2": 1793349100.9287,
   "_level_ready|RECLTD.NS|1d|long|283.933|279.2": 1793159201.504703,
@@ -5481,7 +5468,7 @@
   "_ready|QQQXUSD|1w": 1794412611.398508,
   "_ready|RADICO.NS|1d": 1795060016.749852,
   "_ready|RBLBANK.NS|1M": 1793782607.498867,
-  "_ready|RBLBANK.NS|1d": 1795578414.769854,
+  "_ready|RBLBANK.NS|1d": 1795752112.432177,
   "_ready|RE/USDT|30m": 1789390557.764438,
   "_ready|RE/USDT|4h": 1788948356.002419,
   "_ready|RECLTD.NS|1d": 1794456993.186632,
