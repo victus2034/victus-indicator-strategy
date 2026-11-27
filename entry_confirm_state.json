@@ -334,10 +334,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "ASTERDM.NS|1w|long|620.85|603.8": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "ATUL.NS|1M|long|5008.79|3518.73": {
     "reached_entry": false,
     "stopped_out": false
@@ -459,7 +455,8 @@
     "stopped_out": true
   },
   "BEML.NS|1M|short|2210.54|2282.6": {
-    "reached_entry": false,
+    "reached_entry": true,
+    "stage": 2,
     "stopped_out": false
   },
   "BERGEPAINT.NS|1d|long|455.386|451.15": {
@@ -886,10 +883,6 @@
     "stopped_out": false
   },
   "CUB.NS|1w|long|211.607|208": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
-  "CUB.NS|1w|long|213.294|194.529": {
     "reached_entry": false,
     "stopped_out": false
   },
@@ -1745,10 +1738,6 @@
     "stage": 1,
     "stopped_out": false
   },
-  "KEI.NS|1w|long|3605.5|3509.94": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "KEI.NS|1w|long|3987.75|3889.9": {
     "reached_entry": true,
     "stage": 3,
@@ -2348,10 +2337,6 @@
     "reached_entry": false,
     "stopped_out": false
   },
-  "PNBHOUSING.NS|1w|long|1056.43|884.35": {
-    "reached_entry": false,
-    "stopped_out": false
-  },
   "POLICYBZR.NS|1d|short|1038.35|1057.6": {
     "reached_entry": true,
     "stage": 3,
@@ -2471,10 +2456,6 @@
   "RBLBANK.NS|1d|short|398.643|411.162": {
     "reached_entry": true,
     "stage": 2,
-    "stopped_out": false
-  },
-  "RBLBANK.NS|1w|long|333.21|234.694": {
-    "reached_entry": false,
     "stopped_out": false
   },
   "RECLTD.NS|1M|long|276.637|260.913": {
@@ -2648,8 +2629,8 @@
     "stage": 3,
     "stopped_out": false
   },
-  "_last_check|crypto": 1795754516.72719,
-  "_last_check|nse": 1795754516.72719,
+  "_last_check|crypto": 1795754822.388895,
+  "_last_check|nse": 1795754822.388895,
   "_level_ready|1000PEPEUSD|1d|long|0.00476483|0.00450351": 1793604990.047237,
   "_level_ready|1000PEPEUSD|1d|long|0.00499027|0.00470846": 1794388297.75884,
   "_level_ready|1000PEPEUSD|1d|short|0.00441502|0.00482533": 1792991205.370122,
@@ -3014,6 +2995,7 @@
   "_level_ready|BEML.NS|1M|long|1969.53|1856.78": 1791517599.357562,
   "_level_ready|BEML.NS|1M|short|1991.44|2188": 1795578414.769854,
   "_level_ready|BEML.NS|1M|short|2037.95|2086.9": 1795582015.487559,
+  "_level_ready|BEML.NS|1M|short|2210.54|2282.6": 1795754822.388895,
   "_level_ready|BEML.NS|1d|long|1822.5|1620.62": 1792986387.062464,
   "_level_ready|BEML.NS|1d|long|1857.42|1794.9": 1792640801.869234,
   "_level_ready|BEML.NS|1d|long|1864.7|1834.7": 1792727505.027921,
@@ -4965,7 +4947,7 @@
   "_ready|BEAT/USDT|30m": 1791171365.432313,
   "_ready|BELRISE.NS|1d": 1795146697.449561,
   "_ready|BELRISE.NS|1w": 1793591209.526473,
-  "_ready|BEML.NS|1M": 1795582015.487559,
+  "_ready|BEML.NS|1M": 1795754822.388895,
   "_ready|BEML.NS|1d": 1795578414.769854,
   "_ready|BEML.NS|1w": 1793936864.300001,
   "_ready|BERGEPAINT.NS|1d": 1795060016.749852,
